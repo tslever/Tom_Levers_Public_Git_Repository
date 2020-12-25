@@ -12,10 +12,10 @@ package com.mycompany.serverutilities;
 public class MessageInterface {
     
     private final String endpoint;
-    private final InterfaceForProcessing processing;
+    private final MessageHandler processing;
     
     public MessageInterface(
-            String endpointToUse, InterfaceForProcessing processingToUse) {
+            String endpointToUse, MessageHandler processingToUse) {
         this.endpoint = endpointToUse;
         this.processing = processingToUse;
     }
@@ -24,7 +24,7 @@ public class MessageInterface {
         return this.endpoint;
     }
     
-    public InterfaceForProcessing getProcessing() {
+    public MessageHandler getProcessing() {
         return this.processing;
     }
 }

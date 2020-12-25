@@ -12,7 +12,7 @@ import com.sun.net.httpserver.HttpServer;
 
 /**
  * Defines class Server that allows creation of a server based on an inputted
- * HttpServer object that will allow for listening for HTTP requests from
+ * httpServer object that will allow for listening for HTTP requests from
  * clients and providing HTTP responses to clients.
  * The server's message interfaces will receive actually HTTP messages directed
  * to server endpoints and will provide HTTP messages to clients.
@@ -35,8 +35,7 @@ public class Server {
      * @version 0.0
      * @author Tom Lever
      */
-    public Server(
-        HttpServer httpServerToUse) {        
+    public Server(HttpServer httpServerToUse) {    
         this.httpServer = httpServerToUse;
         setMessageInterfacesHasAlreadyBeenCalled = false;
         serverIsUnableToListenForMessages = true;

@@ -58,30 +58,6 @@ public class Main {
             HttpServer.create(new InetSocketAddress(portNumber), 0));
         // TODO: Generate CreateException when IOException is thrown by create.
         
-        
-        /*// -----------------------------------------
-        // Set the message interfaces of the server.
-        // -----------------------------------------
-        // Instantiate hashMap of endpoints and processings.
-        MapOfEndpointsAndProcessings mapOfEndpointsAndProcessings =
-                new MapOfEndpointsAndProcessings();
-        HashMap<String, InterfaceForProcessing> hashMap =
-                mapOfEndpointsAndProcessings.getHashMap();
-        
-        // Instantiate array of messageInterfaces corresponding to endpoints.
-        MessageInterface[] messageInterfaces =
-                new MessageInterface[hashMap.size()];
-        int positionToAddMessageInterface = 0;
-        for (
-            Map.Entry<String, InterfaceForProcessing> entry :
-            hashMap.entrySet()) {
-            messageInterfaces[positionToAddMessageInterface] =
-                new MessageInterface(entry.getKey(), entry.getValue());
-            ++positionToAddMessageInterface;
-        }
-        
-        server.setMessageInterfaces(messageInterfaces);*/
-        
 
         server.setMessageInterfaces(config.getMessageInterfaces());
         // TODO: Handle exceptions from setMessageInterfaces and

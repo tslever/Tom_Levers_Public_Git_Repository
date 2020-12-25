@@ -17,13 +17,14 @@ public class Config {
     
     public MessageInterface[] getMessageInterfaces() {
         
+        // A message handler is a bridge to go between message interface and
+        // the controller. The message interface needs HTTP-message endpoint
+        // and an object that processes the message.
         MessageInterface one = new MessageInterface(
-                "/one",
-                (InterfaceForProcessing) () -> { System.out.println("/one"); });
+            "/one", new MessageHandler( new Controller() ));
         
         MessageInterface two = new MessageInterface(
-            "/two",
-            (InterfaceForProcessing) () -> { System.out.println("/two"); });
+            "/two", new MessageHandler( new Controller() ));
         
         return new MessageInterface[]{one, two};
         
