@@ -4,21 +4,10 @@ package com.mycompany.serverutilities;
 
 // Import classes.
 import com.sun.net.httpserver.HttpServer;
-//import java.io.BufferedReader;
-//import java.io.InputStreamReader;
-//import java.io.IOException;
-//import java.io.PrintWriter;
-//import java.net.Socket;
 
 /**
- * Defines class Server that allows creation of a server based on an inputted
- * httpServer object that will allow for listening for HTTP requests from
- * clients and providing HTTP responses to clients.
- * The server's message interfaces will receive actually HTTP messages directed
- * to server endpoints and will provide HTTP messages to clients.
- * Server contains a method for setting a server's array of message interfaces
- * based on an inputted array of method interfaces, each with specific endpoints
- * and methods of processing HTTP requests from clients.
+ * Defines class Server whose instances represent servers that listen for HTTP
+ * messages from clients and provide responses to clients.
  * @version 0.0
  * @author Tom Lever
  */
@@ -29,21 +18,22 @@ public class Server {
     private boolean setMessageInterfacesHasAlreadyBeenCalled;
     private boolean serverIsUnableToListenForMessages;
     
-    
     /**
-     * Constructs Server object based on inputted HttpServer object.
-     * @version 0.0
-     * @author Tom Lever
+     * Defines constructor Server which sets attributes of this server with
+     * inputs.
+     * @param httpServerToUse
      */
-    public Server(HttpServer httpServerToUse) {    
+    public Server(HttpServer httpServerToUse) {
+        System.out.println("Server constructor: Started.");
+        
         this.httpServer = httpServerToUse;
         setMessageInterfacesHasAlreadyBeenCalled = false;
         serverIsUnableToListenForMessages = true;
     }
     
     /**
-     * Defines Server's setMessageInterfaces based on an inputted array of
-     * message interfaces.
+     * Defines method setMessageInterfaces, which allows a calling method to
+     * set the array of message interfaces of this server.
      * @version 0.0
      * @author Tom Lever
      * @param messageInterfacesToUse
@@ -51,43 +41,59 @@ public class Server {
      */
     public void setMessageInterfaces(
             MessageInterface[] messageInterfacesToUse) throws Exception {
+        System.out.println("Server.setMessageInterfaces: Started.");
         
         if (setMessageInterfacesHasAlreadyBeenCalled) {
             throw new Exception(
-                "Message interfaces have already been set in Server.");
-            // TODO: Create SetMessageInterfacesHasAlreadyBeenCalledException
-            // class.
+                "Server.setMessageInterfaces: Message interfaces have " +
+                "already been set in Server.");
+            // TODO: Throw a SetMessageInterfacesHasAlreadyBeenCalledException
+            // instead of an Exception.
         }
         
         this.messageInterfaces = messageInterfacesToUse;
+        System.out.println(
+            "Server.setMessageInterfaces: Stored inputted array of message " +
+            "interfaces as this server's array of message interfaces.");
         
-        // Call httpServer's createContext method for every MessageInterface.
-        // After calling createContext, whenever a message with an endpoint
-        // of <the result of message.getEndpoint()> is received by httpServer,
-        // the method <handle> of the object
-        // <the result of messageInterface.getProcessing()> will be called.
         for (MessageInterface messageInterface : this.messageInterfaces) {
             httpServer.createContext(
                 messageInterface.getEndpoint(),
                 messageInterface.getProcessing());
         }
+        System.out.println(
+            "Server.setMessageInterfaces: Created a context to associate " +
+            "specific message processing with each endpoint for HTTP " +
+            "messages.");
         
         setMessageInterfacesHasAlreadyBeenCalled = true;
         serverIsUnableToListenForMessages = false;
+        System.out.println(
+            "Server.setMessageInterfaces: Noted that setMessageInterfaces " +
+            "has been called and that server is able to listen for messages.");
     }
     
+    /**
+     * Defines method startListeningForMessages, which allows this server to
+     * start listening for messages.
+     * @version 0.0
+     * @author Tom Lever
+     * @throws Exception
+     */
     public void startListeningForMessages() throws Exception {
+        System.out.println("Server.startListeningForMessages: Started.");
         
-        // If / else block is important because we don't want to
-        // startListeningForMessages until setMessageInterfaces have been called,
-        // because this.httpServer would not have processings for any endpoints.
         if (serverIsUnableToListenForMessages) {
             throw new Exception(
-                "Server is unable to listen for messages: " +
-                "message interfaces have not been created.");
-            // TODO: Create ServerUnableToListenForMessagesException class.
+                "Server.starListeningForMessages: Server is unable to listen " +
+                "for messages: message interfaces have not been created.");
+            // TODO: Throw a ServerIsUnableToListenForMessagesException
+            // instead of an Exception.
         }
+        
         this.httpServer.start();
-    
+        System.out.println(
+            "Server.startListeningForMessages: Started server listening for " +
+            "HTTP messages from clients.");
     }
 }

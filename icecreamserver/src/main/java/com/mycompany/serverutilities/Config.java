@@ -1,13 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
+// Allows executable to find class Config.
 package com.mycompany.serverutilities;
 
 /**
- *
- * @author thoma
+ * Defines class Config that encapsulates functionality to get an array of
+ * message interfaces.
+ * @version 0.0
+ * @author Tom Lever
  */
 public class Config {
     
@@ -15,19 +14,24 @@ public class Config {
         
     }
     
+    /**
+     * Defines method getMessageInterfaces, which allows a calling method to
+     * get an array of message interfaces.
+     * @return new MessageInterface[]{one, two};
+     */
     public MessageInterface[] getMessageInterfaces() {
+        System.out.println("Config.getMessageInterfaces: Started.");
         
-        // A message handler is a bridge to go between message interface and
-        // the controller. The message interface needs HTTP-message endpoint
-        // and an object that processes the message.
         MessageInterface one = new MessageInterface(
             "/one", new MessageHandler( new Controller() ));
-        
         MessageInterface two = new MessageInterface(
             "/two", new MessageHandler( new Controller() ));
+        System.out.println(
+            "Config.getMessageInterfaces: Defined message interfaces.");
         
+        System.out.println(
+            "Config.getMessageInterfaces: Returning array of defined message " +
+            "interfaces.");
         return new MessageInterface[]{one, two};
-        
     }
-    
 }

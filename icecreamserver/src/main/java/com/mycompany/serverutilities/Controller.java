@@ -1,15 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
+// Allows executable to find class Controller.
 package com.mycompany.serverutilities;
 
+// Imports classes.
 import java.time.LocalDateTime;
 
 /**
- *
- * @author thoma
+ * Defines class Controller that encapsulates functionality to process a
+ * an HTTP message.
+ * @version 0.0
+ * @author Tom Lever
  */
 public class Controller {
     
@@ -17,10 +17,13 @@ public class Controller {
         
     }
     
+    /**
+     * Defines method process, which reacts to a method calling it.
+     */
     public void process() {
+        System.out.println("Controller.process: Started.");
         
-        System.out.printf("Hi from process at %s!\n", LocalDateTime.now());
-        
+        System.out.printf(
+            "Controller.process: Hi, at %s!\n", LocalDateTime.now());
     }
-    
 }
