@@ -25,19 +25,51 @@ public class MessageHandler implements HttpHandler {
         System.out.println("MessageHandler constructor: Started.");
         
         this.controller = controllerToUse;
+        System.out.println(
+            "MessageHandler constructor: Sets controller as controllerToUse.");
     }
     
     /**
-     * Defines method handle which transfers an HTTP message from a message
-     * interface to a controller for processing.
+     * Defines method handle to pick up an HTTP message from a message
+     * interface, extracting the ice cream application message in that HTTP
+     * message, and handing that ice cream application method to a controller
+     * for processing.
      * @param httpExchange
      */
     @Override
     public void handle(HttpExchange httpExchange) {
         System.out.println("MessageHandler.handle: Started.");
         
-        this.controller.process();
-        System.out.println(
-            "MessageHandler.handle: Called this.controller.process.");
+        IceCreamApplicationMessage iceCreamApplicationMessage =
+            getIceCreamApplicationMessage(httpExchange);
+        // Must use try block because handle does not throws Exception.
+        try {
+            this.controller.process(iceCreamApplicationMessage);
+            System.out.println(
+                "MessageHandler.handle: Got ice cream application message by " +
+                "stripping the HTTP layer from the message associated with " +
+                "httpExchange. Called this.controller.process.");
+        }
+        catch(Exception e) {
+            System.out.println(
+                "BasicController must be extended; process must be " +
+                "overridden.");
+            System.exit(1);
+        }
+        // TODO: Catch BasicControllerMustBeExtendedException instead of
+        // Exception.
+    }
+    
+    /**
+     * Defines getIceCreamApplicationMessage, which gets an ice cream
+     * application method from an HTTP message associated with an HttpExchange.
+     * @param httpExchangeToUse
+     * @return 
+     */
+    private IceCreamApplicationMessage getIceCreamApplicationMessage(
+        HttpExchange httpExchangeToUse) {
+        // Functionality to get an ice cream application message from an HTTP
+        // message associated with an HttpExchange.
+        return new IceCreamApplicationMessage();
     }
 }

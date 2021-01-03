@@ -17,20 +17,16 @@ import org.apache.commons.lang.StringUtils;
 public class Main {
     
     /**
-     * Defines method main of this application, which instantiates a server
-     * that listens for HTTP messages from clients (e.g., instances of Google
-     * Chrome) and provides responses to clients.
+     * Defines method main of this application, which instantiates a server,
+     * an ice cream product retrieval subsystem, and an ice cream client
+     * communication subsystem based on the server and the retrieval subsystem.
+     * 
      * @param args
      * @throws Exception
      * @throws IOException
      */
     public static void main(String[] args) throws Exception, IOException {
         System.out.println("main: Started Tom's ice-cream server program.");
-        
-        Config config = new Config();
-        System.out.println(
-            "main: Created a Config object to allow getting message " +
-            "interfaces.");
         
         // isNumeric returns true if argument is a non-negative integer.
         if ((args.length != 1) || (!StringUtils.isNumeric(args[0]))) {
@@ -50,23 +46,25 @@ public class Main {
             HttpServer.create(new InetSocketAddress(portNumber), 0));
         // TODO: Generate CreateException when IOException is thrown by create.
         System.out.println(
-            "main: Created server listening on IP address : port " +
-            "'localhost : " +
-            portNumber +
-            "' for HTTP messages.");
+            "main: Created server, an instance of Server, that will listen " +
+            "on IP address : port 'localhost : " + portNumber + "' for HTTP " +
+            "messages.");    
         
-        server.setMessageInterfaces(config.getMessageInterfaces());
-        // TODO: Generate SetMessageInterfacesException when an Exception is
-        // thrown by setMessageInterfaces.
+        IceCreamProductRetrieval retriever = new IceCreamProductRetrieval();
         System.out.println(
-            "main: Set message interfaces of server as the array of message " +
-            "interfaces resulting from our Config object's method " +
-            "getMessageInterfaces.");
+            "main: Created retriever, an instance of " +
+            "IceCreamProductRetrieval, that represents the server's ice " +
+            "cream product retrieval subsystem.");
         
-        server.startListeningForMessages();
-        // TODO: Generate StartListeningForMessagesException when an Exception
-        // is thrown by startListeningForMessages.
+        IceCreamClientCommunication communicator =
+            new IceCreamClientCommunication(server, retriever);
         System.out.println(
-            "main: Started server listening for HTTP messages from clients.");
+            "main: Created communicator, an instance of " +
+            "IceCreamClientCommunication, that represents the server's ice " +
+            "cream client communication subsystem.");
+        
+        communicator.setMessageInterfacesAndStartServerListening();
+        System.out.println(
+            "main: Set message interfaces and started server listening.");
     }
 }

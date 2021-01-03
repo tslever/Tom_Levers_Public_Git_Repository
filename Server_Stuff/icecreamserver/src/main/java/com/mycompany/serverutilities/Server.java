@@ -29,6 +29,10 @@ public class Server {
         this.httpServer = httpServerToUse;
         setMessageInterfacesHasAlreadyBeenCalled = false;
         serverIsUnableToListenForMessages = true;
+        System.out.println(
+            "Server constructor: Set httpServer as httpServerToUse and noted " +
+            "that setMessageInterfaces has not been called and that server " +
+            "is unable to listen for messages.");
     }
     
     /**
@@ -59,11 +63,11 @@ public class Server {
         for (MessageInterface messageInterface : this.messageInterfaces) {
             httpServer.createContext(
                 messageInterface.getEndpoint(),
-                messageInterface.getProcessing());
+                messageInterface.getMessageHandler());
         }
         System.out.println(
             "Server.setMessageInterfaces: Created a context to associate " +
-            "specific message processing with each endpoint for HTTP " +
+            "a specific message handler with each endpoint for HTTP " +
             "messages.");
         
         setMessageInterfacesHasAlreadyBeenCalled = true;
@@ -96,4 +100,11 @@ public class Server {
             "Server.startListeningForMessages: Started server listening for " +
             "HTTP messages from clients.");
     }
+    
+    /**
+     * Defines method send to send products corresponding to a message from an
+     * ice cream client back to the ice cream client.
+     * @param productsToSend
+     */
+    public void send(Products productsToSend) { }
 }
