@@ -1,6 +1,6 @@
 
 // Allows executable to find class IceCreamApplicationMessage.
-package com.mycompany.serverutilities;
+package com.mycompany.serverutilities.clientcommunicationutilities;
 
 /**
  * Defines class IceCreamApplicationMessage whose instances represent ice cream

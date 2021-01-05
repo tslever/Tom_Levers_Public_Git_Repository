@@ -1,6 +1,6 @@
 
 // Allows executable to find class Controller.
-package com.mycompany.serverutilities;
+package com.mycompany.serverutilities.clientcommunicationutilities;
 
 /**
  * Defines class Controller that defines basic functionality to process a

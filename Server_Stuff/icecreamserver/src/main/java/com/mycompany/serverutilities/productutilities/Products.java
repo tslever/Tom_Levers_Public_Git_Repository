@@ -1,6 +1,6 @@
 
 // Allows executable to find class Products.
-package com.mycompany.serverutilities;
+package com.mycompany.serverutilities.productutilities;
 
 /**
  * Defines class Products, an instance of which informs the sending of a message

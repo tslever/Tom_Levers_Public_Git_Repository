@@ -1,6 +1,10 @@
 
 // Allows executable to find class IceCreamClientCommunication.
-package com.mycompany.serverutilities;
+package com.mycompany.serverutilities.clientcommunicationutilities;
+
+import com.mycompany.serverutilities.productutilities.SearchCriteria;
+import com.mycompany.serverutilities.productutilities.IceCreamProductRetrieval;
+import com.mycompany.serverutilities.productutilities.Products;
 
 /**
  * Defines class IceCreamClientCommunication, an instance of which represents

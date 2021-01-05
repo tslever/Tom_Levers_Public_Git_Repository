@@ -1,6 +1,6 @@
 
 // Allows executable to find class IceCreamProductRetrieval.
-package com.mycompany.serverutilities;
+package com.mycompany.serverutilities.productutilities;
 
 /**
  * Defines class IceCreamProductRetrieval, an instance of which represents

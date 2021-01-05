@@ -1,8 +1,9 @@
 
 // Allows executable to find class Main.
-package com.mycompany.serverutilities;
+package com.mycompany.serverutilities.clientcommunicationutilities;
 
 // Import classes.
+import com.mycompany.serverutilities.productutilities.Products;
 import com.sun.net.httpserver.HttpServer;
 
 /**

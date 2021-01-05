@@ -1,6 +1,6 @@
 
 // Allows executable to find class MessageHandler.
-package com.mycompany.serverutilities;
+package com.mycompany.serverutilities.clientcommunicationutilities;
 
 // Imports classes.
 import com.sun.net.httpserver.HttpExchange;

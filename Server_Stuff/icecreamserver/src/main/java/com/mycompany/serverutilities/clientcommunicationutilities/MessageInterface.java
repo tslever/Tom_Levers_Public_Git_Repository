@@ -1,6 +1,6 @@
 
 // Allows executable to find class MessageInterface.
-package com.mycompany.serverutilities;
+package com.mycompany.serverutilities.clientcommunicationutilities;
 
 /**
  * Defines class MessageInterface that encapsulates functionality to store and

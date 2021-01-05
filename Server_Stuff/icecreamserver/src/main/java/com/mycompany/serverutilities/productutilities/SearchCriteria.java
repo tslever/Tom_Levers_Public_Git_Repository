@@ -1,6 +1,6 @@
 
 // Allows executable to find class SearchCriteria.
-package com.mycompany.serverutilities;
+package com.mycompany.serverutilities.productutilities;
 
 /**
  * Defines class SearchCriteria, which will be extracted from an ice cream

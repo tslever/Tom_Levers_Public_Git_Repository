@@ -3,6 +3,9 @@
 package com.mycompany.serverutilities;
 
 // Imports classes.
+import com.mycompany.serverutilities.clientcommunicationutilities.Server;
+import com.mycompany.serverutilities.clientcommunicationutilities.IceCreamClientCommunication;
+import com.mycompany.serverutilities.productutilities.IceCreamProductRetrieval;
 import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
 import java.net.InetSocketAddress;
