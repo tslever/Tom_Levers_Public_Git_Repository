@@ -21,11 +21,6 @@ package com.mycompany.designclasses;
 public class IceCreamProductRetrieval {
     
     /**
-     * Defines constructor IceCreamProductRetrieval.
-     */
-    public IceCreamProductRetrieval() { }
-    
-    /**
      * Defines method getTheProductsMatching to get the ice cream products
      * matching specific search criteria.
      * @param searchCriteriaToUse

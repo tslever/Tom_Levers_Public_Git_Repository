@@ -12,10 +12,4 @@ package com.mycompany.designclasses;
  * @version 0.0
  * @author Tom Lever
  */
-public class Products {
-
-    /**
-     * Defines constructor Products.
-     */
-    public Products() { }
-}
+public class Products { }

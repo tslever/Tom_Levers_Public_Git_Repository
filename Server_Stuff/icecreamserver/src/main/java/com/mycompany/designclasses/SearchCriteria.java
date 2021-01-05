@@ -12,13 +12,4 @@ package com.mycompany.designclasses;
  * @version 0.0
  * @author Tom Lever
  */
-public class SearchCriteria {
-
-    /**
-     * Defines constructor SearchCriteria.
-     */
-    public SearchCriteria() {
-        System.out.println("SearchCriteria constructor: Started.");
-    }
-
-}
+public class SearchCriteria { }
