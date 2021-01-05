@@ -47,8 +47,9 @@ public class IceCreamClientCommunication {
          */
         @Override
         public void process(IceCreamApplicationMessage messageToProcess) {
-            Products products = retriever.getTheProductsMatching(
-                getSearchCriteria(messageToProcess));
+            SearchCriteria searchCriteria = getSearchCriteria(messageToProcess);
+            Products products =
+                retriever.getTheProductsMatching(searchCriteria);
             server.send(products);
         }
         
@@ -60,8 +61,10 @@ public class IceCreamClientCommunication {
          */
         private SearchCriteria getSearchCriteria(
             IceCreamApplicationMessage iceCreamApplicationMessageToUse) {
+            
             // Functionality to get search criteria from an ice cream
             // application message.
+            
             return new SearchCriteria();
         }
     }
