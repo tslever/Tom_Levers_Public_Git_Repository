@@ -1,5 +1,10 @@
 
 /*
+ * This document was created as part of the decomposition of server subsystem
+ * IceCreamProductRetrieval.
+ */
+
+/*
  * Distinguishes this design class from IceCreamProductRetrieval in
  * package com.mycompany.serverutilities.
  */

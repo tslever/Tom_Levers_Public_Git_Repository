@@ -1,5 +1,10 @@
 
 /*
+ * This document was created as part of the decomposition of server subsystem
+ * IceCreamClientCommunication.
+ */
+
+/*
  * Distinguishes this design class from IceCreamClientCommunication in
  * package com.mycompany.serverutilities.
  */
