@@ -4,27 +4,30 @@ package com.mycompany.serverutilities;
 
 /**
  * Defines class MessageInterface that encapsulates functionality to store and
- * get an endpoint and get a processing method.
+ * get an endpoint and a messageHandler.
  * @version 0.0
  * @author Tom Lever
  */
 public class MessageInterface {
     
     private final String endpoint;
-    private final MessageHandler processing;
+    private final MessageHandler messageHandler;
     
     /**
      * Defines constructor MessageInterface which sets attributes of this
      * message interface with inputs.
      * @param endpointToUse
-     * @param processingToUse
+     * @param messageHandlerToUse
      */
     public MessageInterface(
-            String endpointToUse, MessageHandler processingToUse) {
+        String endpointToUse, MessageHandler messageHandlerToUse) {
         System.out.println("MessageInterface constructor: Started.");
         
         this.endpoint = endpointToUse;
-        this.processing = processingToUse;
+        this.messageHandler = messageHandlerToUse;
+        System.out.println(
+            "MessageInterface constructor: Set endpoint as endpointToUse " +
+            "and set messageHandler as messageHandlerToUse.");
     }
     
     /**
@@ -41,15 +44,16 @@ public class MessageInterface {
     }
 
     /**
-     * Defines method getProcessing which allows a calling method to get a
-     * processing method stored as an attribute of this MessageInterface object.
-     * @return this.processing
+     * Defines method getMessageHandler which allows a calling method to get a
+     * messageHandler stored as an attribute of this MessageInterface object.
+     * @return this.messageHandler
      */
-    public MessageHandler getProcessing() {
-        System.out.println("MessageInterface.getProcessing: Started.");
+    public MessageHandler getMessageHandler() {
+        System.out.println("MessageInterface.getMessageHandler: Started.");
         
         System.out.println(
-            "MessageInterface.getProcessing: Returning this.processing.");
-        return this.processing;
+            "MessageInterface.getMessageHandler: " +
+            "Returning this.messageHandler.");
+        return this.messageHandler;
     }
 }
