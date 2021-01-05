@@ -8,7 +8,7 @@ package com.mycompany.serverutilities.clientcommunicationutilities;
  * @version 0.0
  * @author Tom Lever
  */
-public class IceCreamApplicationMessage {
+class IceCreamApplicationMessage {
     
     private final String bodyOfClientMessage;
     

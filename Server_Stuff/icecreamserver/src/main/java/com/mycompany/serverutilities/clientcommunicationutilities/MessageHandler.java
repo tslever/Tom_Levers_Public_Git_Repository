@@ -19,7 +19,7 @@ import java.util.logging.LogRecord;
  * @version 0.0
  * @author Tom Lever
  */
-public class MessageHandler implements HttpHandler {
+class MessageHandler implements HttpHandler {
     
     private final Controller controller;
     private final static Logger logger =

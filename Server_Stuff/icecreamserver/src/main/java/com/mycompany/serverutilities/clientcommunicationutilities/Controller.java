@@ -8,7 +8,7 @@ package com.mycompany.serverutilities.clientcommunicationutilities;
  * @version 0.0
  * @author Tom Lever
  */
-public class Controller {
+class Controller {
     
     /**
      * Defines constructor Controller.
