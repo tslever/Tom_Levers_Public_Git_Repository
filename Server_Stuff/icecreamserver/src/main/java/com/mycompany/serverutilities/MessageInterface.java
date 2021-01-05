@@ -49,10 +49,11 @@ public class MessageInterface {
      * @return this.messageHandler
      */
     public MessageHandler getMessageHandler() {
-        System.out.println("MessageInterface.getProcessing: Started.");
+        System.out.println("MessageInterface.getMessageHandler: Started.");
         
         System.out.println(
-            "MessageInterface.getProcessing: Returning this.processing.");
+            "MessageInterface.getMessageHandler: " +
+            "Returning this.messageHandler.");
         return this.messageHandler;
     }
 }
