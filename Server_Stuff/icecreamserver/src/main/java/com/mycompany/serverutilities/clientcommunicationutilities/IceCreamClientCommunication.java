@@ -53,8 +53,8 @@ public class IceCreamClientCommunication {
     private class ExtendedController extends Controller {
         
         /**
-         * Defines method process, which overrides Controller's method process
-         * and processes ice cream application messages into products.
+         * Implements Controller's abstract method process,
+         * which processes ice cream application messages into products.
          * @param messageToProcess 
          */
         @Override

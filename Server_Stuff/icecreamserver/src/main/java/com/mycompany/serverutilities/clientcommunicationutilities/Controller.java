@@ -13,7 +13,7 @@ import java.util.logging.Logger;
  * @version 0.0
  * @author Tom Lever
  */
-class Controller {
+abstract class Controller {
     
     private final static Logger logger =
         Logger.getLogger(Controller.class.getName());
@@ -27,16 +27,9 @@ class Controller {
     }
     
     /**
-     * Defines method process, which must be overridden to process
+     * Declares abstract method process, which must be implemented to process
      * IceCreamApplicationMessages into Products.
      * @param messageToProcess
-     * @throws Exception
      */
-    public void process(IceCreamApplicationMessage messageToProcess)
-    throws Exception {
-        throw new Exception(
-            "BasicController must be extended; process must be overridden.");
-        // TODO: Throw BasicControllerMustBeExtendedException instead of
-        // Exception.
-    }
+    abstract public void process(IceCreamApplicationMessage messageToProcess);
 }
