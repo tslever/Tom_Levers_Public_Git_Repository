@@ -1,6 +1,11 @@
 
 // Allows executable to find class Controller.
-package com.mycompany.serverutilities;
+package com.mycompany.serverutilities.clientcommunicationutilities;
+
+// Imports classes.
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 /**
  * Defines class Controller that defines basic functionality to process a
@@ -8,13 +13,17 @@ package com.mycompany.serverutilities;
  * @version 0.0
  * @author Tom Lever
  */
-public class Controller {
+class Controller {
+    
+    private final static Logger logger =
+        Logger.getLogger(Controller.class.getName());
     
     /**
      * Defines constructor Controller.
      */
     public Controller() {
-        System.out.println("Controller constructor: Started.");
+        logger.log(new LogRecord(Level.INFO,
+            "Controller constructor: Started."));
     }
     
     /**

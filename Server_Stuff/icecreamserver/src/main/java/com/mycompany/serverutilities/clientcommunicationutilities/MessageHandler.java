@@ -1,6 +1,6 @@
 
 // Allows executable to find class MessageHandler.
-package com.mycompany.serverutilities;
+package com.mycompany.serverutilities.clientcommunicationutilities;
 
 // Imports classes.
 import com.sun.net.httpserver.HttpExchange;
@@ -19,11 +19,12 @@ import java.util.logging.LogRecord;
  * @version 0.0
  * @author Tom Lever
  */
-public class MessageHandler implements HttpHandler {
+class MessageHandler implements HttpHandler {
     
-    private final Controller controller;
     private final static Logger logger =
         Logger.getLogger(MessageHandler.class.getName());
+    
+    private final Controller controller;
     
     /**
      * Defines constructor MessageHandler which sets attributes of this message
@@ -31,11 +32,12 @@ public class MessageHandler implements HttpHandler {
      * @param controllerToUse
      */
     public MessageHandler(Controller controllerToUse) {
-        System.out.println("MessageHandler constructor: Started.");
+        logger.log(new LogRecord(Level.INFO,
+            "MessageHandler constructor: Started."));
         
         this.controller = controllerToUse;
-        System.out.println(
-            "MessageHandler constructor: Sets controller as controllerToUse.");
+        logger.log(new LogRecord(Level.INFO,
+            "MessageHandler constructor: Sets controller as controllerToUse."));
     }
     
     /**
@@ -47,18 +49,20 @@ public class MessageHandler implements HttpHandler {
      */
     @Override
     public void handle(HttpExchange httpExchange) {
-        System.out.println("MessageHandler.handle: Started.");
+        logger.log(new LogRecord(Level.INFO,
+            "MessageHandler.handle: Started."));
         
         IceCreamApplicationMessage iceCreamApplicationMessage =
             getIceCreamApplicationMessage(httpExchange);
-        System.out.println(
-            "Got ice cream application message from HTTP message from client.");
+        logger.log(new LogRecord(Level.INFO,
+            "Got ice cream application message from HTTP message from " +
+            "client."));
         
         // Must use try block because handle does not throw any exceptions.
         try {
             this.controller.process(iceCreamApplicationMessage);
-            System.out.println(
-                "MessageHandler.handle: Called this.controller.process.");
+            logger.log(new LogRecord(Level.INFO,
+                "MessageHandler.handle: Called this.controller.process."));
         }
         catch(Exception e) {
             logger.log(new LogRecord(Level.SEVERE,
@@ -78,6 +82,8 @@ public class MessageHandler implements HttpHandler {
      */
     private IceCreamApplicationMessage getIceCreamApplicationMessage(
         HttpExchange httpExchangeToUse) {
+            logger.log(new LogRecord(Level.INFO,
+                "MessageHandler.getIceCreamApplicationMessage: Started."));
         
         String bodyOfClientMessage = "";
         
@@ -97,9 +103,9 @@ public class MessageHandler implements HttpHandler {
             }
 
            bodyOfClientMessage = stringBuilder.toString();
-           System.out.printf(
+            logger.log(new LogRecord(Level.INFO,
                 "MessageHandler.getIceCreamApplicationMessage: The body of " +
-                "the client message is '%s'.\n", bodyOfClientMessage);
+                "the client message is '" + bodyOfClientMessage + "'."));
         }
         catch (IOException e) {
             logger.log(new LogRecord(Level.SEVERE,
@@ -107,6 +113,9 @@ public class MessageHandler implements HttpHandler {
                 "Caught IOException thrown by InputStreamReader constructor."));
         }
         
+        logger.log(new LogRecord(Level.INFO,
+            "MessageHandler.getIceCreamApplicationMessage: Returning new " +
+            "ice cream application message based on body of client message."));
         return new IceCreamApplicationMessage(bodyOfClientMessage);
     }
 }

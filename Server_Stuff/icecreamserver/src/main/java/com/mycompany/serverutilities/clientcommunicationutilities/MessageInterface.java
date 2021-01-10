@@ -1,6 +1,11 @@
 
 // Allows executable to find class MessageInterface.
-package com.mycompany.serverutilities;
+package com.mycompany.serverutilities.clientcommunicationutilities;
+
+// Imports classes.
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 /**
  * Defines class MessageInterface that encapsulates functionality to store and
@@ -8,7 +13,10 @@ package com.mycompany.serverutilities;
  * @version 0.0
  * @author Tom Lever
  */
-public class MessageInterface {
+class MessageInterface {
+    
+    private final static Logger logger =
+        Logger.getLogger(MessageInterface.class.getName());
     
     private final String endpoint;
     private final MessageHandler messageHandler;
@@ -21,13 +29,14 @@ public class MessageInterface {
      */
     public MessageInterface(
         String endpointToUse, MessageHandler messageHandlerToUse) {
-        System.out.println("MessageInterface constructor: Started.");
+        logger.log(new LogRecord(Level.INFO,
+            "MessageInterface constructor: Started."));
         
         this.endpoint = endpointToUse;
         this.messageHandler = messageHandlerToUse;
-        System.out.println(
+        logger.log(new LogRecord(Level.INFO,
             "MessageInterface constructor: Set endpoint as endpointToUse " +
-            "and set messageHandler as messageHandlerToUse.");
+            "and set messageHandler as messageHandlerToUse."));
     }
     
     /**
@@ -36,10 +45,11 @@ public class MessageInterface {
      * @return this.endpoint
      */
     public String getEndpoint() {
-        System.out.println("MessageInterface.getEndpoint: Started.");
+        logger.log(new LogRecord(Level.INFO,
+            "MessageInterface.getEndpoint: Started."));
         
-        System.out.println(
-            "MessageInterface.getEndpoint: Returning this.endpoint.");
+        logger.log(new LogRecord(Level.INFO,
+            "MessageInterface.getEndpoint: Returning this.endpoint."));
         return this.endpoint;
     }
 
@@ -49,11 +59,12 @@ public class MessageInterface {
      * @return this.messageHandler
      */
     public MessageHandler getMessageHandler() {
-        System.out.println("MessageInterface.getMessageHandler: Started.");
+        logger.log(new LogRecord(Level.INFO,
+            "MessageInterface.getMessageHandler: Started."));
         
-        System.out.println(
+        logger.log(new LogRecord(Level.INFO,
             "MessageInterface.getMessageHandler: " +
-            "Returning this.messageHandler.");
+            "Returning this.messageHandler."));
         return this.messageHandler;
     }
 }

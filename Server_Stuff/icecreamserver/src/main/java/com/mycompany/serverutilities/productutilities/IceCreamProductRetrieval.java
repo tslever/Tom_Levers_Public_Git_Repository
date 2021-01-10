@@ -1,6 +1,10 @@
 
 // Allows executable to find class IceCreamProductRetrieval.
-package com.mycompany.serverutilities;
+package com.mycompany.serverutilities.productutilities;
+
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 /**
  * Defines class IceCreamProductRetrieval, an instance of which represents
@@ -12,11 +16,15 @@ package com.mycompany.serverutilities;
  */
 public class IceCreamProductRetrieval {
     
+    private final static Logger logger =
+        Logger.getLogger(IceCreamProductRetrieval.class.getName());
+    
     /**
      * Defines constructor IceCreamProductRetrieval.
      */
     public IceCreamProductRetrieval() {
-        System.out.println("IceCreamProductRetrieval constructor: Started.");
+        logger.log(new LogRecord(Level.INFO,
+            "IceCreamProductRetrieval constructor: Started."));
     }
     
     /**
@@ -26,8 +34,15 @@ public class IceCreamProductRetrieval {
      * @return new Products()
      */
     public Products getTheProductsMatching(SearchCriteria searchCriteriaToUse) {
+        logger.log(new LogRecord(Level.INFO,
+            "IceCreamProductRetrieval.getTheProductsMatching: Started."));
+        
         // Functionality to get the products matching the search criteria to
         // use.
+      
+        logger.log(new LogRecord(Level.INFO,
+            "IceCreamProductRetrieval.getTheProductsMatching: Returning the " +
+            "products matching the search criteria to use."));
         return new Products();
     }
 }
