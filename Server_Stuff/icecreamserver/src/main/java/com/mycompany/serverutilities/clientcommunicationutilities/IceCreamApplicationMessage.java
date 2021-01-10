@@ -2,6 +2,11 @@
 // Allows executable to find class IceCreamApplicationMessage.
 package com.mycompany.serverutilities.clientcommunicationutilities;
 
+// Imports classes.
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
+
 /**
  * Defines class IceCreamApplicationMessage whose instances represent ice cream
  * application messages.
@@ -10,6 +15,9 @@ package com.mycompany.serverutilities.clientcommunicationutilities;
  */
 class IceCreamApplicationMessage {
     
+    private final static Logger logger =
+        Logger.getLogger(IceCreamApplicationMessage.class.getName());
+    
     private final String bodyOfClientMessage;
     
     /**
@@ -17,11 +25,12 @@ class IceCreamApplicationMessage {
      * @param bodyOfClientMessageToUse
      */
     public IceCreamApplicationMessage(String bodyOfClientMessageToUse) {
-        System.out.println("IceCreamApplicationMessage constructor: Started.");
+        logger.log(new LogRecord(Level.INFO,
+            "IceCreamApplicationMessage constructor: Started."));
         
         this.bodyOfClientMessage = bodyOfClientMessageToUse;
-        System.out.println(
-            "IceCreamClientCommunication constructor: Set " +
-            "bodyOfClientMessage as bodyOfClientMessageToUse.");
+        logger.log(new LogRecord(Level.INFO,
+            "IceCreamApplicationMessage constructor: Set " +
+            "bodyOfClientMessage as bodyOfClientMessageToUse."));
     } 
 }

@@ -5,6 +5,9 @@ package com.mycompany.serverutilities.clientcommunicationutilities;
 // Import classes.
 import com.mycompany.serverutilities.productutilities.Products;
 import com.sun.net.httpserver.HttpServer;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 /**
  * Defines class Server whose instances represent servers that listen for HTTP
@@ -13,6 +16,9 @@ import com.sun.net.httpserver.HttpServer;
  * @author Tom Lever
  */
 public class Server {
+    
+    private final static Logger logger =
+        Logger.getLogger(Server.class.getName());
     
     private final HttpServer httpServer;
     private MessageInterface[] messageInterfaces;
@@ -25,15 +31,16 @@ public class Server {
      * @param httpServerToUse
      */
     public Server(HttpServer httpServerToUse) {
-        System.out.println("Server constructor: Started.");
+        logger.log(new LogRecord(Level.INFO,
+            "Server constructor: Started."));
         
         this.httpServer = httpServerToUse;
         setMessageInterfacesHasAlreadyBeenCalled = false;
         serverIsUnableToListenForMessages = true;
-        System.out.println(
+        logger.log(new LogRecord(Level.INFO,
             "Server constructor: Set httpServer as httpServerToUse and noted " +
             "that setMessageInterfaces has not been called and that server " +
-            "is unable to listen for messages.");
+            "is unable to listen for messages."));
     }
     
     /**
@@ -46,7 +53,8 @@ public class Server {
      */
     public void setMessageInterfaces(
             MessageInterface[] messageInterfacesToUse) throws Exception {
-        System.out.println("Server.setMessageInterfaces: Started.");
+        logger.log(new LogRecord(Level.INFO,
+            "Server.setMessageInterfaces: Started."));
         
         if (setMessageInterfacesHasAlreadyBeenCalled) {
             throw new Exception(
@@ -57,25 +65,25 @@ public class Server {
         }
         
         this.messageInterfaces = messageInterfacesToUse;
-        System.out.println(
+        logger.log(new LogRecord(Level.INFO,
             "Server.setMessageInterfaces: Stored inputted array of message " +
-            "interfaces as this server's array of message interfaces.");
+            "interfaces as this server's array of message interfaces."));
         
         for (MessageInterface messageInterface : this.messageInterfaces) {
             httpServer.createContext(
                 messageInterface.getEndpoint(),
                 messageInterface.getMessageHandler());
         }
-        System.out.println(
+        logger.log(new LogRecord(Level.INFO,
             "Server.setMessageInterfaces: Created a context to associate " +
             "a specific message handler with each endpoint for HTTP " +
-            "messages.");
+            "messages."));
         
         setMessageInterfacesHasAlreadyBeenCalled = true;
         serverIsUnableToListenForMessages = false;
-        System.out.println(
+        logger.log(new LogRecord(Level.INFO,
             "Server.setMessageInterfaces: Noted that setMessageInterfaces " +
-            "has been called and that server is able to listen for messages.");
+            "has been called and that server is able to listen for messages."));
     }
     
     /**
@@ -86,7 +94,8 @@ public class Server {
      * @throws Exception
      */
     public void startListeningForMessages() throws Exception {
-        System.out.println("Server.startListeningForMessages: Started.");
+        logger.log(new LogRecord(Level.INFO,
+            "Server.startListeningForMessages: Started."));
         
         if (serverIsUnableToListenForMessages) {
             throw new Exception(
@@ -97,9 +106,9 @@ public class Server {
         }
         
         this.httpServer.start();
-        System.out.println(
+        logger.log(new LogRecord(Level.INFO,
             "Server.startListeningForMessages: Started server listening for " +
-            "HTTP messages from clients.");
+            "HTTP messages from clients."));
     }
     
     /**

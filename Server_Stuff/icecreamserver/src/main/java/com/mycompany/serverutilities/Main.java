@@ -9,6 +9,9 @@ import com.mycompany.serverutilities.productutilities.IceCreamProductRetrieval;
 import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -18,6 +21,9 @@ import org.apache.commons.lang.StringUtils;
  * @author Tom Lever
  */
 public class Main {
+    
+    private final static Logger logger =
+        Logger.getLogger(Main.class.getName());
     
     /**
      * Defines method main of this application, which instantiates a server,
@@ -29,7 +35,8 @@ public class Main {
      * @throws IOException
      */
     public static void main(String[] args) throws Exception, IOException {
-        System.out.println("main: Started Tom's ice-cream server program.");
+        logger.log(new LogRecord(Level.INFO,
+            "main: Started Tom's ice-cream server program."));
         
         // isNumeric returns true if argument is a non-negative integer.
         if ((args.length != 1) || (!StringUtils.isNumeric(args[0]))) {
@@ -41,33 +48,33 @@ public class Main {
         // not exist or to not be a non-negative integer.
         
         int portNumber = Integer.parseInt(args[0]);
-        System.out.printf(
-            "main: Parsed first command-line argument as port number %d.\n",
-            portNumber);
+        logger.log(new LogRecord(Level.INFO,
+            "main: Parsed first command-line argument as port number " +
+            portNumber + "."));
         
         Server server = new Server(
             HttpServer.create(new InetSocketAddress(portNumber), 0));
         // TODO: Generate CreateException when IOException is thrown by create.
-        System.out.println(
+        logger.log(new LogRecord(Level.INFO,
             "main: Created server, an instance of Server, that will listen " +
             "on IP address : port 'localhost : " + portNumber + "' for HTTP " +
-            "messages.");    
+            "messages."));    
         
         IceCreamProductRetrieval retriever = new IceCreamProductRetrieval();
-        System.out.println(
+        logger.log(new LogRecord(Level.INFO,
             "main: Created retriever, an instance of " +
             "IceCreamProductRetrieval, that represents the server's ice " +
-            "cream product retrieval subsystem.");
+            "cream product retrieval subsystem."));
         
         IceCreamClientCommunication communicator =
             new IceCreamClientCommunication(server, retriever);
-        System.out.println(
+        logger.log(new LogRecord(Level.INFO,
             "main: Created communicator, an instance of " +
             "IceCreamClientCommunication, that represents the server's ice " +
-            "cream client communication subsystem.");
+            "cream client communication subsystem."));
         
         communicator.setMessageInterfacesAndStartServerListening();
-        System.out.println(
-            "main: Set message interfaces and started server listening.");
+        logger.log(new LogRecord(Level.INFO,
+            "main: Set message interfaces and started server listening."));
     }
 }
