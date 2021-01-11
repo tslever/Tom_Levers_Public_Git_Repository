@@ -106,7 +106,7 @@ public class IceCreamClientCommunication {
      * messages.
      * @throws Exception 
      */
-    public void setMessageInterfacesAndStartServerListening() throws Exception {        
+    public void setMessageInterfaces() throws Exception {        
         ExtendedController extendedController = new ExtendedController();
         logger.log(new LogRecord(Level.INFO,
             "IceCreamClientCommunication." +
@@ -143,8 +143,12 @@ public class IceCreamClientCommunication {
             "setMessageInterfacesAndStartServerListening: " +
             "Set messageInterface in array and set array as attribute of " +
             "this.server."));
-        
+    }
+    
+    public void startServerListeningForMessages() throws Exception {
         this.server.startListeningForMessages();
+        // TODO: Generate ServerStartListeningForMessagesException when an
+        // Exception is thrown by startServerListeningForMessages.
         logger.log(new LogRecord(Level.INFO,
             "IceCreamClientCommunication." +
             "setMessageInterfacesAndStartServerListening: " +
