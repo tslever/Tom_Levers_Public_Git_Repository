@@ -73,8 +73,12 @@ public class Main {
             "IceCreamClientCommunication, that represents the server's ice " +
             "cream client communication subsystem."));
         
-        communicator.setMessageInterfacesAndStartServerListening();
+        communicator.setMessageInterfaces();
         logger.log(new LogRecord(Level.INFO,
-            "main: Set message interfaces and started server listening."));
+            "main: Set message interfaces of server."));
+        
+        communicator.startServerListeningForMessages();
+        logger.log(new LogRecord(Level.INFO,
+            "main: Started server listening for messages."));
     }
 }
