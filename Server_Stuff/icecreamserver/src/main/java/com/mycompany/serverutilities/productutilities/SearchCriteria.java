@@ -18,12 +18,19 @@ public class SearchCriteria {
     private final static Logger logger =
         Logger.getLogger(SearchCriteria.class.getName());
     
+    private final String[] ingredientsList;
+    
     /**
      * Defines constructor SearchCriteria.
+     * @param ingredientsListToUse
      */
-    public SearchCriteria() {
+    public SearchCriteria(String[] ingredientsListToUse) {
         logger.log(new LogRecord(Level.INFO,
             "SearchCriteria constructor: Started."));
+        
+        this.ingredientsList = ingredientsListToUse;
+        logger.log(new LogRecord(Level.INFO,
+            "SearchCriteria constructor: Set ingredientsList as " +
+            "ingredientsListToUse."));
     }
-
 }

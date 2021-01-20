@@ -6,6 +6,7 @@ package com.mycompany.serverutilities.clientcommunicationutilities;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
+import org.json.JSONObject;
 
 /**
  * Defines class Controller that defines basic functionality to process a
@@ -31,5 +32,5 @@ abstract class Controller {
      * IceCreamApplicationMessages into Products.
      * @param messageToProcess
      */
-    abstract public void process(IceCreamApplicationMessage messageToProcess);
+    abstract public void process(JSONObject valuesPassedToController);
 }
