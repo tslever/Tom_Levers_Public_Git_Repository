@@ -11,7 +11,6 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -122,7 +121,7 @@ class MessageHandler implements HttpHandler {
             }
         }
         
-        if (hashMapOfKeysAndValues.size() == 0) {
+        if (hashMapOfKeysAndValues.isEmpty()) {
             hashMapOfKeysAndValues.put(
                 "invalid-key", "{'invalid-key': 'no-valid-keys'}");
         }
