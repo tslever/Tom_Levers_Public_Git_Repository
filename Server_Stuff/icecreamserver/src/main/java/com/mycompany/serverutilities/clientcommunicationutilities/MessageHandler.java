@@ -76,6 +76,11 @@ class MessageHandler implements HttpHandler {
             defineHashMapOfKeysAndValues(
                iceCreamApplicationMessage.getBodyOfClientMessage()),
             this.hashMapOfKeysAndControllers);
+        
+        // Build a response from haveControllersProcessValues
+        // If there was a JSONException, build malformed-JSON response.
+        
+        // Send the response.
     }
     
     // Create utility to split a string on "&" into an array of any number of
@@ -217,6 +222,12 @@ class MessageHandler implements HttpHandler {
                     "Caught UnsupportedEncodingException thrown by " +
                     "decoder."));
             }
+            
+            // TODO: Tell requester that there's an error with their request.
+            //catch (JSONException e) {
+            //    
+            //}
+            
             // TODO: Catch NotJSONObjectException.
             catch (Exception e) {
                 logger.log(new LogRecord(Level.SEVERE,
