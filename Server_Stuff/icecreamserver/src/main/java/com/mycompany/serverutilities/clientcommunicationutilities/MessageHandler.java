@@ -55,8 +55,10 @@ class MessageHandler implements HttpHandler {
      * 2) Get the body of the ice cream application message,
      * 3) Define an array of strings, each with a key to identify a controller
      *    and values to pass to the controller,
-     * 4) Define a hash map of keys and values, and
-     * 5) Have controllers process values.
+     * 4) Define a hash map of keys and values
+     *    (by calling defineHashMapOfKeysAndValues), and
+     * 5) Have controllers process values
+     *    (by calling haveControllersProcessValues).
      * @param httpExchange
      */
     @Override
@@ -70,28 +72,15 @@ class MessageHandler implements HttpHandler {
             "MessageHandler.handle: Got ice cream application message from " +
             "HTTP message from client."));
         
-        String bodyOfClientMessage =
-            iceCreamApplicationMessage.getBodyOfClientMessage();
-        logger.log(new LogRecord(Level.INFO,
-            "The body of the client message is '" +
-            iceCreamApplicationMessage.getBodyOfClientMessage() + "'."));
-        
-        String[] keysToIdentifyControllersAndValuesToPassToControllers =
-            bodyOfClientMessage.split("&");
-        logger.log(new LogRecord(Level.INFO,
-            "MessageHandler.handle: Split the body of the client message " +
-            "based on delimiter '&' into the string array of " +
-            "keys+plus+values '" +
-            Arrays.toString(
-                keysToIdentifyControllersAndValuesToPassToControllers) +
-            "'."));       
-        
-        HashMap<String, String> hashMapOfKeysAndValues =
-           defineHashMapOfKeysAndValues(
-               keysToIdentifyControllersAndValuesToPassToControllers);
-        
-        haveControllersProcessValues(hashMapOfKeysAndValues);
+        haveControllersProcessValues(
+            defineHashMapOfKeysAndValues(
+               iceCreamApplicationMessage.getBodyOfClientMessage()),
+            this.hashMapOfKeysAndControllers);
     }
+    
+    // Create utility to split a string on "&" into an array of any number of
+    // strings.
+    
     
     /**
      * Defines method defineHashMapOfKeysAndValues to, for each string in
@@ -108,7 +97,17 @@ class MessageHandler implements HttpHandler {
      * @return
      */
     private HashMap<String, String> defineHashMapOfKeysAndValues(
-        String[] keysAndValuesToUse) {
+        String bodyOfClientMessage) {
+        
+        String[] keysToIdentifyControllersAndValuesToPassToControllers =
+            bodyOfClientMessage.split("&");
+        logger.log(new LogRecord(Level.INFO,
+            "MessageHandler.handle: Split the body of the client message " +
+            "based on delimiter '&' into the string array of " +
+            "keys+plus+values '" +
+            Arrays.toString(
+                keysToIdentifyControllersAndValuesToPassToControllers) +
+            "'."));
         
         String[] keyToIdentifyControllerAndValuesToPassToControllerAsArray;
         String keyToIdentifyController;
@@ -116,7 +115,7 @@ class MessageHandler implements HttpHandler {
         String valuesToPassToControllerInURLEncoding;
         
         for (String keyToIdentifyControllerAndValuesToPassToControllerAsString :
-            keysAndValuesToUse) {
+            keysToIdentifyControllersAndValuesToPassToControllers) {
             logger.log(new LogRecord(Level.INFO,
                 "MessageHandler.handle: Working with the following key to " +
                 "identify controller and associated values to pass to " +
@@ -172,17 +171,18 @@ class MessageHandler implements HttpHandler {
      * @return
      */
     private void haveControllersProcessValues(
-        HashMap<String, String> hashMapToUse) {
+        HashMap<String, String> hashMapOfKeysAndValues,
+        HashMap<String, Controller> hashMapOfKeysAndControllers) {
         
         String valuesToPassToControllerInURLEncoding;
         String valuesToPassToControllerInJSONFormat;
         JSONObject valuesToPassToControllerAsJSONObject;
         
         for (String keyFromHashMapOfKeysAndValues :
-             hashMapToUse.keySet()) {
+             hashMapOfKeysAndValues.keySet()) {
                 
             valuesToPassToControllerInURLEncoding =
-                hashMapToUse.get(keyFromHashMapOfKeysAndValues);
+                hashMapOfKeysAndValues.get(keyFromHashMapOfKeysAndValues);
 
             try {
                 valuesToPassToControllerInJSONFormat = URLDecoder.decode(
@@ -207,7 +207,7 @@ class MessageHandler implements HttpHandler {
                     "process method the JSONObject '" +
                     valuesToPassToControllerAsJSONObject.toString() +
                     "'."));
-                this.hashMapOfKeysAndControllers
+                hashMapOfKeysAndControllers
                     .get(keyFromHashMapOfKeysAndValues)
                     .process(valuesToPassToControllerAsJSONObject);
             }
@@ -216,6 +216,12 @@ class MessageHandler implements HttpHandler {
                     e.toString() + "\n" +
                     "Caught UnsupportedEncodingException thrown by " +
                     "decoder."));
+            }
+            // TODO: Catch NotJSONObjectException.
+            catch (Exception e) {
+                logger.log(new LogRecord(Level.SEVERE,
+                    e.toString() + "\n" +
+                    "Caught Exception e thrown by process."));
             }
         } 
     }

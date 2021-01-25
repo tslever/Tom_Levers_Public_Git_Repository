@@ -61,11 +61,18 @@ public class IceCreamClientCommunication {
          * @param messageToProcess 
          */
         @Override
-        public void process(Object valuesToUse) {            
+        public void process(Object valuesToUse) throws Exception {            
             logger.log(new LogRecord(Level.INFO,
                 "ExtendedController.process: Started."));
             
+            // TODO: Throw new NotJSONObjectException.
+            if (!(valuesToUse instanceof JSONObject)) {
+                throw new Exception("valuesToUse needs to be a JSONObject.");
+            }
+            
+            // TODO: Test and handle not convertible exception.
             JSONObject valuesToUseAsJSONObject = (JSONObject)valuesToUse;
+
             
             if (valuesToUseAsJSONObject.has("invalid-key") &&
                 valuesToUseAsJSONObject.get("invalid-key").toString().equals(
