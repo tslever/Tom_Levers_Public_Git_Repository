@@ -60,6 +60,10 @@ public class IceCreamClientCommunication {
          * which processes ice cream application messages into products.
          * @param messageToProcess 
          */
+        
+        // Have override take a JSONObject, even though abstract declaration
+        // specifies an Object.
+        
         @Override
         public void process(Object valuesToUse) throws Exception {            
             logger.log(new LogRecord(Level.INFO,
