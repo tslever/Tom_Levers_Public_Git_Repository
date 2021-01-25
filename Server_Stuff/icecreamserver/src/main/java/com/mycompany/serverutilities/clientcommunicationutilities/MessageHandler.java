@@ -50,10 +50,13 @@ class MessageHandler implements HttpHandler {
     }
     
     /**
-     * Defines method handle to pick up an HTTP message from a message
-     * interface, extract the ice cream application message in that HTTP
-     * message, and hand sets of parameters in that message to different
-     * controllers.
+     * Defines method handle to:
+     * 1) Extract the ice cream application message in an HTTP message,
+     * 2) Get the body of the ice cream application message,
+     * 3) Define an array of strings, each with a key to identify a controller
+     *    and values to pass to the controller,
+     * 4) Define a hash map of keys and values, and
+     * 5) Have controllers process values.
      * @param httpExchange
      */
     @Override
@@ -65,11 +68,16 @@ class MessageHandler implements HttpHandler {
             getIceCreamApplicationMessage(httpExchange);
         logger.log(new LogRecord(Level.INFO,
             "MessageHandler.handle: Got ice cream application message from " +
-            "HTTP message from client. The body of the client message is '" +
+            "HTTP message from client."));
+        
+        String bodyOfClientMessage =
+            iceCreamApplicationMessage.getBodyOfClientMessage();
+        logger.log(new LogRecord(Level.INFO,
+            "The body of the client message is '" +
             iceCreamApplicationMessage.getBodyOfClientMessage() + "'."));
         
         String[] keysToIdentifyControllersAndValuesToPassToControllers =
-            iceCreamApplicationMessage.getBodyOfClientMessage().split("&");
+            bodyOfClientMessage.split("&");
         logger.log(new LogRecord(Level.INFO,
             "MessageHandler.handle: Split the body of the client message " +
             "based on delimiter '&' into the string array of " +
@@ -78,13 +86,37 @@ class MessageHandler implements HttpHandler {
                 keysToIdentifyControllersAndValuesToPassToControllers) +
             "'."));       
         
+        HashMap<String, String> hashMapOfKeysAndValues =
+           defineHashMapOfKeysAndValues(
+               keysToIdentifyControllersAndValuesToPassToControllers);
+        
+        haveControllersProcessValues(hashMapOfKeysAndValues);
+    }
+    
+    /**
+     * Defines method defineHashMapOfKeysAndValues to, for each string in
+     * keysAndValuesToUse with a key to identify a controller and values to pass
+     * to the controller:
+     * 1) Convert the string into a two-element array of key and values,
+     * 2) Add key and values to a hashMap if the key corresponds to a valid
+     *    controller and the key and values haven't already been added to the
+     *    hash map, and
+     * 3) Adds "invalid-key" and values "{'invalid-key': 'no-valid-keys'}" to
+     *    the hash map if no keys and values were added to the hash map in
+     *    Step 2.
+     * @param keysAndValuesToUse
+     * @return
+     */
+    private HashMap<String, String> defineHashMapOfKeysAndValues(
+        String[] keysAndValuesToUse) {
+        
         String[] keyToIdentifyControllerAndValuesToPassToControllerAsArray;
         String keyToIdentifyController;
-        HashMap<String, String> hashMapOfKeysAndValues = new HashMap();
+        HashMap<String, String> hashMap = new HashMap();
         String valuesToPassToControllerInURLEncoding;
         
         for (String keyToIdentifyControllerAndValuesToPassToControllerAsString :
-            keysToIdentifyControllersAndValuesToPassToControllers) {
+            keysAndValuesToUse) {
             logger.log(new LogRecord(Level.INFO,
                 "MessageHandler.handle: Working with the following key to " +
                 "identify controller and associated values to pass to " +
@@ -108,32 +140,49 @@ class MessageHandler implements HttpHandler {
                 "MessageHandler.handle: Found keyToIdentifyController '" +
                 keyToIdentifyController + "'."));
             
-            if (!hashMapOfKeysAndValues.containsKey(keyToIdentifyController) &&
+            if (!hashMap.containsKey(keyToIdentifyController) &&
                 hashMapOfKeysAndControllers.containsKey(
                     keyToIdentifyController) &&
                 !keyToIdentifyController.equals("invalid-key")) {
                 valuesToPassToControllerInURLEncoding =
                     keyToIdentifyControllerAndValuesToPassToControllerAsArray
                     [1];
-                hashMapOfKeysAndValues.put(
+                hashMap.put(
                     keyToIdentifyController,
                     valuesToPassToControllerInURLEncoding);
             }
         }
         
-        if (hashMapOfKeysAndValues.isEmpty()) {
-            hashMapOfKeysAndValues.put(
-                "invalid-key", "{'invalid-key': 'no-valid-keys'}");
+        if (hashMap.isEmpty()) {
+            hashMap.put("invalid-key", "{'invalid-key': 'no-valid-keys'}");
         }
-            
+        
+        return hashMap;
+    }
+    
+    /**
+     * Defines method haveControllersProcessValues to, for each key in
+     * hashMapToUse:
+     * 1) Try to decode the values associated with that key from URL encoding
+     *    to JSON format,
+     * 2) Construct a JSONObject based on the decoded values; and
+     * 3) Call the process method of the controller associated with that key,
+     *    passing the process method the JSONObject representing values.
+     * @param keysAndValuesToUse
+     * @return
+     */
+    private void haveControllersProcessValues(
+        HashMap<String, String> hashMapToUse) {
+        
+        String valuesToPassToControllerInURLEncoding;
         String valuesToPassToControllerInJSONFormat;
         JSONObject valuesToPassToControllerAsJSONObject;
         
         for (String keyFromHashMapOfKeysAndValues :
-             hashMapOfKeysAndValues.keySet()) {
+             hashMapToUse.keySet()) {
                 
             valuesToPassToControllerInURLEncoding =
-                hashMapOfKeysAndValues.get(keyFromHashMapOfKeysAndValues);
+                hashMapToUse.get(keyFromHashMapOfKeysAndValues);
 
             try {
                 valuesToPassToControllerInJSONFormat = URLDecoder.decode(
@@ -168,7 +217,7 @@ class MessageHandler implements HttpHandler {
                     "Caught UnsupportedEncodingException thrown by " +
                     "decoder."));
             }
-        }
+        } 
     }
     
     /**

@@ -32,5 +32,5 @@ abstract class Controller {
      * IceCreamApplicationMessages into Products.
      * @param messageToProcess
      */
-    abstract public void process(JSONObject valuesPassedToController);
+    abstract public void process(Object valuesToUse);
 }

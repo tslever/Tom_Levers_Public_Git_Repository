@@ -61,12 +61,14 @@ public class IceCreamClientCommunication {
          * @param messageToProcess 
          */
         @Override
-        public void process(JSONObject valuesToUse) {            
+        public void process(Object valuesToUse) {            
             logger.log(new LogRecord(Level.INFO,
                 "ExtendedController.process: Started."));
             
-            if (valuesToUse.has("invalid-key") &&
-                valuesToUse.get("invalid-key").toString().equals(
+            JSONObject valuesToUseAsJSONObject = (JSONObject)valuesToUse;
+            
+            if (valuesToUseAsJSONObject.has("invalid-key") &&
+                valuesToUseAsJSONObject.get("invalid-key").toString().equals(
                     "no-valid-keys")) {
                 logger.log(new LogRecord(Level.INFO,
                     "ExtendedController.process: Body of client message had " +
@@ -75,7 +77,7 @@ public class IceCreamClientCommunication {
                 return;
             }
             
-            if (!valuesToUse.has("ingredients")) {
+            if (!valuesToUseAsJSONObject.has("ingredients")) {
                 logger.log(new LogRecord(Level.INFO,
                     "ExtendedController.process: Body of client message had " +
                     "no ingredients list: sending an empty products list " +
@@ -84,7 +86,14 @@ public class IceCreamClientCommunication {
                 return;
             }
             
-            SearchCriteria searchCriteria = getSearchCriteria(valuesToUse);
+            JSONArray ingredientsListAsJSONArray =
+               valuesToUseAsJSONObject.getJSONArray("ingredients");
+            logger.log(new LogRecord(Level.INFO,
+                "ExtendedController.process: Got ingredientsListAsJSONArray '" +
+                ingredientsListAsJSONArray.toString() + "'."));
+            
+            SearchCriteria searchCriteria =
+                getSearchCriteria(ingredientsListAsJSONArray);
             logger.log(new LogRecord(Level.INFO,
                 "ExtendedController.process: Got search criteria from " +
                 "values to use."));
@@ -100,53 +109,46 @@ public class IceCreamClientCommunication {
                 "ExtendedController.process: Had server send products to " +
                 "client."));
         }
-        
-        /**
-         * Defines method getSearchCriteria, which gets search criteria from
-         * an ice cream application message.
-         * @param iceCreamApplicationMessageToUse
-         * @return new SearchCriteria()
-         */
-        private SearchCriteria getSearchCriteria(
-            JSONObject objectWithIngredientList) {
-            logger.log(new LogRecord(Level.INFO,
-                "ExtendedController.getSearchCriteria: Started."));
-            
-            JSONArray ingredientsListAsJSONArray =
-                objectWithIngredientList.getJSONArray("ingredients");
-            logger.log(new LogRecord(Level.INFO,
-                "ExtendedController.getSearchCriteria: Got " +
-                "ingredientsListAsJSONArray '" +
-                ingredientsListAsJSONArray.toString() + "'."));
-            
-            if (ingredientsListAsJSONArray.length() == 0) {
-                logger.log(new LogRecord(Level.INFO,
-                    "ExtendedController.getSearchCriteria: Returning " +
-                    "new SearchCriteria, passed a new empty string array, " +
-                    "because there are no ingredients in the " +
-                    "ingredientsListAsJSONArray."));
-                return new SearchCriteria(new String[0]);
-            }
+    }
+    
+    /**
+     * Defines method getSearchCriteria, which gets search criteria from
+     * an ice cream application message.
+     * @param iceCreamApplicationMessageToUse
+     * @return new SearchCriteria()
+     */
+    private SearchCriteria getSearchCriteria(
+        JSONArray jsonArrayToUse) {
+        logger.log(new LogRecord(Level.INFO,
+            "ExtendedController.getSearchCriteria: Started."));
 
-            String[] ingredientsListAsStringArray =
-                new String[ingredientsListAsJSONArray.length()];
-            for (int i = 0;
-                 i < ingredientsListAsStringArray.length;
-                 i++) {
-                ingredientsListAsStringArray[i] =
-                    ingredientsListAsJSONArray.get(i).toString();
-            }
+        if (jsonArrayToUse.length() == 0) {
             logger.log(new LogRecord(Level.INFO,
-                "ExtendedController.getSearchCriteria: Created " +
-                "ingredientsListAsStringArray '" +
-                Arrays.toString(
-                    ingredientsListAsStringArray) + "'."));
-
-            logger.log(new LogRecord(Level.INFO,
-                "ExtendedController.getSearchCriteria: Returning new " +
-                "SearchCriteria based on ingredientsListAsStringArray."));
-            return new SearchCriteria(ingredientsListAsStringArray);
+                "ExtendedController.getSearchCriteria: Returning " +
+                "new SearchCriteria, passed a new empty string array, " +
+                "because there are no ingredients in the " +
+                "ingredientsListAsJSONArray."));
+            return new SearchCriteria(new String[0]);
         }
+
+        String[] ingredientsListAsStringArray =
+            new String[jsonArrayToUse.length()];
+        for (int i = 0;
+             i < ingredientsListAsStringArray.length;
+             i++) {
+            ingredientsListAsStringArray[i] =
+                jsonArrayToUse.get(i).toString();
+        }
+        logger.log(new LogRecord(Level.INFO,
+            "ExtendedController.getSearchCriteria: Created " +
+            "ingredientsListAsStringArray '" +
+            Arrays.toString(
+                ingredientsListAsStringArray) + "'."));
+
+        logger.log(new LogRecord(Level.INFO,
+            "ExtendedController.getSearchCriteria: Returning new " +
+            "SearchCriteria based on ingredientsListAsStringArray."));
+        return new SearchCriteria(ingredientsListAsStringArray);
     }
 
     /**
