@@ -51,8 +51,11 @@ public class Server {
      * @param messageInterfacesToUse
      * @throws Exception
      */
-    public void setMessageInterfaces(
+    void setMessageInterfaces(
             MessageInterface[] messageInterfacesToUse) throws Exception {
+    // Without public, this method is "package-private"
+    // to com.mycompany.serverutilities.clientcommunicationutilities.
+    
         logger.log(new LogRecord(Level.INFO,
             "Server.setMessageInterfaces: Started."));
         

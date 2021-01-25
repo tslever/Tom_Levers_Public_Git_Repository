@@ -6,9 +6,12 @@ package com.mycompany.serverutilities.clientcommunicationutilities;
 import com.mycompany.serverutilities.productutilities.SearchCriteria;
 import com.mycompany.serverutilities.productutilities.IceCreamProductRetrieval;
 import com.mycompany.serverutilities.productutilities.Products;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * Defines class IceCreamClientCommunication, an instance of which represents
@@ -57,15 +60,54 @@ public class IceCreamClientCommunication {
          * which processes ice cream application messages into products.
          * @param messageToProcess 
          */
+        
+        // Have override take a JSONObject, even though abstract declaration
+        // specifies an Object.
+        
         @Override
-        public void process(IceCreamApplicationMessage messageToProcess) {
+        public void process(Object valuesToUse) throws Exception {            
             logger.log(new LogRecord(Level.INFO,
                 "ExtendedController.process: Started."));
             
-            SearchCriteria searchCriteria = getSearchCriteria(messageToProcess);
+            // TODO: Throw new NotJSONObjectException.
+            if (!(valuesToUse instanceof JSONObject)) {
+                throw new Exception("valuesToUse needs to be a JSONObject.");
+            }
+            
+            // TODO: Test and handle not convertible exception.
+            JSONObject valuesToUseAsJSONObject = (JSONObject)valuesToUse;
+
+            
+            if (valuesToUseAsJSONObject.has("invalid-key") &&
+                valuesToUseAsJSONObject.get("invalid-key").toString().equals(
+                    "no-valid-keys")) {
+                logger.log(new LogRecord(Level.INFO,
+                    "ExtendedController.process: Body of client message had " +
+                    "no valid keys: sending an empty products list back."));
+                server.send(new Products());
+                return;
+            }
+            
+            if (!valuesToUseAsJSONObject.has("ingredients")) {
+                logger.log(new LogRecord(Level.INFO,
+                    "ExtendedController.process: Body of client message had " +
+                    "no ingredients list: sending an empty products list " +
+                    "back."));
+                server.send(new Products());
+                return;
+            }
+            
+            JSONArray ingredientsListAsJSONArray =
+               valuesToUseAsJSONObject.getJSONArray("ingredients");
+            logger.log(new LogRecord(Level.INFO,
+                "ExtendedController.process: Got ingredientsListAsJSONArray '" +
+                ingredientsListAsJSONArray.toString() + "'."));
+            
+            SearchCriteria searchCriteria =
+                getSearchCriteria(ingredientsListAsJSONArray);
             logger.log(new LogRecord(Level.INFO,
                 "ExtendedController.process: Got search criteria from " +
-                "message to process."));
+                "values to use."));
             
             Products products =
                 retriever.getTheProductsMatching(searchCriteria);
@@ -78,26 +120,46 @@ public class IceCreamClientCommunication {
                 "ExtendedController.process: Had server send products to " +
                 "client."));
         }
-        
-        /**
-         * Defines method getSearchCriteria, which gets search criteria from
-         * an ice cream application message.
-         * @param iceCreamApplicationMessageToUse
-         * @return new SearchCriteria()
-         */
-        private SearchCriteria getSearchCriteria(
-            IceCreamApplicationMessage iceCreamApplicationMessageToUse) {
+    }
+    
+    /**
+     * Defines method getSearchCriteria, which gets search criteria from
+     * an ice cream application message.
+     * @param iceCreamApplicationMessageToUse
+     * @return new SearchCriteria()
+     */
+    private SearchCriteria getSearchCriteria(
+        JSONArray jsonArrayToUse) {
+        logger.log(new LogRecord(Level.INFO,
+            "ExtendedController.getSearchCriteria: Started."));
+
+        if (jsonArrayToUse.length() == 0) {
             logger.log(new LogRecord(Level.INFO,
-                "ExtendedController.getSearchCriteria: Started."));
-            
-            // Functionality to get search criteria from an ice cream
-            // application message.
-            
-            logger.log(new LogRecord(Level.INFO,
-                "ExtendedController.getSearchCriteria: Returning search " +
-                "criteria based on iceCreamApplicationMessageToUse."));
-            return new SearchCriteria();
+                "ExtendedController.getSearchCriteria: Returning " +
+                "new SearchCriteria, passed a new empty string array, " +
+                "because there are no ingredients in the " +
+                "ingredientsListAsJSONArray."));
+            return new SearchCriteria(new String[0]);
         }
+
+        String[] ingredientsListAsStringArray =
+            new String[jsonArrayToUse.length()];
+        for (int i = 0;
+             i < ingredientsListAsStringArray.length;
+             i++) {
+            ingredientsListAsStringArray[i] =
+                jsonArrayToUse.get(i).toString();
+        }
+        logger.log(new LogRecord(Level.INFO,
+            "ExtendedController.getSearchCriteria: Created " +
+            "ingredientsListAsStringArray '" +
+            Arrays.toString(
+                ingredientsListAsStringArray) + "'."));
+
+        logger.log(new LogRecord(Level.INFO,
+            "ExtendedController.getSearchCriteria: Returning new " +
+            "SearchCriteria based on ingredientsListAsStringArray."));
+        return new SearchCriteria(ingredientsListAsStringArray);
     }
 
     /**
@@ -106,52 +168,72 @@ public class IceCreamClientCommunication {
      * messages.
      * @throws Exception 
      */
-    public void setMessageInterfaces() throws Exception {        
-        ExtendedController extendedController = new ExtendedController();
+    public void setMessageInterfaces() throws Exception {
         logger.log(new LogRecord(Level.INFO,
-            "IceCreamClientCommunication." +
-            "setMessageInterfacesAndStartServerListening: Started."));
+            "IceCreamClientCommunication.setMessageInterfaces: Started."));
         
+        MessageHandler messageHandler = new MessageHandler();
         logger.log(new LogRecord(Level.INFO,
-            "IceCreamClientCommunication." +
-            "setMessageInterfacesAndStartServerListening: " +
-            "Instantiated extendedController, an instance of " +
-            "ExtendedController, which is an extension of Controller. " +
-            "extendedController is recognized as an instance of Controller."));
+            "IceCreamClientCommunication.setMessageInterfaces: " +
+            "Instantiated messageHandler."));
         
-        MessageHandler messageHandler = new MessageHandler(extendedController);
+        ExtendedController extendedControllerForProcessingSearchParameters =
+            new ExtendedController();        
         logger.log(new LogRecord(Level.INFO,
-            "IceCreamClientCommunication." +
-            "setMessageInterfacesAndStartServerListening: " +
-            "Instantiated messageHandler based on extendedController."));
+            "IceCreamClientCommunication.setMessageInterfaces: " +
+            "Instantiated extendedControllerForProcessingSearchParameters, " +
+            "an instance of ExtendedController, which is an extension of " +
+            "Controller. This instance is recognized as an instance of " +
+            "Controller."));
+        
+        messageHandler.addController(
+            "search-parameters",
+            extendedControllerForProcessingSearchParameters);
+        logger.log(new LogRecord(Level.INFO,
+            "IceCreamClientCommunication.setMessageInterfaces: " +
+            "Added extendedControllerForProcessingSearchParameters to " +
+            "messageHandler along with the key 'search-parameters', which " +
+            "MessageHandler.handle will use to identify the appropriate " +
+            "Controller when it finds 'search-parameters=<values to process>' "
+            + "in the body of a client message."));
+        
+        ExtendedController extendedControllerUsedWhenKeyIsInvalid =
+             new ExtendedController();
+        logger.log(new LogRecord(Level.INFO,
+            "IceCreamClientCommunication.setMessageInterfaces: " +
+            "Instantiated extendedControllerUsedWhenKeyIsInvalid."));
+        
+        messageHandler.addController(
+            "invalid-key", extendedControllerUsedWhenKeyIsInvalid);
         
         MessageInterface messageInterface =
             new MessageInterface("/test", messageHandler);
         logger.log(new LogRecord(Level.INFO,
-            "IceCreamClientCommunication." +
-            "setMessageInterfacesAndStartServerListening: " +
+            "IceCreamClientCommunication.setMessageInterfaces: " +
             "Instantiated messageInterface, which will connect messages " +
             "received by the part of the server with endpoint '/test' and " +
-            "the message handler."));
+            "the appropriate message handler."));
         
         this.server.setMessageInterfaces(
             new MessageInterface[]{messageInterface});
         // TODO: Generate SetMessageInterfacesException when an Exception is
         // thrown by setMessageInterfaces.
         logger.log(new LogRecord(Level.INFO,
-            "IceCreamClientCommunication." +
-            "setMessageInterfacesAndStartServerListening: " +
-            "Set messageInterface in array and set array as attribute of " +
-            "this.server."));
+            "IceCreamClientCommunication.setMessageInterfaces: " +
+            "Set messageInterface in an array and set the array as an " +
+            "attribute of this.server."));
     }
     
     public void startServerListeningForMessages() throws Exception {
+        logger.log(new LogRecord(Level.INFO,
+            "IceCreamClientCommunication.startServerListeningForMessages: " +
+            "Started."));
+        
         this.server.startListeningForMessages();
         // TODO: Generate ServerStartListeningForMessagesException when an
         // Exception is thrown by startServerListeningForMessages.
         logger.log(new LogRecord(Level.INFO,
-            "IceCreamClientCommunication." +
-            "setMessageInterfacesAndStartServerListening: " +
+            "IceCreamClientCommunication.startServerListeningForMessages: " +
             "Started server listening for messages."));
     }
 }

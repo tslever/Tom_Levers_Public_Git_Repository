@@ -32,5 +32,9 @@ class IceCreamApplicationMessage {
         logger.log(new LogRecord(Level.INFO,
             "IceCreamApplicationMessage constructor: Set " +
             "bodyOfClientMessage as bodyOfClientMessageToUse."));
-    } 
+    }
+    
+    public String getBodyOfClientMessage() {
+        return this.bodyOfClientMessage;
+    }
 }

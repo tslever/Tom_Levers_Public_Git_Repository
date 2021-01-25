@@ -31,5 +31,5 @@ abstract class Controller {
      * IceCreamApplicationMessages into Products.
      * @param messageToProcess
      */
-    abstract public void process(IceCreamApplicationMessage messageToProcess);
+    abstract public void process(Object valuesToUse) throws Exception;
 }
