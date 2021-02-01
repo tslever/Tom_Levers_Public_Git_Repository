@@ -33,4 +33,8 @@ public class SearchCriteria {
             "SearchCriteria constructor: Set ingredientsList as " +
             "ingredientsListToUse."));
     }
+    
+    public String[] getIngredientsList() {
+        return this.ingredientsList;
+    }
 }

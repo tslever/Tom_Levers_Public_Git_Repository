@@ -3,6 +3,7 @@
 package com.mycompany.serverutilities.clientcommunicationutilities;
 
 // Imports classes.
+import com.mycompany.serverutilities.productutilities.Products;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import java.io.BufferedReader;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.LogRecord;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -29,6 +31,7 @@ class MessageHandler implements HttpHandler {
     private final static Logger logger =
         Logger.getLogger(MessageHandler.class.getName());
     
+    private final Server server; 
     private final HashMap<String, Controller> hashMapOfKeysAndControllers;
     
     /**
@@ -36,10 +39,11 @@ class MessageHandler implements HttpHandler {
      * handler with inputs.
      * @param controllerToUse
      */
-    public MessageHandler() {
+    public MessageHandler(Server serverToUse) {
         logger.log(new LogRecord(Level.INFO,
             "MessageHandler constructor: Started."));
         
+        this.server = serverToUse;
         this.hashMapOfKeysAndControllers = new HashMap();
     }
     
@@ -53,12 +57,11 @@ class MessageHandler implements HttpHandler {
      * Defines method handle to:
      * 1) Extract the ice cream application message in an HTTP message,
      * 2) Get the body of the ice cream application message,
-     * 3) Define an array of strings, each with a key to identify a controller
-     *    and values to pass to the controller,
-     * 4) Define a hash map of keys and values
-     *    (by calling defineHashMapOfKeysAndValues), and
-     * 5) Have controllers process values
-     *    (by calling haveControllersProcessValues).
+     * 3) Define a hash map of keys to identify controllers and values
+     *    for controllers to process,
+     * 4) Have controllers process values,
+     * 5) Build a response from a returned Products, and
+     * 6) Send the response to the client.
      * @param httpExchange
      */
     @Override
@@ -72,32 +75,32 @@ class MessageHandler implements HttpHandler {
             "MessageHandler.handle: Got ice cream application message from " +
             "HTTP message from client."));
         
-        haveControllersProcessValues(
+        Products products = haveControllersProcessValues(
             defineHashMapOfKeysAndValues(
                iceCreamApplicationMessage.getBodyOfClientMessage()),
             this.hashMapOfKeysAndControllers);
+        logger.log(new LogRecord(Level.INFO,
+            "MessageHandler.handle: Got Products with info '" +
+            products.getInfo() + "' and String array of products " +
+            Arrays.toString(products.getProducts()) + "."));
         
-        // Build a response from haveControllersProcessValues
-        // If there was a JSONException, build malformed-JSON response.
-        
-        // Send the response.
+        byte[] response = buildResponseFrom(products);
+        logger.log(new LogRecord(Level.INFO,
+            "MessageHandler.handle: Built response from Products."));
+
+        logger.log(new LogRecord(Level.INFO,
+            "MessageHandler.handle: Sending response to client."));        
+        this.server.send(response, httpExchange);
     }
-    
-    // Create utility to split a string on "&" into an array of any number of
-    // strings.
-    
-    
+        
     /**
      * Defines method defineHashMapOfKeysAndValues to, for each string in
      * keysAndValuesToUse with a key to identify a controller and values to pass
      * to the controller:
-     * 1) Convert the string into a two-element array of key and values,
+     * 1) Convert the string into a two-element array of key and values, and
      * 2) Add key and values to a hashMap if the key corresponds to a valid
      *    controller and the key and values haven't already been added to the
-     *    hash map, and
-     * 3) Adds "invalid-key" and values "{'invalid-key': 'no-valid-keys'}" to
-     *    the hash map if no keys and values were added to the hash map in
-     *    Step 2.
+     *    hash map.
      * @param keysAndValuesToUse
      * @return
      */
@@ -146,8 +149,7 @@ class MessageHandler implements HttpHandler {
             
             if (!hashMap.containsKey(keyToIdentifyController) &&
                 hashMapOfKeysAndControllers.containsKey(
-                    keyToIdentifyController) &&
-                !keyToIdentifyController.equals("invalid-key")) {
+                    keyToIdentifyController)) {
                 valuesToPassToControllerInURLEncoding =
                     keyToIdentifyControllerAndValuesToPassToControllerAsArray
                     [1];
@@ -157,10 +159,6 @@ class MessageHandler implements HttpHandler {
             }
         }
         
-        if (hashMap.isEmpty()) {
-            hashMap.put("invalid-key", "{'invalid-key': 'no-valid-keys'}");
-        }
-        
         return hashMap;
     }
     
@@ -168,73 +166,75 @@ class MessageHandler implements HttpHandler {
      * Defines method haveControllersProcessValues to, for each key in
      * hashMapToUse:
      * 1) Try to decode the values associated with that key from URL encoding
-     *    to JSON format,
-     * 2) Construct a JSONObject based on the decoded values; and
+     *    to JSON format;
+     * 2) Construct a JSONObject based on the decoded values;
      * 3) Call the process method of the controller associated with that key,
-     *    passing the process method the JSONObject representing values.
+     *    passing the process method the JSONObject representing values; and
+     * 4) Return the Products returned by the process method.
      * @param keysAndValuesToUse
      * @return
      */
-    private void haveControllersProcessValues(
+    private Products haveControllersProcessValues(
         HashMap<String, String> hashMapOfKeysAndValues,
         HashMap<String, Controller> hashMapOfKeysAndControllers) {
         
-        String valuesToPassToControllerInURLEncoding;
-        String valuesToPassToControllerInJSONFormat;
-        JSONObject valuesToPassToControllerAsJSONObject;
+        String searchParameters = "search-parameters";
         
-        for (String keyFromHashMapOfKeysAndValues :
-             hashMapOfKeysAndValues.keySet()) {
-                
-            valuesToPassToControllerInURLEncoding =
-                hashMapOfKeysAndValues.get(keyFromHashMapOfKeysAndValues);
+        if (!hashMapOfKeysAndValues.keySet().contains(searchParameters)) {
+            return new Products(
+                "Zero products available: Body of client message does not " +
+                "contain key 'search-parameters'.",
+                new String[0]);
+        }
+        
+        String valuesToPassToControllerInURLEncoding =
+            hashMapOfKeysAndValues.get(searchParameters);
 
-            try {
-                valuesToPassToControllerInJSONFormat = URLDecoder.decode(
-                    valuesToPassToControllerInURLEncoding, "UTF-8");
-                logger.log(new LogRecord(Level.INFO,
-                    "MessageHandler.handle: Decoded values into the " +
-                    "String (in JSON format) '" +
-                    valuesToPassToControllerInJSONFormat + "'."));
+        try {
+            String valuesToPassToControllerInJSONFormat = URLDecoder.decode(
+                valuesToPassToControllerInURLEncoding, "UTF-8");
+            logger.log(new LogRecord(Level.INFO,
+                "MessageHandler.handle: Decoded values into the " +
+                "String (in JSON format) '" +
+                valuesToPassToControllerInJSONFormat + "'."));
 
-                valuesToPassToControllerAsJSONObject = new JSONObject(
-                    valuesToPassToControllerInJSONFormat);
-                logger.log(new LogRecord(Level.INFO,
-                    "MessageHandler.handle: Converted values to the " +
-                    "JSONObject '" +
-                    valuesToPassToControllerAsJSONObject.toString() +
-                    "'."));
+            JSONObject valuesToPassToControllerAsJSONObject = new JSONObject(
+                valuesToPassToControllerInJSONFormat);
+            logger.log(new LogRecord(Level.INFO,
+                "MessageHandler.handle: Converted values to the " +
+                "JSONObject '" +
+                valuesToPassToControllerAsJSONObject.toString() +
+                "'."));
 
-                logger.log(new LogRecord(Level.INFO,
-                    "MessageHandler.handle: Calling the process " +
-                    "method of the controller associated with key '" +
-                    keyFromHashMapOfKeysAndValues + "'. Passing to the " +
-                    "process method the JSONObject '" +
-                    valuesToPassToControllerAsJSONObject.toString() +
-                    "'."));
-                hashMapOfKeysAndControllers
-                    .get(keyFromHashMapOfKeysAndValues)
-                    .process(valuesToPassToControllerAsJSONObject);
-            }
-            catch (UnsupportedEncodingException e) {
-                logger.log(new LogRecord(Level.SEVERE,
-                    e.toString() + "\n" +
-                    "Caught UnsupportedEncodingException thrown by " +
-                    "decoder."));
-            }
-            
-            // TODO: Tell requester that there's an error with their request.
-            //catch (JSONException e) {
-            //    
-            //}
-            
-            // TODO: Catch NotJSONObjectException.
-            catch (Exception e) {
-                logger.log(new LogRecord(Level.SEVERE,
-                    e.toString() + "\n" +
-                    "Caught Exception e thrown by process."));
-            }
-        } 
+            logger.log(new LogRecord(Level.INFO,
+                "MessageHandler.handle: Returning products from the process " +
+                "method of the controller associated with key 'search-" +
+                "parameters'. Passing to the process method the JSONObject '" +
+                valuesToPassToControllerAsJSONObject.toString() +"'."));
+            return hashMapOfKeysAndControllers
+                .get(searchParameters)
+                .process(valuesToPassToControllerAsJSONObject);
+        }
+        catch (UnsupportedEncodingException e) {
+            return new Products(
+                "Zero products available: URL-encoded values associated with " +
+                "key 'search-parameters' is not in UTF-8 format.",
+                new String[0]);
+        }
+        catch (JSONException e) {
+            return new Products(
+                "Zero products available: JSON associated with " +
+                "key 'search-parameters' is invalid.",
+                new String[0]);
+        }
+        // TODO: Catch NotJSONObjectException.
+        catch (Exception e) {
+            return new Products(
+                "Zero products available: The controller associated with " +
+                "key 'search-parameters' was passed an Object that was not " +
+                "a JSONObject.",
+                new String[0]);
+        }
     }
     
     /**
@@ -280,5 +280,22 @@ class MessageHandler implements HttpHandler {
             "MessageHandler.getIceCreamApplicationMessage: Returning new " +
             "ice cream application message based on body of client message."));
         return new IceCreamApplicationMessage(bodyOfClientMessage);
+    }
+    
+    /**
+     * Defines method buildResponseFrom to build and return a String response.
+     * @param productsToUse
+     * @return 
+     */
+    public byte[] buildResponseFrom(Products productsToUse) {
+        
+        String response =
+            "{info: \"" +
+            productsToUse.getInfo() +
+            "\", products: \"" +
+            Arrays.toString(productsToUse.getProducts()) +
+            "\"}";
+        
+        return response.getBytes();
     }
 }
