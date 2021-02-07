@@ -4,7 +4,10 @@ package com.mycompany.serverutilities.clientcommunicationutilities;
 
 // Import classes.
 import com.mycompany.serverutilities.productutilities.Products;
+import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
@@ -117,7 +120,19 @@ public class Server {
     /**
      * Defines method send to send products corresponding to a message from an
      * ice cream client back to the ice cream client.
-     * @param productsToSend
+     * @param response
+     * @param httpExchange
      */
-    public void send(Products productsToSend) { }
+    public void send(byte[] response, HttpExchange httpExchange) {
+    
+        try (OutputStream outputStream = httpExchange.getResponseBody()) {
+            httpExchange.sendResponseHeaders(200, response.length);
+            outputStream.write(response);
+        }
+        catch (IOException e) {
+            logger.log(new LogRecord(Level.SEVERE,
+                e.toString() + "\n" +
+                "Caught IOException thrown by sendResponseHeaders or write."));
+        }
+    }
 }

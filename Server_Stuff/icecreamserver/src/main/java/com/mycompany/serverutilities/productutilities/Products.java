@@ -18,11 +18,25 @@ public class Products {
     private final static Logger logger =
         Logger.getLogger(Products.class.getName());
     
+    String info;
+    String[] products;
+    
     /**
      * Defines constructor Products.
      */
-    public Products() {
+    public Products(String infoToUse, String[] productsToUse) {
         logger.log(new LogRecord(Level.INFO,
             "Products controller: Started."));
+        
+        this.info = infoToUse;
+        this.products = productsToUse;
+    }
+    
+    public String getInfo() {
+        return this.info;
+    }
+    
+    public String[] getProducts() {
+        return this.products;
     }
 }

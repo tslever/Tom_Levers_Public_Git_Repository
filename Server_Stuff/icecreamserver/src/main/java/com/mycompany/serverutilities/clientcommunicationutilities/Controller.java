@@ -3,6 +3,7 @@
 package com.mycompany.serverutilities.clientcommunicationutilities;
 
 // Imports classes.
+import com.mycompany.serverutilities.productutilities.Products;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
@@ -31,5 +32,5 @@ abstract class Controller {
      * IceCreamApplicationMessages into Products.
      * @param messageToProcess
      */
-    abstract public void process(Object valuesToUse) throws Exception;
+    abstract public Products process(Object valuesToUse) throws Exception;
 }

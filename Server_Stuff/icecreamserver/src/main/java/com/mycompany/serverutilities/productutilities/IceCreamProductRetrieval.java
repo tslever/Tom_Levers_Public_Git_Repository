@@ -41,8 +41,13 @@ public class IceCreamProductRetrieval {
         // use.
       
         logger.log(new LogRecord(Level.INFO,
-            "IceCreamProductRetrieval.getTheProductsMatching: Returning the " +
-            "products matching the search criteria to use."));
-        return new Products();
+            "IceCreamProductRetrieval.getTheProductsMatching: Functionality " +
+            "to get the products matching the inputted search criteria does " +
+            "not exist: Returning a Products with relevant info and an empty " +
+            "String array of products."));
+        return new Products(
+            "Zero products available: Functionality to get products matching " +
+            "search criteria does not exist.",
+            new String[0]);
     }
 }

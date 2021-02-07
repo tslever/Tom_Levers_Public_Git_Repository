@@ -53,7 +53,7 @@ public class IceCreamClientCommunication {
      * Defines class ExtendedController, which processes ice cream application
      * messages into products.
      */
-    private class ExtendedController extends Controller {
+    private class ControllerToProcessValuesIntoProducts extends Controller {
         
         /**
          * Implements Controller's abstract method process,
@@ -61,11 +61,10 @@ public class IceCreamClientCommunication {
          * @param messageToProcess 
          */
         
-        // Have override take a JSONObject, even though abstract declaration
-        // specifies an Object.
-        
+        // TODO: Have override take a JSONObject,
+        // even though abstract declaration specifies an Object.
         @Override
-        public void process(Object valuesToUse) throws Exception {            
+        public Products process(Object valuesToUse) throws Exception {            
             logger.log(new LogRecord(Level.INFO,
                 "ExtendedController.process: Started."));
             
@@ -74,27 +73,18 @@ public class IceCreamClientCommunication {
                 throw new Exception("valuesToUse needs to be a JSONObject.");
             }
             
-            // TODO: Test and handle not convertible exception.
+            // TODO: Try the following and catch NotConvertibleException.
             JSONObject valuesToUseAsJSONObject = (JSONObject)valuesToUse;
-
-            
-            if (valuesToUseAsJSONObject.has("invalid-key") &&
-                valuesToUseAsJSONObject.get("invalid-key").toString().equals(
-                    "no-valid-keys")) {
-                logger.log(new LogRecord(Level.INFO,
-                    "ExtendedController.process: Body of client message had " +
-                    "no valid keys: sending an empty products list back."));
-                server.send(new Products());
-                return;
-            }
             
             if (!valuesToUseAsJSONObject.has("ingredients")) {
                 logger.log(new LogRecord(Level.INFO,
                     "ExtendedController.process: Body of client message had " +
-                    "no ingredients list: sending an empty products list " +
-                    "back."));
-                server.send(new Products());
-                return;
+                    "no ingredients list: returning a Products with relevant " +
+                    "info and an empty String array of products."));
+                return new Products(
+                    "Zero products available: " +
+                    "Body of client message had no ingredients list.",
+                    new String[0]);
             }
             
             JSONArray ingredientsListAsJSONArray =
@@ -106,19 +96,21 @@ public class IceCreamClientCommunication {
             SearchCriteria searchCriteria =
                 getSearchCriteria(ingredientsListAsJSONArray);
             logger.log(new LogRecord(Level.INFO,
-                "ExtendedController.process: Got search criteria from " +
-                "values to use."));
+                "ExtendedController.process: Got search criteria with " +
+                "ingredientsList '" +
+                Arrays.toString(searchCriteria.getIngredientsList()) + "'."));
             
             Products products =
                 retriever.getTheProductsMatching(searchCriteria);
             logger.log(new LogRecord(Level.INFO,
-                "ExtendedController.process: Got the products matching " +
-                "the search criteria."));
-            
-            server.send(products);
+                "ExtendedController.process: Got a Products from " +
+                "getTheProductsMatching with info '" + products.getInfo() +
+                "' and the String array of products " +
+                Arrays.toString(products.getProducts()) + "."));
+
             logger.log(new LogRecord(Level.INFO,
-                "ExtendedController.process: Had server send products to " +
-                "client."));
+                "ExtendedController.process: Returning the products."));            
+            return products;
         }
     }
     
@@ -172,13 +164,14 @@ public class IceCreamClientCommunication {
         logger.log(new LogRecord(Level.INFO,
             "IceCreamClientCommunication.setMessageInterfaces: Started."));
         
-        MessageHandler messageHandler = new MessageHandler();
+        MessageHandler messageHandler = new MessageHandler(this.server);
         logger.log(new LogRecord(Level.INFO,
             "IceCreamClientCommunication.setMessageInterfaces: " +
             "Instantiated messageHandler."));
         
-        ExtendedController extendedControllerForProcessingSearchParameters =
-            new ExtendedController();        
+        ControllerToProcessValuesIntoProducts
+            controllerToProcessValuesIntoProducts =
+                new ControllerToProcessValuesIntoProducts();        
         logger.log(new LogRecord(Level.INFO,
             "IceCreamClientCommunication.setMessageInterfaces: " +
             "Instantiated extendedControllerForProcessingSearchParameters, " +
@@ -187,24 +180,14 @@ public class IceCreamClientCommunication {
             "Controller."));
         
         messageHandler.addController(
-            "search-parameters",
-            extendedControllerForProcessingSearchParameters);
+            "search-parameters", controllerToProcessValuesIntoProducts);
         logger.log(new LogRecord(Level.INFO,
             "IceCreamClientCommunication.setMessageInterfaces: " +
-            "Added extendedControllerForProcessingSearchParameters to " +
+            "Added controllerToProcessValuesIntoProducts to " +
             "messageHandler along with the key 'search-parameters', which " +
             "MessageHandler.handle will use to identify the appropriate " +
             "Controller when it finds 'search-parameters=<values to process>' "
             + "in the body of a client message."));
-        
-        ExtendedController extendedControllerUsedWhenKeyIsInvalid =
-             new ExtendedController();
-        logger.log(new LogRecord(Level.INFO,
-            "IceCreamClientCommunication.setMessageInterfaces: " +
-            "Instantiated extendedControllerUsedWhenKeyIsInvalid."));
-        
-        messageHandler.addController(
-            "invalid-key", extendedControllerUsedWhenKeyIsInvalid);
         
         MessageInterface messageInterface =
             new MessageInterface("/test", messageHandler);
