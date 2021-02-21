@@ -27,7 +27,7 @@ import com.
        productutilities.
        IceCreamDatabaseNotFoundException;
 import com.mycompany.serverutilities.productutilities.Product;
-import com.mycompany.serverutilities.productutilities.SearchCriteria;
+import com.mycompany.serverutilities.productutilities.SearchParameters;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.sql.SQLException;
@@ -35,14 +35,11 @@ import java.util.ArrayList;
 
 /**
  * Defines class IceCreamClientCommunication, an instance of which represents
- * an ice cream client communication subsystem. The ice cream client subsystem:
- * 1) stores a server and an ice cream product retrieval subsystem.
- * 
- * 
- * and receives search parameters
- * from the ice cream client, works with an instance of IceCreamProductRetrieval
- * to determine the products that match those search parameters, and provides
- * those matching products to the ice cream client.
+ * an ice cream client communication subsystem, which:
+ * 1) Stores a server and an ice cream product retrieval subsystem,
+ * 2) Implements setMessageInterfaces,
+ * 3) Implements startServerListeningForMessages, and
+ * 4) Implements ControllerToProcessIntoAnswer.
  * @version 0.0
  * @author Tom Lever
  */
@@ -61,6 +58,39 @@ public class IceCreamClientCommunication {
         Server serverToUse, IceCreamProductRetrieval retrieverToUse) {
         this.server = serverToUse;
         this.retriever = retrieverToUse;
+    }
+    
+    /**
+     * Defines method setMessageInterfaces, which sets the message
+     * interfaces of the server.
+     * @throws SetMessageInterfacesException 
+     */
+    public void setMessageInterfaces() throws SetMessageInterfacesException {
+        
+        MessageHandler messageHandler = new MessageHandler();
+        
+        ControllerToProcessIntoAnswer controllerToProcessIntoAnswer =
+                new ControllerToProcessIntoAnswer();
+        
+        messageHandler.addController(
+            "search-parameters", controllerToProcessIntoAnswer);
+        
+        MessageInterface messageInterface =
+            new MessageInterface("/search-by-ingredients", messageHandler);
+        
+        this.server.setMessageInterfaces(
+            new MessageInterface[]{messageInterface});
+    }
+    
+    /**
+     * Defines method startServerListeningForMessages, which starts this.server
+     * listening for messages.
+     * @throws StartServerListeningForMessagesException 
+     */
+    public void startServerListeningForMessages()
+        throws StartServerListeningForMessagesException {
+        
+        this.server.startListeningForMessages();
     }
     
     /**
@@ -94,19 +124,20 @@ public class IceCreamClientCommunication {
             JSONArray ingredientsListAsJSONArray =
                inputToProcessAsJSONObject.getJSONArray("ingredients");
             
-            SearchCriteria searchCriteria;
+            SearchParameters searchParameters;
             try {
-                searchCriteria = getSearchCriteria(ingredientsListAsJSONArray);
+                searchParameters =
+                    getSearchParameters(ingredientsListAsJSONArray);
             }
-            catch (GetSearchCriteriaRecognizedAHackException e) {
+            catch (GetSearchParametersRecognizedAHackException e) {
                 return AnswerBuilder.buildAnswerWithInfo(
-                    "Zero products available: getSearchCriteria recognized a " +
+                    "Zero products available: getSearchParameters recognized a " +
                     "hack.");
             }
             
             try {
                 ArrayList<Product> arrayListOfProducts =
-                    retriever.getTheProductsMatching(searchCriteria);
+                    retriever.getTheProductsMatching(searchParameters);
                 
                 // NetBeans wants to split into declaration and assignment.
                 Answer answer;
@@ -141,62 +172,34 @@ public class IceCreamClientCommunication {
                     "SQLException.");
             }
         }
-    }
-    
-    /**
-     * Defines method getSearchCriteria, which gets search criteria from
-     * jsonArrayToUse.
-     * @param iceCreamApplicationMessageToUse
-     * @return new SearchCriteria(ingredientsListAsStringArray)
-     * @throws GetSearchCriteriaRecognizedAHackException
-     */
-    private SearchCriteria getSearchCriteria(JSONArray jsonArrayToUse)
-        throws GetSearchCriteriaRecognizedAHackException {
+        
+        /**
+         * Defines method getSearchParameters, which gets search parameters from
+         * jsonArrayToUse.
+         * @param iceCreamApplicationMessageToUse
+         * @return new SearchParameters(ingredientsListAsStringArray)
+         * @throws GetSearchParametersRecognizedAHackException
+         */
+        private SearchParameters getSearchParameters(JSONArray jsonArrayToUse)
+            throws GetSearchParametersRecognizedAHackException {
 
-        if (jsonArrayToUse.length() == 0) {
-            return new SearchCriteria(new String[0]);
-        }
+            if (jsonArrayToUse.length() == 0) {
+                return new SearchParameters(new String[0]);
+            }
 
-        String[] ingredientsListAsStringArray =
-            new String[jsonArrayToUse.length()];
-        for (int i = 0; i < ingredientsListAsStringArray.length; i++) {
-            ingredientsListAsStringArray[i] = jsonArrayToUse.get(i).toString();
+            String[] ingredientsListAsStringArray =
+                new String[jsonArrayToUse.length()];
+            for (int i = 0; i < ingredientsListAsStringArray.length; i++) {
+                ingredientsListAsStringArray[i] = jsonArrayToUse.get(i).toString();
+            }
+
+            boolean getSearchParametersRecognizedAHack = false;
+            if (getSearchParametersRecognizedAHack) {
+                throw new GetSearchParametersRecognizedAHackException(
+                    "getSearchParameters recognized a hack.");
+            }
+
+            return new SearchParameters(ingredientsListAsStringArray);
         }
-        
-        boolean getSearchCriteriaRecognizedAHack = false;
-        if (getSearchCriteriaRecognizedAHack) {
-            throw new GetSearchCriteriaRecognizedAHackException(
-                "getSearchCriteria recognized a hack.");
-        }
-        
-        return new SearchCriteria(ingredientsListAsStringArray);
-    }
-    
-    /**
-     * Defines method setMessageInterfaces, which sets the message
-     * interfaces of the server.
-     * @throws SetMessageInterfacesException 
-     */
-    public void setMessageInterfaces() throws SetMessageInterfacesException {
-        
-        MessageHandler messageHandler = new MessageHandler();
-        
-        ControllerToProcessIntoAnswer controllerToProcessIntoAnswer =
-                new ControllerToProcessIntoAnswer();
-        
-        messageHandler.addController(
-            "search-parameters", controllerToProcessIntoAnswer);
-        
-        MessageInterface messageInterface =
-            new MessageInterface("/search-by-ingredients", messageHandler);
-        
-        this.server.setMessageInterfaces(
-            new MessageInterface[]{messageInterface});
-    }
-    
-    public void startServerListeningForMessages()
-        throws StartServerListeningForMessagesException {
-        
-        this.server.startListeningForMessages();
     }
 }

@@ -7,7 +7,6 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ import java.util.ArrayList;
  * Defines class IceCreamProductRetrieval, an instance of which represents
  * an ice cream product retrieval subsystem, which works with an instance of
  * IceCreamClientCommunication to determine the ice cream products that match
- * specific search criteria.
+ * specific search parameters.
  * @version 0.0
  * @author Tom Lever
  */
@@ -29,8 +28,8 @@ public class IceCreamProductRetrieval {
     
     /**
      * Defines method getTheProductsMatching to get the ice cream products
-     * matching specific search criteria.
-     * @param searchCriteriaToUse
+     * matching specific search parameters.
+     * @param searchParametersToUse
      * @return new Products()
      * @throws IceCreamDatabaseNotFoundException
      * @throws GetConnectionException
@@ -39,7 +38,7 @@ public class IceCreamProductRetrieval {
      * @throws SQLException
      */
     public ArrayList<Product> getTheProductsMatching(
-        SearchCriteria searchCriteriaToUse)
+        SearchParameters searchParametersToUse)
         throws IceCreamDatabaseNotFoundException,
                GetConnectionException,
                CreateStatementException,

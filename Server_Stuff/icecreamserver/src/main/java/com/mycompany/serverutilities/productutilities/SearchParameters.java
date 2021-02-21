@@ -1,24 +1,24 @@
 
-// Allows getSearchCriteria to find class SearchCriteria.
+// Allows getSearchParameters to find class SearchParameters.
 package com.mycompany.serverutilities.productutilities;
 
 /**
- * Defines class SearchCriteria, which will be extracted from an ice cream
+ * Defines class SearchParameters, which will be extracted from an ice cream
  * application message and will inform getting the appropriate ice cream
  * products.
  * @version 0.0
  * @author Tom Lever
  */
-public class SearchCriteria {
+public class SearchParameters {
     
     private final String[] ingredientsList;
     
     /**
-     * Defines constructor SearchCriteria, which will set this.ingredientsList
+     * Defines constructor SearchParameters, which will set this.ingredientsList
      * as ingredientsListToUse.
      * @param ingredientsListToUse
      */
-    public SearchCriteria(String[] ingredientsListToUse) {
+    public SearchParameters(String[] ingredientsListToUse) {
         this.ingredientsList = ingredientsListToUse;
     }
     

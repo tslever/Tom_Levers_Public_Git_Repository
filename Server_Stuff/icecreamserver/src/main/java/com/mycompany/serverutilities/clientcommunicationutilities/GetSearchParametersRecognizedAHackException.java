@@ -9,8 +9,8 @@ package com.mycompany.serverutilities.clientcommunicationutilities;
  *
  * @author thoma
  */
-public class GetSearchCriteriaRecognizedAHackException extends Exception {
-    public GetSearchCriteriaRecognizedAHackException(String errorMessageToUse) {
+public class GetSearchParametersRecognizedAHackException extends Exception {
+    public GetSearchParametersRecognizedAHackException(String errorMessageToUse) {
         super(errorMessageToUse);
     }
 }
