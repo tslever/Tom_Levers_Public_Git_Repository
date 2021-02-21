@@ -1,18 +1,26 @@
 
-// Allows executable to find class MessageHandler.
+// Allows setMessageInterfaces to find class MessageHandler.
 package com.mycompany.serverutilities.clientcommunicationutilities;
 
 // Imports classes.
-import com.mycompany.serverutilities.productutilities.Products;
+/*import com.
+       mycompany.
+       serverutilities.
+       clientcommunicationutilities.
+       IceCreamClientCommunication.
+       InputToProcessNotJSONObjectException;*/
+import com.mycompany.serverutilities.productutilities.Answer;
+import com.mycompany.serverutilities.productutilities.AnswerBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.Arrays;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,131 +39,166 @@ class MessageHandler implements HttpHandler {
     private final static Logger logger =
         Logger.getLogger(MessageHandler.class.getName());
     
-    private final Server server; 
     private final HashMap<String, Controller> hashMapOfKeysAndControllers;
     
     /**
-     * Defines constructor MessageHandler which sets attributes of this message
-     * handler with inputs.
-     * @param controllerToUse
+     * Defines constructor MessageHandler, which instantiates this.HashMap.
      */
-    public MessageHandler(Server serverToUse) {
-        logger.log(new LogRecord(Level.INFO,
-            "MessageHandler constructor: Started."));
-        
-        this.server = serverToUse;
+    public MessageHandler() {
         this.hashMapOfKeysAndControllers = new HashMap();
     }
     
+    /**
+     * Defines method addController, which adds controllerToUse to a row in
+     * this.HashMap with keyToIdentifyController.
+     * @param keyToIdentifyController
+     * @param controllerToUse 
+     */
     public void addController(
         String keyToIdentifyController, Controller controllerToUse) {
-        hashMapOfKeysAndControllers.put(
+        this.hashMapOfKeysAndControllers.put(
             keyToIdentifyController, controllerToUse);
     }
     
     /**
      * Defines method handle to:
      * 1) Extract the ice cream application message in an HTTP message,
-     * 2) Get the body of the ice cream application message,
-     * 3) Define a hash map of keys to identify controllers and values
+     * 2) Log the body of the client message as info,
+     * 3) Get the body of the ice cream application message,
+     * 4) Define a hash map of keys to identify controllers and values
      *    for controllers to process,
-     * 4) Have controllers process values,
-     * 5) Build a response from a returned Products, and
-     * 6) Send the response to the client.
+     * 5) Have controllers process values,
+     * 6) Build a response from a returned Answer,
+     * 7) Log the response, and
+     * 8) Send the response to the client.
      * @param httpExchange
      */
     @Override
     public void handle(HttpExchange httpExchange) {
-        logger.log(new LogRecord(Level.INFO,
-            "MessageHandler.handle: Started."));
         
-        IceCreamApplicationMessage iceCreamApplicationMessage =
-            getIceCreamApplicationMessage(httpExchange);
-        logger.log(new LogRecord(Level.INFO,
-            "MessageHandler.handle: Got ice cream application message from " +
-            "HTTP message from client."));
+        IceCreamApplicationMessage iceCreamApplicationMessage;
+        Answer answer;
+        try {
+            iceCreamApplicationMessage =
+                getIceCreamApplicationMessage(httpExchange);
+            
+            logger.log(new LogRecord(Level.INFO,
+                "Body of client message: " +
+                iceCreamApplicationMessage.getBodyOfClientMessage()));
+            
+            answer = haveControllersProcessValues(
+                defineHashMapOfKeysAndValues(
+                   iceCreamApplicationMessage.getBodyOfClientMessage()),
+                this.hashMapOfKeysAndControllers);
+        }
+        catch (GetIceCreamApplicationMessageRecognizedAHackException e) {
+            answer = AnswerBuilder.buildAnswerWithInfo(
+                "Zero products available: getIceCreamApplicationMessage " +
+                "recognized a hack.");
+        }
+        catch (UnsupportedEncodingException e) {
+            answer = AnswerBuilder.buildAnswerWithInfo(
+                "Zero products available: getIceCreamApplicationMessage " +
+                "threw an UnsupportedEncodingException.");
+        }
+        catch (IOException e) {
+            answer = AnswerBuilder.buildAnswerWithInfo(
+                "Zero products available: getIceCreamApplicationMessage " +
+                "threw an IOException.");
+        }
         
-        Products products = haveControllersProcessValues(
-            defineHashMapOfKeysAndValues(
-               iceCreamApplicationMessage.getBodyOfClientMessage()),
-            this.hashMapOfKeysAndControllers);
-        logger.log(new LogRecord(Level.INFO,
-            "MessageHandler.handle: Got Products with info '" +
-            products.getInfo() + "' and String array of products " +
-            Arrays.toString(products.getProducts()) + "."));
-        
-        byte[] response = buildResponseFrom(products);
-        logger.log(new LogRecord(Level.INFO,
-            "MessageHandler.handle: Built response from Products."));
+        byte[] response = buildResponseFrom(answer);
 
         logger.log(new LogRecord(Level.INFO,
-            "MessageHandler.handle: Sending response to client."));        
-        this.server.send(response, httpExchange);
+            "Response: " + new String(response, StandardCharsets.UTF_8)));
+
+        send(response, httpExchange);
     }
-        
+    
     /**
-     * Defines method defineHashMapOfKeysAndValues to, for each string in
-     * keysAndValuesToUse with a key to identify a controller and values to pass
-     * to the controller:
-     * 1) Convert the string into a two-element array of key and values, and
-     * 2) Add key and values to a hashMap if the key corresponds to a valid
-     *    controller and the key and values haven't already been added to the
-     *    hash map.
-     * @param keysAndValuesToUse
-     * @return
+     * Defines getIceCreamApplicationMessage, which gets an ice cream
+     * application message from an HTTP message associated with an HttpExchange.
+     * @param httpExchangeToUse
+     * @return IceCreamApplicationMessage
+     */
+    private IceCreamApplicationMessage getIceCreamApplicationMessage(
+        HttpExchange httpExchangeToUse)
+        throws GetIceCreamApplicationMessageRecognizedAHackException,
+               UnsupportedEncodingException,
+               IOException {
+        
+        boolean getIceCreamApplicationMessageRecognizedHack = false;
+        if (getIceCreamApplicationMessageRecognizedHack) {
+            throw new GetIceCreamApplicationMessageRecognizedAHackException(
+                "getIceCreamApplicationMessage recognized hack.");
+        }
+        
+        String bodyOfClientMessage;
+        
+        InputStream inputStream = httpExchangeToUse.getRequestBody();
+
+        // NetBeans wants to split declaration and assignment.
+        InputStreamReader inputStreamReader;
+        inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+        
+        BufferedReader bufferedReader =
+            new BufferedReader(inputStreamReader);
+
+        StringBuilder stringBuilder = new StringBuilder();
+        int readByteAsInt;
+        while( (readByteAsInt = bufferedReader.read()) != -1 ) {
+            stringBuilder.append( (char)readByteAsInt );
+        }
+
+        bodyOfClientMessage = stringBuilder.toString();
+        
+        return new IceCreamApplicationMessage(bodyOfClientMessage);
+    }
+    
+    /**
+     * Defines method defineHashMapOfKeysAndValues to:
+     * 1) Split bodyOfClientMessage into
+     * keysToIdentifyControllersAndValuesToPassToControllers based on "&",
+     * 2) For each keyToIdentifyControllerAndValuesToPAssToControllerAsString,
+     * split the string into
+     * keyToIdentifyControllerAndValuesToPassToControllerAsArray, and
+     * 3) If the keyToIdentifyController is not already in the hashMap being
+     * defined and this.hashMapOfKeysAndControllers contains
+     * keyToIdentifyController, then put in the hashMap being defined at
+     * the keyToIdentifyController the values to pass to the controller.
+     * @param bodyOfClientMessage
+     * @return hashMap
      */
     private HashMap<String, String> defineHashMapOfKeysAndValues(
         String bodyOfClientMessage) {
         
         String[] keysToIdentifyControllersAndValuesToPassToControllers =
             bodyOfClientMessage.split("&");
-        logger.log(new LogRecord(Level.INFO,
-            "MessageHandler.handle: Split the body of the client message " +
-            "based on delimiter '&' into the string array of " +
-            "keys+plus+values '" +
-            Arrays.toString(
-                keysToIdentifyControllersAndValuesToPassToControllers) +
-            "'."));
         
         String[] keyToIdentifyControllerAndValuesToPassToControllerAsArray;
         String keyToIdentifyController;
         HashMap<String, String> hashMap = new HashMap();
-        String valuesToPassToControllerInURLEncoding;
+        String valuesToPassToController;
         
         for (String keyToIdentifyControllerAndValuesToPassToControllerAsString :
             keysToIdentifyControllersAndValuesToPassToControllers) {
-            logger.log(new LogRecord(Level.INFO,
-                "MessageHandler.handle: Working with the following key to " +
-                "identify controller and associated values to pass to " +
-                "controller: '" +
-                keyToIdentifyControllerAndValuesToPassToControllerAsString +
-                "'."));
                            
             keyToIdentifyControllerAndValuesToPassToControllerAsArray =
                 keyToIdentifyControllerAndValuesToPassToControllerAsString
                 .split("=", 2);
-            logger.log(new LogRecord(Level.INFO,
-                "MessageHandler.handle: Split the key / values string " +
-                "based on delimiter '=' into String array '" +
-                Arrays.toString(
-                keyToIdentifyControllerAndValuesToPassToControllerAsArray) +
-                "'."));
 
             keyToIdentifyController =
                 keyToIdentifyControllerAndValuesToPassToControllerAsArray[0];
-            logger.log(new LogRecord(Level.INFO,
-                "MessageHandler.handle: Found keyToIdentifyController '" +
-                keyToIdentifyController + "'."));
             
             if (!hashMap.containsKey(keyToIdentifyController) &&
-                hashMapOfKeysAndControllers.containsKey(
+                this.hashMapOfKeysAndControllers.containsKey(
                     keyToIdentifyController)) {
-                valuesToPassToControllerInURLEncoding =
+                valuesToPassToController =
                     keyToIdentifyControllerAndValuesToPassToControllerAsArray
                     [1];
                 hashMap.put(
                     keyToIdentifyController,
-                    valuesToPassToControllerInURLEncoding);
+                    valuesToPassToController);
             }
         }
         
@@ -163,139 +206,114 @@ class MessageHandler implements HttpHandler {
     }
     
     /**
-     * Defines method haveControllersProcessValues to, for each key in
-     * hashMapToUse:
-     * 1) Try to decode the values associated with that key from URL encoding
-     *    to JSON format;
-     * 2) Construct a JSONObject based on the decoded values;
-     * 3) Call the process method of the controller associated with that key,
-     *    passing the process method the JSONObject representing values; and
-     * 4) Return the Products returned by the process method.
-     * @param keysAndValuesToUse
-     * @return
+     * Defines method haveControllersProcessValues to, if 'search-parameters' is
+     * in hashMapOfKeysAndValues:
+     * 1) Decode the values corresponding to key 'search-parameters' if the
+     * values are in format "x-www-form-urlencoded",
+     * 2) Construct a JSONObject based on the decoded values, and
+     * 3) Have the controller associated with the key 'search-parameters'
+     * process the valuesToPassToControllerAsJSONObject.
+     * @param hashMapOfKeysAndValues, hashMapOfKeysAndControllers
+     * @return Answer
      */
-    private Products haveControllersProcessValues(
+    private Answer haveControllersProcessValues(
         HashMap<String, String> hashMapOfKeysAndValues,
         HashMap<String, Controller> hashMapOfKeysAndControllers) {
         
         String searchParameters = "search-parameters";
         
         if (!hashMapOfKeysAndValues.keySet().contains(searchParameters)) {
-            return new Products(
+            return AnswerBuilder.buildAnswerWithInfo(
                 "Zero products available: Body of client message does not " +
-                "contain key 'search-parameters'.",
-                new String[0]);
+                "contain key 'search-parameters'.");
         }
         
-        String valuesToPassToControllerInURLEncoding =
+        String valuesToPassToController =
             hashMapOfKeysAndValues.get(searchParameters);
 
         try {
             String valuesToPassToControllerInJSONFormat = URLDecoder.decode(
-                valuesToPassToControllerInURLEncoding, "UTF-8");
-            logger.log(new LogRecord(Level.INFO,
-                "MessageHandler.handle: Decoded values into the " +
-                "String (in JSON format) '" +
-                valuesToPassToControllerInJSONFormat + "'."));
-
+                valuesToPassToController, "UTF-8");
+            
             JSONObject valuesToPassToControllerAsJSONObject = new JSONObject(
                 valuesToPassToControllerInJSONFormat);
-            logger.log(new LogRecord(Level.INFO,
-                "MessageHandler.handle: Converted values to the " +
-                "JSONObject '" +
-                valuesToPassToControllerAsJSONObject.toString() +
-                "'."));
-
-            logger.log(new LogRecord(Level.INFO,
-                "MessageHandler.handle: Returning products from the process " +
-                "method of the controller associated with key 'search-" +
-                "parameters'. Passing to the process method the JSONObject '" +
-                valuesToPassToControllerAsJSONObject.toString() +"'."));
+            
             return hashMapOfKeysAndControllers
                 .get(searchParameters)
                 .process(valuesToPassToControllerAsJSONObject);
         }
         catch (UnsupportedEncodingException e) {
-            return new Products(
-                "Zero products available: URL-encoded values associated with " +
-                "key 'search-parameters' is not in UTF-8 format.",
-                new String[0]);
+            return AnswerBuilder.buildAnswerWithInfo(
+                "Zero products available: Unable to decode " +
+                "valuesToPassToController.");
         }
         catch (JSONException e) {
-            return new Products(
+            return AnswerBuilder.buildAnswerWithInfo(
                 "Zero products available: JSON associated with " +
-                "key 'search-parameters' is invalid.",
-                new String[0]);
+                "key 'search-parameters' is invalid.");
         }
-        // TODO: Catch NotJSONObjectException.
-        catch (Exception e) {
-            return new Products(
+        catch (ProcessException e) {
+            return AnswerBuilder.buildAnswerWithInfo(
                 "Zero products available: The controller associated with " +
                 "key 'search-parameters' was passed an Object that was not " +
-                "a JSONObject.",
-                new String[0]);
+                "a JSONObject.");
         }
     }
     
     /**
-     * Defines getIceCreamApplicationMessage, which gets an ice cream
-     * application method from an HTTP message associated with an HttpExchange.
-     * @param httpExchangeToUse
-     * @return 
+     * Defines method buildResponseFrom to build and return a byte[] response
+     * based on an Answer.
+     * @param answerToUse
+     * @return response.getBytes()
      */
-    private IceCreamApplicationMessage getIceCreamApplicationMessage(
-        HttpExchange httpExchangeToUse) {
-            logger.log(new LogRecord(Level.INFO,
-                "MessageHandler.getIceCreamApplicationMessage: Started."));
+    private byte[] buildResponseFrom(Answer answerToUse) {
         
-        String bodyOfClientMessage = "";
+        String response = "{";
         
-        // NetBeans wanted me to use a try-with-resources block.
-        // Additionally, try block here simplifies method handle.
-        try (
-            InputStream inputStream = httpExchangeToUse.getRequestBody();
-            InputStreamReader inputStreamReader =
-                new InputStreamReader(inputStream, "UTF-8");
-            BufferedReader bufferedReader =
-                new BufferedReader(inputStreamReader);
-        ) {
-            StringBuilder stringBuilder = new StringBuilder();
-            int readByteAsInt;
-            while( (readByteAsInt = bufferedReader.read()) != -1 ) {
-                stringBuilder.append( (char)readByteAsInt );
-            }
-
-           bodyOfClientMessage = stringBuilder.toString();
-            logger.log(new LogRecord(Level.INFO,
-                "MessageHandler.getIceCreamApplicationMessage: The body of " +
-                "the client message is '" + bodyOfClientMessage + "'."));
+        HashMap<String, String> hashMap = answerToUse.getHashMap();
+        
+        int numberOfKeys = hashMap.keySet().size();
+        String[] keys = new String[numberOfKeys];
+        int present_index = 0;
+        for (String key : hashMap.keySet()) {
+            keys[present_index] = key;
+            present_index++;
         }
-        catch (IOException e) {
-            logger.log(new LogRecord(Level.SEVERE,
-                e.toString() + "\n" +
-                "Caught IOException thrown by InputStreamReader constructor."));
+        for (int i = 0; i < numberOfKeys-1; i++) {
+            response +=
+                "\"" + keys[i] + "\": " + hashMap.get(keys[i]) + ", ";            
         }
-        
-        logger.log(new LogRecord(Level.INFO,
-            "MessageHandler.getIceCreamApplicationMessage: Returning new " +
-            "ice cream application message based on body of client message."));
-        return new IceCreamApplicationMessage(bodyOfClientMessage);
-    }
-    
-    /**
-     * Defines method buildResponseFrom to build and return a String response.
-     * @param productsToUse
-     * @return 
-     */
-    public byte[] buildResponseFrom(Products productsToUse) {
-        
-        String response =
-            "{info: \"" +
-            productsToUse.getInfo() +
-            "\", products: \"" +
-            Arrays.toString(productsToUse.getProducts()) +
-            "\"}";
+        response +=
+            "\"" + keys[numberOfKeys-1] + "\": " +
+            hashMap.get(keys[numberOfKeys-1]);
+        response += "}";
         
         return response.getBytes();
+    }
+    
+    /**
+     * Defines method send to send a response back to the ice cream client.
+     * @param response
+     * @param httpExchange
+     */
+    private void send(byte[] response, HttpExchange httpExchange) {
+    
+        try (OutputStream outputStream = httpExchange.getResponseBody();) {
+            // Both getResponseBody and sendResponseHeaders throw IOExceptions.
+            //OutputStream outputStream = httpExchange.getResponseBody();
+            httpExchange.sendResponseHeaders(200, response.length);
+            outputStream.write(response);
+            //outputStream.close();
+        }
+        catch (IOException e) {
+            try {
+                // Send response headers for Internal Server Error. Send no
+                // response body.
+                httpExchange.sendResponseHeaders(500, -1);
+            }
+            catch (IOException f) {
+                
+            }
+        }
     }
 }

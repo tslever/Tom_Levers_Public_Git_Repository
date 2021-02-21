@@ -1,36 +1,28 @@
 
-// Allows executable to find class Controller.
+// Allows ControllerToProcessIntoAnswer to extend Controller.
 package com.mycompany.serverutilities.clientcommunicationutilities;
 
 // Imports classes.
-import com.mycompany.serverutilities.productutilities.Products;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
+import com.mycompany.serverutilities.productutilities.Answer;
 
 /**
- * Defines class Controller that defines basic functionality to process a
- * an HTTP message.
+ * Defines abstract class Controller that declares abstract method process,
+ * which when implemented will process the inputToProcess into an Answer.
  * @version 0.0
  * @author Tom Lever
  */
 abstract class Controller {
     
-    private final static Logger logger =
-        Logger.getLogger(Controller.class.getName());
-    
     /**
      * Defines constructor Controller.
      */
-    public Controller() {
-        logger.log(new LogRecord(Level.INFO,
-            "Controller constructor: Started."));
-    }
+    public Controller() { }
     
     /**
-     * Declares abstract method process, which must be implemented to process
-     * IceCreamApplicationMessages into Products.
+     * Declares abstract method process, which when implemented will process
+     * the inputToProcess into an Answer.
      * @param messageToProcess
      */
-    abstract public Products process(Object valuesToUse) throws Exception;
+    abstract public Answer process(Object inputToProcess)
+        throws ProcessException;
 }

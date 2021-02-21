@@ -1,10 +1,6 @@
 
-// Allows executable to find class SearchCriteria.
+// Allows getSearchCriteria to find class SearchCriteria.
 package com.mycompany.serverutilities.productutilities;
-
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
 
 /**
  * Defines class SearchCriteria, which will be extracted from an ice cream
@@ -14,26 +10,23 @@ import java.util.logging.Logger;
  * @author Tom Lever
  */
 public class SearchCriteria {
-
-    private final static Logger logger =
-        Logger.getLogger(SearchCriteria.class.getName());
     
     private final String[] ingredientsList;
     
     /**
-     * Defines constructor SearchCriteria.
+     * Defines constructor SearchCriteria, which will set this.ingredientsList
+     * as ingredientsListToUse.
      * @param ingredientsListToUse
      */
     public SearchCriteria(String[] ingredientsListToUse) {
-        logger.log(new LogRecord(Level.INFO,
-            "SearchCriteria constructor: Started."));
-        
         this.ingredientsList = ingredientsListToUse;
-        logger.log(new LogRecord(Level.INFO,
-            "SearchCriteria constructor: Set ingredientsList as " +
-            "ingredientsListToUse."));
     }
     
+    
+    /**
+     * Defines getIngredientsList, which will return this.ingredientsList.
+     * @return this.ingredientsList.
+     */
     public String[] getIngredientsList() {
         return this.ingredientsList;
     }
