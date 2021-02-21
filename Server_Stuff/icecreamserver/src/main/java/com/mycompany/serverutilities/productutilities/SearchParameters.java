@@ -12,22 +12,35 @@ package com.mycompany.serverutilities.productutilities;
 public class SearchParameters {
     
     private final String[] ingredientsList;
+    private final int lengthOfIngredientsList;
     
     /**
      * Defines constructor SearchParameters, which will set this.ingredientsList
      * as ingredientsListToUse.
      * @param ingredientsListToUse
+     * @param lengthOfIngredientsListToUse
      */
-    public SearchParameters(String[] ingredientsListToUse) {
+    public SearchParameters(
+        String[] ingredientsListToUse, int lengthOfIngredientsListToUse) {
         this.ingredientsList = ingredientsListToUse;
+        this.lengthOfIngredientsList = lengthOfIngredientsListToUse;
     }
     
     
     /**
-     * Defines getIngredientsList, which will return this.ingredientsList.
+     * Defines getIngredientsList, which returns this.ingredientsList.
      * @return this.ingredientsList.
      */
     public String[] getIngredientsList() {
         return this.ingredientsList;
+    }
+    
+    /**
+     * Defines getLengthOfIngredientsList, which returns
+     * this.lengthOfIngredientsList.
+     * @return this.lengthOfIngredientsList
+     */
+    public int getLengthOfIngredientsList() {
+        return this.lengthOfIngredientsList;
     }
 }

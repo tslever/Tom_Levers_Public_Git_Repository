@@ -184,13 +184,14 @@ public class IceCreamClientCommunication {
             throws GetSearchParametersRecognizedAHackException {
 
             if (jsonArrayToUse.length() == 0) {
-                return new SearchParameters(new String[0]);
+                return new SearchParameters(new String[0], 0);
             }
 
             String[] ingredientsListAsStringArray =
                 new String[jsonArrayToUse.length()];
             for (int i = 0; i < ingredientsListAsStringArray.length; i++) {
-                ingredientsListAsStringArray[i] = jsonArrayToUse.get(i).toString();
+                ingredientsListAsStringArray[i] =
+                    jsonArrayToUse.get(i).toString();
             }
 
             boolean getSearchParametersRecognizedAHack = false;
@@ -199,7 +200,8 @@ public class IceCreamClientCommunication {
                     "getSearchParameters recognized a hack.");
             }
 
-            return new SearchParameters(ingredientsListAsStringArray);
+            return new SearchParameters(
+                ingredientsListAsStringArray, jsonArrayToUse.length());
         }
     }
 }

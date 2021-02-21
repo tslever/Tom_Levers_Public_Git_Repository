@@ -45,6 +45,17 @@ public class IceCreamProductRetrieval {
                ExecuteQueryException,
                SQLException {
         
+        int lengthOfIngredientsList =
+            searchParametersToUse.getLengthOfIngredientsList();
+        if (lengthOfIngredientsList < 1) {
+            return new ArrayList<Product>();
+        }
+        
+        String[] ingredientsList =
+            searchParametersToUse.getIngredientsList();
+        
+        ArrayList<Product> arrayListOfProducts = new ArrayList<>();
+        
         String pathToIceCreamDatabase = "IceCreamDatabase.sqlite";
         File file = new File(pathToIceCreamDatabase);
         if (!file.exists()) {
@@ -70,8 +81,39 @@ public class IceCreamProductRetrieval {
             throw new CreateStatementException(
                 "createStatement threw SQLException.");
         }
+
+        String sqlQuery =
+            "SELECT *\n" +
+            "FROM\n" +
+            "(SELECT name, image_closed, image_open, description, story, " +
+            "productId\n" +
+            "FROM\n" +
+            "(SELECT index_of_product\n" +
+            "FROM\n" +
+            "(SELECT id_of_ingredient\n" +
+            "FROM Ingredients\n" +
+            "WHERE ";
+
+        for (int i = 0; i < lengthOfIngredientsList-1; i++) {
+            sqlQuery +=
+                "(value_of_ingredient = '" + ingredientsList[i] + "') OR\n";
+        }
+        sqlQuery +=
+            "(value_of_ingredient = '" +
+            ingredientsList[lengthOfIngredientsList-1] +
+            "')) AS ids_of_ingredients\n";
+
+        sqlQuery +=
+            "JOIN AssociationsBetweenProductsAndIngredients\n" +
+            "ON id_of_ingredient = index_of_ingredient\n" +
+            "GROUP BY index_of_product\n" +
+            "HAVING COUNT(index_of_product) = " +
+            lengthOfIngredientsList +
+            ") AS indices_of_products_matching_search_parameters\n" +
+            "JOIN Products\n" +
+            "ON id_of_product = index_of_product) AS " +
+            "products_matching_search_parameters_without_arrays";
         
-        String sqlQuery = "SELECT * FROM Products";
         ResultSet resultSet;
         try {
             resultSet = statement.executeQuery(sqlQuery);
@@ -79,8 +121,7 @@ public class IceCreamProductRetrieval {
         catch (SQLException e) {
             throw new ExecuteQueryException("executeQuery threw SQLException.");
         }
-        
-        ArrayList<Product> arrayListOfProducts = new ArrayList<>();
+
         while (resultSet.next()) {
             Product product = new Product();
             product.setName(resultSet.getObject("name").toString());

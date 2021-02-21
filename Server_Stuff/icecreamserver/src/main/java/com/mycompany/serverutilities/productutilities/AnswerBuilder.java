@@ -35,8 +35,16 @@ public class AnswerBuilder {
     public static Answer buildAnswerWithProducts(
         ArrayList<Product> arrayListOfProductsToUse) {
         
+        Answer answer = new Answer();
+        
+        int sizeOfArrayList = arrayListOfProductsToUse.size();
+        if (sizeOfArrayList < 1) {
+            answer.putInHashMapAt("products", "[]");
+            return answer;
+        }
+        
         String productsInJSONFormat = "[";
-        for (int i = 0; i < arrayListOfProductsToUse.size()-1; i++) {
+        for (int i = 0; i < sizeOfArrayList-1; i++) {
             productsInJSONFormat +=
                 arrayListOfProductsToUse.get(i).toString() + ", ";
         }
@@ -46,10 +54,8 @@ public class AnswerBuilder {
             .toString();
         productsInJSONFormat += "]";
         
-        Answer answer = new Answer();
         answer.putInHashMapAt(
             "products", productsInJSONFormat);
         return answer;
     }
-    
 }
