@@ -1,222 +1,207 @@
 
-// Allows executable to find class IceCreamClientCommunication.
+// Allows main to find class IceCreamClientCommunication.
 package com.mycompany.serverutilities.clientcommunicationutilities;
 
 // Imports classes.
-import com.mycompany.serverutilities.productutilities.SearchCriteria;
+import com.mycompany.serverutilities.productutilities.Answer;
+import com.mycompany.serverutilities.productutilities.AnswerBuilder;
 import com.mycompany.serverutilities.productutilities.IceCreamProductRetrieval;
-import com.mycompany.serverutilities.productutilities.Products;
-import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
+import com.
+       mycompany.
+       serverutilities.
+       productutilities.
+       CreateStatementException;
+import com.
+       mycompany.
+       serverutilities.
+       productutilities.
+       ExecuteQueryException;
+import com.
+       mycompany.
+       serverutilities.
+       productutilities.
+       GetConnectionException;
+import com.
+       mycompany.
+       serverutilities.
+       productutilities.
+       IceCreamDatabaseNotFoundException;
+import com.mycompany.serverutilities.productutilities.Product;
+import com.mycompany.serverutilities.productutilities.SearchParameters;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * Defines class IceCreamClientCommunication, an instance of which represents
- * an ice cream client communication subsystem and receives search parameters
- * from the ice cream client, works with an instance of IceCreamProductRetrieval
- * to determine the products that match those search parameters, and provides
- * those matching products to the ice cream client.
+ * an ice cream client communication subsystem, which:
+ * 1) Stores a server and an ice cream product retrieval subsystem,
+ * 2) Implements setMessageInterfaces,
+ * 3) Implements startServerListeningForMessages, and
+ * 4) Implements ControllerToProcessIntoAnswer.
  * @version 0.0
  * @author Tom Lever
  */
 public class IceCreamClientCommunication {
     
-    private final static Logger logger =
-        Logger.getLogger(IceCreamClientCommunication.class.getName());
-    
     private final Server server;
     private final IceCreamProductRetrieval retriever;
     
     /**
-     * Defines constructor IceCreamClientCommunication which sets attributes of
-     * this iceCreamClientCommunication with inputs.
-     * inputs.
+     * Defines constructor IceCreamClientCommunication, which sets this.server
+     * as serverToUse and this.retriever to retrieverToUse.
      * @param serverToUse
      * @param retrieverToUse
      */
     public IceCreamClientCommunication(
         Server serverToUse, IceCreamProductRetrieval retrieverToUse) {
-        logger.log(new LogRecord(Level.INFO,
-            "IceCreamClientCommunication constructor: Started."));
-        
         this.server = serverToUse;
         this.retriever = retrieverToUse;
-        logger.log(new LogRecord(Level.INFO,
-            "IceCreamClientCommunication constructor: Set server as " +
-            "serverToUse and set retriever as retrieverToUse."));
     }
     
     /**
-     * Defines class ExtendedController, which processes ice cream application
-     * messages into products.
+     * Defines method setMessageInterfaces, which sets the message
+     * interfaces of the server.
+     * @throws SetMessageInterfacesException 
      */
-    private class ControllerToProcessValuesIntoProducts extends Controller {
+    public void setMessageInterfaces() throws SetMessageInterfacesException {
         
-        /**
-         * Implements Controller's abstract method process,
-         * which processes ice cream application messages into products.
-         * @param messageToProcess 
-         */
+        MessageHandler messageHandler = new MessageHandler();
         
-        // TODO: Have override take a JSONObject,
-        // even though abstract declaration specifies an Object.
-        @Override
-        public Products process(Object valuesToUse) throws Exception {            
-            logger.log(new LogRecord(Level.INFO,
-                "ExtendedController.process: Started."));
-            
-            // TODO: Throw new NotJSONObjectException.
-            if (!(valuesToUse instanceof JSONObject)) {
-                throw new Exception("valuesToUse needs to be a JSONObject.");
-            }
-            
-            // TODO: Try the following and catch NotConvertibleException.
-            JSONObject valuesToUseAsJSONObject = (JSONObject)valuesToUse;
-            
-            if (!valuesToUseAsJSONObject.has("ingredients")) {
-                logger.log(new LogRecord(Level.INFO,
-                    "ExtendedController.process: Body of client message had " +
-                    "no ingredients list: returning a Products with relevant " +
-                    "info and an empty String array of products."));
-                return new Products(
-                    "Zero products available: " +
-                    "Body of client message had no ingredients list.",
-                    new String[0]);
-            }
-            
-            JSONArray ingredientsListAsJSONArray =
-               valuesToUseAsJSONObject.getJSONArray("ingredients");
-            logger.log(new LogRecord(Level.INFO,
-                "ExtendedController.process: Got ingredientsListAsJSONArray '" +
-                ingredientsListAsJSONArray.toString() + "'."));
-            
-            SearchCriteria searchCriteria =
-                getSearchCriteria(ingredientsListAsJSONArray);
-            logger.log(new LogRecord(Level.INFO,
-                "ExtendedController.process: Got search criteria with " +
-                "ingredientsList '" +
-                Arrays.toString(searchCriteria.getIngredientsList()) + "'."));
-            
-            Products products =
-                retriever.getTheProductsMatching(searchCriteria);
-            logger.log(new LogRecord(Level.INFO,
-                "ExtendedController.process: Got a Products from " +
-                "getTheProductsMatching with info '" + products.getInfo() +
-                "' and the String array of products " +
-                Arrays.toString(products.getProducts()) + "."));
-
-            logger.log(new LogRecord(Level.INFO,
-                "ExtendedController.process: Returning the products."));            
-            return products;
-        }
-    }
-    
-    /**
-     * Defines method getSearchCriteria, which gets search criteria from
-     * an ice cream application message.
-     * @param iceCreamApplicationMessageToUse
-     * @return new SearchCriteria()
-     */
-    private SearchCriteria getSearchCriteria(
-        JSONArray jsonArrayToUse) {
-        logger.log(new LogRecord(Level.INFO,
-            "ExtendedController.getSearchCriteria: Started."));
-
-        if (jsonArrayToUse.length() == 0) {
-            logger.log(new LogRecord(Level.INFO,
-                "ExtendedController.getSearchCriteria: Returning " +
-                "new SearchCriteria, passed a new empty string array, " +
-                "because there are no ingredients in the " +
-                "ingredientsListAsJSONArray."));
-            return new SearchCriteria(new String[0]);
-        }
-
-        String[] ingredientsListAsStringArray =
-            new String[jsonArrayToUse.length()];
-        for (int i = 0;
-             i < ingredientsListAsStringArray.length;
-             i++) {
-            ingredientsListAsStringArray[i] =
-                jsonArrayToUse.get(i).toString();
-        }
-        logger.log(new LogRecord(Level.INFO,
-            "ExtendedController.getSearchCriteria: Created " +
-            "ingredientsListAsStringArray '" +
-            Arrays.toString(
-                ingredientsListAsStringArray) + "'."));
-
-        logger.log(new LogRecord(Level.INFO,
-            "ExtendedController.getSearchCriteria: Returning new " +
-            "SearchCriteria based on ingredientsListAsStringArray."));
-        return new SearchCriteria(ingredientsListAsStringArray);
-    }
-
-    /**
-     * Defines method startProcessingSearchParameters, which sets the message
-     * interfaces of the server and and starts the server listening for
-     * messages.
-     * @throws Exception 
-     */
-    public void setMessageInterfaces() throws Exception {
-        logger.log(new LogRecord(Level.INFO,
-            "IceCreamClientCommunication.setMessageInterfaces: Started."));
-        
-        MessageHandler messageHandler = new MessageHandler(this.server);
-        logger.log(new LogRecord(Level.INFO,
-            "IceCreamClientCommunication.setMessageInterfaces: " +
-            "Instantiated messageHandler."));
-        
-        ControllerToProcessValuesIntoProducts
-            controllerToProcessValuesIntoProducts =
-                new ControllerToProcessValuesIntoProducts();        
-        logger.log(new LogRecord(Level.INFO,
-            "IceCreamClientCommunication.setMessageInterfaces: " +
-            "Instantiated extendedControllerForProcessingSearchParameters, " +
-            "an instance of ExtendedController, which is an extension of " +
-            "Controller. This instance is recognized as an instance of " +
-            "Controller."));
+        ControllerToProcessIntoAnswer controllerToProcessIntoAnswer =
+                new ControllerToProcessIntoAnswer();
         
         messageHandler.addController(
-            "search-parameters", controllerToProcessValuesIntoProducts);
-        logger.log(new LogRecord(Level.INFO,
-            "IceCreamClientCommunication.setMessageInterfaces: " +
-            "Added controllerToProcessValuesIntoProducts to " +
-            "messageHandler along with the key 'search-parameters', which " +
-            "MessageHandler.handle will use to identify the appropriate " +
-            "Controller when it finds 'search-parameters=<values to process>' "
-            + "in the body of a client message."));
+            "search-parameters", controllerToProcessIntoAnswer);
         
         MessageInterface messageInterface =
-            new MessageInterface("/test", messageHandler);
-        logger.log(new LogRecord(Level.INFO,
-            "IceCreamClientCommunication.setMessageInterfaces: " +
-            "Instantiated messageInterface, which will connect messages " +
-            "received by the part of the server with endpoint '/test' and " +
-            "the appropriate message handler."));
+            new MessageInterface("/search-by-ingredients", messageHandler);
         
         this.server.setMessageInterfaces(
             new MessageInterface[]{messageInterface});
-        // TODO: Generate SetMessageInterfacesException when an Exception is
-        // thrown by setMessageInterfaces.
-        logger.log(new LogRecord(Level.INFO,
-            "IceCreamClientCommunication.setMessageInterfaces: " +
-            "Set messageInterface in an array and set the array as an " +
-            "attribute of this.server."));
     }
     
-    public void startServerListeningForMessages() throws Exception {
-        logger.log(new LogRecord(Level.INFO,
-            "IceCreamClientCommunication.startServerListeningForMessages: " +
-            "Started."));
+    /**
+     * Defines method startServerListeningForMessages, which starts this.server
+     * listening for messages.
+     * @throws StartServerListeningForMessagesException 
+     */
+    public void startServerListeningForMessages()
+        throws StartServerListeningForMessagesException {
         
         this.server.startListeningForMessages();
-        // TODO: Generate ServerStartListeningForMessagesException when an
-        // Exception is thrown by startServerListeningForMessages.
-        logger.log(new LogRecord(Level.INFO,
-            "IceCreamClientCommunication.startServerListeningForMessages: " +
-            "Started server listening for messages."));
+    }
+    
+    /**
+     * Defines class ControllerToProcessIntoAnswer, whose process method
+     * processes an inputToProcess into an Answer.
+     */
+    private class ControllerToProcessIntoAnswer extends Controller {        
+        
+        /**
+         * Implements Controller's abstract method process, which processes
+         * inputToProcess into an Answer.
+         * @param messageToProcess 
+         */
+        @Override
+        public Answer process(Object inputToProcess)
+            throws ProcessException {            
+            
+            if (!(inputToProcess instanceof JSONObject)) {
+                throw new ProcessException(
+                    "inputToProcess must be a JSONObject.");
+            }
+            
+            JSONObject inputToProcessAsJSONObject = (JSONObject)inputToProcess;
+            
+            if (!inputToProcessAsJSONObject.has("ingredients")) {                
+                return AnswerBuilder.buildAnswerWithInfo(
+                    "Zero products available: " +
+                    "Body of client message had no ingredients list.");
+            }
+            
+            JSONArray ingredientsListAsJSONArray =
+               inputToProcessAsJSONObject.getJSONArray("ingredients");
+            
+            SearchParameters searchParameters;
+            try {
+                searchParameters =
+                    getSearchParameters(ingredientsListAsJSONArray);
+            }
+            catch (GetSearchParametersRecognizedAHackException e) {
+                return AnswerBuilder.buildAnswerWithInfo(
+                    "Zero products available: getSearchParameters recognized a " +
+                    "hack.");
+            }
+            
+            try {
+                ArrayList<Product> arrayListOfProducts =
+                    retriever.getTheProductsMatching(searchParameters);
+                
+                // NetBeans wants to split into declaration and assignment.
+                Answer answer;
+                answer =
+                    AnswerBuilder.buildAnswerWithProducts(arrayListOfProducts);
+                
+                return answer;
+            }
+            catch (IceCreamDatabaseNotFoundException e) {
+                return AnswerBuilder.buildAnswerWithInfo(
+                    "Zero products available: Database could not be found in " +
+                    "getTheProductsMatching.");
+            }
+            catch (GetConnectionException e) {
+                return AnswerBuilder.buildAnswerWithInfo(
+                    "Zero products available: getTheProductsMatching threw " +
+                    "GetConnectionException.");
+            }
+            catch (CreateStatementException e) {
+                return AnswerBuilder.buildAnswerWithInfo(
+                    "Zero products available: getTheProductsMatching threw " +
+                    "CreateStatementException.");
+            }
+            catch (ExecuteQueryException e) {
+                return AnswerBuilder.buildAnswerWithInfo(
+                    "Zero products available: getTheProductsMatching threw " +
+                    "ExecuteQueryException.");
+            }
+            catch (SQLException e) {
+                return AnswerBuilder.buildAnswerWithInfo(
+                    "Zero products available: getTheProductsMatching threw " +
+                    "SQLException.");
+            }
+        }
+        
+        /**
+         * Defines method getSearchParameters, which gets search parameters from
+         * jsonArrayToUse.
+         * @param iceCreamApplicationMessageToUse
+         * @return new SearchParameters(ingredientsListAsStringArray)
+         * @throws GetSearchParametersRecognizedAHackException
+         */
+        private SearchParameters getSearchParameters(JSONArray jsonArrayToUse)
+            throws GetSearchParametersRecognizedAHackException {
+
+            if (jsonArrayToUse.length() == 0) {
+                return new SearchParameters(new String[0], 0);
+            }
+
+            String[] ingredientsListAsStringArray =
+                new String[jsonArrayToUse.length()];
+            for (int i = 0; i < ingredientsListAsStringArray.length; i++) {
+                ingredientsListAsStringArray[i] =
+                    jsonArrayToUse.get(i).toString();
+            }
+
+            boolean getSearchParametersRecognizedAHack = false;
+            if (getSearchParametersRecognizedAHack) {
+                throw new GetSearchParametersRecognizedAHackException(
+                    "getSearchParameters recognized a hack.");
+            }
+
+            return new SearchParameters(
+                ingredientsListAsStringArray, jsonArrayToUse.length());
+        }
     }
 }

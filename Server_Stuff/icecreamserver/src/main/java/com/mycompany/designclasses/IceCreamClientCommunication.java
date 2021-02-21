@@ -12,20 +12,12 @@ package com.mycompany.designclasses;
 
 /**
  * Defines class IceCreamClientCommunication, an instance of which represents
- * an ice cream client communication subsystem and receives search parameters
- * from the ice cream client, works with an instance of IceCreamProductRetrieval
- * to determine the products that match those search parameters, and provides
- * those matching products to the ice cream client.
+ * an ice cream client communication subsystem, which:
+ * 1) Stores a server and an ice cream product retrieval subsystem,
+ * 2) Implements setMessageInterfaces,
+ * 3) Implements startServerListeningForMessages,
+ * 4) Implements ControllerToProcessIntoAnswer.
+ * @version 0.0
  * @author Tom Lever
  */
-public class IceCreamClientCommunication {
-   
-    /**
-     * Defines constructor IceCreamClientCommunication which sets attributes of
-     * this iceCreamClientCommunication with inputs.
-     * inputs.
-     * @param retrieverToUse
-     */
-    public IceCreamClientCommunication(
-        IceCreamProductRetrieval retrieverToUse) { }
-}
+public class IceCreamClientCommunication { }
