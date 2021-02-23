@@ -15,8 +15,7 @@ package com.mycompany.designclasses;
  * an ice cream client communication subsystem, which uses an HTTP server to
  * listen for messages, works with messages, and communicates with the
  * ice cream product retrieval subsystem, sending search parameters and
- * receiving ice cream products matching those search criteria.
- * retrieval subsystem.
+ * receiving ice cream products matching those search parameters.
  * @version 0.0
  * @author Tom Lever
  */
