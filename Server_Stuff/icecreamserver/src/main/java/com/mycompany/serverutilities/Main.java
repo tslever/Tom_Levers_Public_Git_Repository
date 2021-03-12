@@ -72,6 +72,15 @@ public class Main {
         
         communicator.setMessageInterfaces();
         
+        messageInterfacesHaveBeenSet = true;
+        
         communicator.startServerListeningForMessages();
     }
+    
+    // For testing.
+    private static boolean messageInterfacesHaveBeenSet;
+    public boolean getMessageInterfacesHaveBeenSet() {
+        return messageInterfacesHaveBeenSet;
+    }
+    
 }
