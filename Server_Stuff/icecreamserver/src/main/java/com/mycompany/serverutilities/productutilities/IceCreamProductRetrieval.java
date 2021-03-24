@@ -92,14 +92,13 @@ public class IceCreamProductRetrieval {
             "FROM\n" +
             "(SELECT id_of_ingredient\n" +
             "FROM Ingredients\n" +
-            "WHERE ";
+            "WHERE value_of_ingredient in (";
 
         for (int i = 0; i < lengthOfIngredientsList-1; i++) {
-            sqlQuery +=
-                "(value_of_ingredient = '" + ingredientsList[i] + "') OR\n";
+            sqlQuery += "'" + ingredientsList[i] + "', ";
         }
         sqlQuery +=
-            "(value_of_ingredient = '" +
+            "'" +
             ingredientsList[lengthOfIngredientsList-1] +
             "')) AS ids_of_ingredients\n";
 

@@ -12,9 +12,9 @@ package com.mycompany.designclasses;
 
 /**
  * Defines class IceCreamProductRetrieval, an instance of which represents
- * an ice cream product retrieval subsystem and works with an instance of
- * IceCreamClientCommunication to determine the ice cream products that match
- * specific search parameters.
+ * an ice cream product retrieval subsystem, which receives search parameters
+ * from the ice cream client communicaition subsystem and provides the ice cream
+ * products that match the search parameters.
  * @version 0.0
  * @author Tom Lever
  */

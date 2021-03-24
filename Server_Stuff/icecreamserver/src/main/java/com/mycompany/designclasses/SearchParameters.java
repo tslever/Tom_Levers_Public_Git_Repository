@@ -1,7 +1,7 @@
 
 /*
  * This document was created as part of the decomposition of server input
- * search parameters.
+ * Search parameters.
  */
 
 /*
