@@ -1,0 +1,23 @@
+Herman,Hollerith,1860,Developed mechanical counting machine based on punched cards.
+Edsger,Dijkstra,1930,1972 Turing Award winner.
+John,Atanasoff,1903,Invented digital computer in 1930.
+John,McCarthy,1907,Helped invent the Eniac in 1943.
+Blaise,Pascal,1623,One of inventors of mechanical calculator.
+Jeannette,Wing,1956,Promoter of computational thinking.
+Alan,Turing,1912,Defined a formalism of a computation machine.
+Steven,Jobs,1955,Cofounder of Apple.
+Charles,Babbage,1791,Originated concept of machine that could be programmed.
+Barbara,Liskov,1939,Distributed computing researcher and more.
+Tim,Berners-Lee,1955,"Inventor" of the World Wide Web.
+Alonzo,Church,1903,Many contributions to mathematical logic.
+Ada,Lovelace,1815,Considered by many to be first computer programmer.
+Joseph,Jacquard,1752,Developed programmable loom.
+Grace,Hopper,1906,Compiler and high-level language pioneer.
+Alan,Kay,1940,One of developers of idea of object-oriented programmming.
+Donald,Knuth,1938,"Father of analysis of algorithms".
+Niklaus,Wirth,1934,Designed several widely used programming languages.
+James,Gosling,1955,"Father of java".
+Linus,Torvalds,1969,Main developer of Linux kernal.
+Marissa,Mayer,1975,Executive with Google and Yahoo.
+Steve,Wozniak,1950,Cofounder of Apple.
+Anita,Borg,1949,Founding director of IWT.

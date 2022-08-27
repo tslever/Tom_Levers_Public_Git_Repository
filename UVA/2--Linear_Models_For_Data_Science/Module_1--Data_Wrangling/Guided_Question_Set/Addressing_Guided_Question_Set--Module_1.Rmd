@@ -1,0 +1,195 @@
+---
+title: "Stat 6021: Addressing Guided Question Set 1"
+author: "Tom Lever"
+date: 08/24/22
+output:
+  pdf_document: default
+  html_document: default
+urlcolor: blue
+linkcolor: red
+---
+
+Download the dataset `students.txt` from Collab. The dataset contains information on students taking an introductory statistics class at a large public university in the early 2000's. The columns of data are:
+
+    * `Student`: ID number on survey
+    * `Gender`: gender of student (male / female)
+    * `Smoke`: whether the student smokes (yes / no)
+    * `Marijuan`: whether the student smokes marijuana (yes / no)
+    * `DrivDrnk`: whether the student has ever driven while drunk (yes / no)
+    * `GPA`: student's current GPA
+    * `PartyNum`: number of days per month the student parties
+    * `DaysBeer`: number of days per month the student has at least two alcoholic drinks
+    * `StudyHrs`: number of hours spent studying per week
+
+For the questions below, you may use either the traditional / Base R approach or the `dplyr` approach (or even a combination of both approaches).
+
+1. Looking at the variables above, is there a variable that will definitely not be part of any meaningful analysis? If yes, which one? Remove this variable from your data frame.
+
+    Meaningful analyses would likely anonymize data by removing any student ID numbers.
+    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    library(dplyr)
+    students_dataframe <- read.table("students.txt", header=TRUE)
+    head(students_dataframe, n = 3)
+    anonymized_students_dataframe <- students_dataframe%>%select(-Student)
+    head(anonymized_students_dataframe, n = 3)
+    ```
+    
+2. How many students are there in this dataset?
+
+    ```{r, eval=TRUE, echo=TRUE, results="show", message = FALSE}
+    cat(
+        "There are ", nrow(students_dataframe), " students in this dataset.\n",
+        "The header row of students_dataframe is not considered in this determination."
+    )
+    ```
+    
+3. How many students have a missing entry in at least one of the columns?
+
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    number_of_students_with_missing_datum <-
+        nrow(students_dataframe[!complete.cases(students_dataframe),])
+    cat(
+        "There are ",
+        number_of_students_with_missing_datum,
+        " students with a missing datum."
+    )
+    ```
+    
+4. Report the median values of the numeric variables other than `Student`.
+
+    The numeric variables other than `Student` are `GPA`, `PartyNum`, `DaysBeer`, and `StudyHrs`.
+    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    students_dataframe%>%
+        summarize(
+            median_GPA = median(GPA, na.rm = TRUE)
+        )
+    students_dataframe%>%
+        summarize(
+            median_days_with_party_per_month = median(PartyNum, na.rm = TRUE)
+        )
+    students_dataframe%>%
+        summarize(
+            median_days_with_beer_per_month = median(DaysBeer, na.rm = TRUE)
+        )
+    students_dataframe%>%
+        summarize(
+            median_hours_study_per_week = median(StudyHrs, na.rm = TRUE)
+        )
+    ```
+    
+5. Report the mean and standard deviation of `StudyHrs` for female and male students.
+
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    students_dataframe%>%
+        group_by(Gender)%>%
+            summarize(
+                mean_hours_study_per_week = mean(StudyHrs, na.rm = TRUE),
+                standard_deviation = sd(StudyHrs, na.rm = TRUE)
+            )
+    ```
+    
+6. Construct a 95-percent confidence interval for the mean `StudyHrs` for female students, and another 95-percent confidence interval for the mean `StudyHrs` for male students. Based on these intervals, do we have evidence that the mean `StudyHrs` is different between female and male students? **Hint:** use the `table()` function (base R) or the `count()` function from the `dplyr` package to obtain the sample sizes of female and male students.
+
+    See [Tom Lever's R Package](https://github.com/tslever/TomLeversRPackage "TomLeversRPackage").
+
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    library(TomLeversRPackage)
+    female_students_dataframe <- students_dataframe%>%filter(Gender=="female")
+    male_students_dataframe <- students_dataframe%>%filter(Gender=="male")
+    hours_study_per_week_for_female_students <-
+        female_students_dataframe%>%pull(StudyHrs)
+    hours_study_per_week_for_male_students <- male_students_dataframe%>%pull(StudyHrs)
+    constructConfidenceIntervalForDifferenceBetweenTwoPopulationMeans(
+        hours_study_per_week_for_female_students,
+        hours_study_per_week_for_male_students,
+        0.05
+    )
+    ```
+    
+    Since 0 is in the above confidence interval, a difference of 0 between mean study hours per week for female and male student populations is within the margin of error of the confidence interval for 95 percent of samples. We do not have sufficient evidence to conclude that there is a difference between mean study hours per week for female and male student populations.
+    
+7. Compare the median `StudyHrs` across genders and `Smoke`.
+
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    students_dataframe%>%
+        group_by(Gender, Smoke)%>%
+            summarize(
+                median_hours_study_per_week = median(StudyHrs, na.rm = TRUE)
+            )
+    ```
+    
+8. Create a new variable called `PartyAnimal`, which takes on the value "yes" if the student parties a lot (more than 8 days per month) (i.e., `PartyNum` > 8), and "no" otherwise.
+
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    library(dplyr)
+    PartyNum <- students_dataframe%>%select(PartyNum)
+    PartyAnimal <- ifelse(PartyNum > 8, "yes", "no")
+    colnames(PartyAnimal) <- "PartyAnimal"
+    head(bind_cols(PartyNum, PartyAnimal), n = 7)
+    ```
+    
+9. Create a new variable called `GPA.cat`, which takes on the following values.
+
+    * "low" if GPA is less than 3.00 (less than or equal to 2.99)
+    * "moderate" if GPA is at least 3.00 and less than 3.50 (less than or equal to 3.49)
+    * "high" if GPA is at least 3.50
+    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    GPA <- c(2.99, 3.00, 3.01, 3.49, 3.50, 3.51)
+    GPA.cat <-
+        data.frame(
+            GPA.cat =
+                cut(
+                    GPA,
+                    breaks = c(-Inf, 2.99, 3.49, Inf),
+                    labels = c("low", "moderate", "high")
+                )
+        )
+    bind_cols(data.frame(GPA = GPA), GPA.cat)
+    
+    GPA <- students_dataframe%>%pull(GPA)
+    GPA.cat <-
+        data.frame(
+            GPA.cat =
+                cut(
+                    GPA,
+                    breaks = c(-Inf, 2.99, 3.49, Inf),
+                    labels = c("low", "moderate", "high")
+                )
+        )
+    head(bind_cols(data.frame(GPA = GPA), GPA.cat), n = 5)
+    ```
+    
+10. Add the variables `PartyAnimal` and `GPA.cat` to the redacted data frame from part [1], and export it to a `.csv` file. Name the file `new_students.csv`. We will be using this data file for the next module.
+    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    new_students_dataframe <- bind_cols(students_dataframe, PartyAnimal, GPA.cat)
+    head(new_students_dataframe, n = 3)
+    write.csv(new_students_dataframe, "new_students.csv", row.names = FALSE)
+    
+    new_anonymized_students_dataframe <-
+        bind_cols(anonymized_students_dataframe, PartyAnimal, GPA.cat)
+    head(new_anonymized_students_dataframe, n = 3)
+    write.csv(
+        new_anonymized_students_dataframe,
+        "new_anonymized_students.csv",
+        row.names = FALSE
+    )
+    ```
+    
+11. Suppose we want to focus on students who have low (i.e., below 3.00) GPA's, party a lot (i.e., more than 8 days per month), and study little (i.e., less than 15 hours per week). Create a data frame that contains these students. How many such students are there?
+
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    dataframe_for_students_who_have_low_GPAs_party_a_lot_and_study_little <-
+        students_dataframe%>%
+            filter(GPA < 3.00, PartyNum > 8, StudyHrs < 15)
+    head(dataframe_for_students_who_have_low_GPAs_party_a_lot_and_study_little, n = 3)
+    cat(
+        "There are ",
+        nrow(dataframe_for_students_who_have_low_GPAs_party_a_lot_and_study_little),
+        " students in this dataset.\n",
+        "The header row of students_dataframe is not considered in this determination."
+    )
+    ```

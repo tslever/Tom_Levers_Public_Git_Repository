@@ -1,0 +1,5 @@
+SQLite JDBC
+Copyright 2021 xerial.org
+
+This product includes software developed at
+xerial.org.
