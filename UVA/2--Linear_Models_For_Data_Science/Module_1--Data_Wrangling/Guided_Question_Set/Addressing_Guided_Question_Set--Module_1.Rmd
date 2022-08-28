@@ -92,7 +92,7 @@ For the questions below, you may use either the traditional / Base R approach or
     
 6. Construct a 95-percent confidence interval for the mean `StudyHrs` for female students, and another 95-percent confidence interval for the mean `StudyHrs` for male students. Based on these intervals, do we have evidence that the mean `StudyHrs` is different between female and male students? **Hint:** use the `table()` function (base R) or the `count()` function from the `dplyr` package to obtain the sample sizes of female and male students.
 
-    See [Tom Lever's R Package](https://github.com/tslever/TomLeversRPackage "TomLeversRPackage").
+    See [Tom Lever's R Package](https://github.com/tslever/Tom_Levers_Git_Repository/tree/main/TomLeversRPackage "TomLeversRPackage").
 
     ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
     library(TomLeversRPackage)
