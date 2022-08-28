@@ -1,0 +1,8 @@
+Create React App
+
+
+https://create-react-app.dev/docs/adding-typescript/
+
+npx create-react-app bookkeeper --template typescript
+cd bookkeeper
+npm run start
