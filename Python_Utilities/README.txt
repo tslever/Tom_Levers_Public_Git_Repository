@@ -10,3 +10,8 @@ python Organize_lines_from_a_CSV_file_into_a_dataframe.py<br/>
 
 Example Usage: At command line, enter on one line<br/>
 python Organize_lines_from_a_CSV_file_into_a_dataframe.py ../the_sibling_folder/the_CSV_file.csv 1000 1002
+
+## Convert_Array_Of_Numbers_To_String.py
+A script for converting an array of numbers to a string.
+
+Usage: At command line, enter python Convert_Array_Of_Numbers_To_String.py <base> <array of numbers surrounded by double quotes>
