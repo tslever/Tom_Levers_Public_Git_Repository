@@ -1,0 +1,22 @@
+Authors@R: person("Tom", "Lever", email = "thomas.lever.business@gmail.com", role = c("cre", "aut"))
+BugReports: https://github.com/tslever/TomLeversRPackage/issues
+Depends: R (>= 4.2.1)
+Description: Contains Tom Lever's R functions, including
+    calculatePercentile
+    constructConfidenceIntervalForPopulationMean
+    constructConfidenceIntervalForTwoPopulationMeans
+Encoding: UTF-8
+LazyData: true
+License: GPL-3
+Package: TomLeversRPackage
+RoxygenNote: 7.2.1
+Title: Tom Lever's R Package
+Type: Package
+URL: https://github.com/tslever/TomLeversRPackage
+Version: 0.0.0
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+VignetteBuilder: knitr
+Config/testthat/edition: 3
