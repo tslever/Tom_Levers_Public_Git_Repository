@@ -1,2 +1,2 @@
-# Tom_Levers_Git_Repository
-Contains Tom Lever's software solutions
+# TomLeversRPackage
+Contains Tom Lever's R functions
