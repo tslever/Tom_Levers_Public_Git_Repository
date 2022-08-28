@@ -131,7 +131,7 @@ int main() {
 	cudaFree(intDataOfConvolvedHeyHoToTheGreenwood);
 
 	// Open fileConvolvedHeyHoToTheGreenwood for writing.
-	FILE* fileConvolvedHeyHoToTheGreenwood = fopen("Hey_Ho_To_the_Greenwood--Convolved--48_kHz.wav", "wb");
+	FILE* fileConvolvedHeyHoToTheGreenwood = fopen("Hey_Ho_To_The_Greenwood--Convolved--48_kHz.wav", "wb");
 
 	// Write RIFF header.
 	unsigned char chunkID[4] = { 'R', 'I', 'F', 'F' };
