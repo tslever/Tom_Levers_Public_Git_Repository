@@ -90,7 +90,8 @@ There are 1,384,683 snapshots in this dataset. The header row of `Covid` is not 
     (e) Display the counties with the 10 highest death rates. Be sure to display also the appropriate states, numbers of cases, and numbers of deaths. Is there something you notice about these counties?
     
         ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
-        # For calculatePercentile, devtools::install_github("tslever/Tom_Levers_Git_Repository/TomLeversRPackage")
+        # For calculatePercentile,
+        # devtools::install_github("tslever/Tom_Levers_Git_Repository/TomLeversRPackage")
         library(TomLeversRPackage)
         counties_with_10_highest_death_rates <-
             slice_max(
