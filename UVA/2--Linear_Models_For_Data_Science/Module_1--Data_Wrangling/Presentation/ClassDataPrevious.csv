@@ -1,0 +1,299 @@
+Year,Sleep,Sport,Courses,Major,Age,Computer,Lunch
+Second,8.0,Basketball,6,Commerce,19,Mac,11.00
+Second,7.0,Tennis,5,Psychology,19,Mac,10.00
+Second,8.0,Soccer,5,Cognitive science and psychology,21,Mac,10.00
+First,9.0,Basketball,5,Pre-Comm,19,Mac,4.00
+Second,4.0,Basketball,6,Statistics ,19,PC,0.00
+Third,7.0,None,4,Psychology,20,PC,11.00
+Second,7.0,Basketball,5,Pre-commerce,19,Mac,7.00
+First,7.0,Basketball,6,Biology/Chemistry,18,PC,0.00
+Third,8.5,Basketball,4,Economics,20,Mac,10.00
+Third,7.0,Basketball,6,Global Security and Justice ,20,PC,7.00
+First,8.0,Basketball,5,Global Studies: Crime and Justice,19,Mac,15.00
+First,8.0,Baseball,5,Psychology,19,PC,0.00
+Fourth,7.0,Basketball,4,Psychology ,21,Mac,10.00
+Second,8.0,Football,5,Leadership and Public Policy,20,Mac,12.00
+Second,6.5,Basketball,5,Psychology,19,Mac,5.00
+Fourth,6.0,Basketball,5,Environmental Sciences,22,Mac,10.00
+Second,7.5,Basketball,4,Economics,19,Mac,10.00
+Third,8.0,Basketball,6,Economics,21,Mac,10.00
+Second,9.0,Football,5,Psychology,20,Mac,10.00
+First,7.0,Soccer,4,Psychology,18,Mac,0.00
+Third,7.0,Ping pong,5,astrophysics,20,PC,0.30
+Second,7.0,Basketball,5,Psychology,20,Mac,9.00
+Second,7.0,Baseball,5,Psychology,20,Mac,8.00
+First,5.0,Football,5,Cognitive Science,18,PC,10.00
+Second,8.0,Soccer,5,studio art and psychology,19,PC,7.00
+Third,8.0,Soccer,4,Foreign Affairs,20,PC,10.00
+Second,3.5,Football,5,Psychology ,19,Mac,0.00
+Second,4.0,Ping pong,5,Commerce,19,Mac,1.00
+First,6.0,Basketball,5,Media Studies,18,Mac,12.00
+Second,6.0,None,5,American Politics,19,PC,10.00
+Second,8.0,Soccer,5,American Studies,19,PC,7.00
+Third,8.5,Soccer,5,Computer Science and Politics (Foreign Affairs),20,Mac,9.00
+Fourth,6.0,Soccer,5,Biology,21,PC,12.50
+Second,8.0,Football,6,Statistics,19,Mac,5.00
+First,7.0,Basketball,5,Commerce,18,Mac,10.00
+First,7.0,Basketball,5,Computer Science ,18,Mac,10.00
+Second,7.0,Tennis,5,Psychology,19,Mac,5.00
+Third,8.0,Soccer,5,Chemistry,21,PC,8.00
+Fourth,7.0,None,4,Computer Science,21,Mac,10.00
+First,8.0,Tennis,5,Psychology,18,Mac,8.00
+Third,7.0,Football,5,Global Studies: Middle East & South Asia,20,Mac,10.00
+First,7.0,Baseball,5,Undecided,18,PC,7.00
+Second,7.5,Football,5,Psychology,20,PC,8.50
+Third,7.0,Soccer,5,Media Studies & Foreign Affairs ,21,Mac,10.00
+Second,8.0,Basketball,6,Linguistics; Computer Science,19,PC,0.00
+Second,8.0,Soccer,5,psychology,20,Mac,10.00
+Second,8.5,Basketball,5,Psych (pre-med),19,Mac,44117.00
+Second,9.0,Soccer,6,Psychology,19,PC,10.00
+Third,5.0,Basketball,5,Psychology,21,Mac,11.00
+First,8.5,Soccer,6,Psychology,19,PC,5.00
+Second,7.0,Soccer,5,Batten ,20,Mac,10.00
+Second,8.0,Basketball,5,Sociology and Global studies,20,Mac,10.00
+Second,8.0,Basketball,6,Psychology ,19,Mac,13.00
+Fourth,6.5,Basketball,4,Chemistry,22,Mac,3.00
+Second,10.0,Basketball,5,psychology ,20,Mac,10.00
+Second,7.0,Basketball,5,Economics,19,PC,6.00
+First,8.0,Basketball,5,Political and Social Thought ,19,Mac,9.00
+Third,44020.0,None,5,Foreign Affairs,20,Mac,10.00
+Second,9.0,Basketball,6,Statistics,19,Mac,7.00
+Second,8.5,Tennis,5,Intended: Leadership and Public Policy,19,Mac,7.50
+Second,7.0,Football,5,Biology and Psychology,19,Mac,10.00
+Third,7.0,Baseball,4,Psychology,22,PC,8.00
+Third,10.0,Football,4,Psychology,22,Mac,10.00
+Second,6.0,Soccer,5,Computer Science,19,Mac,0.00
+Third,9.0,Basketball,5,Cog Sci and Media Studies,21,Mac,10.00
+Second,9.0,Basketball,5,Psychology and Public Policy,19,Mac,10.00
+Second,8.0,Soccer,5,psychology ,19,Mac,10.00
+Third,9.0,Basketball,5,Anthropology,22,Mac,5.00
+First,9.0,Football,5,Psychology ,18,Mac,0.00
+Second,6.0,Basketball,5,Urban Planning,20,PC,7.00
+Second,11.0,Soccer,5,Commerce,20,Mac,10.00
+Second,8.0,Tennis,5,Public Policy or YSI,19,Mac,8.00
+Third,7.0,Football,6,Biology,20,Mac,8.00
+Second,5.0,Basketball,5,Psychology and Global Studies ,19,PC,8.00
+Second,7.0,Basketball,5,Psychology ,19,Mac,12.50
+Second,7.5,Football,5,sociology or psychology,19,PC,5.00
+Fourth,4.0,Ping pong,4,Computer Science,21,Mac,12.00
+Second,8.0,Football,5,Psychology,20,PC,8.00
+Second,6.5,Football,4,Psychology,20,Mac,11.00
+Second,7.0,Football,5,Psychology,19,Mac,0.00
+Third,7.0,None,4,"English and WGS (Women, Gender, and Sexuality Studies)",20,PC,7.00
+Second,5.0,None,5,Foreign Affairs,19,Mac,10.00
+Third,7.5,Basketball,5,biomedical engineering,20,Mac,10.00
+Second,8.0,Basketball,5,Statistics,19,Mac,10.00
+Fourth,9.0,Basketball,4,Aerospace Engineering,21,PC,5.00
+Second,7.0,Football,4,Psychology,19,PC,12.50
+Third,8.0,Soccer,6,Systems Engineering,20,PC,0.00
+First,9.0,Basketball,6,Cognitive Science,18,PC,0.00
+Fourth,7.5,Football,3,Psychology,22,PC,7.00
+Fourth,7.5,Football,5,Environmental Science,21,PC,9.00
+Second,8.0,Football,5,Statistics and French,20,Mac,8.00
+Second,6.0,Soccer,5,"Psych major, but also in the Masters program for Elementary Education",19,Mac,10.00
+First,7.0,Basketball,5,Psychology and drama (with a minor in French),18,PC,8.00
+Second,9.0,Basketball,5,Biochemistry,19,PC,7.50
+Third,6.0,Boxing,5,Psychology,20,PC,13.00
+Second,7.0,Basketball,7,psychology and youth and social innovation ,19,,10.00
+Fourth,8.0,Basketball,5,"Media Studies, Spanish",21,Mac,9.00
+Second,5.0,Soccer,5,psychology,20,PC,0.00
+Second,7.0,Soccer,5,Foreign Affairs,20,PC,5.00
+Second,9.0,Basketball,5,Psychology ,19,PC,9.00
+First,6.0,Lacrose,6,Psychology and Sociology ,18,Mac,8.00
+Second,9.0,Football,5,Commerce,19,Mac,10.00
+Second,,Basketball,7,psychology and youth and social innovation,19,Mac,10.00
+First,6.5,Basketball,5,Undecided,19,Mac,0.00
+Second,8.0,Basketball,6,neuroscience,21,Mac,5.00
+Third,8.0,Basketball,4,mathematics/economics,21,PC,7.61
+Second,8.0,Basketball,5,Chemistry and Psychology,20,PC,7.50
+First,8.0,None,5,Psychology,18,Mac,5.00
+Second,7.0,Basketball,7,Computer Science,20,PC,1.00
+Second,7.0,Basketball,6,Psychology and Cognitive Science double,19,Mac,7.00
+Second,8.0,Football,4,Psychology,19,Mac,10.00
+First,8.0,Basketball,5,Psychology,18,Mac,0.00
+Third,7.0,Football,5,Studio Art and Media Studies,21,Mac,8.00
+First,7.0,Basketball,6,Psychology,18,Mac,12.00
+Second,6.0,Baseball,5,Economics,19,Mac,10.00
+First,7.0,Basketball,5,Economics,19,PC,8.00
+Third,7.0,Basketball,6,Cognitive Science,20,Mac,8.00
+Second,7.0,Soccer,5,foreign affairs ,19,Mac,8.00
+Second,7.0,Basketball,5,Chemistry ,20,Mac,5.00
+Fourth,8.5,Football,3,Economics,21,Mac,10.00
+Third,6.0,Basketball,5,math and cognitive science,20,Mac,10.00
+First,9.0,Soccer,7,CS,18,PC,5.00
+Fourth,7.0,Basketball,4,computer science and economics,21,Mac,12.00
+Second,8.0,Soccer,5,English,19,Mac,10.00
+Second,7.0,Basketball,5,Commerce,19,Mac,8.00
+First,8.0,Soccer,5,Batten,18,Mac,12.00
+Second,7.0,Basketball,5,english and media studies ,20,Mac,10.00
+First,7.0,Soccer,5,Undecided,18,PC,8.00
+Second,9.0,Basketball,5,Finance (Comm School),19,Mac,6.50
+First,8.0,Football,5,Computer Science,18,PC,8.00
+Second,8.5,Basketball,5,Foreign Affairs,20,Mac,8.00
+Second,7.0,Football,5,Psychology and Youth and Social Innovation ,19,Mac,10.00
+Second,8.0,Soccer,4,Government,20,PC,10.00
+Second,9.0,None,5,Psychology ,20,Mac,11.00
+First,8.0,Baseball,5,Psychology ,18,Mac,10.00
+First,9.0,Soccer,5,Psychology ,18,Mac,8.00
+Second,8.0,Soccer,5,Commerce,20,PC,11.00
+Second,8.0,Basketball,5,Psychology,19,Mac,7.00
+Second,8.0,Basketball,5,Commerce School,19,Mac,10.00
+Third,8.0,Football,5,Foreign Affairs,20,PC,8.50
+Third,10.0,Tennis,4,Architecture,21,PC,7.00
+Second,6.0,Basketball,5,Psychology,19,Mac,9.00
+Second,9.0,Soccer,6,Psychology,19,PC,10.00
+Second,7.0,Football,5,Computer Science,19,PC,9.00
+Second,7.0,Basketball,4,Global Development Studies,20,Mac,10.00
+Second,8.0,Soccer,5,Global public health,19,PC,9.00
+Second,7.0,Football,4,psychology,20,Mac,6.00
+Second,8.0,Football,5,foreign affairs,19,Mac,10.00
+Third,6.5,Football,5,psychology,19,PC,9.00
+Second,6.0,Football,5,Statistics,19,PC,9.00
+Second,8.0,Basketball,5,"Pre-Commerce, Economics",21,Mac,10.00
+Second,9.5,Lacrose,6,Biology,20,Mac,8.00
+Second,7.0,Soccer,5,kinesiology,20,Mac,10.00
+First,8.0,Football,5,Psychology ,18,PC,10.00
+Second,8.5,None,5,psychology,19,Mac,0.00
+Third,6.0,Football,5,Economics,21,Mac,9.00
+First,5.5,Basketball,5,Psychology,19,PC,9.00
+First,7.0,Football,5,Psychology,19,Mac,9.00
+First,7.0,Soccer,5,Media Studies,19,Mac,10.00
+Second,8.0,None,5,Computer Science and Psychology,19,Mac,7.00
+Third,7.0,Tennis,6,Biochemistry,20,PC,6.50
+Fourth,7.0,Basketball,4,Economics and Foreign Affairs,21,Mac,10.00
+Second,8.0,Basketball,4,Computer Science,19,Mac,10.00
+Second,8.0,Football,5,Psychology,20,Mac,12.00
+Second,6.0,Soccer,5,Econ,19,Mac,11.00
+Second,6.0,Football,6,Biology,19,Mac,12.00
+Fourth,7.0,Basketball,5,Environmental Science,22,Mac,10.00
+First,6.0,Basketball,5,Psychology,18,Mac,10.00
+Fourth,8.0,Football,4,Economics; History,21,Mac,10.00
+Fourth,8.0,Basketball,4,Government ,21,Mac,10.00
+Second,8.0,Football,5,Statistics,19,PC,6.00
+Second,8.0,Basketball,5,Psychology,20,Mac,10.00
+Third,10.0,Boxing,2,psychology,21,Mac,13.00
+First,7.5,Soccer,5,Psychology ,18,PC,8.00
+Second,7.0,None,5,Psychology,19,Mac,7.00
+Second,5.0,Lacrose,4,Psychology and Russian Language,18,PC,2.00
+Second,8.0,Lacrose,5,english,20,Mac,0.00
+Second,9.0,Football,5,Commerce,19,Mac,5.00
+Fourth,6.0,None,5,Youth and Social Innovation (Curry School of Education),21,PC,5.00
+Fourth,8.0,Ping pong,5,Youth & Social Innovation,22,Mac,5.00
+Second,7.5,Football,6,Computer Science,19,PC,6.90
+Second,7.5,Football,5,Public Policy,20,Mac,9.00
+Third,6.0,Basketball,5,Economics and Philosophy,20,Mac,8.00
+Third,8.0,None,5,Global Sustainability ,21,Mac,5.00
+Second,8.0,Football,5,Commerce,20,Mac,10.00
+Fourth,8.0,Basketball,5,Biochemistry,22,Mac,8.50
+First,8.0,Tennis,5,Commerce,18,Mac,8.00
+Second,8.0,Football,5,Psychology ,19,Mac,10.00
+Second,8.0,Basketball,5,Government,19,Mac,8.00
+First,8.0,Tennis,5,Psychology and Creative Writing ,19,Mac,0.00
+Second,5.0,Basketball,5,Biostatistics,19,Mac,12.00
+Third,8.0,Tennis,5,Economics and Cognitive Science,20,Mac,9.00
+Second,6.0,Football,5,Finance ,20,Mac,9.00
+First,9.0,Basketball,5,English and Psychology,18,Mac,0.00
+First,8.5,None,5,Undecided,19,Mac,12.00
+Second,6.0,Football,5,psychology (???),20,Mac,7.00
+Fourth,11.0,Soccer,4,Biomedical Engineering,21,PC,8.00
+Third,8.0,Soccer,6,CS and Art Studio,21,Mac,6.74
+First,6.0,Baseball,6,Global Studies Security and Justice,19,Mac,0.00
+First,7.0,Basketball,5,Psychology,19,Mac,8.00
+First,7.5,None,5,Undecided -- potentially double major in Psychology and Media Studies,18,PC,10.00
+First,8.0,Basketball,5,English ,19,Mac,10.00
+Second,8.0,None,6,Computer Science; Psychology,19,Mac,12.00
+Fourth,8.0,Football,4,Economics,22,PC,10.00
+Second,8.0,None,4,Psychology,19,PC,3.00
+Second,8.0,None,4,Cognitive Science,19,Mac,
+First,7.0,Soccer,5,Media Studies ,19,Mac,8.00
+Second,7.0,Basketball,5,Urban and Environmental Planning and Government,20,Mac,7.50
+Fourth,7.0,Basketball,6,"Econ, Anthropology",22,Mac,10.00
+Second,7.0,Football,5,Computer Science,19,Mac,8.00
+Third,6.0,Soccer,4,Computer Science,21,Mac,10.00
+Second,7.5,Basketball,5,Psychology ,19,Mac,15.00
+Second,7.0,Basketball,5,politics,20,Mac,9.00
+Second,7.0,Soccer,6,Computer Science,20,PC,10.00
+Second,8.0,Basketball,5,Economics,20,Mac,10.00
+Second,7.0,Basketball,5,politics,20,Mac,9.00
+Fourth,5.0,Basketball,4,Biology,21,PC,10.00
+First,8.0,Basketball,5,Foreign Affairs ,18,Mac,9.00
+Third,6.0,Football,5,Computer Science,20,PC,10.00
+First,8.0,Football,5,Psychology and Youth & Social Innovation,18,Mac,10.00
+First,4.0,None,5,Pre comm,18,PC,5.00
+Second,8.0,Football,5,computer science,20,PC,5.00
+Fourth,6.0,None,5,Biology,22,PC,10.00
+Second,7.5,Basketball,5,Government and English,19,Mac,8.00
+First,8.0,None,7,Psychology,18,Mac,5.00
+First,6.0,Soccer,6,Double major in psychology or commerce.,18,PC,11.50
+Third,7.0,Tennis,6,Computer Science,20,PC,11.00
+Second,8.0,None,4,cs/relg studies ,19,Mac,7.00
+Second,9.0,Football,5,Computer Science,19,Mac,5.00
+Second,5.0,Basketball,5,Urban planning,19,Mac,7.50
+First,9.0,Tennis,5,Pysch or Media Studies,19,Mac,7.00
+Third,6.5,Football,5,Government,21,Mac,10.00
+First,6.0,Football,5,Econ + Stat,18,Mac,10.00
+Second,5.0,Soccer,5,Urban Planning,20,Mac,9.50
+Second,8.5,Football,5,psychology,19,Mac,0.00
+First,10.0,Football,5,undecided,19,PC,0.00
+Second,7.0,Basketball,4,Psychology ,19,Mac,10.00
+First,8.0,Ping pong,5,psychology,18,PC,12.00
+Second,7.0,Football,6,Psychology ,19,Mac,9.50
+Fourth,6.0,Football,3,Statistics,21,Mac,10.00
+Second,7.0,Soccer,5,Psychology,19,Mac,10.00
+Second,6.0,Basketball,5,Urban and Environmental Planning,20,Mac,10.00
+Second,6.0,Football,5,Psychology ,19,Mac,10.00
+First,5.0,Tennis,6,Computer Science and Statistics,18,PC,10.00
+Second,8.0,Basketball,5,Computer Science,20,Mac,10.00
+Second,9.0,Boxing,4,undecided ,20,Mac,12.00
+First,7.0,Basketball,4,Biostatistics,18,PC,9.00
+First,8.0,Tennis,5,Psychology,19,Mac,0.00
+Fourth,6.5,Basketball,4,biology ,22,Mac,3.00
+First,9.0,Football,5,Youth and Social Innovation ,19,Mac,7.50
+First,7.0,Football,5,Neuroscience ,18,PC,0.00
+Third,6.0,Basketball,5,Cognitive Science,20,Mac,15.00
+First,4.0,Football,5,Leadership and Public Policy,18,PC,10.00
+First,7.0,Football,5,Economics,18,Mac,10.00
+First,8.0,Soccer,6,politics ,19,PC,11.00
+First,8.0,Lacrose,5,Statistics,18,Mac,15.00
+Second,6.0,Basketball,6,Statistics or Commerce or YSI,20,Mac,10.00
+Second,7.0,Basketball,4,Psychology,19,PC,7.00
+Second,9.0,Soccer,6,Psychology/Philosophy,19,PC,6.00
+Fourth,7.0,Soccer,4,Computer Science,21,Mac,9.00
+First,8.0,Basketball,5,psychology,18,Mac,7.00
+Fourth,9.0,None,4,Classics,21,Mac,6.00
+First,6.0,Basketball,5,American studies and media studies,18,Mac,10.00
+First,9.8,Baseball,5,Psychology,19,PC,0.00
+Second,7.0,Basketball,5,global development studies and public policy ,19,Mac,10.00
+First,6.0,Soccer,5,public policy ,18,PC,10.00
+First,8.0,Basketball,5,Interdisciplinary,18,Mac,14.00
+Third,5.0,Basketball,6,Psychology,21,Mac,10.00
+Second,7.5,Football,5,Stat,20,Mac,10.42
+First,9.0,Football,5,Psychology and Creative Writing ,18,Mac,10.00
+First,8.5,Football,5,psychology,18,Mac,0.00
+First,10.0,Basketball,5,Undecided,19,Mac,14.00
+First,8.0,Basketball,5,Cognitive Science and Computer Science,18,Mac,12.00
+First,7.0,Soccer,5,pre-comm,19,Mac,9.00
+First,0.0,Baseball,5,psychology&cognitive science,19,Mac,15.00
+Third,8.0,Baseball,4,Economics,21,Mac,12.00
+Third,9.0,Basketball,5,Mathematics ,20,PC,7.00
+First,9.0,Soccer,5,foreign affairs + religious studies,19,PC,0.00
+Second,9.0,Football,5,Psychology,20,PC,10.00
+Fourth,6.0,Football,5,Economics and Government,22,Mac,12.00
+Fourth,7.0,Soccer,5,Global Development Studies and French,21,PC,0.00
+First,8.0,Basketball,5,Foreign Affairs ,18,Mac,0.00
+First,5.0,Soccer,5,commerce,19,Mac,15.00
+First,9.5,Football,7,Psychology,18,PC,0.00
+First,8.0,Tennis,9,Computer Science,19,PC,8.00
+First,6.0,Basketball,5,Politics,19,PC,7.00
+Second,8.8,Football,5,Psychology,19,Mac,11.00
+Second,5.5,Football,5,Government and public policy,19,PC,11.00
+First,8.0,Football,5,Commerce,19,PC,8.00
+First,8.0,Basketball,5,Psychology,18,PC,11.00
+First,4.5,Football,6,psych and cognitive science double major,18,PC,11.00
+Second,8.0,Basketball,4,Computer Science,19,Mac,7.00
+Third,8.0,Basketball,5,Statistics,21,Mac,7.50
+First,9.0,Soccer,6,Environmental Science ,18,PC,8.00
+Second,5.0,Soccer,5,Statistics and Art History ,20,Mac,5.00
+First,7.0,Basketball,6,"global development, public policy",18,Mac,9.00
+Third,8.0,None,6,International Economics and Statistics,20,PC,12.50
+Third,6.0,Baseball,5,Psychology,51,PC,10.00

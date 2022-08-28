@@ -1,0 +1,234 @@
+---
+title: "Stat 6021: HW 1"
+author: "Tom Lever"
+date: 08/26/22
+output:
+  pdf_document: default
+  html_document: default
+urlcolor: blue
+linkcolor: red
+---
+
+Download the dataset `UScovid.csv` from Collab. The dataset was released by *The New York Times* and contains data on cumulative (i.e., accruing) counts of coronavirus cases and deaths in the United States, at the state and county level, over each day from Jan 21, 2020 to June 3, 2021. You may read more about the data and the variable descriptions [here](https://www.kaggle.com/datasets/fireballbyedimyrnmom/us-counties-covid-19-dataset "US counties COVID 19 dataset") Please note the dataset is regularly updated. We will use the file on Collab.
+
+Read the data file into R and store the dataset into the object Covid.
+
+```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+Covid <- read.csv("USCovid.csv")
+head(Covid, n = 3)
+nrow(Covid)
+```
+
+There are 1,384,683 snapshots in this dataset. The header row of `Covid` is not considered in this determination.
+
+1. For this question, we focus on data at the county level.
+
+    (a) We are interested in the data at the most recent date, June 3, 2021 (i.e., 2021-06-03). Create a data frame called `latest` that
+    
+        * has only rows pertaining to data from June 3, 2021,
+        * removes rows pertaining to counties that are "Unknown",
+        * removes the column `date` and `fips`, and
+        * is ordered by `county` and then `state` alphabetically.
+        
+        Use the `head()` function to display the first 6 rows of the data frame `latest`.
+        
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        library(dplyr)    
+        latest <-
+            Covid%>%
+                filter(date == "2021-06-03")%>%
+                filter(county != "Unknown")%>%
+                # filter(!is.na(county))
+                # Unknown is not equivalent to NA (i.e., Not Available)
+                select(-date, -fips)%>%
+                arrange(county, state)
+        head(latest, n = 6)
+        ```
+    
+    (b) Calculate the death rate-- call it `death.rate` --for each county. Report the death rate as a percent and round to two decimal places. Add `death.rate` as a new column to the data frame `latest`. Display the first 6 rows of the data frame `latest`.
+    
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        death.rate <- round(latest%>%select(deaths) / latest%>%select(cases) * 100, 2)
+        colnames(death.rate) <- "death.rate"
+        latest <- bind_cols(latest, death.rate)
+
+        death.rate <-
+            rename(
+                round(latest%>%select(deaths) / latest%>%select(cases) * 100, 2),
+                death.rate = deaths
+            )
+        latest <- latest%>%mutate(death.rate = death.rate)
+        head(latest, n = 6)
+        ```
+    
+    (c) Display the counties with the 10 largest numbers of cases. Be sure to display also the appropriate states, numbers of deaths, and death rates.
+    
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        # "slice_min() and slice_max() can order_by multiple variables
+        # if you supply them as a data.frame or tibble (#6176)."
+        # https://github.com/tidyverse/dplyr/blob/main/NEWS.md
+        # For slice_max, devtools::install_github("tidyverse/dplyr")
+        slice_max(
+            latest,
+            n = 10,
+            order_by = data.frame(cases, county, state, deaths, death.rate),
+            with_ties = FALSE
+        )
+        ```
+    
+    (d) Display the counties with the 10 largest numbers of deaths. Be sure to display also the appropriate states, numbers of cases, and death rates.
+    
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        slice_max(
+            latest,
+            n = 10,
+            order_by = data.frame(deaths, county, state, cases, death.rate),
+            with_ties = FALSE
+        )
+        ```
+    
+    (e) Display the counties with the 10 highest death rates. Be sure to display also the appropriate states, numbers of cases, and numbers of deaths. Is there something you notice about these counties?
+    
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        # For calculatePercentile, devtools::install_github("tslever/TomLeversRPackage")
+        library(TomLeversRPackage)
+        counties_with_10_highest_death_rates <-
+            slice_max(
+                latest,
+                n = 10,
+                order_by = data.frame(death.rate, county, state, cases, deaths),
+                with_ties = FALSE
+            )
+        counties_with_10_highest_death_rates
+        calculatePercentile(
+            latest%>%pull(cases),
+            max(counties_with_10_highest_death_rates%>%select(cases), na.rm = TRUE)
+        )
+        ```
+        
+        Yes.
+        The percentile of the maximum number of cases among the counties with the 10 highest death rates, given all numbers of cases, is 23.
+        The maximum number of cases among the counties with the 10 highest death rates is in the lowest quarter of numbers of cases.
+        
+    (f) Display the counties with the 10 highest death rates among counties with at least 100,000 cases. Be sure to display also the appropriate states, numbers of cases, and numbers of deaths.
+    
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        library(TomLeversRPackage)
+        latest%>%
+            filter(cases > 100000)%>%
+            slice_max(
+                n = 10,
+                order_by = data.frame(death.rate, county, state, cases, deaths),
+                with_ties = FALSE
+            )
+        ```
+
+    (g) Display the number of cases, deaths, and death rate for the following counties.
+    
+        i. Albemarle, Virginia
+    
+            ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+            latest%>%
+                filter(county == "Albemarle" & state == "Virginia")
+            ```
+    
+        ii. Charlottesville City, Virginia
+        
+            ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+            latest%>%
+                filter(county == "Charlottesville city" & state == "Virginia")
+            ```
+            
+2. For this question, we focus on data at the state level. Note that the dataset has data on the 50 states, plus DC, Puerto Rico, Guam, Northern Mariana Islands, and the Virgin Islands.
+
+    (a) We are interested in the data at the most recent date, June 3, 2021. Create a data frame called state.level that
+    
+        * has 55 rows, including 1 for each state, 1 for DC, and 1 for each territory
+        * has 3 columns, including `state`, `cases`, and `deaths`, and
+        * is ordered alphabetically by `state`.
+        
+        Display the first 6 rows of the data frame `state.level`.
+        
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        state.level <-
+            Covid%>%
+                filter(date == "2021-06-03")%>%
+                group_by(state)%>%
+                summarize(cases = sum(cases), deaths = sum(deaths, na.rm = TRUE))
+        head(state.level, n = 6)
+        nrow(state.level)
+        ```
+        
+    (b) Calculate the death rate (call it `state.rate`). Report the death rate as a percent and round to two decimal places. Add `state.rate` as a new column to the data frame `state.level`. Display the first 6 rows of the data frame `state.level`.
+    
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        state.rate <-
+            round(state.level%>%select(deaths) / state.level%>%select(cases) * 100, 2)
+        colnames(state.rate) <- "state.rate"
+        state.level <- bind_cols(state.level, state.rate)
+
+        state.rate <-
+            rename(
+                round(
+                    state.level%>%select(deaths) / state.level%>%select(cases) * 100,
+                    2
+                ),
+                state.rate = deaths
+            )
+        state.level <- state.level%>%mutate(state.rate = state.rate)
+        head(state.level, n = 6)
+        ```
+        
+    (c) What is the death rate in Virginia?
+    
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        state.level%>%
+            filter(state == "Virginia")%>%
+            select(state, state.rate)
+        ```
+        
+        The death rate in Virginia is 1.66 percent.
+        
+    (d) What is the death rate in Puerto Rico?
+    
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        state.level%>%
+            filter(state == "Puerto Rico")%>%
+            select(state, state.rate)
+        ```
+        
+        The death rate in Puerto Rico is 1.46 percent.
+        
+    (e) Which states have the 10 highest death rates?
+    
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        slice_max(
+            state.level,
+            n = 10,
+            order_by = data.frame(state.rate, state, cases, deaths),
+            with_ties = FALSE
+        )
+        ```
+        
+        The states with the 10 highest death rates are listed in the above column `state`.
+        
+    (f) Which states have the 10 lowest death rates?
+    
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        slice_min(
+            state.level,
+            n = 10,
+            order_by = data.frame(state.rate, state, cases, deaths),
+            with_ties = FALSE
+        )
+        ```
+        
+        The states with the 10 lowest death rates are listed in the above column `state`.
+        
+    (g) Export this dataset as a `.csv` file named `stateCovid.csv`. We will be using this file for the next homework.
+    
+        I assume "this dataset" is `state.level`.
+    
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        write.csv(state.level, "stateCovid.csv", row.names = FALSE)
+        ```

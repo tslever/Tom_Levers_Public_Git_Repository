@@ -1,0 +1,5 @@
+
+Aggregation (solid stem, open diamond tail, v head): Tile is a component of world
+Extension (solid stem, no tail, open triangle head)
+Implementation (solid stem, no tail, closed traditional arrow head)
+Use / dependency (dotted stem, no tail, v head)
