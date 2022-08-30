@@ -1,4 +1,4 @@
-# TomLeversRPackage 0.0.0
+# TomLeversRPackage 0.1.0
 
 * Created calculatePercentile
 * Created constructConfidenceIntervalForTwoPopulationMeans

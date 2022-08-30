@@ -13,7 +13,7 @@ RoxygenNote: 7.2.1
 Title: Tom Lever's R Package
 Type: Package
 URL: https://github.com/tslever/TomLeversRPackage
-Version: 0.0.0
+Version: 0.1.0
 Suggests: 
     knitr,
     rmarkdown,
