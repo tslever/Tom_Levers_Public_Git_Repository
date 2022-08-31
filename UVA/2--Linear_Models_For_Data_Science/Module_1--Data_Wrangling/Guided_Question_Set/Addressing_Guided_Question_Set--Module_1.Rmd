@@ -38,11 +38,10 @@ For the questions below, you may use either the traditional / Base R approach or
 2. How many students are there in this dataset?
 
     ```{r, eval=TRUE, echo=TRUE, results="show", message = FALSE}
-    cat(
-        "There are ", nrow(students_dataframe), " students in this dataset.\n",
-        "The header row of students_dataframe is not considered in this determination."
-    )
+    nrow(students_dataframe)
     ```
+    
+    There are 249 students in the students dataset. The header row of `students_dataframe` is not considered in this determination.
     
 3. How many students have a missing entry in at least one of the columns?
 
@@ -63,19 +62,7 @@ For the questions below, you may use either the traditional / Base R approach or
     ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
     students_dataframe%>%
         summarize(
-            median_GPA = median(GPA, na.rm = TRUE)
-        )
-    students_dataframe%>%
-        summarize(
-            median_days_with_party_per_month = median(PartyNum, na.rm = TRUE)
-        )
-    students_dataframe%>%
-        summarize(
-            median_days_with_beer_per_month = median(DaysBeer, na.rm = TRUE)
-        )
-    students_dataframe%>%
-        summarize(
-            median_hours_study_per_week = median(StudyHrs, na.rm = TRUE)
+            across(c(GPA, PartyNum, DaysBeer, StudyHrs), ~median(.x, na.rm = TRUE))
         )
     ```
     
@@ -101,6 +88,14 @@ For the questions below, you may use either the traditional / Base R approach or
     hours_study_per_week_for_female_students <-
         female_students_dataframe%>%pull(StudyHrs)
     hours_study_per_week_for_male_students <- male_students_dataframe%>%pull(StudyHrs)
+    constructConfidenceIntervalForPopulationMean(
+        hours_study_per_week_for_female_students,
+        0.05
+    )
+    constructConfidenceIntervalForPopulationMean(
+        hours_study_per_week_for_male_students,
+        0.05
+    )
     constructConfidenceIntervalForDifferenceBetweenTwoPopulationMeans(
         hours_study_per_week_for_female_students,
         hours_study_per_week_for_male_students,
@@ -108,17 +103,28 @@ For the questions below, you may use either the traditional / Base R approach or
     )
     ```
     
+    Since there is overlap between the confidence interval for the population mean hours study per week for female students and the confidence interval for the population mean hours study per week for male students, we conservatively state that we do not have sufficient evidence to conclude that there is adifference between mean study hours per week for female and male student populations.
+    
     Since 0 is in the above confidence interval, a difference of 0 between mean study hours per week for female and male student populations is within the margin of error of the confidence interval for 95 percent of samples. We do not have sufficient evidence to conclude that there is a difference between mean study hours per week for female and male student populations.
     
 7. Compare the median `StudyHrs` across genders and `Smoke`.
 
     ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
-    students_dataframe%>%
-        group_by(Gender, Smoke)%>%
-            summarize(
-                median_hours_study_per_week = median(StudyHrs, na.rm = TRUE)
-            )
+    contigency_table <- tapply(
+        students_dataframe%>%pull(StudyHrs),
+        list(students_dataframe%>%pull(Gender), students_dataframe%>%pull(Smoke)),
+        median,
+        na.rm = TRUE,
+        simplify = TRUE,
+        default = -1
+    )
+    contigency_table
+    chisq.test(contigency_table)
     ```
+    
+    Since median hours study per week for female students going left to right decreases, and median hours study per week for male students going left to right increases, there may be an association between `Gender` and `Smoke`.
+    
+    Given a significance level 0.05, since the above probability 0.478 is greater than the significance level, we fail to reject the null hypothesis of the Pearson's Chi-squared test of independence, which states that there is no association between the row variable `Gender` and the column variable `Smoke`. There may be an association between `Gender` and `Smoke`.
     
 8. Create a new variable called `PartyAnimal`, which takes on the value "yes" if the student parties a lot (more than 8 days per month) (i.e., `PartyNum` > 8), and "no" otherwise.
 
@@ -143,7 +149,9 @@ For the questions below, you may use either the traditional / Base R approach or
             GPA.cat =
                 cut(
                     GPA,
-                    breaks = c(-Inf, 2.99, 3.49, Inf),
+                    #breaks = c(-Inf, 2.99, 3.49, Inf),
+                    breaks = c(-Inf, 3.00, 3.50, Inf),
+                    right = FALSE,
                     labels = c("low", "moderate", "high")
                 )
         )
