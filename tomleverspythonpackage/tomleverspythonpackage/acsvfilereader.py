@@ -1,4 +1,4 @@
-class a_csv_file_reader:
+class ACsvFileReader:
     
     def __init__(self) -> None:
         pass
