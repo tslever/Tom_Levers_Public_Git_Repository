@@ -1,0 +1,21 @@
+---
+title: "Test"
+output: 
+    pdf_document:
+        pandoc_args: --listings
+        includes:
+            in_header: preamble.tex
+date: "2022-09-02"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+# devtools::install_github("tslever/Tom_Levers_Git_Repository/TomLeversRPackage")
+# devtools::install_github( "tslever/Tom_Levers_Git_Repository/TomLeversRPackage")
+"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+```
