@@ -11,7 +11,12 @@ linkcolor: red
 
 Download the dataset `UScovid.csv` from Collab. The dataset was released by *The New York Times* and contains data on cumulative (i.e., accruing) counts of coronavirus cases and deaths in the United States, at the state and county level, over each day from Jan 21, 2020 to June 3, 2021. You may read more about the data and the variable descriptions [here](https://www.kaggle.com/datasets/fireballbyedimyrnmom/us-counties-covid-19-dataset "US counties COVID 19 dataset") Please note the dataset is regularly updated. We will use the file on Collab.
 
-Read the data file into R and store the dataset into the object Covid.
+Read the data file into R and store the dataset into the object Covid [Text].
+
+```{r, echo = F}
+library(knitr)
+#opts_chunk$set(tidy.opts=list(width.cutoff=30),tidy=TRUE)
+```
 
 ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
 Covid <- read.csv("USCovid.csv")
@@ -139,7 +144,7 @@ There are 1,384,683 snapshots in this dataset. The header row of `Covid` is not 
             latest%>%
                 filter(county == "Charlottesville city" & state == "Virginia")
             ```
-            
+
 2. For this question, we focus on data at the state level. Note that the dataset has data on the 50 states, plus DC, Puerto Rico, Guam, Northern Mariana Islands, and the Virgin Islands.
 
     (a) We are interested in the data at the most recent date, June 3, 2021. Create a data frame called state.level that
