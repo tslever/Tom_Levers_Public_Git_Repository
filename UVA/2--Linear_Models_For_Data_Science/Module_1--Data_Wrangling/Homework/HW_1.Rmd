@@ -14,8 +14,9 @@ Download the dataset `UScovid.csv` from Collab. The dataset was released by *The
 Read the data file into R and store the dataset into the object Covid [Text].
 
 ```{r, echo = F}
+#install.packages("formatR", repos='http://cran.us.r-project.org')
 library(knitr)
-#opts_chunk$set(tidy.opts=list(width.cutoff=30),tidy=TRUE)
+opts_chunk$set(tidy.opts = list(width.cutoff = 25), tidy=TRUE)
 ```
 
 ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}

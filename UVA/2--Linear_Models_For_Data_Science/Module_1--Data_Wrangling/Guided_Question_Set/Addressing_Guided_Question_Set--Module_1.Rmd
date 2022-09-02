@@ -60,10 +60,24 @@ For the questions below, you may use either the traditional / Base R approach or
     The numeric variables other than `Student` are `GPA`, `PartyNum`, `DaysBeer`, and `StudyHrs`.
     
     ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
-    students_dataframe%>%
+    median_values <- students_dataframe%>%
         summarize(
             across(c(GPA, PartyNum, DaysBeer, StudyHrs), ~median(.x, na.rm = TRUE))
         )
+    median_values
+    median_values <- t(
+        students_dataframe%>%
+            summarize(
+                median_GPA = median(GPA, na.rm = TRUE),
+                median_number_of_days_with_party_per_month =
+                    median(PartyNum, na.rm = TRUE),
+                median_number_of_days_with_alcohol_per_month =
+                    median(DaysBeer, na.rm = TRUE),
+                median_hours_study_per_week = median(StudyHrs, na.rm = TRUE)
+            )
+    )
+    colnames(median_values) <- "median"
+    median_values
     ```
     
 5. Report the mean and standard deviation of `StudyHrs` for female and male students.
@@ -163,7 +177,8 @@ For the questions below, you may use either the traditional / Base R approach or
             GPA.cat =
                 cut(
                     GPA,
-                    breaks = c(-Inf, 2.99, 3.49, Inf),
+                    breaks = c(-Inf, 3.00, 3.50, Inf),
+                    right = FALSE,
                     labels = c("low", "moderate", "high")
                 )
         )
