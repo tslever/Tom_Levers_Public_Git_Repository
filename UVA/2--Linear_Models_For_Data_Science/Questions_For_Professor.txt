@@ -8,9 +8,13 @@ How do I transpose the output of dplyr.summarize?
 R Markdown
 
 How do I include multiple dates, with custom names (e.g., create, update), in an Rmd file header?
+    For a start, in Rmd file header: date: 'Updated `r format(Sys.Date(), "%B %d, %Y")`'
+
 How do I automatically wrap code and output?
+    For a start, see https://stackoverflow.com/questions/73577848/wrapping-a-line-without-spaces-in-r-markdown-output/73578702?noredirect=1#comment129932748_73578702
+
 How do I create cross references?
-How do I underline URL's?
+    For a start, see bookdown.
 
 What is your syntax for URL's?
     [visible text](URL)
@@ -18,3 +22,31 @@ What is your syntax for URL's?
 
 
 RStudio
+
+
+Statistics
+
+Why is the number of bins of a histogram calculated as the square root of the number of data?
+
+    This is actually not a statistics question. I believe its a warning message that gets printed out by the function. Not sure the motivation behind it. 
+    Another way to specify the bins or binwidth to get rid of the warning message could be 
+    ggplot(Data,aes(x=Age))+
+        geom_histogram(binwidth = 1,fill="blue",color="orange")
+    I tend to like a binwidth of 1.
+
+    See https://github.com/tslever/Tom_Levers_Git_Repository/blob/main/Classify_Oak_Leaves/Classify_Oak_Leaves.py, a program that classifies images as     containing an oak leaf or not using a one-neuron neural network. This program was based off of https://www.coursera.org/learn/neural-networks-deep-    learning?specialization=deep-learning. In this program, I calculated the initial weights as a vector of random numbers drawn from the standard normal     distribution, scaled by 1 / sqrt(n). Is the number of bins and this scaling factor related?
+
+
+Architecture
+
+What naming conventions do you use for R objects?
+
+    What naming conventions do you use for R objects, including packages, directories, files, functions, and variables? The tidyverse style guide     (https://style.tidyverse.org/files.html) does not describe package names. The Google style guide     (https://web.stanford.edu/class/cs109l/unrestricted/resources/google-style.html) is based off of the tidyverse style guide.
+
+    Whatever makes sense to you yourself. As stated in the first link "I think the best rule of thumb is that if you can give a file a concise name that       still evokes its contents, you’ve arrived at a good organisation. But getting to that point is hard."
+    It might take some experience to figure out what works best for you.
+
+    What have been the style expectations of large teams with which you have worked?
+
+How do you create classes in R in the Python / Java / C++ sense?
+

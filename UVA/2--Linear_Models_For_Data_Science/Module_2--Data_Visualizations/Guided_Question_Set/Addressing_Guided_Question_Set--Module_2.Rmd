@@ -25,9 +25,10 @@ The columns of data are:
     * `GPA.cat`: "low" if GPA is less than 3.0, "moderate" if GPA is at least 3.0 and less than 3.5, "high" if GPA is at least 3.5
 
 ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
-students_dataframe <- read.csv(
-    file = "../../Module_1--Data_Wrangling/Guided_Question_Set/new_students.csv"
-)
+students_dataframe <-
+    read.csv(
+        file = "../../Module_1--Data_Wrangling/Guided_Question_Set/new_students.csv"
+    )
 head(students_dataframe, n = 3)
 ```
 
@@ -36,5 +37,198 @@ If needed, be sure to arrange the order of the output appropriately.
 How many students are in each level of `GPA.cat`?
 
     ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
-    table(factor(students_dataframe$GPA.cat, labels = c("low", "moderate", "high")))
+    GPA_category_factor <-
+        factor(students_dataframe$GPA.cat, labels = c("low", "moderate", "high"))
+    table(GPA_category_factor)
+    ```
+    
+    For the students taking an introductory statistics class at a large public university,
+    70 have low GPA's, 87 have moderate GPA's, and 85 have high GPA's.
+    
+2. Produce a bar chart that summarizes the number of students in each level of `GPA.cat`.
+   Be sure to add appropriate labels and titles so that the bar char conveys its message clearly to the reader.
+   Be sure to remove the bar corresponding to the missing values.
+
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    library(dplyr)
+    library(ggplot2)
+    GPA_category <-
+        students_dataframe %>%
+            select(GPA.cat) %>%
+            filter(!is.na(GPA.cat))
+    colnames(GPA_category) <- "GPA_category"
+    ggplot(data = GPA_category, aes(x = GPA_category)) +
+        geom_bar(fill = "blue", color = "orange") +
+        scale_x_discrete(limits = c("low", "moderate", "high")) +
+        theme(
+            plot.title = element_text(hjust = 0.5),
+            axis.text.x = element_text(angle = 0)
+        ) +
+        labs(
+            x = "category",
+            y = "number of students",
+            title = "Number of Students vs. GPA Category"
+        )
+    ```
+    
+3. Create a similar bar chart as you did in Part 2, but with proportions instead of counts.
+   Be sure to remove the bar corresponding to the missing values.
+   
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    library(dplyr)
+    library(ggplot2)
+    number_of_students <- nrow(GPA_category)
+    proportion <-
+        GPA_category %>%
+            group_by(GPA_category) %>%
+            summarize(numbers_of_students = n()) %>%
+            mutate(proportions_of_students = numbers_of_students / number_of_students)
+    ggplot(data = proportion, aes(x = GPA_category, y = proportions_of_students)) +
+        geom_bar(stat = "identity", fill = "blue", color = "orange") +
+        scale_x_discrete(limits = c("low", "moderate", "high")) +
+        theme(
+            plot.title = element_text(hjust = 0.5),
+            axis.text.x = element_text(angle = 0)
+        ) +
+        labs(
+            x = "category",
+            y = "proportions of students",
+            title = "Proportions of Students vs. GPA Category"
+        )
+    ```
+    
+4. Produce a frequency table for the number of female and male students and the GPA category.
+
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    numbers_of_students_by_gender_and_GPA_category <-
+        table(
+            students_dataframe$Gender,
+            factor(students_dataframe$GPA.cat, labels = c("low", "moderate", "high"))
+        )
+    numbers_of_students_by_gender_and_GPA_category
+    chisq.test(numbers_of_students_by_gender_and_GPA_category)
+    ```
+    
+    Given a significance level 0.05, since the above probability 0.04435 is less than the significance level,
+    we reject the null hypothesis of the Pearson's Chi-squared test of independence, which states that
+    there is no association between the row variable `Gender` and the column variable `GPA category`.
+    We have sufficient evidence to conclude that
+    there is an association between the row variable `Gender` and the column variable `GPA category`.
+
+5. Produce a table for the percentage of GPA categories for each gender. For the percentages, round to 2 decimal places. Comment on the relationship between gender and GPA category.
+
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    percentages_of_students_by_gender_and_GPA_category <-
+        round(prop.table(numbers_of_students_by_gender_and_GPA_category, 1) * 100, 2)
+    chisq.test(percentages_of_students_by_gender_and_GPA_category)
+    ```
+    
+    Why are the results of these two Pearson's Chi-squared tests of independence different?
+    See above comment.
+    
+6. Create a bar chart to explore the proportion of GPA categories for female and male students. Be sure to remove the bar corresponding to the missing values.
+
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    gender_and_GPA_category <-
+        students_dataframe %>%
+            select(Gender, GPA.cat) %>%
+            filter(!is.na(GPA.cat))
+    colnames(gender_and_GPA_category) <- c("gender", "GPA_category")
+    proportions_by_gender_and_GPA_category <-
+        gender_and_GPA_category %>%
+            group_by(gender, GPA_category) %>%
+            summarize(proportions_of_students = n()) %>%
+            mutate(proportions_of_students = proportions_of_students / number_of_students)
+    ggplot(
+        proportions_by_gender_and_GPA_category,
+        aes(
+            fill = factor(GPA_category, levels = c("low", "moderate", "high")),
+            x = gender,
+            y = proportions_of_students
+        )
+    ) +
+        geom_bar(position="fill", stat="identity") +
+        scale_fill_discrete(name = "GPA category") +
+        labs(
+            x = "gender",
+            y = "proportions of students",
+            title = "Proportions of Students by GPA Category vs. Gender"
+        )
+    ```
+    
+7. Create a bar chart similar to the bar chart in Part 6, but split by smoking status. Comment on this bar chart.
+
+8. Create a scatterplot of GPA against the amount of hours spent studying per week. How would describe the relationship between GPA and amount of time spent studying?
+
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    hours_study_per_week_and_GPA <- students_dataframe %>% select(StudyHrs, GPA)
+    colnames(hours_study_per_week_and_GPA) <- c("hours_study_per_week", "GPA")
+    ggplot(hours_study_per_week_and_GPA, aes(x = hours_study_per_week, y = GPA)) +
+        geom_point(alpha = 0.2) +
+        geom_smooth(method = "lm", se = TRUE) +
+        labs(
+            x = "hours study per week",
+            y = "GPA",
+            title = "GPA vs. Hours Study Per Week"
+        )
+    linear_model_for_GPA_versus_hours_study_per_week <-
+        lm(GPA ~ hours_study_per_week, data = hours_study_per_week_and_GPA)
+    summary(linear_model_for_GPA_versus_hours_study_per_week)
+    ```
+    
+    Given a significance level 0.05, since the above probability 0.002 is less than the significance level,
+    we reject the null hypothesis of the linear regression t test, which states that
+    there is no correlation between GPA and hours study per week. We have sufficient evidence to conclude that
+    there is a correlation between GPA and hours study per week.
+    
+    The proportion of the variation in GPA that is explained by the linear relationship between GPA and hours study per week is 0.037.
+    Because this proportion is less than 0.8, this linear model is neither good for prediction nor precise.
+    
+9. Edit the scatterplot from Part 8 to include information about the number of days the student parties in a month.
+
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    hours_study_per_week_and_GPA <- students_dataframe %>% select(StudyHrs, GPA, PartyNum)
+    colnames(hours_study_per_week_and_GPA) <-
+        c("hours_study_per_week", "GPA", "number_of_days_with_party_per_month")
+    ggplot(
+        hours_study_per_week_and_GPA,
+        aes(
+            x = hours_study_per_week,
+            y = GPA,
+            size = number_of_days_with_party_per_month
+        )
+    ) +
+        geom_point(alpha = 0.2) +
+        labs(
+            x = "hours study per week",
+            y = "GPA",
+            size = "d w party / M",
+            title = "GPA vs. Hours Study Per Week"
+        ) +
+        scale_size(range = c(0.1, 12))
+    ```
+    
+10. Edit the scatterplot from Part 9 to include information about whether the student smokes or not.
+
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    hours_study_per_week_and_GPA <- students_dataframe %>% select(StudyHrs, GPA, PartyNum, Smoke)
+    colnames(hours_study_per_week_and_GPA) <-
+        c("hours_study_per_week", "GPA", "number_of_days_with_party_per_month", "smokes")
+    ggplot(
+        hours_study_per_week_and_GPA,
+        aes(
+            x = hours_study_per_week,
+            y = GPA,
+            size = number_of_days_with_party_per_month,
+            color = smokes
+        )
+    ) +
+        geom_point(alpha = 0.2) +
+        labs(
+            x = "hours study per week",
+            y = "GPA",
+            size = "d w party / M",
+            title = "GPA vs. Hours Study Per Week"
+        ) +
+        scale_size(range = c(0.1, 12))
     ```
