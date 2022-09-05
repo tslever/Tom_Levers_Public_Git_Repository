@@ -12,17 +12,17 @@ For this exercise, use the `.csv` data file that you created at the end of the p
 As a reminder, the dataset contains information on students taking an introductory statistics class at a large public university.
 The columns of data are:
 
-    * `Student`: ID number on survey
-    * `Gender`: gender of student (male / female)
-    * `Smoke`: whether the student smokes (yes / no)
-    * `Marijuan`: whether the student smokes marijuana (yes / no)
-    * `DrivDrnk`: whether the student has ever driven while drunk (yes / no)
-    * `GPA`: student's current GPA
-    * `PartyNum`: number of days per month the student parties
-    * `DaysBeer`: number of days per month the student has at least two alcoholic drinks
-    * `StudyHrs`: number of hours spent studying per week
-    * `PartyAnimal`: whether the students parties more than 8 days per month (yes / no)
-    * `GPA.cat`: "low" if GPA is less than 3.0, "moderate" if GPA is at least 3.0 and less than 3.5, "high" if GPA is at least 3.5
+* `Student`: ID number on survey
+* `Gender`: gender of student (male / female)
+* `Smoke`: whether the student smokes (yes / no)
+* `Marijuan`: whether the student smokes marijuana (yes / no)
+* `DrivDrnk`: whether the student has ever driven while drunk (yes / no)
+* `GPA`: student's current GPA
+* `PartyNum`: number of days per month the student parties
+* `DaysBeer`: number of days per month the student has at least two alcoholic drinks
+* `StudyHrs`: number of hours spent studying per week
+* `PartyAnimal`: whether the students parties more than 8 days per month (yes / no)
+* `GPA.cat`: "low" if GPA is less than 3.0, "moderate" if GPA is at least 3.0 and less than 3.5, "high" if GPA is at least 3.5
 
 ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
 students_dataframe <-
@@ -37,13 +37,11 @@ If needed, be sure to arrange the order of the output appropriately.
 How many students are in each level of `GPA.cat`?
 
     ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
-    GPA_category_factor <-
-        factor(students_dataframe$GPA.cat, labels = c("low", "moderate", "high"))
-    table(GPA_category_factor)
+    table(students_dataframe$GPA.cat)[c("low", "moderate", "high")]
     ```
     
     For the students taking an introductory statistics class at a large public university,
-    70 have low GPA's, 87 have moderate GPA's, and 85 have high GPA's.
+    87 have low GPA's, 85 have moderate GPA's, and 70 have high GPA's.
     
 2. Produce a bar chart that summarizes the number of students in each level of `GPA.cat`.
    Be sure to add appropriate labels and titles so that the bar char conveys its message clearly to the reader.
@@ -52,10 +50,7 @@ How many students are in each level of `GPA.cat`?
     ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
     library(dplyr)
     library(ggplot2)
-    GPA_category <-
-        students_dataframe %>%
-            select(GPA.cat) %>%
-            filter(!is.na(GPA.cat))
+    GPA_category <- students_dataframe %>% select(GPA.cat) %>% filter(!is.na(GPA.cat))
     colnames(GPA_category) <- "GPA_category"
     ggplot(data = GPA_category, aes(x = GPA_category)) +
         geom_bar(fill = "blue", color = "orange") +
@@ -75,8 +70,6 @@ How many students are in each level of `GPA.cat`?
    Be sure to remove the bar corresponding to the missing values.
    
     ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
-    library(dplyr)
-    library(ggplot2)
     number_of_students <- nrow(GPA_category)
     proportion <-
         GPA_category %>%
@@ -102,9 +95,8 @@ How many students are in each level of `GPA.cat`?
     ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
     numbers_of_students_by_gender_and_GPA_category <-
         table(
-            students_dataframe$Gender,
-            factor(students_dataframe$GPA.cat, labels = c("low", "moderate", "high"))
-        )
+            students_dataframe$Gender, students_dataframe$GPA.cat
+        )[, c("low", "moderate", "high")]
     numbers_of_students_by_gender_and_GPA_category
     chisq.test(numbers_of_students_by_gender_and_GPA_category)
     ```
@@ -120,6 +112,7 @@ How many students are in each level of `GPA.cat`?
     ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
     percentages_of_students_by_gender_and_GPA_category <-
         round(prop.table(numbers_of_students_by_gender_and_GPA_category, 1) * 100, 2)
+    percentages_of_students_by_gender_and_GPA_category
     chisq.test(percentages_of_students_by_gender_and_GPA_category)
     ```
     
@@ -130,19 +123,19 @@ How many students are in each level of `GPA.cat`?
 
     ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
     gender_and_GPA_category <-
-        students_dataframe %>%
-            select(Gender, GPA.cat) %>%
-            filter(!is.na(GPA.cat))
+        students_dataframe %>% select(Gender, GPA.cat) %>% filter(!is.na(GPA.cat))
     colnames(gender_and_GPA_category) <- c("gender", "GPA_category")
-    proportions_by_gender_and_GPA_category <-
+    proportion_of_GPA_category_by_gender <-
         gender_and_GPA_category %>%
             group_by(gender, GPA_category) %>%
             summarize(proportions_of_students = n()) %>%
-            mutate(proportions_of_students = proportions_of_students / number_of_students)
+            mutate(
+                proportions_of_students = proportions_of_students / number_of_students
+            )
     ggplot(
-        proportions_by_gender_and_GPA_category,
+        proportion_of_GPA_category_by_gender,
         aes(
-            fill = factor(GPA_category, levels = c("low", "moderate", "high")),
+            fill = factor(GPA_category, levels = c("high", "moderate", "low")),
             x = gender,
             y = proportions_of_students
         )
@@ -152,16 +145,58 @@ How many students are in each level of `GPA.cat`?
         labs(
             x = "gender",
             y = "proportions of students",
-            title = "Proportions of Students by GPA Category vs. Gender"
+            title = "Proportion of GPA Category by Gender"
+        ) +
+        theme(
+            plot.title = element_text(hjust = 0.5),
+            axis.text.x = element_text(angle = 0)
         )
     ```
     
 7. Create a bar chart similar to the bar chart in Part 6, but split by smoking status. Comment on this bar chart.
 
-8. Create a scatterplot of GPA against the amount of hours spent studying per week. How would describe the relationship between GPA and amount of time spent studying?
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    smoking_status_and_GPA_category <-
+        students_dataframe %>% select(Smoke, GPA.cat) %>% filter(!is.na(GPA.cat))
+    colnames(smoking_status_and_GPA_category) <- c("smoking_status", "GPA_category")
+    proportion_of_GPA_category_by_smoking_status <-
+        smoking_status_and_GPA_category %>%
+            group_by(smoking_status, GPA_category) %>%
+            summarize(proportions_of_students = n()) %>%
+            mutate(
+                proportions_of_students = proportions_of_students / number_of_students
+            )
+    ggplot(
+        proportion_of_GPA_category_by_smoking_status,
+        aes(
+            fill = factor(GPA_category, levels = c("high", "moderate", "low")),
+            x = smoking_status,
+            y = proportions_of_students
+        )
+    ) +
+        geom_bar(position="fill", stat="identity") +
+        scale_fill_discrete(name = "GPA category") +
+        labs(
+            x = "smoking status",
+            y = "proportions of students",
+            title = "Proportions of GPA Category by Smoking Status"
+        ) +
+        theme(
+            plot.title = element_text(hjust = 0.5),
+            axis.text.x = element_text(angle = 0)
+        )
+    ```
+
+    The proportion of students with low GPA who smoke is approximately double the proportion of students with low GPA who do not smoke.
+    The proportion of students with moderate GPA who smoke is approximately two thirds the proportion of students with moderate GPA
+    who do not smoke.
+    The proportion of students with high GPA who smoke is approximately one third the proportion of students with high GPA who do not smoke.
+
+8. Create a scatterplot of GPA against the amount of hours spent studying per week. How would you describe the relationship between GPA and amount of time spent studying?
 
     ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
-    hours_study_per_week_and_GPA <- students_dataframe %>% select(StudyHrs, GPA)
+    hours_study_per_week_and_GPA <-
+        students_dataframe %>% select(StudyHrs, GPA) %>% filter(!is.na(GPA))
     colnames(hours_study_per_week_and_GPA) <- c("hours_study_per_week", "GPA")
     ggplot(hours_study_per_week_and_GPA, aes(x = hours_study_per_week, y = GPA)) +
         geom_point(alpha = 0.2) +
@@ -170,6 +205,10 @@ How many students are in each level of `GPA.cat`?
             x = "hours study per week",
             y = "GPA",
             title = "GPA vs. Hours Study Per Week"
+        ) +
+        theme(
+            plot.title = element_text(hjust = 0.5),
+            axis.text.x = element_text(angle = 0)
         )
     linear_model_for_GPA_versus_hours_study_per_week <-
         lm(GPA ~ hours_study_per_week, data = hours_study_per_week_and_GPA)
@@ -187,11 +226,14 @@ How many students are in each level of `GPA.cat`?
 9. Edit the scatterplot from Part 8 to include information about the number of days the student parties in a month.
 
     ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
-    hours_study_per_week_and_GPA <- students_dataframe %>% select(StudyHrs, GPA, PartyNum)
-    colnames(hours_study_per_week_and_GPA) <-
-        c("hours_study_per_week", "GPA", "number_of_days_with_party_per_month")
+    hours_study_per_week_number_of_days_with_party_per_month_and_GPA <-
+        students_dataframe %>%
+            select(StudyHrs, PartyNum, GPA) %>%
+            filter(!is.na(PartyNum) & !is.na(GPA))
+    colnames(hours_study_per_week_number_of_days_with_party_per_month_and_GPA) <-
+        c("hours_study_per_week", "number_of_days_with_party_per_month", "GPA")
     ggplot(
-        hours_study_per_week_and_GPA,
+        hours_study_per_week_number_of_days_with_party_per_month_and_GPA,
         aes(
             x = hours_study_per_week,
             y = GPA,
@@ -203,24 +245,38 @@ How many students are in each level of `GPA.cat`?
             x = "hours study per week",
             y = "GPA",
             size = "d w party / M",
-            title = "GPA vs. Hours Study Per Week"
+            title = "GPA vs. Hours Study Per Week and Number Of Parties per Month"
         ) +
-        scale_size(range = c(0.1, 12))
+        scale_size(range = c(0.1, 12)) +
+        theme(
+            plot.title = element_text(hjust = 0.5),
+            axis.text.x = element_text(angle = 0)
+        )
     ```
     
 10. Edit the scatterplot from Part 9 to include information about whether the student smokes or not.
 
     ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
-    hours_study_per_week_and_GPA <- students_dataframe %>% select(StudyHrs, GPA, PartyNum, Smoke)
-    colnames(hours_study_per_week_and_GPA) <-
-        c("hours_study_per_week", "GPA", "number_of_days_with_party_per_month", "smokes")
+    hours_study_per_week_number_of_days_with_party_per_month_smoking_status_and_GPA <-
+        students_dataframe %>%
+            select(StudyHrs, PartyNum, Smoke, GPA) %>%
+            filter(!is.na(PartyNum) & !is.na(GPA))
+    colnames(
+        hours_study_per_week_number_of_days_with_party_per_month_smoking_status_and_GPA
+    ) <-
+        c(
+            "hours_study_per_week",
+            "number_of_days_with_party_per_month",
+            "smoking_status",
+            "GPA"
+        )
     ggplot(
-        hours_study_per_week_and_GPA,
+        hours_study_per_week_number_of_days_with_party_per_month_smoking_status_and_GPA,
         aes(
             x = hours_study_per_week,
             y = GPA,
             size = number_of_days_with_party_per_month,
-            color = smokes
+            color = smoking_status
         )
     ) +
         geom_point(alpha = 0.2) +
@@ -228,7 +284,12 @@ How many students are in each level of `GPA.cat`?
             x = "hours study per week",
             y = "GPA",
             size = "d w party / M",
+            color= "smoking status",
             title = "GPA vs. Hours Study Per Week"
         ) +
-        scale_size(range = c(0.1, 12))
+        scale_size(range = c(0.1, 12)) +
+        theme(
+            plot.title = element_text(hjust = 0.5),
+            axis.text.x = element_text(angle = 0)
+        )
     ```
