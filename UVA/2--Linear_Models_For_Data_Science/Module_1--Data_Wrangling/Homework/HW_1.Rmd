@@ -41,7 +41,7 @@ There are 1,384,683 snapshots in this dataset. The header row of `Covid` is not 
                 # filter(!is.na(county))
                 # Unknown is not equivalent to NA (i.e., Not Available)
                 select(-date, -fips)%>%
-                    arrange(county, state)
+                arrange(county, state)
         head(latest, n = 6)
         ```
     
