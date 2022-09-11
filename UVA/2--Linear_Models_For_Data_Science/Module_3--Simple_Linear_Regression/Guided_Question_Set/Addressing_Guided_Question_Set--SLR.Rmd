@@ -180,7 +180,7 @@ on the data set for adult Gentoo penguins near Palmer Station are met.
 11. Produce the ANOVA table for this linear regression model. Using only this table, calculate the value of $R^2$.
 
     ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
-    analyzeVariance(linear_model_for_body_mass_vs_flipper_length)
+    analyze_variance(linear_model_for_body_mass_vs_flipper_length)
     ```
     
 12. What are the null and alternate hypotheses for the ANOVA F test?
