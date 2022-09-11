@@ -123,7 +123,7 @@ head(species_flipper_length_and_body_mass, n = 3)
     data_set <- flipper_length_length_and_body_mass_for_adult_gentoo_penguins
     linear_model_for_body_mass_vs_flipper_length <-
         lm(body_mass_g ~ flipper_length_mm, data = data_set)
-    the_summary <- summarizeLinearModel(linear_model_for_body_mass_vs_flipper_length)
+    the_summary <- summarize_linear_model(linear_model_for_body_mass_vs_flipper_length)
     print(the_summary)
     ```
     
