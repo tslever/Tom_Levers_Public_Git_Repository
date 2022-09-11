@@ -1,6 +1,15 @@
 # TomLeversRPackage
 Contains Tom Lever's R functions
 
+1. analyze_variance
+2. calculate_mode
+3. calculate_percentile
+4. construct_confidence_interval_for_difference_between_two_population_means
+5. construct_confidence_interval_for_population_mean
+6. hello
+7. summarize_linear_model
+8. test_null_hypothesis_involving_proportion
+
 To rebuild this package, open the TomLeversRPackage project in RStudio and run devtools::document() in the RStudio console.
 
 To install this package, run in the RStudio console
