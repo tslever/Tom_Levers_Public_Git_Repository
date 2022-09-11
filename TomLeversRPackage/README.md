@@ -14,10 +14,8 @@ Per "Writing R Extensions" at https://cran.r-project.org/doc/manuals/R-exts.html
 
 Per "Files" at https://style.tidyverse.org/files.html,
 "Avoid using special characters in file names - stick with numbers, letters, -, and _.
-Good
-fit_models.R"
+Good fit_models.R"
 
 Per "Syntax",
-"Variable and function names should use only lowercase letters, numbers, and _. Use underscores (_) (so called snake case) to separate words within a name.
-Good
-day_one"
+"Variable and function names should use only lowercase letters, numbers, and \_. Use underscores (\_) (so called snake case) to separate words within a name.
+Good: day_one"
