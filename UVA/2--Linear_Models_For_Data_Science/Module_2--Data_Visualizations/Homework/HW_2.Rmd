@@ -72,7 +72,7 @@ linkcolor: red
                 ">=",
                 0.05
             )
-        cat(testResult)
+        testResult
         ```
         
         Since the above probability is far less than the significance level, we reject the claim and null hypothesis.
