@@ -50,13 +50,12 @@ head(species_flipper_length_and_body_mass, n = 3)
     
     The relationship between flipper length and body mass for adult penguins near Palmer Station, Antarctica appears linear.
     A line of best fit has been rendered to aid in this determination.
-    A simple linear regression appears reasonable for flipper-length and body-mass data.
+    A simple linear regression model appears reasonable for flipper-length and body-mass data.
     
 2. Produce a similar scatterplot, but with different colored plots for each species.
    How does this scatterplot influence your answer to the previous part?
    
     ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
-    library(ggplot2)
     ggplot(
         species_flipper_length_and_body_mass,
         aes(x = flipper_length_mm, y = body_mass_g, color = species)
@@ -82,12 +81,13 @@ head(species_flipper_length_and_body_mass, n = 3)
     appears linear for each observed species.
     Lines of best fit have been rendered to aid these determinations.
     Simple linear regression appears reasonable for flipper-length and body-mass data for each observed species.
+    Since adult Gentoo penguins on average have greater flipper lengths and body masses than adult Adelie and Chinstrap penguins,
+    it may be worth considering separate linear regression models for each species.
     
 3. Regardless of your answer to the previous part, produce a scatterplot of body mass and flipper length for Gentoo penguins.
    Based on the appearance of the plot, does a simple linear regression appear reasonable for the data?
    
     ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
-    library(ggplot2)
     flipper_length_length_and_body_mass_for_adult_gentoo_penguins <-
         species_flipper_length_and_body_mass %>% filter(species == "Gentoo")
     ggplot(
@@ -131,18 +131,19 @@ head(species_flipper_length_and_body_mass, n = 3)
     We assume that (flipper length, body mass) matched pairs of data for the adult Gentoo penguins near Palmer Station are independent.
     We assume that errors between actual and predicted body masses have mean 0 and constant variance.
     The linear model for body mass versus flipper length for Gentoo penguins has an adjusted sample linear Pearson correlation coefficient
-    R of 0.700.
+    R of 0.703.
     The adjusted sample linear Pearson correlation coefficient measures the strength of the linear relationship
     between (flipper length, body mass) matched pairs of data for the adult Gentoo penguins near Palmer Station.
     The linear model has a positive linear Pearson correlation.
     The value of the linear Pearson correlation coefficient lies between -1 and 1 inclusive.
+    Since the scatterplot shows a reasonable linear association, the correlation coefficient is reliable.
     Since the above probability 2e-16 is less than a significance level 0.05, we can reject the null hypothesis of
     a linear regression t test that there is no correlation between flipper length and body mass for adult Gentoo penguins near Palmer Station,
     and conclude that there is a correlation between flipper length and body mass for adult Gentoo penguins near Palmer Station.
     The linear model has an adjusted sample coefficient of determination of 0.490.
-    The adjusted coefficient of determination $R^2$ is the proportion of the variation in y that is explained by the linear relationship.
+    The adjusted coefficient of determination $R^2$ is the proportion of the variation in body mass for adult Gentoo penguins that is explained by the linear relationship / flipper length.
     The adjusted correlation of determination lies between 0 and 1.
-    Since the adjusted correlation coefficient of determination is less than 0.8, the linear model is neither precise nor good for prediction.
+    Since the adjusted coefficient of determination is less than 0.8, the linear model is neither precise nor good for prediction.
     
 For the rest of the questions, assume the assumptions to perform linear regression
 on the data set for adult Gentoo penguins near Palmer Station are met.
@@ -154,12 +155,13 @@ on the data set for adult Gentoo penguins near Palmer Station are met.
    
 6. Interpret the estimated slope contextually.
 
-   The estimated slope $54.623 \ g / mm$ indicates that for every unit change in flipper length, body mass will increase by $54.623 \ g$.
+   The estimated slope $54.623 \ g / mm$ indicates that for every change in flipper length of $1 \ mm$, predicted body mass will increase by $54.623 \ g$.
    
-7. Does the estimated intercept make sense contextually.
+7. Does the estimated intercept make sense contextually?
 
    The estimated intercept $-6,787.281 \ g$ makes sense as an intercept / offset / bias that allows the estimated body mass to be
    $4,683.55 \ g$, $5,229.779 \ g$, and $5,776.009 \ g$ for flipper lengths $210 \ mm$, $220 \ mm$, and $230 \ mm$.
+   That being said, a penguin cannot have a negative body mass, and a penguin cannot have a flipper length of $0 \ mm$.
    
 8. Report the value of $R^2$ from this linear regression and interpret its value contextually.
 
@@ -168,7 +170,7 @@ on the data set for adult Gentoo penguins near Palmer Station are met.
 9. What is the estimated value for the standard deviation of the error terms for this regression model, $\hat{\sigma}$?
 
    Errors are assumed to have mean 0 and unknown constant variance $\sigma^2$.
-   An estimated variance is $\hat{\sigma}^2$.
+   An estimated variance is the residual mean square  $\hat{\sigma}^2$.
    The residual standard error is $\hat{\sigma}$.
    The estimated value for the standard deviation of the error terms for the regression model is also $\hat{\sigma}$.
    $\hat{\sigma} = 360.2 \ g$.
@@ -190,11 +192,16 @@ on the data set for adult Gentoo penguins near Palmer Station are met.
     
 13. Explain how the F statistic of $118.01$ is found.
 
-
     $$F_0 = \frac{SS_R / df_R}{SS_{Res} / df_{Res}} = \frac{SS_{R} / 1}{SS_{Res} / (n - 2)} = (n - 2) \frac{SS_R}{SS_{Res}} = (123 - 2) \frac{15,308,045 \ g^2}{15,696,203 \ g^2} = 118.01$$
+
+    $$F_0 = \frac{MS_R}{MS_{Res}} = \frac{15,308,045 \ g^2}{129,721 \ g^2} = 118.01$$
     
 14. Write an appropriate conclusion for the ANOVA F test for this simple linear regression model.
 
     Per "Percentage Points of the $F$-Distribution",
     $$F_{\alpha, df_R, df_{Res}} = F_{\alpha, 1, n - 2} = F_{0.05, 1, 123 - 2} = F_{0.05, 1, 121} = 3.84$$
     Since $F_0 > F_{\alpha, df_R, df_{Res}}$, we reject the null hypothesis that the slope of our linear model is equal to 0.
+    
+    Since the above probability $2.2 \times 10^{-16}$ is les than 0.05, we reject the null hypothesis.
+    We have sufficient evidence to conclude that there is a linear relationship between body mass and flipper length
+    for adult Gentoo penguins.

@@ -2,9 +2,11 @@
 #' @description Tests a null hypothesis involving a proportion
 #' @param population_proportion The population proportion in the null hypothesis
 #' @param sample_proportion A sample proportion
+#' @param number_of_data_for_sample The number of data for the sample
 #' @param comparator "=", "<=", or ">="
-#' @return testResult A message rejecting or not rejecting the null hypothesis, and supporting or not supporting the alternate hypothesis
-#' @examples testResult <- test_null_hypothesis_involving_proportion(0.758, 0.505, 467, ">=", 0.05)
+#' @param significance_level A significance level
+#' @return test_result A message rejecting or not rejecting the null hypothesis, and supporting or not supporting the alternate hypothesis
+#' @examples test_result <- test_null_hypothesis_involving_proportion(0.758, 0.505, 467, ">=", 0.05)
 
 #' @export
 test_null_hypothesis_involving_proportion <- function(population_proportion, sample_proportion, number_of_data_for_sample, comparator, significance_level) {
@@ -18,27 +20,7 @@ test_null_hypothesis_involving_proportion <- function(population_proportion, sam
     } else {
         stop("You provided an invalid comparator.")
     }
-    result <- paste("Since probability ", probability, "\n", sep = "")
-    if (probability < significance_level) {
-        result <- paste(result, "is less than ", sep = "")
-    } else {
-        result <- paste(result, "is greater than ", sep = "")
-    }
-    result <- paste(result, "significance level ", significance_level, ",\nwe ", sep = "")
-    if (probability < significance_level) {
-        result <- paste(result, "reject ", sep = "")
-    } else {
-        result <- paste(result, "do not reject ", sep = "")
-    }
-    result <- paste(result, "the null hypothesis.\nWe ", sep = "")
-    if (probability <- significance_level) {
-        result <- paste(result, "have ", sep = "")
-    } else {
-        result <- paste(result, "do not have ", sep = "")
-    }
-    result <- paste(result, "sufficient evidence to support the alternate hypothesis.", sep = "")
-    class(result) <- "hypothesis_test_result"
-    return(result)
+    return(generate_hypothesis_test_result(probability, significance_level))
 }
 
 #' @title print.hypothesis_test_result

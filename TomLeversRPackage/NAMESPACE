@@ -10,4 +10,5 @@ export(construct_confidence_interval_for_difference_between_two_population_means
 export(construct_confidence_interval_for_population_mean)
 export(summarize_linear_model)
 export(test_null_hypothesis_involving_proportion)
+export(test_null_hypothesis_involving_slope)
 import(stringr)

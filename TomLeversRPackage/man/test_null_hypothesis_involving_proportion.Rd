@@ -17,14 +17,18 @@ test_null_hypothesis_involving_proportion(
 
 \item{sample_proportion}{A sample proportion}
 
+\item{number_of_data_for_sample}{The number of data for the sample}
+
 \item{comparator}{"=", "<=", or ">="}
+
+\item{significance_level}{A significance level}
 }
 \value{
-testResult A message rejecting or not rejecting the null hypothesis, and supporting or not supporting the alternate hypothesis
+test_result A message rejecting or not rejecting the null hypothesis, and supporting or not supporting the alternate hypothesis
 }
 \description{
 Tests a null hypothesis involving a proportion
 }
 \examples{
-testResult <- test_null_hypothesis_involving_proportion(0.758, 0.505, 467, ">=", 0.05)
+test_result <- test_null_hypothesis_involving_proportion(0.758, 0.505, 467, ">=", 0.05)
 }
