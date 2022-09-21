@@ -176,3 +176,15 @@ We will continue to use the dataset `penguins` from the `palmerpenguins` package
     ```
     
     Since $p = 0.180$ is greater than $\alpha$, we fail to reject the null hypothesis.
+    
+    If we were interested in the question, "For a single adult Gentoo penguin with a flipper length of $200 \ mm$,
+    is the predicted body mass of that penguin greater than $5000 \ g$", we would test a null hypothesis $H_0: y = 5000 \ g$,
+    and calculate a test statistic using $SE\left\{\hat{y} \ | \ x_0\right\}$.
+
+    If we were interested in the question, "For adult Gentoo penguins with flipper length $200 \ mm$,
+    is the average body mass greater than 5000 grams?", we would test a null hypothesis $H_0: \bar{y} = 5000 \ g$,
+    and calculate a test statistic using $SE\left\{E\left(\hat{y} \ | \ x_0\right)\right\}$.
+    
+    In the former case, we consider the probability of observing a particular body mass;
+    in the latter case, we consider the probability of observing a given mean body mass within a new sample of adult Gentoo penguins
+    near Palmer Station.
