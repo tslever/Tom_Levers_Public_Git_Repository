@@ -1,4 +1,3 @@
-box::use(./print.message)
 box::use(stats[pnorm])
 
 #' @export
