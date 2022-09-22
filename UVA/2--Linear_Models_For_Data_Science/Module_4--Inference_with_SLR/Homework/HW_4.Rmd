@@ -1,0 +1,126 @@
+---
+title: "Stat 6021: HW Set 4"
+author: "Tom Lever"
+date: 09/22/22
+output:
+  pdf_document: default
+  html_document: default
+urlcolor: blue
+linkcolor: red
+---
+
+1.  You will use the dataset `copier.txt` for this question. This is the same data set that you used in the last homework.
+    The Tri-City Office Equipment Corporation sells an imported copier on a franchise basis and
+    performs preventive maintenance and repair service on this copier.
+    The data have been collected from $45$ recent calls by users to perform routine preventive maintenance service;
+    for each call, `Serviced` is the number of copiers serviced and `Minutes` is the total number of minutes spent by the service person.
+    
+    It is hypothesized that the total time spent by the service person can be predicted using the number of copiers serviced.
+    Fit an appropriate linear regression and answer the following questions.
+    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    times_spent_servicing_and_numbers_of_copiers_serviced <- read.table(
+        "../../Module_3--Simple_Linear_Regression/Homework/copier.txt", header = TRUE
+    )
+    head(times_spent_servicing_and_numbers_of_copiers_serviced, n = 3)
+    
+    library(TomLeversRPackage)
+    data_set <- times_spent_servicing_and_numbers_of_copiers_serviced
+    linear_model <- lm(Minutes ~ Serviced, data = data_set)
+    summarize_linear_model(linear_model)
+    ```
+    
+    (a) Produce an appropriate scatterplot and comment on the relationship between the total time spent by the service person
+        and the number of copiers serviced.
+    
+        The response variable is `Minutes`, the total number of minutes spent by the service person.
+        The predictor is `Serviced`, the number of copiers serviced.
+        
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        library(ggplot2)
+        ggplot(
+            times_spent_servicing_and_numbers_of_copiers_serviced,
+            aes(x = Serviced, y = Minutes)
+        ) +
+            geom_point(alpha = 0.2) +
+            geom_smooth(method = "lm", se = FALSE) +
+            labs(
+                x = "number of copiers serviced",
+                y = "time spent servicing (minutes)",
+                title = "Time Spent Servicing vs. Number of Copiers Serviced"
+            ) +
+            theme(
+                plot.title = element_text(hjust = 0.5),
+                axis.text.x = element_text(angle = 0)
+            )
+        ```
+        
+       The relationship between time spent servicing and number of copiers serviced appears linear.
+       A line of best fit has been rendered to aid in this determination.
+       A simple linear regression model appears reasonable for time spent servicing and number of copiers data.
+       
+    (b) What is the correlation between the total time spent by the service person and the number of copiers serviced?
+        Interpret this correlation contextually.
+        
+        We assume that the sample of service calls is simple random.
+        We assume that (Serviced, Minutes) matched pairs of data for the service calls are independent.
+        We assume that errors between actual and predicted times spent servicing are normally and independently distributed
+        with mean 0 and constant variance.
+        The linear model for time spent servicing vs. number of copiers serviced has
+        an adjusted sample linear Pearson coefficient coefficient $R = 0.978$.
+        The adjusted sample linear Pearson correlation coefficient measures the strength of the linear relationship betwen (Serviced, Minutes)
+        matched pairs of data for the sample of service calls.
+        The linear model has a positive linear Pearson correlation.
+        The value of the adjusted sample linear Pearson correlation coefficient lies between $-1$ and $1$ inclusive.
+        Since the scatterplot shows a reasonable linear association, the adjusted sample linear Pearson correlation coefficentis reliable.
+        Since the above probability $p < 2.2 \times 10^{-16}$ is less than a significance level $\alpha = 0.05$,
+        we reject a null hypothesis of a linear regression $t$ test that there is no correlation
+        between time spent servicing and number of copiers serviced, and conclude that there is a correlation between time spent servicing
+        and number of copiers serviced.
+        The linear model has an adjusted sample coefficient of determination of $R^2 = 0.957$.
+        The adjusted sample coefficient of determination is the proportion of variation in time spent servicing
+        that is erxplain by the linear relationship / number of copiers.
+        The adjusted sample coefficient of determination lies between 0 and 1.
+        Since the adjusted sample coefficient of determination is greater than 0.8, the linear model is precise and good for prediction.
+        
+    (c) Can the correlation found in part $1b$ be interpreted reliably?
+    
+        As above, since the scatterplot shows a reasonable linear association, the correlation coefficent $R = 0.978$ is reliable.
+        
+    (d) Obtain the $95$ percent confidence interval for the slope $\beta_1$.
+    
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        confidence_level <- 0.95
+        confint(linear_model, level = confidence_level)
+        ```
+        
+        The $95$ percent confidence interval for the slope $\beta_1$ is $\left[14.061 \ \frac{min}{1}, 16.009 \ \frac{min}{1}\right]$.
+        Since the confidence interval does not contain $0$, we reject the null hypothesis $H_0: \beta_1 = 0 \frac{min}{1}$
+        that the slope of the linear model for time spent servicing vs. number of copiers serviced is $0$.
+        We have sufficient evidence to support the alternate hypothesis $H_1: \beta_1 \neq 0$.
+        
+    (e) Suppose a service person is sent to service $5$ copiers. Obtain an appropriate $95$ percent interval
+        that predicts the total service time spent by the service person.
+        
+        STUFF
+        
+    (f) What is the value of the residual for the first observation? Interpret this value contextually.
+    
+        Let $\hat{\beta}_0 = -0.5802 \ min$ and $\hat{\beta}_1 = 15.0352 \ \frac{min}{1}$ be the estimated intercept and slope of
+        the linear model for time spent servicing vs. number of copiers serviced.
+    
+        The residual $e_i$ for the $i$th observation $\left(x_i, y_i\right) = \left(Serviced_i, Minutes_i\right)$
+        is the difference between the observed time spent servicing $y_i = Serviced_i$ given the observed number of copiers serviced $x_i$
+        and the predicted time spent servicing $\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 x_i$. Mathematically,
+        $$e_i = y_i - \hat{y}_i$$
+        
+        The residual $e_1$ for the first observation $\left(x_1, y_1\right) = \left(Serviced_1, Minutes_1\right) = (2, 20 \ min)$
+        in `copier.txt` is the difference between the observed time spent servicing $y_1 = Serviced_1 = 20 \ min$
+        given the observed number of copiers serviced $x_1 = 2$
+        and the predicted time spent servicing
+        $\hat{y}_1 = \hat{\beta}_0 + \hat{\beta}_1 x_1 = (-0.5802 \ min) + \left(15.0352 \ \frac{min}{1}\right) (2) = 29.4884 \ min$.
+        $$e_i = y_i - \hat{y}_i = (20 \ min) - (29.4884 \ min) = -9.4884 \ min$$
+        
+    (g) What is the average value of all the residuals? Is this value surprising?
+    
+        STUFF

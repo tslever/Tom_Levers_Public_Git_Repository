@@ -81,10 +81,10 @@ We will continue to use the dataset `penguins` from the `palmerpenguins` package
     confint(linear_model, level = confidence_level)
     ```
     
-    Since the confidence interval $\left[44.668 \ \frac{g}{mm}, \ 64.577 \ \frac{g}{mm}\right]$ does not contain 0, we reject the null hypothesis $H_0: \beta = 0 \ \frac{g}{mm}$.
-    We have sufficient evidence to support the alternate hypothesis $H_1: \beta \neq 0$.
+    Since the confidence interval $\left[44.668 \ \frac{g}{mm}, \ 64.577 \ \frac{g}{mm}\right]$ does not contain 0, we reject the null hypothesis $H_0: \beta_1 = 0 \ \frac{g}{mm}$.
+    We have sufficient evidence to support the alternate hypothesis $H_1: \beta_1 \neq 0$.
     
-    Since the confidence interval $\left[44.668 \ \frac{g}{mm}, \ 64.577 \ \frac{g}{mm}\right]$ contains $50 \ \frac{g}{mm}$, we fail to reject the null hypothesis $H_0: \beta = 50 \ \frac{g}{mm}$.
+    Since the confidence interval $\left[44.668 \ \frac{g}{mm}, \ 64.577 \ \frac{g}{mm}\right]$ contains $50 \ \frac{g}{mm}$, we fail to reject the null hypothesis $H_0: \beta_1 = 50 \ \frac{g}{mm}$.
     
 3. Conduct a hypothesis test to determine whether or not there is a linear association between body mass and flipper length
    for adult Gentoo penguins near Palmer Station. State the hypothesis, p-value, and conclusion in context.
