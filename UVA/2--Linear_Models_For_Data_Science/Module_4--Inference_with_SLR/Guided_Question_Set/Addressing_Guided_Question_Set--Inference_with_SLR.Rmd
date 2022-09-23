@@ -61,7 +61,7 @@ We will continue to use the dataset `penguins` from the `palmerpenguins` package
    
    The confidence interval for the change in the predicted body mass when flipper length increases by $1 \ mm$ is
    the confidence interval for the slope of the linear model and is
-   $$\left[\hat{\beta}_1 - t_{\alpha/2, \ df} \ SE\left(\hat{\beta}_1\right), \ \hat{\beta}_1 + t_{\alpha/2, \ df} \ SE\left(\hat{\beta}_1\right)\right]$$
+   $$\left[\hat{\beta}_1 - t_{\alpha/2, \ df_{Res}} \ SE\left(\hat{\beta}_1\right), \ \hat{\beta}_1 + t_{\alpha/2, \ df_{Res}} \ SE\left(\hat{\beta}_1\right)\right]$$
    
     ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
     slope = 54.623
@@ -70,9 +70,9 @@ We will continue to use the dataset `penguins` from the `palmerpenguins` package
     number_of_observations = 123
     number_of_parameters = 2 # x and y
     degrees_of_freedom = number_of_observations - number_of_parameters
-    qt((1 + confidence_level)/2, degrees_of_freedom)
-    # quantile t_{\alpha/2, df} for which probability that test statistic is greater
-    # is half significance level
+    qt((1 + confidence_level)/2, degrees_of_freedom, lower.tail = TRUE)
+    # quantile t_{\alpha/2, df_{Res}} for which probability that magnitude of random test
+    # statistic is greater is half significance level
     quantile <- qt(significance_level/2, degrees_of_freedom, lower.tail = FALSE)
     quantile
     standard_error_of_slope <- 5.028
@@ -89,20 +89,36 @@ We will continue to use the dataset `penguins` from the `palmerpenguins` package
 3. Conduct a hypothesis test to determine whether or not there is a linear association between body mass and flipper length
    for adult Gentoo penguins near Palmer Station. State the hypothesis, p-value, and conclusion in context.
    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    qt(confidence_level, degrees_of_freedom, lower.tail = TRUE)
+    # quantile t_{\alpha, df_{Res}} for which probability that magnitude of random test
+    # statistic is greater is significance level
+    qt(significance_level, degrees_of_freedom, lower.tail = FALSE)
+    ```
+   
    Given a significance level 0.05,
    we test a null hypothesis $H_0: \beta_1 = 0$ that the slope of a linear model of body mass vs. flipper length for adult Gentoo penguins
    near Palmer station is equal to 0.
    If we have sufficient evidence to reject the null hypothesis, we have sufficient evidence to support an alternate hypothesis
-   $H_1: \beta_1 = 0$ that the slope of the linear model is not equal to 0.
-   We have sufficient evidence to reject the null hypothesis if the test statistic $t_0 = 10.863$ is greater than $t_{\alpha/2, df} = 1.980$.
-   Since $t_0 > t_{\alpha/2, df}$, we reject the null hypothesis. We have sufficient evidence to support the alternate hypothesis.
-   $$t_0 = \frac{{\hat{\beta}_1}^2}{MS_{Res} / S_{xx}} = \frac{{\hat{\beta}_1}^2 S_{xx}}{MS_{Res}} = \frac{\hat{\beta}_1 S_{xy}}{MS_{Res}} = \frac{MS_R}{MS_{Res}} = F_0$$
-   We have sufficient evidence to reject the null hypothesis if the probability $p < 2.2 \times 10^{-16}$ is less than $\alpha$.
-   Since $p < \alpha$, we reject the null hypothesis. We have sufficient evidence to support the alternate hypothesis.
+   $H_1: \beta_1 \neq 0$ that the slope of the linear model is not equal to 0.
+   Since the alternate hypothesis involves "$\neq$", we have sufficient evidence to reject the null hypothesis
+   if the magnitude $\left|t_0\right|$ of the test statistic $t_0 = 10.863$ is greater than $t_{\alpha/2, df_{Res}} = 1.980$.
+   If the alternate hypothesis were to involve "$<$" or "$>$", we would have sufficient evidence to reject the null hypothesis
+   if the magnitude $\left|t_0\right|$ of the test statistic $t_0 = 10.863$ is greater than $t_{\alpha, df_{Res}} = 1.658$.
+   Since $\left|t_0\right| > t_{\alpha/2, df_{Res}}$, we reject the null hypothesis. We have sufficient evidence to support the alternate hypothesis.
+   $${t_0}^2 = \frac{\left(\hat{\beta}_1 - \beta_{10}\right)^2}{MS_{Res} / S_{xx}} = \frac{\left(\hat{\beta}_1 - 0\right)^2}{MS_{Res} / S_{xx}} = \frac{{\hat{\beta}_1}^2}{MS_{Res} / S_{xx}} = \frac{{\hat{\beta}_1}^2 S_{xx}}{MS_{Res}} = \frac{\hat{\beta}_1 S_{xy}}{MS_{Res}} = \frac{MS_R}{MS_{Res}} = F_0$$
+   We have sufficient evidence to reject the null hypothesis if the probability $p$ that the test statistic for
+   a random sample of adult Gentoo Penguins near Palmer Station is less than $-\left|t_0\right|$ or greater than $\left|t_0\right|$,
+   assuming the null hypothesis is true, is less than significance level $\alpha$.
+   Since $p < 2.2 \times 10^{-16}$ is less than $\alpha = 0.05$, we reject the null hypothesis. We have sufficient evidence to support the alternate hypothesis.
    
     ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
-    test_statistic <- 10.863
-    probability <- pt(test_statistic, degrees_of_freedom, lower.tail = FALSE)
+    magnitude_of_test_statistic <- abs(10.863)
+    probability <- pt(
+        magnitude_of_test_statistic, degrees_of_freedom, lower.tail = FALSE
+    ) * 2
+    # 2 if the alternate hypothesis involves "\neq"
+    # 1 if the alternate hypothesis involves "<" or ">"
     probability
     test_null_hypothesis_involving_slope(linear_model, 0.05)
     ```
@@ -123,7 +139,7 @@ We will continue to use the dataset `penguins` from the `palmerpenguins` package
    $$SE\left\{E\left(\hat{y} \ | \ x_0\right)\right\} = \sqrt{MS_{Res} \left[\frac{1}{n} + \frac{\left(x_0 - \bar{x}\right)^2}{S_{xx}}\right]}$$
    
    The confidence interval for the mean body mass for adult Gentoo penguins with flipper lengths of $x_0 = 200 \ mm$ is
-   $$\left[ E\left(\hat{y} \ | \ x_0\right) - t_{\alpha/2, \ df} \ SE\left\{E\left(\hat{y} \ | \ x_0\right)\right\}, \ E\left(\hat{y} \ | \ x_0\right) + t_{\alpha/2, \ df} \ SE\left\{E\left(\hat{y} \ | \ x_0\right)\right\} \right]$$
+   $$\left[ E\left(\hat{y} \ | \ x_0\right) - t_{\alpha/2, \ df_{Res}} \ SE\left\{E\left(\hat{y} \ | \ x_0\right)\right\}, \ E\left(\hat{y} \ | \ x_0\right) + t_{\alpha/2, \ df_{Res}} \ SE\left\{E\left(\hat{y} \ | \ x_0\right)\right\} \right]$$
    
     ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
     predict(
@@ -141,7 +157,7 @@ We will continue to use the dataset `penguins` from the `palmerpenguins` package
    $$SE\left\{\hat{y} \ | \ x_0\right\} = \sqrt{MS_{Res} \left[1 + \frac{1}{n} + \frac{\left(x_0 - \bar{x}\right)^2}{S_{xx}}\right]}$$
    
    The prediction interval for the body mass for adult Gentoo penguins with flipper lengths of $x_0 = 200 \ mm$ is
-   $$\left[ E\left(\hat{y} \ | \ x_0\right) - t_{\alpha/2, \ df} \ SE\left\{\hat{y} \ | \ x_0\right\}, \ E\left(\hat{y} \ | \ x_0\right) + t_{\alpha/2, \ df} \ SE\left\{\hat{y} \ | \ x_0\right\} \right]$$
+   $$\left[ E\left(\hat{y} \ | \ x_0\right) - t_{\alpha/2, \ df_{Res}} \ SE\left\{\hat{y} \ | \ x_0\right\}, \ E\left(\hat{y} \ | \ x_0\right) + t_{\alpha/2, \ df_{Res}} \ SE\left\{\hat{y} \ | \ x_0\right\} \right]$$
    
     ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
     predict(
@@ -162,17 +178,22 @@ We will continue to use the dataset `penguins` from the `palmerpenguins` package
    is less than or equal to $\beta_{10}$. If we have sufficient evidence to reject the null hypothesis, we have sufficient evidence
    to support an alterate hypothesis $H_1: \beta_1 > \beta_{10}$ that the slope of the linear model
    of body mass vs. flipper length is greater than $\beta_{10}$. We have sufficient evidence to support an alternate hypothesis
-   $H_1: \beta_1 > \beta_{10}$ if the test statistic $t_0$ is greater than $t_{\alpha/2, \ df} = 1.980$, where
+   $H_1: \beta_1 > \beta_{10}$ if the magnitude $\left|t_0\right|$ of the test statistic $t_0$ is greater than $t_{\alpha, \ df_{Res}} = 1.658$, 
+   where
    $$t_0 = \frac{\hat{\beta}_1 - \beta_{10}}{SE\left(\hat{\beta}_1\right)} = \frac{\left(54.623 \ \frac{g}{mm}\right) - \left(50 \ \frac{g}{mm}\right)}{\left(5.028 \ \frac{g}{mm}\right)} = 0.919$$
-   Since $t_0 = 0.919$ is less than $t_{\alpha/2, \ df} = 1.980$, we have insufficient evidence to reject that the null hypothesis
+   Since $\left|t_0\right| = 0.919$ is less than $t_{\alpha, \ df_{Res}} = 1.658$,
+   we have insufficient evidence to reject that the null hypothesis
    that the predicted body mass increases by a mass less than or equal to $50 \ g$ for each additional millimeter in flipper length,
    and that the slope of the linear model of body mass vs. flipper length is less than or equal to $\beta_{10}$.
    
-   We have sufficient evidence to reject the null hypothesis if the probability $p$ that a test statistic is greater than the magnitude of $t_0$,
-   assuming the null hypothesis is true, is less than $\alpha$.
+   We have sufficient evidence to reject the null hypothesis if the probability $p$ that the magnitude of a test statistic for a random sample
+   of adult Gentoo penguins near Palmer Station is greater than the magnitude $\left|t_0\right|$,
+   assuming the null hypothesis is true, is less than significance level $\alpha$.
    
     ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
-    pt(0.919, degrees_of_freedom, lower.tail = FALSE)
+    pt(0.919, degrees_of_freedom, lower.tail = FALSE) * 1
+    # 2 if the alternate hypothesis involves "\neq"
+    # 1 if the alternate hypothesis involves "<" or ">"
     ```
     
     Since $p = 0.180$ is greater than $\alpha$, we fail to reject the null hypothesis.
