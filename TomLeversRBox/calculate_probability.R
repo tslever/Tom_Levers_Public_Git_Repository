@@ -1,3 +1,5 @@
+box::use(./print.message[print.message])
+box::register_S3_method('print', 'message', print.message)
 box::use(stats[pnorm])
 
 #' @export
