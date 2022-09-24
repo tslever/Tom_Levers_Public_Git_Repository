@@ -136,10 +136,10 @@ We will continue to use the dataset `penguins` from the `palmerpenguins` package
    
    The standard error of the statistic / estimate mean body mass for adult Gentoo penguins near Palmer station with flipper lengths of $x_0 = 200 \ mm$
    $E\left(\hat{y} \ | \ x_0\right)$
-   $$SE\left\{E\left(\hat{y} \ | \ x_0\right)\right\} = \sqrt{MS_{Res} \left[\frac{1}{n} + \frac{\left(x_0 - \bar{x}\right)^2}{S_{xx}}\right]}$$
+   $$SE\left\{\widehat{E\left(y | x_0 = 2\right)}\right\} = \sqrt{MS_{Res} \left[\frac{1}{n} + \frac{\left(x_0 - \bar{x}\right)^2}{S_{xx}}\right]}$$
    
    The confidence interval for the mean body mass for adult Gentoo penguins with flipper lengths of $x_0 = 200 \ mm$ is
-   $$\left[ E\left(\hat{y} \ | \ x_0\right) - t_{\alpha/2, \ df_{Res}} \ SE\left\{E\left(\hat{y} \ | \ x_0\right)\right\}, \ E\left(\hat{y} \ | \ x_0\right) + t_{\alpha/2, \ df_{Res}} \ SE\left\{E\left(\hat{y} \ | \ x_0\right)\right\} \right]$$
+   $$\left[ \widehat{E\left(y | x_0 = 2\right)} - t_{\alpha/2, \ df_{Res}} \ SE\left\{E\left(\hat{y} \ | \ x_0\right)\right\}, \ \widehat{E\left(y | x_0 = 2\right)} + t_{\alpha/2, \ df_{Res}} \ SE\left\{E\left(\hat{y} \ | \ x_0\right)\right\} \right]$$
    
     ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
     predict(

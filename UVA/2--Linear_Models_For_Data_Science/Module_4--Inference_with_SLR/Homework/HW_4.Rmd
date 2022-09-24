@@ -181,11 +181,11 @@ linkcolor: red
        The residual mean square and estimated variance of errors / residuals 
        $$MS_{Res} = \hat{\sigma}^2 = (1.483 \ min)^2 = \frac{SS_{Res}}{df_{Res}} = \frac{SS_{Res}}{n - p} = \frac{SS_{Res}}{n - 2} = \frac{17.6}{8} = 2.2$$
        By definition of a test statistic,
-       $$t_0 = \frac{\hat{\beta}_1 - \beta_{10}}{SE\left(\hat{\beta}_1\right)} = \frac{\hat{\beta}_1 - \beta_{10}}{\sqrt{MS_{Res} / S_{xx}}}$$
+       $$t_{\hat{\beta}_1, \beta_{10}, SE\left(\hat{\beta}_1\right)} = \frac{\hat{\beta}_1 - \beta_{10}}{SE\left(\hat{\beta}_1\right)} = \frac{\hat{\beta}_1 - \beta_{10}}{\sqrt{MS_{Res} / S_{xx}}}$$
        follows a $\left[t_{df_{Res}} = t_{n-p} = \right]t_{n-2}$ distribution if the null hypothesis $H_0: \beta_1 = \beta_{10}$ is true.
-       $$t_0 = \frac{\hat{\beta}_1 - \beta_{10}}{SE\left(\hat{\beta}_1\right)} = \frac{\hat{\beta}_1 - 0}{SE\left(\hat{\beta}_1\right)} = \frac{\hat{\beta}_1}{SE\left(\hat{\beta}_1\right)} = \frac{4.0000}{0.4690} = 8.528$$
-       $$t_0 = \sqrt{{t_0}^2} = \sqrt{\frac{{\hat{\beta}_1}^2}{SE\left(\hat{\beta}_1\right)^2}} = \sqrt{\frac{{\hat{\beta}_1}^2}{MS_{Res} / S_{xx}}} = \sqrt{\frac{{\hat{\beta}_1}^2 S_{xx}}{MS_{Res}}} = \sqrt{\frac{\hat{\beta}_1 S_{xy}}{MS_{Res}}} = \sqrt{F_0}$$
-       $$t_0 = \sqrt{\frac{MS_R}{MS_{Res}}} = \sqrt{\frac{160.0}{2.2}} = 8.528$$
+       $$t_{\hat{\beta}_1, \beta_{10}, SE\left(\hat{\beta}_1\right)} = \frac{\hat{\beta}_1 - \beta_{10}}{SE\left(\hat{\beta}_1\right)} = \frac{\hat{\beta}_1 - 0}{SE\left(\hat{\beta}_1\right)} = \frac{\hat{\beta}_1}{SE\left(\hat{\beta}_1\right)} = \frac{4.0000}{0.4690} = 8.528$$
+       $$t_{\hat{\beta}_1, \beta_{10}, SE\left(\hat{\beta}_1\right)} = \sqrt{\frac{{\hat{\beta}_1}^2}{SE\left(\hat{\beta}_1\right)^2}} = \sqrt{\frac{{\hat{\beta}_1}^2}{MS_{Res} / S_{xx}}} = \sqrt{\frac{{\hat{\beta}_1}^2 S_{xx}}{MS_{Res}}} = \sqrt{\frac{\hat{\beta}_1 S_{xy}}{MS_{Res}}} = \sqrt{F_0}$$
+       $$t_{\hat{\beta}_1, \beta_{10}, SE\left(\hat{\beta}_1\right)} = \sqrt{\frac{MS_R}{MS_{Res}}} = \sqrt{\frac{160.0}{2.2}} = 8.528$$
        The quantile of a Student's $t$ probability distribution with $df_{Res} = n - p = n - 2$ degrees of freedom for which the probability that
        a random test statistic is greater is equal to the significance level $\alpha = 0.05$
        $$t_{\alpha, \ df_{Res}} = qt(\alpha, \ df_{Res}, \ lower.tail = FALSE) = 1.860$$
@@ -206,13 +206,16 @@ linkcolor: red
        If we have sufficient evidence to reject the null hypothesis, we have sufficient evidence to support an alternate hypothesis
        $H_1: \beta_1 \neq 0$ that the slope of the linear model for the number of broken ampules vs. the number of transfers is not equal to $0$.
        Since the alternate hypothesis $H_1$ involves "$\neq$", we have sufficient evidence to reject the null hypothesis
-       if the magnitude $\left|t_0\right|$ of the test statistic $t_0$ is greater than the quantile $t_{\alpha/2, \ df_{Res}}$.
+       if the magnitude $\left|t_{\hat{\beta}_1, \beta_{10}, SE\left(\hat{\beta}_1\right)}\right|$ is greater than
+       the quantile $t_{\alpha/2, \ df_{Res}}$.
        If the alternative $H_1$ were to involve "$<$" or "$>$", we would have sufficient evidence to reject the null hypothesis
-       if the magnitude $\left|t_0\right|$ of the test statistic $t_0$ is greater than $t_{\alpha, \ df_{Res}}$.
-       Since $\left|t_0\right| > t_{\alpha/2, \ df_{Res}}$, we reject the null hypothesis. We have sufficient evidence to support the alternate hypothesis.
+       if the magnitude $\left|t_{\hat{\beta}_1, \beta_{10}, SE\left(\hat{\beta}_1\right)}\right|$ is greater than $t_{\alpha, \ df_{Res}}$.
+       Since $\left|t_{\hat{\beta}_1, \beta_{10}, SE\left(\hat{\beta}_1\right)}\right| > t_{\alpha/2, \ df_{Res}}$,
+       we reject the null hypothesis. We have sufficient evidence to support the alternate hypothesis.
 
-       We have sufficient evidence to reject the null hypothesis if the probability $p$
-       that a the test statistic for a random sample of shipments is less than $-\left|t_0\right|$ or greater than $\left|t_0\right|$,
+       We have sufficient evidence to reject the null hypothesis if the probability $p$ that a the test statistic
+       for a random sample of shipments is less than $-\left|t_{\hat{\beta}_1, \beta_{10}, SE\left(\hat{\beta}_1\right)}\right|$
+       or greater than $\left|t_{\hat{\beta}_1, \beta_{10}, SE\left(\hat{\beta}_1\right)}\right|$,
        assuming the null hypothesis is true, is less than significance level $\alpha$.
 
        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
@@ -227,6 +230,10 @@ linkcolor: red
    (b) Calculate a 95 percent confidence interval that estimates the unknown slope of the linear model
        that fits observations / $(x = transfer, y = broken)$ matched pairs of data for a population of shipments.
    
+       The estimated slope
+       $$\hat{\beta}_1 = 4.0000$$
+       The standard error of the estimated slope
+       $$SE\left(\hat{\beta}_1\right) = 0.4690$$
        The 95 percent confidence interval that estimates the unknown slope of the linear model
        that fits observations for a population of shipments
        $$\left[\hat{\beta}_1 - t_{\alpha/2, \ df_{Res}} \ SE\left(\hat{\beta}_1\right), \ \hat{\beta}_1 + t_{\alpha/2, \ df_{Res}} \ SE\left(\hat{\beta}_1\right)\right]$$
@@ -237,24 +244,30 @@ linkcolor: red
        Conduct an appropriate hypothesis test. State the hypotheses, calculate the test statistic, and
        write the corresponding conclusion in context, in response to his belief.
        
+       The estimated expected value of the number of broken ampules $y$ given the number of transfers $x_0 = 0$
+       $$\widehat{E\left(y | x_0 = 0\right)} = 10.2000$$
+       The assumed expected value of the number of broken ampules $y$ given the number of transfers $x_0 = 0$
+       $$E\left(y | x_0 = 0\right) = 9$$
+       The standard error of the estimated expected value of the number of broken ampules $y$ given the number of transfers $x_0 = 0$
+       $$SE\left\{\widehat{E\left(y | x_0 = 0\right)}\right\} = 0.6633$$
        By definition of a test statistic,
-       $$t_0 = \frac{\widehat{E\left(y | x_0\right)} - E\left(y | x_0\right)}{SE\left(\widehat{E\left(y | x_0\right)}\right)} = \frac{\widehat{E\left(y | x_0\right)} - E\left(y | x_0\right)}{\sqrt{MS_{Res} \left[\frac{1}{n} + \frac{\left(x_0 - \bar{x}\right)^2}{s_{xx}}\right]}} = \frac{\widehat{E\left(y | x_0\right)} - E\left(y | x_0\right)}{\sqrt{MS_{Res} \left[\frac{1}{n} + \frac{\left(x_0 - \bar{x}\right)^2}{\sum_{i = 1}^{n = 10}\left[\left(x_i - \bar{x}\right)^2\right]}\right]}}$$
+       $$t_{\hat{E}, E, SE\left(\hat{E}\right)} = \frac{\widehat{E\left(y | x_0\right)} - E\left(y | x_0\right)}{SE\left\{\widehat{E\left(y | x_0\right)}\right\}} = \frac{\widehat{E\left(y | x_0\right)} - E\left(y | x_0\right)}{\sqrt{MS_{Res} \left[\frac{1}{n} + \frac{\left(x_0 - \bar{x}\right)^2}{s_{xx}}\right]}} = \frac{\widehat{E\left(y | x_0\right)} - E\left(y | x_0\right)}{\sqrt{MS_{Res} \left[\frac{1}{n} + \frac{\left(x_0 - \bar{x}\right)^2}{\sum_{i = 1}^{n = 10}\left[\left(x_i - \bar{x}\right)^2\right]}\right]}}$$
        follows a $\left[t_{df_{Res}} = t_{n-p} = \right]t_{n-2}$ distribution if the null hypothesis $H_0: E\left(y | x_0\right) = \mu$ is true.
-       $$t_0 = \frac{\widehat{E\left(y | x_0 = 0\right)} - E\left(y | x_0 = 0\right)}{SE\left(\widehat{E\left(y | x_0 = 0\right)}\right)} = \frac{10.2000 - 9}{0.6633} = \frac{10.2000 - 9}{\sqrt{2.2 \left[\frac{1}{10} + \frac{\left(0 - 1\right)^2}{10}\right]}} = 1.809$$
+       $$t_{\hat{E}, E, SE\left(\hat{E}\right)} = \frac{\widehat{E\left(y | x_0 = 0\right)} - E\left(y | x_0 = 0\right)}{SE\left\{\widehat{E\left(y | x_0 = 0\right)}\right\}} = \frac{10.2000 - 9}{0.6633} = \frac{10.2000 - 9}{\sqrt{2.2 \left[\frac{1}{10} + \frac{\left(0 - 1\right)^2}{10}\right]}} = 1.809$$
        
        Given a significance level $\alpha = 0.05$, we test a null hypothesis $H_0: E\left(y | x_0 = 0\right) = 9$ that
        the mean number of broken ampules when 0 transfers are made is equal to 9. If we have sufficient evidence to reject the null hypothesis,
        we have sufficient evidence to support an alternate hypothesis $H_1: E\left(y | x_0 = 0\right) \neq 9$ that
        the mean number of broken ampules when 0 transfers are made is not equal to / different from 9.
        Since the alternate hypothesis $H_1$ involves "$\neq$", we have sufficient evidence to reject the null hypothesis
-       if the magnitude $\left|t_0\right|$ of the test statistic $t_0$ is greater than the quantile $t_{\alpha/2, \ df_{Res}}$.
+       if the magnitude $\left|t_{\hat{E}, E, SE\left(\hat{E}\right)}\right|$ is greater than the quantile $t_{\alpha/2, \ df_{Res}}$.
        If the alternative $H_1$ were to involve "$<$" or "$>$", we would have sufficient evidence to reject the null hypothesis
-       if the magnitude $\left|t_0\right|$ of the test statistic $t_0$ is greater than $t_{\alpha, \ df_{Res}}$.
-       Since $\left|t_0\right| < t_{\alpha/2, \ df_{Res}}$,
+       if the magnitude $\left|t_{\hat{E}, E, SE\left(\hat{E}\right)}\right|$ is greater than $t_{\alpha, \ df_{Res}}$.
+       Since $\left|t_{\hat{E}, E, SE\left(\hat{E}\right)}\right| < t_{\alpha/2, \ df_{Res}}$,
        we fail reject the null hypothesis. We have insufficient evidence to support the alternate hypothesis.
        
        We have sufficient evidence to reject the null hypothesis if the probability $p$
-       that a the test statistic for a random sample of shipments is less than $-\left|t_0\right|$ or greater than $\left|t_0\right|$,
+       that a the test statistic for a random sample of shipments is less than $-\left|t_{\hat{E}, E, SE\left(\hat{E}\right)}\right|$ or greater than $\left|t_{\hat{E}, E, SE\left(\hat{E}\right)}\right|$,
        assuming the null hypothesis is true, is less than significance level $\alpha$.
        
        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
@@ -265,3 +278,87 @@ linkcolor: red
        ```
        
        Since $p > \alpha$, we fail to reject the null hypothesis.
+       
+   (d) Calculate a 95 percent confidence interval for the mean number of broken ampules and a 95 percent prediction interval
+       for the number of broken ampules when the number of transfers is 2.
+       
+       The estimated expected value of the number of broken ampules $y$ given the number of transfers $x_0 = 2$
+       $$\widehat{E\left(y | x_0 = 2\right)} = \hat{\beta}_0 + \hat{\beta}_1 x_0 = (10.2000) + (4.0000) (2) = 18.2000$$
+       The standard error of the estimated expected value of the number of broken ampules $y$ given the number of transfers $x_0 = 2$
+       $$SE\left\{\widehat{E\left(y | x_0 = 2\right)}\right\} = \sqrt{MS_{Res} \left[\frac{1}{n} + \frac{\left(x_0 - \bar{x}\right)^2}{\sum_{i = 1}^{n = 10}\left[\left(x_i - \bar{x}\right)^2\right]}\right]} = \sqrt{2.2 \left[\frac{1}{10} + \frac{\left(2 - 1\right)^2}{10}\right]} = 0.6633$$
+       A 95 percent confidence interval for the mean number $E\left(y | x_0 = 2\right)$ of broken ampules when the number of transfers $x_0 = 2$
+       $$\left[ \widehat{E\left(y | x_0 = 2\right)} - t_{\alpha/2, \ df_{Res}} \ SE\left\{\widehat{E\left(y | x_0 = 2\right)}\right\}, \ \widehat{E\left(y | x_0 = 2\right)} + t_{\alpha/2, \ df_{Res}} \ SE\left\{\widehat{E\left(y | x_0 = 2\right)}\right\} \right]$$
+       $$\left[ 18.2000 - (2.306) (0.6633), \ 18.2000 + (2.306) (0.6633) \right]$$
+       $$\left[ 16.670, \ 19.730 \right]$$
+       The predicted number of broken ampules given the number of transfers $x_0 = 2$
+       $$\hat{y}_{x_0 = 2} = \hat{\beta}_0 + \hat{\beta}_1 x_0 = 18.2000$$
+       The standard error of the predicted number of broken ampules given the number of transfers $x_0 = 2$
+       $$SE\left(\hat{y}_{x_0 = 2}\right) = \sqrt{MS_{Res} \left[1 + \frac{1}{n} + \frac{\left(x_0 - \bar{x}\right)^2}{\sum_{i = 1}^{n = 10}\left[\left(x_i - \bar{x}\right)^2\right]}\right]} = \sqrt{2.2 \left[1 + \frac{1}{10} + \frac{\left(2 - 1\right)^2}{10}\right]} = 1.625$$
+       A 95 percent prediction interval for the number of broken ampules when the number of transfers $x_0 = 2$
+       $$\left[\hat{y}_{x_0 = 2} - t_{\alpha/2, \ df_{Res}} SE\left(\hat{y}_{x_0 = 2}\right), \ \hat{y}_{x_0 = 2} + t_{\alpha/2, \ df_{Res}} SE\left(\hat{y}_{x_0 = 2}\right)\right]$$
+       $$\left[(18.2000) - (2.306) (1.625), \ (18.2000) + (2.306) (1.625)\right]$$
+       $$\left[14.453, \ 21.947\right]$$
+       
+   (e) What happens to the intervals from part d when the number of transfers is 1?
+   
+       When the number of transfers becomes $x_0 = 1$, a term in the formulas for the standard error of the estimated expected value
+       of the number of broken ampules $y$ given the number of transfers $x_0 = 2$, and the standard error of the predicted value
+       of the number of broken ampules given the number of transfers $x_0 = 2$, become $0$. These standard errors becomes smaller,
+       the corresponding margins of error becomes smaller, and the intervals narrow.
+       
+   (f) What is the value of the $F$ statistic for the ANOVA table?
+   
+       As suggested in part a,
+       $$F_0 = {t_{\hat{\beta}_1, \beta_{10}, SE\left(\hat{\beta}_1\right)}}^2 = \frac{160.0}{2.2} = 72.727$$
+       
+   (g) Calculate the value of $R^2$.
+   
+       $$SS_R = 160.0$$
+       $$SS_{Res} = 17.6$$
+       $$SS_T = SS_R + SS_{Res} = 160.0 + 17.6 = 177.6$$
+       $$R^2 = \frac{SS_R}{SS_T} = \frac{160.0}{17.6} = 0.901$$
+       $$R = +\sqrt{R^2} = \sqrt{0.901} = 0.949$$
+       
+       We assume that the sample of shipments is simple random.
+       We assume that (x = transfer, y = broken) matched pairs of data for the shipments are independent.
+       We assume that errors / residuals between actual and predicted numbers of broken ampules are normally and independently distributed
+       with mean 0 and constant variance.
+       The linear model for number of broken ampules vs. number of transfers has
+       an adjusted sample linear Pearson coefficient coefficient $R = 0.949$.
+       The adjusted sample linear Pearson correlation coefficient measures the strength of the linear relationship
+       betwen (x = transfer, y = broken) matched pairs of data for the sample of shipments.
+       The linear model has a positive linear Pearson correlation.
+       The value of the adjusted sample linear Pearson correlation coefficient lies between $-1$ and $1$ inclusive.
+       Assuming the simple linear regression was fitted to (x = transfer, y = broken) matched pairs of data for the shipments
+       after a scatterplot of the matched pairs showed a reasonable linear association,
+       the adjusted sample linear Pearson correlation coefficentis reliable.
+       Since the above probability $p = 2.749 \times 10^{-5}$ is less than a significance level $\alpha = 0.05$,
+       we rejected a null hypothesis of a linear regression $t$ test that there is no correlation
+       between number of ampules broken and number of transfers, and concluded that there is a correlation between number of ampules broken
+       and number of transfers.
+       The linear model has an adjusted sample coefficient of determination of $R^2 = 0.901$.
+       The adjusted sample coefficient of determination is the proportion of variation in number of ampules broken
+       that is erxplain by the linear relationship / number of transfers.
+       The adjusted sample coefficient of determination lies between 0 and 1.
+       Since the adjusted sample coefficient of determination is greater than 0.8, the linear model is precise and good for prediction.
+       
+3. Suppose that the slope of the linear model that fits observations / $(x, y)$ matched pairs of data for a population is $0$.
+
+   (a) Describe how the linear model would look in a plot of $y$ versus $x$.
+   
+       In a scatterplot of observations / $(x, y)$ matched pairs of data for a population and a fitted linear model with slope $0$,
+       the linear model would look horizontal.
+       
+   (b) Explain why a slope that is equal to $0$ would indicate that $y$ and $x$ are not linear related,
+       and why a slope that is not equal to $0$ would indicate that $y$ and $x$ are linearly related.
+       
+       A slope that is equal to $0$ indicates that $y$ and $x$ are not linearly related because
+       a slope that is equal to $0$ implies either that $x$ is of little value in explaining the variation in $y$
+       and that the the best estimator of $y$ for any $x$ is $\hat{y} = \bar{y}$,
+       or that the true relationship between $x$ and $y$ is not linear.
+       
+       A slope that is not equal to $0$ indicates that $y$ and $x$ are linearly related because
+       a slope that is not equal to $0$ implies that $x$ is of value in explaining the variability in $y$.
+       However, a slope that is not equal to $0$ could mean either that a linear model is adequate or,
+       that even though there is a linear effect of $x$, better results could be obtained
+       with the addition of higher order polynomial terms in $x$.
