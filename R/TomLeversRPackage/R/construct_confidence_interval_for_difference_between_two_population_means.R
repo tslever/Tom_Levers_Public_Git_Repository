@@ -5,8 +5,8 @@
 #' @param significance_level A significance level (e.g., 0.05)
 #' @return A confidence interval
 #' @examples confidence_interval <- construct_confidence_interval_for_difference_between_two_population_means(iris %>% filter(Species == "versicolor") %>% pull(Sepal.Length), iris %>% filter(Species == "setosa") %>% pull(Sepal.Length), 0.05)
-#' @export
 
+#' @export
 construct_confidence_interval_for_difference_between_two_population_means <- function(data_for_sample_1, data_for_sample_2, significance_level) {
     number_of_data_for_sample_1 <- length(data_for_sample_1)
     number_of_data_for_sample_2 <- length(data_for_sample_2)

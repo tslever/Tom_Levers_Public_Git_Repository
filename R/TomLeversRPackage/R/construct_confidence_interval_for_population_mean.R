@@ -4,8 +4,8 @@
 #' @param significance_level A significance level (e.g., 0.05)
 #' @return A confidence interval
 #' @examples confidence_interval <- construct_confidence_interval_for_population_mean(iris$Sepal.Length, 0.05)
-#' @export
 
+#' @export
 construct_confidence_interval_for_population_mean <- function(data_for_sample, significance_level) {
     number_of_data <- length(data_for_sample)
     degrees_of_freedom <- number_of_data - 1

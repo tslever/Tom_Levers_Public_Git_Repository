@@ -4,8 +4,8 @@
 #' @return The summary for the linear model
 #' @examples the_summary <- summarize_linear_model(lm(iris$Sepal.Length ~ iris$Sepal.Width, data = iris))
 #' @import stringr
-#' @export
 
+#' @export
 summarize_linear_model <- function(linear_model) {
     the_summary <- capture.output(summary(linear_model))
     regular_expression_for_number <- get_regular_expression_for_number()

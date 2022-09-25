@@ -3,8 +3,8 @@
 #' @param data_for_sample A vector of data for a sample
 #' @return The mode
 #' @examples mode <- calculate_mode(iris$Sepal.Length)
-#' @export
 
+#' @export
 calculate_mode <- function(data_for_sample) {
     unique_values <- unique(data_for_sample)
     positions_of_first_matches = match(data_for_sample, unique_values)

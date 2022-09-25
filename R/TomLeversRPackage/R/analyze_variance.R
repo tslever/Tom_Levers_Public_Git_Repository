@@ -4,8 +4,8 @@
 #' @return The analysis of variance for the linear model
 #' @examples analysis_of_variance <- analyze_variance(lm(iris$Sepal.Length ~ iris$Sepal.Width, data = iris))
 #' @import stringr
-#' @export
 
+#' @export
 analyze_variance <- function(linear_model) {
     analysis <- capture.output(anova(linear_model))
     regular_expression_for_number <- get_regular_expression_for_number()

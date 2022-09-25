@@ -7,8 +7,8 @@
 #' @param significance_level A significance level
 #' @return test_result A message rejecting or not rejecting the null hypothesis, and supporting or not supporting the alternate hypothesis
 #' @examples test_result <- test_null_hypothesis_involving_proportion(0.758, 0.505, 467, ">=", 0.05)
-#' @export
 
+#' @export
 test_null_hypothesis_involving_proportion <- function(population_proportion, sample_proportion, number_of_data_for_sample, comparator, significance_level) {
     test_statistic_z <- (sample_proportion - population_proportion) / sqrt(population_proportion * (1 - population_proportion) / number_of_data_for_sample)
     if (comparator == "=") {
