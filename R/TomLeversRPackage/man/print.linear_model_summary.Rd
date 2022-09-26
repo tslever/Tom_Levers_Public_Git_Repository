@@ -7,7 +7,7 @@
 \method{print}{linear_model_summary}(linear_model_summary)
 }
 \arguments{
-\item{the_summary}{The linear-model summary to print}
+\item{summary_output}{The linear-model summary to print}
 }
 \description{
 Adds to the generic function print the linear_model_summary method print.linear_model_summary

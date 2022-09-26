@@ -17,7 +17,6 @@ We wish to see how body weight $x$ could explain the brain weight $y$ of land ma
     ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
     library(MASS)
     library(dplyr)
-    library(Dict)
     library(ggplot2)
     library(TomLeversRPackage)
     
@@ -25,135 +24,306 @@ We wish to see how body weight $x$ could explain the brain weight $y$ of land ma
         MASS::mammals %>% rename(body_weight = body, brain_weight = brain)
     head(species_body_weight_and_brain_weight, n = 3)
     
-    brain_weight_thresholds_and_data_subsets <- dict(
-        '6000 g' = species_body_weight_and_brain_weight %>% filter(brain_weight < 6000),
-        '1000 g' = species_body_weight_and_brain_weight %>% filter(brain_weight < 1000),
-        '100 g' = species_body_weight_and_brain_weight %>% filter(brain_weight < 100),
-        '25 g' = species_body_weight_and_brain_weight %>% filter(brain_weight < 25),
-        '5 g' = species_body_weight_and_brain_weight %>% filter(brain_weight < 5)
-    )
-    
-    #for (key in brain_weight_thresholds_and_data_subsets$keys) {
-    for (key in c("6000 g")) {
-        data_set <- brain_weight_thresholds_and_data_subsets$get(key)
-        plot(
-            ggplot(data_set, aes(x = body_weight, y = brain_weight)) +
-                geom_point(alpha = 0.2) +
-                geom_smooth(method = "lm", se = FALSE) +
-                labs(
-                    x = "body weight (kg)",
-                    y = "brain weight (g)",
-                    title = paste(
-                        "Brain Weight vs. Body Weight for Species of Land Mammals\n",
-                        "with Brain Weights Less Than ",
-                        key,
-                        sep = ""
-                    )
-                ) +
-            theme(
-                plot.title = element_text(hjust = 0.5),
-                axis.text.x = element_text(angle = 0)
-            )
-        )
-     
-        linear_model <- lm(brain_weight ~ body_weight, data = data_set)
-        print(summarize_linear_model(linear_model))
-        
-        plot(
-            ggplot(
-                data.frame(
-                    externally_studentized_residuals = linear_model$residuals,
-                    fitted_values = linear_model$fitted.values
-                ),
-                aes(x = fitted_values, y = externally_studentized_residuals)
+    data_set <- species_body_weight_and_brain_weight
+    plot(
+        ggplot(data_set, aes(x = body_weight, y = brain_weight)) +
+            geom_point(alpha = 0.2) +
+            geom_smooth(method = "lm", se = FALSE) +
+            labs(
+                x = "body weight (kg)",
+                y = "brain weight (g)",
+                title = "Brain Weight vs. Body Weight for Species of Land Mammals"
             ) +
-                geom_point(alpha = 0.2) +
-                geom_smooth(method = "lm", se = FALSE) +
-                labs(
-                    x = "fitted values (g)",
-                    y = "externally studentized residuals (g)",
-                    title = paste(
-                        "Externally Studentized Residuals vs. Fitted Values",
-                        sep = ""
-                    )
-                ) +
-            theme(
-                plot.title = element_text(hjust = 0.5),
-                axis.text.x = element_text(angle = 0)
-            )
+        theme(
+            plot.title = element_text(hjust = 0.5),
+            axis.text.x = element_text(angle = 0)
         )
-        
-        result_of_Box_Cox_Method <- perform_Box_Cox_Method(linear_model)
-        print(result_of_Box_Cox_Method$maximum_likelihood_estimate_of_parameter_lambda)
-        
-        data_set <- data_set %>% mutate(brain_weight_subject_to_Box_Cox_Method = result_of_Box_Cox_Method$transformed_fitted_values)
-        plot(
-            ggplot(data_set, aes(x = body_weight, y = brain_weight_subject_to_Box_Cox_Method)) +
-                geom_point(alpha = 0.2) +
-                geom_smooth(method = "lm", se = FALSE) +
-                labs(
-                    x = "body weight (kg)",
-                    y = "logarithmicized brain weight (g)",
-                    title = paste(
-                        "Logarithmicized Brain Weight vs. Body Weight for Species of Land Mammals\n",
-                        "with Brain Weights Less Than ",
-                        key,
-                        sep = ""
-                    )
-                ) +
-            theme(
-                plot.title = element_text(hjust = 0.5),
-                axis.text.x = element_text(angle = 0)
-            )
-        )
-    }
+    )
     ```
     
-    For sets of observations of brain weight and body weight with maximum brain weights of $6000 \ g$, $1000 \ g$, $100 \ g$, $25 \ g$,
-    and $5 \ g$, taken individually and collectively, the relationship(s) between response $y = brain \ weight$ and predictor / regressor
-    $x = body \ weight$ appears to be nonlinear / logarithmic.
+    The relationship between response / brain weight $y$ and predictor / regressor / body weight $x$ appears nonlinear.
     
-    Assumptions for simple linear regression appear to be violated for sets of observations, taken individually and collectively.
-    a. Assumptions that the relationship between response $y = brain weight$ and predictor / regressor $x = body weight$ is linear,
-       at least approximately, are violated.
-       The relationship(s) appears to be nonlinear / logarithmic.
+    Assumptions for simple linear regression appear to be violated.
+    a. The assumption that the relationship between response / brain weight $y$ and predictor / regressor / body weight $x$ is linear,
+       at least approximately, is not met.
+       The relationship appears to be nonlinear.
        Residuals are not evenly scattered aroun $e = 0$.
-    b. Assumptions that the error term $\epsilon$ of the linear model has mean 0 are violated.
-       Observations are not scattered evenly around the fitted line(s).
+       A Box-Cox plot suggests a maximum-likelihood estimate of parameter $\lambda$ around $0$.
+    b. The assumption that the error term $\epsilon$ of the linear model has mean $0$ is not met.
+       Observations are not scattered evenly around the fitted line.
        Residuals are not evenly scattered around $e = 0$.
-    c. Assumptions that the error term $\epsilon$ of the linear model has constant variance are violated.
+    c. The assumption that the error term $\epsilon$ of the linear model has constant variance is not met.
        The vertical variation of observations is not constant.
        Residuals do not have similar vertical variation across $e = 0$.
-    d. Assumptions that the errors $\epsilon_i$ / residuals $e_i$ are uncorrelated are violated.
-       ?
-    e. Assumptions that the errors $\epsilon_i$ / residuals $e_i$ are normally distributed are violated.
-       ?
+    d. The assumption that the errors $\epsilon_i$ / residuals $e_i$ are uncorrelated is not met.
+       The ACF value for lag $0$ is always $1$; the correlation of the vector of residuals with itself is always 1.
+       Since the ACF value for lag $13$ is significant, we have sufficient evidence to reject a null hypothesis that
+       the residuals of the linear model are uncorrelated.
+       We have sufficient evidence to conclude that the residuals of the linear model are correlated.
+       We have sufficient evidence to conclude that the assumption that the errors $\epsilon_i$ / residuals $e_i$ are uncorrelated is not met.
+    e. Assumptions that the errors $\epsilon_i$ / residuals $e_i$ are normally distributed is not met.
+       A linear model is robust to these assumptions.
+       Given sharp downward and upward curves at extremes of a plot of samples quantiles versus theoretical quantiles for the residuals
+       of the linear model, the tails of the probability vs. externally studentized residuals plot / distribution are too light
+       for this distribution to be considered normal.
+       The assumption that the errors $\epsilon_i$ / residuals $e_i$ are normally distributed is not met.
     
 2. Fit a simple linear regression to the data, and create the corresponding residual plot.
    Do any assumptions for simple linear regression appear to be violated? If so, which ones?
    
-   See above.
+   See above analysis.
+   
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    linear_model <- lm(brain_weight ~ body_weight, data = data_set)
+    print(summarize_linear_model(linear_model))
+   
+    ggplot(
+        data.frame(
+            externally_studentized_residuals = linear_model$residuals,
+            predicted_brain_weights = linear_model$fitted.values
+        ),
+        aes(x = predicted_brain_weights, y = externally_studentized_residuals)
+    ) +
+        geom_point(alpha = 0.2) +
+        geom_hline(yintercept = 0, color = "red") +
+        labs(
+            x = "predicted brain weight (g)",
+            y = "externally studentized residual (g)",
+            title = "Externally Studentized Residuals vs. Predicted Brain Weights"
+        ) +
+    theme(
+        plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 0)
+    )
+    
+    acf(linear_model$residuals, main = "ACF Values vs. Lag for Linear Model")
+    qqnorm(linear_model$residuals)
+    qqline(linear_model$residuals, col = "red")
+    ```
    
 3. Based on your answers to parts 1 and 2, do we need to transform at least one of the variables?
 
    Yes.
-   Because assumptions that the error term $\epsilon$ of the linear model has constant variance are violated,
-   we will transform response $\hat{y} = estimated \ brain \ weight$.
-   Because assumptions that the error term $\epsilon$ of the linear model has mean $0$ are violated,
-   we will transform predictor $x = body \ weight$ after transforming response $\hat{y} = estimated \ brain \ weight$ if necessary.
-   
-   ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
-   
-   ```
+   Because the assumption that the error term $\epsilon$ of the linear model has constant variance is not met,
+   we will transform estimated response / brain weight $\hat{y}$.
+   Because the assumption that the error term $\epsilon$ of the linear model has mean $0$ is not met,
+   we will transform predictor / body weight $x$ after transforming estimated response / brain weight $\hat{y}$ if necessary.
    
 4. For the simple linear regression in part 2, create a Box-Cox plot. What transformation, if any, would you apply to the response variable?
 
-   For the set of observations of brain weight and body weight with maximum brain weights of $6000 \ g$,
-   the maximum-likelihood estimate of $\lambda$ is close to parameter $\lambda = 0$.
-   Since parameter $\lambda = 0$, we use the transformation $\hat{y}' = ln(\hat{y})$.
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    result_of_Box_Cox_Method <- perform_Box_Cox_Method(linear_model)
+    print(result_of_Box_Cox_Method$maximum_likelihood_estimate_of_parameter_lambda)
+    ```
+
+   For the set of observations of brain weight and body weight, the maximum-likelihood estimate of $\lambda$ is close to parameter $\lambda = 0$.
+   Since parameter $\lambda$ is close to $0$, we may use the transformation $\hat{y}' = ln(\hat{y})$.
    
 5. Apply the transformation you specified in part 4, and let $y*$ denote the transformed response variable.
    Create a scatterplot of $y*$ against $x$. Comment on the appearance of the plot.
    Do any assumptions for simple linear regression appear to be violated?
    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    data_set <- data_set %>% mutate(logarithmicized_brain_weight = log(brain_weight))
+    ggplot(data_set, aes(x = body_weight, y = logarithmicized_brain_weight)) +
+        geom_point(alpha = 0.2) +
+        geom_smooth(method = "lm", se = FALSE) +
+        labs(
+            x = "body weight (kg)",
+            y = "logarithmicized brain weight",
+            title = paste(
+                "Logarithmicized Brain Weight ",
+                "vs. Body Weight for Species of Land Mammals",
+                sep = ""
+            )
+        ) +
+    theme(
+        plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 0)
+    )
+    ```
    
+    Assumptions for simple linear regression appear to be violated.
+    a. The assumption that the relationship between response / brain weight $y$ and predictor / regressor / body weight $x$ is linear,
+       at least approximately, is not met.
+       The relationship appears to be nonlinear.
+       Residuals are not evenly scattered aroun $e = 0$.
+    b. The assumption that the error term $\epsilon$ of the linear model has mean $0$ is not met.
+       Observations are not scattered evenly around the fitted line.
+       Residuals are not evenly scattered around $e = 0$.
+    c. The assumption that the error term $\epsilon$ of the linear model has constant variance is not met.
+       The vertical variation of observations is not constant.
+       Residuals do not have similar vertical variation across $e = 0$.
+    d. The assumption that the errors $\epsilon_i$ / residuals $e_i$ are uncorrelated is not met.
+       The ACF value for lag $0$ is always $1$; the correlation of the vector of residuals with itself is always 1.
+       Since the ACF value for lag $13$ is significant, we have sufficient evidence to reject a null hypothesis that
+       the residuals of the linear model are uncorrelated.
+       We have sufficient evidence to conclude that the residuals of the linear model are correlated.
+       We have sufficient evidence to conclude that the assumption that the errors $\epsilon_i$ / residuals $e_i$ are uncorrelated is not met.
+    e. Assumptions that the errors $\epsilon_i$ / residuals $e_i$ are normally distributed is not met.
+       A linear model is robust to these assumptions.
+       Given sharp downward and upward curves at extremes of a plot of samples quantiles versus theoretical quantiles for the residuals
+       of the linear model, the tails of the probability vs. externally studentized residuals plot / distribution are too light
+       for this distribution to be considered normal.
+       The assumption that the errors $\epsilon_i$ / residuals $e_i$ are normally distributed is not met.
+
+6. Fit a simple linear regression to $y*$ against $x$, and create the corresponding residual plot.
+   Do any assumptions for simple linear regression appear to be violated? If so, which ones?
+   
+   See above analysis.
+   
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    semilogarithmicized_linear_model <-
+        lm(logarithmicized_brain_weight ~ body_weight, data = data_set)
+    print(summarize_linear_model(semilogarithmicized_linear_model))
+
+    ggplot(
+        data.frame(
+            externally_studentized_residuals =
+                semilogarithmicized_linear_model$residuals,
+            fitted_values = semilogarithmicized_linear_model$fitted.values
+        ),
+        aes(x = fitted_values, y = externally_studentized_residuals)
+    ) +
+        geom_point(alpha = 0.2) +
+        geom_hline(yintercept = 0, color = "red") +
+        labs(
+            x = "predicted logarithmicized brain weights",
+            y = "externally studentized residuals",
+            title = paste(
+                "Externally Studentized Residuals vs. Predicted Logarithmicized Brain Weights",
+                sep = ""
+            )
+        ) +
+    theme(
+        plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 0)
+    )
+    
+    acf(linear_model$residuals, main = "ACF Values vs. Lag for Linear Model")
+    qqnorm(linear_model$residuals)
+    qqline(linear_model$residuals, col = "red")
+    ```
+   
+7. Do we need to transform the $x$ variable? If yes, what transformations would you try?
+   Create a scatterplot of $y*$ versus $x*$. Do any assumptions for simple linear regression appear violated? If so, which ones?
+   
+   Yes.
+   Logarithmicized Brain Weight vs. Body Weight for Species of Land Mammals is linearizable by
+   logarithmicizing predictor / regressor / body weight $x$.
+   
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    data_set <- data_set %>% mutate(logarithmicized_body_weight = log(body_weight))
+    ggplot(
+        data_set,
+        aes(x = logarithmicized_body_weight, y = logarithmicized_brain_weight)
+    ) +
+        geom_point(alpha = 0.2) +
+        geom_smooth(method = "lm", se = FALSE) +
+        labs(
+            x = "logarithmicized body weight",
+            y = "logarithmicized brain weight",
+            title = paste(
+                "Logarithmicized Brain Weight\n",
+                "vs. Logarithmicized Body Weight for Species of Land Mammals",
+                sep = ""
+            )
+        ) +
+    theme(
+        plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 0)
+    )
+    ```
+   
+    Assumptions for simple linear regression appear to be met.
+    a. The assumption that the relationship between response / brain weight $y$ and predictor / regressor / body weight $x$ is linear,
+       at least approximately, is met.
+       The relationship appears to be linear.
+       Residuals are not evenly scattered around $e = 0$.
+    b. The assumption that the error term $\epsilon$ of the linear model has mean $0$ is met.
+       Observations are scattered evenly around the fitted line.
+       Residuals are evenly scattered around $e = 0$.
+    c. The assumption that the error term $\epsilon$ of the linear model has constant variance is met.
+       The vertical variation of observations is constant.
+       Residuals have similar vertical variation across $e = 0$.
+    d. The assumption that the errors $\epsilon_i$ / residuals $e_i$ are uncorrelated is met.
+       The ACF value for lag $0$ is always $1$; the correlation of the vector of residuals with itself is always 1.
+       Since the ACF values for all lags are insignificant, we have insufficient evidence to reject a null hypothesis that
+       the residuals of the linear model are uncorrelated.
+       We do not have sufficient evidence to conclude that the residuals of the linear model are correlated.
+       We do not have sufficient evidence to conclude that the assumption that the errors $\epsilon_i$ / residuals $e_i$ are uncorrelated
+       is not met.
+    e. Assumptions that the errors $\epsilon_i$ / residuals $e_i$ are normally distributed is met.
+       A linear model is robust to these assumptions.
+       Given observations in a plot of samples quantiles versus theoretical quantiles for the residuals of the linear model
+       lie near the corresponding line of best fit, the probability vs. externally studentized residuals plot / distribution is normal.
+       The assumption that the errors $\epsilon_i$ / residuals $e_i$ are normally distributed is met.
+      
+8. Fit a simple linear regression to $y*$ versus $x*$, and create the corresponding residual plot.
+   Do any assumptions for simple linear regression appear to be violated? If so, which ones?
+   If the assumptions are not met, repeat with a different transformation on the predictor until you are satisfied.
+   
+   See above analysis.
+   
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    logarithmicized_linear_model <-
+        lm(logarithmicized_brain_weight ~ logarithmicized_body_weight, data = data_set)
+    print(summarize_linear_model(logarithmicized_linear_model))
+   
+    ggplot(
+        data.frame(
+            externally_studentized_residuals = logarithmicized_linear_model$residuals,
+            fitted_values = logarithmicized_linear_model$fitted.values
+        ),
+        aes(x = fitted_values, y = externally_studentized_residuals)
+    ) +
+        geom_point(alpha = 0.2) +
+        geom_hline(yintercept = 0, color = "red") +
+        labs(
+            x = "predicted logarithmicized brain weights",
+            y = "externally studentized residuals",
+            title = paste(
+                "Externally Studentized Residuals\n",
+                "vs. Predicted Logarithmicized Brain Weights",
+                sep = ""
+            )
+        ) +
+    theme(
+        plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 0)
+    )
+    ```
+   
+9. Create an ACF plot of the residuals. Comment if assumptions are met for linear regression.
+
+    See above analysis.
+
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    acf(
+        logarithmicized_linear_model$residuals,
+        main = "ACF Value vs. Lag for Logarithmicized Linear Model"
+    )
+    ```
+   
+    Jeffrey Woo recommends ensuring assumptions d and e are met and creating an ACF plot of residuals
+    after we are satisfied that assumptions b and c are met.
+    
+    If the errors / residuals are uncorrelated, the observations are independent.
+    
+10. Create a QQ plot of the residuals. Comment if the assumptions are met for linear regression.
+
+    See above analysis.
+
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    qqnorm(logarithmicized_linear_model$residuals)
+    qqline(logarithmicized_linear_model$residuals, col = "red")
+    ```
+    
+11. Write out the regression equation and, if possible, interpret the slope of the regression.
+    $$\beta_0 = 2.13479$$
+    $$\beta_1 = 0.75169$$
+    $$ln(y) = \beta_0 + \beta_1 \ ln(x)$$
+    $$y = exp\left(\beta_0 + \beta_1 \ ln(x)\right) = exp\left(\beta_0\right) exp\left(\beta_1 \ ln(x)\right) = exp\left(\beta_0\right) exp\left(ln\left(x^{\beta_1}\right)\right) = exp\left(\beta_0\right) x^{\beta_1}$$
+    $$y_+ = exp\left(\beta_0\right) [(1 + p) \ x]^{\beta_1}$$
+    $$\frac{y_{+}}{y} = \frac{exp\left(\beta_0\right) [(1 + p) \ x]^{\beta_1}}{exp\left(\beta_0\right) x^{\beta_1}} = \frac{[(1 + p) \ x]^{\beta_1}}{x^{\beta_1}} = \left[\frac{(1 + p) \ x}{x}\right]^{\beta_1} = (1 + p)^{\beta_1}$$
+    If $x$ increases by proportion $p$ to $x + px$ = $(1 + p)x$, $y$ increases by a factor of $(1 + p)^{\beta_1}$.

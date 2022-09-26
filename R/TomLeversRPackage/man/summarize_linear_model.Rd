@@ -16,5 +16,5 @@ The summary for the linear model
 Summarizes a linear model
 }
 \examples{
-the_summary <- summarize_linear_model(lm(iris$Sepal.Length ~ iris$Sepal.Width, data = iris))
+summary_output <- summarize_linear_model(lm(iris$Sepal.Length ~ iris$Sepal.Width, data = iris))
 }
