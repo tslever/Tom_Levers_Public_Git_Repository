@@ -41,7 +41,10 @@ We wish to see how body weight $x$ could explain the brain weight $y$ of land ma
     )
     ```
     
-    The relationship between response / brain weight $y$ and predictor / regressor / body weight $x$ appears nonlinear.
+    Generally, there appears to be an increasing association
+    between body weight and brain weight.
+    The relationship between response / brain weight $y$ and
+    predictor / regressor / body weight $x$ appears nonlinear.
     
     Assumptions for simple linear regression appear to be violated.
     a. The assumption that the relationship between response / brain weight $y$ and predictor / regressor / body weight $x$ is linear,
@@ -54,7 +57,8 @@ We wish to see how body weight $x$ could explain the brain weight $y$ of land ma
        Residuals are not evenly scattered around $e = 0$.
     c. The assumption that the error term $\epsilon$ of the linear model has constant variance is not met.
        The vertical variation of observations is not constant.
-       Residuals do not have similar vertical variation across $e = 0$.
+       Residuals do not have similar vertical variation across $e = 0$;
+       the vertical spread of the residuals grows with predicted brain weight.
     d. The assumption that the errors $\epsilon_i$ / residuals $e_i$ are uncorrelated is not met.
        The ACF value for lag $0$ is always $1$; the correlation of the vector of residuals with itself is always 1.
        Since the ACF value for lag $13$ is significant, we have sufficient evidence to reject a null hypothesis that
@@ -117,6 +121,7 @@ We wish to see how body weight $x$ could explain the brain weight $y$ of land ma
     ```
 
    For the set of observations of brain weight and body weight, the maximum-likelihood estimate of $\lambda$ is close to parameter $\lambda = 0$.
+   $0$ is a "nice" value within the 95 percent confidence interval for $\lambda$.
    Since parameter $\lambda$ is close to $0$, we may use the transformation $\hat{y}' = ln(\hat{y})$.
    
 5. Apply the transformation you specified in part 4, and let $y*$ denote the transformed response variable.
