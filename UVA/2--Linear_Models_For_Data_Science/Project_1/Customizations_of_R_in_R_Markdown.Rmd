@@ -1,0 +1,76 @@
+---
+title: "Some more stuff"
+output: html_document
+---
+
+```{r}
+##warning message displayed
+library(tidyverse)
+```
+
+```{r, warning=FALSE}
+##no more warning message
+library(tidyverse)
+```
+
+```{r}
+1+1
+```
+
+```{r, echo=FALSE}
+##no code printed
+1+4
+```
+
+```{r}
+library(palmerpenguins)
+Data<-penguins
+
+ggplot(Data, aes(x=flipper_length_mm,y=body_mass_g))+
+  geom_point()+
+  labs(x="Flipper Length in mm", 
+       y="Body Mass in g", 
+       title="Body Mass and Flipper Length of Penguins")
+```
+
+```{r, fig.width = 2, fig.height = 2, warning=FALSE}
+##width reduced and warning message removed
+ggplot(Data, aes(x=flipper_length_mm,y=body_mass_g))+
+  geom_point()+
+  labs(x="Flipper Length in mm", 
+       y="Body Mass in g", 
+       title="Body Mass and Flipper Length of Penguins")
+
+```
+
+```{r, out.width = "20%", warning=FALSE}
+##size reduced and warning message removed
+ggplot(Data, aes(x=flipper_length_mm,y=body_mass_g))+
+  geom_point()+
+  labs(x="Flipper Length in mm", 
+       y="Body Mass in g", 
+       title="Body Mass and Flipper Length of Penguins")
+```
+
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
+library(gridExtra) ##to display mutliple plots in a matrix
+box1<-ggplot(Data, aes(x=species, y=flipper_length_mm))+
+  geom_boxplot()+
+  labs(x="Species", y="Flipper Length", title="Flipper Length by Species")
+
+box2<-ggplot(Data, aes(x=species, body_mass_g))+
+  geom_boxplot()+
+  labs(x="Species", y="Body Mass", title="Body Mass by Species")
+
+box3<-ggplot(Data, aes(x=species, bill_length_mm))+
+  geom_boxplot()+
+  labs(x="Species", y="Bill Length", title="Bill Length by Species")
+
+box4<-ggplot(Data, aes(x=species, bill_depth_mm))+
+  geom_boxplot()+
+  labs(x="Species", y="Bill Depth", title="Bill Depth by Species")
+
+##produce the 4 boxplots in a 2 by 2 matrix
+grid.arrange(box1, box2, box3, box4, ncol = 2, nrow = 2)
+```
+

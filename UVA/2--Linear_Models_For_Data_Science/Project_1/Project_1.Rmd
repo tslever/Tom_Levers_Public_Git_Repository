@@ -1,0 +1,11 @@
+---
+title: "Stat 6021: Project 1"
+author: "Tom Lever"
+date: 10/01/22
+output:
+  pdf_document: default
+  html_document: default
+urlcolor: blue
+linkcolor: red
+---
+
