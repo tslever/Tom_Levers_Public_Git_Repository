@@ -2,6 +2,7 @@ Authors@R: person("Tom", "Lever", email = "thomas.lever.business@gmail.com", rol
 BugReports: https://github.com/tslever/TomLeversRPackage/issues
 Depends: R (>= 4.2.1)
 Imports:
+    MASS (>= 7.3-57),
     stringr (>= 1.4.1)
 Description: Contains Tom Lever's R functions, including
     calculatePercentile
