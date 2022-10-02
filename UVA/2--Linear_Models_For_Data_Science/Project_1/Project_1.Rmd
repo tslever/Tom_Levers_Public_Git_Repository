@@ -1,6 +1,6 @@
 ---
 title: "Stat 6021: Project 1"
-author: "Tom Lever"
+author: "Group 2: Ben G. Ballard, Sirish Kumar Desai, Kevin Kuc, Tom Lever"
 date: 10/01/22
 output:
   pdf_document: default
@@ -9,3 +9,421 @@ urlcolor: blue
 linkcolor: red
 ---
 
+# Executive Summary
+
+Present high-level results of analysis.
+
+Present key findings.
+
+# Presentation and Analysis of Data
+
+## Description of Data and Variables
+
+Our data set describes $1214$ difference diamonds that are for sale at [http://www.bluenile.com](http://www.bluenile.com).
+Our data set describes diamonds with carat, clarity, color, cut, and price data.
+Our data set describes a subset of the diamonds that are for sale with a subset of features.
+Table 1 presents data for three diamonds.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+library(dplyr)
+library(kableExtra)
+data_set <- read.csv("diamonds4.csv", header = TRUE) %>% rename(weight = carat) %>% mutate(clarity = factor(clarity, c("SI2", "SI1", "VS2", "VS1", "VVS2", "VVS1", "IF", "FL")), color = factor(color, c("J", "I", "H", "G", "F", "E", "D")), cut = factor(cut, c("Good", "Very Good", "Ideal", "Astor Ideal")))
+first_three_rows <- head(data_set, n = 3)
+kbl(first_three_rows, caption = "first three diamonds in our data set", booktabs = TRUE, longtable = TRUE) %>% kable_styling(latex_options = "striped", position = "center")
+```
+
+Weight measures a diamond's weight in carats.
+Clarity assesses small imperfections within a diamond and quantifies and specifies inclusions.
+Color refers to how colorless a diamond is.
+Cut measures how well-proportioned a diamond's dimensions are.
+
+## Presentation of Motivations, Visualizations, and Analysis
+
+Present univariate visualizations (e.g., boxplots for categorical variables and boxplots and histograms for quantitative variables)
+
+Present multivariate visualizations.
+
+Address the various claims on at [https://www.bluenile.com/education/diamonds](https://www.bluenile.com/education/diamonds).
+
+1. The higher quality a diamond is, the more expensive it will be.
+
+Determine other claims at [https://www.bluenile.com/education/diamonds](https://www.bluenile.com/education/diamonds).
+
+Add reasons why each visualization is presented.
+
+Resize visualizations to condense report.
+
+-----
+
+Considering the relationship of price of a diamond in our data set and the cut of the diamond,
+we construct boxplots of price versus cut with and without outliers and present the boxplot without outliers.
+Including outliers, a very good diamond has the highest price of over $\$350,000$.
+Excluding outliers, an ideal diamond has the highest price at about $\$10,500$.
+A very good diamond has the lowest price at $\$322$.
+The minimum / first-quartile / median price and interquartile range of prices of Astor ideal diamonds are highest.
+The minimum / first-quartile / median prices of good, very good, and ideal diamonds decrease in that order,
+and are less than the minimum / first-quartile / median price of Astor ideal diamonds.
+The third-quartile price of Astor ideal diamonds is highest at about $\$6,500$.
+The third-quartile prices of good, very good, and ideal diamonds increase in that order,
+and are less than the third-quartile price of Astor ideal diamonds.
+
+```{r, eval=FALSE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+library(ggplot2)
+ggplot(data_set, aes(x = cut, y = price)) +
+    geom_boxplot(fill = "Blue", color = "Orange") +
+    labs(title = "Distributions of Price by Cut") +
+    theme(
+        plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 0)
+    )
+```
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+library(ggplot2)
+ggplot(data_set, aes(x = cut, y = price)) +
+    geom_boxplot(outlier.shape = NA, fill = "Blue", color = "Orange") +
+    coord_cartesian(ylim = c(0, 1.125*10^4)) +
+    labs(title = "Distributions of Price by Cut") +
+    theme(
+        plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 0)
+    )
+minimum_price <- min(data_set$price)
+index_of_minimum_price <- match(minimum_price, data_set$price)
+cut_corresponding_to_minimum_price <- data_set$cut[index_of_minimum_price]
+#minimum_price
+#cut_corresponding_to_minimum_price
+```
+
+Considering the relationship of price of a diamond in our data set and the color of the diamond,
+we construct boxplots of price versus color with and without outliers and present the boxplot without outliers.
+Including outliers, for a transition from a group of diamonds with a color identifier in the English alphabet
+to a group of diamonds with a color identifier of the next letter closer to the beginning of the alphabet, maximum price of a diamond increases
+from around $\$50,000$ to around $\$350,000$.
+Excluding outliers, a group of diamonds with color identifier $H$ has the highest price of about $\$13,750$
+and the highest interquartile range of prices.
+A diamond with color identifier $D$ has the lowest price of $\$322$.
+For a transition from a group of diamonds with a color identifier $G$ to a group of diamonds with a color identifier of a letter
+closer to the beginning of the alphabet, the first-quartile / median / third-quartile price of a diamond increases.
+
+```{r, eval=FALSE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+library(ggplot2)
+ggplot(data_set, aes(x = color, y = price)) +
+    geom_boxplot(fill = "Blue", color = "Orange") +
+    labs(title = "Distributions of Price by Color") +
+    theme(
+        plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 0)
+    )
+```
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+library(ggplot2)
+ggplot(data_set, aes(x = color, y = price)) +
+    geom_boxplot(outlier.shape = NA, fill = "Blue", color = "Orange") +
+    coord_cartesian(ylim = c(0, 1.5*10^4)) +
+    labs(title = "Distributions of Price by Color") +
+    theme(
+        plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 0)
+    )
+color_corresponding_to_minimum_price <- data_set$color[index_of_minimum_price]
+#color_corresponding_to_minimum_price
+```
+
+Considering the relationship of price of a diamond in our data set and the clarity of the diamond,
+we construct boxplots of price versus clarity with outliers and group of diamonds with clarity identifier $FL$,
+and without outliers and without the group of diamonds with clarity identifier $FL$.
+Including outliers and the group of diamonds with clarity identifier $FL$,
+a diamond with clarity identifier $FL$ has the highest first-quartile / median / third-quartile / maximum price and interquartile range
+of prices.
+Excluding outliers and the group of diamonds with clarity identifier $FL$,
+a diamond with clarity identifier $VS1$ has the lowest price.
+A diamond with clarity identifier $VS1$ has the highest first-quartile / third-quartile / maximum price and interquartile range of prices.
+A diamond with clarity identifier $SI1$ has the highest median price.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+library(ggplot2)
+ggplot(data_set, aes(x = clarity, y = price)) +
+    geom_boxplot(fill = "Blue", color = "Orange") +
+    labs(title = "Distributions of Price by Clarity") +
+    theme(
+        plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 0)
+    )
+```
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+library(ggplot2)
+ggplot(data_set %>% filter(clarity != "FL"), aes(x = clarity, y = price)) +
+    geom_boxplot(outlier.shape = NA, fill = "Blue", color = "Orange") +
+    coord_cartesian(ylim = c(0, 1.5*10^4)) +
+    labs(title = "Distributions of Price by Clarity") +
+    theme(
+        plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 0)
+    )
+#clarity_corresponding_to_minimum_price <- data_set$clarity[index_of_minimum_price]
+#clarity_corresponding_to_minimum_price
+```
+
+Considering the relationship of weight of a diamond in our data set and the cut of the diamond,
+we construct a boxplot of weight versus cut.
+Including outliers, an ideal diamond has the highest weight of over $5 \ carat$.
+Excluding outliers, an ideal diamond the highest weight of about $2 \ carat$.
+An Astor ideal diamond has the lowest weight of $0.23 \ carat$.
+Astor ideal diamonds have the highest first-quartile, median, and third-quartile weights.
+Ideal diamonds have the greatest interquartile range of weights.
+The median weights of good, very good, and ideal diamonds decrease in that order.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+library(ggplot2)
+ggplot(data_set, aes(x = cut, y = weight)) +
+    geom_boxplot(fill = "Blue", color = "Orange") +
+    labs(title = "Distributions of Weight by Cut") +
+    theme(
+        plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 0)
+    )
+minimum_weight <- min(data_set$weight)
+index_of_minimum_weight <- match(minimum_weight, data_set$weight)
+cut_corresponding_to_minimum_weight <- data_set$cut[index_of_minimum_weight]
+#minimum_weight
+#cut_corresponding_to_minimum_weight
+```
+
+Considering the relationship of weight of a diamond in our data set and the color of the diamond,
+we construct a boxplot of weight versus color.
+Including outliers, a diamond with color identifier $E$ has the highest weight of over $7 \ carat$.
+Excluding outliers, a diamond with color identifier $F$ or $E$ has the highest weight of around $2 \ carat$.
+A diamond with color identifier $F$ has the lowest weight of $0.23 \ carat$.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+library(ggplot2)
+ggplot(data_set, aes(x = color, y = weight)) +
+    geom_boxplot(fill = "Blue", color = "Orange") +
+    labs(title = "Distributions of Weight by Color") +
+    theme(
+        plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 0)
+    )
+#color_corresponding_to_minimum_weight <- data_set$color[index_of_minimum_weight]
+#color_corresponding_to_minimum_weight
+```
+
+Considering the relationship of weight of a diamond in our data set and the clarity of the diamond,
+we construct a boxplot of weight versus color.
+Including outliers, a diamond with clarity identifier $VS2$ has the highest weight of over $7 \ carat$.
+Excluding outliers, a diamond with clarity identifier $FL$ has the highest weight over about $5.3 \ carat$.
+A diamond with clarity identifier $VS1$ has the lowest weight of $0.23 \ carat$.
+Diamonds with clarity identifier $FL$ have the highest first-quartile / median / third-quartile weights.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+library(ggplot2)
+ggplot(data_set, aes(x = clarity, y = weight)) +
+    geom_boxplot(fill = "Blue", color = "Orange") +
+    labs(title = "Distributions of Weight by Clarity") +
+    theme(
+        plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 0)
+    )
+clarity_corresponding_to_minimum_weight <- data_set$clarity[index_of_minimum_weight]
+clarity_corresponding_to_minimum_weight
+```
+
+Considering the relationship of cut of a diamond in our data set and the color of the diamond,
+we construct a bar chart of proportion of cut by color.
+For each group of diamonds with a unique color identifier, most diamonds were ideal.
+The proportions of ideal, very good, good, and Astor ideal diamonds decreased in that order.
+The group of diamonds with color identifier $F$ had the highest proportion of Astor ideal diamonds.
+The group of diamonds with color identifier $I$ had the highest proportion of ideal diamonds.
+The group of diamonds with color identifier $G$ had the highest proportion of very good diamonds.
+The group of diamonds with color identifier $D$ had the highest proportion of good diamonds.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+library(ggplot2)
+ggplot(data_set, aes(x = color, fill = cut)) +
+    geom_bar(position = "fill") +
+ labs(
+     y = "proportion of cut",
+     title = "Proportion of Cut by Color"
+ ) +
+ theme(
+     plot.title = element_text(hjust = 0.5),
+     axis.text.x = element_text(angle = 90)
+ )
+```
+
+Considering the relationship of cut of a diamond in our data set and the clarity of the diamond,
+we construct a bar chart of proportion of cut by clarity.
+For a group of diamonds with a clarity identifier other than $FL$, most diamonds are ideal.
+For a transition from a group of diamonds with a clarity identifier in the set of identifiers {$VS1$, $VVS2$, $VVS1$, $IF$}
+to a group of diamonds with a clarity identifier in that set closer to $IF$, the proportion of ideal diamonds increases
+and the proportion of very good diamonds decreases, and the proportion of Astor ideal diamonds decreases.
+For a transition from a group of diamonds with a clarity identifier in the set of identifiers {$SI2$, $SI1$, $VS2$, $VS1$, $VVS1$}
+to a group of diamonds with a clarity identifier in that set closer to $VVS1$, the proportion of good diamonds decreases.
+The majority of diamonds with clarity identifier $FL$ are very good, while all other diamonds with clarity identifier $FL$ are ideal.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+library(ggplot2)
+ggplot(data_set, aes(x = clarity, fill = cut)) +
+    geom_bar(position = "fill") +
+ labs(
+     y = "proportion of cut",
+     title = "Proportion of Cut by Clarity"
+ ) +
+ theme(
+     plot.title = element_text(hjust = 0.5),
+     axis.text.x = element_text(angle = 90)
+ )
+```
+
+Considering the relationship of color of a diamond in our data set and the clarity of the diamond,
+we construct a bar chart of proportion of color by clarity.
+The proportion of diamonds with color identifier $D$ for the group of diamonds with clarity identifier $FL$
+is greater than $0.5$, is the only proportion greater than $0.5$, and is significantly greater than the proportion of diamonds
+with color identifier $D$ for any other group of diamonds by clarity identifier.
+For the group of diamonds with clarity identifier $FL$, all diamonds other than diamonds with color identifier $D$ have color identifier $F$.
+For a transition from a group of diamonds with a clarity identifier in the set of identifiers {$VVS2$, $VVS1$, $IF$, $FL$}
+to a group of diamonds with a clarity identifier in that set closer to $FL$, the proportion of diamonds with color identifier $F$ increases.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+library(ggplot2)
+ggplot(data_set, aes(x = clarity, fill = color)) +
+    geom_bar(position = "fill") +
+ labs(
+     y = "proportion of color",
+     title = "Proportion of Color by Clarity"
+ ) +
+ theme(
+     plot.title = element_text(hjust = 0.5),
+     axis.text.x = element_text(angle = 90)
+ )
+```
+
+Considering the relationship of price of a diamond in our data set and the weight of the diamond,
+we construct a scatterplot of price versus weight.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+library(ggplot2)
+ggplot(data_set, aes(x = weight, y = price)) +
+    geom_point(alpha = 0.2) +
+    geom_smooth(method = "lm", se = FALSE) +
+    labs(
+        x = "weight (carat)",
+        y = "Price ($)",
+        title = "Price vs. Weight"
+    ) +
+    theme(
+    plot.title = element_text(hjust = 0.5),
+    axis.text.x = element_text(angle = 0)
+    )
+```
+
+The relationship between price and weight seems quadratic.
+This intuition is supported by our below linear regression and choice of price transformation parameter $\lambda = 0.5$.
+
+# Simple Linear Regression of Price versus Weight
+
+Present commentary and conclusions on an end linear-regression equation and how the SLR model informs us how price of diamonds are related to weight.
+
+-----
+
+Using R, we construct a linear model of price versus weight.
+We assume that our sample of diamonds in simple random.
+We assume that $(weight, \ price)$ matched pairs of data for the diamonds are independent.
+We assume that residuals between actual and predicted prices are normally and independently distributed with mean $0$ and constant variance.
+Based on the above scatterplot of price versus weight, the relationship between price and weight seems quadratic and nonlinear.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+library(TomLeversRPackage)
+linear_model <- lm(price ~ weight, data = data_set)
+```
+
+The Box-Cox Method is presented in section 5.4.1 of *Introduction to Linear Regression Analysis* (Sixth Edition)
+by Douglas C. Montgomery et al..
+Because the above assumption that the error term of the linear model has constant variance is not met,
+using R, we perform the Box-Cox Method to determine a maximum-likelihood estimate of a parameter $\lambda = 0.311$
+to be used in a power transformation $\hat{y}' = \hat{y}^\lambda$ of the predicted prices $\hat{y}$.
+After some experimentation, we choose a parameter $\lambda = 0.5$.
+This choice supports our intuition that the relationship between price and weight seems quadratic.
+We transform predicted price and present a scatterplot of transformed price versus weight.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+result_of_Box_Cox_Method <- perform_Box_Cox_Method(linear_model, vector_of_values_of_lambda = seq(0.29, 0.33, 0.01), whether_to_plot = FALSE)
+maximum_likelihood_estimate_of_parameter_lambda <- result_of_Box_Cox_Method$maximum_likelihood_estimate_of_parameter_lambda
+
+data_set <- data_set %>% mutate(square_rooted_price = price^0.5)
+ggplot() +
+    geom_point(data = data_set, aes(x = weight, y = square_rooted_price ), alpha = 0.2) +
+    geom_smooth(data = data_set, aes(x = weight, y = square_rooted_price), method = "lm", se = FALSE) +
+    labs(
+        x = "weight (carat)",
+        y = "square-rooted price",
+        title = "Square-Rooted Price vs. Weight"
+    ) +
+    theme(
+        plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 0)
+    )
+
+```
+
+Using R, we construct a linear model of squared-rooted price versus weight.
+We present a scatterplot of externally studentized residual versus predicted squared-rooted price.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+transformed_linear_model <- lm(square_rooted_price ~ weight, data = data_set)
+ggplot(
+    data.frame(
+        externally_studentized_residual = transformed_linear_model$residuals,
+        predicted_square_rooted_price = transformed_linear_model$fitted.values
+    ),
+    aes(x = predicted_square_rooted_price, y = externally_studentized_residual)
+) +
+    geom_point(alpha = 0.2) +
+    geom_hline(yintercept = 0, color = "red") +
+    labs(
+        x = "predicted square-rooted price",
+        y = "externally studentized residual",
+        title = "Externally Studentized Residual vs. Predicted Square-Rooted Price"
+    ) +
+theme(
+    plot.title = element_text(hjust = 0.5),
+    axis.text.x = element_text(angle = 0)
+)
+#print(summarize_linear_model(transformed_linear_model))
+
+acf(transformed_linear_model$residuals, main = "ACF Value vs. Lag for Transformed Linear Model")
+qqnorm(transformed_linear_model$residuals)
+qqline(transformed_linear_model$residuals, col = "red")
+```
+
+We determine an estimated linear-regression equation
+$$\sqrt{E(y | x)} = \beta_0 + \beta_1 x = \left(-1.216 \ \$\right) + \left(73.692 \ \frac{\$}{carat}\right) x$$
+where $E(y|x)$ is the expected price given a weight $x$.
+
+Some assumptions for simple linear regression appear to be met.
+
+1. The assumption that the relationship between response / yields $y$ and
+   predictor / regressor / nitrogen fertilizer applications $x$ is linear, at least approximately, is met.
+   The relationship appears to be linear.
+2. The assumption that the error term $\epsilon$ of the linear model has mean $0$ is met.
+   Observations are scattered evenly around the fitted line.
+   Residuals may be evenly scattered aroun $e = 0$.
+3. The assumption that the error term $\epsilon$ of the linear model has constant variance is not met.
+   The vertical variation of observations is not constant.
+   Residuals are not evenly scattered around $e = 0$.
+4. The assumption that the errors $\epsilon_i$ / residuals $e_i$ are uncorrelated is met.
+   The ACF value for lag $0$ is always $1$; the correlation of the vector of residuals with itself is always 1.
+   Since all ACF values are insignificant, we have insufficient evidence to reject a null hypothesis that
+   the residuals of the linear model are uncorrelated.
+   We have insufficient evidence to conclude that the residuals of the linear model are correlated.
+   We have insufficient evidence to conclude that
+   the assumption that the errors $\epsilon_i$ / residuals $e_i$ are uncorrelated is not met.
+5. Assumptions that the errors $\epsilon_i$ / residuals $e_i$ are normally distributed is not met.
+   A linear model is robust to these assumptions.
+   Given sharp downward and upward curves at extremes at a plot of sample quantiles versus theoretical quantiles for the residuals
+   of the transformed linear model, the tails of the probability vs. externally studentized residuals plot / distribution are too light
+   for this distribution to be considered normal. The assumption that the residuals are normally distributed is not met.
+   
