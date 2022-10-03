@@ -45,7 +45,13 @@ Present multivariate visualizations.
 
 Address the various claims on at [https://www.bluenile.com/education/diamonds](https://www.bluenile.com/education/diamonds).
 
-1. The higher quality a diamond is, the more expensive it will be.
+1. "The higher quality a diamond is, the more expensive it will be."
+    a. The higher the weight of a diamond, the higher the price of the diamond.
+    b. The closer the clarity identifier of a diamond is to "FL", the higher the price.
+    c. The closer the color identifier of a diamond is to "D", the higher the price.
+    d. The more ideal a diamond is, the higher the price.
+2. How ideal a diamond is most significant in determining price.
+3. How colorlessness a diamond is second most significant in determining price.
 
 Determine other claims at [https://www.bluenile.com/education/diamonds](https://www.bluenile.com/education/diamonds).
 
