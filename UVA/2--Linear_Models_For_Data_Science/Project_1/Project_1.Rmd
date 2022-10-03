@@ -363,10 +363,6 @@ qqline(linear_model_of_price_and_weight$residuals, col = "red")
 
 # Simple Linear Regression of Price versus Weight
 
-Present commentary and conclusions on an end linear-regression equation and how the SLR model informs us how price of diamonds are related to weight.
-
------
-
 Simple linear regression depends of the following five assumptions being met.
 
 1. The relationship between response / price and predictor / regressor / weight is linear, at least approximately. This assumption is not met.
@@ -531,7 +527,20 @@ qqline(linear_model_of_logarithmicized_price_and_weight$residuals, col = "red")
    a probability vs. externally studentized residuals plot / distribution is not normal.
 
 We determine an estimated linear-regression equation
-$$\beta_0 = 8.521$$
-$$\beta_1 = 1.944$$
-$$ln[E(y | x)] = \beta_0 + \beta_1 ln(x)$$
-where $E(y|x)$ is the expected price given a weight $x$.
+$$\hat{\beta}_0 = 8.521$$
+$$\hat{\beta}_1 = 1.944$$
+$$ln(\hat{y}) = \hat{\beta}_0 + \hat{\beta}_1 ln(x)$$
+where $\hat{y} = E(y|x)$ is the expected price given a weight $x$.
+$$\hat{y} = exp[\hat{\beta}_0 + \hat{\beta}_1 ln(x)]$$
+Consider weights $x$ and $x_+ = (1 + p) x$ and corresponding predicted prices $\hat{y}$ and $\hat{y}_+$.
+$$ln(\hat{y}) = \hat{\beta}_0 + \hat{\beta}_1 ln(x)$$
+$$ln\left(\hat{y}_+\right) = \hat{\beta}_0 + \hat{\beta}_1 ln\left(x_+\right)$$
+$$ln\left(\hat{y}_+\right) - ln\left(\hat{y}\right) = \left[\hat{\beta}_0 + \hat{\beta}_1 ln\left(x_+\right)\right] - \left[\hat{\beta}_0 + \hat{\beta}_1 ln\left(x\right)\right]$$
+$$ln\left(\frac{\hat{y}_+}{\hat{y}}\right) = \hat{\beta}_1 ln\left(x_+\right) - \hat{\beta}_1 ln\left(x\right)$$
+$$ln\left(\frac{\hat{y}_+}{\hat{y}}\right) = \hat{\beta}_1 \left[ln\left(x_+\right) - ln\left(x\right)\right]$$
+$$ln\left(\frac{\hat{y}_+}{\hat{y}}\right) = \hat{\beta}_1 ln\left(\frac{x_+}{x}\right)$$
+$$ln\left(\frac{\hat{y}_+}{\hat{y}}\right) = \hat{\beta}_1 ln\left(\frac{(1 + p)x}{x}\right)$$
+$$ln\left(\frac{\hat{y}_+}{\hat{y}}\right) = \hat{\beta}_1 ln\left(1 + p\right)$$
+$$ln\left(\frac{\hat{y}_+}{\hat{y}}\right) = ln\left[\left(1 + p\right)^{\hat{\beta}_1}\right]$$
+$$\frac{\hat{y}_+}{\hat{y}} = \left(1 + p\right)^{\hat{\beta}_1}$$
+For an increase in weight by proportion $1 + p$, the predicted price increases by a factor of $(1 + p)^{\hat{\beta}_1}$.
