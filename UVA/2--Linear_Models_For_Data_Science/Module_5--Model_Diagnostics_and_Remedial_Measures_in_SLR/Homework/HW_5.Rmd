@@ -31,9 +31,9 @@ linkcolor: red
             geom_point(alpha = 0.2) +
             geom_smooth(method = "lm", se = FALSE) +
             labs(
-                x = "nitrogen fertilizer applications (pounds per acre)",
-                y = "yields (bushels per acre)",
-                title = "Yields vs. Nitrogen Fertilizer Applications"
+                x = "nitrogen fertilizer application (pounds per acre)",
+                y = "yield (bushels per acre)",
+                title = "Yield vs. Nitrogen Fertilizer Application"
             ) +
             theme(
                 plot.title = element_text(hjust = 0.5),
@@ -42,12 +42,12 @@ linkcolor: red
         ```
         
         Generally, there appears to be an increasing association between nitrogen fertilizer applications and yields.
-        The relationship between response / yields $y$ and predictor / regressor / nitrogen fertilizer applications $x$ appears nonlinear,
+        The relationship between response / yield $y$ and predictor / regressor / nitrogen fertilizer application $x$ appears nonlinear,
         perhaps logarithmic.
         
         Assumptions for simple linear regression appear to be not met.
-        1. The assumption that the relationship between response / yields $y$ and
-           predictor / regressor / nitrogen fertilizer applications $x$ is linear, at least approximately, is not met.
+        1. The assumption that the relationship between response / yield $y$ and
+           predictor / regressor / nitrogen fertilizer application $x$ is linear, at least approximately, is not met.
            The relationship appears to be nonlinear.
         2. The assumption that the error term $\epsilon$ of the linear model has mean $0$ is not met.
            Observations are not scattered evenly around the fitted line.
@@ -59,22 +59,23 @@ linkcolor: red
         
         ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
         library(TomLeversRPackage)
-        linear_model <- lm(yield ~ nitrogen, data = data_set)
-        print(summarize_linear_model(linear_model))
+        linear_model_of_yield_and_application <- lm(yield ~ nitrogen, data = data_set)
+        print(summarize_linear_model(linear_model_of_yield_and_application))
         
         ggplot(
             data.frame(
-                externally_studentized_residuals = linear_model$residuals,
-                predicted_yields = linear_model$fitted.values
+                externally_studentized_residual =
+                    linear_model_of_yield_and_application$residuals,
+                predicted_yield = linear_model_of_yield_and_application$fitted.values
             ),
-            aes(x = predicted_yields, y = externally_studentized_residuals)
+            aes(x = predicted_yield, y = externally_studentized_residual)
         ) +
             geom_point(alpha = 0.2) +
             geom_hline(yintercept = 0, color = "red") +
             labs(
-                x = "predicted yields (bushels per acre)",
+                x = "predicted yield (bushels per acre)",
                 y = "externally studentized residual (bushels per acre)",
-                title = "Externally Studentized Residuals vs. Predicted Yields"
+                title = "Externally Studentized Residual vs. Predicted Yield"
             ) +
         theme(
             plot.title = element_text(hjust = 0.5),
@@ -83,36 +84,33 @@ linkcolor: red
         ```
         
         Assumptions for simple linear regression appear to be not met.
-        1. The assumption that the relationship between response / yields $y$ and
-           predictor / regressor / nitrogen fertilizer applications $x$ is linear, at least approximately, is not met.
-        2. The assumption that the error term $\epsilon$ of the linear model has mean $0$ is not met.
-           Residuals are not evenly scattered around $e = 0$; residuals follow a curve.
-        3. The assumption that the error term $\epsilon$ of the linear model has constant variance is not met.
+        1. The assumption that the relationship between response / yield $y$ and
+           predictor / regressor / nitrogen fertilizer application $x$ is linear, at least approximately, is not met; residuals follow a curve.
+        2. The assumption that the error term $\epsilon$ of the linear model of yield and application has mean $0$ is not met.
+           Residuals are not evenly scattered around $e = 0$.
+        3. The assumption that the error term $\epsilon$ of the linear model of yield and application has constant variance is not met.
            Residuals do not have similar vertical variation across $e = 0$.
            
-        Since assumption 3, that the error term $\epsilon$ of the linear model has constant variance, is not met,
-        we transform the predicted reponse / yields.
+        Since assumption 3, that the error term $\epsilon$ of the linear model of yield and application has constant variance, is not met,
+        we transform the response / yield.
         Since we are correcting for the error term $\epsilon$'s non-constant variance, we use a power transformation $y^\lambda$,
         where $\lambda$ is a parameter determined below by the Box-Cox Method.
            
     (c) Create a Box-Cox plot for the profile of log-likelihoods. How does this plot aid in your data transformation?
    
-        Assumptions for simple linear regression appear to be not met.
-        1. The assumption that the relationship between response / yields $y$ and
-           predictor / regressor / nitrogen fertilizer applications $x$ is linear, at least approximately, is not met.
-           A Box-Cox plot suggests a maximum-likelihood estimate of parameter $\lambda$ around $3$, not $1$.
+        A Box-Cox plot suggests a maximum-likelihood estimate of parameter $\lambda$ around $3$, not $1$.
    
         ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
         result_of_Box_Cox_Method <- perform_Box_Cox_Method(
-            linear_model,
+            linear_model_of_yield_and_application,
             vector_of_values_of_lambda = seq(1, 5, 0.1)
         )
         print(result_of_Box_Cox_Method$maximum_likelihood_estimate_of_parameter_lambda)
         ```
         
-        For the set of observations of yields and nitrogen fertilizer applications,
+        For the set of observations of yield and nitrogen fertilizer application,
         the maximum-likelihood estimate of $\lambda$ is close to a whole, within-confidence-interval parameter $\lambda = 3$.
-        Since parameter $\lambda = 3 \neq 0$, we use the transformation $\hat{y}' = \hat{y}^\lambda = \hat{y}^3$.
+        Since parameter $\lambda = 3 \neq 0$, we use the transformation $y' = y^\lambda = y^3$.
        
     (d) Perform the necessary transformation of the data. Refit the regression with the transformed variable and
         assess the regression assumptions. You may have to apply transformations a number of times.
@@ -120,36 +118,39 @@ linkcolor: red
         
         ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
         library(dplyr)
-        data_set <- data_set %>% mutate(cubed_yields = yield^3)
-        ggplot(data_set, aes(x = nitrogen, y = cubed_yields)) +
+        data_set <- data_set %>% mutate(cubed_yield = yield^3)
+        ggplot(data_set, aes(x = nitrogen, y = cubed_yield)) +
             geom_point(alpha = 0.2) +
             geom_smooth(method = "lm", se = FALSE) +
             labs(
-                x = "nitrogen fertilizer applications (pounds per acre)",
-                y = "cubed yields",
-                title = "Cubed Yields vs. Nitrogen Fertilizer Applications"
+                x = "nitrogen fertilizer application (pounds per acre)",
+                y = "cubed yield",
+                title = "Cubed Yield vs. Nitrogen Fertilizer Application"
             ) +
         theme(
             plot.title = element_text(hjust = 0.5),
             axis.text.x = element_text(angle = 0)
         )
         
-        linear_model_with_cubed_yields <- lm(cubed_yields ~ nitrogen, data = data_set)
-        print(summarize_linear_model(linear_model_with_cubed_yields))
+        linear_model_of_cubed_yield_and_application <-
+            lm(cubed_yield ~ nitrogen, data = data_set)
+        print(summarize_linear_model(linear_model_of_cubed_yield_and_application))
         
         ggplot(
             data.frame(
-                externally_studentized_residuals = linear_model_with_cubed_yields$residuals,
-                predicted_yields = linear_model_with_cubed_yields$fitted.values
+                externally_studentized_residual =
+                    linear_model_of_cubed_yield_and_application$residual,
+                predicted_cubed_yield =
+                    linear_model_of_cubed_yield_and_application$fitted.values
             ),
-            aes(x = predicted_yields, y = externally_studentized_residuals)
+            aes(x = predicted_cubed_yield, y = externally_studentized_residual)
         ) +
             geom_point(alpha = 0.2) +
             geom_hline(yintercept = 0, color = "red") +
             labs(
-                x = "predicted yields (bushels per acre)",
-                y = "externally studentized residual (bushels per acre)",
-                title = "Externally Studentized Residuals vs. Predicted Yields"
+                x = "predicted cubed yield",
+                y = "externally studentized residual",
+                title = "Externally Studentized Residual vs. Predicted Yield"
             ) +
         theme(
             plot.title = element_text(hjust = 0.5),
@@ -158,31 +159,31 @@ linkcolor: red
         ```
         
         Assumptions for simple linear regression appear to be not met.
-        1. The assumption that the relationship between response / yields $y$ and
-           predictor / regressor / nitrogen fertilizer applications $x$ is linear, at least approximately, is not met.
+        1. The assumption that the relationship between response / yield $y$ and
+           predictor / regressor / nitrogen fertilizer application $x$ is linear, at least approximately, is not met.
            The relationship appears to be nonlinear.
-        2. The assumption that the error term $\epsilon$ of the linear model has mean $0$ is not met.
+        2. The assumption that the error term $\epsilon$ of the linear model of cubed yield and application has mean $0$ is not met.
            Observations are not scattered evenly around the fitted line.
-           Residuals may be evenly scattered aroun $e = 0$.
-        3. The assumption that the error term $\epsilon$ of the linear model has constant variance is not met.
+           Residuals are not evenly scattered aroun $e = 0$.
+        3. The assumption that the error term $\epsilon$ of the linear model of cubed yield and application has constant variance is not met.
            The vertical variation of observations is not constant.
-           Residuals may be evenly scattered aroun $e = 0$.
+           Residuals are not evenly scattered aroun $e = 0$.
 
         Because a cube-root function roughly fits the above scatterplot of cubed yields vs. nitrogen fertilizer applications,
         we transform the predictor / nitrogen fertilizer application $x$.
            
         ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
         library(dplyr)
-        data_set <- data_set %>% mutate(cube_rooted_applications = nitrogen^(1/3))
-        ggplot(data_set, aes(x = cube_rooted_applications, y = cubed_yields)) +
+        data_set <- data_set %>% mutate(cube_rooted_application = nitrogen^(1/3))
+        ggplot(data_set, aes(x = cube_rooted_application, y = cubed_yield)) +
             geom_point(alpha = 0.2) +
             geom_smooth(method = "lm", se = FALSE) +
             labs(
-                x = "cube rooted nitrogen fertilizer applications",
-                y = "cubed yields",
+                x = "cube-rooted nitrogen fertilizer application",
+                y = "cubed yield",
                 title = paste(
-                    "Cubed Yields vs.\n",
-                    "Cube Rooted Nitrogen Fertilizer Applications",
+                    "Cubed Yield vs.\n",
+                    "Cube-Rooted Nitrogen Fertilizer Application",
                     sep = ""
                 )
             ) +
@@ -191,22 +192,30 @@ linkcolor: red
             axis.text.x = element_text(angle = 0)
         )
         
-        linear_model_with_cubed_yields <- lm(cubed_yields ~ nitrogen, data = data_set)
-        print(summarize_linear_model(linear_model_with_cubed_yields))
+        linear_model_with_cubed_yield_and_cubed_rooted_application <-
+            lm(cubed_yield ~ cube_rooted_application, data = data_set)
+        print(
+            summarize_linear_model(
+                linear_model_with_cubed_yield_and_cubed_rooted_application
+            )
+        )
         
         ggplot(
             data.frame(
-                externally_studentized_residuals = linear_model_with_cubed_yields$residuals,
-                predicted_yields = linear_model_with_cubed_yields$fitted.values
+                externally_studentized_residual =
+                    linear_model_with_cubed_yield_and_cubed_rooted_application$residuals,
+                predicted_cube_rooted_yield =
+                    linear_model_with_cubed_yield_and_cubed_rooted_application$
+                        fitted.values
             ),
-            aes(x = predicted_yields, y = externally_studentized_residuals)
+            aes(x = predicted_cube_rooted_yield, y = externally_studentized_residual)
         ) +
             geom_point(alpha = 0.2) +
             geom_hline(yintercept = 0, color = "red") +
             labs(
-                x = "predicted yields (bushels per acre)",
-                y = "externally studentized residual (bushels per acre)",
-                title = "Externally Studentized Residuals vs. Predicted Yields"
+                x = "predicted cube-rooted yield",
+                y = "externally studentized residual",
+                title = "Externally Studentized Residual vs. Predicted Yield"
             ) +
         theme(
             plot.title = element_text(hjust = 0.5),
@@ -214,40 +223,39 @@ linkcolor: red
         )
         
         acf(
-            linear_model_with_cubed_yields$residuals,
+            linear_model_with_cubed_yield_and_cubed_rooted_application$residuals,
             main = "ACF Value vs. Lag for Logarithmicized Linear Model"
         )
         
-        qqnorm(linear_model_with_cubed_yields$residuals)
-        qqline(linear_model_with_cubed_yields$residuals, col = "red")
+        qqnorm(linear_model_with_cubed_yield_and_cubed_rooted_application$residuals)
+        qqline(linear_model_with_cubed_yield_and_cubed_rooted_application$residuals, col = "red")
         ```
         
         Some assumptions for simple linear regression appear to be met.
-        1. The assumption that the relationship between response / yields $y$ and
-           predictor / regressor / nitrogen fertilizer applications $x$ is linear, at least approximately, is met.
+        1. The assumption that the relationship between response / yield $y$ and
+           predictor / regressor / nitrogen fertilizer application $x$ is linear, at least approximately, is met.
            The relationship appears to be linear.
-        2. The assumption that the error term $\epsilon$ of the linear model has mean $0$ is met.
+        2. The assumption that the error term $\epsilon$ of the linear model of cubed yield and cube-rooted application has mean $0$ is met.
            Observations are scattered evenly around the fitted line.
-           Residuals may be evenly scattered aroun $e = 0$.
-        3. The assumption that the error term $\epsilon$ of the linear model has constant variance is met.
+           Residuals are evenly scattered aroun $e = 0$.
+        3. The assumption that the error term $\epsilon$ of the linear model of cubed yield and cube-rooted application
+           has constant variance is met.
            The vertical variation of observations is constant.
-           Residuals may be evenly scattered aroun $e = 0$.
-        4. The assumption that the errors $\epsilon_i$ / residuals $e_i$ are uncorrelated is not met.
+           Residuals are evenly scattered aroun $e = 0$.
+        4. The assumption that the errors $\epsilon_i$ / residuals $e_i$ are uncorrelated is met.
            The ACF value for lag $0$ is always $1$; the correlation of the vector of residuals with itself is always 1.
-           Since the ACF value for lag $12$ is significant, we have sufficient evidence to reject a null hypothesis that
-           the residuals of the linear model are uncorrelated.
-           We have sufficient evidence to conclude that the residuals of the linear model are correlated.
-           We have sufficient evidence to conclude that
+           Since all ACF values are insignificant, we have insufficient evidence to reject a null hypothesis that
+           the residuals of the linear model of cubed yield and cube-rooted application are uncorrelated.
+           We have insufficient evidence to conclude that the residuals of the linear model of cubed yield and cube-rooted application
+           are correlated.
+           We have insufficient evidence to conclude that
            the assumption that the errors $\epsilon_i$ / residuals $e_i$ are uncorrelated is not met.
-           After searching the Web, we conclude that there is no background information on the cornnit data set of the faraway package.
-           Observations may have been taken non-randomly from specific fields.
-           Observations may depend on soil modifications due to previously fertilizing and growing corn crops.
-        5. Assumptions that the errors $\epsilon_i$ / residuals $e_i$ are normally distributed is met.
+        5. Assumptions that the errors $\epsilon_i$ / residuals $e_i$ are normally distributed is not met.
            A linear model is robust to these assumptions.
-           Given that observations in a plot of sample quantiles versus theoretical quantiles for the residuals
-           of the linear model lie close to a line of best fit,
-           the probability vs. externally studentized residuals plot / distribution is normal.
-           The assumption that the errors $\epsilon_i$ / residuals $e_i$ are normally distributed is met.
+           Given moderate flattening at extremes of a plot of sample quantiles versus theoretical quantiles for the residuals
+           of the linear model of cubed yield and cube-rooted application,
+           the tails of the probability vs. externally studentized residuals plot / distribution are too heavy
+           for this distribution to be considered normal. The assumption that the residuals are normally distributed is not met.
         
 2. A chemist studied the concentration of a solution $y$ over time $x$ by fitting a simple linear regression.
    The scatterplot of the dataset and the residual plot from the regression model are shown in the prompt for this homework.
@@ -257,11 +265,11 @@ linkcolor: red
        The assumption that the error term $\epsilon$ of the linear model has constant variance is not met.
        Residuals do not have similar vertical variation across $e = 0$.
        
-       Since the assumption that the error term $\epsilon$ of the linear model has constant variance, is not met,
-       we transform the predicted reponse / concentration first.
-       Transforming the predicted response / concentration may also influence the linear model's compliance with
+       Since the assumption that the error term $\epsilon$ of the linear model has constant variance is not met,
+       we transform the response / concentration first.
+       Transforming the response / concentration may also influence the linear model's compliance with
        an assumption that the mean of errors is $0$.
-       After transforming the predicted response / concentration, if ensuring the linear model's compliance with
+       After transforming the response / concentration, if ensuring the linear model's compliance with
        an assumption that the mean of errors is $0$ requires a transformation, transform the predictor / time.
        
    (b) The profile log-likelihoods for the parameter $\lambda$ of the Box-Cox power transformation is shown in the prompt for this homework.
@@ -270,7 +278,7 @@ linkcolor: red
    
        Yes. For the set of observations of concentrations and times, the maximum-likelihood estimate of $\lambda$
        is close to a whole, within-confidence-interval parameter $\lambda = 0$.
-       Since parameter $\lambda = 0$, we use the transformation $\hat{y}' = ln\left(\hat{y}\right)$.
+       Since parameter $\lambda = 0$, we use the transformation $y' = ln\left(y\right)$.
        
    (c) Your classmate is adamant on applying the log transformation to the response variable and fits the regression model.
        The R output is shown in the prompt for this homework.
