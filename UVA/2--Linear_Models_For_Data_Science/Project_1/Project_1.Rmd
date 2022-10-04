@@ -39,7 +39,7 @@ Cut measures how well-proportioned a diamond's dimensions are.
 
 ## Presentation of Motivations, Visualizations, and Analysis
 
-Present univariate visualizations (e.g., boxplots for categorical variables and boxplots and histograms for quantitative variables)
+Present univariate visualizations (e.g., bar charts for categorical variables and boxplots and histograms for quantitative variables)
 
 Present multivariate visualizations.
 
