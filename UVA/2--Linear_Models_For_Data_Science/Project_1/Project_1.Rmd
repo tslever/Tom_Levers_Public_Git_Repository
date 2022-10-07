@@ -11,9 +11,19 @@ linkcolor: red
 
 # Executive Summary
 
-Present high-level results of analysis.
+Blue Nile, Inc. contacted our team of data analysts to review a data set containing data relating to $1214$ various diamonds for sale on Blue Nile's website. Our team was tasked with exploring the relationships between key attributes of the diamonds: weight (carat); clarity; color; cut; and price. Below, we further describe these data and variables and present visualizations and analysis. Our visualizations illustrate proportions of diamonds across groups of variables. Our analysis describes trends within the visualizations and evaluates claims on Blue Nile's website.
 
-Present key findings.
+Cut refers to how ideally a diamond is shaped, and consists of a range from $Good$ to $Astor \ Ideal$. $Astor \ Ideal$ diamonds have the highest median price followed by $Ideal$, $Very \ Good$, and $Good$ diamonds. Blue Nile implies that $Astor \ Ideal$ diamonds gather and reflect the most light possible, and may on this basis give $Astor \ Ideal$ diamonds relatively high prices.
+
+Color is the second most significant factor that influences the price of a diamond. As the diamond becomes more colorful the diamond generally decreases in value. The Gemological Institute of America (GIA) color scale is the industry standard for diamond grading. The scale starts with $D$ for least colorful diamonds and alphabetically proceeds to $Z$ for most colorful diamonds (although Blue Nile only carries diamonds with color identifiers in the range $D$ through $J$).
+
+The third factor that affects a diamonds price is clarity, which is an assessment of small imperfections on the surface and within the stone. The clarity of a diamond ranges from $SI2$, which has inclusions observable by a human under $10x$ magnification, to an $FL$ diamond, which is flawless. Flawless diamonds have the highest median price among diamonds grouped by clarity. Their lack of abundance drives up their price; less than $1$ percent of all diamonds have $FL$ clarity. The $VS1$ clarity identifier corresponds to a group of diamonds with the second highest median price, although four groups of diamonds have greater clarity.
+
+The weight of a diamond is measured in carats; Blue Nile and others refer to the weight of a diamond as carat weight and carat. The weight of a diamond is not always indicative of a diamond's size. That being said, we found that as weight increases, the price of a diamond also increases, at an increasing rate, with increasing variability. In "Simple Linear Regression of Price versus Weight", we determine a linear model that relates transformed price to transformed weight. This linear model may be used
+to predict diamond price given weight.
+
+Overall, the cut, color, clarity, and carat of a diamond are all predictors for a diamond's market value,
+with various qualifications.
 
 # Presentation and Analysis of Data
 
@@ -39,27 +49,137 @@ Cut measures how well-proportioned a diamond's dimensions are.
 
 ## Presentation of Motivations, Visualizations, and Analysis
 
-Present univariate visualizations (e.g., bar charts for categorical variables and boxplots and histograms for quantitative variables)
-
 Present multivariate visualizations.
-
-Address the various claims on at [https://www.bluenile.com/education/diamonds](https://www.bluenile.com/education/diamonds).
-
-1. "The higher quality a diamond is, the more expensive it will be."
-    a. The higher the weight of a diamond, the higher the price of the diamond.
-    b. The closer the clarity identifier of a diamond is to "FL", the higher the price.
-    c. The closer the color identifier of a diamond is to "D", the higher the price.
-    d. The more ideal a diamond is, the higher the price.
-2. How ideal a diamond is most significant in determining price.
-3. How colorlessness a diamond is second most significant in determining price.
-
-Determine other claims at [https://www.bluenile.com/education/diamonds](https://www.bluenile.com/education/diamonds).
 
 Add reasons why each visualization is presented.
 
 Resize visualizations to condense report.
 
+Address the various claims at [https://www.bluenile.com/education/diamonds](https://www.bluenile.com/education/diamonds).
+
+1. "The higher quality a diamond is, the more expensive it will be."
+2. How ideal a diamond is most significant in determining price.
+3. How colorlessness a diamond is second most significant in determining price.
+
+Determine other claims at [https://www.bluenile.com/education/diamonds](https://www.bluenile.com/education/diamonds).
+
 -----
+
+Considering proportions of diamonds by clarity, the group of diamonds with clarity identifier $SI1$
+has the highest proportion of about $0.2$. For a transition from a group of diamonds with a clarity identifier in the set
+{$VS1$, $VVS2$, $VVS1$, $IF$, $FL$} to a group of diamonds with clarity identifier closer to $FL$,
+proportion of diamonds decreases. The group of diamonds with clarity identifier $FL$ has the lowest proportion of less than $0.01$.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+library(ggplot2)
+clarity_and_proportion <- data_set %>% select(clarity) %>% group_by(clarity) %>% summarize(count = n()) %>% mutate(proportion = count / nrow(data_set))
+ggplot(clarity_and_proportion, aes(x = clarity, y = proportion)) +
+    geom_bar(stat = "identity", fill = "Blue", color = "Orange") +
+    labs(title = "Distributions of Diamonds by Clarity") +
+    theme(
+        plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 0)
+    )
+```
+
+Considering proportions of diamonds by color, the group of diamonds with color identifier $F$
+has the highest proportion of over $0.175$. The group of diamonds with color identifier $J$
+has the lowest proportion of about $0.075$. There seems to be a general trend of proportion increasing
+as color identifier approaches $D$.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+library(ggplot2)
+color_and_proportion <- data_set %>% select(color) %>% group_by(color) %>% summarize(count = n()) %>% mutate(proportion = count / nrow(data_set))
+ggplot(color_and_proportion, aes(x = color, y = proportion)) +
+    geom_bar(stat = "identity", fill = "Blue", color = "Orange") +
+    labs(title = "Distributions of Diamonds by Color") +
+    theme(
+        plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 0)
+    )
+```
+
+Considering proportions of diamonds by cut, the group of ideal diamonds has the highest proportion of over $0.6$.
+The group of Astor ideal diamonds has the lowest proportion of well under $0.005$.
+As cut improves from good to ideal, proportion of diamonds increases.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+library(ggplot2)
+cut_and_proportion <- data_set %>% select(cut) %>% group_by(cut) %>% summarize(count = n()) %>% mutate(proportion = count / nrow(data_set))
+ggplot(cut_and_proportion, aes(x = cut, y = proportion)) +
+    geom_bar(stat = "identity", fill = "Blue", color = "Orange") +
+    labs(title = "Distributions of Diamonds by Cut") +
+    theme(
+        plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 0)
+    )
+```
+
+Considering a boxplot and a probability density distribution for weight,
+the middle $50$ percent of weights fall between about $0.4 \ carat$ and $1.0 \ carat$.
+The distribution is non-normal and positively / right skewed.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+library(ggplot2)
+ggplot(data_set, aes(y = weight)) +
+    geom_boxplot(fill = "Blue", color = "Orange") +
+    labs(
+        y = "weight",
+        title = "Boxplot of Weight"
+    ) +
+    theme(
+        plot.title = element_text(hjust = 0.5),
+        axis.title.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.text.x = element_blank()
+    )
+
+ggplot() +
+    geom_histogram(data = data_set, aes(x = data_set$weight, y = ..density..), binwidth = density(data_set$weight)$bw, fill = "Blue", color = "Orange") +
+    geom_density(data = data_set, aes(x = data_set$weight), color = "Orange") +
+    labs(
+        x = "weight",
+        y = "probability density",
+        title = "Histogram and Probability Density Distribution of Weight"
+    ) +
+    theme(
+        plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 0)
+    )
+```
+
+Considering a boxplot and a probability density distribution for price,
+the middle $50$ percent of logarithms of prices fall between 6.5 and 7.5.
+The distribution is non-normal and positively / right skewed.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+library(ggplot2)
+ggplot(data_set, aes(y = log(price))) +
+    geom_boxplot(fill = "Blue", color = "Orange") +
+    labs(
+        y = "logarithmicized price",
+        title = "Boxplot of Logarithmicized Price"
+    ) +
+    theme(
+        plot.title = element_text(hjust = 0.5),
+        axis.title.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.text.x = element_blank()
+    )
+
+ggplot() +
+    geom_histogram(data = data_set, aes(x = log(data_set$price), y = ..density..), binwidth = density(log(data_set$price))$bw, fill = "Blue", color = "Orange") +
+    geom_density(data = data_set, aes(x = log(data_set$price)), color = "Orange") +
+    labs(
+        x = "logarithmicized price",
+        y = "probability density",
+        title = paste("Histogram and Probability Density Distribution\n", "of Logarithmicized Price", sep = "")
+    ) +
+    theme(
+        plot.title = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 0)
+    )
+```
 
 Considering the relationship of price of a diamond in our data set and the cut of the diamond,
 we construct boxplots of price versus cut with and without outliers and present the boxplot without outliers.
@@ -73,16 +193,13 @@ The third-quartile price of Astor ideal diamonds is highest at about $\$6,500$.
 The third-quartile prices of good, very good, and ideal diamonds increase in that order,
 and are less than the third-quartile price of Astor ideal diamonds.
 
-```{r, eval=FALSE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
-library(ggplot2)
-ggplot(data_set, aes(x = cut, y = price)) +
-    geom_boxplot(fill = "Blue", color = "Orange") +
-    labs(title = "Distributions of Price by Cut") +
-    theme(
-        plot.title = element_text(hjust = 0.5),
-        axis.text.x = element_text(angle = 0)
-    )
-```
+Considering the claim at [https://www.bluenile.com/education/diamonds](https://www.bluenile.com/education/diamonds)
+that "The higher [in idealness] a diamond is, the more expensive it will be",
+this claim is supported by a trend that as diamonds improve in cut, third-quartile price increases;
+a trend that as diamonds improve in cut from good to very good to ideal, maximum price increases;
+and in that Astor ideal diamonds have the highest minimum / first-quartile / median / third-quartile price.
+However, this claim is refuted by a trend that as diamonds improve in cut from good to very good to ideal,
+minimum / first-quartile/ median price decreases.
 
 ```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
 library(ggplot2)
@@ -111,6 +228,12 @@ and the highest interquartile range of prices.
 A diamond with color identifier $D$ has the lowest price of $\$322$.
 For a transition from a group of diamonds with a color identifier $G$ to a group of diamonds with a color identifier of a letter
 closer to the beginning of the alphabet, the first-quartile / median / third-quartile price of a diamond increases.
+
+Considering the claim at [https://www.bluenile.com/education/diamonds](https://www.bluenile.com/education/diamonds)
+that "The higher [in color] a diamond is, the more expensive it will be",
+this claim is supported in by a trend that for a transition from a group of diamonds with a color identifier in the set
+{"G", "F", "E", "D"} to a group of diamonds with a color identifier closer to "D",
+the min / first-quartile / median / third-quartile / max price increases.
 
 ```{r, eval=FALSE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
 library(ggplot2)
@@ -147,6 +270,11 @@ Excluding outliers and the group of diamonds with clarity identifier $FL$,
 a diamond with clarity identifier $VS1$ has the lowest price.
 A diamond with clarity identifier $VS1$ has the highest first-quartile / third-quartile / maximum price and interquartile range of prices.
 A diamond with clarity identifier $SI1$ has the highest median price.
+
+Considering the claim at [https://www.bluenile.com/education/diamonds](https://www.bluenile.com/education/diamonds)
+that "The higher [in clarity] a diamond is, the more expensive it will be",
+this claim is supported in that flawless diamonds have the highest first-quartile / median / third-quartile / maximum price.
+However, neither when including nor excluding outliers is this claim supported by a trend that price increases with clarity.
 
 ```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
 library(ggplot2)
@@ -314,6 +442,8 @@ a plot of AutoCorrelation Function values versus lag for the model, and
 a plot of sample quantiles versus theoretical quantiles for the residuals of the model.
 
 As weight of a diamond increases, price of the diamond increases, at an increasing rate.
+This description supports the claim at [https://www.bluenile.com/education/diamonds](https://www.bluenile.com/education/diamonds)
+that "The higher [in weight] a diamond is, the more expensive it will be."
 As weight of a diamond increases, the variance of residuals of a linear model of price versus weight increases.
 There is a significant correlation between $(weight, \ price)$ observations and observations three away.
 Given a moderate downward and a sharp upward curve at extremes of a plot of sample quantiles versus theoretical quantiles
@@ -474,7 +604,7 @@ ggplot() +
     )
 
 linear_model_of_logarithmicized_price_and_logarithmicized_weight <- lm(logarithmicized_price ~ logarithmicized_weight, data = data_set)
-print(summarize_linear_model(linear_model_of_logarithmicized_price_and_logarithmicized_weight))
+#print(summarize_linear_model(linear_model_of_logarithmicized_price_and_logarithmicized_weight))
 
 ggplot(
     data.frame(
