@@ -47,23 +47,41 @@ Clarity assesses small imperfections within a diamond and quantifies and specifi
 Color refers to how colorless a diamond is.
 Cut measures how well-proportioned a diamond's dimensions are.
 
-## Presentation of Motivations, Visualizations, and Analysis
+## General Analysis, and Visualizations and Visualization-Specific Analysis
 
-Present multivariate visualizations.
+### General Analysis
 
-Add reasons why each visualization is presented.
+Ben:
 
-Resize visualizations to condense report.
+1. What is this general analysis about?
+2. Why are we presenting this general analysis?
+3. What are the below visualizations and visualization-specific analysis about?
+4. Why are we presenting all these visualizations and visualization-specific analysis?
 
-Address the various claims at [https://www.bluenile.com/education/diamonds](https://www.bluenile.com/education/diamonds).
+Sirish:
 
-1. "The higher quality a diamond is, the more expensive it will be."
-2. How ideal a diamond is most significant in determining price.
-3. How colorlessness a diamond is second most significant in determining price.
+1. Sirish's insights that each rely on information from multiple plots
+2. Sirish's insight into why cut is or not most significant
+3. Sirish's insight into why color is or is not second-most significant
 
-Determine other claims at [https://www.bluenile.com/education/diamonds](https://www.bluenile.com/education/diamonds).
+Considering the claim at [https://www.bluenile.com/education/diamonds](https://www.bluenile.com/education/diamonds)
+that "The higher [in idealness] a diamond is, the more expensive it will be",
+this claim is supported by a trend that as diamonds improve in cut, third-quartile price increases;
+a trend that as diamonds improve in cut from good to very good to ideal, maximum price increases;
+and the fact that Astor ideal diamonds have the highest minimum / first-quartile / median / third-quartile price.
+However, this claim is refuted by a trend that as diamonds improve in cut from good to very good to ideal,
+minimum / first-quartile / median price decreases.
 
------
+Considering the claim that "The higher [in color] a diamond is, the more expensive it will be",
+this claim is supported in by a trend that for a transition from a group of diamonds with a color identifier in the set
+{"G", "F", "E", "D"} to a group of diamonds with a color identifier closer to "D",
+the min / first-quartile / median / third-quartile / max price increases.
+
+Considering the claim that "The higher [in weight] a diamond is, the more expensive it will be,"
+we find in a scatterplot of price versus weight a trend that s weight of a diamond increases,
+price of the diamond increases, at an increasing rate.
+
+### Detailed Visualizations and Plot-Specific Analysis
 
 Considering proportions of diamonds by clarity, the group of diamonds with clarity identifier $SI1$
 has the highest proportion of about $0.2$. For a transition from a group of diamonds with a clarity identifier in the set
@@ -193,14 +211,6 @@ The third-quartile price of Astor ideal diamonds is highest at about $\$6,500$.
 The third-quartile prices of good, very good, and ideal diamonds increase in that order,
 and are less than the third-quartile price of Astor ideal diamonds.
 
-Considering the claim at [https://www.bluenile.com/education/diamonds](https://www.bluenile.com/education/diamonds)
-that "The higher [in idealness] a diamond is, the more expensive it will be",
-this claim is supported by a trend that as diamonds improve in cut, third-quartile price increases;
-a trend that as diamonds improve in cut from good to very good to ideal, maximum price increases;
-and in that Astor ideal diamonds have the highest minimum / first-quartile / median / third-quartile price.
-However, this claim is refuted by a trend that as diamonds improve in cut from good to very good to ideal,
-minimum / first-quartile/ median price decreases.
-
 ```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
 library(ggplot2)
 ggplot(data_set, aes(x = cut, y = price)) +
@@ -228,12 +238,6 @@ and the highest interquartile range of prices.
 A diamond with color identifier $D$ has the lowest price of $\$322$.
 For a transition from a group of diamonds with a color identifier $G$ to a group of diamonds with a color identifier of a letter
 closer to the beginning of the alphabet, the first-quartile / median / third-quartile price of a diamond increases.
-
-Considering the claim at [https://www.bluenile.com/education/diamonds](https://www.bluenile.com/education/diamonds)
-that "The higher [in color] a diamond is, the more expensive it will be",
-this claim is supported in by a trend that for a transition from a group of diamonds with a color identifier in the set
-{"G", "F", "E", "D"} to a group of diamonds with a color identifier closer to "D",
-the min / first-quartile / median / third-quartile / max price increases.
 
 ```{r, eval=FALSE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
 library(ggplot2)
@@ -442,8 +446,6 @@ a plot of AutoCorrelation Function values versus lag for the model, and
 a plot of sample quantiles versus theoretical quantiles for the residuals of the model.
 
 As weight of a diamond increases, price of the diamond increases, at an increasing rate.
-This description supports the claim at [https://www.bluenile.com/education/diamonds](https://www.bluenile.com/education/diamonds)
-that "The higher [in weight] a diamond is, the more expensive it will be."
 As weight of a diamond increases, the variance of residuals of a linear model of price versus weight increases.
 There is a significant correlation between $(weight, \ price)$ observations and observations three away.
 Given a moderate downward and a sharp upward curve at extremes of a plot of sample quantiles versus theoretical quantiles
