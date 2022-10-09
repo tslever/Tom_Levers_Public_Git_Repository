@@ -1,0 +1,126 @@
+---
+title: "Stat 6021: Guided Question Set 6"
+author: "Tom Lever"
+date: 10/09/22
+output:
+  pdf_document: default
+  html_document: default
+urlcolor: blue
+linkcolor: red
+---
+
+For this guided question set, we will use the data set `nfl.txt`, which contains data on NFL team performance from the 1976 season.
+The variables are:
+
+* $y$: Games won in the 14-game 1976 season
+* $x_1$: Rushing yards
+* $x_2$: Passing yards
+* $x_3$: Punting average (yards / punt)
+* $x_4$: Field-goal percentage (field goals made / field goals attempted)
+* $x_5$: Turnover differential (turnovers acquired - turnovers lost)
+* $x_6$: Penalty yards
+* $x_7$: Percent rushing (rushing plays / total plays)
+* $x_8$: Opponents' rushing yards
+* $x_9$: Opponents' passing yards
+
+1.  Create a scatterplot matrix and find the correlation between all pairs of variables for this data set.
+
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    library(TomLeversRPackage)
+    data_set <- read.table("nfl.txt", header = TRUE)
+    head(data_set, n = 3)
+    nrow(data_set)
+    pairs(data_set, lower.panel = NULL)
+    correlation_matrix <- round(cor(data_set), 3)
+    correlation_matrix
+    linear_model <- lm(y ~ ., data = data_set)
+    summarize_linear_model(linear_model)
+    ```
+
+    Answer the following questions based on the output.
+    
+    (a) Which predictors appear to be linearly related to the number of wins?
+        Which predictors do not appear to have a linear relationship with the number of wins?
+        
+        Let significance level $\alpha = 0.05$.
+        
+        Let $t_{\alpha/2, \ n - p}$ be the quantile of a Student's $t$ distribution with $n - p = 28 - 10 = 18$ for which the probability
+        that a test statistic is greater is $\alpha/2 = 0.05/2 = 0.025$.
+        
+        Since the probability, that the magnitude $\left|t\right|$ of a test statistic following the above distribution is greater
+        than $t_{\alpha/2, \ n - p}$, is greater than $\alpha$ for all predictors, all predictors seem to be linearly related to the number of 
+        wins.
+        
+    (b) Do you notice if any of the predictors are highly correlated with one another?
+        If so, which ones?
+        
+        According to Keith G. Calkins, "correlation coefficients whose magnitudes are [higher than] 0.7... indicate variables which can be
+        considered highly correlated."
+        
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        ifelse(correlation_matrix > 0.7, correlation_matrix, "")
+        ```
+        
+        Each predictor is highly correlated with itself.
+        Rushing yards $x_1$ and percent rushing $x_7$ are highly correlated.
+        
+    (c) What predictors would you first consider to use in a multiple linear regression? Briefly explain your choices.
+    
+        I don't know.
+        
+2.  Regardless of your answer to the previous question, fit a multiple regression model for the number of games won against the followning three      predictors: the team's passing yardage ($x_2$), the percentage of rushing plays ($x_7$), and the opponents' yards rushing ($x_8$).
+    Write the estimated regression equation.
+   
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    linear_model <- lm(y ~ x2 + x7 + x8, data = data_set)
+    summarize_linear_model(linear_model)
+    ```
+    
+3.  Interpret the estimated coefficient for the predictor percentage of rushing plays $x_7$ in context.
+
+    Holding predictor team's passing yardage $x_2$ and opponents' yards rushing $x_8$ constant, for an increase in percentage of rushing plays
+    $x_7$ of $1 / 0.194 = 5.156$, expected games won in the 14-game 1976 season increases by $1$.
+   
+4.  What is the estimated number of games a team would win for a team's passing yardage $x_2 = 2000 \ yards$, percentage of rushing plays $x_7 = 48$,
+    and opponents' yards rushing $x_8 = 2350 \ yards$? Also provide a relevant 95-percent confidence interval for the number of games.
+    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    linear_model <- lm(y ~ x2 + x7 + x8, data = data_set)
+    predict(
+        linear_model,
+        newdata = data.frame(x2 = 2000, x7 = 48, x8 = 2350),
+        interval = "confidence"
+    )
+    predict(
+        linear_model,
+        newdata = data.frame(x2 = 2000, x7 = 48, x8 = 2350),
+        interval = "predict"
+    )
+    ```
+    
+    For a particular predictor $\vec{x_0} = (2000 \ yards, 48, 2350 \ yards)$ in the three-dimensional space with
+    $x_2^{min} \leq x_2 \leq x_2^{max}$, $x_7^{min} \leq x_7 \leq x_7^{max}$, and $x_8^{min} \leq x_8 \leq x_8^{max}$,
+    the $95$-percent confidence interval for the expected / mean number of games a team would win
+    $E\left(y | \vec{x}_0\right)$ is $[1.711, \ 5.052]$.
+    The $95$-percent prediction interval for a future number of games a team will win $y_{\vec{x}_0}$ is $[-0.516, \ 7.279]$.
+    
+5.  Using the output for the multiple linear regression model from part 2, answer the following question from a client:
+    "Is this regression model useful in predicting the number of wins during the 1976 season?".
+    Be sure to write the null and alternative hypotheses, state the value of the test statistic, state the $p$-value, and state a relevant
+    conclusion.
+    What is the critical value associated with this hypothesis test? Perform the test with significance level $\alpha = 0.05$.
+    
+    We assume that errors are random, are independent, and follow a normal distribution with mean $E\left(\epsilon_i\right) = 0$ and
+    variance $Var\left(\epsilon_i\right) = \sigma^2$.
+    The multiple linear regression model from part 2 is useful in predicting the number of wins during the 1976 season
+    if at least one of the predictor variables in the set $\left\{x_2, x_7, x_8\right\}$ contributes significantly
+    to the model.
+    We conduct a test of the null hypothesis $H_0: \beta_{x_2} = \beta_{x_7} = \beta_{x_8} = 0$.
+    The alternate hypothesis is $H_1: \beta_{x_2} \neq 0 \ or \ \beta_{x_7} \neq 0 \ or \ \beta_{x_8} \neq 0$.
+    The alternate hypothesis is also $H_1: \beta_{x_i} \neq 0 \ for \ i \in [2, 7, 8]$.
+    If we reject the null hypothesis, at least one of the predictor variables contributes significantly to the model.
+    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    analyze_variance(linear_model)
+    print(names(anova(linear_model)))
+    ```

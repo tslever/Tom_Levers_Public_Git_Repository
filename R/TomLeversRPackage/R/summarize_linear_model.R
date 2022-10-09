@@ -10,9 +10,25 @@ summarize_linear_model <- function(linear_model) {
     the_summary <- summary(linear_model)
     summary_output <- capture.output(the_summary)
 
-    response_intercept <- linear_model$coefficients[1]
-    slope <- linear_model$coefficients[2]
-    linear_regression_equation <- paste("E(y | x) = B_0 + B_1 * x = ", response_intercept, " + ", slope, " * x", sep = "")
+    coefficients <- linear_model$coefficients
+    variables <- names(coefficients)
+    number_of_variables <- length(variables)
+    substrings_of_generic_linear_regression_equation <- character(number_of_variables)
+    substrings_of_generic_linear_regression_equation[1] <- paste("E(y | x) =\n    B_0", " +\n")
+    for (i in 2:(number_of_variables - 1)) {
+        substrings_of_generic_linear_regression_equation[i] <- paste("    B_", variables[i], " * ", variables[i], " +\n", sep = "")
+    }
+    substrings_of_generic_linear_regression_equation[number_of_variables] <- paste("    B_", variables[number_of_variables], " * ", variables[number_of_variables], sep = "")
+    generic_linear_regression_equation <- paste(substrings_of_generic_linear_regression_equation, sep = "", collapse = "")
+    summary_output <- append(summary_output, generic_linear_regression_equation)
+
+    substrings_of_linear_regression_equation <- character(number_of_variables)
+    substrings_of_linear_regression_equation[1] <- paste("E(y | x) =\n    ", coefficients[1], " +\n", sep = "")
+    for (i in 2:(number_of_variables - 1)) {
+        substrings_of_linear_regression_equation[i] <- paste("    ", coefficients[i], " * ", variables[i], " +\n", sep = "")
+    }
+    substrings_of_linear_regression_equation[number_of_variables] <- paste("    ", coefficients[number_of_variables], " * ", variables[number_of_variables], sep = "")
+    linear_regression_equation <- paste(substrings_of_linear_regression_equation, sep = "", collapse = "")
     summary_output <- append(summary_output, linear_regression_equation)
 
     number_of_observations <- nobs(linear_model)

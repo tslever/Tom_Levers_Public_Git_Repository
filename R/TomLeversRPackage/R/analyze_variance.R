@@ -8,27 +8,24 @@
 #' @export
 analyze_variance <- function(linear_model) {
     analysis <- capture.output(anova(linear_model))
-    regular_expression_for_number <- get_regular_expression_for_number()
-
-    line_with_SSR <- analysis[5]
-    DF_SSR_MSR_F0_and_P <- str_extract_all(line_with_SSR, regular_expression_for_number)[[1]]
-    DFR <- as.integer(DF_SSR_MSR_F0_and_P[1])
-    SSR <- as.double(DF_SSR_MSR_F0_and_P[2])
-
-    line_with_SSRes <- analysis[6]
-    DF_SSRes_and_MSRes <- str_extract_all(line_with_SSRes, regular_expression_for_number)[[1]]
-    DFRes <- as.integer(DF_SSRes_and_MSRes[1])
-    SSRes <- as.double(DF_SSRes_and_MSRes[2])
-    DFT <- DFR + DFRes
-    SST <- SSR + SSRes
-    line_with_SST <- paste("DFT: ", DFT, ", SST: ", SST, sep = "")
-    analysis <- append(analysis, line_with_SST)
-
-    coefficient_of_determination_R2 <- SSR / SST
-    line_with_R2 <- paste("R2: ", coefficient_of_determination_R2, sep = "")
-    analysis <- append(analysis, line_with_R2)
 
     number_of_observations <- nobs(linear_model)
+    total_of_degrees_of_freedom <- number_of_observations - 1
+    response_values <- linear_model$model[,1]
+    total_sum_of_squares <- (t(response_values) %*% response_values) - ((sum(response_values)^2) / number_of_observations)
+    line_with_totals <- paste("DFT: ", total_of_degrees_of_freedom, ", SST: ", total_sum_of_squares, sep = "")
+    analysis <- append(analysis, line_with_totals)
+
+    residuals <- linear_model$residuals
+    residual_sum_of_squares <- t(residuals) %*% residuals
+    number_of_variables <- length(names(coefficients))
+    residual_mean_square <- residual_sum_of_squares / (number_of_observations - number_of_variables)
+    total_mean_square <- total_sum_of_squares / (number_of_observations - 1)
+    coefficient_of_determination_R2 <- 1 - (residual_sum_of_squares / total_sum_of_squares)
+    adjusted_coefficient_of_determination_R2 <- 1 - (residual_mean_square / total_mean_square)
+    line_with_adjusted_coefficient_of_determination_R2 <- paste("R2: ", coefficient_of_determination_R2, ", Adjusted R2: ", adjusted_coefficient_of_determination_R2, sep = "")
+    analysis <- append(analysis, line_with_adjusted_coefficient_of_determination_R2)
+
     line_with_number_of_observations <- paste("Number of observations: ", number_of_observations, sep = "")
     analysis <- append(analysis, line_with_number_of_observations)
 
