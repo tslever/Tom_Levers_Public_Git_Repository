@@ -10,7 +10,7 @@ linkcolor: red
 ---
 
 # Executive Summary
-
+#This is Kevins addition to the project
 Blue Nile, Inc. contacted our team of data analysts to review a data set containing data relating to $1214$ various diamonds for sale on Blue Nile's website. Our team was tasked with exploring the relationships between key attributes of the diamonds: weight (carat); clarity; color; cut; and price. Below, we further describe these data and variables and present visualizations and analysis. Our visualizations illustrate proportions of diamonds across groups of variables. Our analysis describes trends within the visualizations and evaluates claims on Blue Nile's website.
 
 Cut refers to how ideally a diamond is shaped, and consists of a range from $Good$ to $Astor \ Ideal$. $Astor \ Ideal$ diamonds have the highest median price followed by $Ideal$, $Very \ Good$, and $Good$ diamonds. Blue Nile implies that $Astor \ Ideal$ diamonds gather and reflect the most light possible, and may on this basis give $Astor \ Ideal$ diamonds relatively high prices.
