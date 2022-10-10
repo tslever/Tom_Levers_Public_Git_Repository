@@ -3,7 +3,6 @@ generate_hypothesis_test_result <- function(probabilities, significance_level) {
      a_probability_is_greater_than_significance_level <- FALSE
      probability_greater_than_significance_level <- -1.0
      for (probability in probabilities[1:(length(probabilities) - 1)]) { # Works when probabilities is a single number or a vector of numbers
-         print(probability)
          if (probability > significance_level) {
              a_probability_is_greater_than_significance_level <- TRUE
              probability_greater_than_significance_level <- probability
