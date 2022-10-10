@@ -122,5 +122,7 @@ The variables are:
     
     ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
     analyze_variance(linear_model)
-    print(names(anova(linear_model)))
+    test_null_hypothesis_involving_multiple_linear_regression_coefficients(
+        linear_model, 0.05
+    )
     ```
