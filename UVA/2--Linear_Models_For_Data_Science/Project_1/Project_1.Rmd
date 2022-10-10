@@ -19,8 +19,9 @@ Color is the second most significant factor that influences the price of a diamo
 
 The third factor that affects a diamonds price is clarity, which is an assessment of small imperfections on the surface and within the stone. The clarity of a diamond ranges from $SI2$, which has inclusions observable by a human under $10x$ magnification, to an $FL$ diamond, which is flawless. Flawless diamonds have the highest median price among diamonds grouped by clarity. Their lack of abundance drives up their price; less than $1$ percent of all diamonds have $FL$ clarity. The $VS1$ clarity identifier corresponds to a group of diamonds with the second highest median price, although four groups of diamonds have greater clarity.
 
-The weight of a diamond is measured in carats; Blue Nile and others refer to the weight of a diamond as carat weight and carat. The weight of a diamond is not always indicative of a diamond's size. That being said, we found that as weight increases, the price of a diamond also increases, at an increasing rate, with increasing variability. In "Simple Linear Regression of Price versus Weight", we determine a linear model that relates transformed price to transformed weight. This linear model may be used
-to predict diamond price given weight.
+The weight of a diamond is measured in carats; Blue Nile and others refer to the weight of a diamond as carat weight and carat. The weight of a diamond is not always indicative of a diamond's size. That being said, we found that as weight increases, the price of a diamond also increases, at an increasing rate, with increasing variability. In "Simple Linear Regression of Price versus Weight", we determine a linear model that relates transformed price to transformed weight. This linear model may be used to predict diamond price given weight.
+For an increase in weight of $10$ percent, price increases by a factor of $1.2$. For example, for an increase in weight
+from $1 \ carat$ to $1.1 \ carat$, price increases from $\$5,019.07$ by a factor of $1.2$ to $\$6,040.75$. These prices have a ratio of $1.2$.
 
 Overall, the cut, color, clarity, and carat of a diamond are all predictors for a diamond's market value,
 with various qualifications.
@@ -466,6 +467,19 @@ ggplot(data_set, aes(x = weight, y = price)) +
     axis.text.x = element_text(angle = 0)
     )
 
+ggplot(data_set, aes(x = clarity, y = price)) +
+    geom_point(alpha = 0.2) +
+    geom_smooth(method = "lm", se = FALSE) +
+    labs(
+        x = "clarity",
+        y = "Price ($)",
+        title = "Price vs. Clarity"
+    ) +
+    theme(
+    plot.title = element_text(hjust = 0.5),
+    axis.text.x = element_text(angle = 0)
+    )
+
 linear_model_of_price_and_weight <- lm(price ~ weight, data = data_set)
 
 ggplot(
@@ -675,4 +689,8 @@ $$ln\left(\frac{\hat{y}_+}{\hat{y}}\right) = \hat{\beta}_1 ln\left(\frac{(1 + p)
 $$ln\left(\frac{\hat{y}_+}{\hat{y}}\right) = \hat{\beta}_1 ln\left(1 + p\right)$$
 $$ln\left(\frac{\hat{y}_+}{\hat{y}}\right) = ln\left[\left(1 + p\right)^{\hat{\beta}_1}\right]$$
 $$\frac{\hat{y}_+}{\hat{y}} = \left(1 + p\right)^{\hat{\beta}_1}$$
-For an increase in weight by proportion $1 + p$, the predicted price increases by a factor of $(1 + p)^{\hat{\beta}_1}$.
+For an increase in weight by proportion $p$, the predicted price increases by a factor of $(1 + p)^{\hat{\beta}_1}$. For example, for an increase in weight by proportion $0.1$, or $10$ percent, the predicted price increases
+by a factor of $(1 + 0.1)^{1.944} = 1.2$.
+For an increase in weight from $1 \ carat$ to $1.1 \ carat$,
+price increases from $exp\left[8.521 + 1.944 \ ln(1)\right] \ dollars = \$5,019.07$
+by a factor of $1.2$ to $exp\left[8.521 + 1.944 \ ln(1.1)\right] \ dollars = \$6,040.75$. These prices have a ratio of $1.2$.
