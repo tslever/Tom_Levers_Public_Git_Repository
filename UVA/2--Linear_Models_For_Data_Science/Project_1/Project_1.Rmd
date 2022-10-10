@@ -48,7 +48,7 @@ Clarity assesses small imperfections within a diamond and quantifies and specifi
 Color refers to how colorless a diamond is.
 Cut measures how well-proportioned a diamond's dimensions are.
 
-## General Analysis, and Visualizations and Visualization-Specific Analysis
+## General Analysis and Addressing Claims on BlueNile's Website
 
 ### General Analysis
 
@@ -71,7 +71,7 @@ Sometimes, the relationship between price and cut, color, clarity, or weight was
 Diamonds of one particular color do not stand out as having a higher price than diamonds of another color.
 
 We use multivariate visualizations to understand the relationships between a variable and
-multiple other variables, as well as compare the relationships between a variable and other variables.
+multiple other variables, as well as to compare the relationships between a variable and other variables.
 For example, we considered the relationships of price and various combinations of other variables.
 
 Our bivariate and multivariate visualizations include boxplots and scatterplots.
@@ -92,6 +92,8 @@ Sirish:
 2. Sirish's insight into why cut is or not most significant
 3. Sirish's insight into why color is or is not second-most significant
 
+### Addressing Claims on BlueNile's Website
+
 Considering the claim at [https://www.bluenile.com/education/diamonds](https://www.bluenile.com/education/diamonds)
 that "The higher [in idealness] a diamond is, the more expensive it will be",
 this claim is supported by a trend that as diamonds improve in cut, third-quartile price increases;
@@ -109,7 +111,7 @@ Considering the claim that "The higher [in weight] a diamond is, the more expens
 we find in a scatterplot of price versus weight a trend that s weight of a diamond increases,
 price of the diamond increases, at an increasing rate.
 
-### Detailed Visualizations and Plot-Specific Analysis
+## Detailed Visualizations and Plot-Specific Analysis
 
 Considering proportions of diamonds by clarity, the group of diamonds with clarity identifier $SI1$
 has the highest proportion of about $0.2$. For a transition from a group of diamonds with a clarity identifier in the set
