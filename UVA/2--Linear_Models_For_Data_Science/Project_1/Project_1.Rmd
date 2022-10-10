@@ -11,8 +11,6 @@ linkcolor: red
 
 # Executive Summary
 
-Ballard TEST WOOO
-
 Blue Nile, Inc. contacted our team of data analysts to review a data set containing data relating to $1214$ various diamonds for sale on Blue Nile's website. Our team was tasked with exploring the relationships between key attributes of the diamonds: weight (carat); clarity; color; cut; and price. Below, we further describe these data and variables and present visualizations and analysis. Our visualizations illustrate proportions of diamonds across groups of variables. Our analysis describes trends within the visualizations and evaluates claims on Blue Nile's website.
 
 Cut refers to how ideally a diamond is shaped, and consists of a range from $Good$ to $Astor \ Ideal$. $Astor \ Ideal$ diamonds have the highest median price followed by $Ideal$, $Very \ Good$, and $Good$ diamonds. Blue Nile implies that $Astor \ Ideal$ diamonds gather and reflect the most light possible, and may on this basis give $Astor \ Ideal$ diamonds relatively high prices.
@@ -55,6 +53,15 @@ Cut measures how well-proportioned a diamond's dimensions are.
 ### General Analysis
 
 Ben:
+
+This report explores the relationships between key attributes of the diamonds, specifically, carat, clarity, color, cut, and finally price.  Price is the attribute we are most interested in.  We are interested in the other attributes in as far as they can be used to evaluate price.   We first explored the relationship of the attributes, or variables, by exploring one variable at a time, known as univariate analysis.  Then we explored relationships between two or more variables at a time, known as multivariate analysis.     We did this through data visualization and descriptive statistics.  
+
+We start by analyzing the data systematically, one variable at a time, through data visualization.  As the saying goes, a picture is worth a thousand words.  An effective graphic can quickly communicate a lot about a dataset’s describe statistics.  Common univariate data visualizations graphics are histograms, density plots, and boxplots.  These visualizations show the count or proportion of the variable in question as well as the dispersion or spread of the data.  We use multivariate graphics to quickly understand the relationship of two or more variables.  Common data visualizations include scatterplots, boxplots, and histograms.
+
+We identified high-level findings relating to cut, color, clarity, and weight and their relationships to price.  In some attributes, characteristics clearly had higher prices.  However, in some attributes, the way those attributes related to price was less obvious.  For example, within Clarity, there is a designation ‘FL’ that has much higher prices than any other clarity designation.  Whereas some attributes, such as Color, one color attribute does not stand out as having a higher price than the others.   
+
+Over the course of the analysis, we came across claims on the BlueNile website, and we evaluated them against what the data says. Xxx Finally, our team fit a linear model to the data with price as the response variable.  Our data analysis team then fit the data to a simple linear regression model.  A Simple linear regression is a statistical method that allows us to summarize and study relationships between variables.  Our intent is to use this simple linear regression to better understand the relationship between the attributes of a diamond and price.  We can also use this technique to predict the price of a diamond, given knowledge of the other attributes.  To use a linear regression model, five assumptions in the data must be met.  Initially these assumptions were not met.  However, there are methods an analyst can employ to allow the ‘transform’ the data such that these assumptions are then met.  
+
 
 1. What is this general analysis about?
 2. Why are we presenting this general analysis?
