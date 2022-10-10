@@ -52,21 +52,39 @@ Cut measures how well-proportioned a diamond's dimensions are.
 
 ### General Analysis
 
-Ben:
+This report explores the relationships between key attributes of diamonds: specifically,
+weight, cut, color, clarity, and price.
 
-This report explores the relationships between key attributes of the diamonds, specifically, carat, clarity, color, cut, and finally price.  Price is the attribute we are most interested in.  We are interested in the other attributes in as far as they can be used to evaluate price.   We first explored the relationship of the attributes, or variables, by exploring one variable at a time, known as univariate analysis.  Then we explored relationships between two or more variables at a time, known as multivariate analysis.     We did this through data visualization and descriptive statistics.  
+We analyze the data one variable at a time through univariate data visualizations,
+including bar charts, box plots, histograms, and plots of probability-density distributions.
+These visualizations depict proportions of diamonds versus values of individual variables,
+summaries of values of individual variables, and discrete and continuous probability density distributions
+versus values of individual variables. Proportions, descriptive statistics, probabilities, and
+information about range, spread, and skewness may be determined from this visualizations.
 
-We start by analyzing the data systematically, one variable at a time, through data visualization.  As the saying goes, a picture is worth a thousand words.  An effective graphic can quickly communicate a lot about a dataset’s describe statistics.  Common univariate data visualizations graphics are histograms, density plots, and boxplots.  These visualizations show the count or proportion of the variable in question as well as the dispersion or spread of the data.  We use multivariate graphics to quickly understand the relationship of two or more variables.  Common data visualizations include scatterplots, boxplots, and histograms.
+We use bivariate visualizations to quickly understand the relationships between pairs of variables.
+For example, we considered the relationships of price and cut, price and color, price and clarity, and 
+price and weight. Price was clearly higher for some values of cut, color, clarity, and weight,
+or clearly followed trends across values of cut, color, clarity, or weight.
+Flawlessly clear diamonds had a much higher median price than diamonds of any other clarity.
+Sometimes, the relationship between price and cut, color, clarity, or weight was let obvious.
+Diamonds of one particular color do not stand out as having a higher price than diamonds of another color.
 
-We identified high-level findings relating to cut, color, clarity, and weight and their relationships to price.  In some attributes, characteristics clearly had higher prices.  However, in some attributes, the way those attributes related to price was less obvious.  For example, within Clarity, there is a designation ‘FL’ that has much higher prices than any other clarity designation.  Whereas some attributes, such as Color, one color attribute does not stand out as having a higher price than the others.   
+We use multivariate visualizations to understand the relationships between a variable and
+multiple other variables, as well as compare the relationships between a variable and other variables.
+For example, we considered the relationships of price and various combinations of other variables.
 
-Over the course of the analysis, we came across claims on the BlueNile website, and we evaluated them against what the data says. Xxx Finally, our team fit a linear model to the data with price as the response variable.  Our data analysis team then fit the data to a simple linear regression model.  A Simple linear regression is a statistical method that allows us to summarize and study relationships between variables.  Our intent is to use this simple linear regression to better understand the relationship between the attributes of a diamond and price.  We can also use this technique to predict the price of a diamond, given knowledge of the other attributes.  To use a linear regression model, five assumptions in the data must be met.  Initially these assumptions were not met.  However, there are methods an analyst can employ to allow the ‘transform’ the data such that these assumptions are then met.  
+Our bivariate and multivariate visualizations include boxplots and scatterplots.
 
+Over the course of our analysis of our visualizations, we evaluated claims on BlueNile's website,
+which are presently immediately below.
 
-1. What is this general analysis about?
-2. Why are we presenting this general analysis?
-3. What are the below visualizations and visualization-specific analysis about?
-4. Why are we presenting all these visualizations and visualization-specific analysis?
+Our team developed a simple linear regression model for price versus weight to deeply understand
+the relationship between price and weight and to provide a means of predicting price given weight.
+In developing this model, we identified five unmet assumptions of simple linear regression.
+We met these assumptions through further data analysis and data transformation.
+Our modeling method may be extended to understanding the relationship between any two quantitative
+variables.
 
 Sirish:
 
