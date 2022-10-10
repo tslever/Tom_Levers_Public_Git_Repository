@@ -12,6 +12,7 @@ library(tidyverse)
 library(ggplot2)
 library(MASS)
 library(dplyr)
+library(readxl)
 Data <- read.csv("diamonds4.csv", header= T)
 Data$clarity <- factor(Data$clarity, levels = c("SI1", "SI2", "VS1", "VS2", "VVS1", "VVS2", "IF", "FL"))
 Data$color <- factor(Data$color, levels = c("J", "I", "H", "G", "F", "E", "D"))
@@ -70,42 +71,62 @@ ggplot(Data, aes(x= cut, y=carat))+
   labs(x= "cut",
        y= "Carat",
        title = "Carat Vs Cut")
-#Carat vs Cut is really low when you get to Astor Ideal
+ggplot(Data, aes(x=log(carat), y=log(price), color = cut))+
+  geom_smooth(method = lm, se=F)+
+  labs(x= "Carat",
+       y= "Price",
+       title = "Price Vs Carat vs Cut")
+#Carat vs Cut is really low when you get to Astor Ideal. Even though that Astor Ideal is what Astor specifically crafted to be the most ideal to let the light through, it seems to have a lower Carat amount. However, even though the average and median weight for the Astor diamonds are lower than the other variables, when you add price back in as a variable, you tend to see higher prices, except at the complete top. I think that this is because when making the 'most ideal cut to allow light reflection' that Astor diamonds probably had more of the original diamond cut off it. What is also interesting is that when you get to high Price and Carats and Cuts, that the Astor Ideal doesn't trend higher than the Ideal Cuts and Good cuts go above the Very Good cuts.
 ```
 
 
 ```{r}
 ggplot(Data, aes(x= color, y=carat))+
   geom_point()+
-  labs(x= "cut",
+  labs(x= "Color",
        y= "Carat",
-       title = "Carat Vs Cut")
+       title = "Carat Vs Color")
 ```
 
 ```{r}
 ggplot(Data, aes(x= clarity, y=carat))+
   geom_point()+
-  labs(x= "cut",
+  labs(x= "Clarity",
        y= "Carat",
-       title = "Carat Vs Cut")
-```
-```{r}
-Data$cut <- factor(Data$cut, levels = c("Good", "Very Good", "Ideal", "Astor Ideal"))
-ggplot(Data, aes(x=log(carat), y=log(price), color = cut))+
-  geom_point()+
-  labs(x= "Carat",
-       y= "Price",
-       title = "Price Vs Carat vs Cut")
+       title = "Carat Vs Clarity")
 ggplot(Data, aes(x=log(carat), y=log(price), color = clarity))+
-  geom_point()+
+  geom_smooth(method = lm, se=F)+
   labs(x= "Carat",
        y= "Price",
        title = "Price Vs Carat vs Clarity")
+#What is surprising about this is that The general price trend tends to be higher in FL, however the Carats look to be on the lower side. The higher you go in the categorical variables with Clarity, the overall Carats tend to go down. However, when price is added back as a variable, there is still an upward trend with pricing. This could be because when there is a lower clarity the weight itself is increased as to raise the price to be more of a desirable rock.
+```
+
+```{r}
+Data$cut <- factor(Data$cut, levels = c("Good", "Very Good", "Ideal", "Astor Ideal"))
+ggplot(Data, aes(x=log(carat), y=log(price)))+
+  geom_smooth(method = lm, se=F)+
+  labs(x= "Carat",
+       y= "Price",
+       title = "Price Vs Carat")
+ggplot(Data, aes(x=log(carat), y=log(price), color = cut))+
+  geom_smooth(method = lm, se=F)+
+  labs(x= "Carat",
+       y= "Price",
+       title = "Price Vs Carat vs Cut")
+
+ggplot(Data, aes(x=log(carat), y=log(price), color = clarity))+
+  geom_point(method = lm, se=F)+
+  labs(x= "Carat",
+       y= "Price",
+       title = "Price Vs Carat vs Clarity")+
+  geom_smooth(method="lm", se=F)
 ggplot(Data, aes(x=log(carat), y=log(price), color = color))+
   geom_point()+
   labs(x= "Carat",
        y= "Price",
-       title = "Price Vs Carat vs Color")
+       title = "Price Vs Carat vs Color")+
+  geom_smooth(method="lm", se=F)
 ggplot(Data, aes(x=log(carat), y=log(price), color = clarity, shape = cut))+
   geom_point()+
   labs(x= "Carat",
@@ -132,6 +153,21 @@ ggplot(Data, aes(x=log(carat), y=log(price), shape = cut, color = color))+
 
 
 ```
+
+```{r}
+
+ggplot(Data, aes(x=log(carat),  y=log(price), color = cut))+
+  geom_smooth(method = lm, se=F)+
+  labs(x= "Carat",
+       y= "Price",
+       title = "LogPrice Vs LogCarat vs Cut")
+ggplot(Data, aes(x=log(carat), y=log(price), color = color, fill = cut))+
+  geom_smooth(method = lm, se=F)+
+  labs(x= "Carat",
+       y= "Price",
+       title = "Price Vs Carat vs Cut vs Color")
+```
+
 
 
 
