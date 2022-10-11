@@ -122,7 +122,12 @@ The variables are:
     
     ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
     analyze_variance(linear_model)
-    test_null_hypothesis_involving_multiple_linear_regression_coefficients(
-        linear_model, 0.05
-    )
+    test_null_hypothesis_involving_MLR_coefficients(linear_model, 0.05)
     ```
+    
+    Alternatively, since the test statistic $F_0 = 29.437$ is greater than the critical $F$ value
+    $F_{\alpha = 0.05, \ k = 2, \ n - p = 28 - 3} = 3.009$, we reject the null hypothesis and support the alternate hypothesis.
+    
+    Since we reject the null hypothesis and support the alternate hypothesis, at least one of the predictor variables contributes
+    significantly to the model. Since at least one of the predictor variables contributes significantly to the model,
+    the model is useful in predicting the number of wins during the 1976 season.

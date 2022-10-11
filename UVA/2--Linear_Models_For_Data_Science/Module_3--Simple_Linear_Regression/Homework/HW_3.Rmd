@@ -98,7 +98,7 @@ linkcolor: red
        The alternate hypothesis for an ANOVA $F$ test is that the slope $\beta_1$ of a linear model is not equal to 0.
        
        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
-       test_null_hypothesis_involving_slope(linear_model, 0.05)
+       test_null_hypothesis_involving_MLR_coefficients(linear_model, 0.05)
        ```
        
 2. Suppose that for $n = 6$ students, we want to predict the students' scores on a second quiz using scores from a first quiz.
@@ -240,7 +240,7 @@ linkcolor: red
         <!--
         ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
         160 / 190
-        test_null_hypothesis_involving_slope(linear_model, 0.05)
+        test_null_hypothesis_involving_MLR_coefficients(linear_model, 0.05)
         ```
         -->
     
