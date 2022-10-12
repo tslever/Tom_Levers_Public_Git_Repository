@@ -52,8 +52,6 @@ Cut measures how well-proportioned a diamond's dimensions are.
 
 ### General Analysis
 
-Ben:
-
 This report explores the relationships between key attributes of the diamonds, specifically, carat, clarity, color, cut, and finally price.  Price is the attribute we are most interested in.  We are interested in the other attributes in as far as they can be used to evaluate price.   We first explored the relationship of the attributes, or variables, by exploring one variable at a time, known as univariate analysis.  Then we explored relationships between two or more variables at a time, known as multivariate analysis.     We did this through data visualization and descriptive statistics.  
 
 We start by analyzing the data systematically, one variable at a time, through data visualization.  As the saying goes, a picture is worth a thousand words.  An effective graphic can quickly communicate a lot about a dataset’s describe statistics.  Common univariate data visualizations graphics are histograms, density plots, and boxplots.  These visualizations show the count or proportion of the variable in question as well as the dispersion or spread of the data.  We use multivariate graphics to quickly understand the relationship of two or more variables.  Common data visualizations include scatterplots, boxplots, and histograms.
@@ -62,17 +60,6 @@ We identified high-level findings relating to cut, color, clarity, and weight an
 
 Over the course of the analysis, we came across claims on the BlueNile website, and we evaluated them against what the data says. Xxx Finally, our team fit a linear model to the data with price as the response variable.  Our data analysis team then fit the data to a simple linear regression model.  A Simple linear regression is a statistical method that allows us to summarize and study relationships between variables.  Our intent is to use this simple linear regression to better understand the relationship between the attributes of a diamond and price.  We can also use this technique to predict the price of a diamond, given knowledge of the other attributes.  To use a linear regression model, five assumptions in the data must be met.  Initially these assumptions were not met.  However, there are methods an analyst can employ to allow the ‘transform’ the data such that these assumptions are then met.  
 
-
-1. What is this general analysis about?
-2. Why are we presenting this general analysis?
-3. What are the below visualizations and visualization-specific analysis about?
-4. Why are we presenting all these visualizations and visualization-specific analysis?
-
-Sirish:
-
-1. Sirish's insights that each rely on information from multiple plots
-2. Sirish's insight into why cut is or not most significant
-3. Sirish's insight into why color is or is not second-most significant
 
 Considering the claim at [https://www.bluenile.com/education/diamonds](https://www.bluenile.com/education/diamonds)
 that "The higher [in idealness] a diamond is, the more expensive it will be",
@@ -185,8 +172,8 @@ library(ggplot2)
 ggplot(data_set, aes(y = log(price))) +
     geom_boxplot(fill = "Blue", color = "Orange") +
     labs(
-        y = "logarithmicized price",
-        title = "Boxplot of Logarithmicized Price"
+        y = "Log of price",
+        title = "Boxplot of Log of Price"
     ) +
     theme(
         plot.title = element_text(hjust = 0.5),
@@ -199,9 +186,9 @@ ggplot() +
     geom_histogram(data = data_set, aes(x = log(data_set$price), y = ..density..), binwidth = density(log(data_set$price))$bw, fill = "Blue", color = "Orange") +
     geom_density(data = data_set, aes(x = log(data_set$price)), color = "Orange") +
     labs(
-        x = "logarithmicized price",
+        x = "Log of price",
         y = "probability density",
-        title = paste("Histogram and Probability Density Distribution\n", "of Logarithmicized Price", sep = "")
+        title = paste("Histogram and Probability Density Distribution\n", "of Log of Price", sep = "")
     ) +
     theme(
         plot.title = element_text(hjust = 0.5),
@@ -539,10 +526,10 @@ Simple linear regression depends of the following five assumptions being met.
    for the residuals of the linear model of price versus weight,
    the tails of a probability vs. externally studentized residuals plot / distribution are too light.
 
-```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
-library(TomLeversRPackage)
-linear_model <- lm(price ~ weight, data = data_set)
-```
+#```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+#library(TomLeversRPackage)
+#linear_model <- lm(price ~ weight, data = data_set)
+#```
 
 Given that the above assumptions for simple linear regression are not met, we generate a data set of transformed price and/or
 transformed weight such that all of the assumptions are met.
@@ -556,13 +543,13 @@ using R, we perform the Box-Cox Method to determine a maximum-likelihood estimat
 to be used in a power transformation $y' = y^\lambda$ of a price $y$.
 The maximum likelihood estimate of $\lambda$ is close to a whole parameter $\lambda = 0$.
 Given a power-transformation parameter $\lambda = 0$, We transform price values according to $y' = ln(y)$.
-We present a scatterplot of logarithmicized price versus weight.
-We construct a linear model of logarithmicized price versus weight and present a scatterplot of externally studentized residuals
-versus predicted logarithmicized price for the linear model of logarithmicized price versus weight.
+We present a scatterplot of Log of price versus weight.
+We construct a linear model of Log of price versus weight and present a scatterplot of externally studentized residuals
+versus predicted Log of price for the linear model of Log of price versus weight.
 
 ```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
-result_of_Box_Cox_Method <- perform_Box_Cox_Method(linear_model, vector_of_values_of_lambda = seq(0.29, 0.33, 0.01), whether_to_plot = FALSE)
-maximum_likelihood_estimate_of_parameter_lambda <- result_of_Box_Cox_Method$maximum_likelihood_estimate_of_parameter_lambda
+#result_of_Box_Cox_Method <- perform_Box_Cox_Method(linear_model, vector_of_values_of_lambda = seq(0.29, #0.33, 0.01), whether_to_plot = FALSE)
+#maximum_likelihood_estimate_of_parameter_lambda <- result_of_Box_Cox_Method$maximum_likelihood_estimate_of_parameter_lambda
 
 data_set <- data_set %>% mutate(logarithmicized_price = log(price))
 ggplot() +
@@ -570,8 +557,8 @@ ggplot() +
     geom_smooth(data = data_set, aes(x = weight, y = logarithmicized_price), method = "lm", se = FALSE) +
     labs(
         x = "weight (carat)",
-        y = "logarithmicized price",
-        title = "Logarithmicized Price vs. Weight"
+        y = "Log of price",
+        title = "Log of Price vs. Weight"
     ) +
     theme(
         plot.title = element_text(hjust = 0.5),
@@ -590,9 +577,9 @@ ggplot(
     geom_point(alpha = 0.2) +
     geom_hline(yintercept = 0, color = "red") +
     labs(
-        x = "predicted logarithmicized price",
+        x = "predicted Log of price",
         y = "externally studentized residual",
-        title = "Externally Studentized Residual vs. Predicted Logarithmicized Price"
+        title = "Externally Studentized Residual vs. Predicted Log of Price"
     ) +
 theme(
     plot.title = element_text(hjust = 0.5),
@@ -600,16 +587,16 @@ theme(
 )
 ```
 
-We have generated a data set of logarithmicized price versus weight for which the assumption that
-the distributions of residuals of a linear model of logarithmicized price and/or weight for different weights have constant variance.
+We have generated a data set of Log of price versus weight for which the assumption that
+the distributions of residuals of a linear model of Log of price and/or weight for different weights have constant variance.
 To generate a data set of transformed price and/or transformed weight for which
 the assumption that the relationship between transformed price and/or transformed weight is linear is met, and
 the assumption that the mean of the residuals of the linear model of transformed price and/or transformed weight is $0$,
-we take our logarithmicized-price data and additionally logarithmicize weight.
-We present a scatterplot of logarithmicized price versus logarithmicized weight.
-We construct a linear model of logarithmicized price versus logarithmicized weight.
-We present a scatterplot of externally studentized residuals versus predicted logarithmicized price for the linear model of
-logarithmicized price versus logarithmicized weight.
+we take our Log of-price data and additionally logarithmicize weight.
+We present a scatterplot of Log of price versus Log of weight.
+We construct a linear model of Log of price versus Log of weight.
+We present a scatterplot of externally studentized residuals versus predicted Log of price for the linear model of
+Log of price versus Log of weight.
 Additionally, we construct a plot of AutoCorrelation Function values versus lag for the linear model, and
 a plot of sample quantiles versus theoretical quantiles for the residuals of the model.
 
@@ -619,9 +606,9 @@ ggplot() +
     geom_point(data = data_set, aes(x = logarithmicized_weight, y = logarithmicized_price), alpha = 0.2) +
     geom_smooth(data = data_set, aes(x = logarithmicized_weight, y = logarithmicized_price), method = "lm", se = FALSE) +
     labs(
-        x = "logarithmicized weight",
-        y = "logarithmicized price",
-        title = "Logarithmicized Price vs. Logarithmicized Weight"
+        x = "Log of weight",
+        y = "Log of price",
+        title = "Log of Price vs. Log of Weight"
     ) +
     theme(
         plot.title = element_text(hjust = 0.5),
@@ -641,9 +628,9 @@ ggplot(
     geom_point(alpha = 0.2) +
     geom_hline(yintercept = 0, color = "red") +
     labs(
-        x = "predicted logarithmicized price",
+        x = "predicted Log of price",
         y = "externally studentized residual",
-        title = "Externally Studentized Residual vs. Predicted Logarithmicized Price"
+        title = "Externally Studentized Residual vs. Predicted Log of Price"
     ) +
 theme(
     plot.title = element_text(hjust = 0.5),
@@ -656,29 +643,29 @@ qqnorm(linear_model_of_logarithmicized_price_and_weight$residuals)
 qqline(linear_model_of_logarithmicized_price_and_weight$residuals, col = "red")
 ```
 
-1. The assumption that the relationship between response / logarithmicized price and predictor / regressor / logarithmicized weight is linear,
+1. The assumption that the relationship between response / Log of price and predictor / regressor / Log of weight is linear,
    at least approximately, is met.
    The relationship appears to be linear.
-2. The assumption that the residuals of the linear model of logarithmicized price versus logarithmicized weight have mean $0$ is met.
+2. The assumption that the residuals of the linear model of Log of price versus Log of weight have mean $0$ is met.
    observations are scattered evenly around the fitted line.
    Residuals are evenly scattered around $e = 0$.
-3. The assumptions that the distributions of residuals of the linear model of logarithmicized price versus logarithmized weight
+3. The assumptions that the distributions of residuals of the linear model of Log of price versus logarithmized weight
    for different weights have constant variance is met.
    The vertical variation of observations is constant.
    Residuals are evenly scattered around $e = 0$.
-4. The assumption that the residuals of the linear model of logarithmicized price versus logarithmicized weight are uncorrelated is met.
+4. The assumption that the residuals of the linear model of Log of price versus Log of weight are uncorrelated is met.
    The ACF value for lag $0$ is always $1$; the correlation of the vector of residuals with itself is always 1.
    Since all ACF value are insignificant, we have insufficient evidence to reject a null hypothesis that
-   the residuals of the linear model of logarithmicized price versus logarithmicized weight are uncorrelated.
-   We have insufficient evidence to conclude that the residuals of the linear model of logarithmicized price versus logarithmicized weight
+   the residuals of the linear model of Log of price versus Log of weight are uncorrelated.
+   We have insufficient evidence to conclude that the residuals of the linear model of Log of price versus Log of weight
    are correlated.
-   We have insufficient evidence to conclude that the assumption that the residuals of the linear model of logarithmicized price
-   versus logarithmicized weight are uncorrelated is not met.
-5. The assumption that the residuals of the linear model of logarithmicized price versus logarithmicized weight are normally distributed
+   We have insufficient evidence to conclude that the assumption that the residuals of the linear model of Log of price
+   versus Log of weight are uncorrelated is not met.
+5. The assumption that the residuals of the linear model of Log of price versus Log of weight are normally distributed
    is not met.
    However, a linear model is robust to these assumptions.
    Given a sharp downward curve at the bottom left of a plot of sample quantiles versus theoretical quantiles
-   for the residuals of the linear model of logarithmicized price versus logarithmicized weight,
+   for the residuals of the linear model of Log of price versus Log of weight,
    a probability vs. externally studentized residuals plot / distribution is not normal.
 
 We determine an estimated linear-regression equation
