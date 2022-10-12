@@ -13,6 +13,7 @@ library(ggplot2)
 library(MASS)
 library(dplyr)
 library(readxl)
+library(ggpubr)
 Data <- read.csv("diamonds4.csv", header= T)
 Data$clarity <- factor(Data$clarity, levels = c("SI1", "SI2", "VS1", "VS2", "VVS1", "VVS2", "IF", "FL"))
 Data$color <- factor(Data$color, levels = c("J", "I", "H", "G", "F", "E", "D"))
@@ -116,7 +117,7 @@ ggplot(Data, aes(x=log(carat), y=log(price), color = cut))+
        title = "Price Vs Carat vs Cut")
 
 ggplot(Data, aes(x=log(carat), y=log(price), color = clarity))+
-  geom_point(method = lm, se=F)+
+  geom_point()+
   labs(x= "Carat",
        y= "Price",
        title = "Price Vs Carat vs Clarity")+
@@ -156,16 +157,19 @@ ggplot(Data, aes(x=log(carat), y=log(price), shape = cut, color = color))+
 
 ```{r}
 
-ggplot(Data, aes(x=log(carat),  y=log(price), color = cut))+
+ggplot(Data, aes(x=(carat),  y=(price), color = cut))+
   geom_smooth(method = lm, se=F)+
   labs(x= "Carat",
        y= "Price",
-       title = "LogPrice Vs LogCarat vs Cut")
-ggplot(Data, aes(x=log(carat), y=log(price), color = color, fill = cut))+
+       title = "Price Vs Carat vs Cut")+
+  stat_regline_equation()
+ggplot(Data, aes(x=(carat), y=(price), color = color))+
   geom_smooth(method = lm, se=F)+
   labs(x= "Carat",
        y= "Price",
-       title = "Price Vs Carat vs Cut vs Color")
+       title = "Price Vs Carat vs Color")+
+  stat_regline_equation()
+#From these 2 graphs we can see that for Astor Ideal and D color, that Astor Ideal starts at a higher base number (-10000), however increases at a slower rate than compared to the D color.We can also see that at the lowest Astor Ideal (Good), it starts off at a lower starting point, however increases a lot faster. What's also interesting is that the good cuts increase past all the other cuts 
 ```
 
 
