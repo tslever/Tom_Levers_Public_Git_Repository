@@ -33,8 +33,8 @@ The variables are:
     pairs(data_set, lower.panel = NULL)
     correlation_matrix <- round(cor(data_set), 3)
     correlation_matrix
-    linear_model <- lm(y ~ ., data = data_set)
-    summarize_linear_model(linear_model)
+    #linear_model <- lm(y ~ x1, data = data_set)
+    #summarize_linear_model(linear_model)
     ```
 
     Answer the following questions based on the output.
@@ -42,14 +42,32 @@ The variables are:
     (a) Which predictors appear to be linearly related to the number of wins?
         Which predictors do not appear to have a linear relationship with the number of wins?
         
+        Considering statistics for each of nine linear models of number of games won $y$ versus one predictor $x$,
+
+        predictor $x$ test statistic $t_0$ probability $p$
+        ------------- -------------------- ---------------
+        $x_1$                        3.758         0.00877
+        $x_2$                        2.811         0.00927
+        $x_3$                       -0.413         0.68300
+        $x_4$                        1.364         0.18400
+        $x_5$                        3.049         0.00522
+        $x_6$                        1.172         0.25200
+        $x_7$                        3.317         0.00269
+        $x_8$                       -5.577        7.38e-06
+        $x_9$                       -1.626         0.11609
+        
         Let significance level $\alpha = 0.05$.
         
-        Let $t_{\alpha/2, \ n - p}$ be the quantile of a Student's $t$ distribution with $n - p = 28 - 10 = 18$ for which the probability
-        that a test statistic is greater is $\alpha/2 = 0.05/2 = 0.025$.
+        Let $t_{\alpha/2, \ n - p} = t_{0.05/2, \ 28 - 2}$ be the quantile / critical value of a Student's $t$ distribution
+        with $n - p = 28 - 2 = 26$ degrees of freedom for which the probability that a test statistic is greater is $\alpha/2 = 0.05/2 = 0.025$.
         
-        Since the probability, that the magnitude $\left|t\right|$ of a test statistic following the above distribution is greater
-        than $t_{\alpha/2, \ n - p}$, is greater than $\alpha$ for all predictors, all predictors seem to be linearly related to the number of 
-        wins.
+        Since the probability $p$, that the magnitude $\left|t\right|$ of a random test statistic following the above distribution is greater
+        than $t_0$, is less than $\alpha$ for each predictor in the set {$x_1$, $x_2$, $x_5$, $x_7$, and $x_8$},
+        we have sufficient evidence to reject a null hypothesis that the predictor is not linearly related to the number of wins.
+        We have sufficient evidence to support an alternate hypothesis that the predictor is linearly related to the number of wins.
+        Since the probability is greater than $\alpha$ for each predictor in the set {$x_3$, $x_4$, $x_6$, and $x_7$},
+        we have insufficient evidence to reject a null hypothesis that the predictor is not linearly related to the number of wins.
+        The predictor may not be linearly related to the number of wins.
         
     (b) Do you notice if any of the predictors are highly correlated with one another?
         If so, which ones?
@@ -66,7 +84,7 @@ The variables are:
         
     (c) What predictors would you first consider to use in a multiple linear regression? Briefly explain your choices.
     
-        I don't know.
+        Because $x_8$ has the lowest probability $p$, followed by $x_7$, I would first consider these variables.
         
 2.  Regardless of your answer to the previous question, fit a multiple regression model for the number of games won against the followning three      predictors: the team's passing yardage ($x_2$), the percentage of rushing plays ($x_7$), and the opponents' yards rushing ($x_8$).
     Write the estimated regression equation.
@@ -98,11 +116,15 @@ The variables are:
     )
     ```
     
-    For a particular predictor $\vec{x_0} = (2000 \ yards, 48, 2350 \ yards)$ in the three-dimensional space with
+    For a particular predictor $\vec{x}_0 = (2000 \ yards, 48, 2350 \ yards)$ in the three-dimensional space with
     $x_2^{min} \leq x_2 \leq x_2^{max}$, $x_7^{min} \leq x_7 \leq x_7^{max}$, and $x_8^{min} \leq x_8 \leq x_8^{max}$,
-    the $95$-percent confidence interval for the expected / mean number of games a team would win
+    
+    The estimated number of a games a team would win is $3$.
+    
+    The $95$-percent confidence interval for the expected / mean number of games a team would win
     $E\left(y | \vec{x}_0\right)$ is $[1.711, \ 5.052]$.
     The $95$-percent prediction interval for a future number of games a team will win $y_{\vec{x}_0}$ is $[-0.516, \ 7.279]$.
+    We are asked for the prediction interval.
     
 5.  Using the output for the multiple linear regression model from part 2, answer the following question from a client:
     "Is this regression model useful in predicting the number of wins during the 1976 season?".
@@ -125,9 +147,95 @@ The variables are:
     test_null_hypothesis_involving_MLR_coefficients(linear_model, 0.05)
     ```
     
-    Alternatively, since the test statistic $F_0 = 29.437$ is greater than the critical $F$ value
-    $F_{\alpha = 0.05, \ k = 2, \ n - p = 28 - 3} = 3.009$, we reject the null hypothesis and support the alternate hypothesis.
+    Alternatively, since the test statistic $F_0 = 29.437$ is greater than the critical value
+    $F_{\alpha = 0.05, \ k = 3, \ n - p = 28 - 4} = 3.009$, we reject the null hypothesis and support the alternate hypothesis.
     
     Since we reject the null hypothesis and support the alternate hypothesis, at least one of the predictor variables contributes
     significantly to the model. Since at least one of the predictor variables contributes significantly to the model,
     the model is useful in predicting the number of wins during the 1976 season.
+    
+6.  Report the value of the $t$ statistic for the predictor $x_7$. What is the relevant conclusion from this $t$ statistic?
+    Also report the critical value for this hypothesis test. Perform the test at significance level $0.05$.
+    
+    The test statistic for the predictor percent rushing $x_7$ $t_0 = 2.198$. The critical value $t_{\alpha/2 = 0.05/2, \ n-p = 28-4} = 2.064$.
+    
+    In parallel, the probability, that the magnitude $\left|t\right|$ of a random test statistic is greater than
+    the magnitude $\left|t_0\right|$ of our test statistic, $p = 0.0378$.
+    
+    Since the test statistic for the predictor $x_7$ is greater than the critical value, and
+    the probability is less than the significance level $\alpha = 0.05$, we reject a null hypothesis that
+    the individual predictor $x_7$ is insignificant in predicting the response $y$ and can be removed from the model.
+    We have sufficient evidence to support the alternate hypothesis that the individual predictor percent rushing $x_7$
+    is significant in predicting the response number of games won $y$ and cannot be removed from the model.
+    
+7. Check the regression assumptions by creating a residual plot, an ACF plot of the residuals, and a QQ plot of the residuals.
+   Comment on these plots.
+
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    library(ggplot2)
+    ggplot(
+        data.frame(
+            externally_studentized_residual = linear_model$residuals,
+            predicted_games_won = linear_model$fitted.values
+        ),
+        aes(x = predicted_games_won, y = externally_studentized_residual)
+    ) +
+        geom_point(alpha = 0.2) +
+        geom_hline(yintercept = 0, color = "red") +
+        labs(
+            x = "predicted games won",
+            y = "externally studentized residual",
+            title = "Externally Studentized Residual vs. Predicted Games Won"
+        ) +
+        theme(
+            plot.title = element_text(hjust = 0.5),
+            axis.text.x = element_text(angle = 0)
+        )
+    
+    acf(linear_model$residuals, main = "ACF Value vs. Lag for Linear Model")
+    
+    qqnorm(linear_model$residuals)
+    qqline(linear_model$residuals, col = "red")
+    ```
+    
+    1.  The assumption that the relationship between response / games won and predictors is linear, at least approximately, is met
+        cannot be addressed.
+    2.  The assumption that the residuals of the linear model of games won versus predictors have mean $0$ is met.
+        Residuals are evenly scattered around $e = 0$.
+    3.  The assumption that the distributions of residuals of the linear model for different weights have constant variance is met.
+        Residuals are evenly scattered around $e = 0$.
+    4.  The assumption that the residuals of the linear model are uncorrelated is met.
+        The ACF value for lag $0$ is always $1$; the correlation of the vector of residuals with itself is always 1.
+        Since all ACF value are insignificant, we have insufficient evidence to reject a null hypothesis that
+        the residuals of the linear model are uncorrelated.
+        We have insufficient evidence to conclude that the residuals of the linear model are correlated.
+        We have insufficient evidence to conclude that the assumption that the residuals of the linear model are uncorrelated is not met.
+    5.  The assumption that the residuals of the linear model are normally distributed is met.
+        A linear model is robust to these assumptions.
+        Considering a plot of sample quantiles versus theoretical quantiles
+        for the residuals of the linear model, since observations lie near the line of best fit,
+        a probability vs. externally studentized residuals plot / distribution is normal.
+        
+8. Consider adding another predictor $x_1$, the team's rushing yards for the season, to the linear model defined in part 2.
+   Interpret the results of the $t$ test for the coefficient of this predictor. A classmate says: "Since the result of the $t$ test
+   is insignificant, the team's rushing yards for the season is not linearly related to the number of wins".
+   
+    The test statistic for the predictor percent rushing $x_1$ $t_0 = 0.549$.
+    The critical value $t_{\alpha/2 = 0.05/2, \ n - p = 28 - 5} = 2.069$.
+   
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    linear_model <- lm(y ~ x1 + x2 + x7 + x8, data = data_set)
+    summarize_linear_model(linear_model)
+    ```
+    
+    In parallel, the probability, that the magnitude $\left|t\right|$ of a random test statistic is greater than
+    the magnitude $\left|t_0\right|$ of our test statistic, $p = 0.589$.
+    
+    Since the test statistic for the predictor $x_1$ is less than the critical value, and
+    the probability is greater than the significance level $\alpha = 0.05$, we have insufficient evidence to reject a null hypothesis that
+    the individual predictor $x_1$ is insignificant in predicting the response number of games won $y$.
+    We have insufficient evidence to support the alternate hypothesis that the individual predictor rushing yards $x_1$
+    is significant in predicting the response number of games won $y$.
+    I agree with my classmate in that the result of the $t$ test is insignificant.
+    I would change my classmate's wording to "we have insufficient evidence to support the alternate hypothesis that the individual predictor
+    rushing yards $x_1$ is significant in predicting the response number of games won $y$, and may be removed from the model".

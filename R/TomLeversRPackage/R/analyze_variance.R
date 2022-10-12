@@ -15,7 +15,7 @@ analyze_variance <- function(linear_model) {
     analysis <- append(analysis, line_with_regression_degrees_of_freedom_sum_of_squares_and_mean_square)
 
     F_statistic <- calculate_F_statistic(linear_model)
-    critical_F_value <- calculate_critical_F_value(linear_model, 0.05)
+    critical_F_value <- calculate_critical_value_F(linear_model, 0.05)
     probability <- calculate_probability(linear_model)
     line_with_F_statistic_critical_F_value_and_probability <- paste("F0: ", F_statistic, ", Fcrit: ", critical_F_value, ", p: ", probability, sep = "")
     analysis <- append(analysis, line_with_F_statistic_critical_F_value_and_probability)
