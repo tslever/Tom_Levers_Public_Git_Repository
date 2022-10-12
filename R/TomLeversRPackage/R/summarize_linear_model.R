@@ -3,7 +3,6 @@
 #' @param linear_model The linear model to summarize
 #' @return The summary for the linear model
 #' @examples summary_output <- summarize_linear_model(lm(iris$Sepal.Length ~ iris$Sepal.Width, data = iris))
-#' @import stringr
 
 #' @export
 summarize_linear_model <- function(linear_model) {
@@ -40,8 +39,8 @@ summarize_linear_model <- function(linear_model) {
     line_with_estimated_variance_of_errors <- paste("Estimated variance of errors: ", estimated_variance_of_errors, sep = "")
     summary_output <- append(summary_output, line_with_estimated_variance_of_errors)
 
-    multiple_R_squared <- the_summary$r.squared
-    adjusted_R_squared <- the_summary$adj.r.squared
+    multiple_R_squared <- calculate_coefficient_of_determination_R2(linear_model)
+    adjusted_R_squared <- calculate_adjusted_coefficient_of_determination_R2(linear_model)
     multiple_R <- sqrt(multiple_R_squared)
     #multiple_R <- cor(linear_model$model[,1], linear_model$model[,2], use = "complete.obs")
     adjusted_R <- sqrt(adjusted_R_squared)

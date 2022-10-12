@@ -3,29 +3,34 @@
 #' @param linear_model The linear model to analyze
 #' @return The analysis of variance for the linear model
 #' @examples analysis_of_variance <- analyze_variance(lm(iris$Sepal.Length ~ iris$Sepal.Width, data = iris))
-#' @import stringr
 
 #' @export
 analyze_variance <- function(linear_model) {
     analysis <- capture.output(anova(linear_model))
 
-    number_of_observations <- nobs(linear_model)
-    total_of_degrees_of_freedom <- number_of_observations - 1
-    response_values <- linear_model$model[,1]
-    total_sum_of_squares <- (t(response_values) %*% response_values) - ((sum(response_values)^2) / number_of_observations)
-    line_with_totals <- paste("DFT: ", total_of_degrees_of_freedom, ", SST: ", total_sum_of_squares, sep = "")
+    regression_degrees_of_freedom <- calculate_regression_degrees_of_freedom(linear_model)
+    regression_sum_of_squares <- calculate_regression_sum_of_squares(linear_model)
+    regression_mean_square <- calculate_regression_mean_square(linear_model)
+    line_with_regression_degrees_of_freedom_sum_of_squares_and_mean_square <- paste("DFR: ", regression_degrees_of_freedom, ", SSR: ", regression_sum_of_squares, ", MSR: ", regression_mean_square, sep = "")
+    analysis <- append(analysis, line_with_regression_degrees_of_freedom_sum_of_squares_and_mean_square)
+
+    F_statistic <- calculate_F_statistic(linear_model)
+    critical_F_value <- calculate_critical_F_value(linear_model, 0.05)
+    probability <- calculate_probability(linear_model)
+    line_with_F_statistic_critical_F_value_and_probability <- paste("F0: ", F_statistic, ", Fcrit: ", critical_F_value, ", p: ", probability, sep = "")
+    analysis <- append(analysis, line_with_F_statistic_critical_F_value_and_probability)
+
+    total_degrees_of_freedom <- calculate_total_degrees_of_freedom(linear_model)
+    total_sum_of_squares <- calculate_total_sum_of_squares(linear_model)
+    line_with_totals <- paste("DFT: ", total_degrees_of_freedom, ", SST: ", total_sum_of_squares, sep = "")
     analysis <- append(analysis, line_with_totals)
 
-    residuals <- linear_model$residuals
-    residual_sum_of_squares <- t(residuals) %*% residuals
-    number_of_variables <- length(names(coefficients))
-    residual_mean_square <- residual_sum_of_squares / (number_of_observations - number_of_variables)
-    total_mean_square <- total_sum_of_squares / (number_of_observations - 1)
-    coefficient_of_determination_R2 <- 1 - (residual_sum_of_squares / total_sum_of_squares)
-    adjusted_coefficient_of_determination_R2 <- 1 - (residual_mean_square / total_mean_square)
+    coefficient_of_determination_R2 <- calculate_coefficient_of_determination_R2(linear_model)
+    adjusted_coefficient_of_determination_R2 <- calculate_adjusted_coefficient_of_determination_R2(linear_model)
     line_with_adjusted_coefficient_of_determination_R2 <- paste("R2: ", coefficient_of_determination_R2, ", Adjusted R2: ", adjusted_coefficient_of_determination_R2, sep = "")
     analysis <- append(analysis, line_with_adjusted_coefficient_of_determination_R2)
 
+    number_of_observations <- nobs(linear_model)
     line_with_number_of_observations <- paste("Number of observations: ", number_of_observations, sep = "")
     analysis <- append(analysis, line_with_number_of_observations)
 

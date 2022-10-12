@@ -18,6 +18,9 @@ install.packages("~\\Documents\\Tom_Levers_Git_Repository\\TomLeversRPackage", r
 Regarding creating this package
 https://www.r-bloggers.com/2020/07/how-to-write-your-own-r-package-and-publish-it-on-cran/
 
+Regarding creating tests
+https://r-pkgs.org/testing-basics.html
+
 Per "Writing R Extensions" at https://cran.r-project.org/doc/manuals/R-exts.html#The-DESCRIPTION-file,
 "The mandatory ‘Package’ field gives the name of the package. This should contain only (ASCII) letters, numbers and dot, have at least two characters and start with a letter and not end in a dot."
 
