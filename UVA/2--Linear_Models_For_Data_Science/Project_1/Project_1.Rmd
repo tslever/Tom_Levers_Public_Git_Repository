@@ -123,31 +123,28 @@ has the highest proportion of about $0.2$. For a transition from a group of diam
 {$VS1$, $VVS2$, $VVS1$, $IF$, $FL$} to a group of diamonds with clarity identifier closer to $FL$,
 proportion of diamonds decreases. The group of diamonds with clarity identifier $FL$ has the lowest proportion of less than $0.01$.
 
-```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+Considering proportions of diamonds by color, the group of diamonds with color identifier $F$
+has the highest proportion of over $0.175$. The group of diamonds with color identifier $J$
+has the lowest proportion of about $0.075$. There seems to be a general trend of proportion increasing
+as color identifier approaches $D$.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE, figures-side, fig.width=3.3, fig.height=2.4}
 library(ggplot2)
 clarity_and_proportion <- data_set %>% select(clarity) %>% group_by(clarity) %>% summarize(count = n()) %>% mutate(proportion = count / nrow(data_set))
 ggplot(clarity_and_proportion, aes(x = clarity, y = proportion)) +
     geom_bar(stat = "identity", fill = "Blue", color = "Orange") +
     labs(title = "Distributions of Diamonds by Clarity") +
     theme(
-        plot.title = element_text(hjust = 0.5),
-        axis.text.x = element_text(angle = 0)
+        plot.title = element_text(hjust = 0.5, size = 11),
+        axis.text.x = element_text(angle = 90)
     )
-```
 
-Considering proportions of diamonds by color, the group of diamonds with color identifier $F$
-has the highest proportion of over $0.175$. The group of diamonds with color identifier $J$
-has the lowest proportion of about $0.075$. There seems to be a general trend of proportion increasing
-as color identifier approaches $D$.
-
-```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
-library(ggplot2)
 color_and_proportion <- data_set %>% select(color) %>% group_by(color) %>% summarize(count = n()) %>% mutate(proportion = count / nrow(data_set))
 ggplot(color_and_proportion, aes(x = color, y = proportion)) +
     geom_bar(stat = "identity", fill = "Blue", color = "Orange") +
     labs(title = "Distributions of Diamonds by Color") +
     theme(
-        plot.title = element_text(hjust = 0.5),
+        plot.title = element_text(hjust = 0.5, size = 11),
         axis.text.x = element_text(angle = 0)
     )
 ```
@@ -156,14 +153,14 @@ Considering proportions of diamonds by cut, the group of ideal diamonds has the 
 The group of Astor ideal diamonds has the lowest proportion of well under $0.005$.
 As cut improves from good to ideal, proportion of diamonds increases.
 
-```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE, fig.width=3.3, fig.height=2.4, fig.align='center'}
 library(ggplot2)
 cut_and_proportion <- data_set %>% select(cut) %>% group_by(cut) %>% summarize(count = n()) %>% mutate(proportion = count / nrow(data_set))
 ggplot(cut_and_proportion, aes(x = cut, y = proportion)) +
     geom_bar(stat = "identity", fill = "Blue", color = "Orange") +
     labs(title = "Distributions of Diamonds by Cut") +
     theme(
-        plot.title = element_text(hjust = 0.5),
+        plot.title = element_text(hjust = 0.5, size = 11),
         axis.text.x = element_text(angle = 0)
     )
 ```
@@ -172,8 +169,7 @@ Considering a boxplot and a probability density distribution for weight,
 the middle $50$ percent of weights fall between about $0.4 \ carat$ and $1.0 \ carat$.
 The distribution is non-normal and positively / right skewed.
 
-```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
-library(ggplot2)
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE, fig.width=3.3, fig.height=2.4}
 ggplot(data_set, aes(y = weight)) +
     geom_boxplot(fill = "Blue", color = "Orange") +
     labs(
@@ -181,7 +177,7 @@ ggplot(data_set, aes(y = weight)) +
         title = "Boxplot of Weight"
     ) +
     theme(
-        plot.title = element_text(hjust = 0.5),
+        plot.title = element_text(hjust = 0.5, size = 11),
         axis.title.x = element_blank(),
         axis.ticks.x = element_blank(),
         axis.text.x = element_blank()
@@ -193,10 +189,10 @@ ggplot() +
     labs(
         x = "weight",
         y = "probability density",
-        title = "Histogram and Probability Density Distribution of Weight"
+        title = "Histogram and Probability Density\nDistribution of Weight"
     ) +
     theme(
-        plot.title = element_text(hjust = 0.5),
+        plot.title = element_text(hjust = 0.5, size = 11),
         axis.text.x = element_text(angle = 0)
     )
 ```
@@ -205,7 +201,7 @@ Considering a boxplot and a probability density distribution for price,
 the middle $50$ percent of logarithms of prices fall between 6.5 and 7.5.
 The distribution is non-normal and positively / right skewed.
 
-```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE, fig.width=3.3, fig.height=2.4}
 library(ggplot2)
 ggplot(data_set, aes(y = log(price))) +
     geom_boxplot(fill = "Blue", color = "Orange") +
@@ -214,7 +210,7 @@ ggplot(data_set, aes(y = log(price))) +
         title = "Boxplot of Logarithmicized Price"
     ) +
     theme(
-        plot.title = element_text(hjust = 0.5),
+        plot.title = element_text(hjust = 0.5, size = 11),
         axis.title.x = element_blank(),
         axis.ticks.x = element_blank(),
         axis.text.x = element_blank()
@@ -226,10 +222,10 @@ ggplot() +
     labs(
         x = "logarithmicized price",
         y = "probability density",
-        title = paste("Histogram and Probability Density Distribution\n", "of Logarithmicized Price", sep = "")
+        title = "Histogram and Probability Density\nDistribution of Logarithmicized Price"
     ) +
     theme(
-        plot.title = element_text(hjust = 0.5),
+        plot.title = element_text(hjust = 0.5, size = 11),
         axis.text.x = element_text(angle = 0)
     )
 ```
@@ -246,14 +242,13 @@ The third-quartile price of Astor ideal diamonds is highest at about $\$6,500$.
 The third-quartile prices of good, very good, and ideal diamonds increase in that order,
 and are less than the third-quartile price of Astor ideal diamonds.
 
-```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
-library(ggplot2)
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE, fig.width=3.3, fig.height=2.4, fig.align='center'}
 ggplot(data_set, aes(x = cut, y = price)) +
     geom_boxplot(outlier.shape = NA, fill = "Blue", color = "Orange") +
     coord_cartesian(ylim = c(0, 1.125*10^4)) +
     labs(title = "Distributions of Price by Cut") +
     theme(
-        plot.title = element_text(hjust = 0.5),
+        plot.title = element_text(hjust = 0.5, size = 11),
         axis.text.x = element_text(angle = 0)
     )
 minimum_price <- min(data_set$price)
@@ -274,25 +269,21 @@ A diamond with color identifier $D$ has the lowest price of $\$322$.
 For a transition from a group of diamonds with a color identifier $G$ to a group of diamonds with a color identifier of a letter
 closer to the beginning of the alphabet, the first-quartile / median / third-quartile price of a diamond increases.
 
-```{r, eval=FALSE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
-library(ggplot2)
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE, fig.width=3.3, fig.height=2.4}
 ggplot(data_set, aes(x = color, y = price)) +
     geom_boxplot(fill = "Blue", color = "Orange") +
     labs(title = "Distributions of Price by Color") +
     theme(
-        plot.title = element_text(hjust = 0.5),
+        plot.title = element_text(hjust = 0.5, size = 11),
         axis.text.x = element_text(angle = 0)
     )
-```
 
-```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
-library(ggplot2)
 ggplot(data_set, aes(x = color, y = price)) +
     geom_boxplot(outlier.shape = NA, fill = "Blue", color = "Orange") +
     coord_cartesian(ylim = c(0, 1.5*10^4)) +
     labs(title = "Distributions of Price by Color") +
     theme(
-        plot.title = element_text(hjust = 0.5),
+        plot.title = element_text(hjust = 0.5, size = 11),
         axis.text.x = element_text(angle = 0)
     )
 color_corresponding_to_minimum_price <- data_set$color[index_of_minimum_price]
@@ -310,31 +301,22 @@ a diamond with clarity identifier $VS1$ has the lowest price.
 A diamond with clarity identifier $VS1$ has the highest first-quartile / third-quartile / maximum price and interquartile range of prices.
 A diamond with clarity identifier $SI1$ has the highest median price.
 
-Considering the claim at [https://www.bluenile.com/education/diamonds](https://www.bluenile.com/education/diamonds)
-that "The higher [in clarity] a diamond is, the more expensive it will be",
-this claim is supported in that flawless diamonds have the highest first-quartile / median / third-quartile / maximum price.
-However, neither when including nor excluding outliers is this claim supported by a trend that price increases with clarity.
-
-```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
-library(ggplot2)
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE, fig.width=3.3, fig.height=2.4}
 ggplot(data_set, aes(x = clarity, y = price)) +
     geom_boxplot(fill = "Blue", color = "Orange") +
     labs(title = "Distributions of Price by Clarity") +
     theme(
-        plot.title = element_text(hjust = 0.5),
-        axis.text.x = element_text(angle = 0)
+        plot.title = element_text(hjust = 0.5, size = 11),
+        axis.text.x = element_text(angle = 90)
     )
-```
 
-```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
-library(ggplot2)
 ggplot(data_set %>% filter(clarity != "FL"), aes(x = clarity, y = price)) +
     geom_boxplot(outlier.shape = NA, fill = "Blue", color = "Orange") +
     coord_cartesian(ylim = c(0, 1.5*10^4)) +
     labs(title = "Distributions of Price by Clarity") +
     theme(
-        plot.title = element_text(hjust = 0.5),
-        axis.text.x = element_text(angle = 0)
+        plot.title = element_text(hjust = 0.5, size = 11),
+        axis.text.x = element_text(angle = 90)
     )
 #clarity_corresponding_to_minimum_price <- data_set$clarity[index_of_minimum_price]
 #clarity_corresponding_to_minimum_price
@@ -349,13 +331,18 @@ Astor ideal diamonds have the highest first-quartile, median, and third-quartile
 Ideal diamonds have the greatest interquartile range of weights.
 The median weights of good, very good, and ideal diamonds decrease in that order.
 
-```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
-library(ggplot2)
+Considering the relationship of weight of a diamond in our data set and the color of the diamond,
+we construct a boxplot of weight versus color.
+Including outliers, a diamond with color identifier $E$ has the highest weight of over $7 \ carat$.
+Excluding outliers, a diamond with color identifier $F$ or $E$ has the highest weight of around $2 \ carat$.
+A diamond with color identifier $F$ has the lowest weight of $0.23 \ carat$.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE, fig.width=3.3, fig.height=2.4}
 ggplot(data_set, aes(x = cut, y = weight)) +
     geom_boxplot(fill = "Blue", color = "Orange") +
     labs(title = "Distributions of Weight by Cut") +
     theme(
-        plot.title = element_text(hjust = 0.5),
+        plot.title = element_text(hjust = 0.5, size = 11),
         axis.text.x = element_text(angle = 0)
     )
 minimum_weight <- min(data_set$weight)
@@ -363,21 +350,12 @@ index_of_minimum_weight <- match(minimum_weight, data_set$weight)
 cut_corresponding_to_minimum_weight <- data_set$cut[index_of_minimum_weight]
 #minimum_weight
 #cut_corresponding_to_minimum_weight
-```
 
-Considering the relationship of weight of a diamond in our data set and the color of the diamond,
-we construct a boxplot of weight versus color.
-Including outliers, a diamond with color identifier $E$ has the highest weight of over $7 \ carat$.
-Excluding outliers, a diamond with color identifier $F$ or $E$ has the highest weight of around $2 \ carat$.
-A diamond with color identifier $F$ has the lowest weight of $0.23 \ carat$.
-
-```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
-library(ggplot2)
 ggplot(data_set, aes(x = color, y = weight)) +
     geom_boxplot(fill = "Blue", color = "Orange") +
     labs(title = "Distributions of Weight by Color") +
     theme(
-        plot.title = element_text(hjust = 0.5),
+        plot.title = element_text(hjust = 0.5, size = 11),
         axis.text.x = element_text(angle = 0)
     )
 #color_corresponding_to_minimum_weight <- data_set$color[index_of_minimum_weight]
@@ -393,19 +371,6 @@ Diamonds with clarity identifier $FL$ have the highest first-quartile / median /
 For a transition from a clarity identifier in the set {$SI2$, $SI1$, $VS2$, $VS1$, $VVS2$, $VVS1$, $IF$} to a clarity identifier closer to $IF$,
 Weight generally decrease as clarity increases.
 
-```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
-library(ggplot2)
-ggplot(data_set, aes(x = clarity, y = weight)) +
-    geom_boxplot(fill = "Blue", color = "Orange") +
-    labs(title = "Distributions of Weight by Clarity") +
-    theme(
-        plot.title = element_text(hjust = 0.5),
-        axis.text.x = element_text(angle = 0)
-    )
-clarity_corresponding_to_minimum_weight <- data_set$clarity[index_of_minimum_weight]
-clarity_corresponding_to_minimum_weight
-```
-
 Considering the relationship of cut of a diamond in our data set and the color of the diamond,
 we construct a bar chart of proportion of cut by color.
 For each group of diamonds with a unique color identifier, most diamonds were ideal.
@@ -415,8 +380,17 @@ The group of diamonds with color identifier $I$ had the highest proportion of id
 The group of diamonds with color identifier $G$ had the highest proportion of very good diamonds.
 The group of diamonds with color identifier $D$ had the highest proportion of good diamonds.
 
-```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
-library(ggplot2)
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE, fig.width=3.3, fig.height=2.4}
+ggplot(data_set, aes(x = clarity, y = weight)) +
+    geom_boxplot(fill = "Blue", color = "Orange") +
+    labs(title = "Distributions of Weight by Clarity") +
+    theme(
+        plot.title = element_text(hjust = 0.5, size = 11),
+        axis.text.x = element_text(angle = 90)
+    )
+clarity_corresponding_to_minimum_weight <- data_set$clarity[index_of_minimum_weight]
+#clarity_corresponding_to_minimum_weight
+
 ggplot(data_set, aes(x = color, fill = cut)) +
     geom_bar(position = "fill") +
  labs(
@@ -424,8 +398,8 @@ ggplot(data_set, aes(x = color, fill = cut)) +
      title = "Proportion of Cut by Color"
  ) +
  theme(
-     plot.title = element_text(hjust = 0.5),
-     axis.text.x = element_text(angle = 90)
+     plot.title = element_text(hjust = 0.5, size = 11),
+     axis.text.x = element_text(angle = 0)
  )
 ```
 
@@ -439,20 +413,6 @@ For a transition from a group of diamonds with a clarity identifier in the set o
 to a group of diamonds with a clarity identifier in that set closer to $VVS1$, the proportion of good diamonds decreases.
 The majority of diamonds with clarity identifier $FL$ are very good, while all other diamonds with clarity identifier $FL$ are ideal.
 
-```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
-library(ggplot2)
-ggplot(data_set, aes(x = clarity, fill = cut)) +
-    geom_bar(position = "fill") +
- labs(
-     y = "proportion of cut",
-     title = "Proportion of Cut by Clarity"
- ) +
- theme(
-     plot.title = element_text(hjust = 0.5),
-     axis.text.x = element_text(angle = 90)
- )
-```
-
 Considering the relationship of color of a diamond in our data set and the clarity of the diamond,
 we construct a bar chart of proportion of color by clarity.
 The proportion of diamonds with color identifier $D$ for the group of diamonds with clarity identifier $FL$
@@ -462,8 +422,18 @@ For the group of diamonds with clarity identifier $FL$, all diamonds other than 
 For a transition from a group of diamonds with a clarity identifier in the set of identifiers {$VVS2$, $VVS1$, $IF$, $FL$}
 to a group of diamonds with a clarity identifier in that set closer to $FL$, the proportion of diamonds with color identifier $F$ increases.
 
-```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
-library(ggplot2)
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE, fig.width=3.3, fig.height=2.4}
+ggplot(data_set, aes(x = clarity, fill = cut)) +
+    geom_bar(position = "fill") +
+ labs(
+     y = "proportion of cut",
+     title = "Proportion of Cut by Clarity"
+ ) +
+ theme(
+     plot.title = element_text(hjust = 0.5, size = 11),
+     axis.text.x = element_text(angle = 90)
+ )
+
 ggplot(data_set, aes(x = clarity, fill = color)) +
     geom_bar(position = "fill") +
  labs(
@@ -471,16 +441,19 @@ ggplot(data_set, aes(x = clarity, fill = color)) +
      title = "Proportion of Color by Clarity"
  ) +
  theme(
-     plot.title = element_text(hjust = 0.5),
+     plot.title = element_text(hjust = 0.5, size = 11),
      axis.text.x = element_text(angle = 90)
  )
 ```
 
-Considering the weight of price, weight, and cut, in general, Astor ideal diamonds have the highest price at low weights,
+Considering the relationship of price, weight, and cut, in general, Astor ideal diamonds have the highest price at low weights,
 and the lowest price at high weights. Sensitivity to weight decreases as cut improves. It may be that making the "most ideal cut to allow
 light reflecting", or ensuring brilliance, requires removing significant material, or small diamonds.
 
-```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+Considering the relationship of price, weight, and color, the price of the most colorless diamonds increases more rapidly than for other
+diamonds. There seems to be a general trend that as colorlessness increases, the price of diamonds, and the sensitivity of price, increase.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE, fig.width = 5.3, fig.height = 3.8, fig.align='center'}
 ggplot(data_set, aes(x = weight, y = price, color = cut)) +
     geom_point() +
     geom_smooth(method = lm, se = FALSE) +
@@ -490,15 +463,16 @@ ggplot(data_set, aes(x = weight, y = price, color = cut)) +
         title = "Price vs. Weight vs. Cut"
     ) +
     theme(
-        plot.title = element_text(hjust = 0.5),
-        axis.text.x = element_text(angle = 90)
+        plot.title = element_text(hjust = 0.5, size = 11),
+        axis.text.x = element_text(angle = 0)
     )
 ```
 
-Considering the relationship of price, weight, and color, the price of the most colorless diamonds increases more rapidly than for other
-diamonds. There seems to be a general trend that as colorlessness increases, the price of diamonds, and the sensitivity of price, increase.
+Considering the relationship of price, weight, and clarity, the price of flawless diamonds increases more rapidly than for other diamonds,
+though there are only three flawless diamonds in our data set, two of the three have low weights, and the third has a high weight and high
+price. There seems to be a general trend that as clarity increases, the price of diamonds, and the sensitivity of price, increase.
 
-```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE, fig.width=3.3, fig.height=2.4}
 ggplot(data_set, aes(x = weight, y = price, color = color)) +
     geom_point() +
     geom_smooth(method = lm, se = FALSE) +
@@ -508,16 +482,10 @@ ggplot(data_set, aes(x = weight, y = price, color = color)) +
         title = "Price vs. Weight vs. Color"
     ) +
     theme(
-        plot.title = element_text(hjust = 0.5),
-        axis.text.x = element_text(angle = 90)
+        plot.title = element_text(hjust = 0.5, size = 11),
+        axis.text.x = element_text(angle = 0)
     )
-```
 
-Considering the relationship of price, weight, and clarity, the price of flawless diamonds increases more rapidly than for other diamonds,
-though there are only three flawless diamonds in our data set, two of the three have low weights, and the third has a high weight and high
-price. There seems to be a general trend that as clarity increases, the price of diamonds, and the sensitivity of price, increase.
-
-```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
 ggplot(data_set, aes(x = weight, y = price, color = clarity)) +
     geom_point() +
     geom_smooth(method = lm, se = FALSE)+
@@ -527,8 +495,8 @@ ggplot(data_set, aes(x = weight, y = price, color = clarity)) +
         title = "Price vs. Weight vs. Clarity"
     ) +
     theme(
-        plot.title = element_text(hjust = 0.5),
-        axis.text.x = element_text(angle = 90)
+        plot.title = element_text(hjust = 0.5, size = 11),
+        axis.text.x = element_text(angle = 0)
     )
 ```
 
@@ -536,7 +504,7 @@ Considering the relationship of price, weight, cut, and color, in general, color
 and have the greatest price sensitivity. Colorful good and very diamonds are priced lowest and have the lowest price sensitivity.
 As color and cut improve, price and price sensitivity increase.
 
-```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE, fig.width = 5.3, fig.height = 3.8, fig.align='center'}
 ggplot(data_set, aes(x = log(weight), y = log(price), color = color, shape = cut)) +
     geom_point() +
     labs(
@@ -545,8 +513,8 @@ ggplot(data_set, aes(x = log(weight), y = log(price), color = color, shape = cut
         title = "Price vs. Weight vs. Cut vs. Color"
     ) +
     theme(
-        plot.title = element_text(hjust = 0.5),
-        axis.text.x = element_text(angle = 90)
+        plot.title = element_text(hjust = 0.5, size = 11),
+        axis.text.x = element_text(angle = 0)
     )
 ```
 
@@ -554,7 +522,7 @@ Considering the relationship of price, weight, cut, and clarity, in general, fla
 and have the greatest price sensitivity. Good and very good diamonds with inclusions are priced lowest and have the lowest price sensitivity.
 As cut and clarity improve, price and price sensitivity increase.
 
-```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE, fig.width = 5.3, fig.height = 3.8, fig.align='center'}
 ggplot(data_set, aes(x = log(weight), y = log(price), color = clarity, shape = cut)) +
     geom_point() +
     labs(
@@ -563,8 +531,8 @@ ggplot(data_set, aes(x = log(weight), y = log(price), color = clarity, shape = c
         title = "Price vs. Weight vs. Cut vs. Clarity"
     ) +
     theme(
-        plot.title = element_text(hjust = 0.5),
-        axis.text.x = element_text(angle = 90)
+        plot.title = element_text(hjust = 0.5, size = 11),
+        axis.text.x = element_text(angle = 0)
     )
 ```
 
@@ -572,7 +540,7 @@ Considering the relationship of price, weight, color, and clarity, in general, c
 and have the greatest price sensitivity. Colorfull diamonds with inclusions are priced lowest and have the lowest price sensitivity.
 As color and clarity improve, price and price sensitivity increase.
 
-```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE, fig.align='center'}
 ggplot(data_set, aes(x = log(weight), y = log(price), color = color, shape = clarity)) +
     geom_point() +
     labs(
@@ -581,15 +549,15 @@ ggplot(data_set, aes(x = log(weight), y = log(price), color = color, shape = cla
         title = "Price vs. Weight vs. Color vs. Clarity"
     ) +
     theme(
-        plot.title = element_text(hjust = 0.5),
-        axis.text.x = element_text(angle = 90)
+        plot.title = element_text(hjust = 0.5, size = 11),
+        axis.text.x = element_text(angle = 0)
     )
 ```
 
 Considering the relationship of price, weight, cut, color, and clarity, as clarity increases, colorless ideal diamonds
 become relatively high priced. As color increases, ideal diamonds with minimal inclusions become relatively high priced.
 
-```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE, fig.width = 5.3, fig.height = 3.8, fig.align='center'}
 ggplot(data_set, aes(x = log(weight), y = log(price), color = color, shape = cut)) +
     geom_point() +
     facet_wrap(vars(clarity)) +
@@ -599,8 +567,8 @@ ggplot(data_set, aes(x = log(weight), y = log(price), color = color, shape = cut
         title = "Price vs. Weight vs. Cut vs. Color vs. Clarity"
     ) +
     theme(
-        plot.title = element_text(hjust = 0.5),
-        axis.text.x = element_text(angle = 90)
+        plot.title = element_text(hjust = 0.5, size = 11),
+        axis.text.x = element_text(angle = 0)
     )
 
 ggplot(data_set, aes(x = log(weight), y = log(price), color = clarity, shape = cut)) +
@@ -612,8 +580,8 @@ ggplot(data_set, aes(x = log(weight), y = log(price), color = clarity, shape = c
         title = "Price vs. Weight vs. Cut vs. Clarity vs. Color"
     ) +
     theme(
-        plot.title = element_text(hjust = 0.5),
-        axis.text.x = element_text(angle = 90)
+        plot.title = element_text(hjust = 0.5, size = 11),
+        axis.text.x = element_text(angle = 0)
     )
 ```
 
@@ -629,8 +597,7 @@ There is a significant correlation between $(weight, \ price)$ observations and 
 Given a moderate downward and a sharp upward curve at extremes of a plot of sample quantiles versus theoretical quantiles
 for the residuals of the linear model of price versus weight, the tails of a probability vs. externally studentized residuals plot / distribution are too light for this distribution to be considered normal.
 
-```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
-library(ggplot2)
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE, fig.width=3.3, fig.height=2.4}
 ggplot(data_set, aes(x = weight, y = price)) +
     geom_point(alpha = 0.2) +
     geom_smooth(method = "lm", se = FALSE) +
@@ -640,7 +607,7 @@ ggplot(data_set, aes(x = weight, y = price)) +
         title = "Price vs. Weight"
     ) +
     theme(
-    plot.title = element_text(hjust = 0.5),
+    plot.title = element_text(hjust = 0.5, size = 11),
     axis.text.x = element_text(angle = 0)
     )
 
@@ -658,15 +625,19 @@ ggplot(
     labs(
         x = "predicted price",
         y = "externally studentized residual",
-        title = "Externally Studentized Residual vs. Predicted Price"
+        title = "Externally Studentized Residual\nvs. Predicted Price"
     ) +
 theme(
-    plot.title = element_text(hjust = 0.5),
+    plot.title = element_text(hjust = 0.5, size = 11),
     axis.text.x = element_text(angle = 0)
 )
+```
 
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE, fig.width = 5.3, fig.height = 3.8, fig.align='center'}
 acf(linear_model_of_price_and_weight$residuals, main = "ACF Value vs. Lag for Transformed Linear Model")
+```
 
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE, fig.width = 5.3, fig.height = 3.8, fig.align='center'}
 qqnorm(linear_model_of_price_and_weight$residuals)
 qqline(linear_model_of_price_and_weight$residuals, col = "red")
 ```
@@ -715,7 +686,7 @@ We present a scatterplot of logarithmicized price versus weight.
 We construct a linear model of logarithmicized price versus weight and present a scatterplot of externally studentized residuals
 versus predicted logarithmicized price for the linear model of logarithmicized price versus weight.
 
-```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE, fig.width=3.3, fig.height=2.4}
 result_of_Box_Cox_Method <- perform_Box_Cox_Method(linear_model, vector_of_values_of_lambda = seq(0.29, 0.33, 0.01), whether_to_plot = FALSE)
 maximum_likelihood_estimate_of_parameter_lambda <- result_of_Box_Cox_Method$maximum_likelihood_estimate_of_parameter_lambda
 
@@ -729,7 +700,7 @@ ggplot() +
         title = "Logarithmicized Price vs. Weight"
     ) +
     theme(
-        plot.title = element_text(hjust = 0.5),
+        plot.title = element_text(hjust = 0.5, size = 11),
         axis.text.x = element_text(angle = 0)
     )
 
@@ -747,10 +718,10 @@ ggplot(
     labs(
         x = "predicted logarithmicized price",
         y = "externally studentized residual",
-        title = "Externally Studentized Residual vs. Predicted Logarithmicized Price"
+        title = "Externally Studentized Residual\nvs. Predicted Logarithmicized Price"
     ) +
 theme(
-    plot.title = element_text(hjust = 0.5),
+    plot.title = element_text(hjust = 0.5, size = 11),
     axis.text.x = element_text(angle = 0)
 )
 ```
@@ -768,7 +739,7 @@ logarithmicized price versus logarithmicized weight.
 Additionally, we construct a plot of AutoCorrelation Function values versus lag for the linear model, and
 a plot of sample quantiles versus theoretical quantiles for the residuals of the model.
 
-```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE, fig.width=3.3, fig.height=2.4}
 data_set <- data_set %>% mutate(logarithmicized_weight = log(weight))
 ggplot() +
     geom_point(data = data_set, aes(x = logarithmicized_weight, y = logarithmicized_price), alpha = 0.2) +
@@ -776,10 +747,10 @@ ggplot() +
     labs(
         x = "logarithmicized weight",
         y = "logarithmicized price",
-        title = "Logarithmicized Price vs. Logarithmicized Weight"
+        title = "Logarithmicized Price\nvs. Logarithmicized Weight"
     ) +
     theme(
-        plot.title = element_text(hjust = 0.5),
+        plot.title = element_text(hjust = 0.5, size = 11),
         axis.text.x = element_text(angle = 0)
     )
 
@@ -798,17 +769,16 @@ ggplot(
     labs(
         x = "predicted logarithmicized price",
         y = "externally studentized residual",
-        title = "Externally Studentized Residual vs. Predicted Logarithmicized Price"
+        title = "Externally Studentized Residual\nvs. Predicted Logarithmicized Price"
     ) +
 theme(
-    plot.title = element_text(hjust = 0.5),
+    plot.title = element_text(hjust = 0.5, size = 11),
     axis.text.x = element_text(angle = 0)
 )
+```
 
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE, fig.width = 5.3, fig.height = 3.8, fig.align='center'}
 acf(linear_model_of_logarithmicized_price_and_weight$residuals, main = "ACF Value vs. Lag for Transformed Linear Model")
-
-qqnorm(linear_model_of_logarithmicized_price_and_weight$residuals)
-qqline(linear_model_of_logarithmicized_price_and_weight$residuals, col = "red")
 ```
 
 1. The assumption that the relationship between response / logarithmicized price and predictor / regressor / logarithmicized weight is linear,
@@ -835,6 +805,11 @@ qqline(linear_model_of_logarithmicized_price_and_weight$residuals, col = "red")
    Given a sharp downward curve at the bottom left of a plot of sample quantiles versus theoretical quantiles
    for the residuals of the linear model of logarithmicized price versus logarithmicized weight,
    a probability vs. externally studentized residuals plot / distribution is not normal.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE, fig.width = 5.3, fig.height = 3.8, fig.align='center'}
+qqnorm(linear_model_of_logarithmicized_price_and_weight$residuals)
+qqline(linear_model_of_logarithmicized_price_and_weight$residuals, col = "red")
+```
 
 We determine an estimated linear-regression equation
 $$\hat{\beta}_0 = 8.521$$
