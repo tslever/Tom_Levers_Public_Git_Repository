@@ -109,10 +109,12 @@ Considering the claim that "The higher [in weight] a diamond is, the more expens
 we find in a scatterplot of price versus weight a trend that s weight of a diamond increases,
 price of the diamond increases, at an increasing rate.
 
-Sirish:
-
-1. Sirish's insight into why cut is or not most significant
-2. Sirish's insight into why color is or is not second-most significant
+Considering a claim that cut is the most significant and a claim that color is second-most significant,
+color may actually be more significant than cut, given graphs of price versus weight versus color and price versus weight versus cut.
+For the same scales of price and weight, most changes between colors result in significant changes in slope,
+whereas most changes between cuts result in less significant changes in slope.
+Additionally, considering high prices and weights, the most colorless diamonds have the highest prices and weights,
+whereas Astor ideal diamonds have the lowest prices and weights.
 
 ## Detailed Visualizations and Plot-Specific Analysis
 
@@ -479,13 +481,13 @@ and the lowest price at high weights. Sensitivity to weight decreases as cut imp
 light reflecting", or ensuring brilliance, requires removing significant material, or small diamonds.
 
 ```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
-ggplot(data_set, aes(x = log(weight), y = log(price), color = cut)) +
+ggplot(data_set, aes(x = weight, y = price, color = cut)) +
     geom_point() +
     geom_smooth(method = lm, se = FALSE) +
     labs(
-        x = "logarithmicized weight",
-        y = "logarithmicized price",
-        title = "Logarithmicized Price vs. Logarithmicized Weight vs. Cut"
+        x = "weight",
+        y = "price",
+        title = "Price vs. Weight vs. Cut"
     ) +
     theme(
         plot.title = element_text(hjust = 0.5),
