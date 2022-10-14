@@ -15,10 +15,15 @@ analyze_variance <- function(linear_model) {
     analysis <- append(analysis, line_with_regression_degrees_of_freedom_sum_of_squares_and_mean_square)
 
     F_statistic <- calculate_F_statistic(linear_model)
-    critical_F_value <- calculate_critical_value_F(linear_model, 0.05)
+    significance_level <- 0.05
+    residual_degrees_of_freedom <- calculate_residual_degrees_of_freedom(linear_model)
+    critical_F_value <- calculate_critical_value_F(linear_model, significance_level)
+    line_with_F_statistic_and_critical_F_value <- paste("F0: ", F_statistic, ", F(alpha = ", significance_level, ", DFR = ", regression_degrees_of_freedom, ", DFRes = ", residual_degrees_of_freedom, "): ", critical_F_value, sep = "")
+    analysis <- append(analysis, line_with_F_statistic_and_critical_F_value)
+
     probability <- calculate_probability(linear_model)
-    line_with_F_statistic_critical_F_value_and_probability <- paste("F0: ", F_statistic, ", Fcrit: ", critical_F_value, ", p: ", probability, sep = "")
-    analysis <- append(analysis, line_with_F_statistic_critical_F_value_and_probability)
+    line_with_probability <- paste("p: ", probability, sep = "")
+    analysis <- append(analysis, line_with_probability)
 
     total_degrees_of_freedom <- calculate_total_degrees_of_freedom(linear_model)
     total_sum_of_squares <- calculate_total_sum_of_squares(linear_model)

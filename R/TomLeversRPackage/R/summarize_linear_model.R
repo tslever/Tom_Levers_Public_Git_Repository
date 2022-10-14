@@ -47,8 +47,10 @@ summarize_linear_model <- function(linear_model) {
     line_with_correlation_coefficients_R <- paste("Multiple R:  ", multiple_R, "\tAdjusted R:  ", adjusted_R, sep = "")
     summary_output <- append(summary_output, line_with_correlation_coefficients_R)
 
-    critical_value_t <- calculate_critical_value_t(linear_model, 0.05)
-    line_with_critical_value_t <- paste("Critical value t_{alpha/2, n-p}: ", critical_value_t, sep = "")
+    significance_level <- 0.05
+    residual_degrees_of_freedom <- calculate_residual_degrees_of_freedom(linear_model)
+    critical_value_t <- calculate_critical_value_t(linear_model, significance_level)
+    line_with_critical_value_t <- paste("Critical value t(alpha/2 = ",  significance_level, "/2, DFRes = ", residual_degrees_of_freedom, "): ", critical_value_t, sep = "")
     summary_output <- append(summary_output, line_with_critical_value_t)
 
     summary_output <- paste(summary_output, collapse = "\n")

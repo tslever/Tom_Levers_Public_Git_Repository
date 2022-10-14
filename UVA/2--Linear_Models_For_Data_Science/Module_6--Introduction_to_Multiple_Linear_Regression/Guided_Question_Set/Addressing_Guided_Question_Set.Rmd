@@ -38,9 +38,13 @@ The variables are:
     ```
 
     Answer the following questions based on the output.
-    
     (a) Which predictors appear to be linearly related to the number of wins?
         Which predictors do not appear to have a linear relationship with the number of wins?
+        
+        We note that predictors in the set {$x_1$, $x_2$, $x_5$, $x_7$, $x_8$} have moderate to high correlations with the number of wins.
+        The last predictor is the only one moderate to highly negatively associated with the number of wins.
+        
+        The predictors in the set {$x_3$, $x_4$, $x_6$, $x_9$} do not have a strong linear relationship with the number of wins.
         
         Considering statistics for each of nine linear models of number of games won $y$ versus one predictor $x$,
 
@@ -65,7 +69,7 @@ The variables are:
         than $t_0$, is less than $\alpha$ for each predictor in the set {$x_1$, $x_2$, $x_5$, $x_7$, and $x_8$},
         we have sufficient evidence to reject a null hypothesis that the predictor is not linearly related to the number of wins.
         We have sufficient evidence to support an alternate hypothesis that the predictor is linearly related to the number of wins.
-        Since the probability is greater than $\alpha$ for each predictor in the set {$x_3$, $x_4$, $x_6$, and $x_7$},
+        Since the probability is greater than $\alpha$ for each predictor in the set {$x_3$, $x_4$, $x_6$, and $x_9$},
         we have insufficient evidence to reject a null hypothesis that the predictor is not linearly related to the number of wins.
         The predictor may not be linearly related to the number of wins.
         
@@ -76,15 +80,23 @@ The variables are:
         considered highly correlated."
         
         ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
-        ifelse(correlation_matrix > 0.7, correlation_matrix, "")
+        ifelse(abs(correlation_matrix) > 0.7, correlation_matrix, "")
+        ifelse(abs(correlation_matrix) > 0.5, correlation_matrix, "")
         ```
         
         Each predictor is highly correlated with itself.
         Rushing yards $x_1$ and percent rushing $x_7$ are highly correlated.
+        $x_1$ is moderately correlated with $x_5 and $x_8$.
+        $x_5$ is moderately correlated with $x_7$.
+        $x_7$ is moderately correlated with $x_8$.
         
     (c) What predictors would you first consider to use in a multiple linear regression? Briefly explain your choices.
     
-        Because $x_8$ has the lowest probability $p$, followed by $x_7$, I would first consider these variables.
+        I would consider using $x_1$, $x_2$, $x_5$, $x_7$, and $x_8$ in a multiple linear regression as these predictors
+        have high correlation with the number of wins.
+        
+        I would consider using $x_2$ as it has a high correlation with the number of wins, and a subset of {$x_1$, $x_5$, $x_7$, $x_8$}
+        as these are correlated with the number of wins but are also correlated among themselves.
         
 2.  Regardless of your answer to the previous question, fit a multiple regression model for the number of games won against the followning three      predictors: the team's passing yardage ($x_2$), the percentage of rushing plays ($x_7$), and the opponents' yards rushing ($x_8$).
     Write the estimated regression equation.
@@ -137,8 +149,10 @@ The variables are:
     The multiple linear regression model from part 2 is useful in predicting the number of wins during the 1976 season
     if at least one of the predictor variables in the set $\left\{x_2, x_7, x_8\right\}$ contributes significantly
     to the model.
-    We conduct a test of the null hypothesis $H_0: \beta_{x_2} = \beta_{x_7} = \beta_{x_8} = 0$.
-    The alternate hypothesis is $H_1: \beta_{x_2} \neq 0 \ or \ \beta_{x_7} \neq 0 \ or \ \beta_{x_8} \neq 0$.
+    We conduct a test of the null hypothesis $H_0: \beta_{x_2} = \beta_{x_7} = \beta_{x_8} = 0$ that
+    all coefficients in the set $\left\{\beta_{x_2}, \beta_{x_7}, \beta{x_8}\right\}$ are 0.
+    The alternate hypothesis is $H_1: \beta_{x_2} \neq 0 \ or \ \beta_{x_7} \neq 0 \ or \ \beta_{x_8} \neq 0$ that
+    at least one of the coefficients in the set $\left\{\beta_{x_2}, \beta_{x_7}, \beta{x_8}\right\}$ is not 0.
     The alternate hypothesis is also $H_1: \beta_{x_i} \neq 0 \ for \ i \in [2, 7, 8]$.
     If we reject the null hypothesis, at least one of the predictor variables contributes significantly to the model.
     
@@ -185,7 +199,7 @@ The variables are:
         labs(
             x = "predicted games won",
             y = "externally studentized residual",
-            title = "Externally Studentized Residual vs. Predicted Games Won"
+            title = "Externally Studentized Residuals vs. Predicted Games Won"
         ) +
         theme(
             plot.title = element_text(hjust = 0.5),
@@ -201,9 +215,9 @@ The variables are:
     1.  The assumption that the relationship between response / games won and predictors is linear, at least approximately, is met
         cannot be addressed.
     2.  The assumption that the residuals of the linear model of games won versus predictors have mean $0$ is met.
-        Residuals are evenly scattered around $e = 0$.
+        Residuals are evenly scattered around $e = 0$ at random.
     3.  The assumption that the distributions of residuals of the linear model for different weights have constant variance is met.
-        Residuals are evenly scattered around $e = 0$.
+        Residuals are evenly scattered around $e = 0$ with constant vertical variance.
     4.  The assumption that the residuals of the linear model are uncorrelated is met.
         The ACF value for lag $0$ is always $1$; the correlation of the vector of residuals with itself is always 1.
         Since all ACF value are insignificant, we have insufficient evidence to reject a null hypothesis that
@@ -213,7 +227,7 @@ The variables are:
     5.  The assumption that the residuals of the linear model are normally distributed is met.
         A linear model is robust to these assumptions.
         Considering a plot of sample quantiles versus theoretical quantiles
-        for the residuals of the linear model, since observations lie near the line of best fit,
+        for the residuals of the linear model, since observations lie near the line of best fit / their theoretical values,
         a probability vs. externally studentized residuals plot / distribution is normal.
         
 8. Consider adding another predictor $x_1$, the team's rushing yards for the season, to the linear model defined in part 2.
@@ -233,9 +247,42 @@ The variables are:
     
     Since the test statistic for the predictor $x_1$ is less than the critical value, and
     the probability is greater than the significance level $\alpha = 0.05$, we have insufficient evidence to reject a null hypothesis that
-    the individual predictor $x_1$ is insignificant in predicting the response number of games won $y$.
+    the individual predictor $x_1$ is insignificant in predicting the response number of games won $y$ in the presence of the other predictors.
     We have insufficient evidence to support the alternate hypothesis that the individual predictor rushing yards $x_1$
-    is significant in predicting the response number of games won $y$.
+    is significant in predicting the response number of games won $y$ in the presence of the other predictors.
     I agree with my classmate in that the result of the $t$ test is insignificant.
     I would change my classmate's wording to "we have insufficient evidence to support the alternate hypothesis that the individual predictor
-    rushing yards $x_1$ is significant in predicting the response number of games won $y$, and may be removed from the model".
+    rushing yards $x_1$ is significant in predicting the response number of games won $y$ in the presence of the other predictors,
+    and may be removed from the model".
+    
+    To address the classmate's statement, we need to fit a simple linear regression model with $x_1$, the team's rushing yards,
+    as the only predictor. The multiple linear regression model is not meant to address the classmate's statement.
+    
+    Fitting a simple linear regression model with $x_1$ as the only predictor and plotting number of games won $y$ and
+    versus the team's rushing yards $x_1$, we see that $x_1$ is a significant predictor and is linearly related to the number of wins.
+    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    linear_model <- lm(y ~ x1, data = data_set)
+    summarize_linear_model(linear_model)
+    ggplot(data_set, aes(x = x1, y = y)) +
+        geom_point(alpha = 0.2) +
+        geom_smooth(method = "lm", se = FALSE) +
+        labs(
+            x = "rushing yards",
+            y = "number of games won",
+            title = "Number of Games Won vs. Rushing Yards"
+        ) +
+        theme(
+            plot.title = element_text(hjust = 0.5),
+            axis.text.x = element_text(angle = 0)
+        )
+    ```
+    
+    $x_1$ is linearly related to the response on its own. That being said, it is not needed in a model with $x_2$, $x_7$, and $x_8$
+    as it doesn't improve the predictions significantly as it is moderately correlated with $x_8$ and highly correlated with $x_7$ /
+    doesn't provide much addition insight to the prediction when the other predictors are already in the model.
+    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    library(dplyr)
+    cor(data_set %>% select(y, x1, x2, x7, x8))
+    ```
