@@ -190,7 +190,7 @@ linkcolor: red
         If the null hypothesis is rejected, the predictor $Age$ is significant to the multiple linear regression model and
         cannot be deleted from the model.
         If the null hypothesis is not rejected, the predictor $Age$ is insignificant to the multiple linear regression model
-        and can be deleted from the model.
+        in the context of all predictors and can be deleted from the model.
         The test statistic for testing the null hypothesis is
         $$t_0 = \frac{\hat{\beta}_{Age}}{SE\left(\hat{\beta}_{Age}\right)} = \frac{-0.014071}{0.022708} = -0.619$$
 
@@ -348,3 +348,87 @@ linkcolor: red
         A value of $1$ indicates a model that perfectly predicts values in the target field.
         A value that is less than or equal to $0.09$ indicates a model that has no predictive value.
         In the real world, adjusted $R^2$ lies between $0$ and $1$."
+        
+3.  Data from $55$ college students are used to estimate a multiple regression model with response variable $LeftArm$ with predictors
+    $LeftFoot$ and $RtFoot$. All variables were measured in centimeters. Some R output is given in the prompt for this homework.
+    
+    A classmate points out that there appears to be a contradiction in the R output; namely, while the ANOVA $F$ statistic is significant,
+    the $t$ statistics for both predictors are insignificant. Is your classmate's concern warranted? Briefly explain.
+    
+    My classmate's concern is not warranted.
+    
+    Since a test statistic $F_0 = 15.19$ is greater than the critical value
+    $F_{\alpha = 0.05, \ df_R = 2, \ df_{Res} = n - p = 55 - 3 = 52} = 2.308$,
+    we have sufficient evidence to reject a null hypothesis $H_0: \beta_{LeftFoot} = \beta_{RtFoot}$ (i.e., all predictor coefficients are $0$).
+    We have sufficient evidence to support an alterate hypothesis $H_1: \beta_i \neq 0$ for at least one predictor $i$
+    (i.e., at least coefficient predictor is not $0$).
+    Since we reject the null hypothesis and support the alternate hypothesis, at least one of the predictor variables
+    contributes significantly to the multiple linear model, and the model is useful in predicting $LeftArm$.
+    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    number_of_predictors <- 2
+    regression_degrees_of_freedom <- number_of_predictors
+    number_of_observations <- 55
+    number_of_variables <- 3
+    residual_degrees_of_freedom <- number_of_observations - number_of_variables
+    calculate_critical_value_F(
+        significance_level,
+        regression_degrees_of_freedom,
+        residual_degrees_of_freedom
+    )
+    ```
+    
+    Since the magnitude $\left|t_i\right|$ of each test statistic is less than a critical value $t_{\alpha/2 = 0.05/2, \ df_{Res} = 52} = 2.474$,
+    we have insufficient evidence to reject a null hypothesis for each predictor $i$ $H_0^i: \beta_i = 0$
+    (i.e., the regression coefficient corresponding to predictor $i$ is $0$).
+    We have insufficient evidence to support an alternate hypothesis for each predictor $i$ $H_1^i: \beta_i \neq 0$
+    (i.e., the regression coefficient corresponding to predictor $i$ is not $0$).
+    Since we have insufficient evidence to reject each null hypothesis and support each alternate hypothesis,
+    we have insufficient evidence to conclude that either predictor is significant to the multiple linear regression model
+    in the context of both predictors, and may remove that predictor while leaving in the other predictor.
+    This may happen if the predictors are very highly correlated.
+    We leave in one predictor $i$ until we conduct analysis of variation for a simple linear regression model of $LeftArm$ versus that predictor
+    and determine that we have insufficient evidence to support an alternate hypothesis that $i$ is insignificant in predicting $LeftArm$.
+    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    calculate_critical_value_t(
+        significance_level,
+        number_of_confidence_intervals,
+        residual_degrees_of_freedom
+    )
+    ```
+    
+4.  Recall that in matrix notation, the least-squares estimators for the regression model can be written as
+
+    $$\boldsymbol{\hat{\beta}} = \begin{bmatrix}\hat{\beta}_0\\\hat{\beta}_1\\\vdots\\\hat{\beta}_k\end{bmatrix} = \left(\boldsymbol{X}^T \boldsymbol{X}\right)^{-1} \boldsymbol{X}^T \boldsymbol{y}$$
+    Let the hat matrix
+    $$\boldsymbol{H} = \boldsymbol{X} \left(\boldsymbol{X}^T \boldsymbol{X}\right)^{-1} \boldsymbol{X}^T$$
+    Fitted values are usually written as
+    $$\boldsymbol{\hat{y}} = \boldsymbol{X} \boldsymbol{\hat{\beta}} = \boldsymbol{X} \left(\boldsymbol{X}^T \boldsymbol{X}\right)^{-1} \boldsymbol{X}^T \boldsymbol{y} = \boldsymbol{H} \boldsymbol{y}$$
+    
+    Show that the hat matrix is idempotent. In other words, show that
+    $$\boldsymbol{H} \boldsymbol{H} = \boldsymbol{H}$$
+    Proof.
+    $$\boldsymbol{H} = \boldsymbol{H} \boldsymbol{H}$$
+    $$\boldsymbol{H} = \boldsymbol{X} \left(\boldsymbol{X}^T \boldsymbol{X}\right)^{-1} \boldsymbol{X}^T \boldsymbol{X} \left(\boldsymbol{X}^T \boldsymbol{X}\right)^{-1} \boldsymbol{X}^T$$
+    The inverse of a square matrix $\boldsymbol{A}$ with $p$ rows and $p$ columns is a matrix $\boldsymbol{A}^{-1}$ with $p$ rows and $p$ columns
+    such that $\boldsymbol{A} \boldsymbol{A}^{-1}$ is the identity matrix $\boldsymbol{I}_p$
+    with $p$ rows and $p$ columns, ones along its diagonal, and zeros elsewhere.
+    
+    Let $n$ be the number of observations on which a multiple linear regression model is based, and
+    let $p$ be the number of variables in the multiple linear regression model.
+    
+    Per section 3.2.1: "Least-Squares Estimation of the Regression Coefficients" in *Introduction to Linear Regression Analysis* by
+    Douglas C. Montgomery et al. (p. 74), the model matrix $\boldsymbol{X}$ has $n$ rows and $p$ columns.
+    $\boldsymbol{X}^T$ has $p$ rows and $n$ columns.
+    
+    $\boldsymbol{A} = \boldsymbol{X}^T \boldsymbol{X}$ is the $p \times p$ matrix product of a $p \times n$ matrix and $n \times p$ matrix.
+    
+    $\boldsymbol{A} = \boldsymbol{X}^T \boldsymbol{X}$ is a square matrix.
+    $$\boldsymbol{H} = \boldsymbol{X} \left(\boldsymbol{X}^T \boldsymbol{X}\right)^{-1} \boldsymbol{A} \boldsymbol{A}^{-1} \boldsymbol{X}^T$$
+    $$\boldsymbol{H} = \boldsymbol{X} \left(\boldsymbol{X}^T \boldsymbol{X}\right)^{-1} \boldsymbol{I_p} \ \boldsymbol{X}^T$$
+    For a matrix $\boldsymbol{B}$ with $r$ rows and $c$ columns, $\boldsymbol{I}_r \boldsymbol{B} = \boldsymbol{B} = \boldsymbol{B} \boldsymbol{I}_c$.
+    
+    $\boldsymbol{B} = \boldsymbol{A}^{-1}$ is a matrix with $p$ rows and $p$ columns.
+    $$\boldsymbol{H} = \boldsymbol{X} \left(\boldsymbol{X}^T \boldsymbol{X}\right)^{-1} \boldsymbol{X}^T$$
+    $$\boldsymbol{H} = \boldsymbol{H}$$

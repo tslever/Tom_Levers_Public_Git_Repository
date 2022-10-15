@@ -167,7 +167,7 @@ The variables are:
     ```
     
     Alternatively, since the test statistic $F_0 = 29.437$ is greater than the critical value
-    $F_{\alpha = 0.05, \ k = 3, \ n - p = 28 - 4} = 3.009$, we reject the null hypothesis and support the alternate hypothesis.
+    $F_{\alpha = 0.05, \ df_R = k = 3, \ df_{Res} = n - p = 28 - 4} = 3.009$, we reject the null hypothesis and support the alternate hypothesis.
     
     Since we reject the null hypothesis and support the alternate hypothesis, at least one of the predictor variables contributes
     significantly to the model. Since at least one of the predictor variables contributes significantly to the model,

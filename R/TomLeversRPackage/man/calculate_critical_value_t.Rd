@@ -17,7 +17,7 @@ calculate_critical_value_t(
 The critical value t
 }
 \description{
-Calculates critical value t of a Student's t distribution with a provided number of degrees of freedom with provided significance level and number of variables
+Calculates critical value t of a Student's t distribution with a provided number of degrees of freedom with provided significance level and number of confidence intervals
 }
 \examples{
 critical_value_t <- calculate_critical_value_t(0.05, 1, 108)

@@ -1,7 +1,7 @@
 #' @title calculate_critical_value_t
-#' @description Calculates critical value t of a Student's t distribution with a provided number of degrees of freedom with provided significance level and number of variables
+#' @description Calculates critical value t of a Student's t distribution with a provided number of degrees of freedom with provided significance level and number of confidence intervals
 #' @param The significance level
-#' @param The number of variables
+#' @param The number of confidence intervals
 #' @param The degrees of freedom of the Student's t distribution
 #' @return The critical value t
 #' @examples critical_value_t <- calculate_critical_value_t(0.05, 1, 108)
