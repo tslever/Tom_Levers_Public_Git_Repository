@@ -7,6 +7,6 @@
 
 #' @export
 test_null_hypothesis_involving_MLR_coefficients <- function(linear_model, significance_level) {
-    probability <- calculate_probability(linear_model)
+    probability <- calculate_p_value_for_all_MLR_coefficients(linear_model)
     return(generate_hypothesis_test_result(probability, significance_level))
 }

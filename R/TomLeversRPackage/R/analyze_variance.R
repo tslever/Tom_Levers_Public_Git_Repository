@@ -21,7 +21,7 @@ analyze_variance <- function(linear_model) {
     line_with_F_statistic_and_critical_F_value <- paste("F0: ", F_statistic, ", F(alpha = ", significance_level, ", DFR = ", regression_degrees_of_freedom, ", DFRes = ", residual_degrees_of_freedom, "): ", critical_F_value, sep = "")
     analysis <- append(analysis, line_with_F_statistic_and_critical_F_value)
 
-    probability <- calculate_probability(linear_model)
+    probability <- calculate_p_value_for_all_MLR_coefficients(linear_model)
     line_with_probability <- paste("p: ", probability, sep = "")
     analysis <- append(analysis, line_with_probability)
 

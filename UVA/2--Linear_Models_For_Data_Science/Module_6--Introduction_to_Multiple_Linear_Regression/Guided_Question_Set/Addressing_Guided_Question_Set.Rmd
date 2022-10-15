@@ -76,8 +76,13 @@ The variables are:
     (b) Do you notice if any of the predictors are highly correlated with one another?
         If so, which ones?
         
-        According to Keith G. Calkins, "correlation coefficients whose magnitudes are [higher than] 0.7... indicate variables which can be
-        considered highly correlated."
+        According to Keith G. Calkins 
+        ([https://www.andrews.edu/~calkins/math/edrm611/edrm05.htm](https://www.andrews.edu/~calkins/math/edrm611/edrm05.htm)),
+        "Correlation coefficients whose magnitude[s] are between 0.9 and 1.0 indicate variables which can be considered very highly correlated.
+        Correlation coefficients whose magnitude[s] are between 0.7 and 0.9 indicate variables which can be considered highly correlated.
+        Correlation coefficients whose magnitude[s] are between $0.5$ and $0.7$ indicate variables which can be considered moderately correlated.
+        Correlation coefficients whose magnitude[s] are between $0.3$ and $0.5$ indicate variables which have... low correlation[s].
+        Correlation coefficients whose magnitude[s] are less than $0.3$ have little if any (linear) correlation."
         
         ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
         ifelse(abs(correlation_matrix) > 0.7, correlation_matrix, "")
