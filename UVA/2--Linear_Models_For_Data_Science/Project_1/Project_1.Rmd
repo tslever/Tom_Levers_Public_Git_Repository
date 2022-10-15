@@ -47,6 +47,7 @@ Weight measures a diamond's weight in carats.
 Clarity assesses small imperfections within a diamond and quantifies and specifies inclusions.
 Color refers to how colorless a diamond is.
 Cut measures how well-proportioned a diamond's dimensions are.
+Price refers to the cost of each diamond per the BlueNile website.
 
 ## General Analysis and Addressing Claims on BlueNile's Website
 
