@@ -1,0 +1,38 @@
+---
+title: "Stat 6021: Guided Question Set 7"
+author: "Tom Lever"
+date: 10/16/22
+output:
+  pdf_document: default
+  html_document: default
+urlcolor: blue
+linkcolor: red
+---
+
+Car drivers like to adjust the seat position for their own comfort. Car designers find it helpful to know where different drivers will position the seat. Researchers at HuMoSim laboratory at the University of Michigan collected data on $38$ drivers. The response variable is $hipcenter$, the
+horizontal distance of the midpoint of the hips from a fixed location in the car in $mm$. They measured the following eight predictors:
+
+* $x_1$: Age: Age in years
+* $x_2$: Weight: Weight in pounds
+* $x_3$: HtShoes: Height with shoes in $cm$.
+* $x_4$: Ht: Height without shoes in $cm$.
+* $x_5$: Seated: Seated height in $cm$.
+* $x_6$: Arm: Arm length in $cm$.
+* $x_7$: Thigh: Thigh length in $cm$.
+* $x_8$: Leg: Lower leg length in $cm$.
+
+The data are from the `faraway` package in R. After installing the faraway package, load the `seatpos` data set.
+
+```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+library(faraway)
+head(seatpos, n = 3)
+```
+
+1.  Fit the full model with all the predictors. Using the `summary` function, comment on the results of the `t` tests and ANOVA `F` test from the
+    output.
+    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    library(TomLeversRPackage)
+    linear_model <- lm(hipcenter ~ ., data = seatpos)
+    summarize_linear_model(linear_model)
+    ```

@@ -8,6 +8,6 @@
 
 #' @export
 calculate_critical_value_F <- function(significance_level, regression_degrees_of_freedom, residual_degrees_of_freedom) {
- critical_F_value <- qf(significance_level, regression_degrees_of_freedom, residual_degrees_of_freedom, lower.tail = FALSE)
- return(critical_F_value)
+    critical_F_value <- qf(significance_level, regression_degrees_of_freedom, residual_degrees_of_freedom, lower.tail = FALSE)
+    return(critical_F_value)
 }
