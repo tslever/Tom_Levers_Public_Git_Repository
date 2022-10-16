@@ -398,6 +398,10 @@ linkcolor: red
     )
     ```
     
+    Per section 9.4.4: Multicollinearity: Multicollinearity Diagnostics: Other Diagnostics in *Introduction to Linear Regression Analysis* (Sixth Edition) by
+    Douglas C. Montgomery et al., "if the overall $F$ statistic is significant but the individual $t$ statistics are all nonsignificant,
+    multicollinearity is present".
+    
 4.  Recall that in matrix notation, the least-squares estimators for the regression model can be written as
 
     $$\boldsymbol{\hat{\beta}} = \begin{bmatrix}\hat{\beta}_0\\\hat{\beta}_1\\\vdots\\\hat{\beta}_k\end{bmatrix} = \left(\boldsymbol{X}^T \boldsymbol{X}\right)^{-1} \boldsymbol{X}^T \boldsymbol{y}$$
@@ -418,7 +422,7 @@ linkcolor: red
     Let $n$ be the number of observations on which a multiple linear regression model is based, and
     let $p$ be the number of variables in the multiple linear regression model.
     
-    Per section 3.2.1: "Least-Squares Estimation of the Regression Coefficients" in *Introduction to Linear Regression Analysis* by
+    Per section 3.2.1: "Least-Squares Estimation of the Regression Coefficients" in *Introduction to Linear Regression Analysis* (Sixth Edition) by
     Douglas C. Montgomery et al. (p. 74), the model matrix $\boldsymbol{X}$ has $n$ rows and $p$ columns.
     $\boldsymbol{X}^T$ has $p$ rows and $n$ columns.
     
