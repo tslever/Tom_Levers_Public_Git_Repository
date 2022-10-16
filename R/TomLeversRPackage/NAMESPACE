@@ -3,6 +3,7 @@
 S3method(print,analysis_of_variance)
 S3method(print,hypothesis_test_result)
 S3method(print,linear_model_summary)
+export(analyze_correlation_matrix)
 export(analyze_variance)
 export(calculate_critical_value_F)
 export(calculate_critical_value_t)

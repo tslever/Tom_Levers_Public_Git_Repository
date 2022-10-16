@@ -36,3 +36,32 @@ head(seatpos, n = 3)
     linear_model <- lm(hipcenter ~ ., data = seatpos)
     summarize_linear_model(linear_model)
     ```
+    
+    Since the above $F$ statistic is greater than the above critical value $F$ / the above $p$-value for an ANOVA $F$ test is less than a
+    significance level $\alpha = 0.05$, we reject a null hypothesis that all regression coefficients in our linear model are $0$ / insignificant. 
+    We have sufficient evidence to support an alternate hypothesis that at least one regression coefficient in our linear model is not $0$ /
+    significant.
+    
+    Since the magnitudes of the above $t$ statistics for all predictors are less than the above critical value $t$, we have insufficient evidence
+    to reject a null hypothesis that each regression coefficient is $0$ / insignificant in the context of the multiple linear model and the other 
+    predictors. We have insufficient evidence to support an alternate hypothesis that each regression coefficient is not $0$ / significant in the
+    context of the multiple linear model and the other predictors.
+    
+2.  Briefly explain why, based on your output from part 1, you suspect the model shows signs of multicollinearity.
+    
+    Per section 9.4.4: Multicollinearity: Multicollinearity Diagnostics: Other Diagnostics in *Introduction to Linear Regression Analysis* (Sixth 
+    Edition) by Douglas C. Montgomery et al., "if the overall $F$ statistic is significant but the individual $t$ statistics are all 
+    nonsignificant, multicollinearity is present". Multicollinearity is present.
+    
+3.  Provide the output of all the pairwise correlations among the predictors. Comment briefly on the pairwise correlations.
+
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    library(dplyr)
+    data_frame_of_predictor_values <- seatpos %>% select(-hipcenter)
+    correlation_matrix <- round(cor(data_frame_of_predictor_values), 3)
+    correlation_matrix
+    ```
+    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    analyze_correlation_matrix(correlation_matrix)
+    ```
