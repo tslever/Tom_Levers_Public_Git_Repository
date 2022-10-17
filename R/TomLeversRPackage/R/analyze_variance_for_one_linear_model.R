@@ -1,11 +1,11 @@
-#' @title analyze_variance
+#' @title analyze_variance_for_one_linear_model
 #' @description Analyzes the variance of a linear model
 #' @param linear_model The linear model to analyze
 #' @return The analysis of variance for the linear model
 #' @examples analysis_of_variance <- analyze_variance(lm(iris$Sepal.Length ~ iris$Sepal.Width, data = iris))
 
 #' @export
-analyze_variance <- function(linear_model) {
+analyze_variance_for_one_linear_model <- function(linear_model) {
     analysis <- capture.output(anova(linear_model))
 
     regression_degrees_of_freedom <- calculate_regression_degrees_of_freedom(linear_model)
@@ -14,7 +14,7 @@ analyze_variance <- function(linear_model) {
     line_with_regression_degrees_of_freedom_sum_of_squares_and_mean_square <- paste("DFR: ", regression_degrees_of_freedom, ", SSR: ", regression_sum_of_squares, ", MSR: ", regression_mean_square, sep = "")
     analysis <- append(analysis, line_with_regression_degrees_of_freedom_sum_of_squares_and_mean_square)
 
-    F_statistic <- calculate_F_statistic(linear_model)
+    F_statistic <- calculate_test_statistic_F(linear_model)
     significance_level <- 0.05
     residual_degrees_of_freedom <- calculate_residual_degrees_of_freedom(linear_model)
     critical_F_value <- calculate_critical_value_F(significance_level, regression_degrees_of_freedom, residual_degrees_of_freedom)
@@ -42,15 +42,4 @@ analyze_variance <- function(linear_model) {
     analysis <- paste(analysis, collapse = "\n")
     class(analysis) <- "analysis_of_variance"
     return(analysis)
-}
-
-
-#' @title print.analysis_of_variance
-#' @description Adds to the generic function print the analysis_of_variance method print.analysis_of_variance
-#' @param analysis The analysis to print
-#' @examples print(analysis_of_variance)
-#' @export
-
-print.analysis_of_variance <- function(analysis) {
-    cat(analysis)
 }

@@ -60,8 +60,172 @@ head(seatpos, n = 3)
     data_frame_of_predictor_values <- seatpos %>% select(-hipcenter)
     correlation_matrix <- round(cor(data_frame_of_predictor_values), 3)
     correlation_matrix
-    ```
-    
-    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
     analyze_correlation_matrix(correlation_matrix)
     ```
+    
+4.  Check the Variance Inflation Factors (VIF's). What do these values indicate about multicollinearity?
+
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    vif(linear_model)
+    ```
+
+    Let $\boldsymbol{X}$ be the $n \times p$ model matrix.
+    Let $C_{jj}$ be the element of $\left(\boldsymbol{X}^T \boldsymbol{X}\right)^{-1}$ in row $j$ and column $j$.
+    Let ${R_j}^2$ be the coefficient of multiple determination obtained from regressing $x_j$ on the other predictors / from the model
+    $$\hat{x}_j = \hat{\beta}_0 + \hat{\beta}_1 x_1 + \hat{\beta}_2 x_2 + ... + \hat{\beta}_{j - 1} x_{j - 1} + \hat{\beta}_{j + 1} x_{j + 1} + ... + \hat{\beta}_k x_k$$
+    Let $Var\left(\hat{\beta}_j\right)$ be the variance of the estimated regression coefficient $\hat{\beta}_j$ of predictor $x_j$.
+    Let $\sigma^2$ be the variance of the linear model for the population of observations.
+    The Variance Inflation Factor for a predictor $x_j$
+    $$VIF_j = C_{jj} = \frac{1}{1 - {R_j}^2} = \frac{Var\left(\hat{\beta}_j\right)}{\sigma^2}$$
+    is the factor by which the variance of the estimated regression coefficient of that predictor increases due to near-linear dependencies among 
+    predictors.
+    The Variance Inflation Factor for predictor $x_j$ measures the combined effect of linear dependencies among predictors on the variance of
+    predictor $x_j$.
+    Since the Variance Inflation Factors for $HtShoes$ and $Ht$ are far greater than $4$, $5$, or even $10$, our linear model is seriously
+    multicollinear. The estimated regression coefficients for $HtShoes$ and $Ht$ are poorly estimated because of multicollinearity.
+    Multicollinearity tends to produce estimated regression coefficients that are too large in magnitude.
+    We are unable to interpret the relationships between predictors, and may be unable to use our model for prediction.
+    
+5.  Looking at the data, we may want to look at the correlations for the variables that describe length of body parts:
+    $HtShoes$, $Ht$, $Seated$, $Arm$, $Thigh$, and $Leg$. Comment on the correlations of these six predictors.
+    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    data_frame_of_predictor_values <-
+        seatpos %>% select(HtShoes, Ht, Seated, Arm, Thigh, Leg)
+    correlation_matrix <- round(cor(data_frame_of_predictor_values), 3)
+    correlation_matrix
+    analyze_correlation_matrix(correlation_matrix)
+    ```
+    
+6.  Since all six predictors from the previous part are highly correlated, you may decide to just use one of the predictors and remove the other
+    five from the model. Decide which predictor out of the six you want to keep, and briefly explain your choice.
+    
+    I will use $HtShoes$, as $HtShoes$ may be thought of as an object with the other variables as components.
+    
+7.  Based on your choice in part 6, fit a multiple linear regression model with your choice of predictor to keep, along with the predictors
+    $x_1 = Age$ and $x_2 = Weight$. Check the Variable Inflation Factors for this model. Comment on whether we still have an issue with
+    multicollinearity.
+    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    library(TomLeversRPackage)
+    reduced_model <- lm(hipcenter ~ HtShoes + Age + Weight, data = seatpos)
+    summarize_linear_model(reduced_model)
+    vif(reduced_model)
+    ```
+    
+    Since the Variance Inflation Factors for all predictors in the reduced model are less than $4$ and are drastically reduced relative to
+    the VIF's of the full model, the reduced model is less multicollinear than the full model. Since the VIF's are non-zero, we still have an
+    issue with multicollinearity. The estimated regression coefficients for the predictors in the reduced model are well estimated relative to
+    the full model.
+    
+8.  Conduct a partial $F$ test to investigate if the predictors you dropped from the full model were jointly insignificant. Be sure to state a
+    relevant conclusion.
+    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    full_model <- lm(
+        hipcenter ~ HtShoes + Age + Weight + Ht + Seated + Arm + Thigh + Leg,
+        data = seatpos
+    )
+    analyze_variance_for_reduced_and_full_linear_models(reduced_model, linear_model)
+    ```
+    
+    The test statistic for a partial $F$ test $F_0 = 0.5863$. Since the test statistic is less than a critical value $F_c = 2.545$,
+    we have insufficient evidence to reject a null hypothesis that the regression coefficients for the dropped predictors are $0$.
+    We have insufficient evidence to support an alternate hypothesis that a regression coefficient for a dropped predictor is not $0$.
+    The dropped predictors are jointly insignificant.
+    The $p$-value for a partial $F$ test $P(F > F_0) = 0.710$. Since this $p$-value is greater than a significance level $\alpha = 0.05$,
+    we have insufficient evidence to reject a null hypothesis that the regression coefficients for the dropped predictors are $0$.
+    We have insufficient evidence to support an alternate hypothesis that a regression coefficient for a dropped predictor is not $0$.
+    The dropped predictors are jointly insignificant.
+    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    analyze_variance_for_one_linear_model(full_model)
+    ```
+    
+    The regression sum of squares for the dropped predictors given that the kept predictors were already in the model and the sum of regression 
+    sum of squares for predictors dropped from the full model given that previous predictors were already in the model
+    $$SS_R\left(\boldsymbol{x}_d | \boldsymbol{x}_k\right) = SS_{R}^{Ht} + SS_{R}^{Seated} + SS_{R}^{Arm} + SS_{R}^{Thigh} + SS_{R}^{Leg} = 183 + 538 + 726 + 69 + 2655 = 4171$$
+    The number of predictors dropped $d = 5$.
+    The regression mean square for the dropped predictors given that the kept predictors were already in the model
+    $$MS_R\left(\boldsymbol{x}_d | \boldsymbol{x}_k\right) = \frac{SS_R\left(\boldsymbol{x}_d | \boldsymbol{x}_k\right)}{d} = 834.2$$
+    The residual mean square $MS_{Res} = 1423$.
+    The test statistic $F$ for the Partial $F$ Test
+    $$F_0 = \frac{MS_R\left(\boldsymbol{x}_d | \boldsymbol{x}_k\right)}{MS_{Res}} = \frac{834.2}{1423} = 0.586$$
+    The corresponding $p$-value
+    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    test_statistic_F0_for_Partial_F_Test <- 0.586
+    number_of_predictors_dropped <- 5
+    number_of_observations <- 38
+    number_of_variables <- 9
+    residual_degrees_of_freedom <- number_of_observations - number_of_variables
+    calculate_p_value_from_F_statistic_and_regression_and_residual_degrees_of_freedom(
+        test_statistic_F0_for_Partial_F_Test,
+        number_of_predictors_dropped,
+        residual_degrees_of_freedom
+    )
+    ```
+    
+9.  Produce a plot of residuals against fitted values for your model from part 7. Based on the residual plot, comment on the assumptions for the
+    multiple linear regression model. Also produce an ACF plot and a QQ plot of the residuals, and comment on the plots.
+    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    library(ggplot2)
+    ggplot(
+        data.frame(
+            externally_studentized_residual = reduced_model$residuals,
+            predicted_hip_center = reduced_model$fitted.values
+        ),
+        aes(x = predicted_hip_center, y = externally_studentized_residual)
+    ) +
+        geom_point(alpha = 0.2) +
+        geom_hline(yintercept = 0, color = "red") +
+        labs(
+            x = "predicted hip center",
+            y = "externally studentized residual",
+            title = "Externally Studentized Residuals vs. Predicted Hip Center"
+        ) +
+        theme(
+            plot.title = element_text(hjust = 0.5),
+            axis.text.x = element_text(angle = 0)
+        )
+    
+    acf(linear_model$residuals, main = "ACF Value vs. Lag for Reduced Model")
+    
+    qqnorm(linear_model$residuals)
+    qqline(linear_model$residuals, col = "red")
+    ```
+    
+    1.  The assumption that the relationship between response / hip center and predictors is linear, at least approximately, is met
+        cannot be addressed.
+    2.  The assumption that the residuals of the linear model of hip center versus predictors have mean $0$ is met.
+        Residuals are evenly scattered around $e = 0$ at random.
+    3.  The assumption that the distributions of residuals of the linear model for different predictors have constant variance is met.
+        Residuals are evenly scattered around $e = 0$ with constant vertical variance.
+    4.  The assumption that the residuals of the linear model are uncorrelated is met.
+        The ACF value for lag $0$ is always $1$; the correlation of the vector of residuals with itself is always 1.
+        Since all ACF value are insignificant (the ACF value for lag $11$ barely), we have insufficient evidence to reject a null hypothesis that
+        the residuals of the linear model are uncorrelated.
+        We have insufficient evidence to conclude that the residuals of the linear model are correlated.
+        We have insufficient evidence to conclude that the assumption that the residuals of the linear model are uncorrelated is not met.
+    5.  The assumption that the residuals of the linear model are normally distributed is met.
+        A linear model is robust to these assumptions.
+        Considering a plot of sample quantiles versus theoretical quantiles
+        for the residuals of the linear model, since observations lie near the line of best fit / their theoretical values,
+        a probability vs. externally studentized residuals plot / distribution is normal.
+        
+10. Based on your results, write your estimated regression equation from part 7. Also report the $R^2$ of this model, and compare with the $R^2$
+    you reported in part 1, for the model with all predictors. Also comment on the adjusted $R^2$ for both models.
+    
+    The $R^2$ of the linear model from part 1 is $0.6866$. The adjusted $R^2$ for the linear model from part 1 is $0.6001$. This coefficient of
+    determination is the proportion of variation in hip center that is explained by the multiple linear relationship / predictors. The adjusted 
+    $R^2$ penalizes us for adding terms to the model that are not helpful. $R^2$ tends to optimistically estimate the fit of the linear 
+    regression. It always increases as the number of predictors in the model increases. Adjusted $R^2$ attempts to correct for this 
+    overestimation. Adjusted $R^2$ might decrease if a specific predictor does not improve the model. Adjusted $R^2$ is always less than or equal
+    to $R^2$. A value of $1$ indicates a model that perfectly predicts values in the target field. A value that is less than or equal to $0.09$
+    indicates a model that has no predictive value. In the real world, adjusted $R^2$ lies between $0$ and $1$.
+    
+    See part 7 for the estimated regression equation of the reduced model. The $R^2$ of the reduced model is $0.6549$. The adjusted $R^2$ of the
+    reduced model is $0.6244$. The $R^2$ of the reduced model is less than the $R^2$ of the linear model from part 1, though the $R^2$ of the
+    reduced model is closer to the adjusted $R^2$ from both the linear model from part 1 and the reduced model. The adjusted $R^2$ for the
+    reduced model is greater than the adjusted $R^2$ for the linear model from part 1.
