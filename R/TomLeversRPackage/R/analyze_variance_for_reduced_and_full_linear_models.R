@@ -16,7 +16,7 @@ analyze_variance_for_reduced_and_full_linear_models <- function(reduced_linear_m
  significance_level <- 0.05
  number_of_predictors_dropped <- (anova(reduced_model, full_model)$"Df")[2]
  residual_degrees_of_freedom_of_full_model <- (anova(reduced_model, full_model)$"Res.Df")[2]
- critical_value_F <- calculate_critical_value_F(significance_level, number_of_predictors_dropped, residual_degrees_of_freedom_of_full_model)
+ critical_value_F <- calculate_critical_value_Fc(significance_level, number_of_predictors_dropped, residual_degrees_of_freedom_of_full_model)
  line_with_critical_value_F <- paste("Fc(alpha = ", significance_level, ", predictors_dropped = ", number_of_predictors_dropped, ", DFRes(full) = ", residual_degrees_of_freedom_of_full_model, ") = ", critical_value_F, sep = "")
  analysis <- append(analysis, line_with_critical_value_F)
 

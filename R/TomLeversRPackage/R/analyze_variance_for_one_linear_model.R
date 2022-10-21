@@ -17,7 +17,7 @@ analyze_variance_for_one_linear_model <- function(linear_model) {
     F_statistic <- calculate_test_statistic_F(linear_model)
     significance_level <- 0.05
     residual_degrees_of_freedom <- calculate_residual_degrees_of_freedom(linear_model)
-    critical_F_value <- calculate_critical_value_F(significance_level, regression_degrees_of_freedom, residual_degrees_of_freedom)
+    critical_F_value <- calculate_critical_value_Fc(significance_level, regression_degrees_of_freedom, residual_degrees_of_freedom)
     line_with_F_statistic_and_critical_F_value <- paste("F0: ", F_statistic, ", F(alpha = ", significance_level, ", DFR = ", regression_degrees_of_freedom, ", DFRes = ", residual_degrees_of_freedom, "): ", critical_F_value, sep = "")
     analysis <- append(analysis, line_with_F_statistic_and_critical_F_value)
 
