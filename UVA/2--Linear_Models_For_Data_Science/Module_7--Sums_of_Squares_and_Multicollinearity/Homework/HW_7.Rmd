@@ -56,7 +56,7 @@ linkcolor: red
         library(ggplot2)
         ggplot(
             data.frame(
-                externally_studentized_residual = full_model$residuals,
+                externally_studentized_residual = reduced_model$residuals,
                 predicted_fertility = reduced_model$fitted.values
             ),
             aes(x = predicted_fertility, y = externally_studentized_residual)

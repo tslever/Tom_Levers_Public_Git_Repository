@@ -10,22 +10,22 @@ summarize_linear_model <- function(linear_model) {
     summary_output <- capture.output(the_summary)
 
     coefficients <- linear_model$coefficients
-    variables <- attr(linear_model$terms, "variables")
-    number_of_variables <- length(variables)
-    predictors <- attr(linear_model$terms, "term.labels")
-    number_of_predictors <- length(predictors)
+    names_of_coefficients <- names(coefficients)
+    predictors_and_interaction_terms <- names_of_coefficients[2:length(names_of_coefficients)]
+    number_of_predictors_and_interaction_terms <- length(predictors_and_interaction_terms)
+    number_of_variables <- number_of_predictors_and_interaction_terms + 1
     substrings_of_generic_linear_regression_equation <- character(number_of_variables)
     substrings_of_generic_linear_regression_equation[1] <- paste("E(y | x) =\n    B_0", sep = "")
-    for (i in 1:number_of_predictors) {
-        substrings_of_generic_linear_regression_equation[i + 1] <- paste(" +\n    B_", predictors[i], " * ", predictors[i], sep = "")
+    for (i in 1:number_of_predictors_and_interaction_terms) {
+        substrings_of_generic_linear_regression_equation[i + 1] <- paste(" +\n    B_", predictors_and_interaction_terms[i], " * ", predictors_and_interaction_terms[i], sep = "")
     }
     generic_linear_regression_equation <- paste(substrings_of_generic_linear_regression_equation, sep = "", collapse = "")
     summary_output <- append(summary_output, generic_linear_regression_equation)
 
     substrings_of_linear_regression_equation <- character(number_of_variables)
     substrings_of_linear_regression_equation[1] <- paste("E(y | x) =\n    ", coefficients[1], sep = "")
-    for (i in 1:number_of_predictors) {
-     substrings_of_linear_regression_equation[i + 1] <- paste(" +\n    ", coefficients[i + 1], " * ", predictors[i], sep = "")
+    for (i in 1:number_of_predictors_and_interaction_terms) {
+     substrings_of_linear_regression_equation[i + 1] <- paste(" +\n    ", coefficients[i + 1], " * ", predictors_and_interaction_terms[i], sep = "")
     }
     linear_regression_equation <- paste(substrings_of_linear_regression_equation, sep = "", collapse = "")
     summary_output <- append(summary_output, linear_regression_equation)
@@ -54,8 +54,8 @@ summarize_linear_model <- function(linear_model) {
     line_with_critical_value_t <- paste("Critical value t(alpha/2 = ",  significance_level, "/2, DFRes = ", residual_degrees_of_freedom, "): ", critical_value_t, sep = "")
     summary_output <- append(summary_output, line_with_critical_value_t)
 
-    critical_value_F <- calculate_critical_value_Fc(significance_level, number_of_predictors, residual_degrees_of_freedom)
-    line_with_critical_value_F <- paste("Critical value F(alpha = ",  significance_level, ", DFR = ", number_of_predictors, ", DFRes = ", residual_degrees_of_freedom, "): ", critical_value_F, sep = "")
+    critical_value_F <- calculate_critical_value_Fc(significance_level, number_of_predictors_and_interaction_terms, residual_degrees_of_freedom)
+    line_with_critical_value_F <- paste("Critical value F(alpha = ",  significance_level, ", DFR = ", number_of_predictors_and_interaction_terms, ", DFRes = ", residual_degrees_of_freedom, "): ", critical_value_F, sep = "")
     summary_output <- append(summary_output, line_with_critical_value_F)
 
     summary_output <- paste(summary_output, collapse = "\n")

@@ -1,0 +1,226 @@
+---
+title: "Stat 6021: Guided Question Set 8"
+author: "Tom Lever"
+date: 10/22/22
+output:
+  pdf_document: default
+  html_document: default
+urlcolor: blue
+linkcolor: red
+---
+
+We will revisit the data set `penguins` from the `palmerpenguins` package. The data set contains size measurements for adult foraging penguins near
+Palmer Station, Antarctica. In this set of questions, we focus on exploring the relationship between body mass $y$ and bill depth $x_1$ of three
+species of penguins.
+
+1.  Create a scatterplot of the body mass against the bill length of the penguins. How would you describe the relationship between these two 
+    variables?
+    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    library(palmerpenguins)
+    library(dplyr)
+    species_bill_depth_and_body_mass <-
+        palmerpenguins::penguins %>%
+            select(species, bill_depth_mm, body_mass_g) %>%
+            filter(!is.na(bill_depth_mm))
+    head(species_bill_depth_and_body_mass, n = 3)
+    ```
+
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    library(ggplot2)
+    ggplot(
+        species_bill_depth_and_body_mass,
+        aes(x = bill_depth_mm, y = body_mass_g)
+    ) +
+        geom_point(alpha = 0.2) +
+        geom_smooth(method = "lm", se = FALSE) +
+        labs(
+            x = "bill depth (mm)",
+            y = "body mass (g)",
+            title = "Body Mass vs. Bill Depth for Adult Penguins near Palmer Station"
+        ) +
+        theme(
+            plot.title = element_text(hjust = 0.5),
+            axis.text.x = element_text(angle = 0)
+        )
+    ```
+    
+    The relationship between bill depth and body mass for adult penguins near Palmer Station, Antarctica appears clustered, perhaps by species,
+    and nonlinear. A line of best fit has been rendered to aid this determination.
+    
+2.  Create the same scatterplot but now with differently colored plots for each species. Also be sure to overlay separate regression lines for 
+    each species. How would you now describe the relationship between the variables?
+    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    library(ggplot2)
+    ggplot(
+        species_bill_depth_and_body_mass,
+        aes(x = bill_depth_mm, y = body_mass_g, color = species)
+    ) +
+        geom_point(alpha = 0.2) +
+        geom_smooth(method = "lm", se = FALSE) +
+        labs(
+            x = "bill depth (mm)",
+            y = "body mass (g)",
+            title = "Body Mass vs. Bill Depth for Adult Penguins near Palmer Station"
+        ) +
+        theme(
+            plot.title = element_text(hjust = 0.5),
+            axis.text.x = element_text(angle = 0)
+        )
+    ```
+    
+    The relationship between bill depth and body mass for adult penguins near Palmer Station, Antarctica appears linear for each observed species.
+    Lines of best fit have been rendered to aid these determinations. The biases and rates at which body mass increases for increasing bill depth 
+    are approximately equal for Adelie and Chinstrap penguins. The bias for Gentoo penguins is substantially greater for Gentoo penguins than for
+    Adelie and Chinstrap penguins. The rate at which body mass increases for increasing bill depth for Gentoo penguins is greater than the rates
+    for Adelie and Chinstrap penguins, indicating that there is an interaction between species and bill depth; the influence of bill depth on 
+    body mass may differ between species.
+    
+3.  Create a multiple linear regression model with interaction between bill depth and species. That is, create a multiple linear regression model
+    $$y = \beta_0 + \beta_1 x_1 + \beta_2 I_1 + \beta_3 I_2 + \beta_4 x_1 I_1 + \beta_5 x_1 I_2 + \epsilon$$
+    where $I_1$ and $I_2$ are indicator variables where $I_1 = 1$ for Chinstrap penguins and $0$ otherwise, and $I_2 = 1$ for Gentoo penguins and
+    $0$ otherwise. Write down the estimated regression equation for this multiple linear regression model.
+    
+    Since the categorical variable `species` has three levels, there will be two indicator variables created to represent the various species.
+    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    library(TomLeversRPackage)
+    generate_data_frame_for_indicator_variables(species_bill_depth_and_body_mass$species)
+    ```
+    
+    A table of indicator variables and their values for each species indicates that the Adelie species is a reference species; both indicator
+    variables take on the value of $0$ for species Adelie.
+    
+    Given the possibility that the rate at which body mass increases for increasing bill depth is greater for Gentoo penguins than for Adelie or
+    Chinstrap penguins, we consider fitting a multiple linear regression model with interaction terms between bill depth and each indicator
+    variable.
+    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    data_set <- species_bill_depth_and_body_mass
+    full_model <- lm(body_mass_g ~ bill_depth_mm * species, data = data_set)
+    summarize_linear_model(full_model)
+    ```
+    
+4.  Carry out the relevant hypothesis test to see if the interaction terms can be dropped. What is the conclusion?
+
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    reduced_model <- lm(body_mass_g ~ bill_depth_mm + species, data = data_set)
+    analyze_variance_for_reduced_and_full_linear_models(reduced_model, full_model)
+    ```
+    
+    We conduct the Partial $F$ Test to investigate if the interaction terms $\beta_4 x_1 I_1$ and $\beta_5 x_1 I_2$ are $0$ / jointly 
+    insignificant in the context of the full multiple linear model and all predictors / can be dropped from the full model. The test statistic 
+    for the Partial $F$ Test $F_0 = 8.234$. Since the test statistic is greater than a critical value $F_c = 3.023$, we have sufficient evidence 
+    to reject a null hypothesis that the regression coefficients for the interaction terms are $0$ / the interaction terms are jointly 
+    insignificant / the interaction terms can be dropped from the full model. We have sufficient evidence to support an alternate hypothesis that
+    a regression coefficient for a dropped predictor is not $0$ / the interaction terms are jointly significant / the interaction terms cannot be
+    dropped from the full model. The full model should be used. There is sufficient evidence that the rate at which body mass increases for
+    increasing bill depth for Gentoo penguins is different that the rates for Adelie and Chinstrap penguins.
+    
+5.  Based on your answer in part 4, write out the estimated regression equations relating body mass and bill depth, for each species of penguins.
+
+    $$y = \beta_0 + \beta_1 x_1 + \beta_2 I_1 + \beta_3 I_2 + \beta_4 x_1 I_1 + \beta_5 x_1 I_2 + \epsilon$$
+    $$E(y) = \beta_0 + \beta_1 x_1 + \beta_2 I_1 + \beta_3 I_2 + \beta_4 x_1 I_1 + \beta_5 x_1 I_2$$
+    
+    $$E(y | species = Adelie) = \beta_0 + \beta_1 x_1 + \beta_2 (0) + \beta_3 (0) + \beta_4 x_1 (0) + \beta_5 x_1 (0)$$
+    $$E(y | species = Adelie) = \beta_0 + \beta_1 x_1$$
+    
+    $$E(y | species = Chinstrap) = \beta_0 + \beta_1 x_1 + \beta_2 (1) + \beta_3 (0) + \beta_4 x_1 (1) + \beta_5 x_1 (0)$$
+    $$E(y | species = Chinstrap) = \beta_0 + \beta_1 x_1 + \beta_2 + \beta_4 x_1$$
+    $$E(y | species = Chinstrap) = \left(\beta_0 + \beta_2\right) + \left(\beta_1 + \beta_4\right) x_1$$
+    
+    $$E(y | species = Gentoo) = \beta_0 + \beta_1 x_1 + \beta_2 (0) + \beta_3 (1) + \beta_4 x_1 (0) + \beta_5 x_1 (1)$$
+    $$E(y | species = Gentoo) = \beta_0 + \beta_1 x_1 + \beta_3 + \beta_5 x_1$$
+    $$E(y | species = Gentoo) = \left(\beta_0 + \beta_3\right) + \left(\beta_1 + \beta_5\right) x_1$$
+    
+6.  Assess if the regression assumptions are met for the model you recommend to use based on part 4. Also, be sure to carry out Levene's test
+    of equality of variances since we have a categorical predictor.
+    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    library(ggplot2)
+    ggplot(
+        data.frame(
+            externally_studentized_residual = full_model$residuals,
+            predicted_body_mass = full_model$fitted.values
+        ),
+        aes(x = predicted_body_mass, y = externally_studentized_residual)
+    ) +
+        geom_point(alpha = 0.2) +
+        geom_hline(yintercept = 0, color = "red") +
+        labs(
+            x = "predicted body mass (g)",
+            y = "externally studentized residual (g)",
+            title = "Externally Studentized Residual vs. Predicted Body Mass"
+        ) +
+        theme(
+            plot.title = element_text(hjust = 0.5),
+            axis.text.x = element_text(angle = 0)
+        )
+        
+    acf(full_model$residuals, main = "ACF Value vs. Lag for Full Model")
+    
+    qqnorm(full_model$residuals)
+    qqline(full_model$residuals, col = "red")
+    ```
+    
+    I recommend the full model of body mass versus bill depth, indicator variables for the various species, and interaction terms between
+    bill depth and indicator variables.
+    
+    1.  The assumption that the relationship between response and predictors is linear, at least approximately, is met cannot be 
+        addressed.
+    2.  The assumption that the residuals of the linear model have mean $0$ is met.
+        Residuals are evenly scattered around $e = 0$ at random.
+    3.  The assumption that the distributions of residuals of the linear model have constant variance is met.
+        Residuals are evenly scattered around $e = 0$ with constant vertical variance.
+    4.  The assumption that the residuals of the linear model are uncorrelated is not met.
+        The ACF value for lag $0$ is always $1$; the correlation of the vector of residuals with itself is always 1.
+        Since the ACF value for the first seven lags at least are significant, we have sufficient evidence to reject a null hypothesis that
+        the residuals of the linear model are uncorrelated.
+        We have sufficient evidence to conclude that the residuals of the linear model are correlated.
+        We have sufficient evidence to conclude that the assumption that the residuals of the linear model are uncorrelated is not met.
+    5.  The assumption that the residuals of the linear model are normally distributed is met.
+        A linear model is robust to these assumptions.
+        Considering a plot of sample quantiles versus theoretical quantiles
+        for the residuals of the linear model, since observations lie near the line of best fit / their theoretical values,
+        a probability vs. externally studentized residuals plot / distribution is normal.
+        
+    We conduct Levene's test for equality of variances of body mass across all species.
+    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    ggplot(species_bill_depth_and_body_mass, aes(x = species, y = body_mass_g)) +
+        geom_boxplot(fill = "Blue", color = "Orange") +
+        labs(
+            title = "Distributions of Body Mass by Species",
+            y = "body mass (g)",
+            x = "species"
+        ) +
+        theme(
+            plot.title = element_text(hjust = 0.5, size = 11),
+            axis.text.x = element_text(angle = 0)
+        )
+    ```
+    
+    The spread of body mass seems to decrease across species Gentoo, Adelie, and Chinstrap.
+    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    library(lawstat)
+    levene.test(
+        species_bill_depth_and_body_mass$body_mass_g,
+        species_bill_depth_and_body_mass$species
+    )
+    ```
+    
+    The null hypothesis for Levene's test is that the variances of body mass across all species are equal.
+    Since the $p$-value is less than significance level $\alpha = 0.05$, we have sufficient evidence to reject the null hypothesis;
+    we have evidence that this assumption is not met.
+    
+7.  Briefly explain if we can conduct pairwise comparisons for the difference in mean body mass among all pairs of species for given values for
+    given values of bill depth. These pairs of species are (Adelie, Chinstrap), (Adelie, Gentoo), and (Chinstrap, Gentoo). If we are able, 
+    conduct Tukey's multiple comparsions and contextually interpret the results of these hypothesis tests.
+    
+    If we had a model with no interactions, we could interpret the coefficents of the indicator variable $I_i$ as the difference in the mean 
+    body mass, given values of bill depth, between the species for which that indicator variable is $1$ and the reference species $Adelie$.
+    We have a model with interactions.
+    
+    
