@@ -279,7 +279,7 @@ linkcolor: red
         $$F_{0, \ w/o \ x_5} = \frac{MS_{R, \ w/o \ x_5}\left(\boldsymbol{x}_{d, \ w/o \ x_5} | \boldsymbol{x}_k\right)}{MS_{Res, \ w/o \ x_5}} = \frac{2.6185}{0.976} = 2.683$$
         
         ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
-        regression_degrees_of_freedom_without_x5 <- 4
+        regression_degrees_of_freedom_without_x5 <- 2
         residual_degrees_of_freedom_without_x5 <- 108
         critical_value_Fc_without_x5 <- calculate_critical_value_Fc(
             significance_level,
@@ -289,14 +289,14 @@ linkcolor: red
         critical_value_Fc_without_x5
         ```
         
-        Since the test statistic $F_{0, \ w/o \ x_5} = 2.683$ is greater than the critical value $F_{c, \ w/o \ x_5} = 2.456$, we have sufficient
-        evidence to reject a null hypothesis that the regression coefficients for the dropped predictors are 0. We have sufficient evidence to
+        Since the test statistic $F_{0, \ w/o \ x_5} = 2.683$ is less than the critical value $F_{c, \ w/o \ x_5} = 3.080$, we have insufficient
+        evidence to reject a null hypothesis that the regression coefficients for the dropped predictors are 0. We have insufficient evidence to
         support an alternate hypothesis that a regression coefficient for a dropped predictor is not $0$. The dropped predictors are jointly
-        significant. The predictors $Age$ and $Census$ cannot be dropped simultaneously from the multiple linear model without the predictor 
+        insignificant. The predictors $Age$ and $Census$ can be dropped simultaneously from the multiple linear model without the predictor 
         $Beds$.
         
         ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
-        test_statistic_F0_without_x5 <- 2.683
+        test_statistic_F0_without_x5 <- 3.080
         p_value_without_x5 <- calculate_p_value_from_F_statistic_and_regression_and_residual_degrees_of_freedom(
             test_statistic_F0_without_x5,
             regression_degrees_of_freedom_without_x5,
@@ -305,10 +305,10 @@ linkcolor: red
         p_value_without_x5
         ```
         
-        Since the $p$-value $p_{w/o \ x_5} = 0.0353$ is less than the significance level $\alpha = 0.05$, we have sufficient evidence to reject a
-        null hypothesis that the regression coefficients for the dropped predictors are $0$. We have sufficient evidence to support an alternate
-        hypothesis that a regression coefficient for a dropped predictor is not $0$. The dropped predictors are jointly significant. The 
-        predictors $Age$ and $Census$ cannot be dropped simultaneously from the multiple linear model without the predictor $Beds$.
+        Since the $p$-value $p_{w/o \ x_5} = 0.05002$ is greater than the significance level $\alpha = 0.05$, we have insufficient evidence to reject a
+        null hypothesis that the regression coefficients for the dropped predictors are $0$. We have insufficient evidence to support an alternate
+        hypothesis that a regression coefficient for a dropped predictor is not $0$. The dropped predictors are jointly insignificant. The 
+        predictors $Age$ and $Census$ can be dropped simultaneously from the multiple linear model without the predictor $Beds$.
         
 3.  This question is based on a data set seen in Homework Set 4. Data from 55 college students are used to estimate a multiple regression model
     with response variable $LeftArm$ and predictors $LeftFoot$ and $RtFoot$. All variables were measured in centimeters. You may assume the
