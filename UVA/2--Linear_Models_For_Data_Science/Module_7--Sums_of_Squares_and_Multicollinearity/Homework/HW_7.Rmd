@@ -160,10 +160,10 @@ linkcolor: red
         $$F_0 = \frac{MS_R\left(\boldsymbol{x}_d | \boldsymbol{x}_k\right)}{MS_{Res}} = \frac{1.755}{0.985} = 1.782$$
         
         Since the R output describes an $F$ statistic for a Partial $F$ Test following an $F$ distribution with $DF_R = 5$ and $DF_{Res} = 107$
-        degrees of freedom, a critical value for the Partial $F$ Test $F_c = 2.299$.
+        degrees of freedom, a critical value for the Partial $F$ Test $F_c = 2.689$.
         
         ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
-        regression_degrees_of_freedom <- 5
+        regression_degrees_of_freedom <- 3
         critical_value_Fc <- qf(
             significance_level,
             regression_degrees_of_freedom,
@@ -179,7 +179,7 @@ linkcolor: red
         critical_value_Fc
         ```
         
-        Since this test statistic $F_0$ is less than the critical value $F_c = 2.299$, we have insufficient evidence to reject a null hypothesis 
+        Since this test statistic $F_0$ is less than the critical value $F_c = 2.689$, we have insufficient evidence to reject a null hypothesis 
         that the regression coefficients for the dropped predictors are $0$. We have insufficient evidence to support an alternate hypothesis 
         that a regression coefficient for a dropped predictor is not $0$. The dropped predictors are jointly insignificant. The predictors $Age$,
         $Census$, and $Beds$ may be dropped simultaneously from the multiple linear model with the above summary and analysis of variance.
@@ -199,7 +199,7 @@ linkcolor: red
         p_value
         ```
         
-        Since the $p$-value $p = 0.123$ corresponding to this $F$ statistic $F_0 = 1.782$ is greater than a significance level $\alpha = 0.05$,
+        Since the $p$-value $p = 0.155$ corresponding to this $F$ statistic $F_0 = 1.782$ is greater than a significance level $\alpha = 0.05$,
         we have insufficient evidence to reject a null hypothesis that the regression coefficients for the dropped predictors are $0$. We have
         insufficient evidence to support an alternate hypothesis that a regression coefficient for a dropped predictor is not $0$. The dropped
         predictors are jointly insignificant. The predictors $Age$, $Census$, and $Beds$ may be dropped simultaneously from the multiple linear 
@@ -319,7 +319,7 @@ linkcolor: red
     Edition) by Douglas C. Montgomery et al., "if the overall $F$ statistic is significant but the individual $t$ statistics are all 
     nonsignificant, multicollinearity is present".
     
-    Since the R output describes an $F$ statistic for a Partial $F$ Test following an $F$ distribution with $DF_R = 2$ and $DF_{Res} = 52$
+    Since the R output describes an $F$ statistic for an ANOVA $F$ Test following an $F$ distribution with $DF_R = 2$ and $DF_{Res} = 52$
     degrees of freedom, a critical value $F_c$ for the overall $F$ statistic $F_0 = 15.19$ follows a $F$ distribution with $DF_R = 2$ and
     $DF_{Res} = 52$ degrees of freedom. This critical value is
     
@@ -336,7 +336,7 @@ linkcolor: red
     
     Since $F_0$ is greater than $F_c$, the overall $F$ statistic is significant.
     
-    Since the R output describes an $F$ statistic for a Partial $F$ Test following an $F$ distribution with $DF_R = 2$ and $DF_{Res} = 52$
+    Since the R output describes an $F$ statistic for an ANOVA $F$ Test following an $F$ distribution with $DF_R = 2$ and $DF_{Res} = 52$
     degrees of freedom, a critical value $t_c$ for each predictor $t$ statistic $t_0$ follows a Student's $t$ distribution with $DF_{Res} = 52$ 
     degrees of freedom. This critical value is
     
