@@ -17,7 +17,7 @@ calculate_critical_value_Fc(
 The critical value F
 }
 \description{
-Calculates critical value F of an F distribution with provided numbers of regression and residual degrees of freedom with provided significance level
+Calculates critical value Fc of an F distribution with specified significance level, number of regression degrees of freedom, and number of residual degrees of freedom
 }
 \examples{
 critical_value_F <- calculate_critical_value_Fc(0.05, 2, 52)

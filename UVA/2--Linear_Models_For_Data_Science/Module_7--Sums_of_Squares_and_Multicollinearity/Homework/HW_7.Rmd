@@ -29,7 +29,7 @@ linkcolor: red
         ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
         library(TomLeversRPackage)
         full_model <- lm(
-            Fertility ~ Agriculture + Examination + Education + Catholic + Infant.Mortality,
+            Fertility ~ Education + Catholic + Infant.Mortality + Agriculture + Examination,
             data = swiss
         )
         reduced_model <- lm(
@@ -46,7 +46,7 @@ linkcolor: red
         
         The $p$-value for the Partial $F$ Test $p = 0.056$. Since this $p$-value is greater than a significance level $\alpha = 0.05$, we have
         insufficient evidence to reject a null hypothesis that the regression coefficients for the predictors $Agriculture$ and $Examination$
-        omitted from the reduced model are $0$. We have insufficient evidence to support an alternate hyptohesis that a regression coefficient for
+        omitted from the reduced model are $0$. We have insufficient evidence to support an alternate hypothesis that a regression coefficient for
         an omitted predictor is not $0$. The predictors $Agriculture$ and $Examination$ are jointly insignificant in the context of the full
         multiple linear model and all predictors. The reduced model should be used.
         
@@ -133,11 +133,11 @@ linkcolor: red
         critical_value_tc
         ```
         
-        Since test statistics $t_{0, \ Stay}$ and $t_{0, \ Cultures}$ are greater than critical value $t_c$, predictors $Stay$ and $Cultures$ are
+        Since test statistics $t_{0, Stay}$ and $t_{0, Cultures}$ are greater than critical value $t_c$, predictors $Stay$ and $Cultures$ are
         significant. Since corresponding $p$-values are less than a significance level $\alpha = 0.05$, predictors $Stay$ and $Cultures$ are
         significant.
         
-        Since test statistics $t_{0, \ Age}$, $t_{0, \ Census}$, and $t_{0, Beds}$ are less than critical value $t_c$, predictors $Age$, $Census$, and
+        Since test statistics $t_{0, Age}$, $t_{0, Census}$, and $t_{0, Beds}$ are less than critical value $t_c$, predictors $Age$, $Census$, and
         $Beds$ are insignificant. Since corresponding $p$-values are greater than significance level $\alpha$, predictors $Age$, $Census$, and
         $Beds$ are insignificant.
         
@@ -149,7 +149,7 @@ linkcolor: red
         predictors. The regression sum of squares for the dropped predictors given that the kept predictors are already in the model, and the
         sum of regression sum of squares for dropped predictors given that kept predictors are already in the model
         
-        $$SS_R\left(\boldsymbol{x}_d | \boldsymbol{x}_k\right) = SS_{R, \ Age} + SS_{R, \ Census} + SS_{R, \ Beds} = 0.136 + 5.101 + 0.028 = 5.265$$
+        $$SS_R\left(\boldsymbol{x}_d | \boldsymbol{x}_k\right) = SS_{R, Age} + SS_{R, Census} + SS_{R, Beds} = 0.136 + 5.101 + 0.028 = 5.265$$
         
         The number of dropped predictors $d = 3$. The regression mean square for the dropped predictors given that the kept predictors are 
         already in the model
@@ -232,15 +232,15 @@ linkcolor: red
         Consider the full model to be a multiple linear regression model of response $InfctRsk$ and all five predictors.
         
         The residual sum of squares of the full model when all five predictors are in the model
-        $$SS_{Res, \ full} = 105.413$$
+        $$SS_{Res, full} = 105.413$$
         
         The regression sum of squares of the full model when all five predictors are in the model
-        $$SS_{R, \ full} = SS_{R, \ Stay} + SS_{R, \ Cultures} + SS_{R, \ Age} + SS_{R, \ Census} + SS_{R, \ Beds}$$
-        $$SS_{R, \ full} = 57.305 + 33.397 + 0.136 + 5.101 + 0.028$$
-        $$SS_{R, \ full} = 95.967$$
+        $$SS_{R, full} = SS_{R, Stay} + SS_{R, Cultures} + SS_{R, Age} + SS_{R, Census} + SS_{R, Beds}$$
+        $$SS_{R, full} = 57.305 + 33.397 + 0.136 + 5.101 + 0.028$$
+        $$SS_{R, full} = 95.967$$
         
         The total sum of squares
-        $$SS_T = SS_{R, \ full} + SS_{Res, \ full} = 95.967 + 105.413 = 201.38$$
+        $$SS_T = SS_{R, full} + SS_{Res, full} = 95.967 + 105.413 = 201.38$$
         
         Let the number of predictors $k = 5$.
         Let

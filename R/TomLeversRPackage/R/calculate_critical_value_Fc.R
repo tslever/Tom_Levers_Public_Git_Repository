@@ -1,5 +1,5 @@
 #' @title calculate_critical_value_Fc
-#' @description Calculates critical value F of an F distribution with provided numbers of regression and residual degrees of freedom with provided significance level
+#' @description Calculates critical value Fc of an F distribution with specified significance level, number of regression degrees of freedom, and number of residual degrees of freedom
 #' @param The significance level
 #' @param The regression degrees of freedom
 #' @param The residual degrees of freedom
