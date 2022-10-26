@@ -163,17 +163,17 @@ linkcolor: red
         degrees of freedom and number of dropped predictors $d = 3$, a critical value for the Partial $F$ Test $F_c = 2.689$.
         
         ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
-        regression_degrees_of_freedom <- 3
+        number_of_dropped_predictors <- 3
         critical_value_Fc <- qf(
             significance_level,
-            regression_degrees_of_freedom,
+            number_of_dropped_predictors,
             residual_degrees_of_freedom,
             lower.tail = FALSE
         )
         critical_value_Fc
         critical_value_Fc <- calculate_critical_value_Fc(
             significance_level,
-            regression_degrees_of_freedom,
+            number_of_dropped_predictors,
             residual_degrees_of_freedom
         )
         critical_value_Fc
@@ -188,13 +188,13 @@ linkcolor: red
         test_statistic_F0 = 1.782
         p_value <- pf(
             test_statistic_F0,
-            regression_degrees_of_freedom,
+            number_of_dropped_predictors,
             residual_degrees_of_freedom,
             lower.tail = FALSE
         )
         p_value
         p_value <- calculate_p_value_from_F_statistic_and_regression_and_residual_degrees_of_freedom(
-            test_statistic_F0, regression_degrees_of_freedom, residual_degrees_of_freedom
+            test_statistic_F0, number_of_dropped_predictors, residual_degrees_of_freedom
         )
         p_value
         ```
