@@ -111,7 +111,7 @@ linkcolor: red
     
     (a) Based on the $t$ statistics, which predictors appear to be insignificant?
     
-        Since the R output describes an $F$ statistic for a Partial $F$ Test following an $F$ distribution with $DF_R = 5$ and $DF_{Res} = 107$
+        Since the R output describes an $F$ statistic for an ANOVA $F$ Test following an $F$ distribution with $DF_R = 5$ and $DF_{Res} = 107$
         degrees of freedom, a critical value $t_c$ for each test statistic $t_0$ follows a Student's $t$ distribution with $DF_{Res} = 107$
         degrees of freedom. This critical value is
         
@@ -159,8 +159,8 @@ linkcolor: red
         The residual mean square $MS_{Res} = 0.985$. The test statistic for the Partial $F$ Test
         $$F_0 = \frac{MS_R\left(\boldsymbol{x}_d | \boldsymbol{x}_k\right)}{MS_{Res}} = \frac{1.755}{0.985} = 1.782$$
         
-        Since the R output describes an $F$ statistic for a Partial $F$ Test following an $F$ distribution with $DF_R = 5$ and $DF_{Res} = 107$
-        degrees of freedom, a critical value for the Partial $F$ Test $F_c = 2.689$.
+        Since the R output describes an $F$ statistic for an ANOVA $F$ Test following an $F$ distribution with $DF_R = 5$ and $DF_{Res} = 107$
+        degrees of freedom and number of dropped predictors $d = 3$, a critical value for the Partial $F$ Test $F_c = 2.689$.
         
         ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
         regression_degrees_of_freedom <- 3
@@ -279,11 +279,11 @@ linkcolor: red
         $$F_{0, \ w/o \ x_5} = \frac{MS_{R, \ w/o \ x_5}\left(\boldsymbol{x}_{d, \ w/o \ x_5} | \boldsymbol{x}_k\right)}{MS_{Res, \ w/o \ x_5}} = \frac{2.6185}{0.976} = 2.683$$
         
         ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
-        regression_degrees_of_freedom_without_x5 <- 2
+        number_of_dropped_predictors <- 2
         residual_degrees_of_freedom_without_x5 <- 108
         critical_value_Fc_without_x5 <- calculate_critical_value_Fc(
             significance_level,
-            regression_degrees_of_freedom_without_x5,
+            number_of_dropped_predictors,
             residual_degrees_of_freedom_without_x5
         )
         critical_value_Fc_without_x5
@@ -299,7 +299,7 @@ linkcolor: red
         test_statistic_F0_without_x5 <- 3.080
         p_value_without_x5 <- calculate_p_value_from_F_statistic_and_regression_and_residual_degrees_of_freedom(
             test_statistic_F0_without_x5,
-            regression_degrees_of_freedom_without_x5,
+            number_of_dropped_predictors,
             residual_degrees_of_freedom_without_x5
         )
         p_value_without_x5
@@ -353,7 +353,7 @@ linkcolor: red
     non-significant.
     Since the corresponding $p$-value is greater than significance level $\alpha = 0.05$, the test statistic for predictor $LeftFoot$ is 
     non-significant.
-    Since the test statistic for predictor $RtFoot$ is less than critical value $t_c$, the test statistic for predictor $RtFoot is 
+    Since the test statistic for predictor $RtFoot$ is less than critical value $t_c$, the test statistic for predictor $RtFoot$ is 
     non-significant.
     Since the corresponding $p$-value is greater than significance level $\alpha = 0.05$, the test statistic for predictor $RtFoot$ is 
     non-significant.
