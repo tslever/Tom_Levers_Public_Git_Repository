@@ -32,8 +32,13 @@ analyze_variance_for_one_linear_model <- function(linear_model) {
 
     coefficient_of_determination_R2 <- calculate_coefficient_of_determination_R2(linear_model)
     adjusted_coefficient_of_determination_R2 <- calculate_adjusted_coefficient_of_determination_R2(linear_model)
-    line_with_adjusted_coefficient_of_determination_R2 <- paste("R2: ", coefficient_of_determination_R2, ", Adjusted R2: ", adjusted_coefficient_of_determination_R2, sep = "")
+    prediction_coefficient_of_determination_R2 <- calculate_prediction_coefficient_of_determination_R2(linear_model)
+    line_with_coefficient_of_determination_R2 <- paste("R2: ", coefficient_of_determination_R2, sep = "")
+    analysis <- append(analysis, line_with_coefficient_of_determination_R2)
+    line_with_adjusted_coefficient_of_determination_R2 <- paste("Adjusted R2: ", adjusted_coefficient_of_determination_R2, sep = "")
     analysis <- append(analysis, line_with_adjusted_coefficient_of_determination_R2)
+    line_with_prediction_coefficient_of_determination_R2 <- paste("Prediction R2: ", prediction_coefficient_of_determination_R2, sep = "")
+    analysis <- append(analysis, line_with_prediction_coefficient_of_determination_R2)
 
     number_of_observations <- nobs(linear_model)
     line_with_number_of_observations <- paste("Number of observations: ", number_of_observations, sep = "")

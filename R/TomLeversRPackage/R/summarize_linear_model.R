@@ -41,6 +41,9 @@ summarize_linear_model <- function(linear_model) {
 
     multiple_R_squared <- calculate_coefficient_of_determination_R2(linear_model)
     adjusted_R_squared <- calculate_adjusted_coefficient_of_determination_R2(linear_model)
+    prediction_coefficient_of_determination_R2 <- calculate_prediction_coefficient_of_determination_R2(linear_model)
+    line_with_prediction_coefficient_of_determination_R2 <- paste("Prediction R2: ", prediction_coefficient_of_determination_R2, sep = "")
+    summary_output <- append(summary_output, line_with_prediction_coefficient_of_determination_R2)
     multiple_R <- sqrt(multiple_R_squared)
     #multiple_R <- cor(linear_model$model[,1], linear_model$model[,2], use = "complete.obs")
     adjusted_R <- sqrt(adjusted_R_squared)
