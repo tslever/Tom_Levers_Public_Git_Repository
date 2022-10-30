@@ -1,0 +1,128 @@
+---
+title: "Stat 6021: Guided Question Set 9"
+author: "Tom Lever"
+date: 10/30/22
+output:
+  pdf_document: default
+  html_document: default
+urlcolor: blue
+linkcolor: red
+---
+
+For this guided question set, we will use the data set `nfl.txt`, which contains data on NFL team performance from the 1976 season.
+The variables are:
+
+* $y$: Games won in the 14-game 1976 season
+* $x_1$: Rushing yards
+* $x_2$: Passing yards
+* $x_3$: Punting average (yards / punt)
+* $x_4$: Field-goal percentage (field goals made / field goals attempted)
+* $x_5$: Turnover differential (turnovers acquired - turnovers lost)
+* $x_6$: Penalty yards
+* $x_7$: Percent rushing (rushing plays / total plays)
+* $x_8$: Opponents' rushing yards
+* $x_9$: Opponents' passing yards
+
+1.  Use the `regsubsets` function from the `leaps` package to run all possible regressions. Set `nbest` to $2$.
+
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    library(leaps)
+    data_set <- read.table(
+        "../../Module_6--Introduction_to_Multiple_Linear_Regression/Guided_Question_Set/nfl.txt",
+        header = TRUE
+    )
+    head(data_set, n = 3)
+    nrow(data_set)
+    subset_selection_object <- regsubsets(y ~ ., data = data_set, nbest = 2)
+    summary_for_subset_selection_object <- summary(subset_selection_object)
+    summary_for_subset_selection_object
+    ```
+
+2.  Identify the multiple linear regression model that is best in terms of
+    
+    (a) Adjusted $R^2$
+    
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        adjusted_R2 <- summary_for_subset_selection_object$adjr2
+        index_of_model_with_maximum_adjusted_R2 <- which.max(adjusted_R2)
+        index_of_model_with_maximum_adjusted_R2
+        matrix_of_models <- summary_for_subset_selection_object$outmat
+        matrix_of_models[index_of_model_with_maximum_adjusted_R2, ]
+        coef(subset_selection_object, index_of_model_with_maximum_adjusted_R2)
+        ```
+    
+    (b) Mallow's $C_p$
+    
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        Cp <- summary_for_subset_selection_object$cp
+        index_of_model_with_minimum_Cp <- which.min(Cp)
+        index_of_model_with_minimum_Cp
+        matrix_of_models[index_of_model_with_minimum_Cp, ]
+        coef(subset_selection_object, index_of_model_with_minimum_Cp)
+        ```
+    
+    (c) Schwartz Bayesian Information Criterion ($BIC_{Schwartz}$)
+    
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        BICSchwartz <- summary_for_subset_selection_object$bic
+        index_of_model_with_minimum_BICSchwartz <- which.min(BICSchwartz)
+        index_of_model_with_minimum_BICSchwartz
+        matrix_of_models[index_of_model_with_minimum_BICSchwartz, ]
+        coef(subset_selection_object, index_of_model_with_minimum_BICSchwartz)
+        ```
+    
+3.  Run forward selection, starting with an intercept-only model. Report the predictors and the estimated coefficients of the model selected.
+
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    intercept_only_model <- lm(y ~ 1, data = data_set)
+    full_model <- lm(y ~ ., data = data_set)
+    step(
+        intercept_only_model,
+        scope = list(lower = intercept_only_model, upper = full_model),
+        direction = "forward"
+    )
+    ```
+    
+4.  Run backward elimination, starting with the model with all predictors.
+    Report the predictors and the estimated coefficients of the model selected.
+    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    step(
+        full_model,
+        scope = list(lower = intercept_only_model, upper = full_model),
+        direction = "backward"
+    )
+    ```
+    
+5.  Run stepwise regression, starting with an intercept-only model. Report the predictors and the estimated coefficients of the model selected.
+
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    step(
+        intercept_only_model,
+        scope = list(lower = intercept_only_model, upper = full_model),
+        direction = "both"
+    )
+    ```
+    
+6.  The PRESS statistic can be used as a criterion in model validation as well as model selection. Unfortunately, the `regsubsets` function
+    from the `leaps` package does not compute the `PRESS` statistic. The `PRESS` statistic can be written as
+    
+    $$PRESS = \sum_{i = 1}^n \left[\left(y_i - \hat{y}_{(i)}\right)^2\right]$$
+    $$PRESS = \sum_{i = 1}^n \left[\left(\frac{e_i}{1 - h_{ii}}\right)^2\right]$$
+    
+    where $h_{ii}$ denotes the $i$th diagonal element of the hat matrix. Write a function that computes the PRESS statistic for a regression 
+    model. Hint: the diagonal elements from the hat matrix can be found using the `lm.influence` function.
+    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    library(TomLeversRPackage)
+    calculate_PRESS(full_model)
+    ```
+    
+7.  Using the function you wrote in part 6, calculate the PRESS statistic for your regression model with $x_2$, $x_7$, and $x_8$ as predictors.
+    Calculate and compare ${R_{prediction}}^2$ and $R^2$ for this model. What comments can you make about the likely predictive performance of
+    this model?
+    
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    library(TomLeversRPackage)
+    calculate_PRESS(lm(y ~ x2 + x7 + x8, data = data_set))
+    ```
