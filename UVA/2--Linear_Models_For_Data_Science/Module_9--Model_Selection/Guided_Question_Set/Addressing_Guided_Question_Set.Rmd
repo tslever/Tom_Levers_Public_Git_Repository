@@ -126,7 +126,6 @@ The variables are:
     library(TomLeversRPackage)
     reduced_model <- lm(y ~ x2 + x7 + x8, data = data_set)
     calculate_PRESS(reduced_model)
-    summarize_linear_model(reduced_model)
     ```
     
     While $76.0$ percent of variability in existing observations is explained by the reduced MLR model,
