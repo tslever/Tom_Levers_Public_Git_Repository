@@ -119,13 +119,14 @@ linkcolor: red
     $$E(y | x) = \beta_0 + \beta_1 x_1 + \beta_2 I_2 + \beta_3 I_3 + \beta_4 x_1 I_2 + \beta_5 x_1 I_3$$
     where $I_2$ and $I_3$ are the dummy codes for $AREA$ / the indicator variables for $South$ and $West$, respectively. If $AREA = South$,
     $I_2 = 1$; else $I_2 = 0$. If $AREA = West$, $I_3 = 1$; else $I_3 = 0$. The prompt for this homework includes output for an R analysis
-    of variance for a multiple linear regression model of teacher pay versus public school expenditure per student and geographic area with an
-    interaction effect between public school expenditure per student and geographic area.
+    of variance for $M_{full}$.
     
     (a) Carry out a hypothesis test to see if the interaction terms are significant.
     
-        The R analysis of variance considers a multiple linear regression model with equation
-        $$E(y | x) = \beta_0 + \beta_1 x_1 + \beta_{area} area + \beta_{x_1, area} \ x_1 \ area$$
+        Let $\boldsymbol{\beta}_{predictor}$ be a column vector of the coefficients of the non-reference indicator variables associated with predictor $predictor$.
+        Let $\boldsymbol{predictor}$ be a column vector of the non-reference indicator variables associated with predictor $predictor$.
+        The R analysis of variance considers a version of the equation for MLR model $M_{full}$
+        $$E(y | x) = \beta_0 + \beta_1 x_1 + \boldsymbol{\beta}_{area} \cdot \boldsymbol{area} + \boldsymbol{\beta}_{x_1, area} \ x_1 \cdot \boldsymbol{area}$$
         
         The mean square for the interaction term $x_1 \ area$
         $$MS_{x_1, area} = \frac{SS_{x_1, area}}{DF_{x_1, area}} = \frac{9,720,281}{2} = 4,860,140.5$$

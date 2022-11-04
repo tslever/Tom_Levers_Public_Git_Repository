@@ -1,0 +1,124 @@
+---
+title: "Stat 6021: Homework Set 9"
+author: "Tom Lever"
+date: 11/03/22
+output:
+  pdf_document: default
+  html_document: default
+urlcolor: blue
+linkcolor: red
+---
+
+1.  You will continue to use the `birthwt` data set from the `MASS` package for this question. The data were collected at Baystate Medical Center, Springfield,
+    MA in 1986. The data contain information regarding weights of newborn babies as well as potential predictors. Before proceeding, be sure to read the 
+    documentation about the data set by typing `?birthwt`. The birthweight of newborns may be related to characteristics of their mothers during pregnancy.
+    
+    (a) Which of these variables is categorical? Ensure that R is viewing the categorical variables correctly. If needed, use the `factor` function to force R to
+        treat the necessary variables as categorical.
+        
+        The following predictors are discrete and categorical:
+        * $low$ (0 indicates newborn birthweight is less than $2.5 \ kg$, 1 indicates newborn birthweight is greater than or equal to $2.5 \ kg$),
+        * $race$ (1 indicates white, 2 indicates black, 3 indicates other),
+        * $smoke$ (0 indicates non-smoking, 1 indicates smoking),
+        * $ptl$ (value represents number of previous premature labors in {0, 1, 2, 3}),
+        * $ht$ (0 indicates no history of hypertension, 1 indicates history of hypertension),
+        * $ui$ (0 indicates no presence of uterine irritability, 1 indicates presence of uterine irritability), and
+        * $ftv$ (value represents number of physician visits during the first trimester in {0, 1, 2, 3, 4, 6})
+        
+        On loading the `MASS` package and the `birthwt` data frame, R interprets the columns corresponding to these variables as vectors of integers.
+    
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        library(MASS)
+        library(TomLeversRPackage)
+        birthwt$low <-
+            convert_to_categorical_vector(birthwt$low, c("N", "Y"))
+        birthwt$race <-
+            convert_to_categorical_vector(birthwt$race, c("white", "black", "other"))
+        birthwt$smoke <-
+            convert_to_categorical_vector(birthwt$smoke, c("N", "Y"))
+        birthwt$ptl <-
+            convert_to_categorical_vector(birthwt$ptl, unique(birthwt$ptl))
+        birthwt$ht <-
+            convert_to_categorical_vector(birthwt$ht, c("N", "Y"))
+        birthwt$ui <-
+            convert_to_categorical_vector(birthwt$ui, c("N", "Y"))
+        birthwt$ftv <-
+            convert_to_categorical_vector(birthwt$ftv, unique(birthwt$ftv))
+        head(birthwt, n = 3)
+        ```
+        
+    (b) A classmate makes the following suggestion: "We should remove the variable $low$ as a predictor for the birth weight of babies. Do you agree with your
+        classmate? Briefly explain. Hint: You do not need to do any statistical analysis to answer this question.
+            
+        I agree. The predictor $low$ is dependent on the response / birth weight $bwt$.
+            
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        library(dplyr)
+        birthwt <- birthwt %>% select(-low)
+        head(birthwt, n = 3)
+        ```
+            
+    (c) Based on your answer to part 1b, perform all possible regressions using the `regsubsets` function from the `leaps` package. Write down the predictors
+        that lead to a first-order model having the best
+            
+        i.   adjusted $R^2$,
+        
+             ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+             library(leaps)
+             subset_selection_object <- regsubsets(
+                 bwt ~ .,
+                 data = birthwt,
+                 nbest = 2,
+                 really.big = TRUE
+             )
+             summary_for_subset_selection_object <- summary(subset_selection_object)
+             adjusted_R2 <- summary_for_subset_selection_object$adjr2
+             index_of_model_with_maximum_adjusted_R2 <- which.max(adjusted_R2)
+             coefficients <- coef(
+                 subset_selection_object, index_of_model_with_maximum_adjusted_R2
+             )
+             predictors <- names(coefficients[2:length(coefficients)])
+             predictors
+             ```
+            
+        ii.  Mallow's $C_p$, and
+            
+             ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+             Cp <- summary_for_subset_selection_object$cp
+             index_of_model_with_minimum_Cp <- which.min(Cp)
+             coefficients <- coef(subset_selection_object, index_of_model_with_minimum_Cp)
+             predictors <- names(coefficients[2:length(coefficients)])
+             predictors
+             ```
+            
+        iii. Schwartz Bayesian Information Criterion ($BIC_{Schwartz}$)
+            
+             ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+             BICSchwartz <- summary_for_subset_selection_object$bic
+             index_of_model_with_minimum_BICSchwartz <- which.min(BICSchwartz)
+             coefficients <- coef(
+                 subset_selection_object, index_of_model_with_minimum_BICSchwartz
+             )
+             predictors <- names(coefficients[2:length(coefficients)])
+             predictors
+             ```
+            
+    (d) Based on your answer to part 1b, use backward selection using the Akaike Information Criterion (AIC) to find the best model. Start with the first-order
+        model with all predictors. What is the regression equation selected?
+        
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        intercept_only_model <- lm(bwt ~ 1, data = birthwt)
+        full_model <- lm(bwt ~ ., data = birthwt)
+        step(
+            full_model,
+            scope = list(lower = intercept_only_model, upper = full_model),
+            direction = "backward"
+        )
+        best_model <- lm(bwt ~ lwt + race + smoke + ptl + ht + ui, data = birthwt)
+        summarize_linear_model(best_model)
+        ```
+        
+        Let $\boldsymbol{\beta}_{predictor}$ be a column vector of the coefficients of the non-reference indicator variables associated with predictor $predictor$.
+        Let $\boldsymbol{predictor}$ be a column vector of the non-reference indicator variables associated with predictor $predictor$.
+        The MLR equation selected is
+        $$bwt = \beta_0 + \beta_{lwt} \ lwt + \boldsymbol{\beta}_{race} \cdot \boldsymbol{race} + \boldsymbol{\beta}_{smoke} \cdot \boldsymbol{smoke} + \boldsymbol{\beta}_{ptl} \cdot \boldsymbol{ptl} + \boldsymbol{\beta}_{ht} \cdot \boldsymbol{ht} + \boldsymbol{\beta}_{ui} \cdot \boldsymbol{ui}$$
