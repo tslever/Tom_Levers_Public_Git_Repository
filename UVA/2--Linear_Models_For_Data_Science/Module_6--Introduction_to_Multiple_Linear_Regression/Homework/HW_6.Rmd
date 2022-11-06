@@ -77,7 +77,7 @@ linkcolor: red
         i.  What is being tested by the ANOVA $F$ statistic? What is the relevant conclusion in context?
         
             ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
-            analyze_variance(linear_model)
+            analyze_variance_for_one_linear_model(linear_model)
             ```
             
             We assume that errors are random, are independent, and follow a normal distribution with mean $E\left(\epsilon_i\right) = 0$ and
@@ -178,7 +178,8 @@ linkcolor: red
         The value of the estimated coefficient of the variable $Stay$ $\hat{\beta}_1 = 0.237209$.
         According to the estimated multiple linear regression model corresponding to the R output,
         for an increase in predictor $Stay$ / the average length of stay of one unit, the predictor $InfctRsk$ /
-        the percentage of patients who get an infection while hospitalized increases by $0.237209$.
+        the percentage of patients who get an infection while hospitalized increases by $0.237209$,
+        when the other predictors are held constant.
         
     (b) Derive the test statistic, $p$-value, and critical value for the variable $Age$.
         What null and alternative hypotheses are being evaluated with this test statistic?
@@ -209,7 +210,7 @@ linkcolor: red
         number_of_observations <- 113
         number_of_variables <- 5
         residual_degrees_of_freedom <- number_of_observations - number_of_variables
-        critical_value <- calculate_critical_value_t(
+        critical_value <- calculate_critical_value_tc(
             significance_level,
             number_of_confidence_intervals,
             residual_degrees_of_freedom
@@ -272,7 +273,7 @@ linkcolor: red
         
         ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
         number_of_confidence_intervals <- 3
-        critical_value <- calculate_critical_value_t(
+        critical_value <- calculate_critical_value_tc(
             significance_level,
             number_of_confidence_intervals,
             residual_degrees_of_freedom
@@ -371,7 +372,7 @@ linkcolor: red
     number_of_observations <- 55
     number_of_variables <- 3
     residual_degrees_of_freedom <- number_of_observations - number_of_variables
-    calculate_critical_value_F(
+    calculate_critical_value_Fc(
         significance_level,
         regression_degrees_of_freedom,
         residual_degrees_of_freedom
@@ -391,7 +392,7 @@ linkcolor: red
     and determine that we have insufficient evidence to support an alternate hypothesis that $i$ is insignificant in predicting $LeftArm$.
     
     ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
-    calculate_critical_value_t(
+    calculate_critical_value_tc(
         significance_level,
         number_of_confidence_intervals,
         residual_degrees_of_freedom

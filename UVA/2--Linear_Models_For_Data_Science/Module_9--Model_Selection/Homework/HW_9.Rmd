@@ -1,7 +1,7 @@
 ---
 title: "Stat 6021: Homework Set 9"
 author: "Tom Lever"
-date: 11/03/22
+date: 11/05/22
 output:
   pdf_document: default
   html_document: default
@@ -16,13 +16,18 @@ linkcolor: red
     (a) Which of these variables is categorical? Ensure that R is viewing the categorical variables correctly. If needed, use the `factor` function to force R to
         treat the necessary variables as categorical.
         
+        Considering discrete variables, Jeffrey Woo suggests to "ask if arithmetic operations can be performed on the variable. If yes, treat as quantitative, if 
+        no, treat as categorical. We will use this for the purpose of the HW question."
+        
         The following predictors are discrete and categorical:
         * $low$ (0 indicates newborn birthweight is less than $2.5 \ kg$, 1 indicates newborn birthweight is greater than or equal to $2.5 \ kg$),
         * $race$ (1 indicates white, 2 indicates black, 3 indicates other),
         * $smoke$ (0 indicates non-smoking, 1 indicates smoking),
-        * $ptl$ (value represents number of previous premature labors in {0, 1, 2, 3}),
         * $ht$ (0 indicates no history of hypertension, 1 indicates history of hypertension),
         * $ui$ (0 indicates no presence of uterine irritability, 1 indicates presence of uterine irritability), and
+        
+        The following predictors are discrete and quantitative:
+        * $ptl$ (value represents number of previous premature labors in {0, 1, 2, 3}),
         * $ftv$ (value represents number of physician visits during the first trimester in {0, 1, 2, 3, 4, 6})
         
         On loading the `MASS` package and the `birthwt` data frame, R interprets the columns corresponding to these variables as vectors of integers.
@@ -36,14 +41,10 @@ linkcolor: red
             convert_to_categorical_vector(birthwt$race, c("white", "black", "other"))
         birthwt$smoke <-
             convert_to_categorical_vector(birthwt$smoke, c("N", "Y"))
-        birthwt$ptl <-
-            convert_to_categorical_vector(birthwt$ptl, unique(birthwt$ptl))
         birthwt$ht <-
             convert_to_categorical_vector(birthwt$ht, c("N", "Y"))
         birthwt$ui <-
             convert_to_categorical_vector(birthwt$ui, c("N", "Y"))
-        birthwt$ftv <-
-            convert_to_categorical_vector(birthwt$ftv, unique(birthwt$ftv))
         head(birthwt, n = 3)
         ```
         
@@ -114,11 +115,77 @@ linkcolor: red
             scope = list(lower = intercept_only_model, upper = full_model),
             direction = "backward"
         )
-        best_model <- lm(bwt ~ lwt + race + smoke + ptl + ht + ui, data = birthwt)
+        best_model <- lm(bwt ~ lwt + race + smoke + ht + ui, data = birthwt)
         summarize_linear_model(best_model)
         ```
         
         Let $\boldsymbol{\beta}_{predictor}$ be a column vector of the coefficients of the non-reference indicator variables associated with predictor $predictor$.
         Let $\boldsymbol{predictor}$ be a column vector of the non-reference indicator variables associated with predictor $predictor$.
         The MLR equation selected is
-        $$bwt = \beta_0 + \beta_{lwt} \ lwt + \boldsymbol{\beta}_{race} \cdot \boldsymbol{race} + \boldsymbol{\beta}_{smoke} \cdot \boldsymbol{smoke} + \boldsymbol{\beta}_{ptl} \cdot \boldsymbol{ptl} + \boldsymbol{\beta}_{ht} \cdot \boldsymbol{ht} + \boldsymbol{\beta}_{ui} \cdot \boldsymbol{ui}$$
+        $$\beta_0 = 2837.264$$
+        $$\beta_{lwt} = 4.242$$
+        $$\boldsymbol{\beta}_{race} = \begin{bmatrix}-475.058 \\ -348.150\end{bmatrix}$$
+        $$\boldsymbol{\beta}_{smoke} = \begin{bmatrix}-356.321\end{bmatrix}$$
+        $$\boldsymbol{\beta}_{ht} = \begin{bmatrix}-585.193\end{bmatrix}$$
+        $$\boldsymbol{\beta}_{ui} = \begin{bmatrix}-525.524\end{bmatrix}$$
+        $$bwt = \beta_0 + \beta_{lwt} \ lwt + \boldsymbol{\beta}_{race} \cdot \boldsymbol{race} + \boldsymbol{\beta}_{smoke} \cdot \boldsymbol{smoke} + \boldsymbol{\beta}_{ht} \cdot \boldsymbol{ht} + \boldsymbol{\beta}_{ui} \cdot \boldsymbol{ui}$$
+        
+2.  The data for this question are $36$ monthly observations on variables affecting sales of a product. The objective is to determine an efficient model for 
+    predicting and explaining market share sales, $Share$, which is the average monthly market share for a product, in percent. The predictors are average monthly
+    price in dollars, $price$, amount of advertising exposure based on gross Nielsen rating, $nielsen$, whether a discount price was in effect, $discount$ (1 if
+    a discount was in effect, 0 otherwise), whether a package promotion was in effect, $promo$ (1 if a promotion was in effect, 0 otherwise), and time in months,
+    $time$.
+    
+    (a) Output in the prompt for this homework was obtained after using the `step` function using forward selection, starting with a model with just the intercept
+        term. What is the model selected based on forward selection?
+        
+        The model selected based on forward selection is
+        $$Share = \beta_0 + \beta_{price} \ price + \boldsymbol{\beta}_{discount} \cdot \boldsymbol{discount} + \boldsymbol{\beta}_{promo} \cdot \boldsymbol{promo}$$
+        
+    (b) Your client asks you to explain what each step in the output shown above means. Explain the forward selection procedure to your client, for this output.
+    
+        The forward selection procedure determines an efficient multiple linear regression model for predicting and explaining market share sales, $Share$, as a 
+        function of various predictors, by considering a base / initial model (e.g., the intercept-only model) and models created by adding predictors, up to a model
+        with a subset of predictors (e.g., the full model). The selected model is described in part 2a. Forward selection is an iterative process. The suboutput for 
+        each iteration consists of a model $m$ to which to consider adding predictors, the Akaike Information Criterion (AIC) for $m$, and a table with a column of
+        predictors $p$ and a column of the AIC of the model resulting from adding $p$ to $m$. Considering one suboutput, the predictor $p$ whose addition to $m$ 
+        results in the lowest AIC is listed first in the suboutput's table and is added to $m$. Adding $<none>$, or no predictors to $m$ results in no change of AIC. 
+        Adding a predictor higher in the table  than $<none>$, which would result in a decrease in AIC for $m$, is preferred to adding no predictors. Adding no 
+        predictors is preferred to adding a predictor lower in the table than $<none>$, which would result in an increase in AIC for $m$. If $<none>$ is listed first 
+        in the table, forward selection ends, and the model associated with the suboutput is selected.
+        
+        For example, the first suboutput contains the intercept-only model $m: Share = \beta_0$. The AIC for $m$ is $-94.8$. A table begins with predictor $discount$
+        and AIC $-128.137$. Predictor $discount$ is added to $m$. The second suboutput contains model $m: $Share = \beta_0 + \boldsymbol{\beta}_{discount} \cdot \boldsymbol{discount}$. The AIC for $m$ is $-128.14$. A table begins with predictor $promo$ and AIC $-129.69$. Predictor $promo$ is added to $m$. The last suboutput 
+        contains the model in part 2a. The AIC for $m$ is $-132.94$. Because a table begins with $<none>$, no predictor is added to the model and forward selection 
+        ends, with the model in part 2a selected.
+    
+    (c) Your client asks if he should go ahead and use the model selected in part 2a. What advice to you have for your client?
+    
+        The model selected in part 2a by forward selection is a first-order model that doesn't consider interactions or higher order terms. You may we to consider
+        interactions or higher-order terms.
+        Regression assumptions for the model selected may not be met. You may wish to check if the following regression assumptions are met.
+        The model selected may not be the best model of the relationship between predictors and/or response, or for prediction. You may wish to consider all MLR
+        models.
+        Since forward selection was used, predictors are added only to a multiple linear regression model; predictors may become insignificant in the context of the
+        multiple linear regression model / all predictors.
+        Performing forward selection using an $F$ statistic instead of an Akaike Information Criterion (AIC), backward selection, bidirection selection, or all
+        possible regressions analysis may yield models different from the model selected.
+        
+3.  Your client asks you to compare and contrast between $R^2$ and adjusted $R^2$, specifically: name one advantage of $R^2$ over adjusted $R^2$, and name one
+    advantage of adjusted $R^2$ over $R^2$.
+    
+    The coefficient of determination $R^2$ is the proportion of variation in a response that is explained by a multiple linear relationship / predictors. The 
+    adjusted $R^2$ is a corrected goodness-of-fit (model accuracy) measure for multiple linear models that penalizes us for adding terms to the model that are not 
+    helpful. $R^2$ tends to optimistically estimate the fit of the linear regression. It always increases as the number of predictors in the model increases. Adjusted
+    $R^2$ attempts to correct for this overestimation. Adjusted $R^2$ might decrease if a specific predictor does not improve the model. Adjusted $R^2$ is calculated
+    by dividing the residual mean square error (which is the sample variance of the target field) by the total mean square error; The result is then subtracted
+    from 1. Adjusted $R^2$ is always less than or equal to $R^2$. A value of $1$ indicates a model that perfectly predicts values in the target field. A value that is
+    less than or equal to $0.09$ indicates a model that has no predictive value. In the real world, adjusted $R^2$ lies between $0$ and $1$.
+    
+4.  Include the function you wrote to compute the PRESS statistic (Question 2 in Guided Question Set).
+
+    [https://github.com/tslever/Tom_Levers_Git_Repository/blob/main/R/TomLeversRPackage/R/calculate_PRESS.R](https://github.com/tslever/Tom_Levers_Git_Repository/blob/main/R/TomLeversRPackage/R/calculate_PRESS.R)
+
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    calculate_PRESS
+    ```
