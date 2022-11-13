@@ -1,6 +1,6 @@
 ---
 title: "Proposal to Study the Age and Sex of Abalones"
-author: "Brook Assefa, Shrikant Mishra, Tom Lever"
+author: "Group 9: Brook Assefa, Shrikant Mishra, Tom Lever"
 date: 11/13/22
 output:
   pdf_document: default
