@@ -1,0 +1,226 @@
+---
+title: "Proposal to Study the Age and Sex of Abalones"
+author: "Brook Assefa, Shrikant Mishra, Tom Lever"
+date: 11/13/22
+output:
+  pdf_document: default
+  html_document: default
+urlcolor: blue
+linkcolor: red
+---
+
+# Introduction to Study and Data Set
+
+According to Candy Abalone, blacklip abalone is a marine univalve mollusc containing a large muscular foot that is highly sought after for eating.
+Blacklip Abalone is found along Australia's southern coast. There is a tighly monitored and controlled quota on Australia wild abalone to ensure its
+ecological sustainability.
+
+There is value is studying the population biology of blacklip abalones, including the relationship of age and sex of with length, diameter, height, whole weight, shucked weight, viscera weight, and shell weight. The age of a blacklip abalone is the sum of the number of rings of the abalone and 1.5. A data set with these data are available at [https://archive.ics.uci.edu/ml/datasets/Abalone](https://archive.ics.uci.edu/ml/datasets/Abalone). Please see attached CSV file entitled `Data_Set--Abalone_Marine_Snails--With_Column_Names.csv`.
+
+# Questions of Interest
+
+We propose to conduct data analysis of the above data set towards answering the following two questions:
+
+1.  How is the age of a blacklip abalone related to and/or predicted from the length, diameter, height, whole weight, shucked weight, viscera weight, 
+    and/or shell weight of the abalone?
+2.  How is the sex of male and female blacklip abalones related to and/or predicted from the length, diameter, height, whole weight, shucked weight, 
+    viscera weight, and/or shell weight of the abalone?
+
+Addressing how the age of a blacklip abalone is related to and/or predicted from the length, diameter, height, whole weight, shucked weight, viscera weight, and/or shell weight of the abalone may be valuable in determining ways to promote the longevity of blacklip abalones and their species. Ways to promote the longevity of other abalone species may be determined. Determining the success of any population-boosting or remediation program may be enhanced.
+
+Addressing how the sex of male and female blacklip abalones is related to and/or predicted from the length, diameter, height, whole weight, shucked weight, viscera weight, and/or shell weight of abalones may be valuable in determining ways to preserve a balance of male and female abalones. Ways to promote a balance for blacklip abalone or other abalone species may be determined. Determining the success of any balance-improving or remediation program may be enhanced.
+
+# Models
+
+We propose to conduct data analysis by studying a multiple linear regression model and a multiple logistic regression model. The response of the
+multiple linear regression model will be age in years; the response of the multiple logistic regression model will be adult sex (i.e., male or female).
+
+According to Keith G. Calkins  ([https://www.andrews.edu/~calkins/math/edrm611/edrm05.htm](https://www.andrews.edu/~calkins/math/edrm611/edrm05.htm)), "Correlation coefficients whose magnitude[s] are between 0.9 and 1.0 indicate variables which can be considered very highly correlated. Correlation coefficients whose magnitude[s] are between 0.7 and 0.9 indicate variables which can be considered highly correlated. Correlation coefficients whose magnitude[s] are between $0.5$ and $0.7$ indicate variables which can be considered moderately correlated. Correlation coefficients whose magnitude[s] are between $0.3$ and $0.5$ indicate variables which have... low correlation[s]. Correlation coefficients whose magnitude[s] are less than $0.3$ have little if any (linear) correlation."
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE}
+library(dplyr)
+data_set <- read.csv('Data_Set--Abalones--With_Column_Names.csv', header = TRUE)
+data_set_for_males_and_females <- data_set %>% filter(sex == 'M' | sex == 'F')
+```
+
+```{r, eval=FALSE, echo=FALSE, results="show", message=FALSE}
+library(TomLeversRPackage)
+data_set_with_numeric_sex <-
+    data_set %>%
+    filter(sex == 'M' | sex == 'F') %>%
+    mutate(sex = replace(sex, sex == 'M', 0)) %>%
+    mutate(sex = replace(sex, sex == 'F', 1)) %>%
+    mutate(sex = replace(sex, sex == 'I', 2))
+data_set_with_numeric_sex$sex <- as.numeric(data_set_with_numeric_sex$sex)
+correlation_matrix <- cor(data_set_with_numeric_sex)
+analyze_correlation_matrix(correlation_matrix)
+intercept_only_linear_model <- lm(rings ~ 1, data = data_set)
+full_linear_model <- lm(rings ~ ., data = data_set)
+## rings ~ shell_weight + shucked_weight + diameter + whole_weight +
+## sex + viscera_weight + height
+step(intercept_only_linear_model, scope = list(lower = intercept_only_linear_model, upper = full_linear_model), direction = "forward")
+## rings ~ shell_weight + shucked_weight + diameter + whole_weight +
+## sex + viscera_weight + height
+step(intercept_only_linear_model, scope = list(lower = intercept_only_linear_model, upper = full_linear_model), direction = "both")
+## rings ~ sex + diameter + height + whole_weight + shucked_weight +
+## viscera_weight + shell_weight
+step(full_linear_model, scope = list(lower = intercept_only_linear_model, upper = full_linear_model), direction = "backward")
+data_set_for_males_and_females <-
+    data_set %>%
+    filter(sex == 'M' | sex == 'F') %>%
+    mutate(sex = replace(sex, sex == 'M', 0)) %>%
+    mutate(sex = replace(sex, sex == 'F', 1))
+data_set_for_males_and_females$sex <- as.numeric(data_set_for_males_and_females$sex)
+intercept_only_logistic_model <- glm(sex ~ 1, data = data_set_for_males_and_females, family = "binomial")
+full_logistic_model <- glm(sex ~ ., data = data_set_for_males_and_females, family = "binomial")
+## sex ~ diameter + shucked_weight + viscera_weight + height
+step(intercept_only_logistic_model, scope = list(lower = intercept_only_logistic_model, upper = full_logistic_model), direction = "forward")
+## sex ~ diameter + shucked_weight + viscera_weight + height
+step(intercept_only_logistic_model, scope = list(lower = intercept_only_logistic_model, upper = full_logistic_model), direction = "both")
+## sex ~ diameter + height + shucked_weight + viscera_weight
+step(full_logistic_model, scope = list(lower = intercept_only_logistic_model, upper = full_logistic_model), direction = "backward")
+```
+
+The age and number of rings of a blacklip abalone has a low correlation with the length, diameter, height, and shell weight of the abalone, and negligible correlation with the sex, shucked weight, and viscera weight of the abalone. These four predictors may be the most significant predictors. That being said, the length of a blacklip abalone is very highly or highly correlated with the diameter, whole weight, height, shucked weight, viscera weight, and shell weight of the abalone. If length and diameter, height, or shell weight are included in a multiple linear regression model, the model may suffer from significant multicollinearity. The same is true if diameter, height, or shell weight is substituted for length.
+
+Both bidirectional and backward selection using R and an Akaike Information Criterion (AIC) suggest conducting a multiple linear regression of the age of a blacklip abalone versus the diameter, height, sex, shell weight, shucked weight, viscera weight, and whole weight of the abalone. Bidirectional selection adds predictors to an intercept-only multiple linear regression model in the following order: shell weight, shucked weight, diameter, whole weight, sex, viscera weight, and height. Shell weight may be added to the model without introducing multicollinearity. Shell weight may be the most important predictor, followed by shucked weight, diameter, whole weight, sex, viscera weight, and height, according to bidirectional selection. That being said, adding shucked weight, diameter, whole weight, sex, viscera weight, and height to a model with shell weight may introduce significant multicollinearity.
+
+The sex of a blacklip abalone has negligible correlation with length, diameter, height, whole weight, shucked weight, viscera weight, and shell weight, and age and number of rings. Forward, bidirectional, and backward selection using R and an AIC suggest conducting a multiple logistic regression of the adult sex (i.e., male or female) of a blacklip abalone versus the diameter, shucked weight, viscera weight, and height of an abalone. Diameter may be added to the linear model without introducing multicollinearity. Diameter may the most important predictor, followed by shucked weight, viscera weight, and height. That being said, adding shucked weight, viscera weight, or hieght to a model with diameter may introduce significant multicollinearity.
+
+# Data Visualizations
+
+A graph of number of rings versus shell weight in grams and sex for blacklip abalones is depicted below. Reasonably, the number of rings and shell weight for infant blacklip abalones are smallest. The number of rings and variance in number of rings grows at a decreasing rate as the shell weight grows. The number of rings and shell weights of male and female adult abalones seem similar. It seems that number of rings has a logarithmic or fractional power relationship with shell weight.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 5.3, fig.height = 3.8, fig.align='center'}
+library(ggplot2)
+ggplot(data_set, aes(x = shell_weight, y = rings, color = sex)) +
+    geom_point() +
+    labs(
+        title = "Number of Rings vs. Shell Weight for Blacklip Abalones",
+        x = "shell weight (g)",
+        y = "number of rings"
+    ) +
+    theme(
+        plot.title = element_text(hjust = 0.5, size = 11),
+        axis.text.x = element_text(angle = 0)
+    )
+```
+
+A graph of externally studentized residuals versus predicted number of rings for a multiple linear model of number of rings versus shell weight of a blacklip abalone is presented below. This graph seems to be a rotated version of the above graph. Both graphs suggest that transformations of shell weights and/or number of rings may help us linearize number of rings versus shell weight data before applying a simple linear regression model.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 5.3, fig.height = 3.8, fig.align='center'}
+linear_model <- lm(rings ~ shell_weight, data = data_set)
+ggplot(
+    data.frame(
+        externally_studentized_residuals = linear_model$residuals,
+        predicted_rings = linear_model$fitted.values
+    ),
+    aes(x = predicted_rings, y = externally_studentized_residuals)
+) +
+    geom_point(alpha = 0.2) +
+    geom_hline(yintercept = 0, color = "red") +
+    labs(
+        x = "predicted number of rings",
+        y = "externally studentized residual",
+        title = "Externally Studentized Residuals vs.\nPredicted Number of Rings"
+    ) +
+theme(
+    plot.title = element_text(hjust = 0.5),
+    axis.text.x = element_text(angle = 0)
+)
+```
+
+A graph of externally studentized residuals versus predicted number of rings for a multiple linear model of number of rings versus length, diameter, height, and shell weight of a blacklip abalone is presented below. This graph resembles the above graph of externalized studentized residuals versus predicted number of rings and is better fit into a horizontal band, suggesting that this linear model may be more appropriate for determining how the age of a blacklip abalone is related to and/or predicted from the length, diameter, height, whole weight, shucked weight, viscera weight, and/or shell weight of the abalone than a simple linear model of number of rings versus shell weight.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 5.3, fig.height = 3.8, fig.align='center'}
+linear_model <- lm(rings ~ length + diameter + height + shell_weight, data = data_set)
+ggplot(
+    data.frame(
+        externally_studentized_residuals = linear_model$residuals,
+        predicted_rings = linear_model$fitted.values
+    ),
+    aes(x = predicted_rings, y = externally_studentized_residuals)
+) +
+    geom_point(alpha = 0.2) +
+    geom_hline(yintercept = 0, color = "red") +
+    labs(
+        x = "predicted number of rings",
+        y = "externally studentized residual",
+        title = "Externally Studentized Residuals vs.\nPredicted Number of Rings"
+    ) +
+theme(
+    plot.title = element_text(hjust = 0.5),
+    axis.text.x = element_text(angle = 0)
+)
+```
+
+A graph of externally studentized residuals versus predicted number of rings for a multiple linear model of rings versus shell weight, shucked weight, diameter, whole weight, sex, viscera weight, and height of a blacklip abalone is presented below. This graph exhibits a right-opening funnel shape that indicates that the variance of the residuals grows with predicted number rings and transformations of number of rings and/or shell weight, shucked weight, diameter, whole weight, sex, viscera weight, and height may help us linearize number of rings versus predictors data before applying a multiple linear regression model.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 5.3, fig.height = 3.8, fig.align='center'}
+linear_model <- lm(rings ~ shell_weight + shucked_weight + diameter + whole_weight + sex + viscera_weight + height, data = data_set)
+ggplot(
+    data.frame(
+        externally_studentized_residuals = linear_model$residuals,
+        predicted_rings = linear_model$fitted.values
+    ),
+    aes(x = predicted_rings, y = externally_studentized_residuals)
+) +
+    geom_point(alpha = 0.2) +
+    geom_hline(yintercept = 0, color = "red") +
+    labs(
+        x = "predicted number of rings",
+        y = "externally studentized residual",
+        title = "Externally Studentized Residuals vs.\nPredicted Number of Rings"
+    ) +
+theme(
+    plot.title = element_text(hjust = 0.5),
+    axis.text.x = element_text(angle = 0)
+)
+```
+
+Boxplots of diameter in millimeters by adult sex of blacklip abalones are presented below. Male blacklip abalones may have more outliers with lower diameters; female blacklip abalones may have more outliers with higher diameters. Males have a slightly lower minimum, first quartile, median, third quartile, and maximum diameter and have a slightly greater interquartile range of diameters. Male blacklip abalones may be smaller than female blacklip abalones. A binary classifier may be able to detect this trend.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 5.3, fig.height = 3.8, fig.align='center'}
+ggplot(data_set_for_males_and_females, aes(x = sex, y = diameter)) +
+    geom_boxplot(fill = "Blue", color = "Orange") +
+    labs(
+        y = "diameter",
+        title = "Boxplots of Diameter by Adult Sex"
+    ) +
+    theme(
+        plot.title = element_text(hjust = 0.5, size = 11),
+    )
+```
+
+The Receiver Operating Characteristic (ROC) curve for a logistic regression model of sex of blacklip abalones versus diameter is presented in black below along with the ROC curve for a random model. Ideally, this ROC curve would climb up the left side of the graph until it reached the top of the graph and continue along the top of the graph to the right. The ROC curve for the logistic regression model is a little to the ROC curve for the random model.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 5.3, fig.height = 3.8, fig.align='center'}
+library(ROCR)
+data_set_for_males_and_females <-
+    data_set %>%
+    filter(sex == 'M' | sex == 'F') %>%
+    mutate(sex = replace(sex, sex == 'M', 0)) %>%
+    mutate(sex = replace(sex, sex == 'F', 1))
+data_set_for_males_and_females$sex <- as.numeric(data_set_for_males_and_females$sex)
+set.seed(0)
+sample <- sample.int(nrow(data_set_for_males_and_females), floor(0.8*nrow(data_set_for_males_and_females)), replace = FALSE)
+training_data_set <- data_set_for_males_and_females[sample, ]
+testing_data_set <- data_set_for_males_and_females[-sample, ]
+logistic_model <- glm(sex ~ diameter, data = training_data_set, family = "binomial")
+predictions <- predict(logistic_model, newdata = testing_data_set, type = "response")
+prediction_object <- prediction(predictions, testing_data_set$sex)
+ROC_curve <- performance(prediction_object, measure = "tpr", x.measure = "fpr")
+plot(ROC_curve, main = "ROC Curve for Sex of Blacklip Abalones")
+lines(x = c(0, 1), y = c(0, 1), col = "red")
+```
+
+The Receiver Operating Characteristic (ROC) curve for a logistic regression model of sex of blacklip abalones versus diameter, shucked weight, viscera weight, and height is presented below along with the ROC curve for a random model. Ideally, this ROC curve would climb up the left side of the graph until it reached the top of the graph and continue along the top of the graph to the right. The ROC curve for the logistic regression model is similar to the above ROC curve.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 5.3, fig.height = 3.8, fig.align='center'}
+logistic_model <- glm(sex ~ diameter + shucked_weight + viscera_weight + height, data = training_data_set, family = "binomial")
+predictions <- predict(logistic_model, newdata = testing_data_set, type = "response")
+prediction_object <- prediction(predictions, testing_data_set$sex)
+ROC_curve <- performance(prediction_object, measure = "tpr", x.measure = "fpr")
+plot(ROC_curve, main = "ROC Curve for Sex of Blacklip Abalones")
+lines(x = c(0, 1), y = c(0, 1), col = "red")
+```
