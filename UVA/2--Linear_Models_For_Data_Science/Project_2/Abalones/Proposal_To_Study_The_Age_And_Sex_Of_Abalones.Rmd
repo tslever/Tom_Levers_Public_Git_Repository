@@ -135,7 +135,7 @@ ggplot(
     labs(
         x = "predicted number of rings",
         y = "externally studentized residual",
-        title = "Residuals vs.\nPredicted Number of Rings\nfor Shell Weight"
+        title = "Residuals vs. Predicted Number of Rings\nfor Shell Weight"
     ) +
 theme(
     plot.title = element_text(hjust = 0.5, size = 11),
@@ -159,7 +159,7 @@ ggplot(
     labs(
         x = "predicted number of rings",
         y = "externally studentized residual",
-        title = "Residuals vs.\nPredicted Number of Rings\nfor Length, Diameter, Height, and Shell Weight"
+        title = "Residuals vs. Predicted Number of Rings\nfor Length, Diameter, Height, and Shell Weight"
     ) +
 theme(
     plot.title = element_text(hjust = 0.5, size = 11),
@@ -183,7 +183,7 @@ ggplot(
     labs(
         x = "predicted number of rings",
         y = "externally studentized residual",
-        title = "Residuals vs.\nPredicted Number of Rings\nfor Shell Weight, Shucked Weight, Diameter,\nWhole Weight, Sex, Viscera Weight, and Height"
+        title = "Residuals vs. Predicted Number of Rings\nfor Shell Weight, Shucked Weight, Diameter,\nWhole Weight, Sex, Viscera Weight, and Height"
     ) +
 theme(
     plot.title = element_text(hjust = 0.5, size = 11),
