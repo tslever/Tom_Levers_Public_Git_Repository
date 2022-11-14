@@ -95,7 +95,7 @@ linkcolor: red
             A linear model is robust to these assumptions.
             Considering a plot of sample quantiles versus theoretical quantiles
             for the residuals of the linear model, since observations lie near the line of best fit / their theoretical values,
-            a probability vs. externally studentized residuals plot / distribution is normal.
+            a probability vs. residuals plot / distribution is normal.
             
 2.  You may only use R as a simple calculator or to find $p$-values or critical values. The data for this question come from $113$ hospitals.
     The key response variable is $InfRsk$, the risk that patients get an infection while staying at the hospital. We will look at five 

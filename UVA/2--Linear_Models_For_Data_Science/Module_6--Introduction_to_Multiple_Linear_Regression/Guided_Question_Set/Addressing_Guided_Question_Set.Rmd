@@ -204,7 +204,7 @@ The variables are:
         labs(
             x = "predicted games won",
             y = "externally studentized residual",
-            title = "Externally Studentized Residuals vs. Predicted Games Won"
+            title = "Residuals vs. Predicted Games Won"
         ) +
         theme(
             plot.title = element_text(hjust = 0.5),
@@ -233,7 +233,7 @@ The variables are:
         A linear model is robust to these assumptions.
         Considering a plot of sample quantiles versus theoretical quantiles
         for the residuals of the linear model, since observations lie near the line of best fit / their theoretical values,
-        a probability vs. externally studentized residuals plot / distribution is normal.
+        a probability vs. residuals plot / distribution is normal.
         
 8. Consider adding another predictor $x_1$, the team's rushing yards for the season, to the linear model defined in part 2.
    Interpret the results of the $t$ test for the coefficient of this predictor. A classmate says: "Since the result of the $t$ test

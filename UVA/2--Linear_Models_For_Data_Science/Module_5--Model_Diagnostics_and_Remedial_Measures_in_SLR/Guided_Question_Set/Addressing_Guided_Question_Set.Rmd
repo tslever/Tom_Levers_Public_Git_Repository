@@ -68,7 +68,7 @@ We wish to see how body weight $x$ could explain the brain weight $y$ of land ma
     e. Assumptions that the errors $\epsilon_i$ / residuals $e_i$ are normally distributed is not met.
        A linear model is robust to these assumptions.
        Given sharp downward and upward curves at extremes of a plot of samples quantiles versus theoretical quantiles for the residuals
-       of the linear model, the tails of the probability vs. externally studentized residuals plot / distribution are too light
+       of the linear model, the tails of the probability vs. residuals plot / distribution are too light
        for this distribution to be considered normal.
        The assumption that the errors $\epsilon_i$ / residuals $e_i$ are normally distributed is not met.
     
@@ -83,17 +83,17 @@ We wish to see how body weight $x$ could explain the brain weight $y$ of land ma
    
     ggplot(
         data.frame(
-            externally_studentized_residuals = linear_model$residuals,
+            the_residuals = linear_model$residuals,
             predicted_brain_weights = linear_model$fitted.values
         ),
-        aes(x = predicted_brain_weights, y = externally_studentized_residuals)
+        aes(x = predicted_brain_weights, y = the_residuals)
     ) +
         geom_point(alpha = 0.2) +
         geom_hline(yintercept = 0, color = "red") +
         labs(
             x = "predicted brain weight (g)",
             y = "externally studentized residual (g)",
-            title = "Externally Studentized Residuals vs. Predicted Brain Weights"
+            title = "Residuals vs. Predicted Brain Weights"
         ) +
     theme(
         plot.title = element_text(hjust = 0.5),
@@ -168,7 +168,7 @@ We wish to see how body weight $x$ could explain the brain weight $y$ of land ma
     e. Assumptions that the errors $\epsilon_i$ / residuals $e_i$ are normally distributed is not met.
        A linear model is robust to these assumptions.
        Given sharp downward and upward curves at extremes of a plot of samples quantiles versus theoretical quantiles for the residuals
-       of the linear model, the tails of the probability vs. externally studentized residuals plot / distribution are too light
+       of the linear model, the tails of the probability vs. residuals plot / distribution are too light
        for this distribution to be considered normal.
        The assumption that the errors $\epsilon_i$ / residuals $e_i$ are normally distributed is not met.
 
@@ -184,19 +184,19 @@ We wish to see how body weight $x$ could explain the brain weight $y$ of land ma
 
     ggplot(
         data.frame(
-            externally_studentized_residuals =
+            the_residuals =
                 semilogarithmicized_linear_model$residuals,
             fitted_values = semilogarithmicized_linear_model$fitted.values
         ),
-        aes(x = fitted_values, y = externally_studentized_residuals)
+        aes(x = fitted_values, y = the_residuals)
     ) +
         geom_point(alpha = 0.2) +
         geom_hline(yintercept = 0, color = "red") +
         labs(
             x = "predicted logarithmicized brain weights",
-            y = "externally studentized residuals",
+            y = "residuals",
             title = paste(
-                "Externally Studentized Residuals vs. Predicted Logarithmicized Brain Weights",
+                "Residuals vs. Predicted Logarithmicized Brain Weights",
                 sep = ""
             )
         ) +
@@ -261,7 +261,7 @@ We wish to see how body weight $x$ could explain the brain weight $y$ of land ma
     e. Assumptions that the errors $\epsilon_i$ / residuals $e_i$ are normally distributed is met.
        A linear model is robust to these assumptions.
        Given observations in a plot of samples quantiles versus theoretical quantiles for the residuals of the linear model
-       lie near the corresponding line of best fit, the probability vs. externally studentized residuals plot / distribution is normal.
+       lie near the corresponding line of best fit, the probability vs. residuals plot / distribution is normal.
        The assumption that the errors $\epsilon_i$ / residuals $e_i$ are normally distributed is met.
       
 8. Fit a simple linear regression to $y*$ versus $x*$, and create the corresponding residual plot.
@@ -277,18 +277,18 @@ We wish to see how body weight $x$ could explain the brain weight $y$ of land ma
    
     ggplot(
         data.frame(
-            externally_studentized_residuals = logarithmicized_linear_model$residuals,
+            the_residuals = logarithmicized_linear_model$residuals,
             fitted_values = logarithmicized_linear_model$fitted.values
         ),
-        aes(x = fitted_values, y = externally_studentized_residuals)
+        aes(x = fitted_values, y = the_residuals)
     ) +
         geom_point(alpha = 0.2) +
         geom_hline(yintercept = 0, color = "red") +
         labs(
             x = "predicted logarithmicized brain weights",
-            y = "externally studentized residuals",
+            y = "residuals",
             title = paste(
-                "Externally Studentized Residuals\n",
+                "Residuals\n",
                 "vs. Predicted Logarithmicized Brain Weights",
                 sep = ""
             )

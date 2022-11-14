@@ -119,23 +119,23 @@ ggplot(data_set, aes(x = shell_weight, y = rings, color = sex)) +
     )
 ```
 
-A graph of externally studentized residuals versus predicted number of rings for a multiple linear model of number of rings versus shell weight of a blacklip abalone is presented below. This graph seems to be a rotated version of the above graph. Both graphs suggest that transformations of shell weights and/or number of rings may help us linearize number of rings versus shell weight data before applying a simple linear regression model.
+A graph of residuals versus predicted number of rings for a multiple linear model of number of rings versus shell weight of a blacklip abalone is presented below. This graph seems to be a rotated version of the above graph. Both graphs suggest that transformations of shell weights and/or number of rings may help us linearize number of rings versus shell weight data before applying a simple linear regression model.
 
 ```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 5.3, fig.height = 3.8, fig.align='center'}
 linear_model <- lm(rings ~ shell_weight, data = data_set)
 ggplot(
     data.frame(
-        externally_studentized_residuals = linear_model$residuals,
+        the_residuals = linear_model$residuals,
         predicted_rings = linear_model$fitted.values
     ),
-    aes(x = predicted_rings, y = externally_studentized_residuals)
+    aes(x = predicted_rings, y = the_residuals)
 ) +
     geom_point(alpha = 0.2) +
     geom_hline(yintercept = 0, color = "red") +
     labs(
         x = "predicted number of rings",
         y = "externally studentized residual",
-        title = "Externally Studentized Residuals vs.\nPredicted Number of Rings\nfor Shell Weight"
+        title = "Residuals vs.\nPredicted Number of Rings\nfor Shell Weight"
     ) +
 theme(
     plot.title = element_text(hjust = 0.5, size = 11),
@@ -143,23 +143,23 @@ theme(
 )
 ```
 
-A graph of externally studentized residuals versus predicted number of rings for a multiple linear model of number of rings versus length, diameter, height, and shell weight of a blacklip abalone is presented below. This graph resembles the above graph of externalized studentized residuals versus predicted number of rings and is better fit into a horizontal band, suggesting that this linear model may be more appropriate for determining how the age of a blacklip abalone is related to and/or predicted from the length, diameter, height, whole weight, shucked weight, viscera weight, and/or shell weight of the abalone than a simple linear model of number of rings versus shell weight.
+A graph of residuals versus predicted number of rings for a multiple linear model of number of rings versus length, diameter, height, and shell weight of a blacklip abalone is presented below. This graph resembles the above graph of externalized studentized residuals versus predicted number of rings and is better fit into a horizontal band, suggesting that this linear model may be more appropriate for determining how the age of a blacklip abalone is related to and/or predicted from the length, diameter, height, whole weight, shucked weight, viscera weight, and/or shell weight of the abalone than a simple linear model of number of rings versus shell weight.
 
 ```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 5.3, fig.height = 3.8, fig.align='center'}
 linear_model <- lm(rings ~ length + diameter + height + shell_weight, data = data_set)
 ggplot(
     data.frame(
-        externally_studentized_residuals = linear_model$residuals,
+        the_residuals = linear_model$residuals,
         predicted_rings = linear_model$fitted.values
     ),
-    aes(x = predicted_rings, y = externally_studentized_residuals)
+    aes(x = predicted_rings, y = the_residuals)
 ) +
     geom_point(alpha = 0.2) +
     geom_hline(yintercept = 0, color = "red") +
     labs(
         x = "predicted number of rings",
         y = "externally studentized residual",
-        title = "Externally Studentized Residuals vs.\nPredicted Number of Rings\nfor Length, Diameter, Height, and Shell Weight"
+        title = "Residuals vs.\nPredicted Number of Rings\nfor Length, Diameter, Height, and Shell Weight"
     ) +
 theme(
     plot.title = element_text(hjust = 0.5, size = 11),
@@ -167,23 +167,23 @@ theme(
 )
 ```
 
-A graph of externally studentized residuals versus predicted number of rings for a multiple linear model of rings versus shell weight, shucked weight, diameter, whole weight, sex, viscera weight, and height of a blacklip abalone is presented below. This graph exhibits a right-opening funnel shape that indicates that the variance of the residuals grows with predicted number rings and transformations of number of rings and/or shell weight, shucked weight, diameter, whole weight, sex, viscera weight, and height may help us linearize number of rings versus predictors data before applying a multiple linear regression model.
+A graph of residuals versus predicted number of rings for a multiple linear model of rings versus shell weight, shucked weight, diameter, whole weight, sex, viscera weight, and height of a blacklip abalone is presented below. This graph exhibits a right-opening funnel shape that indicates that the variance of the residuals grows with predicted number rings and transformations of number of rings and/or shell weight, shucked weight, diameter, whole weight, sex, viscera weight, and height may help us linearize number of rings versus predictors data before applying a multiple linear regression model.
 
 ```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 5.3, fig.height = 3.8, fig.align='center'}
 linear_model <- lm(rings ~ shell_weight + shucked_weight + diameter + whole_weight + sex + viscera_weight + height, data = data_set)
 ggplot(
     data.frame(
-        externally_studentized_residuals = linear_model$residuals,
+        the_residuals = linear_model$residuals,
         predicted_rings = linear_model$fitted.values
     ),
-    aes(x = predicted_rings, y = externally_studentized_residuals)
+    aes(x = predicted_rings, y = the_residuals)
 ) +
     geom_point(alpha = 0.2) +
     geom_hline(yintercept = 0, color = "red") +
     labs(
         x = "predicted number of rings",
         y = "externally studentized residual",
-        title = "Externally Studentized Residuals vs.\nPredicted Number of Rings\nfor Shell Weight, Shucked Weight, Diameter,\nWhole Weight, Sex, Viscera Weight, and Height"
+        title = "Residuals vs.\nPredicted Number of Rings\nfor Shell Weight, Shucked Weight, Diameter,\nWhole Weight, Sex, Viscera Weight, and Height"
     ) +
 theme(
     plot.title = element_text(hjust = 0.5, size = 11),

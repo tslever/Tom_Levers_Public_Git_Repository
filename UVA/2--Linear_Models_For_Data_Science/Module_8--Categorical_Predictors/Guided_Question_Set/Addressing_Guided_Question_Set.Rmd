@@ -183,7 +183,7 @@ species of penguins.
         A linear model is robust to these assumptions.
         Considering a plot of sample quantiles versus theoretical quantiles
         for the residuals of the linear model, since observations lie near the line of best fit / their theoretical values,
-        a probability vs. externally studentized residuals plot / distribution is normal.
+        a probability vs. residuals plot / distribution is normal.
         
     We conduct Levene's test for equality of variances of body mass across all species.
     

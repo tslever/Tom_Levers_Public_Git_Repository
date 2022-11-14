@@ -254,7 +254,7 @@ linkcolor: red
            A linear model is robust to these assumptions.
            Given moderate flattening at extremes of a plot of sample quantiles versus theoretical quantiles for the residuals
            of the linear model of cubed yield and cube-rooted application,
-           the tails of the probability vs. externally studentized residuals plot / distribution are too heavy
+           the tails of the probability vs. residuals plot / distribution are too heavy
            for this distribution to be considered normal. The assumption that the residuals are normally distributed is not met.
         
 2. A chemist studied the concentration of a solution $y$ over time $x$ by fitting a simple linear regression.

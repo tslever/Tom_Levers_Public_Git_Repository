@@ -588,7 +588,7 @@ ggplot(data_set, aes(x = log(weight), y = log(price), color = clarity, shape = c
 
 Considering the relationship of price of a diamond in our data set and the weight of the diamond,
 we construct a scatterplot for a linear model of price versus weight,
-as well as a plot of externally studentized residuals versus predicted prices for the model,
+as well as a plot of residuals versus predicted prices for the model,
 a plot of AutoCorrelation Function values versus lag for the model, and
 a plot of sample quantiles versus theoretical quantiles for the residuals of the model.
 
@@ -596,7 +596,7 @@ As weight of a diamond increases, price of the diamond increases, at an increasi
 As weight of a diamond increases, the variance of residuals of a linear model of price versus weight increases.
 There is a significant correlation between $(weight, \ price)$ observations and observations three away.
 Given a moderate downward and a sharp upward curve at extremes of a plot of sample quantiles versus theoretical quantiles
-for the residuals of the linear model of price versus weight, the tails of a probability vs. externally studentized residuals plot / distribution are too light for this distribution to be considered normal.
+for the residuals of the linear model of price versus weight, the tails of a probability vs. residuals plot / distribution are too light for this distribution to be considered normal.
 
 ```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE, fig.width=3.3, fig.height=2.4}
 ggplot(data_set, aes(x = weight, y = price)) +
@@ -664,7 +664,7 @@ Simple linear regression depends of the following five assumptions being met.
    A linear model is robust to these assumptions.
    Given a moderate downward and a sharp upward curve at extremes of a plot of sample quantiles versus theoretical quantiles
    for the residuals of the linear model of price versus weight,
-   the tails of a probability vs. externally studentized residuals plot / distribution are too light.
+   the tails of a probability vs. residuals plot / distribution are too light.
 
 ```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE}
 library(TomLeversRPackage)
@@ -684,7 +684,7 @@ to be used in a power transformation $y' = y^\lambda$ of a price $y$.
 The maximum likelihood estimate of $\lambda$ is close to a whole parameter $\lambda = 0$.
 Given a power-transformation parameter $\lambda = 0$, We transform price values according to $y' = ln(y)$.
 We present a scatterplot of log of price versus weight.
-We construct a linear model of log of price versus weight and present a scatterplot of externally studentized residuals
+We construct a linear model of log of price versus weight and present a scatterplot of residuals
 versus predicted log of price for the linear model of log of price versus weight.
 
 ```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE, fig.width=3.3, fig.height=2.4}
@@ -735,7 +735,7 @@ the assumption that the mean of the residuals of the linear model of transformed
 we take our log-of-price data and additionally logarithmicize weight.
 We present a scatterplot of log of price versus log of weight.
 We construct a linear model of log of price versus log of weight.
-We present a scatterplot of externally studentized residuals versus predicted log of price for the linear model of
+We present a scatterplot of residuals versus predicted log of price for the linear model of
 log of price versus log of weight.
 Additionally, we construct a plot of AutoCorrelation Function values versus lag for the linear model, and
 a plot of sample quantiles versus theoretical quantiles for the residuals of the model.
@@ -805,7 +805,7 @@ acf(linear_model_of_log_of_price_and_weight$residuals, main = "ACF Value vs. Lag
    However, a linear model is robust to these assumptions.
    Given a sharp downward curve at the bottom left of a plot of sample quantiles versus theoretical quantiles
    for the residuals of the linear model of log of price versus log of weight,
-   a probability vs. externally studentized residuals plot / distribution is not normal.
+   a probability vs. residuals plot / distribution is not normal.
 
 ```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, warning = FALSE, fig.width = 5.3, fig.height = 3.8, fig.align='center'}
 qqnorm(linear_model_of_log_of_price_and_weight$residuals)

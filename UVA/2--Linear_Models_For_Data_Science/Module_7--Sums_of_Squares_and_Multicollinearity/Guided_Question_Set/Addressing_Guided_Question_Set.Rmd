@@ -183,7 +183,7 @@ head(seatpos, n = 3)
         labs(
             x = "predicted hip center",
             y = "externally studentized residual",
-            title = "Externally Studentized Residuals vs. Predicted Hip Center"
+            title = "Residuals vs. Predicted Hip Center"
         ) +
         theme(
             plot.title = element_text(hjust = 0.5),
@@ -212,7 +212,7 @@ head(seatpos, n = 3)
         A linear model is robust to these assumptions.
         Considering a plot of sample quantiles versus theoretical quantiles
         for the residuals of the linear model, since observations lie near the line of best fit / their theoretical values,
-        a probability vs. externally studentized residuals plot / distribution is normal.
+        a probability vs. residuals plot / distribution is normal.
         
 10. Based on your results, write your estimated regression equation from part 7. Also report the $R^2$ of this model, and compare with the $R^2$
     you reported in part 1, for the model with all predictors. Also comment on the adjusted $R^2$ for both models.
