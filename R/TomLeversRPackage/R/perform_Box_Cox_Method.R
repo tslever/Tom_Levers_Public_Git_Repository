@@ -17,15 +17,12 @@ perform_Box_Cox_Method <- function(linear_model, vector_of_values_of_lambda = se
     parameters <- Box_Cox_plot_data$x
     maximum_likelihood_estimate_of_parameter_lambda <- parameters[index_of_maximum_likelihood_in_likelihoods]
 
-    #predictor_values <- unlist(linear_model$model[2])
-    #the_transformed_predictor_values <- Box_Cox_equation(predictor_values, maximum_likelihood_estimate_of_parameter_lambda)
-    fitted_values <- linear_model$fitted.values
-    the_transformed_fitted_values <- Box_Cox_equation(fitted_values, maximum_likelihood_estimate_of_parameter_lambda)
+    response_values <- linear_model$model[,1]
+    the_transformed_response_values <- Box_Cox_equation(response_values, maximum_likelihood_estimate_of_parameter_lambda)
 
     result_of_Box_Cox_Method <- list(
         maximum_likelihood_estimate_of_parameter_lambda = maximum_likelihood_estimate_of_parameter_lambda,
-        #transformed_predictor_values = the_transformed_predictor_values,
-        transformed_fitted_values = the_transformed_fitted_values
+        transformed_response_values = the_transformed_response_values
     )
     class(result_of_Box_Cox_Method) <- "result_of_Box_Cox_Method"
     return(result_of_Box_Cox_Method)
