@@ -2,11 +2,9 @@ Authors@R: person("Tom", "Lever", email = "thomas.lever.business@gmail.com", rol
 BugReports: https://github.com/tslever/TomLeversRPackage/issues
 Depends: R (>= 4.2.1)
 Imports:
+    leaps (>= 3.1),
     MASS (>= 7.3-57)
-Description: Contains Tom Lever's R functions, including
-    calculatePercentile
-    constructConfidenceIntervalForPopulationMean
-    constructConfidenceIntervalForTwoPopulationMeans
+Description: Contains Tom Lever's R functions
 Encoding: UTF-8
 LazyData: true
 License: MIT License

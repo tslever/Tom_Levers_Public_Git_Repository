@@ -4,7 +4,11 @@
 \alias{convert_to_categorical_vector}
 \title{convert_to_categorical_vector}
 \usage{
-convert_to_categorical_vector(discrete_quantitative_vector, vector_of_levels)
+convert_to_categorical_vector(
+  discrete_quantitative_vector,
+  vector_of_levels,
+  reference_class
+)
 }
 \arguments{
 \item{A}{discrete quantitative vector}
