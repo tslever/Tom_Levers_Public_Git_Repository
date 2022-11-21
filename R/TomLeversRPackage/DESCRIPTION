@@ -3,6 +3,7 @@ BugReports: https://github.com/tslever/TomLeversRPackage/issues
 Depends: R (>= 4.2.1)
 Imports:
     leaps (>= 3.1),
+    lmtest (>= 0.9-40),
     MASS (>= 7.3-57)
 Description: Contains Tom Lever's R functions
 Encoding: UTF-8

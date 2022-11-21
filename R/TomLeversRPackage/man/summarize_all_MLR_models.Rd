@@ -4,7 +4,12 @@
 \alias{summarize_all_MLR_models}
 \title{summarize_all_MLR_models}
 \usage{
-summarize_all_MLR_models(data_set, response)
+summarize_all_MLR_models(
+  data_set,
+  response,
+  maximum_number_of_models_in_summary_data_frame_for_each_number_of_variables,
+  functions_to_apply_to_response_values
+)
 }
 \value{
 The summary of all MLR models
