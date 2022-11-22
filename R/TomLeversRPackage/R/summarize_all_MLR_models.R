@@ -2,10 +2,11 @@
 #' @description Summarizes all MLR models
 #' @return The summary of all MLR models
 #' @examples summary_of_all_MLR_models <- summarize_all_MLR_models()
+#' @import ggplot2
 #' @import leaps
 
 #' @export
-summarize_all_MLR_models <- function(data_set, response, maximum_number_of_models_in_summary_data_frame_for_each_number_of_variables, functions_to_apply_to_response_values) {
+summarize_all_MLR_models <- function(data_set, response, maximum_number_of_models_in_summary_data_frame_for_each_number_of_variables, serialized_functions_to_apply) {
  data_frame_of_all_MLR_models <- data.frame(
   formula_string = character(),
   confidence_interval_for_mean_residual_contains_zero = logical(),
@@ -44,21 +45,29 @@ summarize_all_MLR_models <- function(data_set, response, maximum_number_of_model
   number_of_predictors_in_model <- length(names_of_predictors_in_model)
   number_of_variables_in_model <- number_of_predictors_in_model + 1
   response_values <- data_set[, response]
-  function_to_apply_to_response_values <- functions_to_apply_to_response_values[[i]]
-  transformed_response_values <- apply(as.array(response_values), 1, function_to_apply_to_response_values)
+  serialized_function_to_apply <- serialized_functions_to_apply[i, response]
+  function_to_apply <- eval(parse(text = serialized_function_to_apply))
+  transformed_response_values <- apply(as.array(response_values), 1, function_to_apply)
   transformed_response <- paste("transformed_", response, sep = "")
   formula <- reformulate(termlabels = names_of_predictors_in_model, response = transformed_response)
-  data_set_with_transformed_response <- data.frame(data_set)
-  data_set_with_transformed_response <- data_set_with_transformed_response[, !(names(data_set_with_transformed_response) %in% c(transformed_response))]
-  data_set_with_transformed_response[, transformed_response] <- transformed_response_values
-  linear_model <- lm(formula, data = data_set_with_transformed_response)
+  transformed_data_set <- data.frame(transformed_response = transformed_response_values)
+  colnames(transformed_data_set) <- transformed_response
+  for (name_of_predictor_in_model in names_of_predictors_in_model) {
+      serialized_function_to_apply <- serialized_functions_to_apply[i, name_of_predictor_in_model]
+      function_to_apply <- eval(parse(text = serialized_function_to_apply))
+      predictor_values <- data_set[, name_of_predictor_in_model]
+      transformed_data_set[name_of_predictor_in_model] <- apply(as.array(predictor_values), 1, function_to_apply)
+  }
+  linear_model <- lm(formula, data = transformed_data_set)
   residual_sum_of_squares <- calculate_residual_sum_of_squares(linear_model)
   r_squared <- calculate_coefficient_of_determination_R2(linear_model)
   adjusted_r_squared <- calculate_adjusted_coefficient_of_determination_R2(linear_model)
   confidence_interval_for_mean_residual_contains_zero <- determine_whether_confidence_interval_for_mean_residual_contains_zero(linear_model)
   linear_model_is_homoscedastic <- determine_whether_linear_model_is_homoscedastic(linear_model)
   residual_mean_square <- calculate_residual_mean_square(linear_model)
-  estimate_of_variance_of_errors <- residual_mean_square * number_of_variables_in_model
+  formula_for_transformed_full_model <- reformulate(termlabels = ".", response = transformed_response)
+  transformed_full_model <- lm(formula_for_transformed_full_model, data = transformed_data_set)
+  estimate_of_variance_of_errors <- calculate_residual_mean_square(transformed_full_model)
   number_of_data <- nrow(data_set)
   mallows_Cp <- residual_sum_of_squares / estimate_of_variance_of_errors - number_of_data + 2 * number_of_variables_in_model
   schwartz_bayesian_information_criterion <- number_of_data * log(residual_sum_of_squares / number_of_data, base = exp(1)) + number_of_variables_in_model * log(number_of_data, base = exp(1))

@@ -8,7 +8,7 @@ summarize_all_MLR_models(
   data_set,
   response,
   maximum_number_of_models_in_summary_data_frame_for_each_number_of_variables,
-  functions_to_apply_to_response_values
+  serialized_functions_to_apply
 )
 }
 \value{

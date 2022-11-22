@@ -17,7 +17,7 @@ test_that("MLR works",  {
     vector_of_delivery_times <- linear_model$model[,1]
     vector_of_fitted_values <- linear_model$fitted.values
     vector_of_residuals <- linear_model$residuals
-    analysis <- analyze_variance(linear_model)
-    print(summary)
-    print(analysis)
+    analysis <- analyze_variance_for_one_linear_model(linear_model)
+    #print(summary)
+    #print(analysis)
 })

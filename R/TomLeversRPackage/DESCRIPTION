@@ -2,6 +2,7 @@ Authors@R: person("Tom", "Lever", email = "thomas.lever.business@gmail.com", rol
 BugReports: https://github.com/tslever/TomLeversRPackage/issues
 Depends: R (>= 4.2.1)
 Imports:
+    ggplot2 (>= 3.3.6),
     leaps (>= 3.1),
     lmtest (>= 0.9-40),
     MASS (>= 7.3-57)
