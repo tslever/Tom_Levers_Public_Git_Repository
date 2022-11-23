@@ -6,7 +6,7 @@
 #' @import leaps
 
 #' @export
-summarize_all_MLR_models <- function(data_set, response, maximum_number_of_models_in_summary_data_frame_for_each_number_of_variables, serialized_functions_to_apply) {
+summarize_all_MLR_models <- function(data_set, response, maximum_number_of_models_in_summary_data_frame_for_each_number_of_variables, serialized_functions_to_apply, Box_Cox_Method_should_be_performed) {
  data_frame_of_all_MLR_models <- data.frame(
   formula_string = character(),
   confidence_interval_for_mean_residual_contains_zero = logical(),
@@ -22,7 +22,6 @@ summarize_all_MLR_models <- function(data_set, response, maximum_number_of_model
   stringsAsFactors = FALSE
  )
  residual_plots <- vector()
- lambdas <- vector()
  formula_for_full_model <- reformulate(termlabels = ".", response = response)
  subset_selection_object <- regsubsets(formula_for_full_model, data = data_set, nbest = maximum_number_of_models_in_summary_data_frame_for_each_number_of_variables, really.big = TRUE, nvmax = NULL)
  summary_for_subset_selection_object <- summary(subset_selection_object)
@@ -34,7 +33,9 @@ summarize_all_MLR_models <- function(data_set, response, maximum_number_of_model
      name_of_coefficient <- paste("B_", name_of_predictor, sep = "")
      data_frame_of_all_MLR_models[name_of_coefficient] <- double()
  }
- for (i in 1:nrow(mask_of_predictors_for_all_models)) {
+ number_of_possible_MLR_models <- nrow(mask_of_predictors_for_all_models)
+ lambdas <- rep(1, times = number_of_possible_MLR_models)
+ for (i in 1:number_of_possible_MLR_models) {
   mask_of_predictors <- mask_of_predictors_for_all_models[i,]
   names_of_predictors_in_model <- character()
   for (name_of_predictor in names_of_predictors) {
@@ -118,9 +119,11 @@ summarize_all_MLR_models <- function(data_set, response, maximum_number_of_model
     axis.text.x = element_text(angle = 0)
    )
   residual_plots[[i]] <- list(residual_plot)
-  result_of_Box_Cox_Method <- perform_Box_Cox_Method(linear_model, whether_to_plot = FALSE)
-  maximum_likelihood_estimate_of_parameter_lambda <- result_of_Box_Cox_Method$maximum_likelihood_estimate_of_parameter_lambda
-  lambdas[[i]] <- maximum_likelihood_estimate_of_parameter_lambda
+  if (Box_Cox_Method_should_be_performed) {
+      result_of_Box_Cox_Method <- perform_Box_Cox_Method(linear_model, whether_to_plot = FALSE)
+      maximum_likelihood_estimate_of_parameter_lambda <- result_of_Box_Cox_Method$maximum_likelihood_estimate_of_parameter_lambda
+      lambdas[[i]] <- maximum_likelihood_estimate_of_parameter_lambda
+  }
  }
  summary_of_all_MLR_models <- list(data_frame = data_frame_of_all_MLR_models, residual_plots = residual_plots, lambdas = lambdas)
  return(summary_of_all_MLR_models)

@@ -8,7 +8,8 @@ summarize_all_MLR_models(
   data_set,
   response,
   maximum_number_of_models_in_summary_data_frame_for_each_number_of_variables,
-  serialized_functions_to_apply
+  serialized_functions_to_apply,
+  Box_Cox_Method_should_be_performed
 )
 }
 \value{

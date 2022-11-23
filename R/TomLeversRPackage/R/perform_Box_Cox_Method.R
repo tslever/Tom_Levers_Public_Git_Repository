@@ -14,7 +14,7 @@ perform_Box_Cox_Method <- function(linear_model, vector_of_values_of_lambda = se
     maximum_likelihood <- max(likelihoods)
     index_of_maximum_likelihood_in_likelihoods <- match(maximum_likelihood, likelihoods)
     if (index_of_maximum_likelihood_in_likelihoods == 1 || index_of_maximum_likelihood_in_likelihoods == length(likelihoods)) {
-     warning("The maximum likelihood estimate of parameter lambda is at the beginning or end of the specified range")
+     stop("The maximum likelihood estimate of parameter lambda is at the beginning or end of the specified range")
     }
     parameters <- Box_Cox_plot_data$x
     maximum_likelihood_estimate_of_parameter_lambda <- parameters[index_of_maximum_likelihood_in_likelihoods]
