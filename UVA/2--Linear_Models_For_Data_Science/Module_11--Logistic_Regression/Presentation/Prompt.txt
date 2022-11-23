@@ -1,0 +1,64 @@
+
+11.2 Logistic Regression
+
+13.2.1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+
+In a logistic regression model, what distribution does the response variable follow?
+
+Write down the logistic regression model, in terms of the expected value of the response, the regression coefficients, and the predictors.
+
+Why do we use the logistic response function instead of a linear response function?
+
+How do we express the odds in terms of $pi$, the probability that the response is 1?
+
+
+11.3 Estimating the Logistic Regression Coefficients
+
+13.2.2
+
+Write down the expected value and variance for the estimated coefficients in the logistic regression model.
+
+How is maximum likelihood estimation in logistic regression different from least-squares estimation in linear regression?
+
+
+11.4 Interpreting the Coefficients in a Logistic Regression Model
+
+13.2.3
+
+Suppose we have a logistic regression model with just one predictor.
+
+Interpret the estimated coefficient $\hat{\beta}_1}$ in terms of the odds ratio and log odds.
+
+Interpret the estimated coefficient $\hat{\beta}_0$ in terms of the odds ratio and log odds.
+
+
+11.5 Inference in Logistic Regression
+
+13.2.4
+
+What distribution does the test statistic from a likelihood ratio test follow?
+
+What are the three tests for goodness of fit?
+
+What is the goodness of fit of the logistic regression model testing? What distribution does the test statistic follow?
+
+How do we test hypotheses on a subset of the model parameters? What distribution does the test statistic follow?
+
+How do we test an individual coefficient? What distribution does the test statistic follow?                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+How do we construct a confidence interval for a regression coefficient? What is the interpretation of the confidence interval when it does not contain 0? How do we interpret the confidence interval in terms of odds ratio?
+
+How do we test if all the coefficients are 0? What distribution does the test statistic follow?
+
+Read section 1 of the file below to see how confidence intervals for logistic regression coefficients are interpreted. Read section 2 for a recap of the various likelihood ratio tests in logistic regression.
+
+
+11.6 Recap for Module 11
+
+View the videos for a recap of Module 11.
+
+
+11.7 R Tutorial for Module 11
+
+
+11.8 Live Session

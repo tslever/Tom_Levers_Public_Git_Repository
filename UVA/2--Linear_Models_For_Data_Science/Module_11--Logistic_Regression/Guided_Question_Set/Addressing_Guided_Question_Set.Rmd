@@ -1,0 +1,18 @@
+---
+title: "Stat 6021: Guided Question Set 11"
+author: "Tom Lever"
+date: 11/22/22
+output:
+  pdf_document: default
+  html_document: default
+urlcolor: blue
+linkcolor: red
+---
+
+The Western Collaborative Study Group (WCGS) is one of the earliest studies regarding heart disease. Data were collected from 3,154 males aged $39$ to $59$ in the San-Francisco area in $1960$. They all did not have coronary heart disease at the beginning of the study. The data set comes from the `faraway` package and is called `wcgs`. We will focus on predicting the likelihood of developing coronary heart disease based on the following predictors:
+
+* `age`: age in years
+* `sdp`: systolic blood pressure in $mm \ Hg$
+* `dbp`: diastolic blood pressure in $mm \ Hg$
+* `cigs`: number of cigarettes smoked per day
+* `dibep`: behavior type, labeled $A$ and $B$ for aggressive and passive, respectively
