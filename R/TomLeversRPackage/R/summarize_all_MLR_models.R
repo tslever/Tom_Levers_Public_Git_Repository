@@ -22,6 +22,7 @@ summarize_all_MLR_models <- function(data_set, response, maximum_number_of_model
   stringsAsFactors = FALSE
  )
  residual_plots <- vector()
+ lambdas <- vector()
  formula_for_full_model <- reformulate(termlabels = ".", response = response)
  subset_selection_object <- regsubsets(formula_for_full_model, data = data_set, nbest = maximum_number_of_models_in_summary_data_frame_for_each_number_of_variables, really.big = TRUE, nvmax = NULL)
  summary_for_subset_selection_object <- summary(subset_selection_object)
@@ -117,7 +118,10 @@ summarize_all_MLR_models <- function(data_set, response, maximum_number_of_model
     axis.text.x = element_text(angle = 0)
    )
   residual_plots[[i]] <- list(residual_plot)
+  result_of_Box_Cox_Method <- perform_Box_Cox_Method(linear_model, whether_to_plot = FALSE)
+  maximum_likelihood_estimate_of_parameter_lambda <- result_of_Box_Cox_Method$maximum_likelihood_estimate_of_parameter_lambda
+  lambdas[[i]] <- maximum_likelihood_estimate_of_parameter_lambda
  }
- summary_of_all_MLR_models <- list(data_frame = data_frame_of_all_MLR_models, residual_plots = residual_plots)
+ summary_of_all_MLR_models <- list(data_frame = data_frame_of_all_MLR_models, residual_plots = residual_plots, lambdas = lambdas)
  return(summary_of_all_MLR_models)
 }
