@@ -6,8 +6,8 @@
 \usage{
 perform_Box_Cox_Method(
   linear_model,
-  vector_of_values_of_lambda = seq(-2, 2, 0.1),
-  whether_to_plot = TRUE
+  vector_of_values_of_lambda,
+  whether_to_plot
 )
 }
 \arguments{

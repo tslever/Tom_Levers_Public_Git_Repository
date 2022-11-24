@@ -8,7 +8,8 @@
 #' @import MASS
 
 #' @export
-perform_Box_Cox_Method <- function(linear_model, vector_of_values_of_lambda = seq(-2, 2, 0.1), whether_to_plot = TRUE) {
+perform_Box_Cox_Method <- function(linear_model, vector_of_values_of_lambda, whether_to_plot) {
+#perform_Box_Cox_Method <- function(linear_model, vector_of_values_of_lambda = seq(-2, 2, 0.1), whether_to_plot = TRUE) {
     Box_Cox_plot_data <- boxcox.default(linear_model, plotit = whether_to_plot)
     likelihoods <- Box_Cox_plot_data$y
     maximum_likelihood <- max(likelihoods)
