@@ -9,8 +9,11 @@ summarize_linear_model <- function(linear_model) {
     the_summary <- summary(linear_model)
     summary_output <- capture.output(the_summary)
 
-    number_of_predictors_and_interaction_terms <- get_number_of_predictors_and_interaction_terms(linear_model)
-    number_of_variables <- get_number_of_variables(linear_model)
+    coefficients <- linear_model$coefficients
+    names_of_coefficients <- names(coefficients)
+    predictors_and_interaction_terms <- names_of_coefficients[2:length(names_of_coefficients)]
+    number_of_predictors_and_interaction_terms <- length(predictors_and_interaction_terms)
+    number_of_variables <- number_of_predictors_and_interaction_terms + 1
     substrings_of_generic_linear_regression_equation <- character(number_of_variables)
     substrings_of_generic_linear_regression_equation[1] <- paste("E(y | x) =\n    B_0", sep = "")
     for (i in 1:number_of_predictors_and_interaction_terms) {
