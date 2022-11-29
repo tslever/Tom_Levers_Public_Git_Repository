@@ -1,0 +1,66 @@
+---
+title: "Stat 6021: Homework Set 11 and 12"
+author: "Tom Lever"
+date: 11/28/22
+output:
+  pdf_document: default
+  html_document: default
+urlcolor: blue
+linkcolor: red
+---
+
+Note that this is a homework that combines Modules 11  and 12, and is due Dec 5. You can work on questions $1a$ to $1g$ and $2$ after Module 11.
+
+1.  For this question, we will revisit the `penguins` data set from the `palmerpenguins` package. The data set contains information regarding measurements of adult penguins near Palmer Station, Antarctica. We will focus on using the four measurement variables (bill length, bill depth, flipper length, and body mass) to model the gender of the penguins. Since there are three species involved, we also want to control for species in the logistic regression. We will not consider the island and year in this logistic regression.
+
+    When you read the data in, notice that there are a number of penguins with missing values for gender. Remove these observations from the data frame. Also remove columns 2 and 8 since we are not considering island and year in this logistic regression. Then, randomly split your data into a training and test set ($80 - 20$ split respectively). For reproducibility, use `set.seed(1)` while performing the split. You can run the following block of code to carry out the needed steps.
+
+    ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+    library(palmerpenguins)
+    data_set <- penguins
+    data_set <- data_set[complete.cases(data_set[ , 7]), -c(2, 8)]
+    set.seed(1)
+    number_of_observations <- nrow(data_set)
+    number_of_observations
+    head(data_set, n = 3)
+    indices_of_training_observations <- sample.int(number_of_observations, floor(0.8 * number_of_observations), replace = FALSE)
+    training_data_set <- data_set[indices_of_training_observations, ]
+    testing_data_set <- data_set[-indices_of_training_observations, ]
+    ```
+    
+    The questions below should be answered using the training data set.
+    
+    a)  Create some data visualizations to explore the relationship between the various body measurements and the gender of penguins. Be sure to briefly comment on your data visualizations.
+    
+    b)  Use R to fit the logistic regression model (first order only involving the 4 measurement variables and species). Based on the results of the Wald tests for the individual coefficients, which predictor(s) appear to be insignificant in the model?
+    
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE} 
+        generalized_linear_model <- glm(sex ~ bill_length_mm + bill_depth_mm + flipper_length_mm + body_mass_g + species, family = "binomial", data = training_data_set)
+        summary(generalized_linear_model)
+        ```
+        
+        The Wald statistic for testing the significance of $flipper_length_mm$ $Z_0 = -1.358$ with a corresponding $p$ value $p = 0.175$. $flipper_length_mm$ appears to be insignificant in the logistic regression model in the context of all the predictors in the model. We can drop $flipper_length_mm$ from the logistic regression model while leaving the other predictors in the model.
+        
+    c)  Based on your answer in part 1b, drop the predictor(s) and refit the logistic regression model. Write out the estimated logistic regression equation. If you did not drop any predictor, write out the logistic regression equation from part 1b.
+    
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        generalized_linear_model <- glm(sex ~ bill_length_mm + bill_depth_mm + body_mass_g + species, family = "binomial", data = training_data_set)
+        generalized_linear_model
+        ```
+        
+        $$
+        \begin{aligned}
+        ln\left(\frac{\hat{\pi}}{1 - \hat{\pi}}\right) = & \beta_0 \\
+        + & \beta_{bill \ length} (bill \ length) \\
+        + & \beta_{bill \ depth} (bill \ depth) \\
+        + & \beta_{body \ mass} (body \ mass) \\
+        + & \beta_{Chinstrap} I_{Chinstrap} \\
+        + & \beta_{Gentoo} I_{Gentoo} \\
+        ln\left(\frac{\hat{\pi}}{1 - \hat{\pi}}\right) = & (-103.2) \\
+        + & (0.951) (bill \ length) \\
+        + & (2.099) (bill \ depth) \\
+        + & (0.00714) (body \ mass) \\
+        + & (-10.42) I_{Chinstrap} \\
+        + & (-12.38) I_{Gentoo}
+        \end{aligned}
+        $$
