@@ -32,6 +32,115 @@ Note that this is a homework that combines Modules 11  and 12, and is due Dec 5.
     
     a)  Create some data visualizations to explore the relationship between the various body measurements and the gender of penguins. Be sure to briefly comment on your data visualizations.
     
+        Boxplots of bill_length_mm, bill_depth_mm, flipper_length_mm, and body_mass_g are presented below.
+        
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        library(ggplot2)
+        ggplot(data_set, aes(x = sex, y = bill_length_mm)) +
+            geom_boxplot(fill = "Blue", color = "Orange") +
+            labs(
+                y = "bill length (mm)",
+                title = "Boxplots of Bill Length and Sex"
+            ) +
+            theme(
+                plot.title = element_text(hjust = 0.5, size = 11),
+            )
+   
+        ggplot(data_set, aes(x = sex, y = bill_depth_mm)) +
+            geom_boxplot(fill = "Blue", color = "Orange") +
+            labs(
+                y = "bill depth (mm)",
+                title = "Boxplots of Bill Depth and Sex"
+            ) +
+            theme(
+                plot.title = element_text(hjust = 0.5, size = 11),
+            )
+            
+        ggplot(data_set, aes(x = sex, y = flipper_length_mm)) +
+            geom_boxplot(fill = "Blue", color = "Orange") +
+            labs(
+                y = "flipper length (mm)",
+                title = "Boxplots of Flipper Length and Sex"
+            ) +
+            theme(
+                plot.title = element_text(hjust = 0.5, size = 11),
+            )
+            
+        ggplot(data_set, aes(x = sex, y = body_mass_g)) +
+            geom_boxplot(fill = "Blue", color = "Orange") +
+            labs(
+                y = "body mass (g)",
+                title = "Boxplots of Body Mass and Sex"
+            ) +
+            theme(
+                plot.title = element_text(hjust = 0.5, size = 11),
+            )
+        ```
+        
+        Male penguins tend to have longer, deeper bills, longer flippers, and greater body masses. The interquartile ranges of bill length, bill depth, flipper length, and body mass are approximately $10 \ mm$, $3 \ mm$, $25 \ mm$, and $1300 \ g$.
+        
+        All of these body measurements differ similarly between male and female penguins. About three quarters of penguins have bill lengths and bill depths less than the appropriate medians; about three quarters of penguins have flipper lengths and body masses greater than the appropriate medians. Bill length and bill depth are right skewed; flipper length and body mass are left skewed.
+        
+        There is significant overlap in the boxplots for the body measurements; many female and male penguins have similar body measurements.
+    
+        Density plots for bill_length_mm, bill_depth_mm, flipper_length_mm, and body_mass_g are presented below. The density plots for bill length and bill depth are roughly bimodal and left skewed; higher proportions of female and male penguins have lower bill length and bill depth. The density plots for males is shifted right relative to the density plot for females; males generally have greater bill lengths and bill depths than females. The density plots are more or less the same shape, and there is significant overlap. Male bill lengths and depths are more spread out.
+        
+        Density plots for flipper_length_mm and body_mass_g are presented below. The density plots for flipper_length_mm and body_mass_g are roughly bimodal and right skewed; higher proportions of female and male penguins have higher bill length and bill depth. The density plots for males is shifted right relative to the density plot for females; males generally have greater flipper lengths and body masses than females. The density plots are more or less the same shape, and there is significant overlap. Male flipper lengths and body masses are more spread out.
+        
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        ggplot() +
+            geom_histogram(data = data_set, aes(x = data_set$bill_length_mm, y = ..density.., fill = sex), alpha = 0.2, binwidth = density(data_set$bill_length_mm)$bw) +
+            geom_density(data = data_set, aes(x = data_set$bill_length_mm, color = sex)) +
+            labs(
+                x = "bill length (mm)",
+                y = "probability density",
+                title = "Histogram and Probability Density Distribution of Bill Length by Sex"
+            ) +
+            theme(
+                plot.title = element_text(hjust = 0.5, size = 11),
+                axis.text.x = element_text(angle = 0)
+            )
+        
+        ggplot() +
+            geom_histogram(data = data_set, aes(x = data_set$bill_depth_mm, y = ..density.., fill = sex), alpha = 0.2, binwidth = density(data_set$bill_depth_mm)$bw) +
+            geom_density(data = data_set, aes(x = data_set$bill_depth_mm, color = sex)) +
+            labs(
+                x = "systolic blood pressure",
+                y = "probability density",
+                title = "Histogram and Probability Density Distribution of Bill Depth by Sex"
+            ) +
+            theme(
+                plot.title = element_text(hjust = 0.5, size = 11),
+                axis.text.x = element_text(angle = 0)
+            )
+            
+        ggplot() +
+            geom_histogram(data = data_set, aes(x = data_set$flipper_length_mm, y = ..density.., fill = sex), , alpha = 0.2, binwidth = density(data_set$flipper_length_mm)$bw) +
+            geom_density(data = data_set, aes(x = data_set$flipper_length_mm, color = sex)) +
+            labs(
+                x = "flipper length (mm)",
+                y = "probability density",
+                title = "Histogram and Probability Density Distribution of Flipper Length by Sex"
+            ) +
+            theme(
+                plot.title = element_text(hjust = 0.5, size = 11),
+                axis.text.x = element_text(angle = 0)
+            )
+            
+        ggplot() +
+            geom_histogram(data = data_set, aes(x = data_set$body_mass_g, y = ..density.., fill = sex), , alpha = 0.2, binwidth = density(data_set$body_mass_g)$bw) +
+            geom_density(data = data_set, aes(x = data_set$body_mass_g, color = sex)) +
+            labs(
+                x = "body mass (g)",
+                y = "probability density",
+                title = "Histogram and Probability Density Distribution of Body Mass by Sex"
+            ) +
+            theme(
+                plot.title = element_text(hjust = 0.5, size = 11),
+                axis.text.x = element_text(angle = 0)
+            )
+        ```
+    
     b)  Use R to fit the logistic regression model (first order only involving the 4 measurement variables and species). Based on the results of the Wald tests for the individual coefficients, which predictor(s) appear to be insignificant in the model?
     
         ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE} 
@@ -64,3 +173,182 @@ Note that this is a homework that combines Modules 11  and 12, and is due Dec 5.
         + & (-12.38) I_{Gentoo}
         \end{aligned}
         $$
+        
+    d)  Based on your estimated logistic regression equation in part 1c, how would you generalize the relationship between some of the body measurement predictors and the (log) odds of a penguin being male?
+    
+        $\pi$ represents the expected value of our logistic response function given predictor values, the probability that the response is 1, and the probability that a penguin is male. $\frac{\pi}{1 - \pi}$ represents the odds that the response is 1 and the odds that a penguin is male. The log odds of a penguin being male increases with bill length, bill depth, and body mass. The log odds of a penguin being male increases fastest with bill depth.
+        
+    e)  Interpret the estimated coefficient for bill length contextually.
+    
+        The regression coefficient for $bill \ length$ is $0.951$.
+        
+        For an additional millimeter in bill length on average, the estimated log odds of a penguin being male increases  by $0.951$, while controlling for the other predictors ($bill \ depth$, $body \ mass$, an indicator of whether a penguin is a Chinstrap penguin, and an indicator of whether a penguin is a Gentoo penguin).
+        
+        For an additional millimeter in bill length on average, the estimated odds of a penguin being male increases by a factor of $exp(0.951)$, while controlling for the other predictors.
+    
+    f)  Consider a Gentoo penguin with bill length $49 \ mm$, bill depth $15 \ mm$, flipper length $220 \ mm$, and body mass $5700 \ g$. What are the log odds, odds, and probability that this penguin is male?
+    
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        predictor_values <- data.frame(
+            bill_length_mm = 49,
+            bill_depth_mm = 15,
+            flipper_length_mm = 220,
+            body_mass_g = 5700,
+            species = "Gentoo"
+        )
+        log_odds <- predict(generalized_linear_model, predictor_values)
+        log_odds
+        odds <- exp(log_odds)
+        odds
+        probability <- odds / (1 + odds)
+        probability
+        ```
+        
+    g)  Conduct a relevant hypothesis test to assess if the logistic regression model in part 1c is a useful model. Be sure to write out the null and alternative hypotheses, report the value of the test statistic, and write a relevant conclusion.
+    
+        We test the null hypothesis $H_0: \boldsymbol{\beta} = \boldsymbol{0}$ that the logistic regression coefficients are all $0$. The alternate hypothesis is $H_1: \beta_k \neq 0$ for at least one index of a regression coefficient $k$.
+        
+        We consider dropping all $5$ predictors of {$bill \ length$, $bill \ depth$, $body \ mass$, $I_{Chinstrap}$, $I_{Gentoo}$}. The test statistic is $D_{dropped} = D_0 - D_{full}$. The deviance of the dropped predictors follows a $\chi^2$ distribution with degrees of freedom $df_{dropped} = 5$ equal to the number of predictors dropped.
+        
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        D_0 <- generalized_linear_model$null.deviance
+        D_full <- generalized_linear_model$deviance
+        D_dropped <- D_0 - D_full
+        D_dropped
+        number_of_predictors_dropped <- 5
+        pchisq(D_dropped, number_of_predictors_dropped, lower.tail = FALSE)
+        ```
+        
+        The associated $p$ value is above. We reject the null hypothesis. The data support the claim that our model is useful compared to the intercept-only model.
+        
+    h)  Validate your model on the test data by creating an ROC curve. What does your ROC curve tell you?
+    
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        library(ROCR)
+        predicted_sex <- predict(generalized_linear_model, newdata = testing_data_set, type = "response")
+        prediction_instance <- prediction(predicted_sex, testing_data_set$sex)
+        roc_curve <- performance(prediction_instance, measure = "tpr", x.measure = "fpr")
+        plot(roc_curve, main = "ROC Curve for Sex of Penguins")
+        lines(x = c(0, 1), y = c(0, 1), col = "red")
+        ```
+        
+        Our ROC curve tells us that our logistic regression model is abot 90 percent on its way from a logistic regression model that predicts penguin sex randomly and without relying on any predictors (symbolized by the diagonal line) to a logistic regression model that predicts penguin sex perfectly [symbolized by the point (0, 1)].
+        
+    i)  Find the AUC associated with your ROC curve. What does your AUC tell you?
+    
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        auc <- performance(prediction_instance, measure = "auc")
+        auc@y.values
+        ```
+        
+        The Area Under the Curve of the ROC curve tells us that our logistic regression model is about 90 percent on its way from a logistic regression model that predicts penguin sex randomly and without relying on any predictors (symbolized by the area under the diagonal line) to a logistic regression model that predicts indicators of penguin sex perfectly (symbolized by the entire plot area).
+        
+    j)  Create a confusion matrix using a threshold of $0.5$. What is the false positive rate? What is the false negative rate? What is the error rate?
+        
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        table(testing_data_set$sex, predicted_sex > 0.5)
+        ```
+        
+        $$FPR = \frac{FP}{TN + FP} = \frac{7}{28 + 7} = \frac{7}{35} = \frac{1}{5} = 0.2 = P\left(\hat{y} = 1 | y = 0\right)$$
+        $$FNR = \frac{FN}{FN + TP} = \frac{4}{4 + 28} = \frac{4}{32} = \frac{1}{8} = 0.125 = P\left(\hat{y} = 0 | y = 1\right)$$
+        $$ER = \frac{FP + FN}{n} = \frac{FP + FN}{TN + FP + FN + TP} = \frac{7 + 4}{28 + 7 + 4 + 28} = \frac{11}{67} = 0.164 = P\left(\hat{y} \neq y\right)$$
+        
+    k)  Discuss if the threshold should be changed. If it should be changed, explain why, and create another confusion matrix with a different threshold.
+    
+        A cutoff value of $0.5$ gives the highest accuracy / lowest overall error rate on average. At this point, we have a fairly close-to-ideal ROC curve, a fairly high AUC, a fairly low error rate, a fairly low FPR, and a fairly low FNR. The cutoff value of $0.5$ seems satisfactory. We could search for the threshold corresponding to the lowest error rate. Depending on context, we may be more interested in ensuring a high sensitivity / TPR / probability of predicted sex being male when actual sex is male or ensuring high specificity / TNR / probability of predicted sex being female when actual sex is female.
+        
+2.  A health clinic sent fliers to its clients to encourage everyone to get a flu shot. In a follow-up study, $159$ elderly clients were randomly selected and asked if they received a flu shot. A client who received a flu shot was coded $y = 1$, and a client who did not receive a flu shot was coded $y = 0$. Data were also collected on their age, $x_1$, health awareness rating on a $0 - 100$ scale (higher values indicate greater awareness), $x_2$, and gender, $x_3$, where males were coded $x_3 = 1$ and females were coded $x_3 = 0$. A first order logistic model was fitted. The output is displayed in the prompt for this homework.
+
+    a)  Interpret the estimated coefficient for $x_3$, gender, in context.
+    
+        The regression coefficient for `gender` is $0.434$.
+        
+        The estimated log odds of a client having received a flu shot is $0.434$ higher for males than for females, while controlling for the other predictors.
+        
+        The estimated odds of a client having received a flu shot is a factor of $exp(0.434)$ higher for males than for females, while controlling for the other predictors.
+        
+    b)  Conduct the Wald test for $\beta_3$. State the null and alternative hypotheses, calculate the test statistic, and make a conclusion in context.
+    
+        We conduct a Wald test a null hypothesis $H_0: \beta_3 = 0$ that the regression coefficient $\beta_3 = 0$ for individual predictor gender, $x_3$. Our alternate hypothesis $H_1: \beta_3 \neq 0$. The test statistic for our Wald test is
+        
+        $$Z_0 = \frac{\hat{\beta}_3}{SE\left(\hat{\beta}_3\right)} = \frac{0.43397}{0.52179} = 0.832$$
+        
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        test_statistic <- 0.832
+        significance_level <- 0.05
+        qnorm(significance_level, lower.tail = FALSE)
+        pnorm(abs(test_statistic), lower.tail = FALSE) * 2
+        ```
+        
+        Because the test statistic $Z_0$ is less than a critical value $Z_c = 1.645$ and the $p$ value corresponding to the test statistic $Z_0$ is greater than a significance level $\alpha = 0.05$, we fail to reject the null hypothesis. We drop the predictor gender, $x_3$, from our logistic regression model.
+        
+    c)  Calculate a $95$-percent confidence interval for $\beta_3$, and interpret the interval in context.
+    
+        $$\left[\hat{\beta}_3 - Z_{\alpha/2} SE\left(\hat{\beta}_3\right), \hat{\beta}_3 + Z_{\alpha/2} SE\left(\hat{\beta}_3\right)\right]$$
+        $$L = 0.95$$
+        $$alpha = 0.05$$
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        qnorm(significance_level / 2, lower.tail = FALSE)
+        ```
+        $$Z_{alpha/2} = 1.960$$
+        $$\left[0.434 - (1.960) (0.522), 0.434 + (1.960) (0.522)\right]$$
+        $$[-0.589, 1.457]
+        
+        Because a $95$-percent confidence interval for $\beta_3$ contains $0$, the population regression coefficient of the logistic regression model for predictor gender, $x_3$ is not significantly different from $0$. We drop predctor gender, $x_3$, from our logistic regression model.
+        
+    d)  Comment on whether your conclusions from parts 2b and 2c are consistent.
+    
+        Our conclusions from parts 2b and 2c are consistent. We drop the predictor $x_3$, gender, in both cases.
+        
+    e)  Suppose you want to drop the coefficients for age and gender, $\beta_1$ and $\beta_3$. A logistic regression model for just awareness was fitted, and the output is shown in the prompt for this homework. Carry out the appropriate hypothesis test to see if the coefficients for age and gender can be dropped.
+    
+        Our null hypothesis $H_0: \boldsymbol{\beta}_{dropped} = \boldsymbol{0}$.
+        Our alternate hypothesis $H_1: \boldsymbol{\beta}_dropped \neq \boldsymbol{0}$.
+    
+        The deviance of the full model is the residual deviance in the summary for the full model, $D_{full} = 105.09$.
+        The deviance of the reduced model is the residual deviance in the summary for the reduced model, $D_{reduced} = 113.20$.
+        The deviance of the dropped predictors is the difference between the deviance of the reduced model and the deviance of the full model, $8.11$.
+        If the deviance of the dropped predictors $D_{dropped} = 8.11$ is greater than a test statistic ${\chi^2}_{\alpha = 0.05, dropped = 2} = 5.99$, at least one of the regression coefficients in $\beta_{dropped}$ is likely not $0$, and we reject the null hypothesis.
+        If the deviance of the dropped predictors $D_{dropped} = 8.11$ is less than a test statistic ${\chi^2}_{\alpha = 0.05, dropped = 2} = 5.99$, the reduced model is about as good a fit to the data as the full model and we support the null hypothesis; it is likely the regression coefficients of the dropped predictors are $0$.
+        Because the deviance of the dropped predictors $D_{dropped} = 8.11$ is less than a test statistic ${\chi^2}_{\alpha = 0.05, dropped = 2} = 5.99$, the reduced model is about as good a fit to the data as the full model and we support the null hypothesis; it is likely the regression coefficients of the dropped predictors are $0$. We drop the predictors from our logistic regression model.
+    
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        D_full <- 105.09
+        D_reduced <- 113.20
+        D_dropped <- D_reduced - D_full
+        D_dropped
+        significance_level <- 0.05
+        number_of_dropped_predictors <- 2
+        qchisq(significance_level, number_of_dropped_predictors, lower.tail = FALSE)
+        pchisq(D_dropped, number_of_predictors_dropped, lower.tail = FALSE)
+        ```
+        
+    f)  Based on your conclusion in question 2e, what are the estimated odds of a client receiving the flu shot if the client is $70$ years old, has a health awareness rating of $65$, and is male? What is the estimated probability of this client receiving the flu shot?
+        
+        If we were to keep age, aware, and gender,
+        
+        $$ln\left(\frac{\hat{\pi}}{1 - \hat{\pi}}\right) = -1.177 + (0.07279) age + (-0.09899) aware + (0.43397) gender$$
+        $$ln\left(\frac{\hat{\pi}}{1 - \hat{\pi}}\right) = -2.082$$
+        $$ln\left(\frac{\hat{\pi}}{1 - \hat{\pi}}\right) = -2.082$$
+
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        log_odds <- -2.082
+        odds <- exp(log_odds)
+        odds
+        probability <- odds / (1 + odds)
+        probability
+        ```
+        
+        If we drop age and gender and go with aware as in part 2e,
+        
+        $$ln\left(\frac{\hat{\pi}}{1 - \hat{\pi}}\right) = 4.91133 + (-0.11931) aware$$
+        $$ln\left(\frac{\hat{\pi}}{1 - \hat{\pi}}\right) = 4.91133 + (-0.11931) (65)$$
+        $$ln\left(\frac{\hat{\pi}}{1 - \hat{\pi}}\right) = -2.84382$$
+        
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        log_odds <- -2.84382
+        odds <- exp(log_odds)
+        odds
+        probability <- odds / (1 + odds)
+        probability
+        ```

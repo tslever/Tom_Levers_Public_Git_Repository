@@ -209,6 +209,7 @@ The test statistic is $D_{dropped} = D_0 - D_{full}$. The deviance of the droppe
 ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
 D_0 <- generalized_linear_model$null.deviance
 D_full <- generalized_linear_model$deviance
+D_full
 D_dropped <- D_0 - D_full
 D_dropped
 number_of_predictors_dropped <- 5
@@ -226,6 +227,7 @@ The test statistic is $D_{dropped} = D_0 - D_{full}$. The deviance of the droppe
 ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
 reduced_generalized_linear_model <- glm(chd ~ age + cigs + dibep, family = "binomial", data = training_data_set)
 D_reduced <- reduced_generalized_linear_model$deviance
+D_reduced
 D_dropped <- D_reduced - D_full
 D_dropped
 number_of_predictors_dropped <- 2
