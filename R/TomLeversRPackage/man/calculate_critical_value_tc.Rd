@@ -7,7 +7,8 @@
 calculate_critical_value_tc(
   significance_level,
   number_of_confidence_intervals,
-  residual_degrees_of_freedom
+  residual_degrees_of_freedom,
+  hypothesis_test_is_two_tailed
 )
 }
 \arguments{

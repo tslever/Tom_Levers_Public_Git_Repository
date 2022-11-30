@@ -7,7 +7,11 @@
 #' @examples critical_value_t <- calculate_critical_value_tc(0.05, 1, 108)
 
 #' @export
-calculate_critical_value_tc <- function(significance_level, number_of_confidence_intervals, residual_degrees_of_freedom) {
- critical_value_t <- qt(significance_level/(2*number_of_confidence_intervals), residual_degrees_of_freedom, lower.tail = FALSE)
+calculate_critical_value_tc <- function(significance_level, number_of_confidence_intervals, residual_degrees_of_freedom, hypothesis_test_is_two_tailed) {
+ if (hypothesis_test_is_two_tailed) {
+     critical_value_t <- qt(significance_level/(2*number_of_confidence_intervals), residual_degrees_of_freedom, lower.tail = FALSE)
+ } else {
+     critical_value_t <- qt(significance_level, residual_degrees_of_freedom, lower.tail = FALSE)
+ }
  return(critical_value_t)
 }
