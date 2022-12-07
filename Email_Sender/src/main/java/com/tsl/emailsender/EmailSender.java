@@ -13,6 +13,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
+import jakarta.activation.DataSource;
 import jakarta.activation.FileDataSource;
 
 /**
@@ -24,14 +25,18 @@ public abstract class EmailSender {
     EmailInfo emailInfo;
    
     /**
-     * Constructs an email sender based on a {@code Configurations} object.
+     * Constructs an email sender based on a {@code Configurations} object and an {@code EmailInfo} object.
      * 
      * @param configurationsToUse a {@code Configurations} object with which to construct an email sender
+     * @param emailInfoToUse an {@code EmailInfo} object with which to construct an email sender
      * @throws IOException if email information cannot be gotten
      */
-    public EmailSender(Configurations configurationsToUse) throws IOException {
+    public EmailSender(Configurations configurationsToUse, EmailInfo emailInfoToUse) throws IOException {
         configurations = configurationsToUse;
-        emailInfo = getEmailInfo();
+        emailInfo = emailInfoToUse;
+        if (emailInfoToUse == null) {
+            emailInfo = getEmailInfo();
+        }
     }
     
     /**
@@ -51,7 +56,7 @@ public abstract class EmailSender {
         Path pathToBody = Path.of(configurations.getEmailDirectory() + "/body.txt");
         String body = Files.readString(pathToBody, StandardCharsets.UTF_8);
         File directoryForAttachments = new File(configurations.getEmailDirectory() + "/attachments");
-        ArrayList<FileDataSource> arrayListOfAttachments = new ArrayList<>();
+        ArrayList<DataSource> arrayListOfAttachments = new ArrayList<>();
         for (File file : directoryForAttachments.listFiles()) {
             if (!file.isDirectory()) {
                 FileDataSource attachment = new FileDataSource(file);

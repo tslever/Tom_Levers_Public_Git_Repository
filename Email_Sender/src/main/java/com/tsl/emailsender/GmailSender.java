@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
@@ -28,7 +27,7 @@ import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.Message;
 
 import jakarta.activation.DataHandler;
-import jakarta.activation.FileDataSource;
+import jakarta.activation.DataSource;
 import jakarta.mail.MessagingException;
 import jakarta.mail.Multipart;
 import jakarta.mail.Session;
@@ -45,11 +44,12 @@ public class GmailSender extends EmailSender {
     /**
      * Constructs a Gmail sender based on a {@code Configurations} object.
      * 
-     * @param configurationsToUse a {@code Configurations} object with which to construct an email sender
+     * @param configurationsToUse a {@code Configurations} object with which to construct a Gmail sender
+     * @param emailInfoToUse an {@code EmailInfo} object with which to construct a Gmail sender
      * @throws IOException if email information cannot be gotten
      */
-    public GmailSender(Configurations configurationsToUse) throws IOException {
-        super(configurationsToUse);
+    public GmailSender(Configurations configurationsToUse, EmailInfo emailInfoToUse) throws IOException {
+        super(configurationsToUse, emailInfoToUse);
     }
 
     /**
@@ -101,7 +101,7 @@ public class GmailSender extends EmailSender {
         MimeMessage mimeMessage = new MimeMessage(session);
         mimeMessage.setSubject(emailInfo.getSubject());
         mimeMessage.setFrom(emailInfo.getFromAddress());
-        ArrayList<String> arrayListOfToAddresses = emailInfo.getListOfToAddresses();
+        List<String> arrayListOfToAddresses = emailInfo.getListOfToAddresses();
         for (int i = 0; i < arrayListOfToAddresses.size(); i++) {
             String toAddress = arrayListOfToAddresses.get(i);
             InternetAddress toInternetAddress = new InternetAddress(toAddress);
@@ -112,7 +112,7 @@ public class GmailSender extends EmailSender {
         mimeBodyPart.setContent(emailInfo.getBody(), "text/plain");
         Multipart multipart = new MimeMultipart();
         multipart.addBodyPart(mimeBodyPart);
-        for (FileDataSource attachment : emailInfo.getListOfAttachments()) {
+        for (DataSource attachment : emailInfo.getListOfAttachments()) {
             mimeBodyPart = new MimeBodyPart();
             mimeBodyPart.setDataHandler(new DataHandler(attachment));
             mimeBodyPart.setFileName(attachment.getName());

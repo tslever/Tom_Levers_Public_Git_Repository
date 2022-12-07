@@ -1,8 +1,8 @@
 package com.tsl.emailsender;
 
-import java.util.ArrayList;
+import java.util.List;
 
-import jakarta.activation.FileDataSource;
+import jakarta.activation.DataSource;
 
 /**
  * An {@code EmailInfo} object encapsulates email information including a from address, a list of to addresses, a subject, a body, and a list of attachments.
@@ -10,10 +10,10 @@ import jakarta.activation.FileDataSource;
 public class EmailInfo {
     
     private String fromAddress;
-    private ArrayList<String> arrayListOfToAddresses;
+    private List<String> listOfToAddresses;
     private String subject;
     private String body;
-    private ArrayList<FileDataSource> arrayListOfAttachments;
+    private List<DataSource> listOfAttachments;
 
     /**
      * Constructs an {@code EmailInfo} object with a from address, a list of to addresses, a subject, a body, and a list of attachments.
@@ -24,12 +24,12 @@ public class EmailInfo {
      * @param bodyToUse a body
      * @param listOfAttachmentsToUse a list of attachments
      */
-    public EmailInfo(String fromAddressToUse, ArrayList<String> listOfToAddressesToUse, String subjectToUse, String bodyToUse, ArrayList<FileDataSource> listOfAttachmentsToUse) {
+    public EmailInfo(String fromAddressToUse, List<String> listOfToAddressesToUse, String subjectToUse, String bodyToUse, List<DataSource> listOfAttachmentsToUse) {
         fromAddress = fromAddressToUse;
-        arrayListOfToAddresses = listOfToAddressesToUse;
+        listOfToAddresses = listOfToAddressesToUse;
         subject = subjectToUse;
         body = bodyToUse;
-        arrayListOfAttachments = listOfAttachmentsToUse;
+        listOfAttachments = listOfAttachmentsToUse;
     }
     
     /**
@@ -46,8 +46,8 @@ public class EmailInfo {
      * 
      * @return the list of to addresses of this {@code EmailInfo} object
      */
-    public ArrayList<String> getListOfToAddresses() {
-        return arrayListOfToAddresses;
+    public List<String> getListOfToAddresses() {
+        return listOfToAddresses;
     }
     
     /**
@@ -73,7 +73,7 @@ public class EmailInfo {
      * 
      * @return the list of attachments of this {@code EmailInfo} object
      */
-    public ArrayList<FileDataSource> getListOfAttachments() {
-        return arrayListOfAttachments;
+    public List<DataSource> getListOfAttachments() {
+        return listOfAttachments;
     }
 }

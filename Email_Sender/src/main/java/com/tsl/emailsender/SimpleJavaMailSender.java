@@ -17,7 +17,7 @@ import org.simplejavamail.mailer.internal.MailerRegularBuilderImpl;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import jakarta.activation.FileDataSource;
+import jakarta.activation.DataSource;
 
 /**
  * An {@code SimpleJavaMailSender} object represents an Simple Java Mail sender.
@@ -28,10 +28,11 @@ public class SimpleJavaMailSender extends EmailSender {
      * Constructs a Simple Java Mail sender based on a {@code Configurations} object.
      * 
      * @param configurationsToUse a {@code Configurations} object with which to construct a Simple Java Mail sender
+     * @param emailInfoToUse an {@code EmailInfo} object with which to construct a Simple Java Mail Sender
      * @throws IOException if email information cannot be gotten
      */
-    public SimpleJavaMailSender(Configurations configurationsToUse) throws IOException {
-        super(configurationsToUse);
+    public SimpleJavaMailSender(Configurations configurationsToUse, EmailInfo emailInfoToUse) throws IOException {
+        super(configurationsToUse, emailInfoToUse);
     }
     
     /**
@@ -41,8 +42,8 @@ public class SimpleJavaMailSender extends EmailSender {
      */
     public void send() throws IOException {
         ArrayList<AttachmentResource> arrayListOfAttachmentResources = new ArrayList<>();
-        for (FileDataSource fileDataSource : emailInfo.getListOfAttachments()) {
-            AttachmentResource attachmentResource = new AttachmentResource(null, fileDataSource, null, null);
+        for (DataSource dataSource : emailInfo.getListOfAttachments()) {
+            AttachmentResource attachmentResource = new AttachmentResource(null, dataSource, null, null);
             arrayListOfAttachmentResources.add(attachmentResource);
         }
         Email email =
