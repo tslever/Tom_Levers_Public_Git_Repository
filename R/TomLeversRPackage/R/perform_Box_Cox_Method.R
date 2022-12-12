@@ -10,7 +10,7 @@
 #' @export
 perform_Box_Cox_Method <- function(linear_model, vector_of_values_of_lambda, whether_to_plot) {
 #perform_Box_Cox_Method <- function(linear_model, vector_of_values_of_lambda = seq(-2, 2, 0.1), whether_to_plot = TRUE) {
-    Box_Cox_plot_data <- boxcox.default(linear_model, plotit = whether_to_plot)
+    Box_Cox_plot_data <- boxcox.default(linear_model, vector_of_values_of_lambda, plotit = whether_to_plot)
     likelihoods <- Box_Cox_plot_data$y
     maximum_likelihood <- max(likelihoods)
     index_of_maximum_likelihood_in_likelihoods <- match(maximum_likelihood, likelihoods)
@@ -46,7 +46,7 @@ Box_Cox_equation <- function(values, maximum_likelihood_estimate_of_parameter_la
     return(transformed_values)
 }
 
-boxcox.default <- function(linear_model, lambda = seq(-2, 2, 1/10), plotit = TRUE, interp = ((m < 100)), eps = 1/50, xlab = expression(lambda), ylab = "log-Likelihood", ...) {
+boxcox.default <- function(linear_model, lambda, plotit = TRUE, interp = ((m < 100)), eps = 1/50, xlab = expression(lambda), ylab = "log-Likelihood", ...) {
 #boxcox.default <- function(linear_model, lambda = seq(-2, 2, 1/10), plotit = TRUE, interp = (plotit && (m < 100)), eps = 1/50, xlab = expression(lambda), ylab = "log-Likelihood", ...) {
   y <- linear_model$model[, 1]
   xqr <- linear_model$qr
