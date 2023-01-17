@@ -1,0 +1,33 @@
+// build.gradle configures project dependencies and build tasks.
+
+apply plugin: 'java-library'
+
+group = 'Com.TSL'
+archivesBaseName = 'ElasticsearchIndexerAndQuerier'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+// Even if someone says they want to depend on commons-logging, we'll actually depend on slf4j.
+configurations.all {
+    resolutionStrategy.eachDependency { details ->
+        if (details.requested.group == 'commons-logging' && details.requested.name == 'commons-logging') {
+            details.useTarget group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.7.30'
+        } else if (details.requested.group == 'commons-logging' && details.requested.name == 'commons-logging-api') {
+            details.useTarget group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.7.30'
+        }
+    }
+}
+
+dependencies {
+    implementation 'co.elastic.clients:elasticsearch-java:8.3.2'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.3'
+    testCompile 'junit:junit:4.12'
+    
+    implementation 'org.slf4j:slf4j-api:1.7.30'
+    runtimeOnly 'org.apache.logging.log4j:log4j-api:2.17.1'
+    runtimeOnly 'org.apache.logging.log4j:log4j-core:2.17.1'
+    runtimeOnly 'org.apache.logging.log4j:log4j-slf4j-impl:2.17.1'
+}
