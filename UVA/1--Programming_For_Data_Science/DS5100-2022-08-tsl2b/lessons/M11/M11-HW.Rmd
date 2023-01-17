@@ -1,0 +1,157 @@
+---
+editor_options:
+  markdown:
+    wrap: 72
+output: pdf_document
+---
+
+# Metadata
+
+    Course:   DS 5100
+    Module:   11 R Programming 2
+    Topic:    HW on Tidyverse
+    Author:   R.C. Alvarado (adapted)
+    Date:     07 October 2022 (revised)
+
+# Student Info
+
+    Name:  
+    Net ID:
+    File GitHub URL:
+
+# Instructions
+
+In your **private course repo** use this notebook to write code that
+performs the tasks below.
+
+Save your notebook in the `M11` directory.
+
+Remember to add and commit these files to your repo.
+
+Then push your commits to your repo on GitHib.
+
+Be sure to fill out the **Student Info** block above.
+
+To submit your homework, save your results as a PDF and upload it to
+GradeScope.
+
+**TOTAL POINTS: 7**
+
+# Overview
+
+In this homework, you will work with [the Abalone
+dataset](https://archive.ics.uci.edu/ml/datasets/Abalone) from the UCI
+Machine Learning Repository.
+
+To get started, download and import the `abalone.data` dataset from this
+URL:
+
+-   <https://archive.ics.uci.edu/ml/machine-learning-databases/abalone/abalone.data>
+
+You can pass the URL directly to `read.csv()` and that there is no
+header row.
+
+Note: The instruction to print in the questions below can be
+accomplished either through the `print()` function or by displaying a
+value directly.
+
+**TOTAL POINTS: 7**
+
+# Tasks
+
+## Task 0
+
+(0 points)
+
+Get the dataset.
+
+```{r}
+# CODE HERE
+```
+
+## Task 1
+
+(1 point)
+
+Print the number of rows in the dataset.
+
+```{r}
+# CODE HERE
+```
+
+## Task 2
+
+(1 point)
+
+The rightmost column is the number of rings. Print the maximum number of
+rings
+
+```{r}
+# CODE HERE
+```
+
+## Task 3
+
+(1 point)
+
+The leftmost column is the gender with these values: `M`: male, `F`:
+female, `I`: infant.
+
+Apply the `filter()` function from tidyverse to select only rows where
+gender is infant, and print the number of records.
+
+```{r}
+# CODE HERE
+```
+
+## Task 4
+
+(1 point)
+
+Apply the `filter()` function from `tidyverse` to select only rows where
+gender is infant or male, and print the number of records.
+
+```{r}
+# CODE HERE
+```
+
+## Task 5
+
+(1 point)
+
+Call the `table()` function on the abalone genders to find out how many
+of each gender are present.
+
+Print the result.
+
+```{r}
+# CODE HERE
+```
+
+## Task 6
+
+(1 point)
+
+Compute the mean value of column 2 (V2) grouped by gender.
+
+V2 is the longest shell measurement.
+
+Requirements: use the `%>%` operator to chain commands, and the
+`group_by()` and `summarize()` functions.
+
+```{r}
+# CODE HERE
+```
+
+# Task 7
+
+(1 point)
+
+Compute the MEDIAN value of longest shell measurement for only the
+males.
+
+Requirements: use the `%>%` operator to chain commands.
+
+```{r}
+# CODE HERE
+```

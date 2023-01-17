@@ -1,0 +1,134 @@
+---
+title: "hw11"
+author: "Tom Lever"
+date: 11/11/22
+output:
+  pdf_document: default
+  html_document: default
+urlcolor: blue
+linkcolor: red
+---
+
+# Metadata
+
+Name:    hw11
+
+URL:     https://github.com/tslever/DS5100-2022-08-tsl2b/blob/main/lessons/M11/hw11.Rmd
+
+Course:  DS 5100
+
+Term:    Fall 2022 Online
+
+Module:  M11: R Programming
+
+Topic:   Tidyverse
+
+Author:  Tom Lever
+
+Net ID:  tsl2b
+
+Created: 11 November 2022
+
+Updated: 11 November 2022
+
+# Overview
+
+In this homework, you will work on the Abalone datset from the UCI Machine Learning Repository.
+
+To get started, download and import the `abalone.data` dataset from this URL:
+
+* [https://archive.ics.uci.edu/ml/machine-learning-databases/abalone/abalone.data]( https://archive.ics.uci.edu/ml/machine-learning-databases/abalone/abalone.data)
+
+You can pass the URL directly to `read.csv`. There is no header row.
+
+Note: The instruction to print in the questions below can be accomplished either through the `print` function or by displaying a value directly.
+
+**Total Points: 7**
+
+# Tasks
+
+## Task 0
+(0 points)
+
+Get the dataset.
+
+```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+data_set <- read.csv(
+   'https://archive.ics.uci.edu/ml/machine-learning-databases/abalone/abalone.data',
+   header = FALSE
+)
+head(data_set, n = 3)
+```
+
+## Task 1
+(1 point)
+
+Print the number of rows in the dataset.
+
+```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+print(nrow(data_set))
+```
+
+## Task 2
+(1 point)
+
+The rightmost column is the number of rings. Print the maximum number of rings.
+
+```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+library(dplyr)
+print(data_set %>% select(V9) %>% max())
+```
+
+## Task 3
+(1 point)
+
+The leftmost column is the gender with values `M` (Male), `F` (Female), and `I` (Infant).
+
+Apply the `filter` function from `tidyverse` to select only rows where gender is infant, and print the number of records.
+
+```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+print(data_set %>% filter(V1 == 'I') %>% nrow())
+```
+
+## Task 4
+(1 point)
+
+Apply the `filter` function from `tidyverse` to select only rows where gender is infant or male, and print the number of records.
+
+```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+print(data_set %>% filter (V1 == 'I' | V1 == 'M') %>% nrow())
+```
+
+## Task 5
+(1 point)
+
+Call the `table` function on the abalone genders to find out how many of each gender are present.
+
+```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+data_set %>% select(V1) %>% table()
+```
+
+## Task 6
+(1 point)
+
+Compute the mean value of column 2 (V2) grouped by gender.
+
+V2 is the longest shell measurement.
+
+Requirements: Use the `%>%` operator to chain commands, and the `group_by` and `summarize` functions.
+
+```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+data_set %>% group_by(V1) %>% summarize(average = mean(V2))
+```
+
+## Task 7
+(1 point)
+
+Compute the median value of longest shell measurement for only the males.
+
+Requirements: Use the `%>%` operator to chain commands.
+
+```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+data_set %>% filter(V1 == 'M') %>% summarize(the_median = median(V2))
+data_set %>% group_by(V1) %>% summarize(the_median = median(V2)) %>% filter(V1 == 'M')
+```
