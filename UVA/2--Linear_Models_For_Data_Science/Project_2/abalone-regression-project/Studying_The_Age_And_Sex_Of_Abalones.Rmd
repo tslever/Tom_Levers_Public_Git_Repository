@@ -1,0 +1,1111 @@
+---
+title: "Studying the Age and Sex of Abalones"
+author: "Group 9: Brook Assefa, Shrikant Mishra, and Tom Lever"
+date: 11/25/22
+output:
+  pdf_document:
+     extra_dependencies: "subfig"
+  html_document: default
+urlcolor: blue
+linkcolor: red
+---
+
+# 1. Executive Summary
+
+According to [Candy Abalone](https://www.candyabalone.com/), a blacklip abalone is a marine univalve mollusc containing a large muscular foot that is highly sought after as seafood for eating. A blacklip abalone (*Halitois rubra*), is found in regions of southern coastal Australia, such as the island of Tasmania. According to the [Department of Primary Industries in New South Wales](https://www.dpi.nsw.gov.au/__data/assets/pdf_file/0009/375858/BlacklipAbalone.pdf), the species is currently recovering from historically low levels due to overfishing and mortality from a certain parasite. To help populations of blacklip abalones recover, specific bans on harvesting blacklip abalones with lengths less than a certain threshold have been implemented.
+
+There is value in studying the population biology of blacklip abalones, including the relationship of number of rings / age, or sex, of blacklip abalones with the other, and with other physical attributes, including length, diameter, height, whole weight, shucked weight, viscera weight, and shell weight. Understanding the relationship of age of blacklip abalones with the physical attributes of the abalones would allow marine biologists and environmental scientists to determine optimal methods for determining abalone age. Additionally, this study could help ensure healthy, balanced, sustainable, and diverse populations of abalones in terms of age and/or maturity. Scientists may identify trends in physical attributes for different ages over time, which may be useful in identifying individual and population health for blacklip abalones. Understanding the relationship of sex with other physical attributes could allow scientists to explore alternative ways of determining sex, as well as help ensure rebounds of abalone populations to healthy levels.
+
+We are interested in using observations of blacklip abalones, such as those in the [Blacklip Abalone Data Set](https://archive.ics.uci.edu/ml/datasets/Abalone), to answer the following two important questions. See the linked website or below descriptions of variables for further information.
+
+1. "How is the number of rings / age of a blacklip abalone related to and/or predicted from the sex, length, diameter, height, whole weight, shucked weight, viscera weight, and/or shell weight of the abalone?"
+2. "How is the sex of a blacklip abalone related to and/or predicted from the number of rings, length, diameter, height, whole weight, shucked weight, viscera weight, and/or shell weight of the abalone?"
+
+In "A First Question of Interest: Data Visualizations", we note that, as expected, infant blacklip abalones generally have the lowest numbers of rings, ages, and shell weights. Adult male and female blacklip abalones have comparable numbers of rings and ages, though females may be slightly larger and older on average. In "A First Question of Interest: Model Building", we develop and consider the value of a linear model, of a version of number of rings / age for a blacklip abalone, and versions of other physical attributes of the abalone. After much consideration into different attributes and versions of those attributes, we recommend a linear model involving a version of number of rings, a version of shell weight, and two variables that together indicate sex. Evaluating this model, we find that the model is not ideal in predicting age, given that the model is only able to account for about $55$ percent of the variation in rings. We may wish to consider nonlinear models of the relationship between number of rings / age of a blacklip abalone and other physical attributes of the abalone, and other methods of predicting age.
+
+In "A Second Question of Interest: Data Visualizations", we note that, while it is easy to distinguish between infant and adult blacklip abalones, it is not easy to distinguish between adult male and adult female blacklip abalones. In "A Second Question of Interest: Model Building", we consider male and female blacklip abalones only, and consider the relationship between the sex of a blacklip abalone and other physical attributes of the abalone, and a method to predict sex, by developing a binary classification / logistic regression model. After considering a logistic regression model with all physical attributes other than sex, and considering logistic regression models with only some of those physical attributes, a working model with the four physical attributes $length$, $height$, $shucked \ weight$, and $rings$ was preferred. In evaluating this model, we determined that this model performed only slightly better than a model that guesses randomly, performed poorly in terms of key metrics, and was an ineffective predictor of sex. That being said, it did perform slightly better than a model that guesses randomly, suggests a relationship between the sex of a blacklip abalone and other physical attributes of the abalone, and moves us toward understand this relationship and the ideal methods for predicting sex.
+
+# 2. Data Description
+
+## a. Source Description
+
+Our data set with observations, corresponding to $n = 4,177$ blacklip abalones, of number of rings, sex, length, diameter, height, whole weight, shucked weight, viscera weight, and shell weight is available at [https://archive.ics.uci.edu/ml/datasets/Abalone](https://archive.ics.uci.edu/ml/datasets/Abalone).
+
+## b. Description of Variables
+
+Per the UCI website listed above as well as the associated names file that comes with the data, here are the descriptions of the abalone physical characteristics:
+
+* The sex of a blacklip abalone refers to either Male, Female, or Infant.
+* The length (mm) of a blacklip abalone is the length of the longest horizontal line segment $l$ along the abalone's shell.
+* The diameter (mm) of a blacklip abalone is the measurement of the length of the horizontal line segment perpendicular to $l$.
+* The height (mm) of a blacklip abalone is the measurement of the length of the longest vertical line segment $h$ along the abalone's soft tissue and shell.
+* The whole weight (g) of a blacklip abalone is the weight of the entire abalone, including the abalone's soft tissue and shell.
+* The shucked weight (g) of a blacklip abalone is the weight of the abalone's soft tissue without the shell.
+* The viscera weight (g) of a blacklip abalone is the weight of the abalone's soft tissue after bleeding.
+* The shell weight (g) of a blacklip abalone is the weight of the shell without the soft tissue.
+* According to [Hao Chen of the University of California Davis](https://anson.ucdavis.edu/~haochen/abalone_description.pdf),
+the number of rings of a blacklip abalone is determined by cutting the shell through the cone, staining it, and counting the number of rings through a microscope. The age of a blacklip abalone is determined by the number of rings in the shell of the abalone. The age of a blacklip abalone in years is the sum of the number of rings of the abalone and $1.5$.
+
+# 3. A First Question of Interest
+
+## a. Introduction
+
+### i. Question Statement
+
+We conduct data analysis of the above data set towards answering the following question:
+
+"How is the number of rings / age of a blacklip abalone related to and/or predicted from the sex, length, diameter, height, whole weight, shucked weight, viscera weight, and/or shell weight of the abalone?"
+
+### ii. Value in Exploring Question
+
+Addressing how the number of rings / age of a blacklip abalone is related to and/or predicted from the length, diameter, height, whole weight, shucked weight, viscera weight, and/or shell weight of the abalone may be valuable in determining ways to promote the longevity of blacklip abalones and their species. Determining the success of any population-boosting or remediation program may be enhanced.
+
+## b. Data Visualizations
+
+### i. Data Wrangling
+
+No data wrangling was needed in order to produce the below data visualizations.
+
+### ii - iii. Presentation and Interpretation of Data Visualizations
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 5.3, fig.height = 3.8, fig.align='center'}
+data_set <- read.csv('Data_Set--Abalones--With_Column_Names.csv', header = TRUE)
+```
+
+A graph of number of rings versus shell weight in grams and sex for blacklip abalones is depicted below.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 3.5, fig.height = 2.5, fig.align='center', fig.cap = 'Scatterplot of number of rings versus shell weight and sex'}
+library(ggplot2)
+ggplot(data_set, aes(x = shell_weight, y = rings, color = sex)) +
+    geom_point() +
+    scale_color_manual(values = c("brown", "pink", "blue")) +
+    labs(
+        title = "Rings vs. Shell Weight for Blacklip Abalones",
+        x = "shell weight (g)",
+        y = "number of rings"
+    ) +
+    theme(
+        plot.title = element_text(hjust = 0.5, size = 11),
+        axis.text.x = element_text(angle = 0)
+    )
+```
+
+Reasonably, the number of rings and shell weight for infant blacklip abalones are smallest. The number of rings and variance in number of rings grows at a decreasing rate as the shell weight grows. The number of rings and shell weights of male and female adult abalones seem similar. It seems that number of rings has a logarithmic or fractional power relationship with shell weight. Additionally, despite the low correlation between number of rings and sex as depicted in a correlation matrix in section $3.c.ii$, the number of rings seems to be affected by sex values, especially between infants and adults.
+
+Boxplots of the numbers of rings of blacklip abalones by sex is depicted below. Adult male and female blacklip abalones have similar distributions of number of rings. The adult female blacklip abalone with the greatest number of rings has a greater number of rings than the adult male blacklip abalone with the greatest number of rings. The adult male blacklip abalone with the least number of rings has a lower number of rings than the adult female blacklip abalone with the least number of rings. Infant blacklip abalones have the least numbers of rings.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 3.5, fig.height = 2.5, fig.align='center', fig.cap = 'Boxplots comparing numbers of rings for infant, male, and female blacklip abalones'}
+ggplot(data_set, aes(x = sex, y = rings)) +
+    geom_boxplot(fill = "Blue", color = "Orange") +
+    labs(
+        x = "sex",
+        y = "number of rings",
+        title = "Boxplots of Number of Rings / Age by Sex"
+    ) +
+    theme(
+        plot.title = element_text(hjust = 0.5, size = 11),
+    )
+```
+
+Violin plots of number of rings / age by sex are similarly top-skewed. The most common number of rings for female and male adult blacklip abalones is about $10$. The most common number of rings for infant abalones is about $7$. The female adult blacklip abalone with the greatest number of rings / age has a greater number of rings than the male adult blacklip abalone with the greatest number of rings. The male adult blacklip abalone with the least number of rings / age has a lower number of rings than the female adult blacklip abalone with the least number of rings. Infant blacklip abalones have the least numbers of rings.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 3.5, fig.height = 2.5, fig.align='center', fig.cap = 'Violin plots comparing numbers of rings for infant, male, and female blacklip abalones'}
+ggplot(data_set, aes(x = sex, y = rings)) +
+    geom_violin(fill = "Blue", color = "Orange") +
+    labs(
+        x = "sex",
+        y = "number of rings",
+        title = "Violin Plot of Number of Rings by Sex"
+    ) +
+    theme(
+        plot.title = element_text(hjust = 0.5, size = 11),
+    )
+```
+
+A histogram and probability density distribution of number of rings is depicted below. The divergence between the histogram and probability density distribution and the oscillation in the probability density distribution is due to half of the histogram bars having a height of $0$, due to no observations having number of rings corresponding to those bins. The mean number of rings of a blacklip abalone is approximately $10$ with a standard deviation of approximately $3$. The histogram and probability density distribution are approximately normal and slightly right-skewed.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 5.3, fig.height = 3.8, fig.align='center', fig.cap = 'Histogram and probability density distribution of number of rings'}
+ggplot() +
+    geom_histogram(data = data_set, aes(x = rings, y = after_stat(density)), binwidth = density(data_set$rings)$bw, fill = "Blue", color = "Orange") +
+    geom_density(data = data_set, aes(x = rings), color = "Orange") +
+    labs(
+        x = "number of rings",
+        y = "probability density",
+        title = "Histogram and Probability Density of Distribution of Number of Rings"
+    ) +
+    theme(
+        plot.title = element_text(hjust = 0.5, size = 11),
+        axis.text.x = element_text(angle = 0)
+    )
+```
+
+## c. Model Building
+
+### i.  Choice of Initial Linear Regression Model
+
+We study the age of abalones by constructing a multiple linear regression model. The response of the multiple linear regression model will be number of rings / age. The $p = 9$ columns and the first three rows of our data set are presented below.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE}
+head(data_set, n = 3)
+```
+
+We randomize the order of the rows of our data set so that AutoCorrelation Function (ACF) values for nonzero lags for a multiple linear regression model are insignificant, and so that an assumption that the residuals of a multiple linear regression model are uncorrelated is met.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE}
+set.seed(0)
+data_set <- data_set[sample(1:nrow(data_set)), ]
+```
+
+We consider our data set to be a version of our data set with two indicator variables, $male$ and $female$, substituted for the trinary predictor $sex$. The indicator variable $male$ equals $1$ when $sex$ is $M$; $male$ equals $0$ when $sex$ is not $M$. The indicator variable $female$ equals $1$ when $sex$ is $F$; $female$ equals $0$ when $sex$ is not $F$. An abalone being an infant is encoded by both $male$ and $female$ being equal to $0$. The $p = 10$ columns and the first three rows of our data set are presented below.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE}
+library(dplyr)
+library(TomLeversRPackage)
+vector_of_sex_values <- data_set$sex
+data_set <- data_set %>% select(-sex)
+male <- integer()
+female <- integer()
+for (sex in vector_of_sex_values) {
+    if (sex == "I") {
+        male <- append(male, 0)
+        female <- append(female, 0)
+    }
+    if (sex == "M") {
+        male <- append(male, 1)
+        female <- append(female, 0)
+    }
+    if (sex == "F") {
+        male <- append(male, 0)
+        female <- append(female, 1)
+    }
+}
+data_set$male <- male
+data_set$female <- female
+head(data_set, n = 3)
+```
+
+For the remainder of our study of the number of rings / age of abalones, we consider $rings$ to be response and the other $k = 9$ parameters in our data set to be predictors.
+
+After examining the below correlation matrix in section $3.c.ii$, because all predictors other than $male$ and $female$ are at least moderately correlated, we consider an initial and working linear regression model with one predictor. Specifically, we choose the simple linear regression model with lowest Akaike Information Criterion (AIC):
+$$rings = \beta_0 + \beta_1 (shell \ weight) + \epsilon$$
+
+### ii. Improvements to Initial Model
+
+A plot of residuals versus predicted values for our initial linear model is presented below.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.cap = 'Plot of residuals versus predicted values for our initial simple linear regression model', fig.width = 3.5, fig.height = 2.5, fig.align = 'center'}
+library(TomLeversRPackage)
+linear_model <- lm(rings ~ shell_weight, data = data_set)
+print(generate_residual_plot(linear_model, should_plot_residuals_versus_predicted_values = TRUE))
+```
+
+The plot in Figure $5$ exhibits:
+
+1. a logarithmically shaped band that indicates that an assumption that the relationship between number of rings / age and shell weight is linear is not met,
+2. a positive bias that indicates that an assumption that the mean residual is $0$ is not met, and
+3. a right-open funnel shape indicating that the variance of residuals increases with predicted value and that an assumption that the variance of residuals is constant is not met.
+
+Below, we describe the process we used to determine a recommended multiple linear regression model.
+
+We consider $k = 9$ simple linear regression models, each with response $rings$ and one of the $k = 9$ predictors. For each simple linear regression model, we meet simple linear regression assumptions that 1) the relationship between response and predictor is linear, 3) the variance of residuals is constant, and 2) the mean residual is $0$. To meet these assumptions, we examine residual plots and apply the natural logarithm to $rings$ if the predictor is not one of $male$ and $female$, and to the predictor if the predictor is one of $height$, $whole \ weight$, $shucked \ weight$, $viscera \ weight$, and $shell \ weight$.
+
+Specifically, we consider the plot of residuals versus predicted values for each simple linear regression model. The residual plot for each simple linear regression model with predictor other than $male$ and $female$ exhibits a right-opening, positively biased funnel shape suggesting that the residuals of the appropriate simple linear regression model have variance that increases with $rings$ and mean residual greater than $0$. For example, see Figure $5$ above. The residual plots for the simple linear regression models with predictors $height$, $whole \ weight$, $shucked \ weight$, $viscera \ weight$, and $shell \ weight$ additionally offer an impression of a logarithmically shaped band, suggesting that the relationship between $rings$ and predictor may be logarithmic. See Figure $5$ above.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 4.4, fig.height = 3.2, fig.cap = 'Box-Cox plot described below'}
+result_of_Box_Cox_Method <- perform_Box_Cox_Method(linear_model, vector_of_values_of_lambda = seq(-1, 1, 0.1), whether_to_plot = TRUE)
+```
+
+We consider the Box Cox maximum likelihood estimate of parameter $\lambda$ for each simple linear regression model. For each simple linear regression model, the magnitude of the Box Cox maximum likelihood estimate of parameter $\lambda$ is less than $0.25$. We create simple linear regression models with response $ln(rings)$ for each predictor other than $male$ and $female$. For each simple linear regression model with $ln(rings)$, we consider a plot of residuals versus predictor values. For example, below is a residual plot for $ln(rings)$ vs. $shell \ weight$.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 3.5, fig.height = 2.5, fig.cap = 'Residual plot for $ln(rings)$ vs. shell weight'}
+linear_model_with_transformed_response <- lm(rings ~ log(shell_weight, base = exp(1)), data = data_set)
+print(generate_residual_plot(linear_model_with_transformed_response, should_plot_residuals_versus_predicted_values = TRUE))
+```
+
+Following *Introduction to Linear Regression Analysis* (Sixth Edition) by Douglas C. Montgomery et al., for each plot of residuals versus predictor values, an impression of a horizontal band containing the residuals, centered at $e = 0$, is desirable. A nonlinear pattern in general implies that the assumed relationship between $ln(rings)$ and the predictor is not correct. A curved band that looks parabolic and concave up suggests a transformation $x' = x^2$; a curved band that looks logarithmic suggests a transformation $x' = ln(x)$. The plots of residuals versus predictor for predictors $length$, $diameter$, $male$, and $female$ offer an impression of a horizontal band. The plots of residual versus predictor for predictors $whole \ weight$, $shucked \ weight$, $viscera \ weight$, and $shell \ weight$ have curved bands that look logarithmic. We apply the natural logarithm to the $whole \ weight$, $shucked \ weight$, $viscera \ weight$, and $shell \ weight$ columns of our data set.
+
+We consider the residual plots of each simple linear regression model with $ln(rings)$ and/or $ln(predictor)$. There are $5$ models of the form $ln(rings)$ vs. $ln(predictor)$ and $4$ models of the form $ln(rings)$ vs. $predictor$. These simple linear regression models offer the impression of a horizontal band centered at $e = 0$. The above simple linear regression assumptions are met for these simple linear regression models. As a reminder, these simple linear regression assumptions are 1) the relationship between response and predictor is linear, 3) the variance of residuals is constant, and 2) the mean residual is $0$.
+
+For example, we present below a residual plot for $ln(rings)$ vs. $ln(shell \ weight)$.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 3.5, fig.height = 2.5, fig.cap = 'Residual plot for $ln(rings)$ vs. $ln(shell \ weight)$'}
+linear_model_with_ln_rings_and_ln_shell_weight <- lm(log(rings, base = exp(1)) ~ log(shell_weight, base = exp(1)), data = data_set)
+print(generate_residual_plot(linear_model_with_ln_rings_and_ln_shell_weight, should_plot_residuals_versus_predicted_values = TRUE))
+```
+
+For example, we present below the plot of AutoCorrelation Function Value vs. Lag for the simple linear regression model with $ln(rings)$ and $ln(shell \ weight)$. Most AutoCorrelation Function values are insignificant for these simple linear models. The remaining AutoCorrelation Function values for these simple linear models are approximately insignificant. A simple linear regression assumption that residuals are uncorrelated is met approximately for these simple linear regression models.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 4.4, fig.height = 3.2, fig.cap = 'ACF plot for $ln(rings)$ vs. $ln(shell \ weight)$'}
+acf(linear_model_with_ln_rings_and_ln_shell_weight$residuals, main = "ACF Plot")
+```
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 4.4, fig.height = 3.2, fig.cap = 'QQ plot for $ln(rings)$ vs. $ln(shell \ weight)$'}
+qqnorm(linear_model_with_ln_rings_and_ln_shell_weight$residuals)
+qqline(linear_model_with_ln_rings_and_ln_shell_weight$residuals, col = "red")
+```
+
+Additionally, we consider the QQ plots of each simple linear regression model with $ln(rings)$ and/or $ln(predictor)$. We present below the QQ plot for the simple linear regression model with $ln(rings)$ and $ln(shell \ weight)$. The simple linear regression models for $length$, $diameter$, and $height$ seem mildly either light-tailed or right skewed. The remaining simple linear regression models seem mildly either heavy left tailed and light right tailed or positively skewed. A simple linear regression assumption that residuals are normally distributed is approximately met for these simple linear regression models. Simple linear regression is robust to this assumption.
+
+Considering R's forward selection algorithm from an intercept only model to each simple linear regression model with $ln(rings)$ and/or $ln(predictor)$ as described above, the simple linear regression model with the smallest Akaike Information Criterion (AIC) is the model involving $shell \ weight$.
+
+Because the transformed models meet the assumptions as described above, and the simple linear regression model $ln(rings)$ vs. $ln(shell \ weight)$ has the lowest AIC among transformed models, we choose as our working model a simple linear regression model with $ln(rings)$ and $ln(shell \ weight)$:
+$$ln(rings) = \beta_0 + \beta_1 \ ln(shell \ weight) + \epsilon$$
+
+We can consider studying the number of rings / age of abalones with our working model, or a multiple linear regression model informed by our working simple linear regression model.
+
+We analyze the correlation matrix for our data set with additional columns for $ln(variable)$. $ln(shell \ weight)$ is highly correlated with every variable other than $rings$, $male$, and $female$. Because of this, we prefer either a simple linear regression model with predictor $ln(shell \ weight)$, or a multiple linear regression model with predictors $ln(shell \ weight)$, $male$, and $female$.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE}
+data_set["ln_rings"] <- data_set["rings"]
+data_set["ln_shell_weight"] <- data_set["shell_weight"]
+data_set_for_correlation_matrix <- data.frame(data_set)
+colnames(data_set_for_correlation_matrix) <- c("length", "diameter", "height", "whole_weight", "shucked_weight", "viscera_weight", "shell_weight", "rings", "male", "female", "ln_rings", "ln_shell_weight")
+correlation_matrix <- cor(data_set_for_correlation_matrix)
+round(correlation_matrix, 2)
+```
+
+Based on the output of R's bidirectional-selection function, we determine that a multiple linear regression model with $male$ and $female$ is preferred, and we choose as our working multiple linear regression model for studying the number of rings / age:
+$$ln(rings) = \beta_0 + \beta_1 \ ln(shell \ weight) + \beta_2 \ male + \beta_3 \ female + \epsilon$$
+Following "Detecting Multicollinearity Using Variance Inflation Factors" (https://online.stat.psu.edu/stat462/node/180/), the variance inflation factor $VIF_j$ corresponding to predictor $x_j$ in a multiple linear regression model quantifies how much the variance of the estimated coefficient $\beta_j$ corresponding to predictor $x_j$ is inflated due to multicollinearity / correlation between predictor $x_j$ and other predictors. In particular, the variance inflation factor for predictor $x_j$
+$$VIF_j = \frac{1}{1 - {R_j}^2}$$
+where ${R_j}^2$ is the coefficient of determination obtained by regressing predictor $x_j$ on the remaining predictors. A VIF of $1$ means that there is no correlation among predictor $x_j$ and the remaining predictors and that the variance of the regression coefficient corresponding to predictor $x_j$ is not inflated. The general rule of thumb is that VIF's exceeding $4$ warrant further investigation, while VIF's exceeding $10$ are signs of serious multicollinearity requiring correction.
+
+The Variance Inflation Factors for our working multiple linear regression model are all between $1$ and $2$, suggesting that the multicollinearity between $ln(shell \ weight)$, $male$, and $female$ is acceptable.
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE}
+library(car)
+data_set["ln_rings"] <- log(data_set["rings"], base = exp(1))
+data_set["ln_shell_weight"] <- log(data_set["shell_weight"], base = exp(1))
+initial_model <- lm(ln_rings ~ ln_shell_weight + male + female, data = data_set)
+vif(initial_model)
+```
+
+### iii. Recommended Model
+
+Summarizing, above we assessed linear regression models by AIC, a residual analysis, a correlation analysis, bidirectional selection, and multicollinearity. Through comparing simple linear regression models by AIC, we chose as intermediary working models $rings$ vs. $shell \ weight$ and $ln(rings)$ vs. $ln(shell \ weight)$. Through bidirectional selection, we added $male$ and $female$. We recommend our working multiple linear regression model
+$$ln(rings) = \beta_0 + \beta_1 \ ln(shell \ weight) + \beta_2 \ male + \beta_3 \ female + \epsilon$$
+
+We fit our recommended model to our data set.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE}
+linear_model <- lm(ln_rings ~ ln_shell_weight + male + female, data = data_set)
+print(summarize_linear_model(linear_model))
+```
+
+When fit to our data set, our recommended model is
+$$\hat{\beta}_0 = 2.641$$
+$$\hat{\beta}_1 = 0.267$$
+$$\hat{\beta}_2 = 0.070$$
+$$\hat{\beta}_3 = 0.080$$
+$$ln(rings) = 2.641 + (0.267) \ ln(shell \ weight) + (0.070) \ male + (0.080) \ female$$
+$95$-percent confidence intervals for the regression 
+coefficients for $ln(shell \ weight)$, $male$, and $female$
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE}
+confint(linear_model, "ln_shell_weight", level=0.95)
+confint(linear_model, "male", level=0.95)
+confint(linear_model, "female", level=0.95)
+```
+
+The number of rings / age of a blacklip abalone has a linear relationship with approximately the fourth root of shell weight when an indicator of whether the blacklip abalone is male is held constant and an indicator of whether the blacklip abalone is female is held constant.
+$$rings = (shell \ weight)^{0.267} exp\left\{2.641 + 0.070 \ male + 0.080 \ female\right\}$$
+When a blacklip abalone is an infant, the slope of the relationship between number of rings and approximately fourth root of shell weight is $exp\{2.641\} = 14.027$. When a blacklip abalone is male, the slope is larger, at $exp\{2.641 + 0.070\} = 15.044$. When a blacklip abalone is female, the slope is largest, at $exp\{2.641 + 0.080\} = 15.196$.
+
+The confidence interval for the expected natural-log number of rings for adult female blacklip abalones with shell weights of the mean shell weight $x_0 = 0.239$ is
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE}
+predict(
+    linear_model,
+    data.frame(ln_shell_weight = log(mean(data_set[, "shell_weight"])), male = 0, female = 1),
+    level = 0.95,
+    interval = "confidence"
+)
+```
+
+The prediction interval for the natural-log number of rings for adult female blacklip abalones with shell weights of the mean shell weight $x_0 = 0.239$ is
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE}
+predict(
+    linear_model,
+    data.frame(ln_shell_weight = log(mean(data_set[, "shell_weight"])), male = 0, female = 1),
+    level = 0.95,
+    interval = "prediction"
+)
+```
+
+Both intervals include the point estimate for the natural-log expected value of number of rings for the mean shell weight and adult female blacklip abalones. Exponentiating this number yields the point estimate for the expected value of number of rings $10$ for the mean shell weight and adult female blacklip abalones.
+
+For an increase in shell weight by proportion $p$, the number of rings of a blacklip abalone increases by a factor of $(1 + p)^{0.267}$. Age is the number of rings plus $1.5$. For an increase in shell weight from the mean shell weight of $0.239 \ g$ of $p = 0.1$ ($10$ percent), the number of rings of a blacklip abalone increases by a factor of $1.026$ to $0.245$.
+
+For a given $shell \ weight$, a male blacklip abalone has a number of rings that is a factor of $exp(0.070) = 1.073$ larger than an infant abalone. A female blacklip abalone has a number of rings that is a factor of $exp(0.080) = 1.083$ larger than an infant abalone. A female blacklip abalone has a number of rings that is a factor of $exp(0.080 - 0.070) = 1.010$ larger than a male abalone.
+
+### iv. Regression Assumptions, Outliers, High-Leverage Observations, and Influential Observations for Our Recommended Model
+
+A plot of residuals versus predicted values, a plot of AutoCorrelation Function Values, and a QQ plot for our recommended model is presented below.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 3.5, fig.height = 2.5, fig.cap = 'Residual plot for our recommended model'}
+linear_model <- lm(ln_rings ~ ln_shell_weight + male + female, data = data_set)
+print(generate_residual_plot(linear_model, should_plot_residuals_versus_predicted_values = TRUE))
+```
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 4.4, fig.height = 3.2, fig.cap = 'QQ plot for our recommended model'}
+acf(linear_model$residuals, main = "ACF Values vs. Lag for Linear Model")
+```
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 4.4, fig.height = 3.2, fig.cap = 'QQ plot for our recommended model'}
+qqnorm(linear_model$residuals)
+qqline(linear_model$residuals, col = "red")
+```
+
+Assumptions for this multiple linear regression model are met.
+
+1. The relationship between $ln(rings)$ and $ln(shell \ weight)$ is linear; the residuals are evenly scattered across $e = 0$.
+
+2. The mean residual is $0$; the residuals are evenly scattered across $e = 0$.
+
+3. The variance of the residuals is constant; the residuals are evenly spread for different predicted values.
+
+4. The residuals are uncorrelated; AutoCorrelation Function values are approximately insignificant.
+
+5. The residuals are not normally distributed; the residuals have a moderately right-skewed distribution. However, multiple linear regression is robust to this assumption.
+
+6. The variances of response number of rings for each sex are approximately equal.
+
+We use the Student's $t$ distribution and the Bonferroni procedure to find a cutoff value for outlier detection using externally studentized residuals. Let $n = 4,177$ be the number of observations and let $df_{Res}$ be the number of residual degrees of freedom of our recommended model. If magnitude of externally studentized residual $|t_i|$ is greater than a critical $t$ value $t_c = t_{\alpha / (2n), df_{Res} - 1}$, observation $i$ is deemed an outlier. There are no outliers for our linear model.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE}
+significance_level <- 0.05
+number_of_observations <- get_number_of_observations(linear_model)
+residual_degrees_of_freedom <- calculate_residual_degrees_of_freedom(linear_model)
+critical_value_tc <- calculate_critical_value_tc(
+     significance_level,
+     number_of_observations, 
+     residual_degrees_of_freedom - 1,
+     hypothesis_test_is_two_tailed = FALSE
+)
+externally_studentized_residuals <- rstudent(linear_model)
+#externally_studentized_residuals[
+#    abs(externally_studentized_residuals) > critical_value_tc
+#]
+```
+
+A leverage $h_{ii}$ is used to identify how far observation $i$ is from the centroid of the predictor space. If leverage $h_{ii} > \frac{2p}{n}$, then observation $i$ is deemed to have high leverage and is outlying in the predictor space. High leverage observations are data points that are most likely to be influential. There are $148$ high-leverage observations. Shell weights corresponding to low and high leverages have similar right-skewed distributions, though the distribution of shell weights corresponding to high leverages seems to be taller and narrower and to have its peak for a higher shell weight. The proportions of low and high leverage observations are similar across sex.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 3.5, fig.height = 2.5, fig.cap = 'Residual plot presenting high-leverage points'}
+leverages <- lm.influence(linear_model)$hat
+number_of_variables <- get_number_of_variables(linear_model)
+high_leverages <- leverages[leverages > 2 * number_of_variables / number_of_observations]
+indices_of_high_leverage_observations <- as.numeric(names(high_leverages))
+mask_high_leverage <- rep(FALSE, times = number_of_observations)
+for (index_of_high_leverage_observation in indices_of_high_leverage_observations) {
+    mask_high_leverage[index_of_high_leverage_observation] <- TRUE
+}
+data_set["high_leverage"] <- mask_high_leverage
+linear_model <- lm(ln_rings ~ ln_shell_weight + male + female, data = data_set)
+ggplot() +
+    geom_histogram(data = data_set, aes(x = shell_weight, y = after_stat(density), fill = high_leverage), alpha = 0.2, binwidth = density(data_set$shell_weight)$bw) +
+    geom_density(data = data_set, aes(x = shell_weight, color = high_leverage)) +
+    labs(
+        x = "shell weight",
+        y = "probability density",
+        title = "Distributions of Shell Weight"
+    ) +
+    theme(
+        plot.title = element_text(hjust = 0.5, size = 11),
+        axis.text.x = element_text(angle = 0)
+    )
+sex_and_high_leverage <- data.frame(vector_of_sex_values, mask_high_leverage)
+colnames(sex_and_high_leverage) <- c("sex", "high_leverage")
+ggplot(sex_and_high_leverage, aes(x = sex, fill = high_leverage)) +
+    geom_bar(position = "fill") +
+ labs(
+     y = "proportion of high leverage",
+     title = "Proportion of High Leverage by Sex"
+ ) +
+ theme(
+     plot.title = element_text(hjust = 0.5, size = 11),
+     axis.text.x = element_text(angle = 0)
+ )
+```
+
+Cook's distance $D_i$ can be interpreted as the squared Euclidean distance that a vector of fitted values moves when observation $i$ is removed from the regression model. A cutoff rule for an influential observation is $D_i$ is greater than a critical value $F_c = F_{0.5, df_R + 1, df_{Res}}$. There are no influential observations using Cook's distance.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE}
+significance_level <- 0.5
+regression_degrees_of_freedom <- calculate_regression_degrees_of_freedom(linear_model)
+critical_value_Fc <- calculate_critical_value_Fc(
+     significance_level,
+     regression_degrees_of_freedom + 1, 
+     residual_degrees_of_freedom
+)
+cooks_distances <- cooks.distance(linear_model)
+#cooks_distances[cooks_distances > critical_value_Fc]
+```
+
+$DFFITS_i$ measures how the fitted value of observation $i$ changes when it is removed from the regression model. Observation $i$ is influential if $|DFFITS_i| > 2 \sqrt{p / n}$. There $230$ influential observations using $DFFITS_i$. Shell weights corresponding to non-influential and influential observations have similar right-skewed distributions, though the distribution of shell weights corresponding to influential observations seems to be taller and narrower and to have its peak for a higher shell weight. The proportions of non-influential and influential observations are similar across sex.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 3.5, fig.height = 2.5, fig.cap = 'Residual plot presenting DFFITS-influential points'}
+DFFITS_values <- dffits(linear_model)
+influential_observations <- DFFITS_values[
+    abs(DFFITS_values) > 2*sqrt(number_of_variables / number_of_observations)
+]
+#length(influential_observations)
+indices_of_influential_observations <- as.numeric(names(influential_observations))
+mask_is_influential_observation <- rep(FALSE, times = number_of_observations)
+for (index_of_influential_observation in indices_of_influential_observations) {
+    mask_is_influential_observation[index_of_influential_observation] <- TRUE
+}
+data_set["DFFITS_influential"] <- mask_is_influential_observation
+linear_model <- lm(ln_rings ~ ln_shell_weight + male + female, data = data_set)
+ggplot() +
+    geom_histogram(data = data_set, aes(x = shell_weight, y = after_stat(density), fill = DFFITS_influential), alpha = 0.2, binwidth = density(data_set$shell_weight)$bw) +
+    geom_density(data = data_set, aes(x = shell_weight, color = DFFITS_influential)) +
+    labs(
+        x = "shell weight",
+        y = "probability density",
+        title = "Distributions of Shell Weight"
+    ) +
+    theme(
+        plot.title = element_text(hjust = 0.5, size = 11),
+        axis.text.x = element_text(angle = 0)
+    )
+sex_and_DFFITS_influential <- data.frame(vector_of_sex_values, mask_is_influential_observation)
+colnames(sex_and_DFFITS_influential) <- c("sex", "DFFITS_influential")
+ggplot(sex_and_DFFITS_influential, aes(x = sex, fill = DFFITS_influential)) +
+    geom_bar(position = "fill") +
+ labs(
+     y = "DFFITS influential",
+     title = "DFFITS Influential by Sex"
+ ) +
+ theme(
+     plot.title = element_text(hjust = 0.5, size = 11),
+     axis.text.x = element_text(angle = 0)
+ )
+```
+
+$DFBETAS_{j, i}$ measures how much the estimated coefficient $\hat{\beta}_j$ changes when observation $i$ is removed from the multiple linear regression model. The cutoff used is $|DFBETAS_{j,i}| > \frac{2}{\sqrt{n}}$. There are $914$ influential observations using $DFBETAS_{j, i}$. Shell weights corresponding to non-influential and influential observations have similar right-skewed distributions, though the distribution of shell weights corresponding to influential observations seems to be taller and narrower and to have its peak for a higher shell weight. The proportions of non-influential and influential observations are similar across sex.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 3.5, fig.height = 2.5, fig.cap = 'Residual plot presenting DFBETAS-influential points'}
+DFBETAS_values <- dfbetas(linear_model)
+mask_is_observation_influential <- logical()
+for (i in 1:nrow(DFBETAS_values)) {
+    observation <- DFBETAS_values[i, ]
+    is_observation_influential <- FALSE
+    for (j in 1:length(observation)) {
+        if (abs(observation[j]) > 2 / sqrt(number_of_observations)) {
+            is_observation_influential <- TRUE
+        }
+    }
+    mask_is_observation_influential <- append(mask_is_observation_influential, is_observation_influential)
+}
+for (index_of_influential_observation in indices_of_influential_observations) {
+    mask_is_influential_observation[index_of_influential_observation] <- TRUE
+}
+data_set["DFBETAS_influential"] <- mask_is_influential_observation
+linear_model <- lm(ln_rings ~ ln_shell_weight + male + female, data = data_set)
+ggplot() +
+    geom_histogram(data = data_set, aes(x = shell_weight, y = after_stat(density), fill = DFBETAS_influential), alpha = 0.2, binwidth = density(data_set$shell_weight)$bw) +
+    geom_density(data = data_set, aes(x = shell_weight, color = DFBETAS_influential)) +
+    labs(
+        x = "shell weight",
+        y = "probability density",
+        title = "Distributions of Shell Weight"
+    ) +
+    theme(
+        plot.title = element_text(hjust = 0.5, size = 11),
+        axis.text.x = element_text(angle = 0)
+    )
+sex_and_DFBETAS_influential <- data.frame(vector_of_sex_values, mask_is_influential_observation)
+colnames(sex_and_DFBETAS_influential) <- c("sex", "DFBETAS_influential")
+ggplot(sex_and_DFBETAS_influential, aes(x = sex, fill = DFBETAS_influential)) +
+    geom_bar(position = "fill") +
+ labs(
+     y = "DFBETAS influential",
+     title = "DFBETAS Influential by Sex"
+ ) +
+ theme(
+     plot.title = element_text(hjust = 0.5, size = 11),
+     axis.text.x = element_text(angle = 0)
+ )
+```
+
+## d. Conclusions
+
+### i. Addressing Question of Interest
+
+As a reminder, our question of interest is, "How is the number of rings / age of a blacklip abalone related to and/or predicted from the sex, length, diameter, height, whole weight, shucked weight, viscera weight, and/or shell weight of the abalone?"
+
+The $p = 10$ columns and the first three rows of our data set are presented below.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 3.3, fig.height = 2.4, fig.align='center'}
+head(data_set %>% select(-ln_rings, -ln_shell_weight, -high_leverage, -DFFITS_influential, -DFBETAS_influential), n = 3)
+```
+
+Our recommended model is
+$$ln(rings) = \beta_0 + \beta_1 \ ln(shell \ weight) + \beta_2 \ male + \beta_3 \ female + \epsilon$$
+$$ln(rings) = 2.641 + (0.267) \ ln(shell \ weight) + (0.070) \ male + (0.080) \ female$$
+Using the summary of our recommended model above, we conduct an ANOVA $F$ Test / Partial $F$ Test involving all predictors. The null and alternate hypothesis for this test are $H_0: \boldsymbol{\beta} = \boldsymbol{0}$ and $H_1: \boldsymbol{\beta} \neq \boldsymbol{0}$. A test statistic $F = 1736$ is greater than a critical value $F_c = 2.607$. We reject the null hypothesis that all regression coefficients are $0$ and prefer our recommended multiple linear regression model to an intercept only model.
+
+Since each test statistic $t$ in the summary of our recommended model is greater than a critical value $t_c$, for each corresponding predictor, we reject a null hypothesis that the regression coefficient for that predictor is $0$, and conclude that each predictor is significant in the context of the multiple linear regression model / all predictors.
+
+However, while the above hypothesis test results seem ideal, since the multiple and adjusted coefficients of determination $R^2$ for our recommended model are both $0.555$, only a moderate proportion of variation in $ln(rings)$ of blacklip abalones can be explained by the predictors $ln(shell \ weight)$, $male$, and $female$. Given an $R^2$ adequacy criterion of $0.554$, our recommended model is $R^2$ adequate, though barely. Because these coefficients are both less than a common threshold of $0.8$, our linear model is not be good for prediction.
+
+In summary, while our recommended multiple linear regression model does act in some degree as a statistically significant model for the true relationship between the various predictors and blacklip abalone age (as evidenced by the hypothesis tests above), unfortunately this model is not good in accurately predicting blacklip abalone age given these predictors.
+
+### ii. Insights
+
+Considering potential confusion relating to our recommended multiple linear regression model, our set of boxplots of number of rings by sex suggests that there is overlap between the number of rings of infant and adult blacklip abalones and that maturity is not determined by age alone and/or age is not determined by number of rings alone.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 3.5, fig.height = 2.5, fig.align='center', fig.cap = 'Boxplots comparing numbers of rings for infant, male, and female blacklip abalones'}
+sex_and_rings <- data.frame(vector_of_sex_values, data_set["rings"])
+colnames(sex_and_rings) <- c("sex", "rings")
+ggplot(sex_and_rings, aes(x = sex, y = rings)) +
+    geom_boxplot(fill = "Blue", color = "Orange") +
+    labs(
+        x = "sex",
+        y = "number of rings",
+        title = "Boxplots of Number of Rings / Age by Sex"
+    ) +
+    theme(
+        plot.title = element_text(hjust = 0.5, size = 11),
+    )
+```
+
+Considering again the value of our recommended multiple linear regression model, using our multiple linear regression model may help marine biologists or environmental scientists to understand better the relationship of the number of rings / age of a blacklip abalone and other physical attributes of the abalone, to determine the number of rings and age of blacklip abalones, and to ensure a balance of ages in populations of blacklip abalones. Nonlinear models may be better.
+
+### iii. Challenges
+
+Regarding determining our recommended multiple linear regression model, our greatest challenges were considering transformations for a large number of simple and multiple linear regression models before considering various model selection methods.
+
+Developing, testing, sharing, and using an R package for code research, brainstorming, and modularization was challenging.
+
+Communicating remotely and across continents was challenging.
+
+# 4. A Second Question of Interest
+
+## a. Introduction
+
+### i. Question Statement
+
+We conduct data analysis of the above data set towards answering the following question:
+
+"How is the sex of male and female blacklip abalones related to and/or predicted from the number of rings / age, length, diameter, height, whole weight, shucked weight, viscera weight, and/or shell weight of the abalone?"
+
+### ii. Value in Exploring Question
+
+Addressing how the sex of male and female blacklip abalones is related to and/or predicted from the length, diameter, height, whole weight, shucked weight, viscera weight, and/or shell weight of abalones may be valuable in determining ways to preserve a balance of male and female abalones. Ways to promote a balance for blacklip abalone or other abalone species may be determined. Determining the success of any balance-improving or remediation program may be enhanced.
+
+## b. Data Visualizations
+
+### i. Data Wrangling
+
+As this question of interest forms a binary classification problem specifying male and female as the possible responses, the data set is altered to exclude any rows that correspond to infant abalones. Essentially, the rows that contain an 'I' from the sex column are excluded.
+
+Additionally, for logistic regression, the data must be split into a train and test set, in order to to measure potential models' effectiveness on a new data set.
+
+```{r include=FALSE}
+library(ROCR)
+library(tidyverse)
+set.seed(5)
+```
+
+```{r eval=TRUE, echo=FALSE, fig.align='center', fig.height=3.8, fig.width=5.3, message=FALSE, results="show"}
+data <- read.csv('Data_Set--Abalones--With_Column_Names.csv')
+filtered <- data %>% 
+  filter(sex != 'I')
+filtered$sex <- factor(filtered$sex)
+sample<-sample.int(nrow(filtered), floor(.50*nrow(filtered)), replace = F)
+train <- filtered[sample, ]
+test <- filtered[-sample, ]
+```
+
+### ii - iii. Presentation and Interpretation of Data Visualizations
+
+With the training data created, the first step is to perform exploratory data analysis to understand any potential patterns within the data.
+
+A bar chart comparing proportions of male and female abalones in the training data set is depicted below. There are slightly more male abalones (760) than female abalones (657) in our training data set, but there is sufficient representation for both values of our binary response variable.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 5.3, fig.height = 3.8, fig.align='center', fig.subcap=c(1, 2), fig.ncol = 2}
+#table(train$sex)
+```
+
+```{r echo=FALSE, fig.width = 3.5, fig.height = 2.5, fig.cap = 'Bar chart comparing proportion between male and female abalones'}
+#prop.table(table(train$sex))
+barplot_train <- train %>% group_by(sex) %>% summarize(counts = n()) %>% mutate(proportion = counts/nrow(train))
+ggplot(barplot_train, aes(x=sex, y = proportion)) + geom_bar(fill = "blue", color = "orange", stat = "identity") +
+    labs(
+        x = "sex",
+        y = "proportion",
+        title = "Proportion by Sex"
+    ) +
+    theme(
+        plot.title = element_text(hjust = 0.5, size = 11),
+    )
+```
+
+By comparing boxplots of the physical attributes (e.g. length, shucked weight), any differences between the distributions of these attributes can be assessed between male and female abalones. These boxplots are presented in the figure below.
+
+```{r fig.align='center', fig.height=3.8, fig.width=5.3, message=FALSE, include=FALSE, results="show"}
+library(gridExtra)
+#https://cran.r-project.org/web/packages/egg/vignettes/Ecosystem.html
+l <- ggplot(train, aes(x = sex, y = length)) +
+  geom_boxplot(fill = "Blue", color = "Orange")
+d <- ggplot(train, aes(x = sex, y = diameter)) +
+  geom_boxplot(fill = "Blue", color = "Orange")
+h <- ggplot(train, aes(x = sex, y = height)) +
+  geom_boxplot(fill = "Blue", color = "Orange")
+ww <- ggplot(train, aes(x = sex, y = whole_weight)) +
+  geom_boxplot(fill = "Blue", color = "Orange")
+sw1 <- ggplot(train, aes(x = sex, y = shucked_weight)) +
+  geom_boxplot(fill = "Blue", color = "Orange")
+sw2 <- ggplot(train, aes(x = sex, y = shell_weight)) +
+  geom_boxplot(fill = "Blue", color = "Orange")
+r <- ggplot(train, aes(x = sex, y = rings)) +
+  geom_boxplot(fill = "Blue", color = "Orange")
+```
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 5.3, fig.height = 3.8, fig.align='center', fig.cap="Boxplots comparing the distribution of the seven predictor variables between male and female abalones"}
+grid.arrange(l, d, h, ww, sw1, sw2, r)
+```
+
+It appears that the distributions of the physical attributes do not greatly differ when comparing between male and female abalones. However, it does appear that for several variables, male abalones tend to have slightly lower distribution. Male blacklip abalones have more outliers on the lower half, as seen with length and diameter. Males have a slightly lower minimum, first quartile, median, third quartile, and maximum for the vast majority of these plots. Although there is nothing conclusive in the figure, male blacklip abalones may be smaller than female blacklip abalones. A binary classifier may be able to detect this trend.
+
+Next, depicted below are multivariate plots comparing blacklip abalone physical attributes against one another, with the color of the data point indicating the abalone's sex. This is done to assess whether a potential pattern can be seen that separates the two groups on a scatter plot between the predictors. Multiple plots were observed during exploratory data analysis, and the following six best represent the relationships between variables.
+
+```{r fig.align='center', fig.height=3.8, fig.width=5.3, message=FALSE, include=FALSE, results="show"}
+library(gridExtra)
+#https://cran.r-project.org/web/packages/egg/vignettes/Ecosystem.html
+l1 <- ggplot(filtered, aes(x = length, y = diameter, color = sex)) +
+  geom_point(alpha = 0.5)
+l2 <- ggplot(filtered, aes(x = length, y = height, color = sex)) +
+  geom_point(alpha = 0.5)
+l3<-ggplot(filtered, aes(x = shell_weight, y = shucked_weight, color = sex)) +
+  geom_point(alpha = 0.5)
+l4<-ggplot(filtered, aes(x = height, y = whole_weight, color = sex)) +
+  geom_point(alpha = 0.5)
+l5<-ggplot(filtered, aes(x = diameter, y = viscera_weight, color = sex)) +
+  geom_point(alpha = 0.5)
+l6<-ggplot(filtered, aes(x = whole_weight, y = rings, color = sex)) +
+  geom_point(alpha = 0.5)
+```
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 5.3, fig.height = 3.8, fig.align='center', fig.cap = "Multivariable scatter plots comparing blacklip abalone physical attributes against one another"}
+grid.arrange(l1, l2, l3, l4, l5, l6)
+```
+
+It can be seen that male and female data points appear to be interspersed throughout the graphs. However, the male data points also appear to occupy more of the lower ranges of both axes in each plot. More blue points exist in the bottom-left region, where length ranges from 0 - 0.4 mm.
+
+Thus, we can state that although we can see some very slight differences that could distinguish male and female abalones apart, there is nothing conclusive in our preliminary data visualizations. We are unsure that a logistic regression model will be able to accurately predict an abalone's sex based off of its physical attributes.
+
+## c. Model Building
+
+### ii. Choice of Initial Logistic Regression Model
+
+Our second question of interest is framed in a way that we want to understand the true relationship between the predictor variables and the sex variable, as well as to predict and extrapolate on new data. Thus, for our initial model, we will keep all variables present as a baseline, but we will try to improve on this model in the section below.
+
+The general form of this initial model, Model 0, can be described as: $$log \frac{\hat{\pi}}{1-\hat{\pi}} = \hat{\beta_0} + \hat{\beta_1} \ length  + \hat{\beta_2} \ diameter + \hat{\beta_3} \ height + \hat{\beta_4} \ whole + \hat{\beta_5} \ shucked +\hat{\beta_6} \ viscera + \hat{\beta_7} \ shell + \hat{\beta_8} \ rings$$
+
+```{r include=FALSE}
+full_model <- glm(sex~., family = "binomial", data = train)
+```
+
+Fitting this model to the training data using the "glm" command in R, the initial regression model has an equation of:
+
+$$\begin{aligned}
+    log \frac{\hat{\pi}}{1-\hat{\pi}} & = 2.57043 \\ 
+                                      & + 0.73048 \ length \\
+                                      & -7.49341 \ diameter \\
+                                      & -2.59351 \ height \\
+                                      & -0.11939 \ whole \\
+                                      & + 2.92424 \ shucked \\
+                                      & -2.97086 \ viscera \\
+                                      & + 1.14699 \ shell \\
+                                      & + 0.00696 \ rings 
+\end{aligned}$$
+
+A hypothesis test is performed below to confirm whether this initial model is useful in predicting the log odds of the sex variable:
+
+$H_0: \beta_1 = \beta_2 = \beta_3 = \beta_4 = \beta_5 = \beta_6 = \beta_7 = \beta_8 = 0$
+
+$H_a:$ At least one of the coefficients in $H_0$ is not 0.
+
+To perform this test, the $\Delta G^2$ statistic is calculated by getting the difference between the deviance of an intercept-only model and our full model, which is 37.23. Comparing this value to a $\chi^2$ distribution with 8 degrees of freedom, we calculate a p-value of $1.0456 \times 10^{-6}$.
+
+```{r include=FALSE}
+deltaG2 <- full_model$null.deviance - full_model$deviance
+deltaG2
+```
+
+```{r include=FALSE}
+1-pchisq(deltaG2, 8)
+```
+
+Since the p-value is less than $\alpha$ = 0.05, we reject $H_0$. There is sufficient evidence that our initial model is useful in predicting the log odds of abalones' sex.
+
+### ii. Improvements to Initial Model
+
+We analyze the correlation matrix between predictors, in order to check for evidence of multicollinearity:
+
+```{r, echo = FALSE}
+train_for_correlation_matrix <- data.frame(train)
+colnames(train_for_correlation_matrix) <- c("sex", "length", "diameter", "height", "whole", "shucked", "viscera", "shell", "rings")
+round(cor(train_for_correlation_matrix[, c(-1)]), 2)
+```
+
+This matrix shows that there are indeed high correlations between all the predictors in regards to one another, with the exception of $rings$. In fact, $rings$ is the only variable that does not have high or very high correlation with the other predictors.
+
+To further receive evidence for multicollinearity in the model, VIFs in the model are calculated below:
+
+```{r include=FALSE}
+library(faraway)
+```
+
+```{r echo=FALSE}
+vif(full_model)
+```
+
+The VIF values for all predictors can be considered high (greater than 10), with the exception of rings, so we can conclude that the model has multicollinearity. This may not have been a significant issue if the model was exclusively built for prediction, but question 2 aims to understand the true relationship between these variables and abalone's sex, as well as to be able to extrapolate with new data. For these reasons, this will require reducing multicollinearity as much as possible.
+
+Intuitively, through the description of the data set being used, we know that whole weight, shucked weight, viscera weight, and shell weight are most likely linked because they all represent similar attributes. While shucked weight, viscera weight, and shell weight represent the weights of individual components of an abalone, whole weight represents the entire weight combined. It makes sense that a larger value for one would also mean a larger value for another, hence the very high positive correlation between them.
+
+Similarly, length and diameter are highly correlated (.978) because they are just perpendicular measurements of the shell on the same plane. Height is not considered along with these two for now, as length and diameter are horizontal measurements pertaining to the abalone's shell, while height is a vertical measurement that includes soft tissue as well.
+
+For each of these two groups (whole weight, shucked weight, shell weight and length, diameter), we can choose one variable to represent the group within a model with reduced parameters.
+
+Using combinations of the choices of predictors in both groups, we now have a potential set of eight 4-predictor models. Because high correlation exists between predictors across groups as well (e.g. length and whole_weight, diameter and viscera weight), we will add 7 two-predictor models, with rings as one predictor and a choice of one out of the remaining 7. It may make sense that a longer abalone may also have a higher weight. Rings is kept in all models, because it has a low to medium correlation with other variables.
+
+Compiling all of these together, we have a set of 15 potential logistic regression models that could help describe the relationship between the the physical attributes of a blacklip abalone and its sex:
+
+Model 1: $$log \frac{\hat{\pi}}{1-\hat{\pi}} = \hat{\beta_0} + \hat{\beta_1}length  + \hat{\beta_3}height + \hat{\beta_4}whole + \hat{\beta_8}rings$$
+
+Model 2: $$log \frac{\hat{\pi}}{1-\hat{\pi}} = \hat{\beta_0} + \hat{\beta_1}length  + \hat{\beta_3}height + \hat{\beta_5}shucked + \hat{\beta_8}rings$$
+
+Model 3: $$log \frac{\hat{\pi}}{1-\hat{\pi}} = \hat{\beta_0} + \hat{\beta_1}length  + \hat{\beta_3}height + \hat{\beta_6}viscera + \hat{\beta_8}rings$$
+
+Model 4: $$log \frac{\hat{\pi}}{1-\hat{\pi}} = \hat{\beta_0} + \hat{\beta_1}length  + \hat{\beta_3}height + \hat{\beta_7}shell + \hat{\beta_8}rings$$
+
+Model 5: $$log \frac{\hat{\pi}}{1-\hat{\pi}} = \hat{\beta_0} + \hat{\beta_2}diameter  + \hat{\beta_3}height + \hat{\beta_4}whole + \hat{\beta_8}rings$$
+
+Model 6: $$log \frac{\hat{\pi}}{1-\hat{\pi}} = \hat{\beta_0} + \hat{\beta_2}diameter  + \hat{\beta_3}height + \hat{\beta_5}shucked + \hat{\beta_8}rings$$
+
+Model 7:$$log \frac{\hat{\pi}}{1-\hat{\pi}} = \hat{\beta_0} + \hat{\beta_2}diameter  + \hat{\beta_3}height + \hat{\beta_6}viscera + \hat{\beta_8}rings$$
+
+Model 8:$$log \frac{\hat{\pi}}{1-\hat{\pi}} = \hat{\beta_0} + \hat{\beta_2}diameter  + \hat{\beta_3}height + \hat{\beta_7}shell + \hat{\beta_8}rings$$
+
+Model 9:$$log \frac{\hat{\pi}}{1-\hat{\pi}} = \hat{\beta_0} + \hat{\beta_1}length  + \hat{\beta_8}rings$$
+
+Model 10:$$log \frac{\hat{\pi}}{1-\hat{\pi}} = \hat{\beta_0} + \hat{\beta_2}diameter  + \hat{\beta_8}rings$$
+
+Model 11:$$log \frac{\hat{\pi}}{1-\hat{\pi}} = \hat{\beta_0} + \hat{\beta_3}height  + \hat{\beta_8}rings$$
+
+Model 12:$$log \frac{\hat{\pi}}{1-\hat{\pi}} = \hat{\beta_0} + \hat{\beta_4}whole  + \hat{\beta_8}rings$$
+
+Model 13:$$log \frac{\hat{\pi}}{1-\hat{\pi}} = \hat{\beta_0} + \hat{\beta_5}shucked  + \hat{\beta_8}rings$$
+
+Model 14:$$log \frac{\hat{\pi}}{1-\hat{\pi}} = \hat{\beta_0} + \hat{\beta_6}viscera  + \hat{\beta_8}rings$$
+
+Model 15:$$log \frac{\hat{\pi}}{1-\hat{\pi}} = \hat{\beta_0} + \hat{\beta_7}shell  + \hat{\beta_8}rings$$
+
+```{r include=FALSE}
+reduced1 <- glm(sex~length + height + whole_weight + rings, family = "binomial", data = train)
+reduced2 <- glm(sex~length + height + shucked_weight + rings, family = "binomial", data = train)
+reduced3 <- glm(sex~length + height + viscera_weight + rings, family = "binomial", data = train)
+reduced4 <- glm(sex~length + height + shell_weight + rings, family = "binomial", data = train)
+reduced5 <- glm(sex~diameter + height + whole_weight + rings, family = "binomial", data = train)
+reduced6 <- glm(sex~diameter + height + shucked_weight + rings, family = "binomial", data = train)
+reduced7 <- glm(sex~diameter + height + viscera_weight + rings, family = "binomial", data = train)
+reduced8 <- glm(sex~diameter + height + shell_weight + rings, family = "binomial", data = train)
+reduced9 <- glm(sex~length + rings, family = "binomial", data = train)
+reduced10 <- glm(sex~diameter + rings, family = "binomial", data = train)
+reduced11 <- glm(sex~height + rings, family = "binomial", data = train)
+reduced12 <- glm(sex~whole_weight + rings, family = "binomial", data = train)
+reduced13 <- glm(sex~shucked_weight + rings, family = "binomial", data = train)
+reduced14 <- glm(sex~viscera_weight + rings, family = "binomial", data = train)
+reduced15 <- glm(sex~shell_weight + rings, family = "binomial", data = train)
+```
+
+### iii. Performance of Model
+
+Figure 18 shows the generated ROC curves for each of the models listed above. The results from these plots are not promising, as the ROC curve for all of the models appear to be close to the diagonal. While the curves of Model 2 and Model 6 appear to be further away from the diagonal, it is not by a significant margin. Thus, in general, these plots indicate that our models are not much better than random guessing.
+
+```{r echo=FALSE, fig.cap='ROC curves of all potential models', fig.ncol=4, out.width="25%", fig.subcap=c('Full Model 0', 'Reduced Model 1', 'Reduced Model 2', 'Reduced Model 3', 'Reduced Model 4', 'Reduced Model 5', 'Reduced Model 6', 'Reduced Model 7', 'Reduced Model 8', 'Reduced Model 9', 'Reduced Model 10', 'Reduced Model 11', 'Reduced Model 12', 'Reduced Model 13', 'Reduced Model 14', 'Reduced Model 15')}
+#https://bookdown.org/yihui/rmarkdown-cookbook/latex-subfigure.html
+library(ROCR)
+preds_full <- predict(full_model, newdata = test, type = "response")
+rates_full <- prediction(preds_full, test$sex)
+roc_full <- performance(rates_full, measure = "tpr", x.measure = "fpr")
+plot(roc_full, main = "ROC Curve for Model 0")
+lines(x = c(0, 1), y = c(0, 1), col = "red")
+preds_reduced1 <- predict(reduced1, newdata = test, type = "response")
+rates_reduced1 <- prediction(preds_reduced1, test$sex)
+roc_reduced1 <- performance(rates_reduced1, measure = "tpr", x.measure = "fpr")
+plot(roc_reduced1, main = "ROC Curve for Model 1")
+lines(x = c(0, 1), y = c(0, 1), col = "red")
+preds_reduced2 <- predict(reduced2, newdata = test, type = "response")
+rates_reduced2 <- prediction(preds_reduced2, test$sex)
+roc_reduced2 <- performance(rates_reduced2, measure = "tpr", x.measure = "fpr")
+plot(roc_reduced2, main = "ROC Curve for Model 2")
+lines(x = c(0, 1), y = c(0, 1), col = "red")
+preds_reduced3 <- predict(reduced3, newdata = test, type = "response")
+rates_reduced3 <- prediction(preds_reduced3, test$sex)
+roc_reduced3 <- performance(rates_reduced3, measure = "tpr", x.measure = "fpr")
+plot(roc_reduced3, main = "ROC Curve for Model 3")
+lines(x = c(0, 1), y = c(0, 1), col = "red")
+preds_reduced4 <- predict(reduced4, newdata = test, type = "response")
+rates_reduced4 <- prediction(preds_reduced4, test$sex)
+roc_reduced4 <- performance(rates_reduced4, measure = "tpr", x.measure = "fpr")
+plot(roc_reduced4, main = "ROC Curve for Model 4")
+lines(x = c(0, 1), y = c(0, 1), col = "red")
+preds_reduced5 <- predict(reduced5, newdata = test, type = "response")
+rates_reduced5 <- prediction(preds_reduced5, test$sex)
+roc_reduced5 <- performance(rates_reduced5, measure = "tpr", x.measure = "fpr")
+plot(roc_reduced5, main = "ROC Curve for Model 5")
+lines(x = c(0, 1), y = c(0, 1), col = "red")
+preds_reduced6 <- predict(reduced6, newdata = test, type = "response")
+rates_reduced6 <- prediction(preds_reduced6, test$sex)
+roc_reduced6 <- performance(rates_reduced6, measure = "tpr", x.measure = "fpr")
+plot(roc_reduced6, main = "ROC Curve for Model 6")
+lines(x = c(0, 1), y = c(0, 1), col = "red")
+preds_reduced7 <- predict(reduced7, newdata = test, type = "response")
+rates_reduced7 <- prediction(preds_reduced7, test$sex)
+roc_reduced7 <- performance(rates_reduced7, measure = "tpr", x.measure = "fpr")
+plot(roc_reduced7, main = "ROC Curve for Model 7")
+lines(x = c(0, 1), y = c(0, 1), col = "red")
+preds_reduced8 <- predict(reduced8, newdata = test, type = "response")
+rates_reduced8 <- prediction(preds_reduced8, test$sex)
+roc_reduced8 <- performance(rates_reduced8, measure = "tpr", x.measure = "fpr")
+plot(roc_reduced8, main = "ROC Curve for Model 8")
+lines(x = c(0, 1), y = c(0, 1), col = "red")
+preds_reduced9 <- predict(reduced9, newdata = test, type = "response")
+rates_reduced9 <- prediction(preds_reduced9, test$sex)
+roc_reduced9 <- performance(rates_reduced9, measure = "tpr", x.measure = "fpr")
+plot(roc_reduced9, main = "ROC Curve for Model 9")
+lines(x = c(0, 1), y = c(0, 1), col = "red")
+preds_reduced10 <- predict(reduced10, newdata = test, type = "response")
+rates_reduced10 <- prediction(preds_reduced10, test$sex)
+roc_reduced10 <- performance(rates_reduced10, measure = "tpr", x.measure = "fpr")
+plot(roc_reduced10, main = "ROC Curve for Model 10")
+lines(x = c(0, 1), y = c(0, 1), col = "red")
+preds_reduced11 <- predict(reduced11, newdata = test, type = "response")
+rates_reduced11 <- prediction(preds_reduced11, test$sex)
+roc_reduced11 <- performance(rates_reduced11, measure = "tpr", x.measure = "fpr")
+plot(roc_reduced11, main = "ROC Curve for Model 11")
+lines(x = c(0, 1), y = c(0, 1), col = "red")
+preds_reduced12 <- predict(reduced12, newdata = test, type = "response")
+rates_reduced12 <- prediction(preds_reduced12, test$sex)
+roc_reduced12 <- performance(rates_reduced12, measure = "tpr", x.measure = "fpr")
+plot(roc_reduced12, main = "ROC Curve for Model 12")
+lines(x = c(0, 1), y = c(0, 1), col = "red")
+preds_reduced13 <- predict(reduced13, newdata = test, type = "response")
+rates_reduced13 <- prediction(preds_reduced13, test$sex)
+roc_reduced13 <- performance(rates_reduced13, measure = "tpr", x.measure = "fpr")
+plot(roc_reduced13, main = "ROC Curve for Model 13")
+lines(x = c(0, 1), y = c(0, 1), col = "red")
+preds_reduced14 <- predict(reduced14, newdata = test, type = "response")
+rates_reduced14 <- prediction(preds_reduced14, test$sex)
+roc_reduced14 <- performance(rates_reduced14, measure = "tpr", x.measure = "fpr")
+plot(roc_reduced14, main = "ROC Curve for Model 14")
+lines(x = c(0, 1), y = c(0, 1), col = "red")
+preds_reduced15 <- predict(reduced15, newdata = test, type = "response")
+rates_reduced15 <- prediction(preds_reduced15, test$sex)
+roc_reduced15 <- performance(rates_reduced15, measure = "tpr", x.measure = "fpr")
+plot(roc_reduced15, main = "ROC Curve for Model 15")
+lines(x = c(0, 1), y = c(0, 1), col = "red")
+```
+
+```{r include=FALSE}
+auc_full <- performance(rates_full, measure = "auc")
+auc_reduced1 <- performance(rates_reduced1, measure = "auc")
+auc_reduced2 <- performance(rates_reduced2, measure = "auc")
+auc_reduced3 <- performance(rates_reduced3, measure = "auc")
+auc_reduced4 <- performance(rates_reduced4, measure = "auc")
+auc_reduced5 <- performance(rates_reduced5, measure = "auc")
+auc_reduced6 <- performance(rates_reduced6, measure = "auc")
+auc_reduced7 <- performance(rates_reduced7, measure = "auc")
+auc_reduced8 <- performance(rates_reduced8, measure = "auc")
+auc_reduced9 <- performance(rates_reduced9, measure = "auc")
+auc_reduced10 <- performance(rates_reduced10, measure = "auc")
+auc_reduced11 <- performance(rates_reduced11, measure = "auc")
+auc_reduced12 <- performance(rates_reduced12, measure = "auc")
+auc_reduced13 <- performance(rates_reduced13, measure = "auc")
+auc_reduced14 <- performance(rates_reduced14, measure = "auc")
+auc_reduced15 <- performance(rates_reduced15, measure = "auc")
+```
+
+The table below ranks the fifteen models by their area under the ROC curve (AUC) values. As seen with the plots in Table 1, model 2 is the best performing model with an AUC value of 0.58. However, the margin between model 2 and the lowest performing model, Model 15, is only approximately 0.04.
+
+```{r include=FALSE}
+auc_reduced_models<-c(auc_full@y.values[[1]], auc_reduced1@y.values[[1]], auc_reduced2@y.values[[1]], auc_reduced3@y.values[[1]], auc_reduced4@y.values[[1]], auc_reduced5@y.values[[1]], auc_reduced6@y.values[[1]], auc_reduced7@y.values[[1]], auc_reduced8@y.values[[1]], auc_reduced9@y.values[[1]], auc_reduced10@y.values[[1]], auc_reduced11@y.values[[1]], auc_reduced12@y.values[[1]], auc_reduced13@y.values[[1]], auc_reduced14@y.values[[1]], auc_reduced15@y.values[[1]])
+model_names <- c('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15')
+auc_sorted <- data.frame(model_names, auc_reduced_models)
+auc_sorted <- auc_sorted %>% 
+  arrange(desc(auc_reduced_models))
+#auc_sorted
+```
+
+| Model |    AUC    |
+|:-----:|:---------:|
+|   2   | 0.5808754 |
+|   0   | 0.5771254 |
+|   6   | 0.5749740 |
+|   1   | 0.5656410 |
+|   5   | 0.5612851 |
+|  11   | 0.5553576 |
+|  15   | 0.5528716 |
+|  14   | 0.5490835 |
+|   3   | 0.5472616 |
+|  12   | 0.5470613 |
+|   4   | 0.5460276 |
+|  13   | 0.5457913 |
+|   7   | 0.5438141 |
+|   9   | 0.5437921 |
+|  10   | 0.5435407 |
+|   8   | 0.5429768 |
+
+: Potential models ranked by AUC
+
+```{r include=FALSE}
+cm_full <- table(test$sex, preds_full>0.5)
+err_full <- (cm_full[1, 2] + cm_full[2, 1])/(sum(cm_full))
+cm_reduced1 <- table(test$sex, preds_reduced1>0.5)
+err_reduced1 <- (cm_reduced1[1, 2] + cm_reduced1[2, 1])/(sum(cm_reduced1))
+cm_reduced2 <- table(test$sex, preds_reduced2>0.5)
+err_reduced2 <- (cm_reduced2[1, 2] + cm_reduced2[2, 1])/(sum(cm_reduced2))
+cm_reduced3 <- table(test$sex, preds_reduced3>0.5)
+err_reduced3 <- (cm_reduced3[1, 2] + cm_reduced3[2, 1])/(sum(cm_reduced3))
+cm_reduced4 <- table(test$sex, preds_reduced4>0.5)
+err_reduced4 <- (cm_reduced4[1, 2] + cm_reduced4[2, 1])/(sum(cm_reduced4))
+cm_reduced5 <- table(test$sex, preds_reduced5>0.5)
+err_reduced5 <- (cm_reduced5[1, 2] + cm_reduced5[2, 1])/(sum(cm_reduced5))
+cm_reduced6 <- table(test$sex, preds_reduced6>0.5)
+err_reduced6 <- (cm_reduced6[1, 2] + cm_reduced6[2, 1])/(sum(cm_reduced6))
+cm_reduced7 <- table(test$sex, preds_reduced7>0.5)
+err_reduced7 <- (cm_reduced7[1, 2] + cm_reduced7[2, 1])/(sum(cm_reduced7))
+cm_reduced8 <- table(test$sex, preds_reduced8>0.5)
+err_reduced8 <- (cm_reduced8[1, 2] + cm_reduced8[2, 1])/(sum(cm_reduced8))
+cm_reduced9 <- table(test$sex, preds_reduced9>0.5)
+err_reduced9 <- (cm_reduced9[1, 2] + cm_reduced9[2, 1])/(sum(cm_reduced9))
+cm_reduced10 <- table(test$sex, preds_reduced10>0.5)
+err_reduced10 <- (cm_reduced10[1, 2] + cm_reduced10[2, 1])/(sum(cm_reduced10))
+cm_reduced11 <- table(test$sex, preds_reduced11>0.5)
+err_reduced11 <- (cm_reduced11[1, 2] + cm_reduced11[2, 1])/(sum(cm_reduced11))
+cm_reduced12 <- table(test$sex, preds_reduced12>0.5)
+err_reduced12 <- (cm_reduced12[1, 2] + cm_reduced12[2, 1])/(sum(cm_reduced12))
+cm_reduced13 <- table(test$sex, preds_reduced13>0.5)
+err_reduced13 <- (cm_reduced13[1, 2] + cm_reduced13[2, 1])/(sum(cm_reduced13))
+cm_reduced14 <- table(test$sex, preds_reduced14>0.5)
+err_reduced14 <- (cm_reduced14[1, 2] + cm_reduced14[2, 1])/(sum(cm_reduced14))
+cm_reduced15 <- table(test$sex, preds_reduced15>0.5)
+err_reduced15 <- (cm_reduced15[1, 2] + cm_reduced15[2, 1])/(sum(cm_reduced15))
+#cm_reduced15
+```
+
+In the figure below, we rank the potential models by their error rate. A threshold of 0.5 was chosen for the confusion matrix from which the error rate is calculated, because we are only interested in the lowest error rate rather than trying to limit false positive or false negative rates.
+
+```{r include=FALSE}
+err_reduced_models<-c(err_full, err_reduced1, err_reduced2, err_reduced3,err_reduced4, err_reduced5, err_reduced6,err_reduced7, err_reduced8, err_reduced9,err_reduced10, err_reduced11, err_reduced12,err_reduced13, err_reduced14, err_reduced15)
+model_names <- c('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15')
+err_sorted <- data.frame(model_names, err_reduced_models)
+err_sorted <- err_sorted %>% 
+  arrange(err_reduced_models)
+#err_sorted
+```
+
+| Model | Error Rate |
+|:-----:|:----------:|
+|   2   | 0.4393512  |
+|   0   | 0.4400564  |
+|   6   | 0.4407616  |
+|   1   | 0.4485190  |
+|   5   | 0.4492243  |
+|   8   | 0.4569817  |
+|   9   | 0.4583921  |
+|   3   | 0.4598025  |
+|  11   | 0.4612130  |
+|  10   | 0.4619182  |
+|   7   | 0.4640339  |
+|   4   | 0.4654443  |
+|  15   | 0.4675599  |
+|  14   | 0.4682652  |
+|  12   | 0.4724965  |
+|  13   | 0.4851904  |
+
+: Potential models ranked by error rate
+
+The model with the lowest error rate is model 2, with an error rate of 0.439. Additionally, the error rates range from 0.439 to 0.485, which again reinforces that the performance between the best and worst models is not drastically different. Again, similar to the AUC results, model 2's error value indicates that while it might be marginally better than the rest, the model does not perform well on the test data set.
+
+### iv. Recommended Model
+
+With caution regarding its performance, we would like to hesitantly recommend model 2. Model 2 marginally performs the best out of all models in regards to AUC and error rate, even outperforming the full model.
+
+The general form of the model: $$log \frac{\hat{\pi}}{1-\hat{\pi}} = \hat{\beta_0} + \hat{\beta_1}length  + \hat{\beta_3}height + \hat{\beta_5}shucked + \hat{\beta_8}rings$$ The model fitted to the training data: $$log \frac{\hat{\pi}}{1-\hat{\pi}} = 2.808184 -5.281277 \ length - 3.840513 \ height + 2.080794 \ shucked + 0.003041 \ rings$$
+
+A hypothesis test is performed below to compare Model 2 to Model 0, the initial model:
+
+$H_0: \beta_2 = \beta_4 = \beta_6 = \beta_7 = 0$
+
+$H_a:$ At least one of the coefficients in $H_0$ is not 0.
+
+To perform this test, the $\Delta G^2$ statistic is calculated by getting the difference between the deviance of Model 2 and the full model, which is 8.70. Comparing this value to a $\chi^2$ distribution with 4 degrees of freedom, we calculate a p-value of $0.069$.
+
+```{r include=FALSE}
+deltaG2 <- reduced2$deviance - full_model$deviance
+deltaG2
+```
+
+```{r include=FALSE}
+1-pchisq(deltaG2, 4)
+```
+
+Since the p-value is not less than $\alpha$ = 0.05, we fail to reject $H_0$. Thus, we go with the 4-predictor model (Model 2) over the full model (Model 0) when predicting the log odds of abalones' sex.
+
+With all that said, the low AUC values and high error rates show that this model is not ideal in predicting the log odds of abalone's sex.
+
+Additionally, below are the VIF values for the $length$, $height$, $shucked \ weight$, and $rings$ predictors:
+
+```{r echo=FALSE}
+vif(reduced2)
+```
+
+Aside from $rings$, these VIF values are still above 10, which indicates multicollinearity and further reinforces that while this model performs marginally better than the others, it is not ideal. One may consider a two-predictor model to avoid high VIF's and allow for extrapolation; however, this has similarly poor predictive ability. Additionally, a hypothesis test comparing the full model and a two predictor model shows that "dropped" predictors are significant.
+
+## d. Conclusions
+
+### i. Addressing Question of Interest
+
+Our question of interest propelled us to investigate whether a relationship between any or all physical attributes of an abalone and the abalone's sex could be established, or whether knowing the measurements for the former could help us predict the latter.
+
+The final model that was decided upon was: $$log \frac{\hat{\pi}}{1-\hat{\pi}} = 2.808184 -5.281277 \ length - 3.840513 \ height + 2.080794 \ shucked + 0.003041 \ rings$$
+
+While it outperformed the other fifteen models by having the highest Area Under ROC Curve value (0.581) and the lowest error rate (0.439), these values along with an ROC Curve that is close to the diagonal indicate that this model is not able to accurately predict log-odds of sex, and unable to accurately represent the relationship between the physical attributes of an abalone and its sex.
+
+The range between the best and worst models for AUC was 0.034, and the range between the best and worst models for error rate was 0.023. This indicates that these models did not differ much regardless of choice of predictors, and were equally ineffective at predicting blacklip abalones' sex.
+
+Thus, we say that question 2 was not answered by the chosen model, and cannot be answered by similar logistic regression models using the provided data. This reinforces the results of the exploratory data analysis conducted beforehand, where there weren't clear difference between male and female abalones across the various plots.
+
+In summary, while the equation above does act in some degree as a statistically significant model for the true relationship between the physical attributes of blacklip abalone and sex  (as evidenced by the hypothesis test in the previous section involving full and partial models), this model is only slightly better than a random logistic regression model in accurately predicting blacklip abalone sex given these predictors.
+
+### ii. Insights
+
+Considering our data set and analysis, initially, it was surprising to us that the correlation matrix between predictors had high correlation values for most pairs. However, after understanding the context behind the variables in the data description, it made sense that the variables would be heavily positively correlated. While other weight variables measure components within an abalone, the whole weight measures the entire abalone's weight, soft tissue and shell included. Additionally, it might intuitively make sense that a larger abalone with a heavier shell might be longer along the abalone's shell as well. Thus, the high positive correlations and subsequently examined multicollinearity can be explained.
+
+From a biological / environmental perspective, identifying male and female abalones, inducing reproduction, and ensuring a balance according to sex is valuable to marine biologists, conservationists, and a diverse, robust marine environment and ecosystem. Based on our logistic regression modelling, we encourage those interested in determining sex in relationship to other attributes of blacklip abalones or predicting sex to use established analytical methods; it is hard to identify sex of abalones based on a logistic regression model.
+
+### iii. Challenges
+
+The largest challenge for the group with this question was ensuring that all decisions taken during the initial model improvement steps were valid. We were very curious whether components of our analysis from the linear regression section, such as multicollinearity, stepwise regression, and certain hypothesis testing would still be relevant if used when performing logistic regression. This also included making sure that the decision to reduce the number of parameters for potential models based on context from the data description, such as reducing the number of weight variables due to their high correlation and underlying relationship, was also valid.
+
+# References
+
+1. Candy Abalone (2022). "Candy Abalone". Accessed on 12/14/22 at https://www.candyabalone.com.
+
+2. Department of Primary Industries in New South Wales (2009). "Blacklip Abalone". Accessed on 12/14/22 at https://www.dpi.nsw.gov.au/__data/assets/pdf_file/0009/375858/BlacklipAbalone.pdf.
+
+3. UCI Machine Learning Repository (2022). "Abalone Data Set". Accessed on 12/14/22 at https://archive.ics.uci.edu/ml/datasets/Abalone.
+
+4. Hao Chen, University of California Davis (2022). "Abalone Age". Accessed on 12/14/22 at https://anson.ucdavis.edu/~haochen/abalone_description.pdf.
+
+5. STAT 462: Applied Regression Analysis, PennState Eberly College of Science (2022). "Detecting Multicollinearity Using Variance Inflation Factors". Accessed on 12/14/22 at https://online.stat.psu.edu/stat462/node/180/.
+
+6. Baptiste Auguie (2022). "Laying out multiple plots on a page". Accessed on 12/14/22 at https://cran.r-project.org/web/packages/egg/vignettes/Ecosystem.html.
+
+7. Yihui Xie (2022). "LaTeX sub-figures". Accessed on 12/14/22 at https://bookdown.org/yihui/rmarkdown-cookbook/latex-subfigure.html.
