@@ -401,6 +401,7 @@ for (index_of_high_leverage_observation in indices_of_high_leverage_observations
 }
 data_set["high_leverage"] <- mask_high_leverage
 linear_model <- lm(ln_rings ~ ln_shell_weight + male + female, data = data_set)
+
 ggplot() +
     geom_histogram(data = data_set, aes(x = shell_weight, y = after_stat(density), fill = high_leverage), alpha = 0.2, binwidth = density(data_set$shell_weight)$bw) +
     geom_density(data = data_set, aes(x = shell_weight, color = high_leverage)) +
@@ -413,6 +414,7 @@ ggplot() +
         plot.title = element_text(hjust = 0.5, size = 11),
         axis.text.x = element_text(angle = 0)
     )
+
 sex_and_high_leverage <- data.frame(vector_of_sex_values, mask_high_leverage)
 colnames(sex_and_high_leverage) <- c("sex", "high_leverage")
 ggplot(sex_and_high_leverage, aes(x = sex, fill = high_leverage)) +
@@ -456,6 +458,7 @@ for (index_of_influential_observation in indices_of_influential_observations) {
 }
 data_set["DFFITS_influential"] <- mask_is_influential_observation
 linear_model <- lm(ln_rings ~ ln_shell_weight + male + female, data = data_set)
+
 ggplot() +
     geom_histogram(data = data_set, aes(x = shell_weight, y = after_stat(density), fill = DFFITS_influential), alpha = 0.2, binwidth = density(data_set$shell_weight)$bw) +
     geom_density(data = data_set, aes(x = shell_weight, color = DFFITS_influential)) +
@@ -468,6 +471,7 @@ ggplot() +
         plot.title = element_text(hjust = 0.5, size = 11),
         axis.text.x = element_text(angle = 0)
     )
+
 sex_and_DFFITS_influential <- data.frame(vector_of_sex_values, mask_is_influential_observation)
 colnames(sex_and_DFFITS_influential) <- c("sex", "DFFITS_influential")
 ggplot(sex_and_DFFITS_influential, aes(x = sex, fill = DFFITS_influential)) +
@@ -502,6 +506,7 @@ for (index_of_influential_observation in indices_of_influential_observations) {
 }
 data_set["DFBETAS_influential"] <- mask_is_influential_observation
 linear_model <- lm(ln_rings ~ ln_shell_weight + male + female, data = data_set)
+
 ggplot() +
     geom_histogram(data = data_set, aes(x = shell_weight, y = after_stat(density), fill = DFBETAS_influential), alpha = 0.2, binwidth = density(data_set$shell_weight)$bw) +
     geom_density(data = data_set, aes(x = shell_weight, color = DFBETAS_influential)) +
@@ -514,6 +519,7 @@ ggplot() +
         plot.title = element_text(hjust = 0.5, size = 11),
         axis.text.x = element_text(angle = 0)
     )
+
 sex_and_DFBETAS_influential <- data.frame(vector_of_sex_values, mask_is_influential_observation)
 colnames(sex_and_DFBETAS_influential) <- c("sex", "DFBETAS_influential")
 ggplot(sex_and_DFBETAS_influential, aes(x = sex, fill = DFBETAS_influential)) +
@@ -605,6 +611,7 @@ Additionally, for logistic regression, the data must be split into a train and t
 ```{r include=FALSE}
 library(ROCR)
 library(tidyverse)
+
 set.seed(5)
 ```
 
@@ -810,10 +817,12 @@ reduced1 <- glm(sex~length + height + whole_weight + rings, family = "binomial",
 reduced2 <- glm(sex~length + height + shucked_weight + rings, family = "binomial", data = train)
 reduced3 <- glm(sex~length + height + viscera_weight + rings, family = "binomial", data = train)
 reduced4 <- glm(sex~length + height + shell_weight + rings, family = "binomial", data = train)
+
 reduced5 <- glm(sex~diameter + height + whole_weight + rings, family = "binomial", data = train)
 reduced6 <- glm(sex~diameter + height + shucked_weight + rings, family = "binomial", data = train)
 reduced7 <- glm(sex~diameter + height + viscera_weight + rings, family = "binomial", data = train)
 reduced8 <- glm(sex~diameter + height + shell_weight + rings, family = "binomial", data = train)
+
 reduced9 <- glm(sex~length + rings, family = "binomial", data = train)
 reduced10 <- glm(sex~diameter + rings, family = "binomial", data = train)
 reduced11 <- glm(sex~height + rings, family = "binomial", data = train)
@@ -835,76 +844,91 @@ rates_full <- prediction(preds_full, test$sex)
 roc_full <- performance(rates_full, measure = "tpr", x.measure = "fpr")
 plot(roc_full, main = "ROC Curve for Model 0")
 lines(x = c(0, 1), y = c(0, 1), col = "red")
+
 preds_reduced1 <- predict(reduced1, newdata = test, type = "response")
 rates_reduced1 <- prediction(preds_reduced1, test$sex)
 roc_reduced1 <- performance(rates_reduced1, measure = "tpr", x.measure = "fpr")
 plot(roc_reduced1, main = "ROC Curve for Model 1")
 lines(x = c(0, 1), y = c(0, 1), col = "red")
+
 preds_reduced2 <- predict(reduced2, newdata = test, type = "response")
 rates_reduced2 <- prediction(preds_reduced2, test$sex)
 roc_reduced2 <- performance(rates_reduced2, measure = "tpr", x.measure = "fpr")
 plot(roc_reduced2, main = "ROC Curve for Model 2")
 lines(x = c(0, 1), y = c(0, 1), col = "red")
+
 preds_reduced3 <- predict(reduced3, newdata = test, type = "response")
 rates_reduced3 <- prediction(preds_reduced3, test$sex)
 roc_reduced3 <- performance(rates_reduced3, measure = "tpr", x.measure = "fpr")
 plot(roc_reduced3, main = "ROC Curve for Model 3")
 lines(x = c(0, 1), y = c(0, 1), col = "red")
+
 preds_reduced4 <- predict(reduced4, newdata = test, type = "response")
 rates_reduced4 <- prediction(preds_reduced4, test$sex)
 roc_reduced4 <- performance(rates_reduced4, measure = "tpr", x.measure = "fpr")
 plot(roc_reduced4, main = "ROC Curve for Model 4")
 lines(x = c(0, 1), y = c(0, 1), col = "red")
+
 preds_reduced5 <- predict(reduced5, newdata = test, type = "response")
 rates_reduced5 <- prediction(preds_reduced5, test$sex)
 roc_reduced5 <- performance(rates_reduced5, measure = "tpr", x.measure = "fpr")
 plot(roc_reduced5, main = "ROC Curve for Model 5")
 lines(x = c(0, 1), y = c(0, 1), col = "red")
+
 preds_reduced6 <- predict(reduced6, newdata = test, type = "response")
 rates_reduced6 <- prediction(preds_reduced6, test$sex)
 roc_reduced6 <- performance(rates_reduced6, measure = "tpr", x.measure = "fpr")
 plot(roc_reduced6, main = "ROC Curve for Model 6")
 lines(x = c(0, 1), y = c(0, 1), col = "red")
+
 preds_reduced7 <- predict(reduced7, newdata = test, type = "response")
 rates_reduced7 <- prediction(preds_reduced7, test$sex)
 roc_reduced7 <- performance(rates_reduced7, measure = "tpr", x.measure = "fpr")
 plot(roc_reduced7, main = "ROC Curve for Model 7")
 lines(x = c(0, 1), y = c(0, 1), col = "red")
+
 preds_reduced8 <- predict(reduced8, newdata = test, type = "response")
 rates_reduced8 <- prediction(preds_reduced8, test$sex)
 roc_reduced8 <- performance(rates_reduced8, measure = "tpr", x.measure = "fpr")
 plot(roc_reduced8, main = "ROC Curve for Model 8")
 lines(x = c(0, 1), y = c(0, 1), col = "red")
+
 preds_reduced9 <- predict(reduced9, newdata = test, type = "response")
 rates_reduced9 <- prediction(preds_reduced9, test$sex)
 roc_reduced9 <- performance(rates_reduced9, measure = "tpr", x.measure = "fpr")
 plot(roc_reduced9, main = "ROC Curve for Model 9")
 lines(x = c(0, 1), y = c(0, 1), col = "red")
+
 preds_reduced10 <- predict(reduced10, newdata = test, type = "response")
 rates_reduced10 <- prediction(preds_reduced10, test$sex)
 roc_reduced10 <- performance(rates_reduced10, measure = "tpr", x.measure = "fpr")
 plot(roc_reduced10, main = "ROC Curve for Model 10")
 lines(x = c(0, 1), y = c(0, 1), col = "red")
+
 preds_reduced11 <- predict(reduced11, newdata = test, type = "response")
 rates_reduced11 <- prediction(preds_reduced11, test$sex)
 roc_reduced11 <- performance(rates_reduced11, measure = "tpr", x.measure = "fpr")
 plot(roc_reduced11, main = "ROC Curve for Model 11")
 lines(x = c(0, 1), y = c(0, 1), col = "red")
+
 preds_reduced12 <- predict(reduced12, newdata = test, type = "response")
 rates_reduced12 <- prediction(preds_reduced12, test$sex)
 roc_reduced12 <- performance(rates_reduced12, measure = "tpr", x.measure = "fpr")
 plot(roc_reduced12, main = "ROC Curve for Model 12")
 lines(x = c(0, 1), y = c(0, 1), col = "red")
+
 preds_reduced13 <- predict(reduced13, newdata = test, type = "response")
 rates_reduced13 <- prediction(preds_reduced13, test$sex)
 roc_reduced13 <- performance(rates_reduced13, measure = "tpr", x.measure = "fpr")
 plot(roc_reduced13, main = "ROC Curve for Model 13")
 lines(x = c(0, 1), y = c(0, 1), col = "red")
+
 preds_reduced14 <- predict(reduced14, newdata = test, type = "response")
 rates_reduced14 <- prediction(preds_reduced14, test$sex)
 roc_reduced14 <- performance(rates_reduced14, measure = "tpr", x.measure = "fpr")
 plot(roc_reduced14, main = "ROC Curve for Model 14")
 lines(x = c(0, 1), y = c(0, 1), col = "red")
+
 preds_reduced15 <- predict(reduced15, newdata = test, type = "response")
 rates_reduced15 <- prediction(preds_reduced15, test$sex)
 roc_reduced15 <- performance(rates_reduced15, measure = "tpr", x.measure = "fpr")
@@ -935,6 +959,7 @@ The table below ranks the fifteen models by their area under the ROC curve (AUC)
 
 ```{r include=FALSE}
 auc_reduced_models<-c(auc_full@y.values[[1]], auc_reduced1@y.values[[1]], auc_reduced2@y.values[[1]], auc_reduced3@y.values[[1]], auc_reduced4@y.values[[1]], auc_reduced5@y.values[[1]], auc_reduced6@y.values[[1]], auc_reduced7@y.values[[1]], auc_reduced8@y.values[[1]], auc_reduced9@y.values[[1]], auc_reduced10@y.values[[1]], auc_reduced11@y.values[[1]], auc_reduced12@y.values[[1]], auc_reduced13@y.values[[1]], auc_reduced14@y.values[[1]], auc_reduced15@y.values[[1]])
+
 model_names <- c('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15')
 auc_sorted <- data.frame(model_names, auc_reduced_models)
 auc_sorted <- auc_sorted %>% 
@@ -966,36 +991,52 @@ auc_sorted <- auc_sorted %>%
 ```{r include=FALSE}
 cm_full <- table(test$sex, preds_full>0.5)
 err_full <- (cm_full[1, 2] + cm_full[2, 1])/(sum(cm_full))
+
 cm_reduced1 <- table(test$sex, preds_reduced1>0.5)
 err_reduced1 <- (cm_reduced1[1, 2] + cm_reduced1[2, 1])/(sum(cm_reduced1))
+
 cm_reduced2 <- table(test$sex, preds_reduced2>0.5)
 err_reduced2 <- (cm_reduced2[1, 2] + cm_reduced2[2, 1])/(sum(cm_reduced2))
+
 cm_reduced3 <- table(test$sex, preds_reduced3>0.5)
 err_reduced3 <- (cm_reduced3[1, 2] + cm_reduced3[2, 1])/(sum(cm_reduced3))
+
 cm_reduced4 <- table(test$sex, preds_reduced4>0.5)
 err_reduced4 <- (cm_reduced4[1, 2] + cm_reduced4[2, 1])/(sum(cm_reduced4))
+
 cm_reduced5 <- table(test$sex, preds_reduced5>0.5)
 err_reduced5 <- (cm_reduced5[1, 2] + cm_reduced5[2, 1])/(sum(cm_reduced5))
+
 cm_reduced6 <- table(test$sex, preds_reduced6>0.5)
 err_reduced6 <- (cm_reduced6[1, 2] + cm_reduced6[2, 1])/(sum(cm_reduced6))
+
 cm_reduced7 <- table(test$sex, preds_reduced7>0.5)
 err_reduced7 <- (cm_reduced7[1, 2] + cm_reduced7[2, 1])/(sum(cm_reduced7))
+
 cm_reduced8 <- table(test$sex, preds_reduced8>0.5)
 err_reduced8 <- (cm_reduced8[1, 2] + cm_reduced8[2, 1])/(sum(cm_reduced8))
+
 cm_reduced9 <- table(test$sex, preds_reduced9>0.5)
 err_reduced9 <- (cm_reduced9[1, 2] + cm_reduced9[2, 1])/(sum(cm_reduced9))
+
 cm_reduced10 <- table(test$sex, preds_reduced10>0.5)
 err_reduced10 <- (cm_reduced10[1, 2] + cm_reduced10[2, 1])/(sum(cm_reduced10))
+
 cm_reduced11 <- table(test$sex, preds_reduced11>0.5)
 err_reduced11 <- (cm_reduced11[1, 2] + cm_reduced11[2, 1])/(sum(cm_reduced11))
+
 cm_reduced12 <- table(test$sex, preds_reduced12>0.5)
 err_reduced12 <- (cm_reduced12[1, 2] + cm_reduced12[2, 1])/(sum(cm_reduced12))
+
 cm_reduced13 <- table(test$sex, preds_reduced13>0.5)
 err_reduced13 <- (cm_reduced13[1, 2] + cm_reduced13[2, 1])/(sum(cm_reduced13))
+
 cm_reduced14 <- table(test$sex, preds_reduced14>0.5)
 err_reduced14 <- (cm_reduced14[1, 2] + cm_reduced14[2, 1])/(sum(cm_reduced14))
+
 cm_reduced15 <- table(test$sex, preds_reduced15>0.5)
 err_reduced15 <- (cm_reduced15[1, 2] + cm_reduced15[2, 1])/(sum(cm_reduced15))
+
 #cm_reduced15
 ```
 
@@ -1003,6 +1044,7 @@ In the figure below, we rank the potential models by their error rate. A thresho
 
 ```{r include=FALSE}
 err_reduced_models<-c(err_full, err_reduced1, err_reduced2, err_reduced3,err_reduced4, err_reduced5, err_reduced6,err_reduced7, err_reduced8, err_reduced9,err_reduced10, err_reduced11, err_reduced12,err_reduced13, err_reduced14, err_reduced15)
+
 model_names <- c('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15')
 err_sorted <- data.frame(model_names, err_reduced_models)
 err_sorted <- err_sorted %>% 

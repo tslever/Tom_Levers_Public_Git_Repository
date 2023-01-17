@@ -1,0 +1,596 @@
+---
+title: 'STAT 6021: Regression Project Question 2'
+author: "Shrikant Mishra"
+date: "2022-11-20"
+output: html_document
+---
+```{r include=FALSE}
+library(ROCR)
+library(tidyverse)
+
+set.seed(5)
+```
+
+```{r include=FALSE}
+data <- read.csv('Data_Set--Abalone_Marine_Snails--With_Column_Names.csv')
+filtered <- data %>% 
+  filter(sex != 'I')
+sample<-sample.int(nrow(filtered), floor(.50*nrow(filtered)), replace = F)
+train <- filtered[sample, ]
+test <- filtered[-sample, ]
+```
+
+
+## 4a. i) Question of Interest #2:
+
+How is the sex of male and female blacklip abalones related to and/or predicted from the age and number of rings, length, diameter, height, whole weight, shucked weight, viscera weight, and/or shell weight of the abalone?
+
+## 4a. ii) 
+Addressing how the sex of male and female blacklip abalones is related to and/or predicted from the length, diameter, height, whole weight, shucked weight, viscera weight, and/or shell weight of abalones may be valuable in determining ways to preserve a balance of male and female abalones. Ways to promote a balance for blacklip abalone or other abalone species may be determined. Determining the success of any balance-improving or remediation program may be enhanced.
+
+
+### 4b. Data Visualizations:
+
+There are approximately equal data points in our training data set for both values of our binary variable, as seen below.
+```{r}
+table(train$sex)
+```
+
+```{r}
+prop.table(table(train$sex))
+```
+
+```{r}
+train$sex <- factor(train$sex)
+```
+
+By comparing boxplots of the physical attributes (e.g. length, shucked weight) between the female and male abalones, we can assess whether there exists a difference between the distributions of these attributes among the two.
+```{r include=FALSE}
+library(gridExtra)
+```
+
+```{r include=FALSE}
+l <- ggplot(train, aes(x = sex, y = length)) +
+  geom_boxplot()
+d <- ggplot(train, aes(x = sex, y = diameter)) +
+  geom_boxplot()
+h <- ggplot(train, aes(x = sex, y = height)) +
+  geom_boxplot()
+ww <- ggplot(train, aes(x = sex, y = whole_weight)) +
+  geom_boxplot()
+sw1 <- ggplot(train, aes(x = sex, y = shucked_weight)) +
+  geom_boxplot()
+sw2 <- ggplot(train, aes(x = sex, y = shell_weight)) +
+  geom_boxplot()
+r <- ggplot(train, aes(x = sex, y = rings)) +
+  geom_boxplot()
+```
+
+```{r}
+#https://cran.r-project.org/web/packages/egg/vignettes/Ecosystem.html
+grid.arrange(l, d, h, ww, sw1, sw2, r)
+```
+
+As can be seen by the boxplots above, it appears that the distributions of the physical attributes do not differ much when comparing between male and female abalones. However, it does appear that for several variables, male abalones tend to have slightly lower distribution, with a lower first quartile value as well as some outliers on the lower half of the boxplot.
+
+
+Next, depicted below are multivariate plots comparing abalone physical attributes against each other, with the color of the data point indicating whether the abalone is male or female. This is done to assess whether a potential pattern can be seen that separates the two categories on a scatter plot between two of the predictors.
+
+```{r include=FALSE}
+l1 <- ggplot(filtered, aes(x = length, y = diameter, color = sex)) +
+  geom_point()
+l2 <- ggplot(filtered, aes(x = length, y = height, color = sex)) +
+  geom_point()
+l3<-ggplot(filtered, aes(x = length, y = whole_weight, color = sex)) +
+  geom_point()
+l4<-ggplot(filtered, aes(x = length, y = shucked_weight, color = sex)) +
+  geom_point()
+l5<-ggplot(filtered, aes(x = length, y = viscera_weight, color = sex)) +
+  geom_point()
+l6<-ggplot(filtered, aes(x = length, y = rings, color = sex)) +
+  geom_point()
+```
+
+```{r}
+grid.arrange(l1, l2, l3, l4, l5, l6)
+```
+
+It can be seen that although the male and female data points appear to be interspersed throughout each of the graph, the male data points also appear to occupy more of the lower ranges of both predictor variables that are being compared, as seen with the existence of more blue points in the bottom-left of the plots.
+
+Thus, we can state that from that although we can see some slight differences that could distinguish male and female abalones apart in our preliminary data visualizations, there is not a lot of promise that a logarithmic regression model will be able to accurately predict an abalone's sex based off of its physical attributes. 
+
+
+
+### 4c. i) Model Building
+
+Our second question of interest is framed in a way that we want to understand the true relationship between the predictor variables in the data and the sex variable, which implies being able to extrapolate on new data. Thus, for our initial model, we will keep all variables present as a baseline, but we will try to improve on this model in the section below.
+
+The general form of this initial model can be described by:
+
+$$log \frac{\pi}{1-\pi} = \hat{\beta_0} + \hat{\beta_1}x_1  + \hat{\beta_2}x_2 + \hat{\beta_3}x_3 + \hat{\beta_4}x_4 + \hat{\beta_5}x_5 +\hat{\beta_6}x_6 + \hat{\beta_7}x_7 + \hat{\beta_8}x_8$$
+
+with the following interpretations for the estimated coefficients:
+
+$\hat{\beta_1}$:
+$\hat{\beta_2}$:
+$\hat{\beta_3}$:
+$\hat{\beta_4}$:
+$\hat{\beta_5}$:
+$\hat{\beta_6}$:
+$\hat{\beta_7}$:
+$\hat{\beta_8}$: 
+
+
+
+```{r}
+full_model <- glm(sex~., family = "binomial", data = train)
+summary(full_model)
+```
+Our initial regression model has an equation of:
+$log \frac{\pi}{1-\pi} = 2.57043 + 0.73048x_1  -7.49341x_2 -2.59351x_3 -0.11939x_4 + 2.92424x_5 -2.97086x_6 + 1.14699x_7 + 0.00696x_8$
+
+
+```{r}
+deltaG2 <- full_model$null.deviance - full_model$deviance
+deltaG2
+```
+```{r}
+1-pchisq(deltaG2, 8)
+```
+Is useful. 
+
+### 4c. ii) Model Improvement
+
+From the summary output, it can be seen that many of the predictor variables have insignificant p-values in the t-test that measures significance in the presence of other predictors. This implies multicollinearity. 
+
+Taking a look at the correlation matrix between predictors:
+
+```{r}
+cor(train[, c(-1)])
+```
+This correlation matrix for all the predictors shows that there are indeed high correlations between all the predictors with each other, with the exception of rings. 
+
+Checking for multicollinearity can be done using the following:
+
+```{r}
+library(faraway)
+vif(full_model)
+```
+
+We can see high VIF values for all of the predictors (greater than 10), with the exception of rings, so we can see that the model has multicollinearity. While this may not have been an issue if our model was exclusively built for prediction, but we're aiming to understand the true relationship between these variables and abalone's sex, so we need the ability to be able to extrapolate as well with new data, thus requires reducing multicollinearity as much as possible.
+
+Intuitively, through the description of the data set being used, we know that whole_weight, shucked_weight, viscera_weight, and shell_weight are most likely linked because they all represent similar variables. Similarly, length and diameter are most likely heavily correlated (.977) because they are just perpendicular measurements of the shell on the same dimension. 
+For each of these two groups, we can choose one variable to represent the group.
+
+Using combinations of the predictors in both groups, we now have a set of 8 potential models. Because high correlation exists between predictors across groups as well (e.g. length and whole_weight), we will add 7 two-predictor models, with rings as one predictor and a choice of one out of the remaining 7 to represent those 7. Compiling them together, we have 15 possible logistic regression models that could help describe the relationship between the predictors and abalone sex:
+
+Reduced Model 1: $log \frac{\pi}{1-\pi} = \hat{\beta_0} + \hat{\beta_1}x_1  + \hat{\beta_3}x_3 + \hat{\beta_4}x_4 + \hat{\beta_8}x_8$
+
+Reduced Model 2: $log \frac{\pi}{1-\pi} = \hat{\beta_0} + \hat{\beta_1}x_1  + \hat{\beta_3}x_3 + \hat{\beta_5}x_5 + \hat{\beta_8}x_8$
+
+Reduced Model 3: $log \frac{\pi}{1-\pi} = \hat{\beta_0} + \hat{\beta_1}x_1  + \hat{\beta_3}x_3 + \hat{\beta_6}x_6 + \hat{\beta_8}x_8$
+
+Reduced Model 4: $log \frac{\pi}{1-\pi} = \hat{\beta_0} + \hat{\beta_1}x_1  + \hat{\beta_3}x_3 + \hat{\beta_7}x_7 + \hat{\beta_8}x_8$
+
+Reduced Model 5: $log \frac{\pi}{1-\pi} = \hat{\beta_0} + \hat{\beta_2}x_2  + \hat{\beta_3}x_3 + \hat{\beta_4}x_4 + \hat{\beta_8}x_8$
+
+Reduced Model 6: $log \frac{\pi}{1-\pi} = \hat{\beta_0} + \hat{\beta_2}x_2  + \hat{\beta_3}x_3 + \hat{\beta_5}x_5 + \hat{\beta_8}x_8$
+
+Reduced Model 7:$log \frac{\pi}{1-\pi} = \hat{\beta_0} + \hat{\beta_2}x_2  + \hat{\beta_3}x_3 + \hat{\beta_6}x_6 + \hat{\beta_8}x_8$
+
+Reduced Model 8:$log \frac{\pi}{1-\pi} = \hat{\beta_0} + \hat{\beta_2}x_2  + \hat{\beta_3}x_3 + \hat{\beta_7}x_7 + \hat{\beta_8}x_8$
+
+Reduced Model 9:$log \frac{\pi}{1-\pi} = \hat{\beta_0} + \hat{\beta_1}x_1  + \hat{\beta_8}x_8$
+
+Reduced Model 10:$log \frac{\pi}{1-\pi} = \hat{\beta_0} + \hat{\beta_2}x_2  + \hat{\beta_8}x_8$
+
+Reduced Model 11:$log \frac{\pi}{1-\pi} = \hat{\beta_0} + \hat{\beta_3}x_3  + \hat{\beta_8}x_8$
+
+Reduced Model 12:$log \frac{\pi}{1-\pi} = \hat{\beta_0} + \hat{\beta_4}x_4  + \hat{\beta_8}x_8$
+
+Reduced Model 13:$log \frac{\pi}{1-\pi} = \hat{\beta_0} + \hat{\beta_5}x_5  + \hat{\beta_8}x_8$
+
+Reduced Model 14:$log \frac{\pi}{1-\pi} = \hat{\beta_0} + \hat{\beta_6}x_6  + \hat{\beta_8}x_8$
+
+Reduced Model 15:$log \frac{\pi}{1-\pi} = \hat{\beta_0} + \hat{\beta_7}x_7  + \hat{\beta_8}x_8$
+
+
+```{r echo=TRUE}
+reduced1 <- glm(sex~length + height + whole_weight + rings, family = "binomial", data = train)
+reduced2 <- glm(sex~length + height + shucked_weight + rings, family = "binomial", data = train)
+reduced3 <- glm(sex~length + height + viscera_weight + rings, family = "binomial", data = train)
+reduced4 <- glm(sex~length + height + shell_weight + rings, family = "binomial", data = train)
+
+reduced5 <- glm(sex~diameter + height + whole_weight + rings, family = "binomial", data = train)
+reduced6 <- glm(sex~diameter + height + shucked_weight + rings, family = "binomial", data = train)
+reduced7 <- glm(sex~diameter + height + viscera_weight + rings, family = "binomial", data = train)
+reduced8 <- glm(sex~diameter + height + shell_weight + rings, family = "binomial", data = train)
+
+reduced9 <- glm(sex~length + rings, family = "binomial", data = train)
+reduced10 <- glm(sex~diameter + rings, family = "binomial", data = train)
+reduced11 <- glm(sex~height + rings, family = "binomial", data = train)
+reduced12 <- glm(sex~whole_weight + rings, family = "binomial", data = train)
+reduced13 <- glm(sex~shucked_weight + rings, family = "binomial", data = train)
+reduced14 <- glm(sex~viscera_weight + rings, family = "binomial", data = train)
+reduced15 <- glm(sex~shell_weight + rings, family = "binomial", data = train)
+
+```
+
+For each model below, we present the regression equation, the vif values, the ROC curve, as well as a confusion matrix. We have kept the threshold for the confusion at 0.5, because we do not have any motivations for enlarging TPR or reducing FPR.
+
+### Reduced Model 1:
+
+$log \frac{\pi}{1-\pi} = 3.12552 + -5.52691x_1  + -4.73209x_3 + 1.19836x_4 + -0.02838x_8$
+
+VIF for Reduced Model 1:
+```{r}
+vif(reduced1)
+```
+
+ROC Curve for Reduced Model 1:
+```{r}
+preds_reduced1 <- predict(reduced1, newdata = test, type = "response")
+rates_reduced1 <- prediction(preds_reduced1, test$sex)
+roc_reduced1 <- performance(rates_reduced1, measure = "tpr", x.measure = "fpr")
+plot(roc_reduced1, main = "ROC Curve for Abalone Data")
+lines(x = c(0, 1), y = c(0, 1), col = "red")
+```
+
+AUC for Reduced Model 1:
+```{r}
+auc_reduced1 <- performance(rates_reduced1, measure = "auc")
+auc_reduced1@y.values[[1]]
+```
+
+Confusion Matrix for Reduced Model 1:
+```{r}
+table(test$sex, preds_reduced1>0.5)
+```
+
+```{r}
+cm_reduced1 <- table(test$sex, preds_reduced1>0.5)
+acc_reduced1 <- (cm_reduced1[1, 1] + cm_reduced1[2, 2])/(sum(cm_reduced1))
+err_reduced1 <- (cm_reduced1[1, 2] + cm_reduced1[2, 1])/(sum(cm_reduced1))
+acc_reduced1
+err_reduced1
+```
+
+
+Accuracy for Reduced Model 1: 0.551481
+Error for Reduced Model 1: 0.448519
+
+
+
+
+### Reduced Model 2:
+$log \frac{\pi}{1-\pi} = \hat{\beta_0} + \hat{\beta_1}x_1  + \hat{\beta_3}x_3 + \hat{\beta_5}x_5 + \hat{\beta_8}x_8$
+
+VIF for Reduced Model 2:
+```{r}
+vif(reduced2)
+```
+
+ROC Curve for Reduced Model 2:
+```{r}
+preds_reduced2 <- predict(reduced2, newdata = test, type = "response")
+rates_reduced2 <- prediction(preds_reduced2, test$sex)
+roc_reduced2 <- performance(rates_reduced2, measure = "tpr", x.measure = "fpr")
+plot(roc_reduced2, main = "ROC Curve for Abalone Data")
+lines(x = c(0, 1), y = c(0, 1), col = "red")
+```
+
+AUC for Reduced Model 1:
+```{r}
+auc_reduced2 <- performance(rates_reduced2, measure = "auc")
+auc_reduced2@y.values
+```
+
+Confusion Matrix for Reduced Model 2:
+```{r}
+table(test$sex, preds_reduced2>0.5)
+```
+
+```{r}
+cm_reduced2 <- table(test$sex, preds_reduced2>0.5)
+acc_reduced2 <- (cm_reduced2[1, 1] + cm_reduced2[2, 2])/(sum(cm_reduced2))
+err_reduced2 <- (cm_reduced2[1, 2] + cm_reduced2[2, 1])/(sum(cm_reduced2))
+acc_reduced2
+err_reduced2
+```
+
+
+Accuracy for Reduced Model 2: 0.5606488
+Error for Reduced Model 2: 0.4393512
+
+### Reduced Model 3
+$log \frac{\pi}{1-\pi} = \hat{\beta_0} + \hat{\beta_1}x_1  + \hat{\beta_3}x_3 + \hat{\beta_6}x_6 + \hat{\beta_8}x_8$
+
+VIF for Reduced Model 3:
+```{r}
+vif(reduced3)
+```
+
+ROC Curve for Reduced Model 3:
+```{r}
+preds_reduced3 <- predict(reduced3, newdata = test, type = "response")
+rates_reduced3 <- prediction(preds_reduced3, test$sex)
+roc_reduced3 <- performance(rates_reduced3, measure = "tpr", x.measure = "fpr")
+plot(roc_reduced3, main = "ROC Curve for Abalone Data")
+lines(x = c(0, 1), y = c(0, 1), col = "red")
+```
+
+AUC for Reduced Model 3:
+```{r}
+auc_reduced3 <- performance(rates_reduced3, measure = "auc")
+auc_reduced3@y.values
+```
+
+Confusion Matrix for Reduced Model 3:
+```{r}
+table(test$sex, preds_reduced3>0.5)
+```
+
+```{r}
+cm_reduced3 <- table(test$sex, preds_reduced3>0.5)
+acc_reduced3 <- (cm_reduced3[1, 1] + cm_reduced3[2, 2])/(sum(cm_reduced3))
+err_reduced3 <- (cm_reduced3[1, 2] + cm_reduced3[2, 1])/(sum(cm_reduced3))
+acc_reduced3
+err_reduced3
+```
+
+
+Accuracy for Reduced Model 3: 0.5401975
+Error for Reduced Model 3: 0.4598025
+
+### Reduced Model 4
+
+$log \frac{\pi}{1-\pi} = \hat{\beta_0} + \hat{\beta_1}x_1  + \hat{\beta_3}x_3 + \hat{\beta_7}x_7 + \hat{\beta_8}x_8$
+
+VIF for Reduced Model 4:
+```{r}
+vif(reduced4)
+```
+
+ROC Curve for Reduced Model 4:
+```{r}
+preds_reduced4 <- predict(reduced4, newdata = test, type = "response")
+rates_reduced4 <- prediction(preds_reduced4, test$sex)
+roc_reduced4 <- performance(rates_reduced4, measure = "tpr", x.measure = "fpr")
+plot(roc_reduced4, main = "ROC Curve for Abalone Data")
+lines(x = c(0, 1), y = c(0, 1), col = "red")
+```
+
+AUC for Reduced Model 1:
+```{r}
+auc_reduced4 <- performance(rates_reduced4, measure = "auc")
+auc_reduced4@y.values
+```
+
+Confusion Matrix for Reduced Model 4:
+```{r}
+table(test$sex, preds_reduced4>0.5)
+```
+
+```{r}
+cm_reduced4 <- table(test$sex, preds_reduced4>0.5)
+acc_reduced4 <- (cm_reduced4[1, 1] + cm_reduced4[2, 2])/(sum(cm_reduced4))
+err_reduced4 <- (cm_reduced4[1, 2] + cm_reduced4[2, 1])/(sum(cm_reduced4))
+acc_reduced4
+err_reduced4
+```
+
+
+Accuracy for Reduced Model 4: 0.5401975
+Error for Reduced Model 4: 0.4598025
+
+### Reduced Model 5
+
+$log \frac{\pi}{1-\pi} = \hat{\beta_0} + \hat{\beta_2}x_2  + \hat{\beta_3}x_3 + \hat{\beta_4}x_4 + \hat{\beta_8}x_8$
+
+
+VIF for Reduced Model 5:
+```{r}
+vif(reduced5)
+```
+
+ROC Curve for Reduced Model 5:
+```{r}
+preds_reduced5 <- predict(reduced5, newdata = test, type = "response")
+rates_reduced5 <- prediction(preds_reduced5, test$sex)
+roc_reduced5 <- performance(rates_reduced5, measure = "tpr", x.measure = "fpr")
+plot(roc_reduced5, main = "ROC Curve for Abalone Data")
+lines(x = c(0, 1), y = c(0, 1), col = "red")
+```
+
+AUC for Reduced Model 5:
+```{r}
+auc_reduced5 <- performance(rates_reduced5, measure = "auc")
+auc_reduced5@y.values
+```
+
+Confusion Matrix for Reduced Model 5:
+```{r}
+table(test$sex, preds_reduced5>0.5)
+```
+
+```{r}
+cm_reduced3 <- table(test$sex, preds_reduced3>0.5)
+acc_reduced3 <- (cm_reduced3[1, 1] + cm_reduced3[2, 2])/(sum(cm_reduced3))
+err_reduced3 <- (cm_reduced3[1, 2] + cm_reduced3[2, 1])/(sum(cm_reduced3))
+acc_reduced3
+err_reduced3
+```
+
+
+Accuracy for Reduced Model 3: 0.5401975
+Error for Reduced Model 3: 0.4598025
+
+### Reduced Model 6:
+$log \frac{\pi}{1-\pi} = \hat{\beta_0} + \hat{\beta_2}x_2  + \hat{\beta_3}x_3 + \hat{\beta_5}x_5 + \hat{\beta_8}x_8$
+
+VIF for Reduced Model 6:
+```{r}
+vif(reduced6)
+```
+
+ROC Curve for Reduced Model 6:
+```{r}
+preds_reduced6 <- predict(reduced6, newdata = test, type = "response")
+rates_reduced6 <- prediction(preds_reduced6, test$sex)
+roc_reduced6 <- performance(rates_reduced6, measure = "tpr", x.measure = "fpr")
+plot(roc_reduced6, main = "ROC Curve for Abalone Data")
+lines(x = c(0, 1), y = c(0, 1), col = "red")
+```
+
+AUC for Reduced Model 6:
+```{r}
+auc_reduced6 <- performance(rates_reduced6, measure = "auc")
+auc_reduced6@y.values
+```
+
+Confusion Matrix for Reduced Model 6:
+```{r}
+table(test$sex, preds_reduced6>0.5)
+```
+
+```{r}
+cm_reduced3 <- table(test$sex, preds_reduced3>0.5)
+acc_reduced3 <- (cm_reduced3[1, 1] + cm_reduced3[2, 2])/(sum(cm_reduced3))
+err_reduced3 <- (cm_reduced3[1, 2] + cm_reduced3[2, 1])/(sum(cm_reduced3))
+acc_reduced3
+err_reduced3
+```
+
+
+Accuracy for Reduced Model 3: 0.5401975
+Error for Reduced Model 3: 0.4598025
+
+### Reduced Model 7:
+
+$log \frac{\pi}{1-\pi} = \hat{\beta_0} + \hat{\beta_2}x_2  + \hat{\beta_3}x_3 + \hat{\beta_6}x_6 + \hat{\beta_8}x_8$
+
+VIF for Reduced Model 7:
+```{r}
+vif(reduced7)
+```
+
+ROC Curve for Reduced Model 7:
+```{r}
+preds_reduced7 <- predict(reduced7, newdata = test, type = "response")
+rates_reduced7 <- prediction(preds_reduced7, test$sex)
+roc_reduced7 <- performance(rates_reduced7, measure = "tpr", x.measure = "fpr")
+plot(roc_reduced7, main = "ROC Curve for Abalone Data")
+lines(x = c(0, 1), y = c(0, 1), col = "red")
+```
+
+AUC for Reduced Model 7:
+```{r}
+auc_reduced7 <- performance(rates_reduced7, measure = "auc")
+auc_reduced7@y.values
+```
+
+Confusion Matrix for Reduced Model 7:
+```{r}
+table(test$sex, preds_reduced7>0.5)
+```
+
+```{r}
+cm_reduced3 <- table(test$sex, preds_reduced3>0.5)
+acc_reduced3 <- (cm_reduced3[1, 1] + cm_reduced3[2, 2])/(sum(cm_reduced3))
+err_reduced3 <- (cm_reduced3[1, 2] + cm_reduced3[2, 1])/(sum(cm_reduced3))
+acc_reduced3
+err_reduced3
+```
+
+
+Accuracy for Reduced Model 3: 0.5401975
+Error for Reduced Model 3: 0.4598025
+
+### Reduced Model 8:
+
+$log \frac{\pi}{1-\pi} = \hat{\beta_0} + \hat{\beta_2}x_2  + \hat{\beta_3}x_3 + \hat{\beta_7}x_7 + \hat{\beta_8}x_8$
+
+VIF for Reduced Model 8:
+```{r}
+vif(reduced8)
+```
+
+ROC Curve for Reduced Model 8:
+```{r}
+preds_reduced8 <- predict(reduced8, newdata = test, type = "response")
+rates_reduced8 <- prediction(preds_reduced8, test$sex)
+roc_reduced8 <- performance(rates_reduced8, measure = "tpr", x.measure = "fpr")
+plot(roc_reduced8, main = "ROC Curve for Abalone Data")
+lines(x = c(0, 1), y = c(0, 1), col = "red")
+```
+
+AUC for Reduced Model 8:
+```{r}
+auc_reduced8 <- performance(rates_reduced8, measure = "auc")
+auc_reduced8@y.values
+```
+
+Confusion Matrix for Reduced Model 8:
+```{r}
+table(test$sex, preds_reduced8>0.5)
+```
+
+```{r}
+cm_reduced8 <- table(test$sex, preds_reduced8>0.5)
+acc_reduced8 <- (cm_reduced8[1, 1] + cm_reduced8[2, 2])/(sum(cm_reduced8))
+err_reduced8 <- (cm_reduced8[1, 2] + cm_reduced8[2, 1])/(sum(cm_reduced8))
+acc_reduced8
+err_reduced8
+```
+
+
+Accuracy for Reduced Model 8: 0.5401975
+Error for Reduced Model 8: 0.4598025
+
+### Reduced Model 9:
+
+$log \frac{\pi}{1-\pi} = \hat{\beta_0} + \hat{\beta_2}x_2  + \hat{\beta_3}x_3 + \hat{\beta_7}x_7 + \hat{\beta_8}x_8$
+
+
+
+VIF for Reduced Model 8:
+```{r}
+vif(reduced9)
+```
+
+ROC Curve for Reduced Model 9:
+```{r}
+preds_reduced9 <- predict(reduced9, newdata = test, type = "response")
+rates_reduced9 <- prediction(preds_reduced9, test$sex)
+roc_reduced9 <- performance(rates_reduced9, measure = "tpr", x.measure = "fpr")
+plot(roc_reduced9, main = "ROC Curve for Abalone Data")
+lines(x = c(0, 1), y = c(0, 1), col = "red")
+```
+
+AUC for Reduced Model 9:
+```{r}
+auc_reduced9 <- performance(rates_reduced9, measure = "auc")
+auc_reduced9@y.values
+```
+
+Confusion Matrix for Reduced Model 9:
+```{r}
+table(test$sex, preds_reduced9>0.5)
+```
+
+Accuracy for Reduced Model 9:
+Error for Reduced Model 9:
+
+Finally, we can use automated stepwise regression using the "step" function to build a model that is based on AIC, and compare with the models from above. We have confirmed through the step function's documentation that "glm" class models are valid inputs.
+
+```{r}
+#regnull <- lm(rings~1, data = train)
+#regfull <- lm(rings~., data = train)
+#step(regnull, scope = list(lower = regnull, upper = regfull), direction = "both")
+```
+
+Stepwise regression suggests using all predictors, as that reduces AIC the most.
+
+
+Conclusion:
+Intuitively, the high correlation makes sense between variables. The older an abalone is, the larger it can be expected to 
