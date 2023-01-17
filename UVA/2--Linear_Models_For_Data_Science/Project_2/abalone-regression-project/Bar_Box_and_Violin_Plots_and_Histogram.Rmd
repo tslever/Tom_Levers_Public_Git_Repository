@@ -1,0 +1,129 @@
+---
+title: "Bar, Box, and Violin Plots and Histogram"
+author: "Tom Lever"
+date: 11/13/22
+output:
+  pdf_document: default
+  html_document: default
+urlcolor: blue
+linkcolor: red
+---
+
+```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+library(dplyr)
+library(ggplot2)
+data_set <- read.csv('Data_Set--Abalones--With_Column_Names.csv', header = TRUE)
+sex_and_proportion <-
+    data_set %>% select(sex) %>%
+    group_by(sex) %>%
+    summarize(count = n()) %>%
+    mutate(proportion = count / nrow(data_set))
+ggplot(sex_and_proportion, aes(x = sex, y = proportion)) +
+    geom_bar(stat = "identity", fill = "Blue", color = "Orange") +
+    labs(title = "Distributions of Abalone Marine Snails") +
+    theme(
+        plot.title = element_text(hjust = 0.5, size = 11),
+        axis.text.x = element_text(angle = 0)
+    )
+```
+
+```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+sex_and_mean_length <-
+    data_set %>%
+    select(sex, length) %>%
+    group_by(sex) %>%
+    summarize(mean_length = mean(length))
+ggplot(sex_and_mean_length, aes(x = sex, y = mean_length)) +
+    geom_bar(stat = "identity", fill = "Blue", color = "Orange") +
+    labs(
+        title = "Distributions of Abalones",
+        y = "mean length (mm)"
+    ) +
+    theme(
+        plot.title = element_text(hjust = 0.5, size = 11),
+        axis.text.x = element_text(angle = 0)
+    )
+```
+
+```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+ggplot(data_set, aes(y = diameter)) +
+    geom_boxplot(fill = "Blue", color = "Orange") +
+    labs(
+        y = "Diameter",
+        title = "Boxplot of Diameter"
+    ) +
+    theme(
+        plot.title = element_text(hjust = 0.5, size = 11),
+        axis.title.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.text.x = element_blank()
+    )
+```
+
+```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+ggplot(data_set, aes(x = sex, y = height)) +
+    geom_boxplot(fill = "Blue", color = "Orange") +
+    labs(
+        x = "sex",
+        y = "height",
+        title = "Boxplot of Height by Sex"
+    ) +
+    theme(
+        plot.title = element_text(hjust = 0.5, size = 11),
+    )
+```
+
+```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+ggplot(data_set, aes(x = sex, y = whole_weight)) +
+    geom_violin(fill = "Blue", color = "Orange") +
+    labs(
+        x = "sex",
+        y = "whole weight",
+        title = "Violin Plot of Whole Weight by Sex"
+    ) +
+    theme(
+        plot.title = element_text(hjust = 0.5, size = 11),
+    )
+```
+
+```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+ggplot() +
+    geom_histogram(data = data_set, aes(x = shucked_weight, y = ..density..), binwidth = density(data_set$shucked_weight)$bw, fill = "Blue", color = "Orange") +
+    geom_density(data = data_set, aes(x = shucked_weight), color = "Orange") +
+    labs(
+        x = "weight",
+        y = "probability density",
+        title = "Histogram and Probability Density of Distribution of Shucked Weight"
+    ) +
+    theme(
+        plot.title = element_text(hjust = 0.5, size = 11),
+        axis.text.x = element_text(angle = 0)
+    )
+```
+
+```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+ggplot(data_set, aes(x = sex, y = shell_weight)) +
+    geom_boxplot(fill = "Blue", color = "Orange") +
+    labs(
+        x = "sex",
+        y = "viscera weight",
+        title = "Boxplot of Viscera Weight by Sex and Rings"
+    ) +
+    theme(
+        plot.title = element_text(hjust = 0.5, size = 11),
+    ) +
+    facet_wrap(~rings)
+```
+
+```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+ggplot(data_set, aes(x = sex, y = viscera_weight, fill = as.factor(rings))) +
+    geom_boxplot() +
+    labs(
+        x = "sex",
+        y = "viscera weight",
+        title = "Boxplot of Viscera Weight by Sex and Rings"
+    ) +
+    theme(
+        plot.title = element_text(hjust = 0.5, size = 11),
+    )
+```
