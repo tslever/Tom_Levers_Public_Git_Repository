@@ -1,0 +1,29 @@
+test_generate_data_frame_of_face_combinations_and_counts (__main__.TestAnalyzer)
+Tests Analyzer.generate_data_frame_of_face_combinations_and_counts ... ok
+test_generate_data_frame_of_rolls_and_face_counts (__main__.TestAnalyzer)
+Tests Analyzer.generate_data_frame_of_rolls_and_face_counts ... ok
+test_get_number_of_rolls_where_all_dice_have_the_same_face (__main__.TestAnalyzer)
+Tests Analyzer.test_get_number_of_rolls_where_all_dice_have_the_same_face ... ok
+test_init (__main__.TestAnalyzer)
+Tests Analyzer.__init__ ... ok
+test_play (__main__.TestAnalyzer)
+Tests Analyzer.play ... ok
+test_change_weight (__main__.TestDie)
+Tests Die.change_weight ... ok
+test_init (__main__.TestDie)
+Tests Die.__init__ ... ok
+test_roll (__main__.TestDie)
+Tests Die.roll ... ok
+test_show (__main__.TestDie)
+Tests Die.show ... ok
+test_init (__main__.TestGame)
+Tests Game.__init__ ... ok
+test_play (__main__.TestGame)
+Tests Game.play ... ok
+test_show (__main__.TestGame)
+Tests Game.show ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.421s
+
+OK
