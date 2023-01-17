@@ -1,0 +1,454 @@
+---
+title: "Model_Selection_Of_Abalones"
+author: "Brook Tarekegn Assefa"
+date: "2022-11-14"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+## Model Selection Of Abalones
+
+
+### Import the necessary packages 
+```{r,echo=FALSE, include=FALSE}
+library(leaps)
+library(ggplot2)
+library(tidyverse)
+library(MASS)
+```
+
+# Import the data and look at the first six rows
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 5.3, fig.height = 3.8, fig.align='center'}
+Data <- read.csv('Data_Set--Abalones--With_Column_Names.csv', header = TRUE)
+head(Data)
+```
+
+# Let us first look at the Histogram of the rings Dataset, it seems to be slightly 
+right skewed
+
+```{r}
+hist(Data$rings)
+```
+
+
+### First, perform all possible regressions
+
+The age and number of rings of a blacklip abalone has a moderate correlation 
+with all variables other than sex and shucked weight of the abalone,
+for which correlation is low.
+
+***The following order was suggested in our proposal: shell weight, shucked***
+***weight, diameter, whole weight, sex, viscera weight, and height. ***
+As we can observer the if we consider one predictor model, 
+what is the best one predictor?
+This turns out to be the shell_weight as stated in our proposal.
+If I consider two predictive model what turned out to be the best two predictive 
+model are shell weight and shucked weight respectively; and the process goes on 
+as per the suggested order.
+```{r}
+allregressions <- regsubsets(rings~., force.out=NULL, data=Data, nbest=1) 
+summary(allregressions)
+```
+From this we would like to extract the best model based on the following criteria:-  
+**criteria 1**:- Having High/Maximum Adjusted R Squared value  
+**criteria 2**:- Having Low Mallow's CP  
+**criteria 3**:- Having Low BIC 
+The Mallow's Cp and BIC are usually similar. 
+ 
+### These can now be extracted from the summary
+```{r}
+names(summary(allregressions))
+```
+### adjusted R 2 ?
+```{r}
+which.max(summary(allregressions)$adjr2)
+```
+### Mallow’s Cp ?
+```{r}
+which.min(summary(allregressions)$cp)
+```
+### BIC ?
+```{r}
+which.min(summary(allregressions)$bic)
+```
+Based on the above response of the *allregressions object* we can observe that 
+Model 7 has the best adjusted R2 , Mallow's Cp and BIC. Therefore we can get
+the corresponding coefficients and predictors of these models, and they all 
+have shell_weight, sex, diameter, height, whole_weight, shucked_weight and 
+viscera_weight.
+Since Model 7 is the best model selected we can get the coefficient as follows:- 
+```{r}
+coef(allregressions, which.max(summary(allregressions)$adjr2))
+```
+We will then use the **Forward selection** , **Backward Selection** and 
+the **Bidirectional selection** to find the best model according to AIC?
+### Intercept only model
+```{r}
+regnull <- lm(rings~1, data=Data)
+```
+### Model with all predictors
+```{r}
+regfull <- lm(rings~., data=Data)
+```
+### Let us first carry out the  **Forward selection**.
+```{r}
+step(regnull, scope=list(lower=regnull, upper=regfull), direction="forward")
+```
+Therefore we can understand from the **Forward selection** all predictors are included 
+except the **length predictor**. Indicating that the seven predictors listed below 
+are significant predictors.
+### Therefore the regression equation selected is as the following for y hat:- 
+$$
+\hat{y} = 3.87038 + 8.75078x_1 -19.80258x_2 + 10.56951 x_3 + 8.97751x_4 -0.76889x_5
+-10.61279x_6 + 10.74911x_7
+$$
+### Let us now carry out the  **Backward selection**.
+```{r}
+step(regfull, scope=list(lower=regnull, upper=regfull), direction="backward")
+```
+Therefore we can understand from the **Backward selection** also includes all predictors 
+except the **length predictor**. Indicating that the seven predictors listed below 
+are significant predictors. T
+### Therefore the regression equation selected is as the following for y hat:- 
+$$
+\hat{y} = 3.87038 + 8.75078x_1 -19.80258x_2 + 10.56951 x_3 + 8.97751x_4 -0.76889x_5
+-10.61279x_6 + 10.74911x_7
+$$
+This doesn't help much as it is similar to the forward selection. 
+Since in our proposal we have mentioned that the observed correlation among the 
+rings has a moderate correlation with all variables other than
+sex and shucked weight of the abalone. We would like to force out these values and perform the 
+**Backward selection**.
+```{r}
+data_set_with_numeric_sex <-
+    Data %>%
+    mutate(sex = replace(sex, sex == 'M', 0)) %>%
+    mutate(sex = replace(sex, sex == 'F', 1)) %>%
+    mutate(sex = replace(sex, sex == 'I', 2))
+data_set_with_numeric_sex$sex <- as.numeric(data_set_with_numeric_sex$sex)
+correlation_matrix <- cor(data_set_with_numeric_sex)
+correlation_matrix
+```
+### Model with all predictors except excluding the sex and shucked weight of the abalone.
+```{r}
+regfull_excluding_sex_shucked_weight <- lm(rings~ diameter+height+whole_weight+viscera_weight+shell_weight+length, data=Data)
+```
+### Perform the Backward elimination from the regfull
+```{r}
+step(regfull_excluding_sex_shucked_weight, scope=list(lower=regnull, upper=regfull_excluding_sex_shucked_weight), direction="backward")
+```
+After excluding the sex and shucked_weight we can observe that this change has rendered 
+the **viscera weight** as insignificant predictor.
+### Therefore our adjusted regression equation for y hat is :- 
+$$
+\hat{y} = 3.702 + 14.387x_1 + 13.085x_2 - 5.959x_3 + 26.202x_4 -5.308x_5
+$$
+ If We would like to force out the sex and shucked weight of the abalone 
+ and perform the **Bidirectional selection**, we would have found the same result 
+ as the one stated above.
+ 
+ 
+But if we do perform the **Forward selection** we can see that the *viscera_weight*
+weight is considered as a significant predictor , 
+which was dropped by **Backward and Bidirectional selections.**
+```{r}
+step(regfull_excluding_sex_shucked_weight, scope=list(lower=regnull, upper=regfull_excluding_sex_shucked_weight), direction="forward")
+```
+### Therefore our Forward selection regression equation for y hat is :- 
+$$
+\hat{y} = 3.674 + 14.318x_1 + 13.176x_2 - 5.671x_3 -1.203x_4 + 26.017x_5 -5.183x_6  
+$$
+ 
+ 
+**Forward selection**:- 
+$$
+x_1 , x_2 , x_3 ,x_4 ,x_5 , x_6  
+$$
+**Backward elimination** and **Bidirectional regression** 
+$$
+x_1 , x_2 , x_3 ,x_4 ,x_5
+$$
+"***Berk [1978]*** has noted that **forward selection**
+tends to agree with all possible regressions for **small subset sizes** but not for large
+ones, while **backward elimination** tends to agree with all possible regressions for
+large subset sizes but not for small ones." 
+Based on this our final regression equation and the model selection based on the AIC is 
+excluding the  **viscera weight** (which is of a blacklip abalone is the gut weight after bleeding.)
+When thinking logically about it , it seems like it does not have any relation
+with the age of an abalone at all.
+$$
+\hat{y} = 3.702 + 14.387x_1 + 13.085x_2 - 5.959x_3 + 26.202x_4 -5.308x_5
+$$
+
+
+## We will now perform Non-linear transformation on the variables to improve the regression results.  
+
+Let us perform the residual plot and see which of linear regressions model assumptions 
+are met and/or if we do need improvement transformation.
+
+```{r, eval=TRUE, echo=FALSE, results="show", message=FALSE, fig.width = 5.3, fig.height = 3.8, fig.align='center'}
+linear_model <- lm(rings ~ length + diameter + height + shell_weight , data = Data)
+ggplot(
+    data.frame(
+        the_residuals = linear_model$residuals,
+        predicted_rings = linear_model$fitted.values
+    ),
+    aes(x = predicted_rings, y = the_residuals)
+) +
+    geom_point(alpha = 0.2) +
+    geom_hline(yintercept = 0, color = "red") +
+    labs(
+        x = "predicted number of rings",
+        y = "externally studentized residual",
+        title = "Residuals vs. Predicted Number of Rings\nfor Length, Diameter, Height, and Shell Weight"
+    ) +
+theme(
+    plot.title = element_text(hjust = 0.5, size = 11),
+    axis.text.x = element_text(angle = 0)
+)
+```
+
+ 
+ 
+ 
+# Let us first attempt the Box Cox Transformation on the response variable y (rings).
+
+$$
+The \ Transformation \ takes\ the\ form\: y^* = y^\lambda
+$$
+
+$$
+if\: \lambda = 0 , \:we \: perform \: a \: log \:transformation 
+$$
+
+
+
+```{r}
+boxcox(linear_model)
+```
+
+ The result suggest that we have 0 within range and that we can perform a log 
+ transformation to linearize the non-random right funnel like distribution. 
+ 
+ For a better observation to see that the lambda lies between the 3 dotted vertical lines,
+ we will zoom in on the plot.
+ 
+```{r}
+boxcox(linear_model, lambda = seq(-0.5,0.5,1/10))
+```
+ 
+ Therefore let us now perform the log transformation on the Dataset.
+```{r} 
+data_to_transform <-  Data[, c(2,3,4,8)]
+head(data_to_transform)
+```
+## Since based on the properities of logrithm we can not take the logarithm of a 
+negative number or of zero we will add the constant value of 1 to all the values 
+of length , diameter , height and shell weight.
+
+```{r}
+data_to_transform <-  data_to_transform + 1
+head(data_to_transform)
+```
+
+## We can now perform the Log transform 
+
+```{r}
+xstar <- log(data_to_transform)
+```
+
+## Append the transformed data to the main Dataset 
+```{r}
+Data<-data.frame(Data,xstar)
+```
+
+## Regress the response variable of rings on the transformed regressors
+
+```{r}
+head(Data)
+Data.xstar<-lm(rings~length.1+diameter.1+height.1+shell_weight.1, data=Data)
+```
+
+
+## Extract the y hat and the residuals
+```{r}
+yhat2<-Data.xstar$fitted.values
+res2<-Data.xstar$residuals
+```
+
+
+## Add the y hat and the residuals to the data frame
+```{r}
+Data<-data.frame(Data,yhat2,res2)
+```
+
+
+## Residual plot with xstar
+
+```{r}
+ggplot(Data, aes(x=yhat2,y=res2))+
+  geom_point()+
+  geom_hline(yintercept=0, color="red")+
+  labs(x="Fitted y", y="Residuals", title="Residual Plot with xstar")
+```
+
+
+## We can observe improvement on the Residuals more evenly scattered across horizontal line.
+## The Vertical spread appears constant ; thus the assumptions 1 and 2 both met. 
+
+## ACF Plot of residuals went over the blue dotted line; but this occured because
+## we add 1 to all the data values previously.
+```{r} 
+acf(res2, main="ACF Plot of Residuals with xstar")
+```
+ 
+
+## QQ plot of residuals
+```{r}
+qqnorm(res2)
+```
+
+
+# Confidence Intervals
+
+Create a 95-percent confidence family of confidence intervals for the difference
+in the expected value of the mean number of rings for **male and infant**,
+**female and infant**, and **female and male abalones**?
+
+For a given $shell \ weight$, a male blacklip abalone has a number of rings that is a factor of $exp(\beta_2)$ larger than an infant abalone. A female blacklip abalone has a number of rings that is a factor of $exp(\beta_3)$ larger than an infant abalone. A female blacklip abalone has a number of rings that is a factor of $exp(\beta_3 - \beta_2)$ larger than a male abalone.
+
+```{r}
+head(Data)
+```
+
+```{r}
+class(Data$rings)
+```
+
+```{r}
+class(Data$sex)
+```
+
+```{r}
+Data$sex <- factor(Data$sex)
+```
+
+```{r}
+levels(Data$sex) 
+```
+
+
+```{r}
+boxplot(sex=="M" ~ rings, data=Data)
+```
+
+
+```{r}
+boxplot(sex=="F" ~ rings, data=Data)
+```
+
+ 
+ 
+```{r}
+boxplot(sex=="I" ~ rings, data=Data)
+```
+ 
+ Let us decide if we would like to make the assumptions that the population
+ variances are equal or non-equal from the Box plot above. We can observe a close
+ similarity between male and female, But a there seems that their is a large variation in number of rings in Infant group.  
+ 
+ Thus we need to compare the actual variance in each sex group.
+ 
+```{r}
+var(Data$rings[Data$sex=="M"])
+```
+ 
+```{r}
+var(Data$rings[Data$sex=="F"])
+```
+ 
+```{r}
+var(Data$rings[Data$sex=="I"])
+```
+ 
+ 
+ Although it is small we can observe the variance difference between the 
+male and female group , and also the smaller Infant group. Thus we conclude that we have evidence to believe that the population variances are non-equal and we will 
+use the non-equal assumption in our t-test.
+
+**T-test for number of rings against the Male blacklip abalone.**
+
+```{r}
+t.test(Data$sex=="M", Data$rings,
+       alternative ="two.sided",
+       mu = 0, paired = FALSE, var.equal = FALSE,
+       conf.level = 0.95)
+```
+
+
+**T-test for number of rings against the Female blacklip abalone.**
+
+```{r}
+t.test(Data$sex=="F", Data$rings,
+       alternative ="two.sided",
+       mu = 0, paired = FALSE, var.equal = FALSE,
+       conf.level = 0.95)
+```
+
+**T-test for number of rings against the Infant blacklip abalone.**
+
+```{r}
+t.test(Data$sex=="I", Data$rings,
+       alternative ="two.sided",
+       mu = 0, paired = FALSE, var.equal = FALSE,
+       conf.level = 0.95)
+```
+ 
+ **T-test for number of rings of Male against the Infant blacklip abalone.**
+
+```{r}
+t.test(Data$sex=="M", Data$sex=="I",
+       alternative ="two.sided",
+       mu = 0, paired = FALSE, var.equal = FALSE,
+       conf.level = 0.95)
+```
+ 
+  **T-test for number of rings of Female against the Infant blacklip abalone.**
+
+```{r}
+t.test(Data$sex=="F", Data$sex=="I",
+       alternative ="two.sided",
+       mu = 0, paired = FALSE, var.equal = FALSE,
+       conf.level = 0.95)
+```
+
+ **T-test for number of rings of Male against the Female blacklip abalone.**
+
+```{r}
+t.test(Data$sex=="M", Data$sex=="F",
+       alternative ="two.sided",
+       mu = 0, paired = FALSE, var.equal = FALSE,
+       conf.level = 0.95)
+```
+ 
+ The 95% Confidence Interval for the Model that includes:
+ 
+$$
+E(Y|x) = \beta_0 + \beta_1length + \beta_2diameter + \beta_3height + \beta_4shellweight
+$$ 
+ 
+ 
+ 
+$$ 
+Confidence Interval = Sample Statistic ± t \ Multiplier ×  Standard \ deviation \\
+CI= \bar{x} ±  t^* × \frac{s}{\sqrt{n}}
+$$
+
+
+
+ 
+```{r}
+confint(linear_model, level=0.95)
+```
