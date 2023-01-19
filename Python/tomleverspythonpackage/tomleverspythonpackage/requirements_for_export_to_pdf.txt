@@ -1,0 +1,4 @@
+traitlets==5.5.0
+nbformat==5.7.0
+nbconvert==7.2.2
+ipython==8.5.0

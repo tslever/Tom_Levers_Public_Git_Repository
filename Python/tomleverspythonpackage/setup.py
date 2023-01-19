@@ -3,19 +3,19 @@ from setuptools import setup
 setup(
     name='tomleverspythonpackage',
     version='0.1.0',
-    description='Contains Tom Lever\'s Python objects',
-    url='https://github.com/tslever/tree/main/tomleverspythonpackage',
     author='Tom Lever',
     author_email='thomas.lever.business@gmail.com',
-    license='BSD 2-clause',
     packages=['tomleverspythonpackage'],
+    url='https://github.com/tslever/Tom_Levers_Git_Repository/tree/main/Python/tomleverspythonpackage',
+    license='MIT License',
+    description='A Python package offering Tom Lever\'s Python solutions',
+    long_description=open('README.md').read(),
     install_requires=[],
     classifiers=[
-        'Development Status :: 1 - Planning',
+        'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Science/Research',
-        'License :: OSI Approved :: BSD License',
+        'License :: OSI Approved :: MIT License',
         'Operating System :: POSIX :: Linux',
-        'Programming Language :: Python :: 3.9',
-        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11'
     ]
 )
