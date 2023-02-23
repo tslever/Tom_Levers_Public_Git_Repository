@@ -1,0 +1,82 @@
+Column No.	Column name	Data type	Varies By	Calculated from other columns?	Description
+0	game_id	object	Game	No	Unique ID for one NBA game
+1	game_date	object	Game	No	Date in YYYY-MM-DD format
+2	OT	int64	Game	No	Boolean: did the game go into overtime?
+3	H_A	object	Game and Team	No	Is the team playing at home or away in this game?
+4	Team_Abbrev	object	Team	No	Team
+5	Team_Score	int64	Team	No	Team's score in this game
+6	Team_pace	float64	Game and Team	No	Pace Calculation Formula=[240/(Team Minutes)]*(Possession_team + Possession_opponent)/2
+7	Team_efg_pct	float64	Game and Team	Yes	Effective Field Goal Percentage Formula=[(All Field Goals Made) + 0.5*(3P Field Goals Made)]/(All Field Goal Attempts)
+8	Team_tov_pct	float64	Game and Team	Yes	Turnover Ratio Formula=(Turnovers)100)/ [(Field Goal Attempts)+(Free Throw Attempts0.44)+(Assists)+(Turnovers)]
+9	Team_orb_pct	float64	Game and Team	Yes	Offensive Rebounding Percentage Formula=(Offensive Rebounds)/[(Offensive Rebounds)+(Opponent’s Defensive Rebounds)]
+10	Team_ft_rate	float64	Game and Team	Yes	Free Throw Rate Formula= (Total Free Throws Attempted) / (Total Field Goal Attempted)]
+11	Team_off_rtg	float64	Game and Team	No	Offensive Efficiency Formula=100*(Points Scored / Possessions)
+12	Inactives	object	Game and Team	Yes	List of inactive players
+13	Opponent_Abbrev	object	Game and Team	No	Opponent team
+14	Opponent_Score	int64	Game and Team	No	Opponent's score
+15	Opponent_pace	float64	Game and Team	Yes	Pace Calculation Formula=[240/(Team Minutes)]*(Possession_team + Possession_opponent)/2
+16	Opponent_efg_pct	float64	Game and Team	Yes	Effective Field Goal Percentage Formula=[(All Field Goals Made) + 0.5*(3P Field Goals Made)]/(All Field Goal Attempts)
+17	Opponent_tov_pct	float64	Game and Team	Yes	Turnover Ratio Formula=(Turnovers)100)/ [(Field Goal Attempts)+(Free Throw Attempts0.44)+(Assists)+(Turnovers)]
+18	Opponent_orb_pct	float64	Game and Team	Yes	Offensive Rebounding Percentage Formula=(Offensive Rebounds)/[(Offensive Rebounds)+(Opponent’s Defensive Rebounds)]
+19	Opponent_ft_rate	float64	Game and Team	Yes	Free Throw Rate Formula= (Total Free Throws Attempted) / (Total Field Goal Attempted)]
+20	Opponent_off_rtg	float64	Game and Team	No	Offensive Efficiency Formula=100*(Points Scored / Possessions)
+21	player	object	Player	No	Name of player
+22	player_id	object	Player	No	Unique ID for the player
+23	starter	int64	Game and Player	No	Binary: did this player start the game?
+24	mp	object	Game and Player	No	Minutes played in MM:SS format
+25	fg	int64	Game and Player	No	Number of field goals (shots other than free throws) made
+26	fga	int64	Game and Player	No	Number of field goals (shots other than free throws) attempted
+27	fg_pct	float64	Game and Player	Yes	Field goal percentage formula = (fg / fga)
+28	fg3	int64	Game and Player	No	Three-point field goals made
+29	fg3a	int64	Game and Player	No	Three-point field goals attempted
+30	fg3_pct	float64	Game and Player	Yes	Three-point field goal percentage formula = (fg3 / fg3a)
+31	ft	int64	Game and Player	No	Free throws made
+32	fta	int64	Game and Player	No	Free throws attempted
+33	ft_pct	float64	Game and Player	Yes	Free throw percentage formula = (ft / fta)
+34	orb	int64	Game and Player	No	Offensive rebounds
+35	drb	int64	Game and Player	No	Defensive rebounds
+36	trb	int64	Game and Player	Yes	Total rebounds
+37	ast	int64	Game and Player	No	Assists
+38	stl	int64	Game and Player	No	Steals
+39	blk	int64	Game and Player	No	Blocks
+40	tov	int64	Game and Player	No	Turnovers
+41	pf	int64	Game and Player	No	Personal fouls
+42	pts	int64	Game and Player	No	Points
+43	plus_minus	int64	Game and Player	No	Total team score minus total opponent team score for the minutes in which this player was in the game
+44	did_not_play	int64	Game and Player	No	1 if the player did not play, 0 if the player played at all
+45	is_inactive	int64	Game and Player	No	1 if the player was inactive, 0 if the player was available to play
+46	ts_pct	float64	Game and Player	Yes	True Shooting Percentage Formula=0.5(Total Points)/[(Total Field Goal Attempts) + 0.44(Total Free Throw Attempts)]
+47	efg_pct	float64	Game and Player	Yes	Effective Field Goal Percentage Formula=[(All Field Goals Made) + 0.5*(3P Field Goals Made)]/(All Field Goal Attempts)
+48	fg3a_per_fga_pct	float64	Game and Player	Yes	Formula = (fg3a / fga)
+49	fta_per_fga_pct	float64	Game and Player	Yes	Formula = (fta / fga)
+50	orb_pct	float64	Game and Player	Yes	Formula = 100 * (player's orb / team orb)
+51	drb_pct	float64	Game and Player	Yes	Formula = 100 * (player's drb / team drb)
+52	trb_pct	float64	Game and Player	Yes	Formula = 100 * (player's trb / team trb)
+53	ast_pct	float64	Game and Player	Yes	Formula = 100 * (player's ast / team ast)
+54	stl_pct	float64	Game and Player	Yes	Formula = 100 * (player's stl / team stl)
+55	blk_pct	float64	Game and Player	Yes	Formula = 100 * (player's blk / team blk)
+56	tov_pct	float64	Game and Player	Yes	Formula = 100 * (player's tov / team tov)
+57	usg_pct	float64	Game and Player	Yes	Usage rate, aka NBA usage percentage, is an estimate of the percentage of team plays used by a player while he was on the floor. Usage rate can be calculated with how a possession ends: “field-goal or free-throw attempt, or a turnover. Usage Rate Calculation Formula = 100((Player’s Field Goal Attempts)+0.44(Player’s Free Throw Attempts)+(Player’s Turnovers))(Team’s Total Minutes)/((Team’s Total Field Goal Attempts)+0.44(Team’s Total Free Throw Attempts)+Team’s Total Turnovers))5(Player’s Minutes)
+58	off_rtg	int64	Game and Player	No	Number of team points per 48 minutes while this player was on the floor.
+59	def_rtg	int64	Game and Player	No	Number of opponent team's points per 48 minutes while this player was on the floor.
+60	bpm	float64	Game and Player	No	Box plus-minus takes box score stats from an individual and tries to estimate player performance relative to the NBA average. Since BPM is a per-100-possession stat where 0.0 is league average, +5 means the player is 5 points better than an average player over 100 possessions (which is about All-NBA level), -2 is replacement level, and -5 is really bad.
+61	season	int64	Game	Yes	Year in which the season ended. For the 2021-2022 season this value is 2022
+62	minutes	float64	Game and Player	No	Minutes the player was in the game
+63	double_double	int64	Game and Player	Yes	Binary: did the player record double digits in two of points, rebounds, assists, steals, and blocks?
+64	triple_double	int64	Game and Player	Yes	Binary: did the player record double digits in three of points, rebounds, assists, steals, and blocks?
+65	DKP	float64	Game and Player	Yes	Fantasy points scored by this player on DraftKings.com
+66	FDP	float64	Game and Player	Yes	Fantasy points scored by this player on FanDuel.com
+67	SDP	float64	Game and Player	Yes	Fantasy points scored by this player on another sports betting website (I'm not sure what SD is though)
+68	DKP_per_minute	object	Game and Player	Yes	DKP / minutes
+69	FDP_per_minute	object	Game and Player	Yes	FDP / minutes
+70	SDP_per_minute	object	Game and Player	Yes	SDP / minutes
+71	pf_per_minute	float64	Game and Player	Yes	pf / minutes
+72	ts	float64	N/A	N/A	(Not sure what this column is. We'll delete it)
+73	last_60_minutes_per_game_starting	float64	N/A	N/A	(Not sure what this column is. We'll delete it)
+74	last_60_minutes_per_game_bench	float64	N/A	N/A	(Not sure what this column is. We'll delete it)
+75	PG%	float64	Game and Player	No	% of player's minutes playing the point guard position
+76	SG%	float64	Game and Player	No	% of player's minutes playing the point guard position
+77	SF%	float64	Game and Player	No	% of player's minutes playing the point guard position
+78	PF%	float64	Game and Player	No	% of player's minutes playing the power forward position
+79	C%	float64	Game and Player	Yes	% of player's minutes playing the center position
+80	active_position_minutes	float64	N/A	N/A	(Not sure what this column is. We'll delete it)
