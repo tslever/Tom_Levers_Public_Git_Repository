@@ -1,0 +1,5 @@
+﻿atomic_number,chemical_symbol,name,type,url,atomic_mass,standard_state,electron_configuration,oxidation_states,electronegativity,atomic_radius,ionization_energy,electron_affinity,melting_point,boiling_point,density,year_discovered
+1,H,Hydrogen,Nonmetal,https://pubchem.ncbi.nlm.nih.gov/element/1,1.008,Gas,1s1,"+1,-1",2.2,120,13.598,0.754,13.81,20.28,0.00008988,1766
+2,He,Helium,Noble Gas,https://pubchem.ncbi.nlm.nih.gov/element/2,4.0026,Gas,1s2,0,,140,24.587,,0.95,4.22,0.0001785,1868
+2,Li,Lithium,Alkali Metal,https://pubchem.ncbi.nlm.nih.gov/element/3,7,Solid,[He]2s1,1,0.98,182,5.392,0.618,453.65,1615,0.534,1817
+6,C,Carbon,Nonmetal,https://pubchem.ncbi.nlm.nih.gov/element/6,12.011,Solid,[He]2s22p2,"+4,+2,-4",2.55,170,11.26,1.263,3823,4098,2.267,Ancient
