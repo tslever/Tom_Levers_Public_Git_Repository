@@ -1,0 +1,1000 @@
+[{"report_date":"2023-04-18T00:00:00.000","fips":"51001","locality":"Accomack","vdh_health_district":"Eastern Shore","total_cases":"9197","hospitalizations":"472","deaths":"120"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51003","locality":"Albemarle","vdh_health_district":"Blue Ridge","total_cases":"25612","hospitalizations":"507","deaths":"209"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51005","locality":"Alleghany","vdh_health_district":"Alleghany","total_cases":"4578","hospitalizations":"113","deaths":"112"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51007","locality":"Amelia","vdh_health_district":"Piedmont","total_cases":"3603","hospitalizations":"186","deaths":"64"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51009","locality":"Amherst","vdh_health_district":"Central Virginia","total_cases":"9728","hospitalizations":"476","deaths":"114"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51011","locality":"Appomattox","vdh_health_district":"Central Virginia","total_cases":"5064","hospitalizations":"242","deaths":"62"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51013","locality":"Arlington","vdh_health_district":"Arlington","total_cases":"67098","hospitalizations":"1370","deaths":"369"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51015","locality":"Augusta","vdh_health_district":"Central Shenandoah","total_cases":"24687","hospitalizations":"641","deaths":"239"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51017","locality":"Bath","vdh_health_district":"Central Shenandoah","total_cases":"1086","hospitalizations":"22","deaths":"21"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51019","locality":"Bedford","vdh_health_district":"Central Virginia","total_cases":"22333","hospitalizations":"777","deaths":"288"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51021","locality":"Bland","vdh_health_district":"Mount Rogers","total_cases":"2428","hospitalizations":"79","deaths":"25"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51023","locality":"Botetourt","vdh_health_district":"Alleghany","total_cases":"10055","hospitalizations":"167","deaths":"118"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51025","locality":"Brunswick","vdh_health_district":"Southside","total_cases":"4107","hospitalizations":"82","deaths":"54"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51027","locality":"Buchanan","vdh_health_district":"Cumberland Plateau","total_cases":"6226","hospitalizations":"236","deaths":"150"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51029","locality":"Buckingham","vdh_health_district":"Piedmont","total_cases":"5013","hospitalizations":"182","deaths":"64"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51031","locality":"Campbell","vdh_health_district":"Central Virginia","total_cases":"17814","hospitalizations":"773","deaths":"238"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51033","locality":"Caroline","vdh_health_district":"Rappahannock","total_cases":"9088","hospitalizations":"130","deaths":"95"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51035","locality":"Carroll","vdh_health_district":"Mount Rogers","total_cases":"9910","hospitalizations":"441","deaths":"178"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51036","locality":"Charles City","vdh_health_district":"Chickahominy","total_cases":"1729","hospitalizations":"90","deaths":"31"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51037","locality":"Charlotte","vdh_health_district":"Piedmont","total_cases":"3475","hospitalizations":"203","deaths":"49"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51041","locality":"Chesterfield","vdh_health_district":"Chesterfield","total_cases":"100651","hospitalizations":"1778","deaths":"875"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51043","locality":"Clarke","vdh_health_district":"Lord Fairfax","total_cases":"3541","hospitalizations":"125","deaths":"57"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51045","locality":"Craig","vdh_health_district":"Alleghany","total_cases":"1453","hospitalizations":"37","deaths":"25"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51047","locality":"Culpeper","vdh_health_district":"Rappahannock Rapidan","total_cases":"14513","hospitalizations":"321","deaths":"179"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51049","locality":"Cumberland","vdh_health_district":"Piedmont","total_cases":"1860","hospitalizations":"116","deaths":"30"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51051","locality":"Dickenson","vdh_health_district":"Cumberland Plateau","total_cases":"4924","hospitalizations":"104","deaths":"71"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51053","locality":"Dinwiddie","vdh_health_district":"Crater","total_cases":"7587","hospitalizations":"350","deaths":"109"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51057","locality":"Essex","vdh_health_district":"Three Rivers","total_cases":"2863","hospitalizations":"102","deaths":"43"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51059","locality":"Fairfax","vdh_health_district":"Fairfax","total_cases":"263108","hospitalizations":"5213","deaths":"1721"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51061","locality":"Fauquier","vdh_health_district":"Rappahannock Rapidan","total_cases":"16717","hospitalizations":"550","deaths":"164"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51063","locality":"Floyd","vdh_health_district":"New River","total_cases":"3734","hospitalizations":"112","deaths":"55"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51065","locality":"Fluvanna","vdh_health_district":"Blue Ridge","total_cases":"6938","hospitalizations":"169","deaths":"54"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51067","locality":"Franklin County","vdh_health_district":"West Piedmont","total_cases":"14206","hospitalizations":"484","deaths":"229"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51069","locality":"Frederick","vdh_health_district":"Lord Fairfax","total_cases":"26933","hospitalizations":"740","deaths":"291"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51071","locality":"Giles","vdh_health_district":"New River","total_cases":"5315","hospitalizations":"153","deaths":"60"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51073","locality":"Gloucester","vdh_health_district":"Three Rivers","total_cases":"9706","hospitalizations":"131","deaths":"116"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51075","locality":"Goochland","vdh_health_district":"Chickahominy","total_cases":"5834","hospitalizations":"167","deaths":"64"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51077","locality":"Grayson","vdh_health_district":"Mount Rogers","total_cases":"5690","hospitalizations":"231","deaths":"98"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51079","locality":"Greene","vdh_health_district":"Blue Ridge","total_cases":"5114","hospitalizations":"212","deaths":"65"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51081","locality":"Greensville","vdh_health_district":"Crater","total_cases":"3927","hospitalizations":"157","deaths":"45"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51083","locality":"Halifax","vdh_health_district":"Southside","total_cases":"9765","hospitalizations":"287","deaths":"194"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51085","locality":"Hanover","vdh_health_district":"Chickahominy","total_cases":"29258","hospitalizations":"951","deaths":"348"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51087","locality":"Henrico","vdh_health_district":"Henrico","total_cases":"92778","hospitalizations":"1783","deaths":"1086"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51089","locality":"Henry","vdh_health_district":"West Piedmont","total_cases":"16153","hospitalizations":"678","deaths":"331"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51091","locality":"Highland","vdh_health_district":"Central Shenandoah","total_cases":"497","hospitalizations":"13","deaths":"6"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51093","locality":"Isle of Wight","vdh_health_district":"Western Tidewater","total_cases":"9285","hospitalizations":"281","deaths":"130"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51095","locality":"James City","vdh_health_district":"Peninsula","total_cases":"21447","hospitalizations":"339","deaths":"155"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51097","locality":"King and Queen","vdh_health_district":"Three Rivers","total_cases":"1479","hospitalizations":"61","deaths":"15"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51099","locality":"King George","vdh_health_district":"Rappahannock","total_cases":"6959","hospitalizations":"109","deaths":"57"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51101","locality":"King William","vdh_health_district":"Three Rivers","total_cases":"4755","hospitalizations":"117","deaths":"52"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51103","locality":"Lancaster","vdh_health_district":"Three Rivers","total_cases":"2381","hospitalizations":"54","deaths":"42"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51105","locality":"Lee","vdh_health_district":"Lenowisco","total_cases":"8531","hospitalizations":"197","deaths":"133"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51107","locality":"Loudoun","vdh_health_district":"Loudoun","total_cases":"98506","hospitalizations":"2060","deaths":"448"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51109","locality":"Louisa","vdh_health_district":"Blue Ridge","total_cases":"8981","hospitalizations":"221","deaths":"103"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51111","locality":"Lunenburg","vdh_health_district":"Piedmont","total_cases":"3384","hospitalizations":"117","deaths":"45"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51113","locality":"Madison","vdh_health_district":"Rappahannock Rapidan","total_cases":"3195","hospitalizations":"77","deaths":"48"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51115","locality":"Mathews","vdh_health_district":"Three Rivers","total_cases":"2081","hospitalizations":"46","deaths":"27"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51117","locality":"Mecklenburg","vdh_health_district":"Southside","total_cases":"7954","hospitalizations":"217","deaths":"148"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51119","locality":"Middlesex","vdh_health_district":"Three Rivers","total_cases":"2552","hospitalizations":"57","deaths":"55"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51121","locality":"Montgomery","vdh_health_district":"New River","total_cases":"25305","hospitalizations":"495","deaths":"189"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51125","locality":"Nelson","vdh_health_district":"Blue Ridge","total_cases":"3274","hospitalizations":"80","deaths":"40"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51127","locality":"New Kent","vdh_health_district":"Chickahominy","total_cases":"6012","hospitalizations":"191","deaths":"46"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51131","locality":"Northampton","vdh_health_district":"Eastern Shore","total_cases":"2921","hospitalizations":"167","deaths":"78"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51133","locality":"Northumberland","vdh_health_district":"Three Rivers","total_cases":"2731","hospitalizations":"78","deaths":"47"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51135","locality":"Nottoway","vdh_health_district":"Piedmont","total_cases":"5716","hospitalizations":"295","deaths":"103"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51137","locality":"Orange","vdh_health_district":"Rappahannock Rapidan","total_cases":"9262","hospitalizations":"224","deaths":"110"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51139","locality":"Page","vdh_health_district":"Lord Fairfax","total_cases":"7100","hospitalizations":"311","deaths":"133"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51141","locality":"Patrick","vdh_health_district":"West Piedmont","total_cases":"5061","hospitalizations":"169","deaths":"123"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51143","locality":"Pittsylvania","vdh_health_district":"Pittsylvania-Danville","total_cases":"19295","hospitalizations":"675","deaths":"249"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51145","locality":"Powhatan","vdh_health_district":"Chesterfield","total_cases":"6412","hospitalizations":"147","deaths":"67"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51147","locality":"Prince Edward","vdh_health_district":"Piedmont","total_cases":"6853","hospitalizations":"360","deaths":"90"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51149","locality":"Prince George","vdh_health_district":"Crater","total_cases":"11656","hospitalizations":"325","deaths":"90"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51153","locality":"Prince William","vdh_health_district":"Prince William","total_cases":"128784","hospitalizations":"3464","deaths":"840"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51155","locality":"Pulaski","vdh_health_district":"New River","total_cases":"11046","hospitalizations":"424","deaths":"169"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51157","locality":"Rappahannock","vdh_health_district":"Rappahannock Rapidan","total_cases":"1382","hospitalizations":"42","deaths":"14"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51159","locality":"Richmond County","vdh_health_district":"Three Rivers","total_cases":"2929","hospitalizations":"66","deaths":"30"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51161","locality":"Roanoke County","vdh_health_district":"Alleghany","total_cases":"28522","hospitalizations":"447","deaths":"321"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51163","locality":"Rockbridge","vdh_health_district":"Central Shenandoah","total_cases":"5239","hospitalizations":"141","deaths":"93"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51165","locality":"Rockingham","vdh_health_district":"Central Shenandoah","total_cases":"19302","hospitalizations":"904","deaths":"273"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51167","locality":"Russell","vdh_health_district":"Cumberland Plateau","total_cases":"9617","hospitalizations":"234","deaths":"139"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51169","locality":"Scott","vdh_health_district":"Lenowisco","total_cases":"7794","hospitalizations":"252","deaths":"145"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51171","locality":"Shenandoah","vdh_health_district":"Lord Fairfax","total_cases":"14151","hospitalizations":"541","deaths":"265"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51173","locality":"Smyth","vdh_health_district":"Mount Rogers","total_cases":"12244","hospitalizations":"517","deaths":"206"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51175","locality":"Southampton","vdh_health_district":"Western Tidewater","total_cases":"4535","hospitalizations":"138","deaths":"109"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51177","locality":"Spotsylvania","vdh_health_district":"Rappahannock","total_cases":"35571","hospitalizations":"638","deaths":"342"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51179","locality":"Stafford","vdh_health_district":"Rappahannock","total_cases":"42479","hospitalizations":"656","deaths":"202"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51181","locality":"Surry","vdh_health_district":"Crater","total_cases":"1439","hospitalizations":"83","deaths":"23"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51183","locality":"Sussex","vdh_health_district":"Crater","total_cases":"3013","hospitalizations":"133","deaths":"49"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51185","locality":"Tazewell","vdh_health_district":"Cumberland Plateau","total_cases":"14118","hospitalizations":"316","deaths":"225"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51187","locality":"Warren","vdh_health_district":"Lord Fairfax","total_cases":"11553","hospitalizations":"394","deaths":"185"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51191","locality":"Washington","vdh_health_district":"Mount Rogers","total_cases":"18357","hospitalizations":"1033","deaths":"264"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51193","locality":"Westmoreland","vdh_health_district":"Three Rivers","total_cases":"4378","hospitalizations":"142","deaths":"60"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51195","locality":"Wise","vdh_health_district":"Lenowisco","total_cases":"14071","hospitalizations":"367","deaths":"238"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51197","locality":"Wythe","vdh_health_district":"Mount Rogers","total_cases":"9816","hospitalizations":"390","deaths":"173"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51199","locality":"York","vdh_health_district":"Peninsula","total_cases":"13991","hospitalizations":"188","deaths":"136"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51510","locality":"Alexandria","vdh_health_district":"Alexandria","total_cases":"45804","hospitalizations":"832","deaths":"233"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51520","locality":"Bristol","vdh_health_district":"Mount Rogers","total_cases":"6308","hospitalizations":"370","deaths":"112"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51530","locality":"Buena Vista City","vdh_health_district":"Central Shenandoah","total_cases":"2345","hospitalizations":"50","deaths":"48"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51540","locality":"Charlottesville","vdh_health_district":"Blue Ridge","total_cases":"12534","hospitalizations":"201","deaths":"86"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51550","locality":"Chesapeake","vdh_health_district":"Chesapeake","total_cases":"64789","hospitalizations":"1683","deaths":"568"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51570","locality":"Colonial Heights","vdh_health_district":"Chesterfield","total_cases":"6372","hospitalizations":"133","deaths":"113"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51580","locality":"Covington","vdh_health_district":"Alleghany","total_cases":"1925","hospitalizations":"40","deaths":"31"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51590","locality":"Danville","vdh_health_district":"Pittsylvania-Danville","total_cases":"14840","hospitalizations":"536","deaths":"302"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51595","locality":"Emporia","vdh_health_district":"Crater","total_cases":"1686","hospitalizations":"117","deaths":"57"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51600","locality":"Fairfax City","vdh_health_district":"Fairfax","total_cases":"2776","hospitalizations":"95","deaths":"51"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51610","locality":"Falls Church","vdh_health_district":"Fairfax","total_cases":"3536","hospitalizations":"35","deaths":"21"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51620","locality":"Franklin City","vdh_health_district":"Western Tidewater","total_cases":"2674","hospitalizations":"109","deaths":"56"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51630","locality":"Fredericksburg","vdh_health_district":"Rappahannock","total_cases":"7295","hospitalizations":"152","deaths":"51"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51640","locality":"Galax","vdh_health_district":"Mount Rogers","total_cases":"3328","hospitalizations":"170","deaths":"86"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51650","locality":"Hampton","vdh_health_district":"Hampton","total_cases":"39025","hospitalizations":"808","deaths":"375"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51660","locality":"Harrisonburg","vdh_health_district":"Central Shenandoah","total_cases":"15352","hospitalizations":"418","deaths":"185"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51670","locality":"Hopewell","vdh_health_district":"Crater","total_cases":"8014","hospitalizations":"307","deaths":"127"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51678","locality":"Lexington","vdh_health_district":"Central Shenandoah","total_cases":"2744","hospitalizations":"35","deaths":"34"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51680","locality":"Lynchburg","vdh_health_district":"Central Virginia","total_cases":"24613","hospitalizations":"1013","deaths":"328"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51683","locality":"Manassas City","vdh_health_district":"Prince William","total_cases":"11960","hospitalizations":"449","deaths":"80"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51685","locality":"Manassas Park","vdh_health_district":"Prince William","total_cases":"4924","hospitalizations":"165","deaths":"31"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51690","locality":"Martinsville","vdh_health_district":"West Piedmont","total_cases":"4627","hospitalizations":"221","deaths":"126"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51700","locality":"Newport News","vdh_health_district":"Peninsula","total_cases":"50177","hospitalizations":"949","deaths":"459"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51710","locality":"Norfolk","vdh_health_district":"Norfolk","total_cases":"54334","hospitalizations":"1953","deaths":"549"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51720","locality":"Norton","vdh_health_district":"Lenowisco","total_cases":"1622","hospitalizations":"42","deaths":"22"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51730","locality":"Petersburg","vdh_health_district":"Crater","total_cases":"10317","hospitalizations":"486","deaths":"153"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51735","locality":"Poquoson","vdh_health_district":"Peninsula","total_cases":"2993","hospitalizations":"53","deaths":"31"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51740","locality":"Portsmouth","vdh_health_district":"Portsmouth","total_cases":"26829","hospitalizations":"1175","deaths":"369"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51750","locality":"Radford","vdh_health_district":"New River","total_cases":"5232","hospitalizations":"71","deaths":"51"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51760","locality":"Richmond City","vdh_health_district":"Richmond","total_cases":"61119","hospitalizations":"1320","deaths":"548"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51770","locality":"Roanoke City","vdh_health_district":"Roanoke","total_cases":"28514","hospitalizations":"537","deaths":"441"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51775","locality":"Salem","vdh_health_district":"Alleghany","total_cases":"7347","hospitalizations":"139","deaths":"113"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51790","locality":"Staunton","vdh_health_district":"Central Shenandoah","total_cases":"7989","hospitalizations":"215","deaths":"138"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51800","locality":"Suffolk","vdh_health_district":"Western Tidewater","total_cases":"24619","hospitalizations":"901","deaths":"346"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51810","locality":"Virginia Beach","vdh_health_district":"Virginia Beach","total_cases":"116446","hospitalizations":"3889","deaths":"954"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51820","locality":"Waynesboro","vdh_health_district":"Central Shenandoah","total_cases":"7610","hospitalizations":"187","deaths":"87"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51830","locality":"Williamsburg","vdh_health_district":"Peninsula","total_cases":"2344","hospitalizations":"66","deaths":"25"}
+,{"report_date":"2023-04-18T00:00:00.000","fips":"51840","locality":"Winchester","vdh_health_district":"Lord Fairfax","total_cases":"8230","hospitalizations":"289","deaths":"101"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51001","locality":"Accomack","vdh_health_district":"Eastern Shore","total_cases":"9197","hospitalizations":"472","deaths":"120"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51003","locality":"Albemarle","vdh_health_district":"Blue Ridge","total_cases":"25608","hospitalizations":"507","deaths":"209"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51005","locality":"Alleghany","vdh_health_district":"Alleghany","total_cases":"4578","hospitalizations":"113","deaths":"112"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51007","locality":"Amelia","vdh_health_district":"Piedmont","total_cases":"3602","hospitalizations":"186","deaths":"64"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51009","locality":"Amherst","vdh_health_district":"Central Virginia","total_cases":"9726","hospitalizations":"476","deaths":"113"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51011","locality":"Appomattox","vdh_health_district":"Central Virginia","total_cases":"5060","hospitalizations":"241","deaths":"62"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51013","locality":"Arlington","vdh_health_district":"Arlington","total_cases":"67093","hospitalizations":"1370","deaths":"369"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51015","locality":"Augusta","vdh_health_district":"Central Shenandoah","total_cases":"24676","hospitalizations":"641","deaths":"239"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51017","locality":"Bath","vdh_health_district":"Central Shenandoah","total_cases":"1086","hospitalizations":"22","deaths":"21"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51019","locality":"Bedford","vdh_health_district":"Central Virginia","total_cases":"22332","hospitalizations":"775","deaths":"288"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51021","locality":"Bland","vdh_health_district":"Mount Rogers","total_cases":"2428","hospitalizations":"79","deaths":"25"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51023","locality":"Botetourt","vdh_health_district":"Alleghany","total_cases":"10054","hospitalizations":"167","deaths":"118"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51025","locality":"Brunswick","vdh_health_district":"Southside","total_cases":"4107","hospitalizations":"82","deaths":"54"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51027","locality":"Buchanan","vdh_health_district":"Cumberland Plateau","total_cases":"6224","hospitalizations":"236","deaths":"150"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51029","locality":"Buckingham","vdh_health_district":"Piedmont","total_cases":"5013","hospitalizations":"182","deaths":"64"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51031","locality":"Campbell","vdh_health_district":"Central Virginia","total_cases":"17812","hospitalizations":"772","deaths":"238"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51033","locality":"Caroline","vdh_health_district":"Rappahannock","total_cases":"9084","hospitalizations":"130","deaths":"95"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51035","locality":"Carroll","vdh_health_district":"Mount Rogers","total_cases":"9907","hospitalizations":"441","deaths":"178"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51036","locality":"Charles City","vdh_health_district":"Chickahominy","total_cases":"1729","hospitalizations":"90","deaths":"31"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51037","locality":"Charlotte","vdh_health_district":"Piedmont","total_cases":"3475","hospitalizations":"203","deaths":"49"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51041","locality":"Chesterfield","vdh_health_district":"Chesterfield","total_cases":"100647","hospitalizations":"1778","deaths":"875"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51043","locality":"Clarke","vdh_health_district":"Lord Fairfax","total_cases":"3541","hospitalizations":"125","deaths":"57"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51045","locality":"Craig","vdh_health_district":"Alleghany","total_cases":"1453","hospitalizations":"37","deaths":"25"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51047","locality":"Culpeper","vdh_health_district":"Rappahannock Rapidan","total_cases":"14510","hospitalizations":"321","deaths":"179"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51049","locality":"Cumberland","vdh_health_district":"Piedmont","total_cases":"1860","hospitalizations":"116","deaths":"30"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51051","locality":"Dickenson","vdh_health_district":"Cumberland Plateau","total_cases":"4923","hospitalizations":"104","deaths":"71"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51053","locality":"Dinwiddie","vdh_health_district":"Crater","total_cases":"7586","hospitalizations":"349","deaths":"109"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51057","locality":"Essex","vdh_health_district":"Three Rivers","total_cases":"2863","hospitalizations":"102","deaths":"43"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51059","locality":"Fairfax","vdh_health_district":"Fairfax","total_cases":"263068","hospitalizations":"5213","deaths":"1721"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51061","locality":"Fauquier","vdh_health_district":"Rappahannock Rapidan","total_cases":"16716","hospitalizations":"550","deaths":"164"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51063","locality":"Floyd","vdh_health_district":"New River","total_cases":"3734","hospitalizations":"112","deaths":"55"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51065","locality":"Fluvanna","vdh_health_district":"Blue Ridge","total_cases":"6938","hospitalizations":"169","deaths":"54"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51067","locality":"Franklin County","vdh_health_district":"West Piedmont","total_cases":"14205","hospitalizations":"484","deaths":"229"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51069","locality":"Frederick","vdh_health_district":"Lord Fairfax","total_cases":"26926","hospitalizations":"739","deaths":"291"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51071","locality":"Giles","vdh_health_district":"New River","total_cases":"5315","hospitalizations":"153","deaths":"60"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51073","locality":"Gloucester","vdh_health_district":"Three Rivers","total_cases":"9702","hospitalizations":"131","deaths":"115"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51075","locality":"Goochland","vdh_health_district":"Chickahominy","total_cases":"5834","hospitalizations":"166","deaths":"64"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51077","locality":"Grayson","vdh_health_district":"Mount Rogers","total_cases":"5691","hospitalizations":"231","deaths":"98"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51079","locality":"Greene","vdh_health_district":"Blue Ridge","total_cases":"5113","hospitalizations":"212","deaths":"65"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51081","locality":"Greensville","vdh_health_district":"Crater","total_cases":"3927","hospitalizations":"157","deaths":"45"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51083","locality":"Halifax","vdh_health_district":"Southside","total_cases":"9763","hospitalizations":"287","deaths":"194"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51085","locality":"Hanover","vdh_health_district":"Chickahominy","total_cases":"29251","hospitalizations":"951","deaths":"348"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51087","locality":"Henrico","vdh_health_district":"Henrico","total_cases":"92762","hospitalizations":"1783","deaths":"1086"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51089","locality":"Henry","vdh_health_district":"West Piedmont","total_cases":"16151","hospitalizations":"678","deaths":"331"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51091","locality":"Highland","vdh_health_district":"Central Shenandoah","total_cases":"497","hospitalizations":"13","deaths":"6"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51093","locality":"Isle of Wight","vdh_health_district":"Western Tidewater","total_cases":"9285","hospitalizations":"281","deaths":"130"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51095","locality":"James City","vdh_health_district":"Peninsula","total_cases":"21442","hospitalizations":"339","deaths":"155"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51097","locality":"King and Queen","vdh_health_district":"Three Rivers","total_cases":"1479","hospitalizations":"60","deaths":"15"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51099","locality":"King George","vdh_health_district":"Rappahannock","total_cases":"6958","hospitalizations":"109","deaths":"57"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51101","locality":"King William","vdh_health_district":"Three Rivers","total_cases":"4755","hospitalizations":"117","deaths":"52"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51103","locality":"Lancaster","vdh_health_district":"Three Rivers","total_cases":"2378","hospitalizations":"54","deaths":"42"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51105","locality":"Lee","vdh_health_district":"Lenowisco","total_cases":"8528","hospitalizations":"196","deaths":"133"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51107","locality":"Loudoun","vdh_health_district":"Loudoun","total_cases":"98494","hospitalizations":"2057","deaths":"448"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51109","locality":"Louisa","vdh_health_district":"Blue Ridge","total_cases":"8980","hospitalizations":"221","deaths":"103"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51111","locality":"Lunenburg","vdh_health_district":"Piedmont","total_cases":"3383","hospitalizations":"117","deaths":"45"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51113","locality":"Madison","vdh_health_district":"Rappahannock Rapidan","total_cases":"3195","hospitalizations":"77","deaths":"48"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51115","locality":"Mathews","vdh_health_district":"Three Rivers","total_cases":"2082","hospitalizations":"46","deaths":"28"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51117","locality":"Mecklenburg","vdh_health_district":"Southside","total_cases":"7951","hospitalizations":"216","deaths":"148"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51119","locality":"Middlesex","vdh_health_district":"Three Rivers","total_cases":"2549","hospitalizations":"57","deaths":"55"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51121","locality":"Montgomery","vdh_health_district":"New River","total_cases":"25305","hospitalizations":"494","deaths":"189"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51125","locality":"Nelson","vdh_health_district":"Blue Ridge","total_cases":"3274","hospitalizations":"80","deaths":"40"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51127","locality":"New Kent","vdh_health_district":"Chickahominy","total_cases":"6012","hospitalizations":"191","deaths":"46"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51131","locality":"Northampton","vdh_health_district":"Eastern Shore","total_cases":"2921","hospitalizations":"167","deaths":"78"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51133","locality":"Northumberland","vdh_health_district":"Three Rivers","total_cases":"2733","hospitalizations":"78","deaths":"47"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51135","locality":"Nottoway","vdh_health_district":"Piedmont","total_cases":"5715","hospitalizations":"295","deaths":"103"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51137","locality":"Orange","vdh_health_district":"Rappahannock Rapidan","total_cases":"9257","hospitalizations":"224","deaths":"110"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51139","locality":"Page","vdh_health_district":"Lord Fairfax","total_cases":"7100","hospitalizations":"311","deaths":"133"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51141","locality":"Patrick","vdh_health_district":"West Piedmont","total_cases":"5060","hospitalizations":"169","deaths":"123"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51143","locality":"Pittsylvania","vdh_health_district":"Pittsylvania-Danville","total_cases":"19289","hospitalizations":"675","deaths":"249"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51145","locality":"Powhatan","vdh_health_district":"Chesterfield","total_cases":"6409","hospitalizations":"148","deaths":"67"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51147","locality":"Prince Edward","vdh_health_district":"Piedmont","total_cases":"6853","hospitalizations":"360","deaths":"90"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51149","locality":"Prince George","vdh_health_district":"Crater","total_cases":"11653","hospitalizations":"325","deaths":"90"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51153","locality":"Prince William","vdh_health_district":"Prince William","total_cases":"128763","hospitalizations":"3464","deaths":"840"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51155","locality":"Pulaski","vdh_health_district":"New River","total_cases":"11044","hospitalizations":"424","deaths":"169"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51157","locality":"Rappahannock","vdh_health_district":"Rappahannock Rapidan","total_cases":"1382","hospitalizations":"42","deaths":"14"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51159","locality":"Richmond County","vdh_health_district":"Three Rivers","total_cases":"2931","hospitalizations":"66","deaths":"30"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51161","locality":"Roanoke County","vdh_health_district":"Alleghany","total_cases":"28520","hospitalizations":"447","deaths":"321"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51163","locality":"Rockbridge","vdh_health_district":"Central Shenandoah","total_cases":"5238","hospitalizations":"141","deaths":"93"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51165","locality":"Rockingham","vdh_health_district":"Central Shenandoah","total_cases":"19299","hospitalizations":"904","deaths":"273"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51167","locality":"Russell","vdh_health_district":"Cumberland Plateau","total_cases":"9614","hospitalizations":"234","deaths":"139"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51169","locality":"Scott","vdh_health_district":"Lenowisco","total_cases":"7792","hospitalizations":"252","deaths":"145"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51171","locality":"Shenandoah","vdh_health_district":"Lord Fairfax","total_cases":"14149","hospitalizations":"540","deaths":"265"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51173","locality":"Smyth","vdh_health_district":"Mount Rogers","total_cases":"12243","hospitalizations":"517","deaths":"206"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51175","locality":"Southampton","vdh_health_district":"Western Tidewater","total_cases":"4535","hospitalizations":"138","deaths":"109"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51177","locality":"Spotsylvania","vdh_health_district":"Rappahannock","total_cases":"35566","hospitalizations":"638","deaths":"342"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51179","locality":"Stafford","vdh_health_district":"Rappahannock","total_cases":"42474","hospitalizations":"656","deaths":"202"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51181","locality":"Surry","vdh_health_district":"Crater","total_cases":"1439","hospitalizations":"82","deaths":"23"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51183","locality":"Sussex","vdh_health_district":"Crater","total_cases":"3013","hospitalizations":"133","deaths":"49"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51185","locality":"Tazewell","vdh_health_district":"Cumberland Plateau","total_cases":"14114","hospitalizations":"316","deaths":"225"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51187","locality":"Warren","vdh_health_district":"Lord Fairfax","total_cases":"11552","hospitalizations":"394","deaths":"185"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51191","locality":"Washington","vdh_health_district":"Mount Rogers","total_cases":"18356","hospitalizations":"1033","deaths":"264"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51193","locality":"Westmoreland","vdh_health_district":"Three Rivers","total_cases":"4378","hospitalizations":"142","deaths":"60"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51195","locality":"Wise","vdh_health_district":"Lenowisco","total_cases":"14066","hospitalizations":"367","deaths":"238"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51197","locality":"Wythe","vdh_health_district":"Mount Rogers","total_cases":"9815","hospitalizations":"390","deaths":"173"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51199","locality":"York","vdh_health_district":"Peninsula","total_cases":"13987","hospitalizations":"188","deaths":"136"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51510","locality":"Alexandria","vdh_health_district":"Alexandria","total_cases":"45801","hospitalizations":"832","deaths":"233"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51520","locality":"Bristol","vdh_health_district":"Mount Rogers","total_cases":"6307","hospitalizations":"370","deaths":"112"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51530","locality":"Buena Vista City","vdh_health_district":"Central Shenandoah","total_cases":"2345","hospitalizations":"50","deaths":"48"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51540","locality":"Charlottesville","vdh_health_district":"Blue Ridge","total_cases":"12531","hospitalizations":"201","deaths":"86"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51550","locality":"Chesapeake","vdh_health_district":"Chesapeake","total_cases":"64776","hospitalizations":"1681","deaths":"568"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51570","locality":"Colonial Heights","vdh_health_district":"Chesterfield","total_cases":"6373","hospitalizations":"133","deaths":"113"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51580","locality":"Covington","vdh_health_district":"Alleghany","total_cases":"1925","hospitalizations":"40","deaths":"31"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51590","locality":"Danville","vdh_health_district":"Pittsylvania-Danville","total_cases":"14837","hospitalizations":"536","deaths":"302"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51595","locality":"Emporia","vdh_health_district":"Crater","total_cases":"1680","hospitalizations":"117","deaths":"57"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51600","locality":"Fairfax City","vdh_health_district":"Fairfax","total_cases":"2776","hospitalizations":"95","deaths":"51"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51610","locality":"Falls Church","vdh_health_district":"Fairfax","total_cases":"3535","hospitalizations":"35","deaths":"21"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51620","locality":"Franklin City","vdh_health_district":"Western Tidewater","total_cases":"2674","hospitalizations":"109","deaths":"56"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51630","locality":"Fredericksburg","vdh_health_district":"Rappahannock","total_cases":"7295","hospitalizations":"152","deaths":"51"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51640","locality":"Galax","vdh_health_district":"Mount Rogers","total_cases":"3326","hospitalizations":"170","deaths":"86"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51650","locality":"Hampton","vdh_health_district":"Hampton","total_cases":"39016","hospitalizations":"808","deaths":"375"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51660","locality":"Harrisonburg","vdh_health_district":"Central Shenandoah","total_cases":"15351","hospitalizations":"418","deaths":"185"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51670","locality":"Hopewell","vdh_health_district":"Crater","total_cases":"8011","hospitalizations":"307","deaths":"127"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51678","locality":"Lexington","vdh_health_district":"Central Shenandoah","total_cases":"2744","hospitalizations":"35","deaths":"34"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51680","locality":"Lynchburg","vdh_health_district":"Central Virginia","total_cases":"24602","hospitalizations":"1011","deaths":"328"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51683","locality":"Manassas City","vdh_health_district":"Prince William","total_cases":"11958","hospitalizations":"449","deaths":"80"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51685","locality":"Manassas Park","vdh_health_district":"Prince William","total_cases":"4923","hospitalizations":"165","deaths":"31"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51690","locality":"Martinsville","vdh_health_district":"West Piedmont","total_cases":"4625","hospitalizations":"221","deaths":"126"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51700","locality":"Newport News","vdh_health_district":"Peninsula","total_cases":"50169","hospitalizations":"948","deaths":"459"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51710","locality":"Norfolk","vdh_health_district":"Norfolk","total_cases":"54332","hospitalizations":"1953","deaths":"549"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51720","locality":"Norton","vdh_health_district":"Lenowisco","total_cases":"1622","hospitalizations":"42","deaths":"22"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51730","locality":"Petersburg","vdh_health_district":"Crater","total_cases":"10317","hospitalizations":"485","deaths":"153"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51735","locality":"Poquoson","vdh_health_district":"Peninsula","total_cases":"2993","hospitalizations":"53","deaths":"31"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51740","locality":"Portsmouth","vdh_health_district":"Portsmouth","total_cases":"26821","hospitalizations":"1175","deaths":"369"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51750","locality":"Radford","vdh_health_district":"New River","total_cases":"5230","hospitalizations":"71","deaths":"51"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51760","locality":"Richmond City","vdh_health_district":"Richmond","total_cases":"61120","hospitalizations":"1320","deaths":"548"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51770","locality":"Roanoke City","vdh_health_district":"Roanoke","total_cases":"28513","hospitalizations":"536","deaths":"441"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51775","locality":"Salem","vdh_health_district":"Alleghany","total_cases":"7346","hospitalizations":"138","deaths":"113"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51790","locality":"Staunton","vdh_health_district":"Central Shenandoah","total_cases":"7981","hospitalizations":"214","deaths":"137"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51800","locality":"Suffolk","vdh_health_district":"Western Tidewater","total_cases":"24618","hospitalizations":"901","deaths":"346"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51810","locality":"Virginia Beach","vdh_health_district":"Virginia Beach","total_cases":"116442","hospitalizations":"3887","deaths":"953"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51820","locality":"Waynesboro","vdh_health_district":"Central Shenandoah","total_cases":"7606","hospitalizations":"187","deaths":"87"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51830","locality":"Williamsburg","vdh_health_district":"Peninsula","total_cases":"2343","hospitalizations":"66","deaths":"25"}
+,{"report_date":"2023-04-17T00:00:00.000","fips":"51840","locality":"Winchester","vdh_health_district":"Lord Fairfax","total_cases":"8230","hospitalizations":"289","deaths":"101"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51001","locality":"Accomack","vdh_health_district":"Eastern Shore","total_cases":"9194","hospitalizations":"472","deaths":"120"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51003","locality":"Albemarle","vdh_health_district":"Blue Ridge","total_cases":"25608","hospitalizations":"507","deaths":"209"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51005","locality":"Alleghany","vdh_health_district":"Alleghany","total_cases":"4577","hospitalizations":"113","deaths":"112"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51007","locality":"Amelia","vdh_health_district":"Piedmont","total_cases":"3602","hospitalizations":"186","deaths":"64"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51009","locality":"Amherst","vdh_health_district":"Central Virginia","total_cases":"9726","hospitalizations":"476","deaths":"113"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51011","locality":"Appomattox","vdh_health_district":"Central Virginia","total_cases":"5059","hospitalizations":"241","deaths":"62"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51013","locality":"Arlington","vdh_health_district":"Arlington","total_cases":"67087","hospitalizations":"1370","deaths":"369"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51015","locality":"Augusta","vdh_health_district":"Central Shenandoah","total_cases":"24676","hospitalizations":"641","deaths":"239"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51017","locality":"Bath","vdh_health_district":"Central Shenandoah","total_cases":"1086","hospitalizations":"22","deaths":"21"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51019","locality":"Bedford","vdh_health_district":"Central Virginia","total_cases":"22330","hospitalizations":"775","deaths":"288"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51021","locality":"Bland","vdh_health_district":"Mount Rogers","total_cases":"2428","hospitalizations":"79","deaths":"25"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51023","locality":"Botetourt","vdh_health_district":"Alleghany","total_cases":"10053","hospitalizations":"167","deaths":"118"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51025","locality":"Brunswick","vdh_health_district":"Southside","total_cases":"4107","hospitalizations":"82","deaths":"54"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51027","locality":"Buchanan","vdh_health_district":"Cumberland Plateau","total_cases":"6224","hospitalizations":"236","deaths":"150"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51029","locality":"Buckingham","vdh_health_district":"Piedmont","total_cases":"5013","hospitalizations":"182","deaths":"64"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51031","locality":"Campbell","vdh_health_district":"Central Virginia","total_cases":"17812","hospitalizations":"772","deaths":"238"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51033","locality":"Caroline","vdh_health_district":"Rappahannock","total_cases":"9084","hospitalizations":"130","deaths":"95"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51035","locality":"Carroll","vdh_health_district":"Mount Rogers","total_cases":"9907","hospitalizations":"441","deaths":"178"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51036","locality":"Charles City","vdh_health_district":"Chickahominy","total_cases":"1729","hospitalizations":"90","deaths":"31"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51037","locality":"Charlotte","vdh_health_district":"Piedmont","total_cases":"3473","hospitalizations":"203","deaths":"49"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51041","locality":"Chesterfield","vdh_health_district":"Chesterfield","total_cases":"100643","hospitalizations":"1778","deaths":"875"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51043","locality":"Clarke","vdh_health_district":"Lord Fairfax","total_cases":"3541","hospitalizations":"125","deaths":"57"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51045","locality":"Craig","vdh_health_district":"Alleghany","total_cases":"1453","hospitalizations":"37","deaths":"25"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51047","locality":"Culpeper","vdh_health_district":"Rappahannock Rapidan","total_cases":"14510","hospitalizations":"321","deaths":"179"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51049","locality":"Cumberland","vdh_health_district":"Piedmont","total_cases":"1860","hospitalizations":"116","deaths":"30"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51051","locality":"Dickenson","vdh_health_district":"Cumberland Plateau","total_cases":"4923","hospitalizations":"104","deaths":"71"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51053","locality":"Dinwiddie","vdh_health_district":"Crater","total_cases":"7586","hospitalizations":"349","deaths":"109"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51057","locality":"Essex","vdh_health_district":"Three Rivers","total_cases":"2863","hospitalizations":"102","deaths":"43"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51059","locality":"Fairfax","vdh_health_district":"Fairfax","total_cases":"263045","hospitalizations":"5213","deaths":"1721"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51061","locality":"Fauquier","vdh_health_district":"Rappahannock Rapidan","total_cases":"16716","hospitalizations":"550","deaths":"164"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51063","locality":"Floyd","vdh_health_district":"New River","total_cases":"3734","hospitalizations":"112","deaths":"55"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51065","locality":"Fluvanna","vdh_health_district":"Blue Ridge","total_cases":"6937","hospitalizations":"169","deaths":"54"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51067","locality":"Franklin County","vdh_health_district":"West Piedmont","total_cases":"14205","hospitalizations":"484","deaths":"229"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51069","locality":"Frederick","vdh_health_district":"Lord Fairfax","total_cases":"26924","hospitalizations":"739","deaths":"291"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51071","locality":"Giles","vdh_health_district":"New River","total_cases":"5315","hospitalizations":"152","deaths":"60"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51073","locality":"Gloucester","vdh_health_district":"Three Rivers","total_cases":"9701","hospitalizations":"131","deaths":"115"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51075","locality":"Goochland","vdh_health_district":"Chickahominy","total_cases":"5833","hospitalizations":"166","deaths":"64"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51077","locality":"Grayson","vdh_health_district":"Mount Rogers","total_cases":"5690","hospitalizations":"231","deaths":"98"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51079","locality":"Greene","vdh_health_district":"Blue Ridge","total_cases":"5113","hospitalizations":"212","deaths":"65"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51081","locality":"Greensville","vdh_health_district":"Crater","total_cases":"3927","hospitalizations":"157","deaths":"45"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51083","locality":"Halifax","vdh_health_district":"Southside","total_cases":"9762","hospitalizations":"287","deaths":"194"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51085","locality":"Hanover","vdh_health_district":"Chickahominy","total_cases":"29249","hospitalizations":"951","deaths":"348"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51087","locality":"Henrico","vdh_health_district":"Henrico","total_cases":"92753","hospitalizations":"1783","deaths":"1086"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51089","locality":"Henry","vdh_health_district":"West Piedmont","total_cases":"16150","hospitalizations":"678","deaths":"331"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51091","locality":"Highland","vdh_health_district":"Central Shenandoah","total_cases":"497","hospitalizations":"13","deaths":"6"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51093","locality":"Isle of Wight","vdh_health_district":"Western Tidewater","total_cases":"9285","hospitalizations":"281","deaths":"130"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51095","locality":"James City","vdh_health_district":"Peninsula","total_cases":"21440","hospitalizations":"339","deaths":"155"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51097","locality":"King and Queen","vdh_health_district":"Three Rivers","total_cases":"1478","hospitalizations":"60","deaths":"15"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51099","locality":"King George","vdh_health_district":"Rappahannock","total_cases":"6958","hospitalizations":"109","deaths":"57"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51101","locality":"King William","vdh_health_district":"Three Rivers","total_cases":"4754","hospitalizations":"117","deaths":"52"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51103","locality":"Lancaster","vdh_health_district":"Three Rivers","total_cases":"2378","hospitalizations":"54","deaths":"42"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51105","locality":"Lee","vdh_health_district":"Lenowisco","total_cases":"8528","hospitalizations":"196","deaths":"133"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51107","locality":"Loudoun","vdh_health_district":"Loudoun","total_cases":"98484","hospitalizations":"2057","deaths":"448"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51109","locality":"Louisa","vdh_health_district":"Blue Ridge","total_cases":"8980","hospitalizations":"221","deaths":"103"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51111","locality":"Lunenburg","vdh_health_district":"Piedmont","total_cases":"3383","hospitalizations":"117","deaths":"45"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51113","locality":"Madison","vdh_health_district":"Rappahannock Rapidan","total_cases":"3195","hospitalizations":"77","deaths":"48"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51115","locality":"Mathews","vdh_health_district":"Three Rivers","total_cases":"2082","hospitalizations":"46","deaths":"28"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51117","locality":"Mecklenburg","vdh_health_district":"Southside","total_cases":"7950","hospitalizations":"216","deaths":"148"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51119","locality":"Middlesex","vdh_health_district":"Three Rivers","total_cases":"2549","hospitalizations":"57","deaths":"55"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51121","locality":"Montgomery","vdh_health_district":"New River","total_cases":"25304","hospitalizations":"494","deaths":"189"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51125","locality":"Nelson","vdh_health_district":"Blue Ridge","total_cases":"3274","hospitalizations":"80","deaths":"40"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51127","locality":"New Kent","vdh_health_district":"Chickahominy","total_cases":"6012","hospitalizations":"191","deaths":"46"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51131","locality":"Northampton","vdh_health_district":"Eastern Shore","total_cases":"2921","hospitalizations":"167","deaths":"78"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51133","locality":"Northumberland","vdh_health_district":"Three Rivers","total_cases":"2732","hospitalizations":"78","deaths":"47"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51135","locality":"Nottoway","vdh_health_district":"Piedmont","total_cases":"5715","hospitalizations":"295","deaths":"103"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51137","locality":"Orange","vdh_health_district":"Rappahannock Rapidan","total_cases":"9252","hospitalizations":"224","deaths":"110"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51139","locality":"Page","vdh_health_district":"Lord Fairfax","total_cases":"7100","hospitalizations":"311","deaths":"133"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51141","locality":"Patrick","vdh_health_district":"West Piedmont","total_cases":"5060","hospitalizations":"169","deaths":"123"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51143","locality":"Pittsylvania","vdh_health_district":"Pittsylvania-Danville","total_cases":"19289","hospitalizations":"675","deaths":"249"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51145","locality":"Powhatan","vdh_health_district":"Chesterfield","total_cases":"6409","hospitalizations":"148","deaths":"67"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51147","locality":"Prince Edward","vdh_health_district":"Piedmont","total_cases":"6852","hospitalizations":"360","deaths":"90"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51149","locality":"Prince George","vdh_health_district":"Crater","total_cases":"11653","hospitalizations":"325","deaths":"90"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51153","locality":"Prince William","vdh_health_district":"Prince William","total_cases":"128747","hospitalizations":"3464","deaths":"840"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51155","locality":"Pulaski","vdh_health_district":"New River","total_cases":"11043","hospitalizations":"424","deaths":"169"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51157","locality":"Rappahannock","vdh_health_district":"Rappahannock Rapidan","total_cases":"1382","hospitalizations":"42","deaths":"14"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51159","locality":"Richmond County","vdh_health_district":"Three Rivers","total_cases":"2931","hospitalizations":"66","deaths":"30"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51161","locality":"Roanoke County","vdh_health_district":"Alleghany","total_cases":"28520","hospitalizations":"447","deaths":"321"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51163","locality":"Rockbridge","vdh_health_district":"Central Shenandoah","total_cases":"5238","hospitalizations":"141","deaths":"93"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51165","locality":"Rockingham","vdh_health_district":"Central Shenandoah","total_cases":"19299","hospitalizations":"904","deaths":"273"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51167","locality":"Russell","vdh_health_district":"Cumberland Plateau","total_cases":"9614","hospitalizations":"234","deaths":"139"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51169","locality":"Scott","vdh_health_district":"Lenowisco","total_cases":"7792","hospitalizations":"252","deaths":"145"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51171","locality":"Shenandoah","vdh_health_district":"Lord Fairfax","total_cases":"14149","hospitalizations":"540","deaths":"265"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51173","locality":"Smyth","vdh_health_district":"Mount Rogers","total_cases":"12243","hospitalizations":"517","deaths":"206"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51175","locality":"Southampton","vdh_health_district":"Western Tidewater","total_cases":"4535","hospitalizations":"138","deaths":"109"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51177","locality":"Spotsylvania","vdh_health_district":"Rappahannock","total_cases":"35563","hospitalizations":"638","deaths":"342"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51179","locality":"Stafford","vdh_health_district":"Rappahannock","total_cases":"42469","hospitalizations":"656","deaths":"202"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51181","locality":"Surry","vdh_health_district":"Crater","total_cases":"1439","hospitalizations":"82","deaths":"23"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51183","locality":"Sussex","vdh_health_district":"Crater","total_cases":"3013","hospitalizations":"133","deaths":"49"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51185","locality":"Tazewell","vdh_health_district":"Cumberland Plateau","total_cases":"14114","hospitalizations":"316","deaths":"225"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51187","locality":"Warren","vdh_health_district":"Lord Fairfax","total_cases":"11552","hospitalizations":"394","deaths":"185"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51191","locality":"Washington","vdh_health_district":"Mount Rogers","total_cases":"18356","hospitalizations":"1033","deaths":"264"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51193","locality":"Westmoreland","vdh_health_district":"Three Rivers","total_cases":"4378","hospitalizations":"142","deaths":"60"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51195","locality":"Wise","vdh_health_district":"Lenowisco","total_cases":"14064","hospitalizations":"367","deaths":"238"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51197","locality":"Wythe","vdh_health_district":"Mount Rogers","total_cases":"9814","hospitalizations":"390","deaths":"173"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51199","locality":"York","vdh_health_district":"Peninsula","total_cases":"13983","hospitalizations":"188","deaths":"136"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51510","locality":"Alexandria","vdh_health_district":"Alexandria","total_cases":"45797","hospitalizations":"832","deaths":"233"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51520","locality":"Bristol","vdh_health_district":"Mount Rogers","total_cases":"6307","hospitalizations":"370","deaths":"112"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51530","locality":"Buena Vista City","vdh_health_district":"Central Shenandoah","total_cases":"2345","hospitalizations":"50","deaths":"48"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51540","locality":"Charlottesville","vdh_health_district":"Blue Ridge","total_cases":"12531","hospitalizations":"201","deaths":"86"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51550","locality":"Chesapeake","vdh_health_district":"Chesapeake","total_cases":"64772","hospitalizations":"1681","deaths":"568"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51570","locality":"Colonial Heights","vdh_health_district":"Chesterfield","total_cases":"6373","hospitalizations":"133","deaths":"113"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51580","locality":"Covington","vdh_health_district":"Alleghany","total_cases":"1925","hospitalizations":"40","deaths":"31"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51590","locality":"Danville","vdh_health_district":"Pittsylvania-Danville","total_cases":"14837","hospitalizations":"536","deaths":"302"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51595","locality":"Emporia","vdh_health_district":"Crater","total_cases":"1680","hospitalizations":"117","deaths":"57"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51600","locality":"Fairfax City","vdh_health_district":"Fairfax","total_cases":"2776","hospitalizations":"95","deaths":"51"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51610","locality":"Falls Church","vdh_health_district":"Fairfax","total_cases":"3534","hospitalizations":"35","deaths":"21"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51620","locality":"Franklin City","vdh_health_district":"Western Tidewater","total_cases":"2674","hospitalizations":"109","deaths":"56"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51630","locality":"Fredericksburg","vdh_health_district":"Rappahannock","total_cases":"7294","hospitalizations":"152","deaths":"51"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51640","locality":"Galax","vdh_health_district":"Mount Rogers","total_cases":"3327","hospitalizations":"170","deaths":"86"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51650","locality":"Hampton","vdh_health_district":"Hampton","total_cases":"39011","hospitalizations":"808","deaths":"375"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51660","locality":"Harrisonburg","vdh_health_district":"Central Shenandoah","total_cases":"15351","hospitalizations":"418","deaths":"185"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51670","locality":"Hopewell","vdh_health_district":"Crater","total_cases":"8011","hospitalizations":"307","deaths":"127"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51678","locality":"Lexington","vdh_health_district":"Central Shenandoah","total_cases":"2744","hospitalizations":"35","deaths":"34"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51680","locality":"Lynchburg","vdh_health_district":"Central Virginia","total_cases":"24602","hospitalizations":"1011","deaths":"328"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51683","locality":"Manassas City","vdh_health_district":"Prince William","total_cases":"11956","hospitalizations":"449","deaths":"80"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51685","locality":"Manassas Park","vdh_health_district":"Prince William","total_cases":"4923","hospitalizations":"165","deaths":"31"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51690","locality":"Martinsville","vdh_health_district":"West Piedmont","total_cases":"4625","hospitalizations":"221","deaths":"126"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51700","locality":"Newport News","vdh_health_district":"Peninsula","total_cases":"50165","hospitalizations":"948","deaths":"459"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51710","locality":"Norfolk","vdh_health_district":"Norfolk","total_cases":"54327","hospitalizations":"1953","deaths":"549"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51720","locality":"Norton","vdh_health_district":"Lenowisco","total_cases":"1622","hospitalizations":"42","deaths":"22"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51730","locality":"Petersburg","vdh_health_district":"Crater","total_cases":"10316","hospitalizations":"485","deaths":"153"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51735","locality":"Poquoson","vdh_health_district":"Peninsula","total_cases":"2993","hospitalizations":"53","deaths":"31"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51740","locality":"Portsmouth","vdh_health_district":"Portsmouth","total_cases":"26819","hospitalizations":"1175","deaths":"369"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51750","locality":"Radford","vdh_health_district":"New River","total_cases":"5230","hospitalizations":"71","deaths":"51"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51760","locality":"Richmond City","vdh_health_district":"Richmond","total_cases":"61116","hospitalizations":"1320","deaths":"548"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51770","locality":"Roanoke City","vdh_health_district":"Roanoke","total_cases":"28513","hospitalizations":"536","deaths":"441"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51775","locality":"Salem","vdh_health_district":"Alleghany","total_cases":"7345","hospitalizations":"138","deaths":"113"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51790","locality":"Staunton","vdh_health_district":"Central Shenandoah","total_cases":"7981","hospitalizations":"214","deaths":"137"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51800","locality":"Suffolk","vdh_health_district":"Western Tidewater","total_cases":"24613","hospitalizations":"901","deaths":"346"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51810","locality":"Virginia Beach","vdh_health_district":"Virginia Beach","total_cases":"116433","hospitalizations":"3887","deaths":"953"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51820","locality":"Waynesboro","vdh_health_district":"Central Shenandoah","total_cases":"7606","hospitalizations":"187","deaths":"87"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51830","locality":"Williamsburg","vdh_health_district":"Peninsula","total_cases":"2343","hospitalizations":"66","deaths":"25"}
+,{"report_date":"2023-04-16T00:00:00.000","fips":"51840","locality":"Winchester","vdh_health_district":"Lord Fairfax","total_cases":"8230","hospitalizations":"289","deaths":"101"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51001","locality":"Accomack","vdh_health_district":"Eastern Shore","total_cases":"9191","hospitalizations":"472","deaths":"120"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51003","locality":"Albemarle","vdh_health_district":"Blue Ridge","total_cases":"25605","hospitalizations":"507","deaths":"209"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51005","locality":"Alleghany","vdh_health_district":"Alleghany","total_cases":"4577","hospitalizations":"113","deaths":"112"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51007","locality":"Amelia","vdh_health_district":"Piedmont","total_cases":"3602","hospitalizations":"186","deaths":"64"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51009","locality":"Amherst","vdh_health_district":"Central Virginia","total_cases":"9724","hospitalizations":"476","deaths":"113"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51011","locality":"Appomattox","vdh_health_district":"Central Virginia","total_cases":"5059","hospitalizations":"241","deaths":"62"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51013","locality":"Arlington","vdh_health_district":"Arlington","total_cases":"67080","hospitalizations":"1370","deaths":"369"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51015","locality":"Augusta","vdh_health_district":"Central Shenandoah","total_cases":"24676","hospitalizations":"641","deaths":"239"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51017","locality":"Bath","vdh_health_district":"Central Shenandoah","total_cases":"1086","hospitalizations":"22","deaths":"21"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51019","locality":"Bedford","vdh_health_district":"Central Virginia","total_cases":"22329","hospitalizations":"775","deaths":"288"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51021","locality":"Bland","vdh_health_district":"Mount Rogers","total_cases":"2427","hospitalizations":"79","deaths":"25"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51023","locality":"Botetourt","vdh_health_district":"Alleghany","total_cases":"10053","hospitalizations":"167","deaths":"118"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51025","locality":"Brunswick","vdh_health_district":"Southside","total_cases":"4107","hospitalizations":"82","deaths":"54"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51027","locality":"Buchanan","vdh_health_district":"Cumberland Plateau","total_cases":"6224","hospitalizations":"236","deaths":"150"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51029","locality":"Buckingham","vdh_health_district":"Piedmont","total_cases":"5013","hospitalizations":"182","deaths":"64"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51031","locality":"Campbell","vdh_health_district":"Central Virginia","total_cases":"17811","hospitalizations":"772","deaths":"238"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51033","locality":"Caroline","vdh_health_district":"Rappahannock","total_cases":"9083","hospitalizations":"130","deaths":"95"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51035","locality":"Carroll","vdh_health_district":"Mount Rogers","total_cases":"9907","hospitalizations":"441","deaths":"178"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51036","locality":"Charles City","vdh_health_district":"Chickahominy","total_cases":"1729","hospitalizations":"90","deaths":"31"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51037","locality":"Charlotte","vdh_health_district":"Piedmont","total_cases":"3472","hospitalizations":"203","deaths":"49"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51041","locality":"Chesterfield","vdh_health_district":"Chesterfield","total_cases":"100638","hospitalizations":"1778","deaths":"875"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51043","locality":"Clarke","vdh_health_district":"Lord Fairfax","total_cases":"3541","hospitalizations":"125","deaths":"57"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51045","locality":"Craig","vdh_health_district":"Alleghany","total_cases":"1453","hospitalizations":"37","deaths":"25"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51047","locality":"Culpeper","vdh_health_district":"Rappahannock Rapidan","total_cases":"14509","hospitalizations":"321","deaths":"179"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51049","locality":"Cumberland","vdh_health_district":"Piedmont","total_cases":"1860","hospitalizations":"116","deaths":"30"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51051","locality":"Dickenson","vdh_health_district":"Cumberland Plateau","total_cases":"4922","hospitalizations":"104","deaths":"71"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51053","locality":"Dinwiddie","vdh_health_district":"Crater","total_cases":"7586","hospitalizations":"349","deaths":"109"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51057","locality":"Essex","vdh_health_district":"Three Rivers","total_cases":"2863","hospitalizations":"102","deaths":"43"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51059","locality":"Fairfax","vdh_health_district":"Fairfax","total_cases":"263010","hospitalizations":"5213","deaths":"1721"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51061","locality":"Fauquier","vdh_health_district":"Rappahannock Rapidan","total_cases":"16715","hospitalizations":"550","deaths":"164"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51063","locality":"Floyd","vdh_health_district":"New River","total_cases":"3733","hospitalizations":"112","deaths":"55"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51065","locality":"Fluvanna","vdh_health_district":"Blue Ridge","total_cases":"6937","hospitalizations":"169","deaths":"54"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51067","locality":"Franklin County","vdh_health_district":"West Piedmont","total_cases":"14205","hospitalizations":"484","deaths":"229"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51069","locality":"Frederick","vdh_health_district":"Lord Fairfax","total_cases":"26923","hospitalizations":"739","deaths":"291"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51071","locality":"Giles","vdh_health_district":"New River","total_cases":"5314","hospitalizations":"152","deaths":"60"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51073","locality":"Gloucester","vdh_health_district":"Three Rivers","total_cases":"9697","hospitalizations":"131","deaths":"115"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51075","locality":"Goochland","vdh_health_district":"Chickahominy","total_cases":"5832","hospitalizations":"166","deaths":"64"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51077","locality":"Grayson","vdh_health_district":"Mount Rogers","total_cases":"5690","hospitalizations":"231","deaths":"98"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51079","locality":"Greene","vdh_health_district":"Blue Ridge","total_cases":"5112","hospitalizations":"212","deaths":"65"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51081","locality":"Greensville","vdh_health_district":"Crater","total_cases":"3927","hospitalizations":"157","deaths":"45"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51083","locality":"Halifax","vdh_health_district":"Southside","total_cases":"9759","hospitalizations":"287","deaths":"194"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51085","locality":"Hanover","vdh_health_district":"Chickahominy","total_cases":"29248","hospitalizations":"951","deaths":"348"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51087","locality":"Henrico","vdh_health_district":"Henrico","total_cases":"92744","hospitalizations":"1783","deaths":"1086"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51089","locality":"Henry","vdh_health_district":"West Piedmont","total_cases":"16148","hospitalizations":"678","deaths":"331"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51091","locality":"Highland","vdh_health_district":"Central Shenandoah","total_cases":"497","hospitalizations":"13","deaths":"6"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51093","locality":"Isle of Wight","vdh_health_district":"Western Tidewater","total_cases":"9285","hospitalizations":"281","deaths":"130"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51095","locality":"James City","vdh_health_district":"Peninsula","total_cases":"21436","hospitalizations":"339","deaths":"155"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51097","locality":"King and Queen","vdh_health_district":"Three Rivers","total_cases":"1478","hospitalizations":"60","deaths":"15"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51099","locality":"King George","vdh_health_district":"Rappahannock","total_cases":"6955","hospitalizations":"109","deaths":"57"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51101","locality":"King William","vdh_health_district":"Three Rivers","total_cases":"4753","hospitalizations":"117","deaths":"52"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51103","locality":"Lancaster","vdh_health_district":"Three Rivers","total_cases":"2378","hospitalizations":"54","deaths":"42"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51105","locality":"Lee","vdh_health_district":"Lenowisco","total_cases":"8528","hospitalizations":"196","deaths":"133"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51107","locality":"Loudoun","vdh_health_district":"Loudoun","total_cases":"98478","hospitalizations":"2057","deaths":"448"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51109","locality":"Louisa","vdh_health_district":"Blue Ridge","total_cases":"8980","hospitalizations":"221","deaths":"103"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51111","locality":"Lunenburg","vdh_health_district":"Piedmont","total_cases":"3382","hospitalizations":"117","deaths":"45"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51113","locality":"Madison","vdh_health_district":"Rappahannock Rapidan","total_cases":"3195","hospitalizations":"77","deaths":"48"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51115","locality":"Mathews","vdh_health_district":"Three Rivers","total_cases":"2082","hospitalizations":"46","deaths":"28"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51117","locality":"Mecklenburg","vdh_health_district":"Southside","total_cases":"7950","hospitalizations":"216","deaths":"148"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51119","locality":"Middlesex","vdh_health_district":"Three Rivers","total_cases":"2548","hospitalizations":"57","deaths":"55"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51121","locality":"Montgomery","vdh_health_district":"New River","total_cases":"25303","hospitalizations":"494","deaths":"189"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51125","locality":"Nelson","vdh_health_district":"Blue Ridge","total_cases":"3274","hospitalizations":"80","deaths":"40"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51127","locality":"New Kent","vdh_health_district":"Chickahominy","total_cases":"6011","hospitalizations":"191","deaths":"46"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51131","locality":"Northampton","vdh_health_district":"Eastern Shore","total_cases":"2921","hospitalizations":"167","deaths":"78"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51133","locality":"Northumberland","vdh_health_district":"Three Rivers","total_cases":"2732","hospitalizations":"78","deaths":"47"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51135","locality":"Nottoway","vdh_health_district":"Piedmont","total_cases":"5715","hospitalizations":"295","deaths":"103"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51137","locality":"Orange","vdh_health_district":"Rappahannock Rapidan","total_cases":"9252","hospitalizations":"224","deaths":"110"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51139","locality":"Page","vdh_health_district":"Lord Fairfax","total_cases":"7100","hospitalizations":"311","deaths":"133"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51141","locality":"Patrick","vdh_health_district":"West Piedmont","total_cases":"5058","hospitalizations":"169","deaths":"123"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51143","locality":"Pittsylvania","vdh_health_district":"Pittsylvania-Danville","total_cases":"19288","hospitalizations":"674","deaths":"249"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51145","locality":"Powhatan","vdh_health_district":"Chesterfield","total_cases":"6409","hospitalizations":"148","deaths":"67"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51147","locality":"Prince Edward","vdh_health_district":"Piedmont","total_cases":"6851","hospitalizations":"360","deaths":"90"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51149","locality":"Prince George","vdh_health_district":"Crater","total_cases":"11652","hospitalizations":"325","deaths":"90"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51153","locality":"Prince William","vdh_health_district":"Prince William","total_cases":"128737","hospitalizations":"3464","deaths":"840"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51155","locality":"Pulaski","vdh_health_district":"New River","total_cases":"11043","hospitalizations":"424","deaths":"169"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51157","locality":"Rappahannock","vdh_health_district":"Rappahannock Rapidan","total_cases":"1382","hospitalizations":"42","deaths":"14"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51159","locality":"Richmond County","vdh_health_district":"Three Rivers","total_cases":"2931","hospitalizations":"66","deaths":"30"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51161","locality":"Roanoke County","vdh_health_district":"Alleghany","total_cases":"28514","hospitalizations":"447","deaths":"321"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51163","locality":"Rockbridge","vdh_health_district":"Central Shenandoah","total_cases":"5238","hospitalizations":"141","deaths":"93"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51165","locality":"Rockingham","vdh_health_district":"Central Shenandoah","total_cases":"19298","hospitalizations":"904","deaths":"273"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51167","locality":"Russell","vdh_health_district":"Cumberland Plateau","total_cases":"9614","hospitalizations":"234","deaths":"139"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51169","locality":"Scott","vdh_health_district":"Lenowisco","total_cases":"7791","hospitalizations":"252","deaths":"145"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51171","locality":"Shenandoah","vdh_health_district":"Lord Fairfax","total_cases":"14148","hospitalizations":"540","deaths":"265"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51173","locality":"Smyth","vdh_health_district":"Mount Rogers","total_cases":"12243","hospitalizations":"517","deaths":"206"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51175","locality":"Southampton","vdh_health_district":"Western Tidewater","total_cases":"4535","hospitalizations":"138","deaths":"109"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51177","locality":"Spotsylvania","vdh_health_district":"Rappahannock","total_cases":"35559","hospitalizations":"638","deaths":"342"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51179","locality":"Stafford","vdh_health_district":"Rappahannock","total_cases":"42466","hospitalizations":"656","deaths":"202"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51181","locality":"Surry","vdh_health_district":"Crater","total_cases":"1439","hospitalizations":"82","deaths":"23"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51183","locality":"Sussex","vdh_health_district":"Crater","total_cases":"3013","hospitalizations":"133","deaths":"49"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51185","locality":"Tazewell","vdh_health_district":"Cumberland Plateau","total_cases":"14114","hospitalizations":"316","deaths":"225"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51187","locality":"Warren","vdh_health_district":"Lord Fairfax","total_cases":"11552","hospitalizations":"394","deaths":"185"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51191","locality":"Washington","vdh_health_district":"Mount Rogers","total_cases":"18356","hospitalizations":"1033","deaths":"264"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51193","locality":"Westmoreland","vdh_health_district":"Three Rivers","total_cases":"4375","hospitalizations":"142","deaths":"60"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51195","locality":"Wise","vdh_health_district":"Lenowisco","total_cases":"14061","hospitalizations":"367","deaths":"238"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51197","locality":"Wythe","vdh_health_district":"Mount Rogers","total_cases":"9814","hospitalizations":"390","deaths":"173"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51199","locality":"York","vdh_health_district":"Peninsula","total_cases":"13982","hospitalizations":"188","deaths":"136"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51510","locality":"Alexandria","vdh_health_district":"Alexandria","total_cases":"45791","hospitalizations":"832","deaths":"233"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51520","locality":"Bristol","vdh_health_district":"Mount Rogers","total_cases":"6305","hospitalizations":"370","deaths":"112"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51530","locality":"Buena Vista City","vdh_health_district":"Central Shenandoah","total_cases":"2345","hospitalizations":"50","deaths":"48"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51540","locality":"Charlottesville","vdh_health_district":"Blue Ridge","total_cases":"12530","hospitalizations":"201","deaths":"86"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51550","locality":"Chesapeake","vdh_health_district":"Chesapeake","total_cases":"64769","hospitalizations":"1681","deaths":"568"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51570","locality":"Colonial Heights","vdh_health_district":"Chesterfield","total_cases":"6373","hospitalizations":"133","deaths":"113"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51580","locality":"Covington","vdh_health_district":"Alleghany","total_cases":"1925","hospitalizations":"40","deaths":"31"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51590","locality":"Danville","vdh_health_district":"Pittsylvania-Danville","total_cases":"14837","hospitalizations":"536","deaths":"302"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51595","locality":"Emporia","vdh_health_district":"Crater","total_cases":"1680","hospitalizations":"117","deaths":"57"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51600","locality":"Fairfax City","vdh_health_district":"Fairfax","total_cases":"2776","hospitalizations":"95","deaths":"51"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51610","locality":"Falls Church","vdh_health_district":"Fairfax","total_cases":"3534","hospitalizations":"35","deaths":"21"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51620","locality":"Franklin City","vdh_health_district":"Western Tidewater","total_cases":"2674","hospitalizations":"109","deaths":"56"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51630","locality":"Fredericksburg","vdh_health_district":"Rappahannock","total_cases":"7294","hospitalizations":"152","deaths":"51"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51640","locality":"Galax","vdh_health_district":"Mount Rogers","total_cases":"3326","hospitalizations":"170","deaths":"86"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51650","locality":"Hampton","vdh_health_district":"Hampton","total_cases":"39009","hospitalizations":"808","deaths":"375"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51660","locality":"Harrisonburg","vdh_health_district":"Central Shenandoah","total_cases":"15350","hospitalizations":"418","deaths":"185"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51670","locality":"Hopewell","vdh_health_district":"Crater","total_cases":"8011","hospitalizations":"307","deaths":"127"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51678","locality":"Lexington","vdh_health_district":"Central Shenandoah","total_cases":"2744","hospitalizations":"35","deaths":"34"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51680","locality":"Lynchburg","vdh_health_district":"Central Virginia","total_cases":"24600","hospitalizations":"1011","deaths":"328"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51683","locality":"Manassas City","vdh_health_district":"Prince William","total_cases":"11954","hospitalizations":"449","deaths":"80"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51685","locality":"Manassas Park","vdh_health_district":"Prince William","total_cases":"4923","hospitalizations":"165","deaths":"31"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51690","locality":"Martinsville","vdh_health_district":"West Piedmont","total_cases":"4625","hospitalizations":"221","deaths":"126"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51700","locality":"Newport News","vdh_health_district":"Peninsula","total_cases":"50158","hospitalizations":"948","deaths":"459"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51710","locality":"Norfolk","vdh_health_district":"Norfolk","total_cases":"54323","hospitalizations":"1953","deaths":"549"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51720","locality":"Norton","vdh_health_district":"Lenowisco","total_cases":"1622","hospitalizations":"42","deaths":"22"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51730","locality":"Petersburg","vdh_health_district":"Crater","total_cases":"10316","hospitalizations":"485","deaths":"153"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51735","locality":"Poquoson","vdh_health_district":"Peninsula","total_cases":"2992","hospitalizations":"53","deaths":"31"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51740","locality":"Portsmouth","vdh_health_district":"Portsmouth","total_cases":"26817","hospitalizations":"1175","deaths":"369"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51750","locality":"Radford","vdh_health_district":"New River","total_cases":"5229","hospitalizations":"71","deaths":"51"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51760","locality":"Richmond City","vdh_health_district":"Richmond","total_cases":"61109","hospitalizations":"1320","deaths":"548"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51770","locality":"Roanoke City","vdh_health_district":"Roanoke","total_cases":"28511","hospitalizations":"536","deaths":"441"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51775","locality":"Salem","vdh_health_district":"Alleghany","total_cases":"7344","hospitalizations":"138","deaths":"113"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51790","locality":"Staunton","vdh_health_district":"Central Shenandoah","total_cases":"7981","hospitalizations":"214","deaths":"137"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51800","locality":"Suffolk","vdh_health_district":"Western Tidewater","total_cases":"24612","hospitalizations":"901","deaths":"346"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51810","locality":"Virginia Beach","vdh_health_district":"Virginia Beach","total_cases":"116427","hospitalizations":"3887","deaths":"953"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51820","locality":"Waynesboro","vdh_health_district":"Central Shenandoah","total_cases":"7606","hospitalizations":"187","deaths":"87"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51830","locality":"Williamsburg","vdh_health_district":"Peninsula","total_cases":"2343","hospitalizations":"66","deaths":"25"}
+,{"report_date":"2023-04-15T00:00:00.000","fips":"51840","locality":"Winchester","vdh_health_district":"Lord Fairfax","total_cases":"8230","hospitalizations":"289","deaths":"101"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51001","locality":"Accomack","vdh_health_district":"Eastern Shore","total_cases":"9190","hospitalizations":"472","deaths":"119"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51003","locality":"Albemarle","vdh_health_district":"Blue Ridge","total_cases":"25600","hospitalizations":"507","deaths":"209"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51005","locality":"Alleghany","vdh_health_district":"Alleghany","total_cases":"4576","hospitalizations":"113","deaths":"112"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51007","locality":"Amelia","vdh_health_district":"Piedmont","total_cases":"3601","hospitalizations":"186","deaths":"64"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51009","locality":"Amherst","vdh_health_district":"Central Virginia","total_cases":"9722","hospitalizations":"476","deaths":"113"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51011","locality":"Appomattox","vdh_health_district":"Central Virginia","total_cases":"5058","hospitalizations":"241","deaths":"62"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51013","locality":"Arlington","vdh_health_district":"Arlington","total_cases":"67080","hospitalizations":"1370","deaths":"369"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51015","locality":"Augusta","vdh_health_district":"Central Shenandoah","total_cases":"24675","hospitalizations":"641","deaths":"239"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51017","locality":"Bath","vdh_health_district":"Central Shenandoah","total_cases":"1086","hospitalizations":"22","deaths":"21"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51019","locality":"Bedford","vdh_health_district":"Central Virginia","total_cases":"22323","hospitalizations":"775","deaths":"288"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51021","locality":"Bland","vdh_health_district":"Mount Rogers","total_cases":"2427","hospitalizations":"79","deaths":"25"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51023","locality":"Botetourt","vdh_health_district":"Alleghany","total_cases":"10052","hospitalizations":"167","deaths":"118"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51025","locality":"Brunswick","vdh_health_district":"Southside","total_cases":"4107","hospitalizations":"82","deaths":"54"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51027","locality":"Buchanan","vdh_health_district":"Cumberland Plateau","total_cases":"6224","hospitalizations":"236","deaths":"150"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51029","locality":"Buckingham","vdh_health_district":"Piedmont","total_cases":"5013","hospitalizations":"182","deaths":"64"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51031","locality":"Campbell","vdh_health_district":"Central Virginia","total_cases":"17808","hospitalizations":"772","deaths":"238"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51033","locality":"Caroline","vdh_health_district":"Rappahannock","total_cases":"9083","hospitalizations":"130","deaths":"95"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51035","locality":"Carroll","vdh_health_district":"Mount Rogers","total_cases":"9904","hospitalizations":"441","deaths":"178"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51036","locality":"Charles City","vdh_health_district":"Chickahominy","total_cases":"1729","hospitalizations":"90","deaths":"31"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51037","locality":"Charlotte","vdh_health_district":"Piedmont","total_cases":"3468","hospitalizations":"202","deaths":"49"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51041","locality":"Chesterfield","vdh_health_district":"Chesterfield","total_cases":"100628","hospitalizations":"1778","deaths":"875"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51043","locality":"Clarke","vdh_health_district":"Lord Fairfax","total_cases":"3541","hospitalizations":"125","deaths":"57"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51045","locality":"Craig","vdh_health_district":"Alleghany","total_cases":"1453","hospitalizations":"37","deaths":"25"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51047","locality":"Culpeper","vdh_health_district":"Rappahannock Rapidan","total_cases":"14506","hospitalizations":"321","deaths":"179"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51049","locality":"Cumberland","vdh_health_district":"Piedmont","total_cases":"1859","hospitalizations":"116","deaths":"30"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51051","locality":"Dickenson","vdh_health_district":"Cumberland Plateau","total_cases":"4922","hospitalizations":"104","deaths":"71"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51053","locality":"Dinwiddie","vdh_health_district":"Crater","total_cases":"7581","hospitalizations":"349","deaths":"109"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51057","locality":"Essex","vdh_health_district":"Three Rivers","total_cases":"2862","hospitalizations":"102","deaths":"43"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51059","locality":"Fairfax","vdh_health_district":"Fairfax","total_cases":"262984","hospitalizations":"5211","deaths":"1721"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51061","locality":"Fauquier","vdh_health_district":"Rappahannock Rapidan","total_cases":"16714","hospitalizations":"550","deaths":"164"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51063","locality":"Floyd","vdh_health_district":"New River","total_cases":"3731","hospitalizations":"111","deaths":"55"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51065","locality":"Fluvanna","vdh_health_district":"Blue Ridge","total_cases":"6936","hospitalizations":"169","deaths":"54"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51067","locality":"Franklin County","vdh_health_district":"West Piedmont","total_cases":"14201","hospitalizations":"483","deaths":"229"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51069","locality":"Frederick","vdh_health_district":"Lord Fairfax","total_cases":"26919","hospitalizations":"738","deaths":"291"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51071","locality":"Giles","vdh_health_district":"New River","total_cases":"5314","hospitalizations":"152","deaths":"60"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51073","locality":"Gloucester","vdh_health_district":"Three Rivers","total_cases":"9694","hospitalizations":"131","deaths":"115"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51075","locality":"Goochland","vdh_health_district":"Chickahominy","total_cases":"5830","hospitalizations":"166","deaths":"64"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51077","locality":"Grayson","vdh_health_district":"Mount Rogers","total_cases":"5689","hospitalizations":"231","deaths":"98"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51079","locality":"Greene","vdh_health_district":"Blue Ridge","total_cases":"5112","hospitalizations":"212","deaths":"65"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51081","locality":"Greensville","vdh_health_district":"Crater","total_cases":"3927","hospitalizations":"157","deaths":"45"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51083","locality":"Halifax","vdh_health_district":"Southside","total_cases":"9757","hospitalizations":"287","deaths":"194"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51085","locality":"Hanover","vdh_health_district":"Chickahominy","total_cases":"29246","hospitalizations":"951","deaths":"348"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51087","locality":"Henrico","vdh_health_district":"Henrico","total_cases":"92734","hospitalizations":"1782","deaths":"1086"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51089","locality":"Henry","vdh_health_district":"West Piedmont","total_cases":"16147","hospitalizations":"678","deaths":"331"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51091","locality":"Highland","vdh_health_district":"Central Shenandoah","total_cases":"497","hospitalizations":"13","deaths":"6"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51093","locality":"Isle of Wight","vdh_health_district":"Western Tidewater","total_cases":"9283","hospitalizations":"281","deaths":"130"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51095","locality":"James City","vdh_health_district":"Peninsula","total_cases":"21433","hospitalizations":"339","deaths":"155"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51097","locality":"King and Queen","vdh_health_district":"Three Rivers","total_cases":"1477","hospitalizations":"60","deaths":"15"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51099","locality":"King George","vdh_health_district":"Rappahannock","total_cases":"6955","hospitalizations":"109","deaths":"57"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51101","locality":"King William","vdh_health_district":"Three Rivers","total_cases":"4753","hospitalizations":"117","deaths":"52"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51103","locality":"Lancaster","vdh_health_district":"Three Rivers","total_cases":"2370","hospitalizations":"54","deaths":"42"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51105","locality":"Lee","vdh_health_district":"Lenowisco","total_cases":"8527","hospitalizations":"196","deaths":"132"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51107","locality":"Loudoun","vdh_health_district":"Loudoun","total_cases":"98462","hospitalizations":"2057","deaths":"448"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51109","locality":"Louisa","vdh_health_district":"Blue Ridge","total_cases":"8980","hospitalizations":"221","deaths":"103"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51111","locality":"Lunenburg","vdh_health_district":"Piedmont","total_cases":"3380","hospitalizations":"117","deaths":"45"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51113","locality":"Madison","vdh_health_district":"Rappahannock Rapidan","total_cases":"3195","hospitalizations":"77","deaths":"48"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51115","locality":"Mathews","vdh_health_district":"Three Rivers","total_cases":"2081","hospitalizations":"46","deaths":"28"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51117","locality":"Mecklenburg","vdh_health_district":"Southside","total_cases":"7950","hospitalizations":"215","deaths":"148"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51119","locality":"Middlesex","vdh_health_district":"Three Rivers","total_cases":"2548","hospitalizations":"57","deaths":"55"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51121","locality":"Montgomery","vdh_health_district":"New River","total_cases":"25301","hospitalizations":"494","deaths":"189"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51125","locality":"Nelson","vdh_health_district":"Blue Ridge","total_cases":"3274","hospitalizations":"80","deaths":"40"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51127","locality":"New Kent","vdh_health_district":"Chickahominy","total_cases":"6011","hospitalizations":"191","deaths":"46"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51131","locality":"Northampton","vdh_health_district":"Eastern Shore","total_cases":"2921","hospitalizations":"167","deaths":"78"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51133","locality":"Northumberland","vdh_health_district":"Three Rivers","total_cases":"2733","hospitalizations":"78","deaths":"47"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51135","locality":"Nottoway","vdh_health_district":"Piedmont","total_cases":"5713","hospitalizations":"295","deaths":"103"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51137","locality":"Orange","vdh_health_district":"Rappahannock Rapidan","total_cases":"9252","hospitalizations":"224","deaths":"110"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51139","locality":"Page","vdh_health_district":"Lord Fairfax","total_cases":"7097","hospitalizations":"311","deaths":"133"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51141","locality":"Patrick","vdh_health_district":"West Piedmont","total_cases":"5058","hospitalizations":"169","deaths":"123"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51143","locality":"Pittsylvania","vdh_health_district":"Pittsylvania-Danville","total_cases":"19288","hospitalizations":"674","deaths":"249"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51145","locality":"Powhatan","vdh_health_district":"Chesterfield","total_cases":"6409","hospitalizations":"148","deaths":"67"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51147","locality":"Prince Edward","vdh_health_district":"Piedmont","total_cases":"6849","hospitalizations":"360","deaths":"90"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51149","locality":"Prince George","vdh_health_district":"Crater","total_cases":"11650","hospitalizations":"325","deaths":"90"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51153","locality":"Prince William","vdh_health_district":"Prince William","total_cases":"128719","hospitalizations":"3464","deaths":"840"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51155","locality":"Pulaski","vdh_health_district":"New River","total_cases":"11042","hospitalizations":"424","deaths":"169"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51157","locality":"Rappahannock","vdh_health_district":"Rappahannock Rapidan","total_cases":"1382","hospitalizations":"42","deaths":"14"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51159","locality":"Richmond County","vdh_health_district":"Three Rivers","total_cases":"2931","hospitalizations":"66","deaths":"30"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51161","locality":"Roanoke County","vdh_health_district":"Alleghany","total_cases":"28510","hospitalizations":"447","deaths":"321"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51163","locality":"Rockbridge","vdh_health_district":"Central Shenandoah","total_cases":"5238","hospitalizations":"141","deaths":"93"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51165","locality":"Rockingham","vdh_health_district":"Central Shenandoah","total_cases":"19298","hospitalizations":"904","deaths":"273"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51167","locality":"Russell","vdh_health_district":"Cumberland Plateau","total_cases":"9612","hospitalizations":"234","deaths":"139"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51169","locality":"Scott","vdh_health_district":"Lenowisco","total_cases":"7788","hospitalizations":"252","deaths":"145"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51171","locality":"Shenandoah","vdh_health_district":"Lord Fairfax","total_cases":"14144","hospitalizations":"539","deaths":"265"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51173","locality":"Smyth","vdh_health_district":"Mount Rogers","total_cases":"12242","hospitalizations":"517","deaths":"206"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51175","locality":"Southampton","vdh_health_district":"Western Tidewater","total_cases":"4533","hospitalizations":"138","deaths":"109"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51177","locality":"Spotsylvania","vdh_health_district":"Rappahannock","total_cases":"35558","hospitalizations":"638","deaths":"342"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51179","locality":"Stafford","vdh_health_district":"Rappahannock","total_cases":"42461","hospitalizations":"656","deaths":"202"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51181","locality":"Surry","vdh_health_district":"Crater","total_cases":"1439","hospitalizations":"82","deaths":"23"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51183","locality":"Sussex","vdh_health_district":"Crater","total_cases":"3012","hospitalizations":"133","deaths":"49"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51185","locality":"Tazewell","vdh_health_district":"Cumberland Plateau","total_cases":"14114","hospitalizations":"316","deaths":"225"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51187","locality":"Warren","vdh_health_district":"Lord Fairfax","total_cases":"11550","hospitalizations":"394","deaths":"185"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51191","locality":"Washington","vdh_health_district":"Mount Rogers","total_cases":"18355","hospitalizations":"1033","deaths":"264"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51193","locality":"Westmoreland","vdh_health_district":"Three Rivers","total_cases":"4370","hospitalizations":"141","deaths":"60"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51195","locality":"Wise","vdh_health_district":"Lenowisco","total_cases":"14059","hospitalizations":"367","deaths":"238"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51197","locality":"Wythe","vdh_health_district":"Mount Rogers","total_cases":"9814","hospitalizations":"390","deaths":"173"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51199","locality":"York","vdh_health_district":"Peninsula","total_cases":"13980","hospitalizations":"188","deaths":"136"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51510","locality":"Alexandria","vdh_health_district":"Alexandria","total_cases":"45786","hospitalizations":"832","deaths":"233"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51520","locality":"Bristol","vdh_health_district":"Mount Rogers","total_cases":"6304","hospitalizations":"370","deaths":"112"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51530","locality":"Buena Vista City","vdh_health_district":"Central Shenandoah","total_cases":"2345","hospitalizations":"50","deaths":"48"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51540","locality":"Charlottesville","vdh_health_district":"Blue Ridge","total_cases":"12532","hospitalizations":"201","deaths":"86"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51550","locality":"Chesapeake","vdh_health_district":"Chesapeake","total_cases":"64765","hospitalizations":"1678","deaths":"568"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51570","locality":"Colonial Heights","vdh_health_district":"Chesterfield","total_cases":"6374","hospitalizations":"133","deaths":"113"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51580","locality":"Covington","vdh_health_district":"Alleghany","total_cases":"1923","hospitalizations":"40","deaths":"31"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51590","locality":"Danville","vdh_health_district":"Pittsylvania-Danville","total_cases":"14835","hospitalizations":"536","deaths":"302"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51595","locality":"Emporia","vdh_health_district":"Crater","total_cases":"1663","hospitalizations":"117","deaths":"57"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51600","locality":"Fairfax City","vdh_health_district":"Fairfax","total_cases":"2777","hospitalizations":"95","deaths":"51"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51610","locality":"Falls Church","vdh_health_district":"Fairfax","total_cases":"3534","hospitalizations":"35","deaths":"21"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51620","locality":"Franklin City","vdh_health_district":"Western Tidewater","total_cases":"2676","hospitalizations":"109","deaths":"56"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51630","locality":"Fredericksburg","vdh_health_district":"Rappahannock","total_cases":"7294","hospitalizations":"152","deaths":"51"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51640","locality":"Galax","vdh_health_district":"Mount Rogers","total_cases":"3327","hospitalizations":"170","deaths":"86"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51650","locality":"Hampton","vdh_health_district":"Hampton","total_cases":"39001","hospitalizations":"808","deaths":"375"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51660","locality":"Harrisonburg","vdh_health_district":"Central Shenandoah","total_cases":"15349","hospitalizations":"418","deaths":"185"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51670","locality":"Hopewell","vdh_health_district":"Crater","total_cases":"8008","hospitalizations":"307","deaths":"127"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51678","locality":"Lexington","vdh_health_district":"Central Shenandoah","total_cases":"2743","hospitalizations":"35","deaths":"34"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51680","locality":"Lynchburg","vdh_health_district":"Central Virginia","total_cases":"24592","hospitalizations":"1010","deaths":"328"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51683","locality":"Manassas City","vdh_health_district":"Prince William","total_cases":"11950","hospitalizations":"449","deaths":"80"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51685","locality":"Manassas Park","vdh_health_district":"Prince William","total_cases":"4922","hospitalizations":"165","deaths":"31"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51690","locality":"Martinsville","vdh_health_district":"West Piedmont","total_cases":"4624","hospitalizations":"221","deaths":"126"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51700","locality":"Newport News","vdh_health_district":"Peninsula","total_cases":"50152","hospitalizations":"948","deaths":"459"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51710","locality":"Norfolk","vdh_health_district":"Norfolk","total_cases":"54319","hospitalizations":"1952","deaths":"549"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51720","locality":"Norton","vdh_health_district":"Lenowisco","total_cases":"1622","hospitalizations":"42","deaths":"22"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51730","locality":"Petersburg","vdh_health_district":"Crater","total_cases":"10311","hospitalizations":"485","deaths":"153"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51735","locality":"Poquoson","vdh_health_district":"Peninsula","total_cases":"2992","hospitalizations":"53","deaths":"31"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51740","locality":"Portsmouth","vdh_health_district":"Portsmouth","total_cases":"26815","hospitalizations":"1175","deaths":"369"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51750","locality":"Radford","vdh_health_district":"New River","total_cases":"5228","hospitalizations":"71","deaths":"51"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51760","locality":"Richmond City","vdh_health_district":"Richmond","total_cases":"61097","hospitalizations":"1320","deaths":"548"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51770","locality":"Roanoke City","vdh_health_district":"Roanoke","total_cases":"28509","hospitalizations":"535","deaths":"441"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51775","locality":"Salem","vdh_health_district":"Alleghany","total_cases":"7342","hospitalizations":"138","deaths":"113"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51790","locality":"Staunton","vdh_health_district":"Central Shenandoah","total_cases":"7981","hospitalizations":"214","deaths":"137"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51800","locality":"Suffolk","vdh_health_district":"Western Tidewater","total_cases":"24607","hospitalizations":"901","deaths":"346"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51810","locality":"Virginia Beach","vdh_health_district":"Virginia Beach","total_cases":"116415","hospitalizations":"3886","deaths":"953"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51820","locality":"Waynesboro","vdh_health_district":"Central Shenandoah","total_cases":"7606","hospitalizations":"187","deaths":"87"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51830","locality":"Williamsburg","vdh_health_district":"Peninsula","total_cases":"2343","hospitalizations":"66","deaths":"25"}
+,{"report_date":"2023-04-14T00:00:00.000","fips":"51840","locality":"Winchester","vdh_health_district":"Lord Fairfax","total_cases":"8230","hospitalizations":"287","deaths":"101"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51001","locality":"Accomack","vdh_health_district":"Eastern Shore","total_cases":"9190","hospitalizations":"472","deaths":"119"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51003","locality":"Albemarle","vdh_health_district":"Blue Ridge","total_cases":"25599","hospitalizations":"507","deaths":"209"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51005","locality":"Alleghany","vdh_health_district":"Alleghany","total_cases":"4578","hospitalizations":"113","deaths":"112"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51007","locality":"Amelia","vdh_health_district":"Piedmont","total_cases":"3601","hospitalizations":"186","deaths":"64"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51009","locality":"Amherst","vdh_health_district":"Central Virginia","total_cases":"9722","hospitalizations":"476","deaths":"113"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51011","locality":"Appomattox","vdh_health_district":"Central Virginia","total_cases":"5058","hospitalizations":"241","deaths":"62"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51013","locality":"Arlington","vdh_health_district":"Arlington","total_cases":"67074","hospitalizations":"1370","deaths":"369"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51015","locality":"Augusta","vdh_health_district":"Central Shenandoah","total_cases":"24674","hospitalizations":"641","deaths":"239"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51017","locality":"Bath","vdh_health_district":"Central Shenandoah","total_cases":"1086","hospitalizations":"22","deaths":"21"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51019","locality":"Bedford","vdh_health_district":"Central Virginia","total_cases":"22321","hospitalizations":"775","deaths":"288"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51021","locality":"Bland","vdh_health_district":"Mount Rogers","total_cases":"2427","hospitalizations":"79","deaths":"25"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51023","locality":"Botetourt","vdh_health_district":"Alleghany","total_cases":"10052","hospitalizations":"167","deaths":"118"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51025","locality":"Brunswick","vdh_health_district":"Southside","total_cases":"4107","hospitalizations":"82","deaths":"54"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51027","locality":"Buchanan","vdh_health_district":"Cumberland Plateau","total_cases":"6224","hospitalizations":"236","deaths":"150"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51029","locality":"Buckingham","vdh_health_district":"Piedmont","total_cases":"5014","hospitalizations":"182","deaths":"64"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51031","locality":"Campbell","vdh_health_district":"Central Virginia","total_cases":"17808","hospitalizations":"772","deaths":"238"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51033","locality":"Caroline","vdh_health_district":"Rappahannock","total_cases":"9083","hospitalizations":"130","deaths":"95"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51035","locality":"Carroll","vdh_health_district":"Mount Rogers","total_cases":"9902","hospitalizations":"441","deaths":"178"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51036","locality":"Charles City","vdh_health_district":"Chickahominy","total_cases":"1729","hospitalizations":"90","deaths":"31"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51037","locality":"Charlotte","vdh_health_district":"Piedmont","total_cases":"3465","hospitalizations":"202","deaths":"49"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51041","locality":"Chesterfield","vdh_health_district":"Chesterfield","total_cases":"100624","hospitalizations":"1778","deaths":"875"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51043","locality":"Clarke","vdh_health_district":"Lord Fairfax","total_cases":"3540","hospitalizations":"125","deaths":"57"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51045","locality":"Craig","vdh_health_district":"Alleghany","total_cases":"1453","hospitalizations":"37","deaths":"25"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51047","locality":"Culpeper","vdh_health_district":"Rappahannock Rapidan","total_cases":"14505","hospitalizations":"321","deaths":"179"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51049","locality":"Cumberland","vdh_health_district":"Piedmont","total_cases":"1859","hospitalizations":"116","deaths":"30"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51051","locality":"Dickenson","vdh_health_district":"Cumberland Plateau","total_cases":"4922","hospitalizations":"104","deaths":"71"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51053","locality":"Dinwiddie","vdh_health_district":"Crater","total_cases":"7579","hospitalizations":"348","deaths":"109"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51057","locality":"Essex","vdh_health_district":"Three Rivers","total_cases":"2862","hospitalizations":"102","deaths":"43"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51059","locality":"Fairfax","vdh_health_district":"Fairfax","total_cases":"262953","hospitalizations":"5211","deaths":"1721"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51061","locality":"Fauquier","vdh_health_district":"Rappahannock Rapidan","total_cases":"16713","hospitalizations":"550","deaths":"164"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51063","locality":"Floyd","vdh_health_district":"New River","total_cases":"3731","hospitalizations":"111","deaths":"55"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51065","locality":"Fluvanna","vdh_health_district":"Blue Ridge","total_cases":"6936","hospitalizations":"169","deaths":"54"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51067","locality":"Franklin County","vdh_health_district":"West Piedmont","total_cases":"14200","hospitalizations":"482","deaths":"229"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51069","locality":"Frederick","vdh_health_district":"Lord Fairfax","total_cases":"26918","hospitalizations":"738","deaths":"291"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51071","locality":"Giles","vdh_health_district":"New River","total_cases":"5313","hospitalizations":"152","deaths":"60"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51073","locality":"Gloucester","vdh_health_district":"Three Rivers","total_cases":"9694","hospitalizations":"131","deaths":"115"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51075","locality":"Goochland","vdh_health_district":"Chickahominy","total_cases":"5830","hospitalizations":"166","deaths":"64"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51077","locality":"Grayson","vdh_health_district":"Mount Rogers","total_cases":"5689","hospitalizations":"231","deaths":"98"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51079","locality":"Greene","vdh_health_district":"Blue Ridge","total_cases":"5112","hospitalizations":"212","deaths":"65"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51081","locality":"Greensville","vdh_health_district":"Crater","total_cases":"3927","hospitalizations":"157","deaths":"45"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51083","locality":"Halifax","vdh_health_district":"Southside","total_cases":"9749","hospitalizations":"287","deaths":"194"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51085","locality":"Hanover","vdh_health_district":"Chickahominy","total_cases":"29245","hospitalizations":"951","deaths":"348"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51087","locality":"Henrico","vdh_health_district":"Henrico","total_cases":"92726","hospitalizations":"1782","deaths":"1086"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51089","locality":"Henry","vdh_health_district":"West Piedmont","total_cases":"16148","hospitalizations":"678","deaths":"331"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51091","locality":"Highland","vdh_health_district":"Central Shenandoah","total_cases":"497","hospitalizations":"13","deaths":"6"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51093","locality":"Isle of Wight","vdh_health_district":"Western Tidewater","total_cases":"9281","hospitalizations":"281","deaths":"130"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51095","locality":"James City","vdh_health_district":"Peninsula","total_cases":"21428","hospitalizations":"339","deaths":"155"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51097","locality":"King and Queen","vdh_health_district":"Three Rivers","total_cases":"1477","hospitalizations":"60","deaths":"15"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51099","locality":"King George","vdh_health_district":"Rappahannock","total_cases":"6949","hospitalizations":"109","deaths":"57"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51101","locality":"King William","vdh_health_district":"Three Rivers","total_cases":"4752","hospitalizations":"117","deaths":"52"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51103","locality":"Lancaster","vdh_health_district":"Three Rivers","total_cases":"2370","hospitalizations":"54","deaths":"42"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51105","locality":"Lee","vdh_health_district":"Lenowisco","total_cases":"8527","hospitalizations":"196","deaths":"132"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51107","locality":"Loudoun","vdh_health_district":"Loudoun","total_cases":"98453","hospitalizations":"2057","deaths":"448"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51109","locality":"Louisa","vdh_health_district":"Blue Ridge","total_cases":"8979","hospitalizations":"221","deaths":"103"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51111","locality":"Lunenburg","vdh_health_district":"Piedmont","total_cases":"3379","hospitalizations":"117","deaths":"45"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51113","locality":"Madison","vdh_health_district":"Rappahannock Rapidan","total_cases":"3195","hospitalizations":"77","deaths":"48"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51115","locality":"Mathews","vdh_health_district":"Three Rivers","total_cases":"2081","hospitalizations":"46","deaths":"28"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51117","locality":"Mecklenburg","vdh_health_district":"Southside","total_cases":"7949","hospitalizations":"215","deaths":"148"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51119","locality":"Middlesex","vdh_health_district":"Three Rivers","total_cases":"2547","hospitalizations":"57","deaths":"55"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51121","locality":"Montgomery","vdh_health_district":"New River","total_cases":"25299","hospitalizations":"494","deaths":"189"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51125","locality":"Nelson","vdh_health_district":"Blue Ridge","total_cases":"3274","hospitalizations":"80","deaths":"40"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51127","locality":"New Kent","vdh_health_district":"Chickahominy","total_cases":"6011","hospitalizations":"191","deaths":"46"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51131","locality":"Northampton","vdh_health_district":"Eastern Shore","total_cases":"2921","hospitalizations":"167","deaths":"78"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51133","locality":"Northumberland","vdh_health_district":"Three Rivers","total_cases":"2732","hospitalizations":"78","deaths":"47"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51135","locality":"Nottoway","vdh_health_district":"Piedmont","total_cases":"5712","hospitalizations":"295","deaths":"103"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51137","locality":"Orange","vdh_health_district":"Rappahannock Rapidan","total_cases":"9251","hospitalizations":"224","deaths":"110"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51139","locality":"Page","vdh_health_district":"Lord Fairfax","total_cases":"7097","hospitalizations":"311","deaths":"133"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51141","locality":"Patrick","vdh_health_district":"West Piedmont","total_cases":"5057","hospitalizations":"169","deaths":"123"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51143","locality":"Pittsylvania","vdh_health_district":"Pittsylvania-Danville","total_cases":"19286","hospitalizations":"674","deaths":"249"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51145","locality":"Powhatan","vdh_health_district":"Chesterfield","total_cases":"6409","hospitalizations":"148","deaths":"67"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51147","locality":"Prince Edward","vdh_health_district":"Piedmont","total_cases":"6848","hospitalizations":"360","deaths":"90"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51149","locality":"Prince George","vdh_health_district":"Crater","total_cases":"11649","hospitalizations":"325","deaths":"90"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51153","locality":"Prince William","vdh_health_district":"Prince William","total_cases":"128713","hospitalizations":"3464","deaths":"840"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51155","locality":"Pulaski","vdh_health_district":"New River","total_cases":"11042","hospitalizations":"424","deaths":"169"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51157","locality":"Rappahannock","vdh_health_district":"Rappahannock Rapidan","total_cases":"1382","hospitalizations":"42","deaths":"14"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51159","locality":"Richmond County","vdh_health_district":"Three Rivers","total_cases":"2931","hospitalizations":"66","deaths":"30"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51161","locality":"Roanoke County","vdh_health_district":"Alleghany","total_cases":"28505","hospitalizations":"447","deaths":"321"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51163","locality":"Rockbridge","vdh_health_district":"Central Shenandoah","total_cases":"5236","hospitalizations":"141","deaths":"93"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51165","locality":"Rockingham","vdh_health_district":"Central Shenandoah","total_cases":"19297","hospitalizations":"904","deaths":"273"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51167","locality":"Russell","vdh_health_district":"Cumberland Plateau","total_cases":"9611","hospitalizations":"234","deaths":"139"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51169","locality":"Scott","vdh_health_district":"Lenowisco","total_cases":"7786","hospitalizations":"252","deaths":"145"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51171","locality":"Shenandoah","vdh_health_district":"Lord Fairfax","total_cases":"14142","hospitalizations":"539","deaths":"265"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51173","locality":"Smyth","vdh_health_district":"Mount Rogers","total_cases":"12240","hospitalizations":"517","deaths":"206"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51175","locality":"Southampton","vdh_health_district":"Western Tidewater","total_cases":"4533","hospitalizations":"139","deaths":"109"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51177","locality":"Spotsylvania","vdh_health_district":"Rappahannock","total_cases":"35556","hospitalizations":"638","deaths":"342"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51179","locality":"Stafford","vdh_health_district":"Rappahannock","total_cases":"42453","hospitalizations":"656","deaths":"202"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51181","locality":"Surry","vdh_health_district":"Crater","total_cases":"1439","hospitalizations":"82","deaths":"23"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51183","locality":"Sussex","vdh_health_district":"Crater","total_cases":"3012","hospitalizations":"133","deaths":"49"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51185","locality":"Tazewell","vdh_health_district":"Cumberland Plateau","total_cases":"14114","hospitalizations":"316","deaths":"225"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51187","locality":"Warren","vdh_health_district":"Lord Fairfax","total_cases":"11549","hospitalizations":"394","deaths":"185"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51191","locality":"Washington","vdh_health_district":"Mount Rogers","total_cases":"18355","hospitalizations":"1033","deaths":"264"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51193","locality":"Westmoreland","vdh_health_district":"Three Rivers","total_cases":"4368","hospitalizations":"141","deaths":"60"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51195","locality":"Wise","vdh_health_district":"Lenowisco","total_cases":"14057","hospitalizations":"367","deaths":"238"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51197","locality":"Wythe","vdh_health_district":"Mount Rogers","total_cases":"9813","hospitalizations":"390","deaths":"173"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51199","locality":"York","vdh_health_district":"Peninsula","total_cases":"13978","hospitalizations":"188","deaths":"136"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51510","locality":"Alexandria","vdh_health_district":"Alexandria","total_cases":"45781","hospitalizations":"832","deaths":"233"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51520","locality":"Bristol","vdh_health_district":"Mount Rogers","total_cases":"6304","hospitalizations":"370","deaths":"112"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51530","locality":"Buena Vista City","vdh_health_district":"Central Shenandoah","total_cases":"2345","hospitalizations":"50","deaths":"48"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51540","locality":"Charlottesville","vdh_health_district":"Blue Ridge","total_cases":"12528","hospitalizations":"201","deaths":"86"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51550","locality":"Chesapeake","vdh_health_district":"Chesapeake","total_cases":"64759","hospitalizations":"1678","deaths":"568"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51570","locality":"Colonial Heights","vdh_health_district":"Chesterfield","total_cases":"6373","hospitalizations":"133","deaths":"113"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51580","locality":"Covington","vdh_health_district":"Alleghany","total_cases":"1921","hospitalizations":"40","deaths":"31"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51590","locality":"Danville","vdh_health_district":"Pittsylvania-Danville","total_cases":"14833","hospitalizations":"536","deaths":"302"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51595","locality":"Emporia","vdh_health_district":"Crater","total_cases":"1663","hospitalizations":"117","deaths":"57"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51600","locality":"Fairfax City","vdh_health_district":"Fairfax","total_cases":"2774","hospitalizations":"95","deaths":"51"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51610","locality":"Falls Church","vdh_health_district":"Fairfax","total_cases":"3534","hospitalizations":"35","deaths":"21"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51620","locality":"Franklin City","vdh_health_district":"Western Tidewater","total_cases":"2674","hospitalizations":"109","deaths":"56"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51630","locality":"Fredericksburg","vdh_health_district":"Rappahannock","total_cases":"7294","hospitalizations":"152","deaths":"51"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51640","locality":"Galax","vdh_health_district":"Mount Rogers","total_cases":"3326","hospitalizations":"170","deaths":"86"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51650","locality":"Hampton","vdh_health_district":"Hampton","total_cases":"38990","hospitalizations":"808","deaths":"375"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51660","locality":"Harrisonburg","vdh_health_district":"Central Shenandoah","total_cases":"15348","hospitalizations":"418","deaths":"185"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51670","locality":"Hopewell","vdh_health_district":"Crater","total_cases":"8005","hospitalizations":"307","deaths":"127"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51678","locality":"Lexington","vdh_health_district":"Central Shenandoah","total_cases":"2744","hospitalizations":"35","deaths":"34"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51680","locality":"Lynchburg","vdh_health_district":"Central Virginia","total_cases":"24586","hospitalizations":"1010","deaths":"328"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51683","locality":"Manassas City","vdh_health_district":"Prince William","total_cases":"11947","hospitalizations":"449","deaths":"80"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51685","locality":"Manassas Park","vdh_health_district":"Prince William","total_cases":"4921","hospitalizations":"165","deaths":"31"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51690","locality":"Martinsville","vdh_health_district":"West Piedmont","total_cases":"4621","hospitalizations":"221","deaths":"126"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51700","locality":"Newport News","vdh_health_district":"Peninsula","total_cases":"50149","hospitalizations":"948","deaths":"459"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51710","locality":"Norfolk","vdh_health_district":"Norfolk","total_cases":"54312","hospitalizations":"1951","deaths":"549"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51720","locality":"Norton","vdh_health_district":"Lenowisco","total_cases":"1621","hospitalizations":"42","deaths":"22"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51730","locality":"Petersburg","vdh_health_district":"Crater","total_cases":"10312","hospitalizations":"485","deaths":"153"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51735","locality":"Poquoson","vdh_health_district":"Peninsula","total_cases":"2991","hospitalizations":"53","deaths":"31"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51740","locality":"Portsmouth","vdh_health_district":"Portsmouth","total_cases":"26812","hospitalizations":"1175","deaths":"369"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51750","locality":"Radford","vdh_health_district":"New River","total_cases":"5228","hospitalizations":"71","deaths":"51"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51760","locality":"Richmond City","vdh_health_district":"Richmond","total_cases":"61090","hospitalizations":"1320","deaths":"548"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51770","locality":"Roanoke City","vdh_health_district":"Roanoke","total_cases":"28507","hospitalizations":"535","deaths":"441"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51775","locality":"Salem","vdh_health_district":"Alleghany","total_cases":"7343","hospitalizations":"138","deaths":"113"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51790","locality":"Staunton","vdh_health_district":"Central Shenandoah","total_cases":"7980","hospitalizations":"214","deaths":"137"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51800","locality":"Suffolk","vdh_health_district":"Western Tidewater","total_cases":"24606","hospitalizations":"901","deaths":"346"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51810","locality":"Virginia Beach","vdh_health_district":"Virginia Beach","total_cases":"116406","hospitalizations":"3886","deaths":"953"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51820","locality":"Waynesboro","vdh_health_district":"Central Shenandoah","total_cases":"7606","hospitalizations":"187","deaths":"87"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51830","locality":"Williamsburg","vdh_health_district":"Peninsula","total_cases":"2342","hospitalizations":"66","deaths":"25"}
+,{"report_date":"2023-04-13T00:00:00.000","fips":"51840","locality":"Winchester","vdh_health_district":"Lord Fairfax","total_cases":"8231","hospitalizations":"287","deaths":"101"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51001","locality":"Accomack","vdh_health_district":"Eastern Shore","total_cases":"9190","hospitalizations":"471","deaths":"119"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51003","locality":"Albemarle","vdh_health_district":"Blue Ridge","total_cases":"25597","hospitalizations":"507","deaths":"209"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51005","locality":"Alleghany","vdh_health_district":"Alleghany","total_cases":"4576","hospitalizations":"113","deaths":"112"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51007","locality":"Amelia","vdh_health_district":"Piedmont","total_cases":"3599","hospitalizations":"186","deaths":"64"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51009","locality":"Amherst","vdh_health_district":"Central Virginia","total_cases":"9721","hospitalizations":"476","deaths":"113"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51011","locality":"Appomattox","vdh_health_district":"Central Virginia","total_cases":"5058","hospitalizations":"241","deaths":"62"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51013","locality":"Arlington","vdh_health_district":"Arlington","total_cases":"67071","hospitalizations":"1370","deaths":"369"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51015","locality":"Augusta","vdh_health_district":"Central Shenandoah","total_cases":"24673","hospitalizations":"641","deaths":"239"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51017","locality":"Bath","vdh_health_district":"Central Shenandoah","total_cases":"1086","hospitalizations":"22","deaths":"21"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51019","locality":"Bedford","vdh_health_district":"Central Virginia","total_cases":"22319","hospitalizations":"774","deaths":"287"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51021","locality":"Bland","vdh_health_district":"Mount Rogers","total_cases":"2427","hospitalizations":"79","deaths":"25"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51023","locality":"Botetourt","vdh_health_district":"Alleghany","total_cases":"10049","hospitalizations":"167","deaths":"118"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51025","locality":"Brunswick","vdh_health_district":"Southside","total_cases":"4104","hospitalizations":"82","deaths":"54"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51027","locality":"Buchanan","vdh_health_district":"Cumberland Plateau","total_cases":"6223","hospitalizations":"236","deaths":"150"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51029","locality":"Buckingham","vdh_health_district":"Piedmont","total_cases":"5013","hospitalizations":"182","deaths":"64"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51031","locality":"Campbell","vdh_health_district":"Central Virginia","total_cases":"17806","hospitalizations":"772","deaths":"238"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51033","locality":"Caroline","vdh_health_district":"Rappahannock","total_cases":"9083","hospitalizations":"130","deaths":"95"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51035","locality":"Carroll","vdh_health_district":"Mount Rogers","total_cases":"9897","hospitalizations":"441","deaths":"178"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51036","locality":"Charles City","vdh_health_district":"Chickahominy","total_cases":"1729","hospitalizations":"90","deaths":"31"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51037","locality":"Charlotte","vdh_health_district":"Piedmont","total_cases":"3462","hospitalizations":"202","deaths":"49"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51041","locality":"Chesterfield","vdh_health_district":"Chesterfield","total_cases":"100616","hospitalizations":"1778","deaths":"875"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51043","locality":"Clarke","vdh_health_district":"Lord Fairfax","total_cases":"3539","hospitalizations":"124","deaths":"57"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51045","locality":"Craig","vdh_health_district":"Alleghany","total_cases":"1453","hospitalizations":"37","deaths":"25"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51047","locality":"Culpeper","vdh_health_district":"Rappahannock Rapidan","total_cases":"14505","hospitalizations":"321","deaths":"179"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51049","locality":"Cumberland","vdh_health_district":"Piedmont","total_cases":"1860","hospitalizations":"116","deaths":"30"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51051","locality":"Dickenson","vdh_health_district":"Cumberland Plateau","total_cases":"4921","hospitalizations":"104","deaths":"71"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51053","locality":"Dinwiddie","vdh_health_district":"Crater","total_cases":"7579","hospitalizations":"348","deaths":"109"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51057","locality":"Essex","vdh_health_district":"Three Rivers","total_cases":"2862","hospitalizations":"102","deaths":"43"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51059","locality":"Fairfax","vdh_health_district":"Fairfax","total_cases":"262920","hospitalizations":"5211","deaths":"1721"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51061","locality":"Fauquier","vdh_health_district":"Rappahannock Rapidan","total_cases":"16710","hospitalizations":"549","deaths":"164"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51063","locality":"Floyd","vdh_health_district":"New River","total_cases":"3731","hospitalizations":"111","deaths":"55"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51065","locality":"Fluvanna","vdh_health_district":"Blue Ridge","total_cases":"6936","hospitalizations":"169","deaths":"54"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51067","locality":"Franklin County","vdh_health_district":"West Piedmont","total_cases":"14198","hospitalizations":"482","deaths":"228"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51069","locality":"Frederick","vdh_health_district":"Lord Fairfax","total_cases":"26914","hospitalizations":"738","deaths":"291"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51071","locality":"Giles","vdh_health_district":"New River","total_cases":"5313","hospitalizations":"152","deaths":"60"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51073","locality":"Gloucester","vdh_health_district":"Three Rivers","total_cases":"9693","hospitalizations":"131","deaths":"115"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51075","locality":"Goochland","vdh_health_district":"Chickahominy","total_cases":"5829","hospitalizations":"166","deaths":"64"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51077","locality":"Grayson","vdh_health_district":"Mount Rogers","total_cases":"5689","hospitalizations":"231","deaths":"98"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51079","locality":"Greene","vdh_health_district":"Blue Ridge","total_cases":"5110","hospitalizations":"212","deaths":"65"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51081","locality":"Greensville","vdh_health_district":"Crater","total_cases":"3927","hospitalizations":"157","deaths":"45"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51083","locality":"Halifax","vdh_health_district":"Southside","total_cases":"9744","hospitalizations":"287","deaths":"194"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51085","locality":"Hanover","vdh_health_district":"Chickahominy","total_cases":"29238","hospitalizations":"951","deaths":"348"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51087","locality":"Henrico","vdh_health_district":"Henrico","total_cases":"92669","hospitalizations":"1782","deaths":"1086"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51089","locality":"Henry","vdh_health_district":"West Piedmont","total_cases":"16143","hospitalizations":"678","deaths":"331"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51091","locality":"Highland","vdh_health_district":"Central Shenandoah","total_cases":"497","hospitalizations":"13","deaths":"6"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51093","locality":"Isle of Wight","vdh_health_district":"Western Tidewater","total_cases":"9278","hospitalizations":"280","deaths":"129"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51095","locality":"James City","vdh_health_district":"Peninsula","total_cases":"21422","hospitalizations":"339","deaths":"155"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51097","locality":"King and Queen","vdh_health_district":"Three Rivers","total_cases":"1477","hospitalizations":"60","deaths":"15"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51099","locality":"King George","vdh_health_district":"Rappahannock","total_cases":"6949","hospitalizations":"109","deaths":"57"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51101","locality":"King William","vdh_health_district":"Three Rivers","total_cases":"4751","hospitalizations":"116","deaths":"52"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51103","locality":"Lancaster","vdh_health_district":"Three Rivers","total_cases":"2369","hospitalizations":"54","deaths":"42"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51105","locality":"Lee","vdh_health_district":"Lenowisco","total_cases":"8526","hospitalizations":"196","deaths":"132"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51107","locality":"Loudoun","vdh_health_district":"Loudoun","total_cases":"98435","hospitalizations":"2055","deaths":"448"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51109","locality":"Louisa","vdh_health_district":"Blue Ridge","total_cases":"8979","hospitalizations":"221","deaths":"103"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51111","locality":"Lunenburg","vdh_health_district":"Piedmont","total_cases":"3379","hospitalizations":"117","deaths":"45"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51113","locality":"Madison","vdh_health_district":"Rappahannock Rapidan","total_cases":"3193","hospitalizations":"77","deaths":"48"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51115","locality":"Mathews","vdh_health_district":"Three Rivers","total_cases":"2081","hospitalizations":"46","deaths":"28"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51117","locality":"Mecklenburg","vdh_health_district":"Southside","total_cases":"7939","hospitalizations":"215","deaths":"148"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51119","locality":"Middlesex","vdh_health_district":"Three Rivers","total_cases":"2546","hospitalizations":"57","deaths":"55"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51121","locality":"Montgomery","vdh_health_district":"New River","total_cases":"25297","hospitalizations":"494","deaths":"189"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51125","locality":"Nelson","vdh_health_district":"Blue Ridge","total_cases":"3274","hospitalizations":"80","deaths":"40"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51127","locality":"New Kent","vdh_health_district":"Chickahominy","total_cases":"6012","hospitalizations":"191","deaths":"46"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51131","locality":"Northampton","vdh_health_district":"Eastern Shore","total_cases":"2921","hospitalizations":"167","deaths":"78"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51133","locality":"Northumberland","vdh_health_district":"Three Rivers","total_cases":"2733","hospitalizations":"78","deaths":"47"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51135","locality":"Nottoway","vdh_health_district":"Piedmont","total_cases":"5711","hospitalizations":"295","deaths":"103"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51137","locality":"Orange","vdh_health_district":"Rappahannock Rapidan","total_cases":"9251","hospitalizations":"223","deaths":"110"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51139","locality":"Page","vdh_health_district":"Lord Fairfax","total_cases":"7096","hospitalizations":"311","deaths":"133"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51141","locality":"Patrick","vdh_health_district":"West Piedmont","total_cases":"5057","hospitalizations":"169","deaths":"123"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51143","locality":"Pittsylvania","vdh_health_district":"Pittsylvania-Danville","total_cases":"19286","hospitalizations":"673","deaths":"249"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51145","locality":"Powhatan","vdh_health_district":"Chesterfield","total_cases":"6409","hospitalizations":"148","deaths":"67"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51147","locality":"Prince Edward","vdh_health_district":"Piedmont","total_cases":"6847","hospitalizations":"360","deaths":"90"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51149","locality":"Prince George","vdh_health_district":"Crater","total_cases":"11647","hospitalizations":"325","deaths":"90"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51153","locality":"Prince William","vdh_health_district":"Prince William","total_cases":"128699","hospitalizations":"3464","deaths":"840"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51155","locality":"Pulaski","vdh_health_district":"New River","total_cases":"11042","hospitalizations":"424","deaths":"169"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51157","locality":"Rappahannock","vdh_health_district":"Rappahannock Rapidan","total_cases":"1382","hospitalizations":"42","deaths":"14"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51159","locality":"Richmond County","vdh_health_district":"Three Rivers","total_cases":"2930","hospitalizations":"66","deaths":"30"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51161","locality":"Roanoke County","vdh_health_district":"Alleghany","total_cases":"28501","hospitalizations":"447","deaths":"321"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51163","locality":"Rockbridge","vdh_health_district":"Central Shenandoah","total_cases":"5236","hospitalizations":"141","deaths":"93"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51165","locality":"Rockingham","vdh_health_district":"Central Shenandoah","total_cases":"19297","hospitalizations":"904","deaths":"273"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51167","locality":"Russell","vdh_health_district":"Cumberland Plateau","total_cases":"9610","hospitalizations":"234","deaths":"139"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51169","locality":"Scott","vdh_health_district":"Lenowisco","total_cases":"7784","hospitalizations":"251","deaths":"145"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51171","locality":"Shenandoah","vdh_health_district":"Lord Fairfax","total_cases":"14140","hospitalizations":"539","deaths":"265"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51173","locality":"Smyth","vdh_health_district":"Mount Rogers","total_cases":"12239","hospitalizations":"516","deaths":"204"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51175","locality":"Southampton","vdh_health_district":"Western Tidewater","total_cases":"4530","hospitalizations":"139","deaths":"109"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51177","locality":"Spotsylvania","vdh_health_district":"Rappahannock","total_cases":"35553","hospitalizations":"638","deaths":"342"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51179","locality":"Stafford","vdh_health_district":"Rappahannock","total_cases":"42447","hospitalizations":"656","deaths":"202"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51181","locality":"Surry","vdh_health_district":"Crater","total_cases":"1439","hospitalizations":"82","deaths":"23"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51183","locality":"Sussex","vdh_health_district":"Crater","total_cases":"3011","hospitalizations":"133","deaths":"49"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51185","locality":"Tazewell","vdh_health_district":"Cumberland Plateau","total_cases":"14113","hospitalizations":"316","deaths":"225"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51187","locality":"Warren","vdh_health_district":"Lord Fairfax","total_cases":"11546","hospitalizations":"394","deaths":"185"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51191","locality":"Washington","vdh_health_district":"Mount Rogers","total_cases":"18352","hospitalizations":"1033","deaths":"264"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51193","locality":"Westmoreland","vdh_health_district":"Three Rivers","total_cases":"4367","hospitalizations":"141","deaths":"60"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51195","locality":"Wise","vdh_health_district":"Lenowisco","total_cases":"14055","hospitalizations":"367","deaths":"238"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51197","locality":"Wythe","vdh_health_district":"Mount Rogers","total_cases":"9810","hospitalizations":"390","deaths":"174"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51199","locality":"York","vdh_health_district":"Peninsula","total_cases":"13977","hospitalizations":"188","deaths":"136"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51510","locality":"Alexandria","vdh_health_district":"Alexandria","total_cases":"45778","hospitalizations":"832","deaths":"233"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51520","locality":"Bristol","vdh_health_district":"Mount Rogers","total_cases":"6304","hospitalizations":"370","deaths":"112"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51530","locality":"Buena Vista City","vdh_health_district":"Central Shenandoah","total_cases":"2345","hospitalizations":"50","deaths":"48"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51540","locality":"Charlottesville","vdh_health_district":"Blue Ridge","total_cases":"12528","hospitalizations":"201","deaths":"86"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51550","locality":"Chesapeake","vdh_health_district":"Chesapeake","total_cases":"64749","hospitalizations":"1677","deaths":"567"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51570","locality":"Colonial Heights","vdh_health_district":"Chesterfield","total_cases":"6374","hospitalizations":"133","deaths":"113"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51580","locality":"Covington","vdh_health_district":"Alleghany","total_cases":"1921","hospitalizations":"40","deaths":"31"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51590","locality":"Danville","vdh_health_district":"Pittsylvania-Danville","total_cases":"14830","hospitalizations":"536","deaths":"302"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51595","locality":"Emporia","vdh_health_district":"Crater","total_cases":"1663","hospitalizations":"117","deaths":"57"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51600","locality":"Fairfax City","vdh_health_district":"Fairfax","total_cases":"2774","hospitalizations":"95","deaths":"51"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51610","locality":"Falls Church","vdh_health_district":"Fairfax","total_cases":"3533","hospitalizations":"35","deaths":"21"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51620","locality":"Franklin City","vdh_health_district":"Western Tidewater","total_cases":"2676","hospitalizations":"110","deaths":"57"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51630","locality":"Fredericksburg","vdh_health_district":"Rappahannock","total_cases":"7292","hospitalizations":"152","deaths":"51"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51640","locality":"Galax","vdh_health_district":"Mount Rogers","total_cases":"3327","hospitalizations":"170","deaths":"86"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51650","locality":"Hampton","vdh_health_district":"Hampton","total_cases":"38981","hospitalizations":"808","deaths":"375"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51660","locality":"Harrisonburg","vdh_health_district":"Central Shenandoah","total_cases":"15345","hospitalizations":"418","deaths":"185"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51670","locality":"Hopewell","vdh_health_district":"Crater","total_cases":"8004","hospitalizations":"307","deaths":"127"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51678","locality":"Lexington","vdh_health_district":"Central Shenandoah","total_cases":"2742","hospitalizations":"35","deaths":"34"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51680","locality":"Lynchburg","vdh_health_district":"Central Virginia","total_cases":"24584","hospitalizations":"1010","deaths":"327"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51683","locality":"Manassas City","vdh_health_district":"Prince William","total_cases":"11946","hospitalizations":"449","deaths":"80"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51685","locality":"Manassas Park","vdh_health_district":"Prince William","total_cases":"4921","hospitalizations":"165","deaths":"31"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51690","locality":"Martinsville","vdh_health_district":"West Piedmont","total_cases":"4620","hospitalizations":"221","deaths":"126"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51700","locality":"Newport News","vdh_health_district":"Peninsula","total_cases":"50141","hospitalizations":"948","deaths":"459"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51710","locality":"Norfolk","vdh_health_district":"Norfolk","total_cases":"54309","hospitalizations":"1950","deaths":"549"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51720","locality":"Norton","vdh_health_district":"Lenowisco","total_cases":"1621","hospitalizations":"42","deaths":"22"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51730","locality":"Petersburg","vdh_health_district":"Crater","total_cases":"10312","hospitalizations":"485","deaths":"153"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51735","locality":"Poquoson","vdh_health_district":"Peninsula","total_cases":"2991","hospitalizations":"53","deaths":"31"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51740","locality":"Portsmouth","vdh_health_district":"Portsmouth","total_cases":"26809","hospitalizations":"1175","deaths":"369"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51750","locality":"Radford","vdh_health_district":"New River","total_cases":"5226","hospitalizations":"71","deaths":"51"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51760","locality":"Richmond City","vdh_health_district":"Richmond","total_cases":"61130","hospitalizations":"1319","deaths":"548"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51770","locality":"Roanoke City","vdh_health_district":"Roanoke","total_cases":"28503","hospitalizations":"535","deaths":"441"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51775","locality":"Salem","vdh_health_district":"Alleghany","total_cases":"7343","hospitalizations":"138","deaths":"113"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51790","locality":"Staunton","vdh_health_district":"Central Shenandoah","total_cases":"7980","hospitalizations":"214","deaths":"137"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51800","locality":"Suffolk","vdh_health_district":"Western Tidewater","total_cases":"24604","hospitalizations":"901","deaths":"346"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51810","locality":"Virginia Beach","vdh_health_district":"Virginia Beach","total_cases":"116396","hospitalizations":"3886","deaths":"953"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51820","locality":"Waynesboro","vdh_health_district":"Central Shenandoah","total_cases":"7605","hospitalizations":"187","deaths":"87"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51830","locality":"Williamsburg","vdh_health_district":"Peninsula","total_cases":"2342","hospitalizations":"66","deaths":"25"}
+,{"report_date":"2023-04-12T00:00:00.000","fips":"51840","locality":"Winchester","vdh_health_district":"Lord Fairfax","total_cases":"8229","hospitalizations":"287","deaths":"101"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51001","locality":"Accomack","vdh_health_district":"Eastern Shore","total_cases":"9187","hospitalizations":"471","deaths":"119"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51003","locality":"Albemarle","vdh_health_district":"Blue Ridge","total_cases":"25595","hospitalizations":"507","deaths":"209"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51005","locality":"Alleghany","vdh_health_district":"Alleghany","total_cases":"4577","hospitalizations":"113","deaths":"112"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51007","locality":"Amelia","vdh_health_district":"Piedmont","total_cases":"3599","hospitalizations":"186","deaths":"64"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51009","locality":"Amherst","vdh_health_district":"Central Virginia","total_cases":"9721","hospitalizations":"476","deaths":"113"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51011","locality":"Appomattox","vdh_health_district":"Central Virginia","total_cases":"5057","hospitalizations":"241","deaths":"62"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51013","locality":"Arlington","vdh_health_district":"Arlington","total_cases":"67068","hospitalizations":"1370","deaths":"369"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51015","locality":"Augusta","vdh_health_district":"Central Shenandoah","total_cases":"24677","hospitalizations":"641","deaths":"239"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51017","locality":"Bath","vdh_health_district":"Central Shenandoah","total_cases":"1086","hospitalizations":"22","deaths":"21"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51019","locality":"Bedford","vdh_health_district":"Central Virginia","total_cases":"22319","hospitalizations":"774","deaths":"287"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51021","locality":"Bland","vdh_health_district":"Mount Rogers","total_cases":"2426","hospitalizations":"79","deaths":"25"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51023","locality":"Botetourt","vdh_health_district":"Alleghany","total_cases":"10047","hospitalizations":"167","deaths":"118"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51025","locality":"Brunswick","vdh_health_district":"Southside","total_cases":"4104","hospitalizations":"82","deaths":"54"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51027","locality":"Buchanan","vdh_health_district":"Cumberland Plateau","total_cases":"6223","hospitalizations":"236","deaths":"150"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51029","locality":"Buckingham","vdh_health_district":"Piedmont","total_cases":"5013","hospitalizations":"182","deaths":"64"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51031","locality":"Campbell","vdh_health_district":"Central Virginia","total_cases":"17806","hospitalizations":"772","deaths":"238"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51033","locality":"Caroline","vdh_health_district":"Rappahannock","total_cases":"9082","hospitalizations":"130","deaths":"95"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51035","locality":"Carroll","vdh_health_district":"Mount Rogers","total_cases":"9895","hospitalizations":"441","deaths":"178"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51036","locality":"Charles City","vdh_health_district":"Chickahominy","total_cases":"1729","hospitalizations":"90","deaths":"31"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51037","locality":"Charlotte","vdh_health_district":"Piedmont","total_cases":"3459","hospitalizations":"202","deaths":"49"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51041","locality":"Chesterfield","vdh_health_district":"Chesterfield","total_cases":"100619","hospitalizations":"1778","deaths":"875"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51043","locality":"Clarke","vdh_health_district":"Lord Fairfax","total_cases":"3537","hospitalizations":"123","deaths":"57"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51045","locality":"Craig","vdh_health_district":"Alleghany","total_cases":"1453","hospitalizations":"37","deaths":"25"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51047","locality":"Culpeper","vdh_health_district":"Rappahannock Rapidan","total_cases":"14505","hospitalizations":"321","deaths":"179"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51049","locality":"Cumberland","vdh_health_district":"Piedmont","total_cases":"1858","hospitalizations":"115","deaths":"30"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51051","locality":"Dickenson","vdh_health_district":"Cumberland Plateau","total_cases":"4920","hospitalizations":"104","deaths":"71"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51053","locality":"Dinwiddie","vdh_health_district":"Crater","total_cases":"7578","hospitalizations":"347","deaths":"109"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51057","locality":"Essex","vdh_health_district":"Three Rivers","total_cases":"2860","hospitalizations":"102","deaths":"43"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51059","locality":"Fairfax","vdh_health_district":"Fairfax","total_cases":"262910","hospitalizations":"5211","deaths":"1721"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51061","locality":"Fauquier","vdh_health_district":"Rappahannock Rapidan","total_cases":"16708","hospitalizations":"549","deaths":"164"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51063","locality":"Floyd","vdh_health_district":"New River","total_cases":"3731","hospitalizations":"111","deaths":"55"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51065","locality":"Fluvanna","vdh_health_district":"Blue Ridge","total_cases":"6935","hospitalizations":"169","deaths":"54"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51067","locality":"Franklin County","vdh_health_district":"West Piedmont","total_cases":"14198","hospitalizations":"482","deaths":"228"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51069","locality":"Frederick","vdh_health_district":"Lord Fairfax","total_cases":"26912","hospitalizations":"738","deaths":"291"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51071","locality":"Giles","vdh_health_district":"New River","total_cases":"5313","hospitalizations":"152","deaths":"60"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51073","locality":"Gloucester","vdh_health_district":"Three Rivers","total_cases":"9689","hospitalizations":"131","deaths":"115"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51075","locality":"Goochland","vdh_health_district":"Chickahominy","total_cases":"5829","hospitalizations":"166","deaths":"64"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51077","locality":"Grayson","vdh_health_district":"Mount Rogers","total_cases":"5689","hospitalizations":"231","deaths":"98"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51079","locality":"Greene","vdh_health_district":"Blue Ridge","total_cases":"5109","hospitalizations":"212","deaths":"65"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51081","locality":"Greensville","vdh_health_district":"Crater","total_cases":"3927","hospitalizations":"157","deaths":"45"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51083","locality":"Halifax","vdh_health_district":"Southside","total_cases":"9741","hospitalizations":"287","deaths":"194"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51085","locality":"Hanover","vdh_health_district":"Chickahominy","total_cases":"29230","hospitalizations":"951","deaths":"348"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51087","locality":"Henrico","vdh_health_district":"Henrico","total_cases":"92605","hospitalizations":"1782","deaths":"1086"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51089","locality":"Henry","vdh_health_district":"West Piedmont","total_cases":"16141","hospitalizations":"678","deaths":"331"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51091","locality":"Highland","vdh_health_district":"Central Shenandoah","total_cases":"497","hospitalizations":"13","deaths":"6"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51093","locality":"Isle of Wight","vdh_health_district":"Western Tidewater","total_cases":"9277","hospitalizations":"280","deaths":"129"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51095","locality":"James City","vdh_health_district":"Peninsula","total_cases":"21418","hospitalizations":"338","deaths":"155"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51097","locality":"King and Queen","vdh_health_district":"Three Rivers","total_cases":"1476","hospitalizations":"60","deaths":"15"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51099","locality":"King George","vdh_health_district":"Rappahannock","total_cases":"6948","hospitalizations":"109","deaths":"57"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51101","locality":"King William","vdh_health_district":"Three Rivers","total_cases":"4752","hospitalizations":"116","deaths":"52"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51103","locality":"Lancaster","vdh_health_district":"Three Rivers","total_cases":"2366","hospitalizations":"54","deaths":"42"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51105","locality":"Lee","vdh_health_district":"Lenowisco","total_cases":"8526","hospitalizations":"196","deaths":"132"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51107","locality":"Loudoun","vdh_health_district":"Loudoun","total_cases":"98421","hospitalizations":"2053","deaths":"448"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51109","locality":"Louisa","vdh_health_district":"Blue Ridge","total_cases":"8979","hospitalizations":"221","deaths":"103"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51111","locality":"Lunenburg","vdh_health_district":"Piedmont","total_cases":"3379","hospitalizations":"117","deaths":"45"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51113","locality":"Madison","vdh_health_district":"Rappahannock Rapidan","total_cases":"3193","hospitalizations":"77","deaths":"48"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51115","locality":"Mathews","vdh_health_district":"Three Rivers","total_cases":"2081","hospitalizations":"46","deaths":"28"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51117","locality":"Mecklenburg","vdh_health_district":"Southside","total_cases":"7936","hospitalizations":"213","deaths":"148"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51119","locality":"Middlesex","vdh_health_district":"Three Rivers","total_cases":"2545","hospitalizations":"57","deaths":"55"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51121","locality":"Montgomery","vdh_health_district":"New River","total_cases":"25294","hospitalizations":"493","deaths":"189"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51125","locality":"Nelson","vdh_health_district":"Blue Ridge","total_cases":"3273","hospitalizations":"80","deaths":"40"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51127","locality":"New Kent","vdh_health_district":"Chickahominy","total_cases":"6011","hospitalizations":"191","deaths":"46"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51131","locality":"Northampton","vdh_health_district":"Eastern Shore","total_cases":"2923","hospitalizations":"167","deaths":"78"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51133","locality":"Northumberland","vdh_health_district":"Three Rivers","total_cases":"2733","hospitalizations":"78","deaths":"47"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51135","locality":"Nottoway","vdh_health_district":"Piedmont","total_cases":"5710","hospitalizations":"295","deaths":"103"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51137","locality":"Orange","vdh_health_district":"Rappahannock Rapidan","total_cases":"9250","hospitalizations":"223","deaths":"110"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51139","locality":"Page","vdh_health_district":"Lord Fairfax","total_cases":"7096","hospitalizations":"310","deaths":"133"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51141","locality":"Patrick","vdh_health_district":"West Piedmont","total_cases":"5057","hospitalizations":"169","deaths":"123"}
+,{"report_date":"2023-04-11T00:00:00.000","fips":"51143","locality":"Pittsylvania","vdh_health_district":"Pittsylvania-Danville","total_cases":"19281","hospitalizations":"672","deaths":"249"}]
