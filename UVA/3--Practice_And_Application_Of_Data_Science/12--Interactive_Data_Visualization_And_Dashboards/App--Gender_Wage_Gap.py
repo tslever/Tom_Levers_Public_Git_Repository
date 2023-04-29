@@ -20,22 +20,22 @@ gss = pd.read_csv(
 columns_of_interest = [
     'id',
     'wtss',
-    'sex',
-    'educ',
-    'region',
+    'sex', # sex
+    'educ', # education
+    'region', # region
     'age',
-    'coninc',
-    'prestg10',
+    'coninc', # personal annual income
+    'prestg10', # occupational prestige
     'mapres10',
     'papres10',
-    'sei10',
-    'satjob',
-    'fechld',
-    'fefam',
-    'fepol',
-    'fepresch',
-    'meovrwrk'
-] 
+    'sei10', # index of socioeconomic status
+    'satjob', # job satisfaction
+    'fechld', # agreement with "A working mother can establish just as warm and secure a relationship with her children as a mother who does not work."
+    'fefam', # agreement with "It is much better for everyone involved if the man is the achiever outside the home and the woman takes care of the home and family."
+    'fepol', # agreement with "Most men are better suited emotionally for politics than are most women."
+    'fepresch', # "A preschool child is likely to suffer if his or her mother works."
+    'meovrwrk' # "Family life often suffers because men concentrate too much on their work."
+]
 gss_clean = gss[columns_of_interest]
 gss_clean = gss_clean.rename(
     {
@@ -66,7 +66,7 @@ gss_clean.age = gss_clean.age.astype('float')
 text = '''
 According to the [Pew Research Center](https://www.pewresearch.org/social-trends/2023/03/01/the-enduring-grip-of-the-gender-pay-gap/), "Women generally begin their careers closer to wage parity with men, but they lose ground as they age and progress through their work lives, a pattern that has remained consistent over time". According to [Forbes Magazine](https://www.forbes.com/advisor/business/gender-pay-gap-statistics/), "There are two types of gender pay gaps: the controlled and uncontrolled gap. The controlled gap measures the difference in pay between men and women performing the same job, with the same experience and qualifications. The uncontrolled gap represents the overall difference in pay between men and women, considering all the jobs and industries in which they work... When comparing women and men with the same job title, seniority level and hours worked, a gender gap of 11% still exists in terms of take-home pay."
 
-In order to study the gender wage gap, we consider data from the General Social Survey (GSS). According to the [National Opinion Research Center](https://gss.norc.org/About-The-GSS), "For five decades, the General Social Survey (GSS) has studied the growing complexity of American society. It is the only full-probability, personal-interview survey designed to monitor changes in both social characteristics and attitudes currently being conducted in the United States. The General Social Survey (GSS) is a nationally representative survey of adults in the United States conducted since 1972. The GSS collects data on contemporary American society in order to monitor and explain trends in opinions, attitudes and behaviors. The GSS has adapted questions from earlier surveys, thereby allowing researchers to conduct comparisons for up to 80 years. The GSS contains a standard core of demographic, behavioral, and attitudinal questions, plus topics of special interest. Among the topics covered are civil liberties, crime and violence, intergroup tolerance, morality, national spending priorities, psychological well-being, social mobility, and stress and traumatic events... The data come from the General Social Surveys, interviews administered to NORC national samples using a standard questionnaire." The data for this study include values for sex, years of formal education, personal annual income, occupational prestige, index of socioeconomic status, and agreement with, "It is much better for everyone involved if the man is the achiever outside the home and the woman takes care of the home and family."
+In order to study the gender wage gap, we consider data from the General Social Survey (GSS). According to the [National Opinion Research Center](https://gss.norc.org/About-The-GSS), "For five decades, the General Social Survey (GSS) has studied the growing complexity of American society. It is the only full-probability, personal-interview survey designed to monitor changes in both social characteristics and attitudes currently being conducted in the United States. The General Social Survey (GSS) is a nationally representative survey of adults in the United States conducted since 1972. The GSS collects data on contemporary American society in order to monitor and explain trends in opinions, attitudes and behaviors. The GSS has adapted questions from earlier surveys, thereby allowing researchers to conduct comparisons for up to 80 years. The GSS contains a standard core of demographic, behavioral, and attitudinal questions, plus topics of special interest. Among the topics covered are civil liberties, crime and violence, intergroup tolerance, morality, national spending priorities, psychological well-being, social mobility, and stress and traumatic events... The data come from the General Social Surveys, interviews administered to NORC national samples using a standard questionnaire." The data for this study include values for sex, years of formal education, region, personal annual income, occupational prestige, index of socioeconomic status, job satisfaction, and agreement with five statements relating to gender roles.
 '''
 data_frame = (gss_clean
     .drop(
