@@ -301,7 +301,7 @@ app.layout = html.Div(
         html.H2('Annual Income vs. Occupational Prestige'),
         dcc.Graph(figure = scatter_plot),
         html.H2('Distributions Of Income By Sex And Occupational Prestige'),
-        #dcc.Graph(figure = facet_grid),
+        dcc.Graph(figure = facet_grid),
         html.H2('Distributions of Income and Occupation Prestige By Sex'),
         html.Div(
             [
