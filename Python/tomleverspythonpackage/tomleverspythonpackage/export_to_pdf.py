@@ -7,6 +7,7 @@ import sys
 
 # Removes components of Jupyter-Notebook cells based on cell tags.
 # Based on https://nbconvert.readthedocs.io/en/latest/removing_cells.html.
+# Example: python Tom_Levers_Git_Repository/Python/tomleverspythonpackage/tomleverspythonpackage/export_to_pdf.py Tom_Levers_Git_Repository/UVA/3--Practice_And_Application_Of_Data_Science/12--Interactive_Data_Visualization_And_Dashboards/labassignment12.ipynb
 
 def main():
 
