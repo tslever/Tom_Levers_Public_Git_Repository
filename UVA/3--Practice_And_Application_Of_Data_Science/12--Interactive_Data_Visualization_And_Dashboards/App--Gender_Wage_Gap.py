@@ -178,8 +178,8 @@ distributions_of_occupational_prestige_by_sex = distributions_of_occupational_pr
 
 description_to_feature_whose_categories_forms_the_basis_of_bars = {
     'Job Satisfaction': 'satjob',
-    'Agreement With "A working mother can establish just as warm and secure a relationship with her children as a mother who does not work."': 'relationship',
-    'Agreement With "It is much better for everyone involved if the man is the achiever outside the home and the woman takes care of the home and family."': 'male_breadwinner',
+    'Agreement With "A working mother can establish just as warm and secure a relationship with her children\nas a mother who does not work."': 'relationship',
+    'Agreement With "It is much better for everyone involved if the man is the achiever outside the home\nand the woman takes care of the home and family."': 'male_breadwinner',
     'Agreement With "Most men are better suited emotionally for politics than are most women."': 'men_bettersuited',
     'Agreement With "A preschool child is likely to suffer if his or her mother works."': 'child_suffer',
     'Agreement With "Family life often suffers because men concentrate too much on their work."': 'men_overwork'
@@ -413,7 +413,7 @@ def generate_title_for_figure(Introduction, Socioeconomic_Success_By_Sex, Bar_Pl
     elif button_clicked == 'button_labeled_Socioeconomic_Success_By_Sex':
         return 'Socioeconomic Success By Sex'
     elif button_clicked == 'button_labeled_Interactive_Bar_Plot':
-        return 'Bar Plot'
+        return 'Interactive Bar Plot'
     elif button_clicked == 'button_labeled_Annual_Income_Versus_Occupational_Prestige':
         return 'Annual Income Versus Occupational Prestige'
     elif button_clicked == 'button_labeled_Distributions_Of_Income_By_Sex_And_Occupational_Prestige':
