@@ -178,8 +178,8 @@ distributions_of_occupational_prestige_by_sex = distributions_of_occupational_pr
 
 description_to_feature_whose_categories_forms_the_basis_of_bars = {
     'Job Satisfaction': 'satjob',
-    'Agreement With "A working mother can establish just as warm and secure a relationship with her children\nas a mother who does not work."': 'relationship',
-    'Agreement With "It is much better for everyone involved if the man is the achiever outside the home\nand the woman takes care of the home and family."': 'male_breadwinner',
+    'Agreement With "A working mother can establish just as warm and secure a relationship with her children<br>as a mother who does not work."': 'relationship',
+    'Agreement With "It is much better for everyone involved if the man is the achiever outside the home<br>and the woman takes care of the home and family."': 'male_breadwinner',
     'Agreement With "Most men are better suited emotionally for politics than are most women."': 'men_bettersuited',
     'Agreement With "A preschool child is likely to suffer if his or her mother works."': 'child_suffer',
     'Agreement With "Family life often suffers because men concentrate too much on their work."': 'men_overwork'
