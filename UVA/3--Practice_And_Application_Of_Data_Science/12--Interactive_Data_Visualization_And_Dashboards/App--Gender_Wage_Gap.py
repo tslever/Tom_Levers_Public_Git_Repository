@@ -1,4 +1,4 @@
-from dash import Dash, html, dcc, Output, Input
+from dash import Dash, html, dcc, Output, Input, ctx
 import numpy as np
 import pandas as pd
 import plotly.express as px
@@ -63,11 +63,8 @@ gss_clean.age = gss_clean.age.replace(
 )
 gss_clean.age = gss_clean.age.astype('float')
 
-text = '''
-According to the [Pew Research Center](https://www.pewresearch.org/social-trends/2023/03/01/the-enduring-grip-of-the-gender-pay-gap/), "Women generally begin their careers closer to wage parity with men, but they lose ground as they age and progress through their work lives, a pattern that has remained consistent over time". According to [Forbes Magazine](https://www.forbes.com/advisor/business/gender-pay-gap-statistics/), "There are two types of gender pay gaps: the controlled and uncontrolled gap. The controlled gap measures the difference in pay between men and women performing the same job, with the same experience and qualifications. The uncontrolled gap represents the overall difference in pay between men and women, considering all the jobs and industries in which they work... When comparing women and men with the same job title, seniority level and hours worked, a gender gap of 11% still exists in terms of take-home pay."
-
-In order to study the gender wage gap, we consider data from the General Social Survey (GSS). According to the [National Opinion Research Center](https://gss.norc.org/About-The-GSS), "For five decades, the General Social Survey (GSS) has studied the growing complexity of American society. It is the only full-probability, personal-interview survey designed to monitor changes in both social characteristics and attitudes currently being conducted in the United States. The General Social Survey (GSS) is a nationally representative survey of adults in the United States conducted since 1972. The GSS collects data on contemporary American society in order to monitor and explain trends in opinions, attitudes and behaviors. The GSS has adapted questions from earlier surveys, thereby allowing researchers to conduct comparisons for up to 80 years. The GSS contains a standard core of demographic, behavioral, and attitudinal questions, plus topics of special interest. Among the topics covered are civil liberties, crime and violence, intergroup tolerance, morality, national spending priorities, psychological well-being, social mobility, and stress and traumatic events... The data come from the General Social Surveys, interviews administered to NORC national samples using a standard questionnaire." The data for this study include values for sex, years of formal education, region, personal annual income, occupational prestige, index of socioeconomic status, job satisfaction, and agreement with five statements relating to gender roles.
-'''
+paragraph_1 = 'According to the [Pew Research Center](https://www.pewresearch.org/social-trends/2023/03/01/the-enduring-grip-of-the-gender-pay-gap/), "Women generally begin their careers closer to wage parity with men, but they lose ground as they age and progress through their work lives, a pattern that has remained consistent over time". According to [Forbes Magazine](https://www.forbes.com/advisor/business/gender-pay-gap-statistics/), "There are two types of gender pay gaps: the controlled and uncontrolled gap. The controlled gap measures the difference in pay between men and women performing the same job, with the same experience and qualifications. The uncontrolled gap represents the overall difference in pay between men and women, considering all the jobs and industries in which they work... When comparing women and men with the same job title, seniority level and hours worked, a gender gap of 11% still exists in terms of take-home pay."'
+paragraph_2 = 'In order to study the gender wage gap, we consider data from the General Social Survey (GSS). According to the [National Opinion Research Center](https://gss.norc.org/About-The-GSS), "For five decades, the General Social Survey (GSS) has studied the growing complexity of American society. It is the only full-probability, personal-interview survey designed to monitor changes in both social characteristics and attitudes currently being conducted in the United States. The General Social Survey (GSS) is a nationally representative survey of adults in the United States conducted since 1972. The GSS collects data on contemporary American society in order to monitor and explain trends in opinions, attitudes and behaviors. The GSS has adapted questions from earlier surveys, thereby allowing researchers to conduct comparisons for up to 80 years. The GSS contains a standard core of demographic, behavioral, and attitudinal questions, plus topics of special interest. Among the topics covered are civil liberties, crime and violence, intergroup tolerance, morality, national spending priorities, psychological well-being, social mobility, and stress and traumatic events... The data come from the General Social Surveys, interviews administered to NORC national samples using a standard questionnaire." The data for this study include values for sex, years of formal education, region, personal annual income, occupational prestige, index of socioeconomic status, job satisfaction, and agreement with five statements relating to gender roles.'
 data_frame = (gss_clean
     .drop(
         columns = [
@@ -279,62 +276,255 @@ app = Dash(__name__, external_stylesheets = external_stylesheets)
 app.layout = html.Div(
     [
         html.H1('Gender Wage Gap'),
-        html.H2('Introduction'),
-        dcc.Markdown(children = text),
-        html.H2('Socioeconomic Success By Sex'),
-        dcc.Graph(figure = table),
-        dcc.Graph(
-            id = 'bar_plot'#, # Callback step 5: The output from the callback gets sent here.
-        ),
-        html.H2('Select feature for which to create a bar plot.'),
-        dcc.Dropdown(
-            id = 'dropdown_menu_for_feature_whose_categories_forms_the_basis_of_bars', # Callback step 1: Just provide an ID for the element to be input to the callback.
-            options = list(description_to_feature_whose_categories_forms_the_basis_of_bars.keys()),
-            value = 'Job Satisfaction'
-        ),
-        html.H2('Select feature by which to group bars.'),
-        dcc.Dropdown(
-            id = 'dropdown_menu_for_feature_by_which_to_group',
-            options = list(description_to_feature_by_which_to_group.keys()),
-            value = 'None'
-        ),
-        html.H2('Annual Income vs. Occupational Prestige'),
-        dcc.Graph(figure = scatter_plot),
-        html.H2('Distributions Of Income By Sex And Occupational Prestige'),
-        dcc.Graph(figure = facet_grid),
-        html.H2('Distributions of Income and Occupation Prestige By Sex'),
-        html.Div(
+        html.Table(
             [
-                dcc.Graph(figure = distributions_of_income_by_sex)
+                html.Tr(
+                    [
+                        html.Td(
+                            [
+                                html.Button(
+                                    'Introduction',
+                                    id = 'button_labeled_Introduction',
+                                    style = {'width': '100%'}
+                                ),
+                                html.Br(),
+                                html.Button(
+                                    'Socioeconomic Success By Sex',
+                                    id = 'button_labeled_Socioeconomic_Success_By_Sex',
+                                    style = {'width': '100%'}
+                                ),
+                                html.Br(),
+                                html.Button(
+                                    'Interactive Bar Plot',
+                                    id = 'button_labeled_Interactive_Bar_Plot',
+                                    style = {'width': '100%'}
+                                ),
+                                html.Br(),
+                                html.Button(
+                                    'Annual Income Versus Occupational Prestige',
+                                    id = 'button_labeled_Annual_Income_Versus_Occupational_Prestige',
+                                    style = {'width': '100%'}
+                                ),
+                                html.Br(),
+                                html.Button(
+                                    'Distributions Of Income By Sex And Occupational Prestige',
+                                    id = 'button_labeled_Distributions_Of_Income_By_Sex_And_Occupational_Prestige',
+                                    style = {'width': '100%'}
+                                ),
+                                html.Br(),
+                                html.Button(
+                                    'Distributions Of Income And Occupation Prestige By Sex',
+                                    id = 'button_labeled_Distributions_Of_Income_And_Occupational_Prestige_By_Sex',
+                                    style = {'width': '100%'}
+                                )
+                            ],
+                            rowSpan = 2,
+                            style = {
+                                'width': '33%',
+                                'border': 'solid'
+                            }
+                        ),
+                        html.Td(
+                            html.Div(
+                                id = 'title_of_figure'
+                            ),
+                            style = {
+                                'border': 'solid'
+                            }
+                        )
+                    ]
+                ),
+                html.Tr(
+                    [
+                        html.Td(
+                            [
+                                html.Div(
+                                    id = 'figure'
+                                ),
+                                html.Div(
+                                    [
+                                        dcc.Graph(
+                                            id = 'bar_plot'
+                                        ),
+                                        'Select feature for which to create a bar plot.',
+                                        dcc.Dropdown(
+                                            id = 'dropdown_menu_for_feature_whose_categories_forms_the_basis_of_bars',
+                                            options = list(description_to_feature_whose_categories_forms_the_basis_of_bars.keys()),
+                                            value = 'Job Satisfaction'
+                                        ),
+                                        html.Br(),
+                                        'Select feature by which to group bars.',
+                                        dcc.Dropdown(
+                                            id = 'dropdown_menu_for_feature_by_which_to_group',
+                                            options = list(description_to_feature_by_which_to_group.keys()),
+                                            value = 'None'
+                                        )
+                                    ],
+                                    style = {'display': 'none'}
+                                )
+                            ],
+                            style = {
+                                'border': 'solid'
+                            }
+                        )
+                    ]
+                )
             ],
-            style = {
-                'width': '48%',
-                'float': 'left'
-            }
-        ),
-        html.Div(
-            [            
-                dcc.Graph(figure = distributions_of_occupational_prestige_by_sex)
-            ],
-            style = {
-                'width': '48%',
-                'float': 'right'
-            }
+            style = {'width': '100%'}
         )
     ]
 )
 
-# Callbacks go between the layout and the dashboard run commands.
-# What I'm about to type is going to decorate the function that I type next.
 @app.callback(
-    # Callback step 4: Define output.
+    Output(
+        component_id = 'title_of_figure',
+        component_property = 'children'
+    ),
+    Input(
+        'button_labeled_Introduction',
+        'n_clicks'
+    ),
+    Input(
+        'button_labeled_Socioeconomic_Success_By_Sex',
+        'n_clicks'
+    ),
+    Input(
+        'button_labeled_Interactive_Bar_Plot',
+        'n_clicks'
+    ),
+    Input(
+        'button_labeled_Annual_Income_Versus_Occupational_Prestige',
+        'n_clicks'
+    ),
+    Input(
+        'button_labeled_Distributions_Of_Income_By_Sex_And_Occupational_Prestige',
+        'n_clicks'
+    ),
+    Input(
+        'button_labeled_Distributions_Of_Income_And_Occupational_Prestige_By_Sex',
+        'n_clicks'
+    )
+)
+def generate_title_for_figure(Introduction, Socioeconomic_Success_By_Sex, Bar_Plot, Annual_Income_Versus_Occupational_Prestige, Distributions_Of_Income_By_Sex_And_Occupational_Prestige, Distributions_Of_Income_And_Occupational_Prestige_By_Sex):
+    button_clicked = ctx.triggered_id
+    print(button_clicked)
+    if (button_clicked == None) or (button_clicked == 'button_labeled_Introduction'):
+        return 'Introduction'
+    elif button_clicked == 'button_labeled_Socioeconomic_Success_By_Sex':
+        return 'Socioeconomic Success By Sex'
+    elif button_clicked == 'button_labeled_Interactive_Bar_Plot':
+        return 'Bar Plot'
+    elif button_clicked == 'button_labeled_Annual_Income_Versus_Occupational_Prestige':
+        return 'Annual Income Versus Occupational Prestige'
+    elif button_clicked == 'button_labeled_Distributions_Of_Income_By_Sex_And_Occupational_Prestige':
+        return 'Distributions Of Income By Sex And Occupational Prestige'
+    elif button_clicked == 'button_labeled_Distributions_Of_Income_And_Occupational_Prestige_By_Sex':
+        return 'Distributions Of Income And Occupational Prestige By Sex'
+    else:
+        return 'Placeholder'
+    
+@app.callback(
+    Output(
+        component_id = 'figure',
+        component_property = 'children'
+    ),
+    Input(
+        'button_labeled_Introduction',
+        'n_clicks'
+    ),
+    Input(
+        'button_labeled_Socioeconomic_Success_By_Sex',
+        'n_clicks'
+    ),
+    Input(
+        'button_labeled_Interactive_Bar_Plot',
+        'n_clicks'
+    ),
+    Input(
+        'button_labeled_Annual_Income_Versus_Occupational_Prestige',
+        'n_clicks'
+    ),
+    Input(
+        'button_labeled_Distributions_Of_Income_By_Sex_And_Occupational_Prestige',
+        'n_clicks'
+    ),
+    Input(
+        'button_labeled_Distributions_Of_Income_And_Occupational_Prestige_By_Sex',
+        'n_clicks'
+    )
+)
+def generate_figure(Introduction, Socioeconomic_Success_By_Sex, Bar_Plot, Annual_Income_Versus_Occupational_Prestige, Distributions_Of_Income_By_Sex_And_Occupational_Prestige, Distributions_Of_Income_And_Occupational_Prestige_By_Sex):
+    button_clicked = ctx.triggered_id
+    print(button_clicked)
+    if (button_clicked == None) or (button_clicked == 'button_labeled_Introduction'):
+        return html.Div(
+            [
+                dcc.Markdown(paragraph_1),
+                dcc.Markdown(paragraph_2)
+            ]
+        )
+    elif button_clicked == 'button_labeled_Socioeconomic_Success_By_Sex':
+        return html.Div(
+            dcc.Graph(figure = table)
+        )
+    elif button_clicked == 'button_labeled_Interactive_Bar_Plot':
+        return html.Div(
+            [
+                dcc.Graph(
+                    id = 'bar_plot'
+                ),
+                'Select feature for which to create a bar plot.',
+                dcc.Dropdown(
+                    id = 'dropdown_menu_for_feature_whose_categories_forms_the_basis_of_bars',
+                    options = list(description_to_feature_whose_categories_forms_the_basis_of_bars.keys()),
+                    value = 'Job Satisfaction'
+                ),
+                html.Br(),
+                'Select feature by which to group bars.',
+                dcc.Dropdown(
+                    id = 'dropdown_menu_for_feature_by_which_to_group',
+                    options = list(description_to_feature_by_which_to_group.keys()),
+                    value = 'None'
+                )
+            ]
+        )
+    elif button_clicked == 'button_labeled_Annual_Income_Versus_Occupational_Prestige':
+        return dcc.Graph(figure = scatter_plot)
+    elif button_clicked == 'button_labeled_Distributions_Of_Income_By_Sex_And_Occupational_Prestige':
+        return dcc.Graph(figure = facet_grid)
+    elif button_clicked == 'button_labeled_Distributions_Of_Income_And_Occupational_Prestige_By_Sex':
+        return html.Div(
+            [
+                html.Div(
+                    [
+                        dcc.Graph(figure = distributions_of_income_by_sex)
+                    ],
+                    style = {
+                        'width': '48%',
+                        'float': 'left'
+                    }
+                ),
+                html.Div(
+                    [            
+                        dcc.Graph(figure = distributions_of_occupational_prestige_by_sex)
+                    ],
+                    style = {
+                        'width': '48%',
+                        'float': 'right'
+                    }
+                )
+            ]
+        )
+    else:
+        return 'Placeholder'
+
+@app.callback(
     Output(
         component_id = 'bar_plot',
         component_property = 'figure'
     ),
-    # Callback step 2: Send the input to this callback.
     Input(
-        component_id = 'dropdown_menu_for_feature_whose_categories_forms_the_basis_of_bars', # Look for the input to come from the feature with ID places.
+        component_id = 'dropdown_menu_for_feature_whose_categories_forms_the_basis_of_bars',
         component_property = 'value'
     ),
     Input(
@@ -342,7 +532,6 @@ app.layout = html.Div(
         component_property = 'value'
     )
 )
-# Callback step 3: The callback sends the input to this function. Then it sends the function's output back to the callback.
 def generate_bar_plot(description_of_feature_whose_categories_form_the_basis_of_bars, description_of_feature_by_which_to_group):
     feature_whose_categories_forms_the_basis_of_bars = description_to_feature_whose_categories_forms_the_basis_of_bars[description_of_feature_whose_categories_form_the_basis_of_bars]
     horizontal_axis_label = feature_whose_categories_forms_the_basis_of_bars_to_bar_plot_horizontal_axis_label[feature_whose_categories_forms_the_basis_of_bars]
