@@ -12,5 +12,7 @@ __author__ = "Tom Lever"
 __credits__ = "Tom Lever"
 
 from tomleverspythonpackage.csvfilereader import *
+from tomleverspythonpackage.exporttopdf import *
 from tomleverspythonpackage.getlistofanchortagswithhyperlinkreferences import *
 from tomleverspythonpackage.listabsolutepathsoffileindirectorytree import *
+from tomleverspythonpackage.upgradeallpippackages import *

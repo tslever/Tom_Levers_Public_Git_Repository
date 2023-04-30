@@ -7,7 +7,6 @@ class CsvFileReader:
         the_dictionary = {
             
         }
-        
         with open(path, mode='r') as the_csv_file:
             for line in the_csv_file:
                 the_stripped_line = line.rstrip('\n')

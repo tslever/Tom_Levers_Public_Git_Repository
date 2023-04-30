@@ -1,3 +1,7 @@
+# Removes components of Jupyter-Notebook cells based on cell tags.
+# Based on https://nbconvert.readthedocs.io/en/latest/removing_cells.html.
+# Example: python Tom_Levers_Git_Repository/Python/tomleverspythonpackage/tomleverspythonpackage/exporttopdf.py Tom_Levers_Git_Repository/UVA/3--Practice_And_Application_Of_Data_Science/12--Interactive_Data_Visualization_And_Dashboards/labassignment12.ipynb
+
 from traitlets.config import Config
 import nbformat as nbf
 from nbconvert.exporters import PDFExporter
@@ -5,11 +9,7 @@ from nbconvert.preprocessors import TagRemovePreprocessor
 from pathlib import Path
 import sys
 
-# Removes components of Jupyter-Notebook cells based on cell tags.
-# Based on https://nbconvert.readthedocs.io/en/latest/removing_cells.html.
-# Example: python Tom_Levers_Git_Repository/Python/tomleverspythonpackage/tomleverspythonpackage/export_to_pdf.py Tom_Levers_Git_Repository/UVA/3--Practice_And_Application_Of_Data_Science/12--Interactive_Data_Visualization_And_Dashboards/labassignment12.ipynb
-
-def main():
+def export_to_pdf():
 
     path_of_jupyter_notebook_as_string = sys.argv[1]
     path_of_jupyter_notebook = Path(path_of_jupyter_notebook_as_string)
@@ -43,4 +43,4 @@ def main():
         f.write(output[0])
 
 if __name__ == "__main__":
-    main()
+    export_to_pdf()
