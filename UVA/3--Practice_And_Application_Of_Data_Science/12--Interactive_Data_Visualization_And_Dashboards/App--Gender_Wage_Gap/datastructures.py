@@ -162,7 +162,7 @@ data_frame_of_data_of_General_Social_Survey['men_overwork'] = (data_frame_of_dat
 paragraph_1 = 'According to the [Pew Research Center](https://www.pewresearch.org/social-trends/2023/03/01/the-enduring-grip-of-the-gender-pay-gap/), "Women generally begin their careers closer to wage parity with men, but they lose ground as they age and progress through their work lives, a pattern that has remained consistent over time". According to [Forbes Magazine](https://www.forbes.com/advisor/business/gender-pay-gap-statistics/), "There are two types of gender pay gaps: the controlled and uncontrolled gap. The controlled gap measures the difference in pay between men and women performing the same job, with the same experience and qualifications. The uncontrolled gap represents the overall difference in pay between men and women, considering all the jobs and industries in which they work... When comparing women and men with the same job title, seniority level and hours worked, a gender gap of 11% still exists in terms of take-home pay."'
 paragraph_2 = 'In order to study the gender wage gap, we consider data from the General Social Survey (GSS). According to the [National Opinion Research Center](https://gss.norc.org/About-The-GSS), "For five decades, the General Social Survey (GSS) has studied the growing complexity of American society. It is the only full-probability, personal-interview survey designed to monitor changes in both social characteristics and attitudes currently being conducted in the United States. The General Social Survey (GSS) is a nationally representative survey of adults in the United States conducted since 1972. The GSS collects data on contemporary American society in order to monitor and explain trends in opinions, attitudes and behaviors. The GSS has adapted questions from earlier surveys, thereby allowing researchers to conduct comparisons for up to 80 years. The GSS contains a standard core of demographic, behavioral, and attitudinal questions, plus topics of special interest. Among the topics covered are civil liberties, crime and violence, intergroup tolerance, morality, national spending priorities, psychological well-being, social mobility, and stress and traumatic events... The data come from the General Social Surveys, interviews administered to NORC national samples using a standard questionnaire." The data for this study include values for sex, years of formal education, region, personal annual income, occupational prestige, index of socioeconomic status, job satisfaction, and agreement with five statements relating to gender roles.'
 
-table = (data_frame_of_data_of_General_Social_Survey
+data_frame = (data_frame_of_data_of_General_Social_Survey
     .drop( # categorical
         columns = [
             'region',
@@ -182,9 +182,9 @@ table = (data_frame_of_data_of_General_Social_Survey
     )
     .mean()
 )
-table = table[['income', 'job_prestige', 'socioeconomic_index', 'education']]
-table = table.round(2)
-table = table.rename(
+data_frame = data_frame[['income', 'job_prestige', 'socioeconomic_index', 'education']]
+data_frame = data_frame.round(2)
+data_frame = data_frame.rename(
     columns = {
         'income': 'mean annual income',
         'job_prestige': 'occupational prestige',
@@ -192,8 +192,7 @@ table = table.rename(
         'education': 'years of education'
     }
 )
-table = table.reset_index()
-table = ff.create_table(table)
+data_frame = data_frame.reset_index()
 
 salmon = '#FA8072'
 scatter_plot = px.scatter(

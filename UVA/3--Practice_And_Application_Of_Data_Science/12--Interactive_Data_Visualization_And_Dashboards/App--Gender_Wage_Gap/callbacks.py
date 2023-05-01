@@ -1,4 +1,4 @@
-from dash import Dash, html, dcc, Output, Input, ctx
+from dash import Dash, dash_table, html, dcc, Output, Input, ctx
 from datastructures import *
 import plotly.express as px
 
@@ -112,7 +112,10 @@ def generate_figure(
         )
     elif button_clicked == 'button_labeled_Socioeconomic_Success_By_Sex':
         return html.Div(
-            dcc.Graph(figure = table)
+            dash_table.DataTable(
+                data = data_frame.to_dict(orient = 'records'),
+                sort_action = 'native'
+            )
         )
     elif button_clicked == 'button_labeled_Interactive_Bar_Plot':
         return html.Div(
