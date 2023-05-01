@@ -312,6 +312,3 @@ feature_whose_categories_forms_the_basis_of_bars_to_bar_plot_horizontal_axis_lab
     'child_suffer': 'agreement',
     'men_overwork': 'agreement'
 }
-external_stylesheets = [
-    'https://codepen.io/chriddyp/pen/bWLwgP.css'
-]
