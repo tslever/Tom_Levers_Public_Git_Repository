@@ -1,0 +1,29 @@
+
+
+Apache is software that acts as ice-cream client communication subsystem and like Server object server.
+Response providers are like my message interfaces.
+I don't give providers to Apache; I put providers in a place that Apache calls (the place is a cgi-bin).
+Each provider is an executable, and represents the stuff to do when a message arrives at an endpoint.
+Apache gives the contents of an incoming message to a provider; each provider receives the contents of its incoming message.
+Once the response provider has received the contents of its message, it produces a response, returns the response to standard output, provides a termination code, and ends itself.
+Standard output: A place to which information in sent from an application (just like sending printline to console).
+Chip wanted to use Apache and have processing as executables
+httpServer doesn't exist in Ada: Chip wanted to standardize and generize response provider applications (all processing of message receipt, work, response generation)
+
+GNAT Studio: GNU Ada ? Studio: GNU started with building C compilers
+Ada: Library units: Packages (collection, visibility, public, private); subprograms (functions and procedures (i.e., void functions))
+Ada: Any program can be main
+pragma: This is written with a particular version of Ada
+with: make compiled thing available to compiler
+Precompiling was huge savings in development time when compiling took a long time
+Building will prepare The_NIHR_PTSD_Report_Request_Receiver executable as a provider.
+Procedure is created from generic procedure passed request processor.
+
+Response provider is message interface.
+Request processor is message handler.
+Chip takes request receiver message interface and puts it a CGI-Bin location in a file system (which is like IP->Port->endpoint).
+Once its there, it becomes the usable respnose provider / message interface. 
+
+Specification: Design classes
+Body: Implemented classes 
+

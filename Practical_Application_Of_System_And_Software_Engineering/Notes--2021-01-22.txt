@@ -1,0 +1,48 @@
+
+Webpage: Delivered and interpreted set of HTML, static
+Single-page web-delivered application (Angular app): Code that runs on browser side to update layout based on actions
+One Angular workspace per Twirling-Hall project (human-client project) (project = site, group of web-delivered applications, etc.)
+- One Angular application per page
+- One Angular target (lowest level Angular setup for Angular development / Angular project) per Angular application
+- One Angular target per TH-project-wide shared component or code
+One Angular workspace for Twirling-Hall-wide shared components and code
+
+
+Angular project called ptsd-survey that results in "submit survey" interface
+twirling-hall.com/nihr/ptsd-survey
+workspace: nihr, first segment in path (workspace named after Twirling-Hall project)
+ptsd-survey angular project contains:
+- src: The only file folder we touch
+  - index.html
+  - main.ts
+  - saas: language; scss: file extension of SAAS styling file; only file we touch
+  - index.html, main.ts stay the same between all Angular projects
+  - Assets folder: folder for public images and scripts (anything that needs to be downloaded) that live on the server (Chip doesn't use it)
+  - app folder
+    - app.module.ts: app module
+    - app.component.ts: app component
+      - Always contains template so that everything in this app folder can stay the same
+    - app.component.scss: Styling for everything within scope of app
+    - application folder
+      top-level.module.ts (making things visible by importing and making declarations)
+      top-level.module.ts (aggregating)
+      top-level.component.html (structure)
+          top-level-component is whole Angular component containing rest of Angular project components
+          client-info, nihr-logo, ptsd-survey-form are sub-components
+          This file only lists sub-components (in one level of hierarchy)
+
+top-level.component.scss:
+:host { }: Styling for top-level component, display sub-components flexibly, center sub-components.
+ptsd-survey-form {
+    position: absolute;
+    width: 98%;
+    height: 90%;
+    bottom: 1%
+} modifies boundaries of ptsd-survey-form as they relate to top-level.component
+modifies <ptsd-survey-form>, an angular component, automatically
+
+Modules: packages
+Component: Structural unit
+
+This variable subscribes to this service:
+Telling variables that subscribe to the service "Here's my new value!".
