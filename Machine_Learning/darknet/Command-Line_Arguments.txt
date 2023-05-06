@@ -1,0 +1,6 @@
+
+detector train ../../cfg/Quercus_and_Storm-detector.data ../../cfg/yolov4-Quercus_and_Storm-detector-train.cfg ../../yolov4.conv.137
+
+detector demo ../../cfg/Quercus_and_Storm-detector.data ../../cfg/yolov4-Quercus_and_Storm-detector-test.cfg ../../backup/yolov4-Quercus_and_Storm-detector-train_final.weights -c 0 -ext_output
+
+detector demo ../../cfg/Quercus_and_Storm-detector.data ../../cfg/yolov4-Quercus_and_Storm-detector-test.cfg ../../backup/yolov4-Quercus_and_Storm-detector-train_final.weights ../../Quercus_and_Storm_Dataset/Oak_and_Hurricane.mp4 -out_filename ../../Oak_and_Hurricane--Labeled.mp4 -ext_output
