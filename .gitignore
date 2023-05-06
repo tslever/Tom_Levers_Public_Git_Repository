@@ -5,7 +5,11 @@
 .Rproj.user
 .ipynb_checkpoints
 __pycache__
+
 obj
+.vs
+Debug
+
 .classpath
 .project
 .settings
