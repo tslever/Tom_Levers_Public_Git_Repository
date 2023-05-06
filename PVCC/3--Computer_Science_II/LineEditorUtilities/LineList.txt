@@ -1,0 +1,97 @@
+/** 
+* 
+* Student name:  xxxxx
+* Completion date: xxxx
+*
+* LineList.txt: the template file of LineList.java
+* Student tasks: implement tasks as specified in this file
+*
+* LineList class is a linked-base list that represents the contents of a document
+*
+*/
+
+
+public class LineList{
+   
+   private Node head;
+   
+   public LineList(){   //constructor  
+      head=null;
+   }
+   //Don't modify anything before this line. 
+   //Do not add any other instance variables.
+   
+
+   // *** Student tasks: implement the following methods *** 
+  
+X   public void empty(){
+      	// delete all lines in the editor
+   }
+
+X   public void load(String fileName, boolean append){
+      	// append is true, read lines and add to existing list, 
+      	// otherwise, create new list.
+	// Each line is stored in a Node.
+	// You may need to handle exception within this method
+	// or throw runtime exception only.
+
+   }
+   
+X   public void save(String fileName){
+      	// Save all lines represented with Nodes to a file. 
+	// Each line (Node) occupies a line in the saved file.
+	// You may need to handle exception within this method
+	// or throw runtime exception only.
+
+   }
+   
+X   public void addLine(String line){
+      	//append the line to the end of the list
+   }
+
+X   public void addLine(String line, int n){
+      	//insert new line to nth line, if n > total number of line, 
+      	//append to the end of the list.
+   }
+   
+X   public int words(){
+      	// count number of words, word may be separated with 
+      	// \t,;.?!-@spaces ' * and "
+      
+   }
+
+X   public int lines(){ 
+      	// count number of lines, which is the same as the number of
+      	// nodes in the list.
+   }
+
+X   public void delete(int n){
+      	//delete nth line if exists. Otherwise do nothing.
+   }
+
+X   public String toString(){
+      	// Return all lines represented by Nodes in the list. All lines
+      	// are in the same order as their corresponding nodes in the list.
+      	// All lines are separated with \n. No newline character should be 
+	// added after the last line.
+     
+   }
+
+X   public void print(){
+      	// Print each line. Each line is proceeded with its corresponding line 
+      	// numbers. Please refer to sample output.
+
+   }
+   
+X   public void replace(String s1, String s2){
+      	// Replace all occurrences of s1 with s2.
+
+   }
+   
+X   public void line(int n){
+      	// Print nth line in the document. (The nth node in the list)
+      	// If nth line does not exists, print “Line n does not exist.”
+
+   }
+
+}
