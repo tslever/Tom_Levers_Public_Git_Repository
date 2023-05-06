@@ -525,27 +525,27 @@ dxrep dx_box_iou(box pred, box truth, IOU_LOSS iou_loss) {
 //#ifdef DEBUG_PRINTS
     /*printf("  directions dt: ");
     if ((pred_tblr.top < truth_tblr.top && dx.dt > 0) || (pred_tblr.top > truth_tblr.top && dx.dt < 0)) {
-      printf("[check]");
+      printf("✓");
     } else {
-      printf("X");
+      printf("𝒙");
     }
     printf(", ");
     if ((pred_tblr.bot < truth_tblr.bot && dx.db > 0) || (pred_tblr.bot > truth_tblr.bot && dx.db < 0)) {
-      printf("[check]");
+      printf("✓");
     } else {
-      printf("X");
+      printf("𝒙");
     }
     printf(", ");
     if ((pred_tblr.left < truth_tblr.left && dx.dl > 0) || (pred_tblr.left > truth_tblr.left && dx.dl < 0)) {
-      printf("[check]");
+      printf("✓");
     } else {
-      printf("X");
+      printf("𝒙");
     }
     printf(", ");
     if ((pred_tblr.right < truth_tblr.right && dx.dr > 0) || (pred_tblr.right > truth_tblr.right && dx.dr < 0)) {
-      printf("[check]");
+      printf("✓");
     } else {
-      printf("X");
+      printf("𝒙");
     }
     printf("\n");
 

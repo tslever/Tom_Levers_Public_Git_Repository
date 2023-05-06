@@ -13,6 +13,8 @@
 #include "connected_layer.h"
 
 
+extern void predict_classifier_for_testing(char* datacfg, char* cfgfile, char* weightfile, char* filename, int top);
+
 extern void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *filename, int top);
 extern void run_voxel(int argc, char **argv);
 extern void run_yolo(int argc, char **argv);
@@ -23,6 +25,9 @@ extern void run_captcha(int argc, char **argv);
 extern void run_nightmare(int argc, char **argv);
 extern void run_dice(int argc, char **argv);
 extern void run_compare(int argc, char **argv);
+
+extern void run_classifier_for_testing(int argc, char** argv);
+
 extern void run_classifier(int argc, char **argv);
 extern void run_char_rnn(int argc, char **argv);
 extern void run_vid_rnn(int argc, char **argv);
@@ -429,7 +434,21 @@ void visualize(char *cfgfile, char *weightfile)
 #endif
 }
 
-int main(int argc, char **argv)
+
+
+
+int main(int argc, char** argv) {
+
+    run_classifier_for_testing(argc, argv);
+
+    return 0;
+
+}
+
+
+
+
+int main__default(int argc, char **argv)
 {
 #ifdef _DEBUG
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);

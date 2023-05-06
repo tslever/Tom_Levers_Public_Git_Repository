@@ -6,12 +6,23 @@
 #include "assert.h"
 #include "classifier.h"
 #include "dark_cuda.h"
+
 #ifdef WIN32
 #include <time.h>
 #include "gettimeofday.h"
 #else
 #include <sys/time.h>
 #endif
+
+#include "Classification_Engine_Interface.h"
+#include "Image_Processor_Interface.h"
+#include "Weights_File_Processor_Interface.h"
+
+#include "Classification_Engine_Interface_For_Testing.h"
+#include "Image_Processor_Interface_For_Testing.h"
+#include "Weights_File_Processor_Interface_For_Testing.h"
+
+
 
 float validate_classifier_single(char *datacfg, char *filename, char *weightfile, network *existing_net, int topk_custom);
 
@@ -822,11 +833,38 @@ void try_classifier(char *datacfg, char *cfgfile, char *weightfile, char *filena
     free(indexes);
 }
 
+
+
+
+
+void predict_classifier_for_testing(char* datacfg, char* cfgfile, char* weightfile, char* filename, int top) {
+
+    network* The_Pointer_To_The_Network = (network*)malloc(sizeof(network));
+    network net = *The_Pointer_To_The_Network;
+    DNLIB_load_weights_for_testing(&net, weightfile);
+
+    char* input = NULL;
+    image im = DNLIB_load_image_color_for_testing(input, 0, 0);
+    image resized = DNLIB_resize_min_for_testing(im, net.w);
+    image cropped = DNLIB_crop_image_for_testing(resized, (resized.w - net.w) / 2, (resized.h - net.h) / 2, net.w, net.h);
+
+    float* X = NULL;
+    float* predictions = DNLIB_network_predict_for_testing(net, X);
+    DNLIB_hierarchy_predictions_for_testing(predictions, net.outputs, net.hierarchy, 0);
+    int* indexes = NULL;
+    DNLIB_top_k_for_testing(predictions, net.outputs, top, indexes);
+
+}
+
+
+
+
+
 void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *filename, int top)
 {
     network net = parse_network_cfg_custom(cfgfile, 1, 0);
     if(weightfile){
-        load_weights(&net, weightfile);
+        DNLIB_load_weights(&net, weightfile);
     }
     set_batch_network(&net, 1);
     srand(2222222);
@@ -866,9 +904,9 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
             if(!input) break;
             strtok(input, "\n");
         }
-        image im = load_image_color(input, 0, 0);
-        image resized = resize_min(im, net.w);
-        image cropped = crop_image(resized, (resized.w - net.w)/2, (resized.h - net.h)/2, net.w, net.h);
+        image im = DNLIB_load_image_color(input, 0, 0);
+        image resized = DNLIB_resize_min(im, net.w);
+        image cropped = DNLIB_crop_image(resized, (resized.w - net.w)/2, (resized.h - net.h)/2, net.w, net.h);
         printf("%d %d\n", cropped.w, cropped.h);
 
         float *X = cropped.data;
@@ -877,8 +915,8 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
         float *predictions = network_predict(net, X);
         printf("%s: Predicted in %lf milli-seconds.\n", input, ((double)get_time_point() - time) / 1000);
 
-        if(net.hierarchy) hierarchy_predictions(predictions, net.outputs, net.hierarchy, 0);
-        top_k(predictions, net.outputs, top, indexes);
+        if(net.hierarchy) DNLIB_hierarchy_predictions(predictions, net.outputs, net.hierarchy, 0);
+        DNLIB_top_k(predictions, net.outputs, top, indexes);
 
         for(i = 0; i < top; ++i){
             int index = indexes[i];
@@ -928,7 +966,7 @@ void label_classifier(char *datacfg, char *filename, char *weightfile)
         image im = load_image_color(paths[i], 0, 0);
         image resized = resize_min(im, net.w);
         image crop = crop_image(resized, (resized.w - net.w)/2, (resized.h - net.h)/2, net.w, net.h);
-        float *pred = network_predict(net, crop.data);
+        float *pred = DNLIB_network_predict(net, crop.data);
 
         if(resized.data != im.data) free_image(resized);
         free_image(im);
@@ -1348,6 +1386,25 @@ void demo_classifier(char *datacfg, char *cfgfile, char *weightfile, int cam_ind
     }
 #endif
 }
+
+
+
+
+
+void run_classifier_for_testing(int argc, char** argv) {
+
+    char* data = argv[3];
+    char* cfg = argv[4];
+    char* weights = (argc > 5) ? argv[5] : 0;
+    char* filename = (argc > 6) ? argv[6] : 0;
+    int top = find_int_arg(argc, argv, "-t", 0);
+
+    if (0 == strcmp(argv[2], "predict")) predict_classifier_for_testing(data, cfg, weights, filename, top);
+
+}
+
+
+
 
 
 void run_classifier(int argc, char **argv)
