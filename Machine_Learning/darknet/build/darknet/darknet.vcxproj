@@ -90,7 +90,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(OPENCV_DIR)\include;..\..\include;..\..\3rdparty\stb\include;..\..\3rdparty\pthreads\include;%(AdditionalIncludeDirectories);$(CudaToolkitIncludeDir);$(CUDNN)\include;$(cudnn)\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OPENCV_DIR)\include;C:\opencv_4.5\opencv\build\include;..\..\include;..\..\3rdparty\stb\include;..\..\3rdparty\pthreads\include;%(AdditionalIncludeDirectories);$(CudaToolkitIncludeDir);$(CUDNN)\include;$(cudnn)\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>CUDNN_HALF;CUDNN;_MBCS;_CRTDBG_MAP_ALLOC;_TIMESPEC_DEFINED;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;_CRT_RAND_S;GPU;WIN32;DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UndefinePreprocessorDefinitions>OPENCV;</UndefinePreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -99,7 +99,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(OPENCV_DIR)\x64\vc15\lib;$(OPENCV_DIR)\x64\vc14\lib;$(CUDA_PATH)\lib\$(PlatformName);$(CUDNN)\lib\x64;$(cudnn)\lib\x64;..\..\3rdparty\pthreads\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OPENCV_DIR)\x64\vc15\lib;$(OPENCV_DIR)\x64\vc14\lib;C:\opencv_4.5\opencv\build\x64\vc14\lib;$(CUDA_PATH)\lib\$(PlatformName);$(CUDNN)\lib\x64;$(cudnn)\lib\x64;..\..\3rdparty\pthreads\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <OutputFile>opencv_world452d.lib;$(OutDir)\$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalDependencies>pthreadVC2.lib;cublas.lib;curand.lib;cudart.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AssemblyDebug>true</AssemblyDebug>
@@ -185,6 +185,8 @@
     <ClCompile Include="..\..\src\box.c" />
     <ClCompile Include="..\..\src\captcha.c" />
     <ClCompile Include="..\..\src\cifar.c" />
+    <ClCompile Include="..\..\src\Classification_Engine_Interface.c" />
+    <ClCompile Include="..\..\src\Classification_Engine_Interface_For_Testing.c" />
     <ClCompile Include="..\..\src\classifier.c" />
     <ClCompile Include="..\..\src\coco.c" />
     <ClCompile Include="..\..\src\col2im.c" />
@@ -215,6 +217,8 @@
     <ClCompile Include="..\..\src\im2col.c" />
     <ClCompile Include="..\..\src\image.c" />
     <ClCompile Include="..\..\src\image_opencv.cpp" />
+    <ClCompile Include="..\..\src\Image_Processor_Interface.c" />
+    <ClCompile Include="..\..\src\Image_Processor_Interface_For_Testing.c" />
     <ClCompile Include="..\..\src\layer.c" />
     <ClCompile Include="..\..\src\list.c" />
     <ClCompile Include="..\..\src\local_layer.c" />
@@ -245,6 +249,8 @@
     <ClCompile Include="..\..\src\upsample_layer.c" />
     <ClCompile Include="..\..\src\utils.c" />
     <ClCompile Include="..\..\src\voxel.c" />
+    <ClCompile Include="..\..\src\Weights_File_Processor_Interface.c" />
+    <ClCompile Include="..\..\src\Weights_File_Processor_Interface_For_Testing.c" />
     <ClCompile Include="..\..\src\writing.c" />
     <ClCompile Include="..\..\src\yolo.c" />
     <ClCompile Include="..\..\src\yolo_layer.c" />
@@ -259,6 +265,8 @@
     <ClInclude Include="..\..\src\batchnorm_layer.h" />
     <ClInclude Include="..\..\src\blas.h" />
     <ClInclude Include="..\..\src\box.h" />
+    <ClInclude Include="..\..\src\Classification_Engine_Interface.h" />
+    <ClInclude Include="..\..\src\Classification_Engine_Interface_For_Testing.h" />
     <ClInclude Include="..\..\src\classifier.h" />
     <ClInclude Include="..\..\src\col2im.h" />
     <ClInclude Include="..\..\src\connected_layer.h" />
@@ -282,6 +290,8 @@
     <ClInclude Include="..\..\src\im2col.h" />
     <ClInclude Include="..\..\src\image.h" />
     <ClInclude Include="..\..\src\image_opencv.h" />
+    <ClInclude Include="..\..\src\Image_Processor_Interface.h" />
+    <ClInclude Include="..\..\src\Image_Processor_Interface_For_Testing.h" />
     <ClInclude Include="..\..\src\layer.h" />
     <ClInclude Include="..\..\src\list.h" />
     <ClInclude Include="..\..\src\local_layer.h" />
@@ -308,6 +318,8 @@
     <ClInclude Include="..\..\src\unistd.h" />
     <ClInclude Include="..\..\src\upsample_layer.h" />
     <ClInclude Include="..\..\src\utils.h" />
+    <ClInclude Include="..\..\src\Weights_File_Processor_Interface.h" />
+    <ClInclude Include="..\..\src\Weights_File_Processor_Interface_For_Testing.h" />
     <ClInclude Include="..\..\src\yolo_layer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
