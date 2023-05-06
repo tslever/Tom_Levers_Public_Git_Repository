@@ -1,0 +1,11 @@
+
+
+Set the include path in your client project to include the DLL header files directly from your DLL project.
+Set the Additional Include Directories path in your project to include the path to the original header.
+
+Set the library path in your client project to inclde the DLL import libraries from the DLL project.
+
+Copy the built DLL from the DLL project into your client build output directory.
+
+
+https://docs.microsoft.com/en-us/cpp/build/walkthrough-creating-and-using-a-dynamic-link-library-cpp?view=msvc-160
