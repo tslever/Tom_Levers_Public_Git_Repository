@@ -17,3 +17,4 @@ from tomleverspythonpackage.exporttopdf import *
 from tomleverspythonpackage.getlistofanchortagswithhyperlinkreferences import *
 from tomleverspythonpackage.listabsolutepathsoffileindirectorytree import *
 from tomleverspythonpackage.upgradeallpippackages import *
+from tomleverspythonpackage.utilitiesfororganizinglinesfromacsvfileintoadataframe import *

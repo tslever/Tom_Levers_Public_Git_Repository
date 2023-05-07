@@ -1,6 +1,6 @@
-from Exceptions.A_Fields_Values_Mismatch_Exception import *
-from Exceptions.An_Invalid_Path_Exception import *
-from Exceptions.An_Invalid_Line_Indices_Exception import *
+from tomleverspythonpackage.utilitiesfororganizinglinesfromacsvfileintoadataframe.exceptions.afieldvaluesmismatchexception import *
+from tomleverspythonpackage.utilitiesfororganizinglinesfromacsvfileintoadataframe.exceptions.aninvalidpathexception import *
+from tomleverspythonpackage.utilitiesfororganizinglinesfromacsvfileintoadataframe.exceptions.aninvalidlineindicesexception import *
 import pandas
 from pathlib import Path
 
