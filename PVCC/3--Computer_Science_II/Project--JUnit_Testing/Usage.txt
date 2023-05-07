@@ -1,0 +1,6 @@
+
+javac Triangle.java
+
+javac -cp "junit.jar;" TomLeverTriangleTest.java
+
+java -cp "junit.jar;hamcrest-core.jar;" org.junit.runner.JUnitCore TomLeverTriangleTest
