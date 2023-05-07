@@ -1,0 +1,1463 @@
+MACBETH
+by William Shakespeare
+Persons Represented
+DUNCAN, King of Scotland.
+MALCOLM, his Son.
+DONALBAIN, his Son.
+MACBETH, General in the King's Army.
+BANQUO, General in the King's Army.
+MACDUFF, Nobleman of Scotland.
+LENNOX, Nobleman of Scotland.
+ROSS, Nobleman of Scotland.
+MENTEITH, Nobleman of Scotland.
+ANGUS, Nobleman of Scotland.
+CAITHNESS, Nobleman of Scotland.
+5
+FLEANCE, Son to Banquo.
+SIWARD, Earl of Northumberland, General of the English Forces. YOUNG SIWARD, his Son.
+SEYTON, an Officer attending on Macbeth.
+BOY, Son to Macduff.
+An English Doctor. A Scotch Doctor. A Soldier. A Porter. An Old Man.
+LADY MACBETH.
+LADY MACDUFF.
+Gentlewoman attending on Lady Macbeth.
+HECATE,and three Witches.
+Lords, Gentlemen, Officers, Soldiers, Murderers, Attendants, and Messengers.
+The Ghost of Banquo and several other Apparitions.
+SCENE: In the end of the Fourth Act, in England; through the rest of the Play, in Scotland; and chiefly at
+Macbeth's Castle.
+ACT I.
+SCENE I. An open Place. Thunder and Lightning.
+[Enter three Witches.]
+FIRST WITCH.
+When shall we three meet again?
+In thunder, lightning, or in rain?
+SECOND WITCH.
+When the hurlyburly's done,
+When the battle's lost and won.
+THIRD WITCH.
+That will be ere the set of sun.
+FIRST WITCH.
+Where the place?
+SECOND WITCH.
+Upon the heath.
+THIRD WITCH.
+There to meet with Macbeth.
+FIRST WITCH.
+I come, Graymalkin!
+ALL.
+Paddock calls:--anon:--
+Fair is foul, and foul is fair:
+Hover through the fog and filthy air.
+6
+[Witches vanish.]
+SCENE II. A Camp near Forres.
+[Alarum within. Enter King Duncan, Malcolm, Donalbain, Lennox, with Attendants, meeting a bleeding
+Soldier.]
+DUNCAN.
+What bloody man is that? He can report,
+As seemeth by his plight, of the revolt
+The newest state.
+MALCOLM.
+This is the sergeant
+Who, like a good and hardy soldier, fought
+'Gainst my captivity.--Hail, brave friend!
+Say to the king the knowledge of the broil
+As thou didst leave it.
+SOLDIER.
+Doubtful it stood;
+As two spent swimmers that do cling together
+And choke their art. The merciless Macdonwald,--
+Worthy to be a rebel,--for to that
+The multiplying villainies of nature
+Do swarm upon him,--from the Western isles
+Of kerns and gallowglasses is supplied;
+And fortune, on his damned quarrel smiling,
+Show'd like a rebel's whore. But all's too weak;
+For brave Macbeth,--well he deserves that name,--
+Disdaining fortune, with his brandish'd steel,
+Which smok'd with bloody execution,
+Like valor's minion,
+Carv'd out his passag tTill he fac'd the slave;
+And ne'er shook hands, nor bade farewell to him,
+Till he unseam'd him from the nave to the chaps,
+And fix'd his head upon our battlements.
+DUNCAN.
+O valiant cousin! worthy gentleman!
+SOLDIER.
+As whence the sun 'gins his reflection
+Shipwrecking storms and direful thunders break;
+So from that spring, whence comfort seem'd to come
+Discomfort swells. Mark, King of Scotland, mark:
+No sooner justice had, with valor arm'd,
+Compell'd these skipping kerns to trust their heels,
+But the Norweyan lord, surveying vantage,
+With furbish'd arms and new supplies of men,
+Began a fresh assault.
+7
+DUNCAN.
+Dismay'd not this
+Our captains, Macbeth and Banquo?
+SOLDIER.
+Yes;
+As sparrows eagles, or the hare the lion.
+If I say sooth, I must report they were
+As cannons overcharg'd with double cracks;
+So they
+Doubly redoubled strokes upon the foe:
+Except they meant to bathe in reeking wounds,
+Or memorize another Golgotha,
+I cannot tell:--
+But I am faint; my gashes cry for help.
+DUNCAN.
+So well thy words become thee as thy wounds;
+They smack of honor both.--Go, get him surgeons.
+[Exit Soldier, attended.]
+Who comes here?
+MALCOLM.
+The worthy Thane of Ross.
+LENNOX.
+What a haste looks through his eyes! So should he look
+That seems to speak things strange.
+[Enter Ross.]
+ROSS.
+God save the King!
+DUNCAN.
+Whence cam'st thou, worthy thane?
+ROSS.
+From Fife, great king;
+Where the Norweyan banners flout the sky
+And fan our people cold.
+Norway himself, with terrible numbers,
+Assisted by that most disloyal traitor
+The Thane of Cawdor, began a dismal conflict;
+Till that Bellona's bridegroom, lapp'd in proof,
+Confronted him with self-comparisons,
+Point against point rebellious, arm 'gainst arm,
+Curbing his lavish spirit: and, to conclude,
+The victory fell on us.
+8
+DUNCAN.
+Great happiness!
+ROSS.
+That now
+Sweno, the Norways' king, craves composition;
+Nor would we deign him burial of his men
+Till he disbursed, at Saint Colme's-inch,
+Ten thousand dollars to our general use.
+DUNCAN.
+No more that Thane of Cawdor shall deceive
+Our bosom interest:--go pronounce his present death,
+And with his former title greet Macbeth.
+ROSS.
+I'll see it done.
+DUNCAN.
+What he hath lost, noble Macbeth hath won.
+[Exeunt.]
+SCENE III. A heath.
+[Thunder. Enter the three Witches.]
+FIRST WITCH.
+Where hast thou been, sister?
+SECOND WITCH.
+Killing swine.
+THIRD WITCH.
+Sister, where thou?
+FIRST WITCH.
+A sailor's wife had chestnuts in her lap,
+And mounch'd, and mounch'd, and mounch'd:--"Give me," quoth I: "Aroint thee, witch!" the rump-fed ronyon
+cries.
+Her husband's to Aleppo gone, master o' the Tiger:
+But in a sieve I'll thither sail,
+And, like a rat without a tail,
+I'll do, I'll do, and I'll do.
+SECOND WITCH.
+I'll give thee a wind.
+FIRST WITCH.
+Thou art kind.
+THIRD WITCH.
+9
+And I another.
+FIRST WITCH.
+I myself have all the other:
+And the very ports they blow,
+All the quarters that they know
+I' the shipman's card.
+I will drain him dry as hay:
+Sleep shall neither night nor day
+Hang upon his pent-house lid;
+He shall live a man forbid:
+Weary seven-nights nine times nine
+Shall he dwindle, peak, and pine:
+Though his bark cannot be lost,
+Yet it shall be tempest-tost.--
+Look what I have.
+SECOND WITCH.
+Show me, show me.
+FIRST WITCH.
+Here I have a pilot's thumb,
+Wreck'd as homeward he did come.
+[Drum within.]
+THIRD WITCH.
+A drum, a drum!
+Macbeth doth come.
+ALL.
+The weird sisters, hand in hand,
+Posters of the sea and land,
+Thus do go about, about:
+Thrice to thine, and thrice to mine,
+And thrice again, to make up nine:--
+Peace!--the charm's wound up.
+[Enter Macbeth and Banquo.]
+MACBETH.
+So foul and fair a day I have not seen.
+BANQUO.
+How far is't call'd to Forres?--What are these
+So wither'd, and so wild in their attire,
+That look not like the inhabitants o' the earth,
+And yet are on't?--Live you? or are you aught
+That man may question? You seem to understand me,
+By each at once her chappy finger laying
+Upon her skinny lips:--you should be women,
+And yet your beards forbid me to interpret
+10
+That you are so.
+MACBETH.
+Speak, if you can;--what are you?
+FIRST WITCH.
+All hail, Macbeth! hail to thee, Thane of Glamis!
+SECOND WITCH.
+All hail, Macbeth! hail to thee, Thane of Cawdor!
+THIRD WITCH.
+All hail, Macbeth! that shalt be king hereafter!
+BANQUO.
+Good sir, why do you start; and seem to fear
+Things that do sound so fair?-- I' the name of truth,
+Are ye fantastical, or that indeed
+Which outwardly ye show? My noble partner
+You greet with present grace and great prediction
+Of noble having and of royal hope,
+That he seems rapt withal:--to me you speak not:
+If you can look into the seeds of time,
+And say which grain will grow, and which will not,
+Speak then to me, who neither beg nor fear
+Your favors nor your hate.
+FIRST WITCH.
+Hail!
+SECOND WITCH.
+Hail!
+THIRD WITCH.
+Hail!
+FIRST WITCH.
+Lesser than Macbeth, and greater.
+SECOND WITCH.
+Not so happy, yet much happier.
+THIRD WITCH.
+Thou shalt get kings, though thou be none:
+So all hail, Macbeth and Banquo!
+FIRST WITCH.
+Banquo and Macbeth, all hail!
+MACBETH.
+Stay, you imperfect speakers, tell me more:
+By Sinel's death I know I am Thane of Glamis;
+11
+But how of Cawdor? The Thane of Cawdor lives,
+A prosperous gentleman; and to be king
+Stands not within the prospect of belief,
+No more than to be Cawdor. Say from whence
+You owe this strange intelligence? or why
+Upon this blasted heath you stop our way
+With such prophetic greeting?--Speak, I charge you.
+[Witches vanish.]
+BANQUO.
+The earth hath bubbles, as the water has,
+And these are of them:--whither are they vanish'd?
+
+MACBETH.
+Into the air; and what seem'd corporal melted
+As breath into the wind.--Would they had stay'd!
+BANQUO.
+Were such things here as we do speak about?
+Or have we eaten on the insane root
+That takes the reason prisoner?
+MACBETH.
+Your children shall be kings.
+BANQUO.
+You shall be king.
+MACBETH.
+And Thane of Cawdor too; went it not so?
+BANQUO.
+To the selfsame tune and words. Who's here?
+[Enter Ross and Angus.]
+ROSS.
+The king hath happily receiv'd, Macbeth,
+The news of thy success: and when he reads
+Thy personal venture in the rebels' fight,
+His wonders and his praises do contend
+Which should be thine or his: silenc'd with that,
+In viewing o'er the rest o' the self-same day,
+He finds thee in the stout Norweyan ranks,
+Nothing afeard of what thyself didst make,
+Strange images of death. As thick as hail
+Came post with post; and every one did bear
+Thy praises in his kingdom's great defense,
+And pour'd them down before him.
+ANGUS.
+12
+We are sent
+To give thee, from our royal master, thanks;
+Only to herald thee into his sight,
+Not pay thee.
+ROSS.
+And, for an earnest of a greater honor,
+He bade me, from him, call thee Thane of Cawdor:
+In which addition, hail, most worthy thane,
+For it is thine.
+BANQUO.
+What, can the devil speak true?
+MACBETH.
+The Thane of Cawdor lives: why do you dress me
+In borrow'd robes?
+ANGUS.
+Who was the Thane lives yet;
+But under heavy judgement bears that life
+Which he deserves to lose. Whether he was combin'd
+With those of Norway, or did line the rebel
+With hidden help and vantage, or that with both
+He labour'd in his country's wreck, I know not;
+But treasons capital, confess'd and proved,
+Have overthrown him.
+MACBETH.
+[Aside.] Glamis, and Thane of Cawdor:
+The greatest is behind.--Thanks for your pains.--
+Do you not hope your children shall be kings,
+When those that gave the Thane of Cawdor to me
+Promis'd no less to them?
+BANQUO.
+That, trusted home,
+Might yet enkindle you unto the crown,
+Besides the Thane of Cawdor. But 'tis strange:
+And oftentimes to win us to our harm,
+The instruments of darkness tell us truths;
+Win us with honest trifles, to betray's
+In deepest consequence.--
+Cousins, a word, I pray you.
+MACBETH.
+[Aside.] Two truths are told,
+As happy prologues to the swelling act
+Of the imperial theme.--I thank you, gentlemen.--
+[Aside.] This supernatural soliciting
+Cannot be ill; cannot be good:--if ill,
+Why hath it given me earnest of success,
+13
+Commencing in a truth? I am Thane of Cawdor:
+If good, why do I yield to that suggestion
+Whose horrid image doth unfix my hair,
+And make my seated heart knock at my ribs,
+Against the use of nature? Present fears
+Are less than horrible imaginings:
+My thought, whose murder yet is but fantastical,
+Shakes so my single state of man, that function
+Is smother'd in surmise; and nothing is
+But what is not.
+BANQUO.
+Look, how our partner's rapt.
+MACBETH.
+[Aside.] If chance will have me king, why, chance may crown me Without my stir.
+BANQUO.
+New honors come upon him,
+Like our strange garments, cleave not to their mould
+But with the aid of use.
+MACBETH.
+[Aside.] Come what come may,
+Time and the hour runs through the roughest day.
+BANQUO.
+Worthy Macbeth, we stay upon your leisure.
+MACBETH.
+Give me your favor:--my dull brain was wrought
+With things forgotten. Kind gentlemen, your pains
+Are register'd where every day I turn
+The leaf to read them.--Let us toward the king.--
+Think upon what hath chanc'd; and, at more time,
+The interim having weigh'd it, let us speak
+Our free hearts each to other.
+BANQUO.
+Very gladly.
+MACBETH.
+Till then, enough.--Come, friends.
+[Exeunt.]
+SCENE IV. Forres. A Room in the Palace.
+[Flourish. Enter Duncan, Malcolm, Donalbain, Lennox, and
+Attendants.]
+DUNCAN.
+14
+Is execution done on Cawdor? Are not
+Those in commission yet return'd?
+MALCOLM.
+My liege,
+They are not yet come back. But I have spoke
+With one that saw him die: who did report,
+That very frankly he confess'd his treasons;
+Implor'd your highness' pardon; and set forth
+A deep repentance: nothing in his life
+Became him like the leaving it; he died
+As one that had been studied in his death,
+To throw away the dearest thing he ow'd
+As 'twere a careless trifle.
+DUNCAN.
+There's no art
+To find the mind's construction in the face:
+He was a gentleman on whom I built
+An absolute trust.--
+[Enter Macbeth, Banquo, Ross, and Angus.]
+O worthiest cousin!
+The sin of my ingratitude even now
+Was heavy on me: thou art so far before,
+That swiftest wing of recompense is slow
+To overtake thee. Would thou hadst less deserv'd;
+That the proportion both of thanks and payment
+Might have been mine! only I have left to say,
+More is thy due than more than all can pay.
+MACBETH.
+The service and the loyalty I owe,
+In doing it, pays itself. Your highness' part
+Is to receive our duties: and our duties
+Are to your throne and state, children and servants;
+Which do but what they should, by doing everything
+Safe toward your love and honor.
+DUNCAN.
+Welcome hither:
+I have begun to plant thee, and will labor
+To make thee full of growing.--Noble Banquo,
+That hast no less deserv'd, nor must be known
+No less to have done so,let me infold thee
+And hold thee to my heart.
+BANQUO.
+There if I grow,
+The harvest is your own.
+15
+DUNCAN.
+My plenteous joys,
+Wanton in fulness, seek to hide themselves
+In drops of sorrow.--Sons, kinsmen, thanes,
+And you whose places are the nearest, know,
+We will establish our estate upon
+Our eldest, Malcolm; whom we name hereafter
+The Prince of Cumberland: which honor must
+Not unaccompanied invest him only,
+But signs of nobleness, like stars, shall shine
+On all deservers.--From hence to Inverness,
+And bind us further to you.
+MACBETH.
+The rest is labor, which is not us'd for you:
+I'll be myself the harbinger, and make joyful
+The hearing of my wife with your approach;
+So, humbly take my leave.
+DUNCAN.
+My worthy Cawdor!
+MACBETH.
+[Aside.] The Prince of Cumberland!--That is a step,
+On which I must fall down, or else o'erleap,
+For in my way it lies. Stars, hide your fires!
+Let not light see my black and deep desires:
+The eye wink at the hand! yet let that be,
+Which the eye fears, when it is done, to see.
+[Exit.]
+DUNCAN.
+True, worthy Banquo!--he is full so valiant;
+And in his commendations I am fed,--
+It is a banquet to me. Let us after him,
+Whose care is gone before to bid us welcome:
+It is a peerless kinsman.
+[Flourish. Exeunt.]
+SCENE V. Inverness. A Room in Macbeth's Castle.
+[Enter Lady Macbeth, reading a letter.]
+LADY MACBETH.
+"They met me in the day of success; and I have
+learned by the perfectest report they have more in them than mortal knowledge. When I burned in desire to
+question them
+further, they made themselves air, into which they vanished. Whiles I stood rapt in the wonder of it, came
+missives from the king, who all-hailed me, 'Thane of Cawdor'; by which title, before, these weird sisters
+saluted me, and referred me to the coming on of time, with 'Hail, king that shalt be!' This have I thought good
+16
+to deliver thee, my dearest partner of
+greatness; that thou mightst not lose the dues of rejoicing, by being ignorant of what greatness is promised
+thee. Lay it to thy heart, and farewell."
+Glamis thou art, and Cawdor; and shalt be
+What thou art promis'd; yet do I fear thy nature;
+It is too full o' the milk of human kindness
+To catch the nearest way: thou wouldst be great;
+Art not without ambition; but without
+The illness should attend it. What thou wouldst highly,
+That wouldst thou holily; wouldst not play false,
+And yet wouldst wrongly win: thou'dst have, great Glamis,
+That which cries, "Thus thou must do, if thou have it:
+And that which rather thou dost fear to do
+Than wishest should be undone." Hie thee hither,
+That I may pour my spirits in thine ear;
+And chastise with the valor of my tongue
+All that impedes thee from the golden round,
+Which fate and metaphysical aid doth seem
+To have thee crown'd withal.
+[Enter an Attendant.]
+What is your tidings?
+ATTENDANT.
+The king comes here tonight.
+LADY MACBETH.
+Thou'rt mad to say it:
+Is not thy master with him? who, were't so,
+Would have inform'd for preparation.
+ATTENDANT.
+So please you, it is true:--our thane is coming:
+One of my fellows had the speed of him;
+Who, almost dead for breath, had scarcely more
+Than would make up his message.
+LADY MACBETH.
+Give him tending;
+He brings great news.
+[Exit Attendant.]
+The raven himself is hoarse
+That croaks the fatal entrance of Duncan
+Under my battlements. Come, you spirits
+That tend on mortal thoughts, unsex me here;
+And fill me, from the crown to the toe, top-full
+Of direst cruelty! make thick my blood,
+Stop up the access and passage to remorse,
+17
+That no compunctious visitings of nature
+Shake my fell purpose, nor keep peace between
+The effect and it! Come to my woman's breasts,
+And take my milk for gall, your murdering ministers,
+Wherever in your sightless substances
+You wait on nature's mischief! Come, thick night,
+And pall thee in the dunnest smoke of hell
+That my keen knife see not the wound it makes
+Nor heaven peep through the blanket of the dark
+To cry, "Hold, hold!"
+[Enter Macbeth.]
+Great Glamis! Worthy Cawdor!
+Greater than both, by the all-hail hereafter!
+Thy letters have transported me beyond
+This ignorant present, and I feel now
+The future in the instant.
+MACBETH.
+My dearest love,
+Duncan comes here tonight.
+LADY MACBETH.
+And when goes hence?
+MACBETH.
+To-morrow,--as he purposes.
+LADY MACBETH.
+O, never
+Shall sun that morrow see!
+Your face, my thane, is as a book where men
+May read strange matters:--to beguile the time,
+Look like the time; bear welcome in your eye,
+Your hand, your tongue: look like the innocent flower,
+But be the serpent under't. He that's coming
+Must be provided for: and you shall put
+This night's great business into my despatch;
+Which shall to all our nights and days to come
+Give solely sovereign sway and masterdom.
+MACBETH.
+We will speak further.
+LADY MACBETH.
+Only look up clear;
+To alter favor ever is to fear:
+Leave all the rest to me.
+[Exeunt.]
+18
+SCENE VI. The same. Before the Castle.
+[Hautboys. Servants of Macbeth attending.]
+[Enter Duncan, Malcolm, Donalbain, Banquo, Lennox, Macduff, Ross, Angus, and Attendants.]
+DUNCAN.
+This castle hath a pleasant seat: the air
+Nimbly and sweetly recommends itself
+Unto our gentle senses.
+BANQUO.
+This guest of summer,
+The temple-haunting martlet, does approve
+By his lov'd mansionry, that the heaven's breath
+Smells wooingly here: no jutty, frieze, buttress,
+Nor coigne of vantage, but this bird hath made
+His pendant bed and procreant cradle:
+Where they most breed and haunt, I have observ'd
+The air is delicate.
+[Enter Lady Macbeth.]
+DUNCAN.
+See, see, our honour'd hostess!--
+The love that follows us sometime is our trouble,
+Which still we thank as love. Herein I teach you
+How you shall bid God ild us for your pains,
+And thank us for your trouble.
+LADY MACBETH.
+All our service
+In every point twice done, and then done double,
+Were poor and single business to contend
+Against those honours deep and broad wherewith
+Your majesty loads our house: for those of old,
+And the late dignities heap'd up to them,
+We rest your hermits.
+DUNCAN.
+Where's the Thane of Cawdor?
+We cours'd him at the heels, and had a purpose
+To be his purveyor: but he rides well;
+And his great love, sharp as his spur, hath holp him
+To his home before us. Fair and noble hostess,
+We are your guest tonight.
+LADY MACBETH.
+Your servants ever
+Have theirs, themselves, and what is theirs, in compt,
+To make their audit at your highness' pleasure,
+Still to return your own.
+19
+DUNCAN.
+Give me your hand;
+Conduct me to mine host: we love him highly,
+And shall continue our graces towards him.
+By your leave, hostess.
+[Exeunt.]
+SCENE VII. The same. A Lobby in the Castle.
+[Hautboys and torches. Enter, and pass over, a Sewer and divers Servants with dishes and service. Then enter
+Macbeth.]
+MACBETH.
+If it were done when 'tis done, then 'twere well
+It were done quickly. If the assassination
+Could trammel up the consequence, and catch,
+With his surcease, success; that but this blow
+Might be the be-all and the end-all--here,
+But here, upon this bank and shoal of time,--
+We'd jump the life to come. But in these cases
+We still have judgement here; that we but teach
+Bloody instructions, which being taught, return
+To plague the inventor: this even-handed justice
+Commends the ingredients of our poison'd chalice
+To our own lips. He's here in double trust:
+First, as I am his kinsman and his subject,
+Strong both against the deed: then, as his host,
+Who should against his murderer shut the door,
+Not bear the knife myself. Besides, this Duncan
+Hath borne his faculties so meek, hath been
+So clear in his great office, that his virtues
+Will plead like angels, trumpet-tongued, against
+The deep damnation of his taking-off:
+And pity, like a naked new-born babe,
+Striding the blast, or heaven's cherubin, hors'd
+Upon the sightless couriers of the air,
+Shall blow the horrid deed in every eye,
+That tears shall drown the wind.--I have no spur
+To prick the sides of my intent, but only
+Vaulting ambition, which o'erleaps itself,
+And falls on the other.
+[Enter Lady Macbeth.]
+How now! what news?
+LADY MACBETH.
+He has almost supp'd: why have you left the chamber?
+MACBETH.
+Hath he ask'd for me?
+20
+LADY MACBETH.
+Know you not he has?
+MACBETH.
+We will proceed no further in this business:
+He hath honour'd me of late; and I have bought
+Golden opinions from all sorts of people,
+Which would be worn now in their newest gloss,
+Not cast aside so soon.
+LADY MACBETH.
+Was the hope drunk
+Wherein you dress'd yourself? hath it slept since?
+And wakes it now, to look so green and pale
+At what it did so freely? From this time
+Such I account thy love. Art thou afeard
+To be the same in thine own act and valor
+As thou art in desire? Wouldst thou have that
+Which thou esteem'st the ornament of life,
+And live a coward in thine own esteem;
+Letting "I dare not" wait upon "I would,"
+Like the poor cat i' the adage?
+MACBETH.
+Pr'ythee, peace!
+I dare do all that may become a man;
+Who dares do more is none.
+LADY MACBETH.
+What beast was't, then,
+That made you break this enterprise to me?
+When you durst do it, then you were a man;
+And, to be more than what you were, you would
+Be so much more the man. Nor time nor place
+Did then adhere, and yet you would make both:
+They have made themselves, and that their fitness now
+Does unmake you. I have given suck, and know
+How tender 'tis to love the babe that milks me:
+I would, while it was smiling in my face,
+Have pluck'd my nipple from his boneless gums
+And dash'd the brains out, had I so sworn as you
+Have done to this.
+MACBETH.
+If we should fail?
+LADY MACBETH.
+We fail!
+But screw your courage to the sticking-place,
+And we'll not fail. When Duncan is asleep,--
+Whereto the rather shall his day's hard journey
+Soundly invite him, his two chamberlains
+21
+Will I with wine and wassail so convince
+That memory, the warder of the brain,
+Shall be a fume, and the receipt of reason
+A limbec only: when in swinish sleep
+Their drenched natures lie as in a death,
+What cannot you and I perform upon
+The unguarded Duncan? what not put upon
+His spongy officers; who shall bear the guilt
+Of our great quell?
+MACBETH.
+Bring forth men-children only;
+For thy undaunted mettle should compose
+Nothing but males. Will it not be receiv'd,
+When we have mark'd with blood those sleepy two
+Of his own chamber, and us'd their very daggers,
+That they have don't?
+LADY MACBETH.
+Who dares receive it other,
+As we shall make our griefs and clamor roar
+Upon his death?
+MACBETH.
+I am settled, and bend up
+Each corporal agent to this terrible feat.
+Away, and mock the time with fairest show:
+False face must hide what the false heart doth know.
+[Exeunt.]
+ACT II.
+SCENE I. Inverness. Court within the Castle.
+[Enter Banquo, preceeded by Fleance with a torch.]
+BANQUO.
+How goes the night, boy?
+FLEANCE.
+The moon is down; I have not heard the clock.
+BANQUO.
+And she goes down at twelve.
+FLEANCE.
+I take't, 'tis later, sir.
+BANQUO.
+Hold, take my sword.--There's husbandry in heaven;
+Their candles are all out:--take thee that too.--
+22
+A heavy summons lies like lead upon me,
+And yet I would not sleep:--merciful powers,
+Restrain in me the cursed thoughts that nature
+Gives way to in repose!--Give me my sword.
+Who's there?
+[Enter Macbeth, and a Servant with a torch.]
+MACBETH.
+A friend.
+BANQUO.
+What, sir, not yet at rest? The king's a-bed:
+He hath been in unusual pleasure and
+Sent forth great largess to your officers:
+This diamond he greets your wife withal,
+By the name of most kind hostess; and shut up
+In measureless content.
+MACBETH.
+Being unprepar'd,
+Our will became the servant to defect;
+Which else should free have wrought.
+BANQUO.
+All's well.
+I dreamt last night of the three weird sisters:
+To you they have show'd some truth.
+MACBETH.
+I think not of them:
+Yet, when we can entreat an hour to serve,
+We would spend it in some words upon that business,
+If you would grant the time.
+BANQUO.
+At your kind'st leisure.
+MACBETH.
+If you shall cleave to my consent,--when 'tis,
+It shall make honor for you.
+BANQUO.
+So I lose none
+In seeking to augment it, but still keep
+My bosom franchis'd, and allegiance clear,
+I shall be counsell'd.
+MACBETH.
+Good repose the while!
+BANQUO.
+23
+Thanks, sir: the like to you!
+[Exeunt Banquo and Fleance.]
+MACBETH.
+Go bid thy mistress, when my drink is ready,
+She strike upon the bell. Get thee to bed.
+[Exit Servant.]
+Is this a dagger which I see before me,
+The handle toward my hand? Come, let me clutch thee:--
+I have thee not, and yet I see thee still.
+Art thou not, fatal vision, sensible
+To feeling as to sight? or art thou but
+A dagger of the mind, a false creation,
+Proceeding from the heat-oppressed brain?
+I see thee yet, in form as palpable
+As this which now I draw.
+Thou marshall'st me the way that I was going;
+And such an instrument I was to use.
+Mine eyes are made the fools o' the other senses,
+Or else worth all the rest: I see thee still;
+And on thy blade and dudgeon gouts of blood,
+Which was not so before.--There's no such thing:
+It is the bloody business which informs
+Thus to mine eyes.--Now o'er the one half-world
+Nature seems dead, and wicked dreams abuse
+The curtain'd sleep; now witchcraft celebrates
+Pale Hecate's offerings; and wither'd murder,
+Alarum'd by his sentinel, the wolf,
+Whose howl's his watch, thus with his stealthy pace,
+With Tarquin's ravishing strides, towards his design
+Moves like a ghost.--Thou sure and firm-set earth,
+Hear not my steps, which way they walk, for fear
+Thy very stones prate of my whereabout,
+And take the present horror from the time,
+Which now suits with it.--Whiles I threat, he lives;
+Words to the heat of deeds too cold breath gives.
+[A bell rings.]
+I go, and it is done; the bell invites me.
+Hear it not, Duncan, for it is a knell
+That summons thee to heaven or to hell.
+[Exit.]
+[Enter Lady Macbeth.]
+LADY MACBETH.
+That which hath made them drunk hath made me bold:
+24
+What hath quench'd them hath given me fire.--Hark!--Peace!
+It was the owl that shriek'd, the fatal bellman,
+Which gives the stern'st good night. He is about it:
+The doors are open; and the surfeited grooms
+Do mock their charge with snores: I have drugg'd their possets That death and nature do contend about them,
+Whether they live or die.
+MACBETH.
+[Within.] Who's there?--what, ho!
+LADY MACBETH.
+Alack! I am afraid they have awak'd,
+And 'tis not done: the attempt, and not the deed,
+Confounds us.--Hark!--I laid their daggers ready;
+He could not miss 'em.--Had he not resembled
+My father as he slept, I had done't.--My husband!
+[Re-enter Macbeth.]
+MACBETH.
+I have done the deed.--Didst thou not hear a noise?
+LADY MACBETH.
+I heard the owl scream and the crickets cry.
+Did not you speak?
+MACBETH.
+When?
+LADY MACBETH.
+Now.
+MACBETH.
+As I descended?
+LADY MACBETH.
+Ay.
+MACBETH.
+Hark!--
+Who lies i' the second chamber?
+LADY MACBETH.
+Donalbain.
+MACBETH.
+This is a sorry sight.
+[Looking on his hands.]
+LADY MACBETH.
+A foolish thought, to say a sorry sight.
+25
+MACBETH.
+There's one did laugh in's sleep, and one cried, "Murder!"
+That they did wake each other: I stood and heard them:
+But they did say their prayers, and address'd them
+Again to sleep.
+LADY MACBETH.
+There are two lodg'd together.
+MACBETH.
+One cried, "God bless us!" and, "Amen," the other;
+As they had seen me with these hangman's hands.
+Listening their fear, I could not say "Amen,"
+When they did say, "God bless us."
+LADY MACBETH.
+Consider it not so deeply.
+MACBETH.
+But wherefore could not I pronounce "Amen"?
+I had most need of blessing, and "Amen"
+Stuck in my throat.
+LADY MACBETH.
+These deeds must not be thought
+After these ways; so, it will make us mad.
+MACBETH.
+I heard a voice cry, "Sleep no more!
+Macbeth does murder sleep,"--the innocent sleep;
+Sleep that knits up the ravell'd sleave of care,
+The death of each day's life, sore labour's bath,
+Balm of hurt minds, great nature's second course,
+Chief nourisher in life's feast.
+LADY MACBETH.
+What do you mean?
+MACBETH.
+Still it cried, "Sleep no more!" to all the house:
+"Glamis hath murder'd sleep, and therefore Cawdor
+Shall sleep no more,--Macbeth shall sleep no more!"
+LADY MACBETH.
+Who was it that thus cried? Why, worthy thane,
+You do unbend your noble strength to think
+So brainsickly of things.--Go get some water,
+And wash this filthy witness from your hand.--
+Why did you bring these daggers from the place?
+They must lie there: go carry them; and smear
+The sleepy grooms with blood.
+26
+MACBETH.
+I'll go no more:
+I am afraid to think what I have done;
+Look on't again I dare not.
+LADY MACBETH.
+Infirm of purpose!
+Give me the daggers: the sleeping and the dead
+Are but as pictures: 'tis the eye of childhood
+That fears a painted devil. If he do bleed,
+I'll gild the faces of the grooms withal,
+For it must seem their guilt.
+[Exit. Knocking within.]
+MACBETH.
+Whence is that knocking?
+How is't with me, when every noise appals me?
+What hands are here? Ha, they pluck out mine eyes!
+Will all great Neptune's ocean wash this blood
+Clean from my hand? No; this my hand will rather
+The multitudinous seas incarnadine,
+Making the green one red.
+[Re-enter Lady Macbeth.]
+LADY MACBETH.
+My hands are of your color, but I shame
+To wear a heart so white. [Knocking within.] I hear knocking At the south entry:--retire we to our chamber.
+A little water clears us of this deed:
+How easy is it then! Your constancy
+Hath left you unattended.--[Knocking within.] Hark, more
+knocking:
+Get on your nightgown, lest occasion call us
+And show us to be watchers:--be not lost
+So poorly in your thoughts.
+MACBETH.
+To know my deed, 'twere best not know myself. [Knocking within.] Wake Duncan with thy knocking! I
+would thou couldst!
+[Exeunt.]
+[Enter a Porter. Knocking within.]
+PORTER.
+Here's a knocking indeed! If a man were porter of hell-gate, he should have old turning the key. [Knocking.]
+Knock, knock, knock. Who's there, i' the name of Belzebub? Here's a farmer that hanged himself on the
+expectation of plenty: come in time; have napkins enow about you; here you'll sweat for't.--[Knocking.]
+Knock, knock! Who's there, in the other devil's name? Faith, here's an equivocator, that could swear in both
+the scales against either scale, who committed treason enough for God's sake, yet could not equivocate to
+heaven: O, come in, equivocator. [Knocking.] Knock, knock, knock! Who's there? Faith, here's an English
+27
+tailor come hither, for stealing out of a French hose: come in, tailor; here you may roast your goose.--
+[Knocking.] Knock, knock: never at quiet! What are you?--But this place is too cold for hell.
+I'll devil-porter it no further: I had thought to have let in some of all professions, that go the primrose way to
+the
+everlasting bonfire. [Knocking.] Anon, anon! I pray you, remember the porter.
+[Opens the gate.]
+[Enter Macduff and Lennox.]
+MACDUFF.
+Was it so late, friend, ere you went to bed,
+That you do lie so late?
+PORTER.
+Faith, sir, we were carousing till the second cock: and
+drink, sir, is a great provoker of three things.
+MACDUFF.
+What three things does drink especially provoke?
+PORTER.
+Marry, sir, nose-painting, sleep, and urine. Lechery, sir,
+it provokes and unprovokes; it provokes the desire, but it
+takes away the performance: therefore much drink may be said to be an equivocator with lechery: it makes
+him, and it mars him; it sets him on, and it takes him off; it persuades him, and
+disheartens him; makes him stand to, and not stand to: in
+conclusion, equivocates him in a sleep, and giving him the lie, leaves him.
+MACDUFF.
+I believe drink gave thee the lie last night.
+PORTER.
+That it did, sir, i' the very throat o' me; but I requited
+him for his lie; and, I think, being too strong for him,
+though he took up my legs sometime, yet I made a shift to cast him.
+MACDUFF.
+Is thy master stirring?--
+Our knocking has awak'd him; here he comes.
+[Enter Macbeth.]
+LENNOX.
+Good morrow, noble sir!
+MACBETH.
+Good morrow, both!
+MACDUFF.
+Is the king stirring, worthy thane?
+28
+MACBETH.
+Not yet.
+MACDUFF.
+He did command me to call timely on him:
+I have almost slipp'd the hour.
+MACBETH.
+I'll bring you to him.
+MACDUFF.
+I know this is a joyful trouble to you;
+But yet 'tis one.
+MACBETH.
+The labour we delight in physics pain.
+This is the door.
+MACDUFF.
+I'll make so bold to call.
+For 'tis my limited service.
+[Exit Macduff.]
+LENNOX.
+Goes the king hence to-day?
+MACBETH.
+He does: he did appoint so.
+LENNOX.
+The night has been unruly: where we lay,
+Our chimneys were blown down: and, as they say,
+Lamentings heard i' the air, strange screams of death;
+And prophesying, with accents terrible,
+Of dire combustion and confus'd events,
+New hatch'd to the woeful time: the obscure bird
+Clamour'd the live-long night; some say the earth
+Was feverous, and did shake.
+MACBETH.
+'Twas a rough night.
+LENNOX.
+My young remembrance cannot parallel
+A fellow to it.
+[Re-enter Macduff.]
+MACDUFF.
+O horror, horror, horror! Tongue nor heart
+Cannot conceive nor name thee!
+29
+MACBETH, LENNOX.
+What's the matter?
+MACDUFF.
+Confusion now hath made his masterpiece!
+Most sacrilegious murder hath broke ope
+The Lord's anointed temple, and stole thence
+The life o' the building.
+MACBETH.
+What is't you say? the life?
+LENNOX.
+Mean you his majesty?
+MACDUFF.
+Approach the chamber, and destroy your sight
+With a new Gorgon:--do not bid me speak;
+See, and then speak yourselves.
+[Exeunt Macbeth and Lennox.]
+Awake, awake!--
+Ring the alarum bell:--murder and treason!
+Banquo and Donalbain! Malcolm! awake!
+Shake off this downy sleep, death's counterfeit,
+And look on death itself! up, up, and see
+The great doom's image! Malcolm! Banquo!
+As from your graves rise up, and walk like sprites
+To countenance this horror!
+[Alarum-bell rings.]
+[Re-enter Lady Macbeth.]
+LADY MACBETH.
+What's the business,
+That such a hideous trumpet calls to parley
+The sleepers of the house? speak, speak!
+MACDUFF.
+O gentle lady,
+'Tis not for you to hear what I can speak:
+The repetition, in a woman's ear,
+Would murder as it fell.
+[Re-enter Banquo.]
+O Banquo, Banquo!
+Our royal master's murder'd!
+LADY MACBETH.
+30
+Woe, alas!
+What, in our house?
+BANQUO.
+Too cruel any where.--
+Dear Duff, I pr'ythee, contradict thyself,
+And say it is not so.
+[Re-enter Macbeth and Lennox, with Ross.]
+MACBETH.
+Had I but died an hour before this chance,
+I had liv'd a blessed time; for, from this instant
+There's nothing serious in mortality:
+All is but toys: renown and grace is dead;
+The wine of life is drawn, and the mere lees
+Is left this vault to brag of.
+[Enter Malcolm and Donalbain.]
+DONALBAIN.
+What is amiss?
+MACBETH.
+You are, and do not know't:
+The spring, the head, the fountain of your blood
+Is stopp'd; the very source of it is stopp'd.
+MACDUFF.
+Your royal father's murder'd.
+MALCOLM.
+O, by whom?
+LENNOX.
+Those of his chamber, as it seem'd, had done't:
+Their hands and faces were all badg'd with blood;
+So were their daggers, which, unwip'd, we found
+Upon their pillows:
+They star'd, and were distracted; no man's life
+Was to be trusted with them.
+MACBETH.
+O, yet I do repent me of my fury,
+That I did kill them.
+MACDUFF.
+Wherefore did you so?
+MACBETH.
+Who can be wise, amaz'd, temperate, and furious,
+Loyal and neutral, in a moment? No man:
+31
+The expedition of my violent love
+Outrun the pauser reason. Here lay Duncan,
+His silver skin lac'd with his golden blood;
+And his gash'd stabs look'd like a breach in nature
+For ruin's wasteful entrance: there, the murderers,
+Steep'd in the colours of their trade, their daggers
+Unmannerly breech'd with gore: who could refrain,
+That had a heart to love, and in that heart
+Courage to make's love known?
+LADY MACBETH.
+Help me hence, ho!
+MACDUFF.
+Look to the lady.
+MALCOLM.
+Why do we hold our tongues,
+That most may claim this argument for ours?
+DONALBAIN.
+What should be spoken here, where our fate,
+Hid in an auger hole, may rush, and seize us?
+Let's away;
+Our tears are not yet brew'd.
+MALCOLM.
+Nor our strong sorrow
+Upon the foot of motion.
+BANQUO.
+Look to the lady:--
+[Lady Macbeth is carried out.]
+And when we have our naked frailties hid,
+That suffer in exposure, let us meet,
+And question this most bloody piece of work
+To know it further. Fears and scruples shake us:
+In the great hand of God I stand; and thence,
+Against the undivulg'd pretense I fight
+Of treasonous malice.
+MACDUFF.
+And so do I.
+ALL.
+So all.
+MACBETH.
+Let's briefly put on manly readiness,
+And meet i' the hall together.
+32
+ALL.
+Well contented.
+[Exeunt all but Malcolm and Donalbain.]
+MALCOLM.
+What will you do? Let's not consort with them:
+To show an unfelt sorrow is an office
+Which the false man does easy. I'll to England.
+DONALBAIN.
+To Ireland, I; our separated fortune
+Shall keep us both the safer: where we are,
+There's daggers in men's smiles: the near in blood,
+The nearer bloody.
+MALCOLM.
+This murderous shaft that's shot
+Hath not yet lighted; and our safest way
+Is to avoid the aim. Therefore to horse;
+And let us not be dainty of leave-taking,
+But shift away: there's warrant in that theft
+Which steals itself, when there's no mercy left.
+[Exeunt.]
+SCENE II. The same. Without the Castle.
+[Enter Ross and an old Man.]
+OLD MAN.
+Threescore and ten I can remember well:
+Within the volume of which time I have seen
+Hours dreadful and things strange; but this sore night
+Hath trifled former knowings.
+ROSS.
+Ah, good father,
+Thou seest, the heavens, as troubled with man's act,
+Threaten his bloody stage: by the clock 'tis day,
+And yet dark night strangles the travelling lamp;
+Is't night's predominance, or the day's shame,
+That darkness does the face of earth entomb,
+When living light should kiss it?
+OLD MAN.
+'Tis unnatural,
+Even like the deed that's done. On Tuesday last,
+A falcon, towering in her pride of place,
+Was by a mousing owl hawk'd at and kill'd.
+ROSS.
+33
+And Duncan's horses,--a thing most strange and certain,--
+Beauteous and swift, the minions of their race,
+Turn'd wild in nature, broke their stalls, flung out,
+Contending 'gainst obedience, as they would make
+War with mankind.
+OLD MAN.
+'Tis said they eat each other.
+ROSS.
+They did so; to the amazement of mine eyes,
+That look'd upon't.
+Here comes the good Macduff.
+[Enter Macduff.]
+How goes the world, sir, now?
+MACDUFF.
+Why, see you not?
+ROSS.
+Is't known who did this more than bloody deed?
+MACDUFF.
+Those that Macbeth hath slain.
+ROSS.
+Alas, the day!
+What good could they pretend?
+MACDUFF.
+They were suborn'd:
+Malcolm and Donalbain, the king's two sons,
+Are stol'n away and fled; which puts upon them
+Suspicion of the deed.
+ROSS.
+'Gainst nature still:
+Thriftless ambition, that wilt ravin up
+Thine own life's means!--Then 'tis most like,
+The sovereignty will fall upon Macbeth.
+MACDUFF.
+He is already nam'd; and gone to Scone
+To be invested.
+ROSS.
+Where is Duncan's body?
+MACDUFF.
+Carried to Colme-kill,
+34
+The sacred storehouse of his predecessors,
+And guardian of their bones.
+ROSS.
+Will you to Scone?
+MACDUFF.
+No, cousin, I'll to Fife.
+ROSS.
+Well, I will thither.
+MACDUFF.
+Well, may you see things well done there,--adieu!--
+Lest our old robes sit easier than our new!
+ROSS.
+Farewell, father.
+OLD MAN.
+God's benison go with you; and with those
+That would make good of bad, and friends of foes!
+[Exeunt.]
+ACT III.
+SCENE I. Forres. A Room in the Palace.
+[Enter Banquo.]
+BANQUO.
+Thou hast it now,--king, Cawdor, Glamis, all,
+As the weird women promis'd; and, I fear,
+Thou play'dst most foully for't; yet it was said
+It should not stand in thy posterity;
+But that myself should be the root and father
+Of many kings. If there come truth from them,--
+As upon thee, Macbeth, their speeches shine,--
+Why, by the verities on thee made good,
+May they not be my oracles as well,
+And set me up in hope? But hush; no more.
+[Sennet sounded. Enter Macbeth as King, Lady Macbeth
+as Queen; Lennox, Ross, Lords, Ladies, and Attendants.]
+MACBETH.
+Here's our chief guest.
+LADY MACBETH.
+If he had been forgotten,
+It had been as a gap in our great feast,
+35
+And all-thing unbecoming.
+MACBETH.
+To-night we hold a solemn supper, sir,
+And I'll request your presence.
+BANQUO.
+Let your highness
+Command upon me; to the which my duties
+Are with a most indissoluble tie
+For ever knit.
+MACBETH.
+Ride you this afternoon?
+BANQUO.
+Ay, my good lord.
+MACBETH.
+We should have else desir'd your good advice,--
+Which still hath been both grave and prosperous,--
+In this day's council; but we'll take to-morrow.
+Is't far you ride?
+BANQUO.
+As far, my lord, as will fill up the time
+'Twixt this and supper: go not my horse the better,
+I must become a borrower of the night,
+For a dark hour or twain.
+MACBETH.
+Fail not our feast.
+BANQUO.
+My lord, I will not.
+MACBETH.
+We hear our bloody cousins are bestow'd
+In England and in Ireland; not confessing
+Their cruel parricide, filling their hearers
+With strange invention: but of that to-morrow;
+When therewithal we shall have cause of state
+Craving us jointly. Hie you to horse: adieu,
+Till you return at night. Goes Fleance with you?
+BANQUO.
+Ay, my good lord: our time does call upon's.
+MACBETH.
+I wish your horses swift and sure of foot;
+And so I do commend you to their backs.
+Farewell.--
+36
+[Exit Banquo.]
+Let every man be master of his time
+Till seven at night; to make society
+The sweeter welcome, we will keep ourself
+Till supper time alone: while then, God be with you!
+[Exeunt Lady Macbeth, Lords, Ladies, &c.]
+Sirrah, a word with you: attend those men
+Our pleasure?
+ATTENDANT.
+They are, my lord, without the palace gate.
+MACBETH.
+Bring them before us.
+[Exit Attendant.]
+To be thus is nothing;
+But to be safely thus:--our fears in Banquo.
+Stick deep; and in his royalty of nature
+Reigns that which would be fear'd: 'tis much he dares;
+And, to that dauntless temper of his mind,
+He hath a wisdom that doth guide his valour
+To act in safety. There is none but he
+Whose being I do fear: and under him,
+My genius is rebuk'd; as, it is said,
+Mark Antony's was by Caesar. He chid the sisters
+When first they put the name of king upon me,
+And bade them speak to him; then, prophet-like,
+They hail'd him father to a line of kings:
+Upon my head they plac'd a fruitless crown,
+And put a barren sceptre in my gripe,
+Thence to be wrench'd with an unlineal hand,
+No son of mine succeeding. If't be so,
+For Banquo's issue have I fil'd my mind;
+For them the gracious Duncan have I murder'd;
+Put rancours in the vessel of my peace
+Only for them; and mine eternal jewel
+Given to the common enemy of man,
+To make them kings, the seed of Banquo kings!
+Rather than so, come, fate, into the list,
+And champion me to the utterance!--Who's there?--
+[Re-enter Attendant, with two Murderers.]
+Now go to the door, and stay there till we call.
+[Exit Attendant.]
+37
+Was it not yesterday we spoke together?
+FIRST MURDERER.
+It was, so please your highness.
+MACBETH.
+Well then, now
+Have you consider'd of my speeches? Know
+That it was he, in the times past, which held you
+So under fortune; which you thought had been
+Our innocent self: this I made good to you
+In our last conference, pass'd in probation with you
+How you were borne in hand, how cross'd, the instruments,
+Who wrought with them, and all things else that might
+To half a soul and to a notion craz'd
+Say, "Thus did Banquo."
+FIRST MURDERER.
+You made it known to us.
+MACBETH.
+I did so; and went further, which is now
+Our point of second meeting. Do you find
+Your patience so predominant in your nature,
+That you can let this go? Are you so gospell'd,
+To pray for this good man and for his issue,
+Whose heavy hand hath bow'd you to the grave,
+And beggar'd yours forever?
+FIRST MURDERER.
+We are men, my liege.
+MACBETH.
+Ay, in the catalogue ye go for men;
+As hounds, and greyhounds, mongrels, spaniels, curs,
+Shoughs, water-rugs, and demi-wolves are clept
+All by the name of dogs: the valu'd file
+Distinguishes the swift, the slow, the subtle,
+The house-keeper, the hunter, every one
+According to the gift which bounteous nature
+Hath in him clos'd; whereby he does receive
+Particular addition, from the bill
+That writes them all alike: and so of men.
+Now, if you have a station in the file,
+Not i' the worst rank of manhood, say it;
+And I will put that business in your bosoms,
+Whose execution takes your enemy off;
+Grapples you to the heart and love of us,
+Who wear our health but sickly in his life,
+Which in his death were perfect.
+SECOND MURDERER.
+38
+I am one, my liege,
+Whom the vile blows and buffets of the world
+Have so incens'd that I am reckless what
+I do to spite the world.
+FIRST MURDERER.
+And I another,
+So weary with disasters, tugg'd with fortune,
+That I would set my life on any chance,
+To mend it or be rid on't.
+MACBETH.
+Both of you
+Know Banquo was your enemy.
+BOTH MURDERERS.
+True, my lord.
+MACBETH.
+So is he mine; and in such bloody distance,
+That every minute of his being thrusts
+Against my near'st of life; and though I could
+With barefac'd power sweep him from my sight,
+And bid my will avouch it, yet I must not,
+For certain friends that are both his and mine,
+Whose loves I may not drop, but wail his fall
+Who I myself struck down: and thence it is
+That I to your assistance do make love;
+Masking the business from the common eye
+For sundry weighty reasons.
+SECOND MURDERER.
+We shall, my lord,
+Perform what you command us.
+FIRST MURDERER.
+Though our lives--
+MACBETH.
+Your spirits shine through you. Within this hour at most,
+I will advise you where to plant yourselves;
+Acquaint you with the perfect spy o' the time,
+The moment on't; for't must be done to-night
+And something from the palace; always thought
+That I require a clearness; and with him,--
+To leave no rubs nor botches in the work,--
+Fleance his son, that keeps him company,
+Whose absence is no less material to me
+Than is his father's, must embrace the fate
+Of that dark hour. Resolve yourselves apart:
+I'll come to you anon.
+39
+BOTH MURDERERS.
+We are resolv'd, my lord.
+MACBETH.
+I'll call upon you straight: abide within.
+[Exeunt Murderers.]
+It is concluded:--Banquo, thy soul's flight,
+If it find heaven, must find it out to-night.
+[Exit.]
