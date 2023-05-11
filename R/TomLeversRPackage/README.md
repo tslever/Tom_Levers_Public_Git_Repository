@@ -1,10 +1,19 @@
 # TomLeversRPackage
 Contains Tom Lever's R functions.
 
-To rebuild this package, open the TomLeversRPackage project in RStudio and run devtools::document() in the RStudio console.
+To rebuild this package, in RStudio's console, run
 
-To install this package, run in the RStudio console
-install.packages("C:\\Users\\Tom\\Documents\\Tom_Levers_Git_Repository\\R\\TomLeversRPackage", repos = NULL, type="source")
+`install.packages("devtools")`
+
+`setwd("C:/Users/Tom/Documents/Tom_Levers_Public_Git_Repository/R/TomLeversRPackage")`
+
+`devtools::document()`
+
+To install this package, in RStudio's console, run
+
+`detach("package:TomLeversRPackage", unload = TRUE)`
+
+`install.packages("C:/Users/Tom/Documents/Tom_Levers_Git_Repository/R/TomLeversRPackage", repos = NULL, type="source")`
 
 Regarding creating this package
 https://www.r-bloggers.com/2020/07/how-to-write-your-own-r-package-and-publish-it-on-cran/
