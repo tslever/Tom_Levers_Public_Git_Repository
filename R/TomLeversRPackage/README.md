@@ -1,6 +1,10 @@
 # TomLeversRPackage
 Contains Tom Lever's R functions.
 
+Install R 4.3.0.
+
+Install Rtools43 following https://cran.r-project.org/bin/windows/Rtools/rtools43/rtools.html.
+
 To rebuild this package, in RStudio's console, run
 
 `install.packages("devtools")`
@@ -13,7 +17,7 @@ To install this package, in RStudio's console, run
 
 `detach("package:TomLeversRPackage", unload = TRUE)`
 
-`install.packages("C:/Users/Tom/Documents/Tom_Levers_Git_Repository/R/TomLeversRPackage", repos = NULL, type="source")`
+`install.packages("C:/Users/Tom/Documents/Tom_Levers_Public_Git_Repository/R/TomLeversRPackage", repos = NULL, type = "source")`
 
 Regarding creating this package
 https://www.r-bloggers.com/2020/07/how-to-write-your-own-r-package-and-publish-it-on-cran/
