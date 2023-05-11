@@ -1,5 +1,5 @@
 # Tom_Levers_Public_Git_Repository
-Contains Tom Lever's public software solutions
+Contains Tom Lever's public, non-sensitive, moderately sized, technical documents
 
 To resolve "Filename too long" in Windows 10, run `git config --global core.longpaths true`.
 
