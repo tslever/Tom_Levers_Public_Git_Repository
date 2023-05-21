@@ -1,0 +1,46 @@
+﻿Study Static Analysis:1 started: 5/21/2023, 2:59:54 AM
+Number of configurations: 1
+Study        Worst Jacobian ratio :  1.01  on element 92 finished: 5/21/2023, 3:01:24 AM
+Total time 0:01:29
+
+Study Static Analysis:1 started: 5/21/2023, 3:01:53 AM
+Number of configurations: 1
+Default mesh: 517090 elements, 946894 nodes
+Mesh at contact 19 is too coarse
+Mesh at contact 30 is too coarse
+Mesh at contact 34 is too coarse
+Mesh at contact 119 is too coarse
+Mesh at contact 121 is too coarse
+Mesh at contact 122 is too coarse
+Mesh at contact 124 is too coarse
+Mesh at contact 127 is too coarse
+Mesh at contact 128 is too coarse
+Mesh at contact 130 is too coarse
+Mesh at contact 131 is too coarse
+Mesh at contact 147 is too coarse
+Mesh at contact 151 is too coarse
+Mesh at contact 153 is too coarse
+Mesh at contact 154 is too coarse
+Mesh at contact 157 is too coarse
+Mesh at contact 158 is too coarse
+Mesh at contact 159 is too coarse
+Mesh at contact 161 is too coarse
+Mesh at contact 162 is too coarse
+Mesh at contact 289 is too coarse
+Mesh at contact 290 is too coarse
+Mesh at contact 294 is too coarse
+Mesh at contact 296 is too coarse
+Mesh at contact 297 is too coarse
+Mesh at contact 298 is too coarse
+Mesh at contact 303 is too coarse
+Mesh at contact 304 is too coarse
+Mesh at contact 305 is too coarse
+Mesh at contact 311 is too coarse
+Mesh at contact 312 is too coarse
+Mesh at contact 313 is too coarse
+Solution time 314s
+Convergence rate: 50%
+Reached the total number of h refinements 
+Study        Worst Jacobian ratio :  1.01  on element 92 finished: 5/21/2023, 3:08:37 AM
+Total time 0:06:44
+
