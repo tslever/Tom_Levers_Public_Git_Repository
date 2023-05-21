@@ -1,0 +1,70 @@
+﻿Study Static Analysis:1 started: 5/20/2023, 5:25:21 PM
+Number of configurations: 1
+Default mesh: 706561 elements, 1261551 nodes
+Mesh at contact 75 is too coarse
+Mesh at contact 80 is too coarse
+Mesh at contact 81 is too coarse
+Mesh at contact 82 is too coarse
+Mesh at contact 167 is too coarse
+Mesh at contact 168 is too coarse
+Mesh at contact 169 is too coarse
+Mesh at contact 171 is too coarse
+Mesh at contact 172 is too coarse
+Mesh at contact 174 is too coarse
+Mesh at contact 177 is too coarse
+Mesh at contact 178 is too coarse
+Mesh at contact 179 is too coarse
+Mesh at contact 181 is too coarse
+Mesh at contact 200 is too coarse
+Mesh at contact 201 is too coarse
+Mesh at contact 202 is too coarse
+Mesh at contact 204 is too coarse
+Mesh at contact 206 is too coarse
+Mesh at contact 209 is too coarse
+Mesh at contact 210 is too coarse
+Mesh at contact 214 is too coarse
+Mesh at contact 215 is too coarse
+Mesh at contact 320 is too coarse
+Mesh at contact 325 is too coarse
+Mesh at contact 326 is too coarse
+Solution time 358s
+Convergence rate: 50%
+Reached the total number of h refinements 
+Study Static Analysis:1 finished: 5/20/2023, 5:32:08 PM
+Total time 0:06:47
+
+Study Static Analysis:1 started: 5/21/2023, 3:21:53 AM
+Number of configurations: 1
+Default mesh: 724099 elements, 1297635 nodes
+Mesh at contact 75 is too coarse
+Mesh at contact 80 is too coarse
+Mesh at contact 81 is too coarse
+Mesh at contact 82 is too coarse
+Mesh at contact 167 is too coarse
+Mesh at contact 168 is too coarse
+Mesh at contact 169 is too coarse
+Mesh at contact 171 is too coarse
+Mesh at contact 172 is too coarse
+Mesh at contact 174 is too coarse
+Mesh at contact 177 is too coarse
+Mesh at contact 178 is too coarse
+Mesh at contact 179 is too coarse
+Mesh at contact 181 is too coarse
+Mesh at contact 200 is too coarse
+Mesh at contact 201 is too coarse
+Mesh at contact 202 is too coarse
+Mesh at contact 204 is too coarse
+Mesh at contact 206 is too coarse
+Mesh at contact 209 is too coarse
+Mesh at contact 210 is too coarse
+Mesh at contact 214 is too coarse
+Mesh at contact 215 is too coarse
+Mesh at contact 320 is too coarse
+Mesh at contact 325 is too coarse
+Mesh at contact 326 is too coarse
+Solution time 1.54e+03s
+Convergence rate: 50%
+Reached the total number of h refinements 
+Study        Worst Jacobian ratio :  1  on element 1 finished: 5/21/2023, 3:51:34 AM
+Total time 0:29:41
+
