@@ -1,0 +1,12 @@
+Properties Of Inventor Material "Wood (Southern Pine)"
+
+
+Per https://www.engineeringtoolbox.com/thermal-conductivity-d_429.html , the thermal conductivity k of “wood across the grain, yellow pine, timber” is 0.085 BTU per foot per hour per degree Fahrenheit or 1.966 x 10^{-6} BTU per inch per second per degree Fahrenheit.
+Per https://puuinfo.fi/puutieto/wood-as-a-material/thermal-properties-of-wood/?lang=en#:~:text=The%20heat%20storing%20capacity%20of,C%20is%202%2C300%20J%2FkgoC. , “the average specific heat value of pine and spruce at +0 – 100 degrees Celsius is 2,300 J/kgoC” or 0.549 BTU per pound per degree Fahrenheit.
+Per https://www.engineeringtoolbox.com/linear-expansion-coefficients-d_95.html , the linear temperature expansion coefficient alpha is 2.78 x 10^{-6} per degree Fahrenheit.
+Per https://www.engineeringtoolbox.com/timber-mechanical-properties-d_1789.html , the Modulus of Elasticity E for “Pine – Eastern White, Jack, Loblolly, Lodgepole, Longleaf, Pitch” is between 1,232,500 and 1,986,500 psi or 1,609,500 psi.
+Per https://www.fhwa.dot.gov/publications/research/safety/04097/sec130.cfm , Poisson’s ratio \mu for “southern yellow pine” is 0.225 on average.
+Per https://www.engineeringtoolbox.com/timber-mechanical-properties-d_1789.html , the “Shear Strength parallel to grain” \tau for “Pine – Eastern White, Jack, Loblolly, Lodgepole, Longleaf, Pitch” is between 885 and 1508 psi or 1,196.5 psi on average.
+Per https://www.engineeringtoolbox.com/wood-density-d_40.html , the density of “Pine, yellow” is 26.2 pounds per cubic foot or 0.0152 pounds per cubic inch.
+Per https://www.engineeringtoolbox.com/timber-mechanical-properties-d_1789.html , the “Compressive Strength” \sigma of “Pine – Eastern White, Jack, Loblolly, Lodgepole, Longleaf, Pitch” is between 4800 and 7134 psi or 5,967 psi on average.
+Per https://www.engineeringtoolbox.com/young-modulus-d_417.html , the “Ultimate Tensile Strength” \sigma_u of “Pine Wood (along grain)” is 5.8 ksi or 5,800 psi.
