@@ -5,12 +5,13 @@
 ## Basic Commands
 
 ###
-x <- c(1, 3, 2, 5)
+x <- c(1, 3, 2, 5)data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAWElEQVR42mNgGPTAxsZmJsVqQApgmGw1yApwKcQiT7phRBuCzzCSDSHGMKINIeDNmWQlA2IigKJwIssQkHdINgxfmBBtGDEBS3KCxBc7pMQgMYE5c/AXPwAwSX4lV3pTWwAAAABJRU5ErkJggg==
 x
 ###
 x = c(1, 6, 2)
 x
 y = c(1, 4, 3)
+z = 12
 ###
 length(x)
 length(y)
@@ -35,7 +36,9 @@ sqrt(x)
 x^2
 ###
 x <- rnorm(50)
+x
 y <- x + rnorm(50, mean = 50, sd = .1)
+y
 cor(x, y)
 ###
 set.seed(1303)
