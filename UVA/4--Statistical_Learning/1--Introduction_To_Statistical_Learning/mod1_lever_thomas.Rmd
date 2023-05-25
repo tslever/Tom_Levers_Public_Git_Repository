@@ -256,7 +256,7 @@ knitr::opts_chunk$set(
             
             In the `College` data set, Texas A&M University at Galveston has a percent of faculty with PhD's equal to $103$.
             This value could either be an error or a code for a missing value.
-
+            
 10. This exercise involves the Boston housing data set.
 
     (a) To begin, load in the `Boston` data set. The Boston data set is part of the ISLR2 library.
