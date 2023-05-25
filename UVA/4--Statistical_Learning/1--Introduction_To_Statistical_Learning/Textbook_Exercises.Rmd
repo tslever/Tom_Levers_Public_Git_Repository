@@ -47,15 +47,19 @@ knitr::opts_chunk$set(
 
     (a) The sample size $n$ is extremely large, and the number of predictors $p$ is small.
 
-        We would expect generally the performance of a flexible statistical learning method to be worse than the performance of an inflexible method as there are few predictors and parameters and ample data to characterize a trend.
+        We would expect generally the performance of a flexible statistical learning method to be better than the performance of an inflexible method as a flexible statistical learning method would fit the extremely large set of data more closely.
 
     (b) The number of predictors $p$ is extremely large, and the number of observations $n$ is small.
 
-        We would expect generally the performance of a flexible statistical learning method to be better than the performance of an inflexible method as there.
+        We would expect generally the performance of a flexible statistical learning method to be worse than the performance of an inflexible method as a flexible statistical learning method would overfit the small set of data.
     
     (c) The relationship between the predictors and response is highly non-linear.
+    
+        We would expect generally the performance of a flexible statistical method to be better than the performance of an inflexible method as a flexible statistical method has more degrees of freedom.
 
     (d) The variance of the error terms, i.e. $\sigma^2 = Var(\epsilon)$, is extremely high.
+    
+        We would expect generally the performance of a flexible statistical method to be worse than the performance of an inflexible method as a flexible statistical method would fit the variance, error, and noise of the set of data.
 
 2.  Explain whether each scenario is a classification or regression problem, and indicate whether we are most interested in inference or prediction. Finally, provide $n$ and $p$.
 
@@ -75,7 +79,7 @@ knitr::opts_chunk$set(
 
     What are the advantages of a parametric approach to regression or classification (as opposed to a non-parametric approach)? What are its disadvantages?
 
-    A parametric approach to regression and classification has the advantages of involving a explicit, understandable formula with generally a relatively small number of parameters with values that are trained. A parametric approach generally is simple, may be used for prediction and inference, is inflexible, and may have low variance among predicted values given different training data sets. A parametric approach may be too simple, inflexible, and have a high bias. Variance
+    A parametric approach to regression and classification has the advantages of involving a explicit, understandable formula with generally a relatively small number of parameters with values that are trained based on a modest set of data. A parametric approach generally is simple, may be used for prediction and inference, is inflexible, and may have low variance among predicted values given different training data sets. A parametric approach may be too simple, inflexible, and have a high bias. Variance
 
     $$v = E\left(\left\{\hat{f}(x)-E\left[\hat{f}(x)\right]\right\}^2\right)$$
 
@@ -84,9 +88,9 @@ knitr::opts_chunk$set(
     $$b = \left\{E\left[\hat{f}(x)\right] - y(x)\right\}^2$$
     where $y(x)$ is the ground-truth value at $x$ corresponding to the predicted value.
 
-    A non-parametric approach to regression and classification has the advantage of modeling generally nonlinear relationships using a relatively large number of parameters with values that are trained. A non-parametric approach is flexible and has a low bias. A non-parametric approach may be used for prediction. A non-parametric approach generally is a complex black box that may not be used for inference. A non-parametric approach may have high variance among predicted values given different training data sets.
+    A non-parametric approach to regression and classification has the advantage of modeling generally nonlinear relationships using a relatively large number of parameters with values that are trained based on a large set of data. A non-parametric approach is flexible and has a low bias. A non-parametric approach may be used for prediction. A non-parametric approach generally is a complex black box that may not be used for inference. A non-parametric approach may have high variance among predicted values given different training data sets and may overfit the set of data.
 
-8.  This exercise relates to the College data set, which can be found in the file `College.csv` on the book website.
+8.  This exercise relates to the `College` data set, which can be found in the file `College.csv` on the book website.
 
     It contains a number of variables for $777$ different universities and colleges in the US. The variables are
 
@@ -153,9 +157,6 @@ knitr::opts_chunk$set(
             column_of_numerical_representations <- rep(0, number_of_rows_in_college)
             condition <- college$Indicator_Of_Whether_College_Is_Private == "Yes"
             column_of_numerical_representations[condition] <- 1
-            library(TomLeversRPackage)
-            index_Of_Indicator_Of_Whether_College_Is_Private <- college |>
-                get_column_index("Indicator_Of_Whether_College_Is_Private")
             data_frame_of_second_through_tenth_columns <- college[, 2:10]
             data_frame_representing_first_ten_columns_of_college <- data.frame(
                 column_of_numerical_representations,
@@ -166,8 +167,6 @@ knitr::opts_chunk$set(
                 main = "Scatterplot Matrix Of The First Ten Columns Of College",
                 labels = seq(1, 10)
             )
-            #library(GGally)
-            #ggpairs(data_frame_representing_first_ten_columns_of_college)
             ```
         
         iii. Use the `plot()` function to produce side-by-side boxplots of `Outstate` versus `Private`.
@@ -201,10 +200,7 @@ knitr::opts_chunk$set(
             Use the `summary()` function to see how many elite universities there are. Now use the `plot()` function to produce side-by-side boxplots of `Outstate` versus `Elite`.
             
             ```{r}
-            library(TomLeversRPackage)
-            index_of_column_Elite <- get_column_index(college, "Elite")
-            column_Elite <- college[, index_of_column_Elite]
-            summary(column_Elite)
+            summary(college$Elite)
             plot(
                 x = Elite,
                 y = college$Out_Of_State_Tuition,
@@ -247,6 +243,19 @@ knitr::opts_chunk$set(
             ```
         
         vi. Continue exploring the data, and provide a brief summary of what you discover.
+        
+            ```{r}
+            column_Percent_Of_Faculty_With_PhDs <- college$Percent_Of_Faculty_With_PhDs
+            summary(column_Percent_Of_Faculty_With_PhDs)
+            college_has_percent_of_faculty_with_PhDs_equal_to_103 <-
+                column_Percent_Of_Faculty_With_PhDs == 103
+            index_of_college_with_percent_of_faculty_with_PhDs_equal_to_103 <- 
+                which(college_has_percent_of_faculty_with_PhDs_equal_to_103)
+            college[index_of_college_with_percent_of_faculty_with_PhDs_equal_to_103, ]
+            ```
+            
+            In the `College` data set, Texas A&M University at Galveston has a percent of faculty with PhD's equal to $103$.
+            This value could either be an error or a code for a missing value.
 
 10. This exercise involves the Boston housing data set.
 
@@ -357,17 +366,188 @@ knitr::opts_chunk$set(
     
         ```{r}
         correlation_matrix <- cor(Boston)
+        library(TomLeversRPackage)
         analyze_correlation_matrix(correlation_matrix)
         ```
         
         Per capita crime rate is very highly positively associated with itself; highly correlated with no predictors; moderately positively correlated with index of accessibility of radial highways and full-value property-tax rate per 10,000 dollars; lowly positively correlated with proportion of non-retail business acres per town, nitrogen oxides concentration in parts per 10 million, proportion of owner-occupied units built prior to 1940, and lower status of the population in percent; and lowly negatively correlated with weighted mean of distances to five Boston employment centers and median value of owner-occupied homes in thousands of dollars.
 
     (d) Do any of the census tracts of Boston appear to have particularly high crime rates? Tax rates? Pupil-teacher ratios? Comment on the range of each predictor.
+    
+        Many of the census tracts of Boston appear to have particularly high crime rates. These particularly high crime rates are represented below as outliers in "Distribution Of Crime Rates". According to "Distribution Of Tax Rates" and "Distribution Of Pupil Teacher Ratios", none of the census tracts of Boston appear to have particularly high tax rates or pupil teacher ratios. However, according to "Histogram Of Tax Rates", many of the census tracts of Boston appear to have particularly high tax rates and particularly high pupil teacher ratios. The minimum crime rate for a census tract of Boston is $0.006$; the maximum crime rate for a census tract of Boston is $89.0$. The minimum tax rate for a census tract of Boston is $187$; the maximum tax rate for a census tract of Boston is $711$. The minimum pupil teacher ratio for a census tract of Boston is $12.6$; the maximum pupil teacher ratio for a census tract of Boston is $22$.
+
+        ```{r}
+        boxplot(
+            Boston$crim,
+            main = "Distribution Of Crime Rates",
+            ylab = "Crime Rate"
+        )
+        min(Boston$crim)
+        max(Boston$crim)
+        boxplot(
+            Boston$tax,
+            main = "Distribution Of Tax Rates",
+            ylab = "Tax Rate"
+        )
+        min(Boston$tax)
+        max(Boston$tax)
+        hist(
+            x = Boston$tax,
+            main = "Histogram Of Tax Rates",
+            xlab = "Tax Rate",
+            ylab = "Frequency"
+        )
+        boxplot(
+            Boston$ptratio,
+            main = "Distribution Of Pupil Teacher Ratios",
+            ylab = "Pupil Teacher Ratio"
+        )
+        min(Boston$ptratio)
+        max(Boston$ptratio)
+        hist(
+            x = Boston$ptratio,
+            main = "Histogram Of Pupil Teacher Ratios",
+            xlab = "Pupil Teacher Ratio",
+            ylab = "Frequency"
+        )
+        ```
 
     (e) How many of the census tracts in this data set bound the Charles river?
+    
+        ```{r}
+        census_tracts_bound_Charles_River <- Boston$chas == 1
+        vector_of_indices_of_census_tracts_that_bound_Charles_River <-
+            which(census_tracts_bound_Charles_River)
+        length(vector_of_indices_of_census_tracts_that_bound_Charles_River)
+        ```
 
     (f) What is the median pupil-teacher ratio among the towns in this data set?
+    
+        ```{r}
+        median(Boston$ptratio)
+        ```
 
     (g) Which census tract of Boston has lowest median value of owner-occupied homes? What are the values of the other predictors for that census tract, and how do those values compare to the overall ranges for those predictors? Comment on your findings.
 
+        ```{r}
+        index_of_lowest_median_home_value <- which.min(Boston$medv)
+        index_of_lowest_median_home_value
+        record_with_lowest_median_home_value <-
+            Boston[index_of_lowest_median_home_value, ]
+        record_with_lowest_median_home_value
+        
+        calculate_percentile_of_value_of_record_in_column <-
+            function(record, name_of_column) {
+            index <- get_column_index(record, name_of_column)
+            value <- record[1, index]
+            percentile <- calculate_percentile(Boston[, index], value)
+            return(percentile)
+        }
+        
+        calculate_percentile_of_value_of_record_in_column(
+            record_with_lowest_median_home_value,
+            "crim"
+        )
+        calculate_percentile_of_value_of_record_in_column(
+            record_with_lowest_median_home_value,
+            "zn"
+        )
+        calculate_percentile_of_value_of_record_in_column(
+            record_with_lowest_median_home_value,
+            "indus"
+        )
+        calculate_percentile_of_value_of_record_in_column(
+            record_with_lowest_median_home_value,
+            "chas"
+        )
+        calculate_percentile_of_value_of_record_in_column(
+            record_with_lowest_median_home_value,
+            "nox"
+        )
+        calculate_percentile_of_value_of_record_in_column(
+            record_with_lowest_median_home_value,
+            "rm"
+        )
+        calculate_percentile_of_value_of_record_in_column(
+            record_with_lowest_median_home_value,
+            "age"
+        )
+        calculate_percentile_of_value_of_record_in_column(
+            record_with_lowest_median_home_value,
+            "dis"
+        )
+        calculate_percentile_of_value_of_record_in_column(
+            record_with_lowest_median_home_value,
+            "rad"
+        )
+        calculate_percentile_of_value_of_record_in_column(
+            record_with_lowest_median_home_value,
+            "tax"
+        )
+        calculate_percentile_of_value_of_record_in_column(
+            record_with_lowest_median_home_value,
+            "ptratio"
+        )
+        calculate_percentile_of_value_of_record_in_column(
+            record_with_lowest_median_home_value,
+            "lstat"
+        )
+        calculate_percentile_of_value_of_record_in_column(
+            record_with_lowest_median_home_value,
+            "medv"
+        )
+        ```
+
     (h) In this data set, how many of the census tracts average more than seven rooms per dwelling? More than eight rooms per dwelling? Comment on the census tracts that average more than eight rooms per dwelling.
+    
+        ```{r}
+        census_tracts_average_more_than_seven_rooms_per_dwelling <- Boston$rm > 7
+        census_tracts_average_more_than_eight_rooms_per_dwelling <- Boston$rm > 8
+        vector_of_indices_of_tracts_averaging_more_than_seven_rooms_per_dwelling <- 
+            which(census_tracts_average_more_than_seven_rooms_per_dwelling)
+        vector_of_indices_of_tracts_averaging_more_than_eight_rooms_per_dwelling <-
+            which(census_tracts_average_more_than_eight_rooms_per_dwelling)
+        length(vector_of_indices_of_tracts_averaging_more_than_seven_rooms_per_dwelling)
+        number_of_tracts_average_more_than_eight_rooms_per_dwelling <- length(
+            vector_of_indices_of_tracts_averaging_more_than_eight_rooms_per_dwelling
+        )
+        number_of_tracts_average_more_than_eight_rooms_per_dwelling
+        data_frame_of_tracts_averaging_more_than_eight_rooms_per_dwelling <-
+            Boston[FALSE, ]
+        for (i in 1:number_of_tracts_average_more_than_eight_rooms_per_dwelling) {
+            index_of_tract_averaging_more_than_eight_rooms_per_dwelling <-
+                vector_of_indices_of_tracts_averaging_more_than_eight_rooms_per_dwelling[
+                    i
+                ]
+            number_of_rows <-
+                nrow(data_frame_of_tracts_averaging_more_than_eight_rooms_per_dwelling)
+            data_frame_of_tracts_averaging_more_than_eight_rooms_per_dwelling[
+                number_of_rows + 1,
+            ] <- Boston[i, ]
+        }
+        data_frame_of_tracts_averaging_more_than_eight_rooms_per_dwelling
+        summary(Boston$crim)
+        summary(data_frame_of_tracts_averaging_more_than_eight_rooms_per_dwelling$crim)
+        summary(Boston$zn)
+        summary(data_frame_of_tracts_averaging_more_than_eight_rooms_per_dwelling$zn)
+        summary(Boston$indus)
+        summary(data_frame_of_tracts_averaging_more_than_eight_rooms_per_dwelling$indus)
+        summary(Boston$nox)
+        summary(data_frame_of_tracts_averaging_more_than_eight_rooms_per_dwelling$nox)
+        summary(Boston$age)
+        summary(data_frame_of_tracts_averaging_more_than_eight_rooms_per_dwelling$age)
+        summary(Boston$dis)
+        summary(data_frame_of_tracts_averaging_more_than_eight_rooms_per_dwelling$dis)
+        summary(Boston$rad)
+        summary(data_frame_of_tracts_averaging_more_than_eight_rooms_per_dwelling$rad)
+        summary(Boston$tax)
+        summary(data_frame_of_tracts_averaging_more_than_eight_rooms_per_dwelling$tax)
+        summary(Boston$ptratio)
+        summary(data_frame_of_tracts_averaging_more_than_eight_rooms_per_dwelling$ptratio)
+        summary(Boston$lstat)
+        summary(data_frame_of_tracts_averaging_more_than_eight_rooms_per_dwelling$lstat)
+        summary(Boston$medv)
+        summary(data_frame_of_tracts_averaging_more_than_eight_rooms_per_dwelling$medv)
+        ```
+        
+        The census tracts averaging more than eight rooms per dwelling generally have low crime rates, proportion of residential land zoned for lots over $25,000$ square feet, proportion of non-retail business acres per town, nitrogen oxides concentration in parts per 10 million, index of accessibility to radial highways, full-value property-tax rates per 10,000 dollars, and pupil teacher ratio by town. These census tracts generally have average proportion of owner-occupied units built prior to 1940 and percent of population with lower status. These census tracts have high average number of rooms per dwelling, weighted mean of distances to five Boston employment centers, and median value of owner-occupied homes in thousands of dollars. These census tracts do not bound the Charles River.
