@@ -19,6 +19,8 @@ To install this package, in RStudio's console, run
 
 `install.packages("C:/Users/Tom/Documents/Tom_Levers_Public_Git_Repository/R/TomLeversRPackage", repos = NULL, type = "source")`
 
+`library(TomLeversRPackage)`
+
 Regarding creating this package
 https://www.r-bloggers.com/2020/07/how-to-write-your-own-r-package-and-publish-it-on-cran/
 
