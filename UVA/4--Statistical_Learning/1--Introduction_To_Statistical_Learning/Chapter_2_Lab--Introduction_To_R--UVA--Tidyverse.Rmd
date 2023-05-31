@@ -1,0 +1,459 @@
+---
+title: 'Chapter 2 Lab: Introduction to R'
+output:
+  html_document:
+    toc: yes
+    toc_depth: 1
+    toc_float: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '1'
+editor_options:
+  chunk_output_type: inline
+---
+<!--- Below are global settings for knitr. You can override any of them by adding the changes to individual chunks --->
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(error=TRUE,        # Keep compiling upon error
+                      collapse=FALSE,    # collapse by default
+                      echo=TRUE,         # echo code by default
+                      comment = "#>",    # change comment character
+                      fig.width = 5.5,     # set figure width
+                      fig.align = "center",# set figure position
+                      out.width = "49%", # set width of displayed images
+                      warning=FALSE,     # do not show R warnings
+                      message=FALSE)     # do not show R messages
+```
+
+This includes one mapping from the one-to-many mappings that exist from the base
+R code presented in ILSR into a tidyverse re-implementation.
+For fuller and richer exposition beyond the code artifacts present here, please 
+feel free to explore other such efforts that are available online, e.g., [here](https://github.com/SmithCollege-SDS/tidy-islr/blob/master/lab01/Lab%201%20-%20Introduction%20to%20R.ipynb)
+and [here](https://github.com/uc-cfss/tidy-islr/blob/master/02-stat-learn.Rmd).
+In particular, these two resources have been referred to and leveraged to 
+produce the tidyverse implementations we present and use below.
+
+# Basic Commands (Base R)
+## Vectors
+Create a vector
+```{r}
+x <- c(1,3,2,5)
+x
+```
+```{r}
+x = c(1,6,2)
+x
+```
+```{r}
+y = c(1,4,3)
+```
+Length of vector
+```{r}
+length(x)
+length(y)
+```
+Element-wise addition of two vectors
+```{r}
+x+y
+```
+Removing objects 
+```{r}
+ls()
+rm(x,y)
+ls()
+rm(list=ls())
+```
+## Matrices
+```{r}
+?matrix
+```
+```{r}
+x=matrix(data=c(1,2,3,4), nrow=2, ncol=2)
+x
+```
+```{r}
+x=matrix(c(1,2,3,4), 2, 2)
+matrix(c(1,2,3,4),2,2,byrow=TRUE)
+```
+Element-wise application of functions
+```{r}
+sqrt(x)
+x^2
+```
+## Random numbers
+```{r}
+x=rnorm(50)
+y=x+rnorm(50,mean=50,sd=.1)
+```
+```{r}
+cor(x,y)
+```
+Use a random seed to ensure reprodicability 
+```{r}
+set.seed(1303)
+rnorm(50)
+```
+A few statistics
+```{r}
+set.seed(3)
+y=rnorm(100)
+mean(y)
+var(y)
+sqrt(var(y))
+sd(y)
+```
+
+
+# Graphics
+
+## Data {.tabset}
+### Tidyverse
+
+```{r}
+library(tibble)
+
+xy <- tibble(
+  x=rnorm(100),
+  y=rnorm(100)
+)
+```
+
+### Base R
+```{r}
+x=rnorm(100)
+y=rnorm(100)
+```
+
+## {-}
+
+## Scatterplot {.tabset}
+### Tidyverse
+```{r scatter}
+library(ggplot2)
+
+scatter_plot <- ggplot(mapping=aes(x=x, y=y),
+                      data=xy) +
+  geom_point(color='green') +
+  labs(title="Plot of X vs Y",
+       x="this is the x-axis",
+       y="this is the y-axis")
+
+scatter_plot
+```
+```
+ggsave(filename = "scatter_plot.pdf", plot = scatter_plot)
+```
+
+### Base R
+```{r}
+plot(x,y)
+plot(x,y,xlab="this is the x-axis",ylab="this is the y-axis",main="Plot of X vs Y")
+```
+```
+pdf("Figure.pdf")
+plot(x,y,col="green")
+dev.off()
+```
+
+## {-}
+
+## Contour plots {.tabset}
+### Tidyverse ggplot
+```{r}
+d <- seq(-pi,pi,length=50)
+x <- outer(d, d, function(x, y) x )
+y <- t(x)
+z <- outer(d, d, function(x, y) cos(y)/(1+x^2) )
+
+xyz <- tibble(
+  x=as.vector(x),
+  y=as.vector(y),
+  z1=as.vector(z)
+)
+
+contour_plot1 <- ggplot(mapping=aes(x=x, y=y, z=z1),
+                        data=xyz)
+
+contour_plot1+geom_contour()
+
+#contour(x,y,f,nlevels=45,add=T)
+
+contour_plot1+geom_contour()+geom_contour(bins=45)
+
+#fa=(f-t(f))/2
+#contour(x,y,fa,nlevels=15)
+
+xyz <- xyz %>% add_column(z2=as.numeric((z-t(z))/2))
+contour_plot2 <- ggplot(mapping=aes(x=x, y=y, z=z2),
+                        data=xyz) 
+
+contour_plot2+geom_contour(bins=15)
+
+#image(x,y,fa)
+
+contour_plot2+geom_contour_filled()
+```
+
+### Base R
+```{r}
+x=seq(1,10)
+x
+x=1:10
+x
+x=seq(-pi,pi,length=50)
+y=x
+f=outer(x,y,function(x,y)cos(y)/(1+x^2))
+contour(x,y,f)
+contour(x,y,f,nlevels=45,add=T)  # add to current graph!
+```
+```{r}
+fa=(f-t(f))/2
+contour(x,y,fa,nlevels=15)
+```
+```{r}
+image(x,y,fa)
+```
+
+## 3D graphs {.tabset}
+### plotly
+
+`install.packages("plotly", repos="http://cran.rstudio.com")`
+
+```{r plotly}
+library(plotly)
+
+plot_ly(x=x, y=y, z=z, type='surface') %>% 
+  layout(scene = list(aspectmode='cube'))
+# zoom and drag!
+```
+
+
+### Base R
+```{r}
+persp(x,y,fa)
+```
+```{r}
+persp(x,y,fa,theta=30)
+persp(x,y,fa,theta=30,phi=20)
+persp(x,y,fa,theta=30,phi=70)
+persp(x,y,fa,theta=30,phi=40)
+```
+
+## {-}
+
+# Indexing Data
+```{r}
+A=matrix(1:16,4,4)
+A
+```
+```{r}
+A[2,3]
+```
+```{r}
+A[c(1,3),c(2,4)]
+A[1:3,2:4]
+```
+Slices
+```{r}
+A[1:2,]
+A[,1:2]
+A[1,]
+```
+Remove 
+```{r}
+A[-c(1,3),]
+A[-c(1,3),-c(1,3,4)]
+```
+```{r}
+dim(A)
+```
+
+## tidyverse indexing
+### dplyr: filter/select
+
+```{r dplyr}
+library(dplyr)
+
+filter(.data = xyz, x > 0)
+data %>% filter(x > 0)
+
+select(.data = xyz, x, y)
+```
+
+
+# Loading Data
+
+## Read data from file {.tabset}
+### Tidyverse readr
+```{r auto1}
+#Load the `Auto` data using the `read_csv()` function (from `readr` package).
+library(readr)
+Auto = read_csv('https://www.statlearning.com/s/Auto.csv')
+```
+```
+View(Auto) # <-- fix(Auto), or, if you're in Rstudio and have a data object
+           # you can just click on the data object
+```
+```{r}
+Auto
+Auto %>% count(horsepower)
+Auto = read_csv('https://www.statlearning.com/s/Auto.csv', 
+                na = "?")
+summary(Auto)
+```
+### Base R
+```{r}
+Auto=read.table("Auto.data")
+head(Auto)
+# fix(Auto)
+```
+```{r}
+Auto=read.table("Auto.data",header=T,na.strings="?")
+head(Auto)
+# fix(Auto)
+```
+```{r}
+Auto=read.csv("Auto.csv",header=T,na.strings="?")
+head(Auto)
+# fix(Auto)
+```
+## Handling missing data
+One way of handling missing data
+```{r}
+Auto[rowSums(is.na(Auto)) > 0,]
+```
+```{r}
+dim(Auto)
+Auto=na.omit(Auto)
+dim(Auto)
+names(Auto)
+```
+
+The tidyverse can handle NA's appropriately without us explicitly dropping those rows
+
+```{r, echo=FALSE}
+baseAuto <- Auto
+```
+
+# Additional Graphical and Numerical Summaries
+## Scatterplots and boxplots {.tabset}
+### Tidyverse ggplot
+```{r}
+ggplot(Auto, aes(x=factor(cylinders), y=mpg)) + 
+  geom_boxplot(fill="orange", color="blue") + 
+  labs(x="cylinders", y="MPG")
+
+Auto <- mutate(.data=Auto,
+               cylinders=as.factor(cylinders))
+ggplot(data = Auto, mapping = aes(x=cylinders, y=mpg)) +
+  geom_boxplot(fill="orange", color="blue") + 
+  labs(x="cylinders", y="MPG")
+
+#hist(mpg)
+#hist(mpg,col=2)
+#hist(mpg,col=2,breaks=15)
+
+ggplot(Auto, aes(x=mpg)) + 
+  geom_histogram(binwidth=1, 
+                 center=10, 
+                 fill="orange", 
+                 color="blue")
+```
+
+### Base R
+```{r, echo=FALSE}
+Auto <- baseAuto
+```
+
+```
+plot(cylinders, mpg)
+```
+You need to specify the data frame explicitly
+```{r}
+plot(Auto$cylinders, Auto$mpg)
+```
+Attaching a data frame makes the columns directly available
+```{r}
+attach(Auto)
+plot(cylinders, mpg)
+```
+Treat cylinders as a qualitative variable by converting to a factor. This will switch the plot to a boxplot!
+```{r}
+cylinders=as.factor(cylinders)
+plot(cylinders, mpg)
+```
+Modifying the output
+```{r}
+plot(cylinders, mpg, col="red")
+plot(cylinders, mpg, col="red", varwidth=T)  # width proportional to sqrt of sample size
+plot(cylinders, mpg, col="red", varwidth=T,horizontal=T)
+plot(cylinders, mpg, col="red", varwidth=T, xlab="cylinders", ylab="MPG")
+```
+```{r, echo=FALSE}
+baseAuto <- Auto
+```
+
+## {-}
+
+## Histograms {.tabset}
+### Tidyverse ggplot
+```{r}
+ggplot(Auto, aes(x=mpg)) + 
+  geom_histogram(binwidth=1, 
+                 center=10, 
+                 fill="orange", 
+                 color="blue")
+```
+
+### Base R
+```{r}
+hist(mpg)
+hist(mpg,col=2)
+hist(mpg,col=2,breaks=15)
+```
+
+## {-}
+
+## Scatterplot matrices {.tabset}
+### Tidyverse GGally
+```{r}
+library(GGally)
+ggpairs(data = select(.data = Auto, -name))
+```
+
+### Base R
+```
+pairs(Auto)
+```
+Column `name` causes a problem 
+```{r}
+pairs(~ mpg + displacement + horsepower + weight + acceleration, Auto)
+```
+
+## Interactive graphs {.tabset}
+
+### plotly
+```{r auto4}
+library(plotly)
+
+p <- ggplot(Auto, aes(x=horsepower, y=mpg, label=name)) +
+  geom_point()
+ggplotly(p) 
+
+```
+
+### Base R
+```{r}
+plot(horsepower,mpg)
+```
+```
+identify(horsepower,mpg,name)
+```
+
+## Summary
+
+```{r}
+summary(Auto)
+```
+```{r}
+summary(mpg)
+```
