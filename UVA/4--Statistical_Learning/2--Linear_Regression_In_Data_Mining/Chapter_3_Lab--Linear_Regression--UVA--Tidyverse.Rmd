@@ -1,0 +1,291 @@
+# Chapter 3 Lab: Linear Regression
+
+<!--- Below are global settings for knitr. You can override any of them by adding the changes to individual chunks --->
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(error=TRUE,        # Keep compiling upon error
+                      collapse=FALSE,    # collapse by default
+                      echo=TRUE,         # echo code by default
+                      comment = "#>",    # change comment character
+                      fig.width = 5.5,     # set figure width
+                      fig.align = "center",# set figure position
+                      out.width = "49%", # set width of displayed images
+                      warning=FALSE,     # do not show R warnings
+                      message=FALSE)     # do not show R messages
+```
+
+`install.packages("ISLR")`
+
+``` {r data}
+library(MASS)
+library(ISLR)
+```
+
+## Simple Linear Regression
+
+``` {r reg}
+#fix(Boston) 
+View(Boston) # in Rstudio you can click variables in the Environment pane, but
+# Boston is available as a package resource -- not an environment variable -- so
+# you'll have to assign it to a variable if you want to use this method. Try
+# these commands: Boston <- Boston; <click on the variable>; rm(Boston); Boston
+names(Boston) # ls(Boston) also works
+lm.fit <- lm(medv~lstat)
+lm.fit <- lm(medv~lstat, data=Boston)
+attach(Boston)
+lm.fit <- lm(medv~lstat)
+lm.fit
+```
+
+
+### tidy'ing
+
+- One aspect of being tidy compliant, as noted [here](https://github.com/uc-cfss/tidy-islr/blob/master/03-linear-regression.Rmd)
+is being able to organize information into data frames
+
+`install.packages("tidypredict")`
+
+``` {r tidy}
+#summary(lm.fit)
+library(broom)
+glance(lm.fit)
+names(lm.fit) # ls(lm.fit) also works
+#coef(lm.fit)
+tidy(lm.fit)
+#confint(lm.fit)
+tidy(lm.fit, conf.int = TRUE)
+```
+
+
+### predict
+
+- Just as tidyverse is meant to support, accentuate, and complement R's core
+functionality of R, like `lm`, so too is tidy not concerned with overwriting 
+other core components of R, such as the `predict` method, below 
+(as can be seen from how the "See Also" section of `?augment.lm` points to 
+`stats::predict.lm()`).
+
+``` {r asis}
+library(tidyr)
+
+predict(lm.fit, data.frame(lstat=(c(5,10,15))), interval="confidence") %>%
+  as_tibble()
+predict(lm.fit, data.frame(lstat=(c(5,10,15))), interval="prediction") %>%
+  as_tibble()
+augment(lm.fit) # currently does not support prediction intervals
+predict(lm.fit, augment(lm.fit)) %>% head(30)
+```
+
+
+### ggplot2
+
+``` {r ggplot}
+library(ggplot2)
+
+#plot(lstat,medv)
+#abline(lm.fit)
+#abline(lm.fit,lwd=3)
+#abline(lm.fit,lwd=3,col="red")
+#plot(lstat,medv,col="red")
+#plot(lstat,medv,pch=20)
+#plot(lstat,medv,pch="+")
+#plot(1:20,1:20,pch=1:20)
+xy_plot <- ggplot(mapping=aes(x=lstat, y=medv), data=Boston) +
+  geom_point(color='orange', shape=1:506, fill="navy", size=3) +
+  geom_smooth(method = 'lm') +
+  labs(title="Plot of X vs Y",
+       x="% population with lower income status classification",
+       y="median value of owner occupied homes ($1k's)")
+xy_plot
+```
+
+### more ggplot2
+
+`install.packages('gridExtra')`
+`install.packages("latex2exp")`
+
+``` {r more-ggplot2}
+library(dplyr)
+library(tibble)
+
+#par(mfrow=c(2,2))
+#plot(lm.fit) 
+
+# https://rpubs.com/therimalaya/43190
+resVfit <- function(lm.model.fit){
+  lm.model.fit %>% 
+  ggplot(aes(.fitted, .resid)) + geom_point() +
+    stat_smooth(method="loess") +
+    geom_hline(yintercept=0, col="red", linetype="dashed") +
+    labs(x="Fitted values", y="Residuals", title="Residual vs Fitted Plot") + 
+    theme_bw()
+}
+
+# https://ggplot2.tidyverse.org/reference/geom_qq.html
+q_q <- function(lm.model.fit){
+  lm.model.fit %>% augment() %>%
+  ggplot(aes(sample=.std.resid)) +
+    stat_qq() + stat_qq_line() + theme_bw()
+}
+
+
+library(latex2exp)
+scaleVloc <- function(lm.model.fit){
+  lm.model.fit %>% augment() %>%
+  mutate(.sqrt.abs.std.resid=sqrt(abs(.std.resid))) %>% 
+  ggplot(aes(.fitted, .sqrt.abs.std.resid)) + geom_point() +
+    stat_smooth(method="loess") +
+    scale_x_continuous(name="Fitted values") + 
+    scale_y_continuous(name=TeX("$\\sqrt{Standardized\\;Residuals}$")) + 
+    ggtitle("Scale-Location") + theme_bw()
+}
+
+
+# https://rpubs.com/therimalaya/43190
+resVlev <- function(lm.model.fit){
+  lm.model.fit %>% augment() %>% rownames_to_column() %>%
+  ggplot(aes(.hat,.std.resid, label=rowname)) + 
+    geom_point(aes(size=.cooksd), na.rm=TRUE) + 
+    stat_smooth(method="loess", na.rm=TRUE) + 
+    scale_x_continuous(name="Leverage") + 
+    scale_y_continuous(name="Standardized Residuals") + 
+    ggtitle("Residual vs Leverage Plot") + 
+    theme_bw() + theme(legend.position="bottom")
+}
+
+library(plotly)
+ggplotly(resVlev(lm.fit)) # hover to see row numbers for high leverage/cooks distance points
+
+
+# https://stats.stackexchange.com/questions/204708/is-studentized-residuals-v-s-standardized-residuals-in-lm-model/381928
+#plot(predict(lm.fit), residuals(lm.fit))
+# https://uw-pols503.github.io/2016/outliers_robust_regression.html
+#plot(predict(lm.fit), rstudent(lm.fit))
+stuResVfit <- lm.fit %>% augment %>% 
+  mutate(.student.resid = .resid / .sigma * sqrt(1 - .hat)) %>%
+  ggplot(aes(.fitted, .student.resid)) + geom_point() + 
+  labs(x="Fitted values", y=("Studentized residuals"), 
+       title="Studentized residuals") + theme_bw()
+
+
+#plot(hatvalues(lm.fit))
+hatVals <- lm.fit %>% augment() %>% 
+  ggplot(aes(seq_along(.hat), .hat))+
+  geom_bar(stat="identity", position="identity") + 
+  labs(x="Obs. Number", y=TeX("Hat values"), 
+       title="Hat values") + theme_bw()
+cookVals <- lm.fit %>% augment() %>% 
+  ggplot(aes(seq_along(.cooksd), .cooksd))+
+  geom_bar(stat="identity", position="identity") + 
+  labs(x="Obs. Number", y=TeX("Cook's distance"), 
+       title="Cook's distance") + theme_bw()
+```
+
+### gridExtra
+
+``` {r gridExtra, fig.width=8, fig.height=8, out.width="80%", cache=TRUE}
+# https://cran.r-project.org/web/packages/egg/vignettes/Ecosystem.html
+library(gridExtra)
+grid.arrange(resVfit(lm.fit), scaleVloc(lm.fit), stuResVfit, q_q(lm.fit), 
+             resVlev(lm.fit), hatVals, cookVals, 
+             widths=c(1,1,1),   
+             layout_matrix = rbind(c(1, 2, 3),
+                                   c(7, 5, 5),
+                                   c(6, 4, 4)))
+
+
+
+#https://stackoverflow.com/questions/36731027/how-can-i-plot-the-residuals-of-lm-with-ggplot
+#install.packages("ggfortify")
+library(ggfortify)
+autoplot(lm.fit)
+
+which.max(hatvalues(lm.fit))
+```
+    
+    
+
+
+## Multiple Linear Regression
+
+`install.packages('car')`
+
+``` {r mlr}
+lm.fit <- lm(medv~lstat+age)
+#summary(lm.fit)
+tidy(lm.fit)
+glance(lm.fit)
+
+lm.fit <- lm(medv~., data=Boston)
+#summary(lm.fit)
+tidy(lm.fit)
+glance(lm.fit)
+
+library(car)
+vif(lm.fit)
+
+lm.fit1 <- lm(medv~.-age, data=Boston)
+#summary(lm.fit)
+tidy(lm.fit)
+glance(lm.fit)
+
+lm.fit_no_age <- lm(medv~., data=Boston)
+#summary(lm.fit_no_age)
+tidy(lm.fit_no_age)
+
+lm.fit_no_age <- update(lm.fit, ~.-age)
+tidy(lm.fit_no_age)
+```
+
+
+
+## Interaction Terms
+
+``` {r higher-order, fig.width=8, fig.height=8, out.width="80%", cache=TRUE}
+
+#summary(lm(medv~lstat*age, data=Boston))
+tidy(lm(medv~lstat*age, data=Boston))
+
+# Non-linear Transformations of the Predictors
+lm.fit_higherOrderTerms <- lm(medv~lstat+I(lstat^2))
+#summary(lm.fit2)
+tidy(lm.fit_higherOrderTerms)
+lm.fit <- lm(medv~lstat)
+tidy(anova(lm.fit, lm.fit_higherOrderTerms))
+
+#par(mfrow=c(2,2))
+#plot(lm.fit_higherOrderTerms)
+library(gridExtra)
+grid.arrange(resVfit(lm.fit), q_q(lm.fit), scaleVloc(lm.fit), resVlev(lm.fit),
+             ncol=2)
+
+
+lm.fit_5thOrder_polynomial <- lm(medv~poly(lstat,5))
+#summary(lm.fit5)
+tidy(lm.fit_5thOrder_polynomial)
+#summary(lm(medv~log(rm),data=Boston))
+tidy(lm(medv~log(rm), data=Boston))
+
+# Qualitative Predictors
+
+#fix(Carseats)
+View(Carseats)
+names(Carseats)
+lm.fit <- lm(Sales~.+Income:Advertising+Price:Age, data=Carseats)
+#summary(lm.fit)
+tidy(lm.fit)
+attach(Carseats)
+contrasts(ShelveLoc)
+
+# Writing Functions
+
+LoadLibraries
+LoadLibraries()
+LoadLibraries=function(){
+ library(ISLR)
+ library(MASS)
+ print("The libraries have been loaded.")
+ }
+LoadLibraries
+LoadLibraries()
+
+
