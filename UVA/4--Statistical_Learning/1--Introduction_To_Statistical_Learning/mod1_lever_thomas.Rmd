@@ -24,6 +24,7 @@ knitr::opts_chunk$set(
 ```
 
 <!--- Change font size for headers --->
+<!--
 <style>
     h1.title {
         font-size: 28px;
@@ -38,6 +39,7 @@ knitr::opts_chunk$set(
         font-size: 14px;
     }
 </style>
+-->
 
 **DS 6030 | Spring 2022 | University of Virginia **
 

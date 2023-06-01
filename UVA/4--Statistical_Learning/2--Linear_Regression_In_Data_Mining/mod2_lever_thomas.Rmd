@@ -1,0 +1,225 @@
+---
+title: "DS-6030 Homework Module 2"
+author: "Tom Lever"
+date: 05/31/2023
+output:
+  pdf_document: default
+  html_document: default
+urlcolor: blue
+---
+
+<!--- Below are global settings for knitr. You can override any of them by adding the changes to individual chunks --->
+```{r global_options, include = FALSE}
+knitr::opts_chunk$set(
+    error = TRUE, # Keep compiling upon error
+    collapse = FALSE, # code and corresponding output appear in knit file in separate blocks
+    echo = TRUE, # echo code by default
+    comment = "#", # change comment character
+    #fig.width = 5.5, # set figure width
+    fig.align = "center", # set figure position
+    #out.width = "49%", # set width of displayed images
+    warning = FALSE, # do not show R warnings
+    message = FALSE # do not show R messages
+)
+```
+
+<!--- Change font size for headers --->
+<!--
+<style>
+    h1.title {
+        font-size: 28px;
+    }
+    h1 {
+        font-size: 22px;
+    }
+    h2 {
+        font-size: 18px;
+    }
+    h3 {
+        font-size: 14px;
+    }
+</style>
+-->
+
+**DS 6030 | Spring 2022 | University of Virginia **
+
+1.  This question involves the use of multiple linear regression on the Auto data set.
+
+    (a) Produce a scatterplot matrix which includes all of the variables in the data set.
+    
+        ```{r}
+        library(ISLR2)
+        pairs(Auto, main = "Scatterplot Matrix Of Auto")
+        ```
+
+    (b) Compute the matrix of correlations between the variables using the function `cor()`. You will need to exclude the name variable, which is qualitative.
+    
+        ```{r}
+        library(TomLeversRPackage)
+        index_of_column_name <- get_column_index(Auto, "name")
+        data_frame_of_columns_except_name <- Auto[, -index_of_column_name]
+        cor(data_frame_of_columns_except_name)
+        ```
+
+    (c) Use the `lm()` function to perform a multiple linear regression with `mpg` as the response and all other variables except name as the predictors. Use the `summary()` function to print the results. Comment on the output. For instance:
+    
+        ```{r}
+        linear_model <- lm(
+            formula = mpg ~ cylinders + displacement + horsepower + weight + acceleration + year + origin,
+            data = Auto
+        )
+        summarize_linear_model(linear_model)
+        ```
+
+        i.  Is there a relationship between the predictors and the response?
+        
+            ```{r}
+            analyze_variance_for_one_linear_model(linear_model)
+            ```
+            
+            We assume that the errors for the above linear model are random, are independent, and follow a normal distribution with mean $E\left(\epsilon_i\right) = 0$ and variance $Var\left(\epsilon_i\right) = \sigma^2$. There is a relationship between the predictors and the response if at least one of the predictor variables in the set $\{cylinders, displacement, horsepower, weight, acceleration, year, origin\}$ contributes significantly to the model. We conduct a test of the null hypothesis $H_0: \beta_{cylinders} = \beta_{displacement} = \beta_{horsepower} = \beta_{weight} = \beta_{acceleration} = \beta_{year} = \beta_{origin} = 0$ that all coefficients in the set $\{\beta_{cylinders}, \beta_{displacement}, \beta_{horsepower}, \beta_{weight}, \beta_{acceleration}, \beta_{year}, \beta_{origin}\}$ are $0$. The alternate hypothesis is $H_1: \beta_{cylinders} \neq 0 \ or \ \beta_{displacement} \neq 0 \ or \ \beta_{horsepower} \neq 0 \ or \ \beta_{weight} \neq 0 \ or \ \beta_{acceleration} \neq 0 \ or \ \beta_{year} \neq 0 \ or \ \beta_{origin} \neq 0$ that at least one coefficient in the set $\{\beta_{cylinders}, \beta_{displacement}, \beta_{horsepower}, \beta_{weight}, \beta_{acceleration}, \beta_{year}, \beta_{origin}\}$ is not $0$. The alternate hypothesis is also $H_1: \beta_i \neq 0 \ for \ i \in \{\beta_{cylinders}, \beta_{displacement}, \beta_{horsepower}, \beta_{weight}, \beta_{acceleration}, \beta_{year}, \beta_{origin}\}$. If we reject the null hypothesis, at least one of the predictor variables contributes significantly to the model.
+            
+        ```{r}
+        test_null_hypothesis_involving_MLR_coefficients(linear_model, 0.05)
+        ```
+        
+        Alternately, since the test statistic $F_0 = 252.428$ is greater than the critical value $F_{\alpha = 0.05, \ df_R = p = 7, \ df_{Res} = n - v = 392 - 8} = 2.033$, we reject the null hypothesis and support the alternate hypothesis. Since we reject the null hypothesis and support the alternate hypothesis, at least one of the predictors contributes significantly to the model. Since at least one of the predictors contributes significantly to the model, there a relationship between the predictors and the response.
+        
+        ii. Which predictors appear to have a statistically significant relationship to the response?
+        
+            A critical value $t_{alpha/2 = 0.05, \ n - v = 392 - 8} = 1.649$. The summary for the above linear model provides test statistics for predictors. In parallel, the summary provides probabilities where each probability $p$ is the probability that the magnitude $|t|$ of a random test statistic is greater than the magnitude $|t_0|$ of the appropriate test statistic. Because the magnitudes of the test statistic for displacement, weight, year, and origin are greater than the critical value, and the probabilities for these predictors are less than the significance level $\alpha = 0.05$, we reject null hypotheses that each individual predictor is insignificant in predicting the response in the context of the model and can be removed from the model. For these predictors we have sufficient evidence to support the alternate hypothesis that the predictor is significant in predicting the response in the context of the model and cannot be removed from the model.
+        
+        iii. What does the coefficient for the year variable suggest?
+        
+             The coefficient for predictor year $\beta_{year} = 0.751$ suggests that for every increase of $1$ year, response miles per gallon $mpg$ increases by $0.751$, all other predictors being equal.
+
+    (d) Use the `plot()` function to produce diagnostic plots of the linear regression fit. Comment on any problems you see with the fit. Do the residual plots suggest any unusually large outliers? Does the leverage plot identify any observations with unusually high leverage?
+    
+        ```{r, echo = FALSE, eval = FALSE}
+        library(ggplot2)
+        ggplot(
+            data.frame(
+                residual = linear_model$residuals,
+                predicted_mpg = linear_model$fitted.values
+            ),
+            aes(x = predicted_mpg, y = residual)
+        ) +
+        geom_point(alpha = 0.2) +
+        geom_hline(yintercept = 0, color = "red") +
+        labs(
+            x = "predicted_mpg",
+            y = "residual",
+            title = "Residuals vs. Predicted MPG"
+        ) +
+        theme(
+            plot.title = element_text(hjust = 0.5),
+            axis.text.x = element_text(angle = 0)
+        )
+        ```
+        
+        ```{r}
+        plot(linear_model)
+        ```
+        
+        According to [https://data.library.virginia.edu/diagnostic-plots/](https://data.library.virginia.edu/diagnostic-plots/), a plot of residuals vs. fitted values shows if residuals have non-linear patterns. There could be a non-linear relationship between predictor variables and an outcome variable, and the pattern could show up in this plot if the model doesn't capture the non-linear relationship. If you find equally spread residuals around a horizontal line without distinct patterns, that is a good indication you don't have non-linear relationships."
+        
+        Our plot of residuals vs. fitted values exhibits a "U" shape. According to [https://mathstat.slu.edu/~speegle/_book_summer_2021/SimpleReg.html](https://mathstat.slu.edu/~speegle/_book_summer_2021/SimpleReg.html), "A pattern such as a U-shape is evidence of a lurking variable that we have not taken into account. A lurking variable could be information related to the data that we did not collect, or it could be that our model should include a quadratic term."
+        
+        According to [https://data.library.virginia.edu/diagnostic-plots/](https://data.library.virginia.edu/diagnostic-plots/), a normal Q-Q plot "shows if residuals are normally distributed. Do residuals follow a straight line well or do they deviate severely? It's good if residuals are lined well on the straight dashed line." According to [https://data.library.virginia.edu/understanding-q-q-plots/](https://data.library.virginia.edu/understanding-q-q-plots/), the QQ plot, or quantile-quantile plot, is a graphical tool to help us assess if a set of data plausibly came from some theoretical distribution such as a normal or exponential. For example, if we run a statistical analysis that assumes our residuals are normally distributed, we can use a normal QQ plot to check that assumption. It's just a visual check, not an air-tight proof, so it is somewhat subjective. But it allows us to see at-a-glance if our assumption is plausible, and if not, how the assumption is violated and what data points contribute to the violation."
+        
+        "A QQ plot is a scatterplot created by plotting two sets of quantiles against one another. If both sets of quantiles came from the same distribution, we should see the points forming a line that's roughly straight."
+        
+        "Now what are 'quantiles'? These are often referred to as 'percentiles'. These are points in your data below which a certain proportion of your data fall. For example, imagine the classic bell-curve standard normal distribution with a mean of $0$. The $0.5$ quantile, or $50$th percentile, is $0$. Half the data lie below $0$. That's thge peak of the hump in the curve. The $0.95$ quantile, or $95$th percentile, is about $1.64$. $95$ percent of the data lie below $1.64$."
+        
+        "So we see that quantiles are basically just your data sorted in ascending order, with various data points labelled as being the point below which a certain proportion of the data fall."
+        
+        QQ plots plot standardized residuals "versus quantiles calculated from a theoretical distribution. The number is quantiles is selected to match the size of your sample data. While normal QQ plots are the ones most often used in practice due to so many statistical methods assuming normality, QQ plots can actually be created for any distribution."
+        
+        "What about when points don't fall on a straight line? What can we infer about our data?" A QQ plot for which the upper right points deviate up from the line of the QQ plot indicates that your sample distribution has "heavy tails", which means that "your data has a larger number of extreme values than would be expected if they truly came from a normal distribution."
+        
+        According to [https://data.library.virginia.edu/diagnostic-plots/](https://data.library.virginia.edu/diagnostic-plots/), a Scale / Spread - Location plot "shows if residuals are spread equally along the ranges of predictors. This is how you can check the assumption of equal variance (homoscedasticity). It's good if you see a horizontal line with equally (randomly) spread points." Residuals exhibit a "U" shape indicating that the multiple linear regression assumption that the variance of errors is constant is not met.
+        
+        A plot of standardized residuals vs. leverage "helps us find influential cases (i.e., subjects) if there are any. Not all outliers are influential in linear regression analysis (whatever outliers mean). Even though data have extreme values, they might not be influential to determine a regression line. THat means the results wouldn't be much different if we either include or exclude them from analysis. They follow the trend in the majority of cases and they don't really matter; the are not influential. On the other hand, some cases could be very influential even if they look to be within a reasonable range of the values. They could be extreme cases against a regression line and can alter the results if we exclude them from analysis. Another way to put it is that they don't get along with the trend in the majority of the cases."
+        
+        "Unlike the other plots, this time patterns are not relevant. We watch out for outlying values at the upper right corner or at the lower right corner. Those spots are the places where cases can be influential against a regression line. Look for cases outside of the dashed lines. When cases are outside of the dashed lines (meaning they have high 'Cook's distance' scores), the cases are influential to the regression results. The regression results will be altered if we exclude those cases."
+        
+        In our case where you "can barely see Cook's distance lines" and "all cases are well inside of the Cook's distance lines", there are no influential cases. In a case where a point "is far beyond the Cook's distance lines", the point corresponds to an influential observation.
+        
+        Our plot of standardized residuals vs. leverage shows a point corresponding to observation 14 with relatively high leverage.
+        
+        "The four plots show potential problematic cases with the row numbers of the cases in the data set. If some cases are identified across all four plots, you might want to take a closer look at them individually. Is there anything special for the subject? Or could it be simply errors in data entry?" Observations 323, 326, and 327 are potentially problematic or outliers according to the plot of residuals vs. fitted values, the plot of standardized residuals vs. theoretical quantiles, and the Scale / Spread - Location plot. Observation 327 additionally is identified as potentially problematic or an outlier in the plot of standardized residuals vs. leverage. If we define outlier to being observation with a magnitude of standardized residual greater than 2, the plot of standardized residuals vs. leverage shows some outliers.
+        
+        "In that case, you may want to go back to your theory and hypotheses. Is it really a linear relationship between the predictors and the outcome? You may want to include a quadratic term, for example. A log transformation may better represent the phenomena that you'd like to model. Or, is there any important variable that you left out from your model? Other variables you didn't include (e.g., age or gender) may play an important role in your model and data. Or, maybe, your data were systematically biased when collecting data. You may want to redesign data collection methods."
+
+    (e) Use the `*` and `:` symbols to fit linear regression models with interaction effects. Do any interactions appear to be statistically significant?
+    
+        Cylinders and displacement have the highest correlation at $0.951$. Displacement and weight have the second highest correlation at $0.932$. Let us consider a linear model involving cylinders, displacement, and a term representing interaction between cylinders and displacement. Let us consider a linear model involving displacement, weight, and a term representing interaction between displacement and weight. Let us consider a linear model involving cylinders, displacement, weight, an interaction term involving cylinders and displacement, and an interaction term involving displacement and weight.
+        
+        For the linear model $mpg = \beta_0 + \beta_1 \ cylinders + \beta_2 \ displacement + \beta_3 \ cylinders \ displacement$, since the $p$ value for each predictive term is less than significance level $0.05$, each predictive term is statistically significant.
+        
+        For the linear model $mpg = \beta_0 + \beta_1 \ displacement + \beta_2 \ weight + \beta_3 \ displacement \ weight$, since the $p$ value for each predictive term is less than significance level $0.05$, each predictive term is statistically significant.
+        
+        For the linear model $mpg = \beta_0 + \beta_1 \ cylinders + \beta_2 \ displacement + \beta_3 \ weight + \beta_4 \ cylinders \ displacement + \beta_5 \ displacement \ weight$, since the $p$ value for the predictive term $displacement \ weight$ is less than significance level $0.05$, this predictive term is statistically significant. Since the $p$ value for the predictive term $cylinders \ displacement$ is greater than significance level $0.05$, each predictive term is statistically insignificant.
+    
+        ```{r}
+        linear_model <- lm(formula = mpg ~ cylinders * displacement, data = Auto)
+        summarize_linear_model(linear_model)
+        linear_model <- lm(
+            formula = mpg ~ displacement + weight + displacement : weight,
+            data = Auto
+        )
+        summarize_linear_model(linear_model)
+        linear_model <- lm(
+            mpg ~ cylinders * displacement + displacement * weight,
+            data = Auto
+        )
+        summarize_linear_model(linear_model)
+        ```
+
+    (f) Try a few different transformations of the variables, such as $\log(X)$, $\sqrt{X}$, $X^2$. Comment on your findings.
+
+# 14. This problem focuses on the collinearity problem.
+
+(a) Perform the following commands in R. 
+```
+set.seed(1)
+x1 = runif(100)
+x2 = 0.5*x1 + rnorm(100)/10
+y = 2 + 2*x1 + 0.3*x2 + rnorm(100)
+```
+
+The last line corresponds to creating a linear model in which $y$ is a function of $x1$ and $x2$. Write out the form of the linear model. What are the regression coefficients?
+
+(b) What is the correlation between `x1` and `x2`? Create a scatterplot displaying the relationship between the variables.
+
+(c) Using this data, fit a least squares regression to predict `y` using `x1` and `x2`. Describe the results obtained. What are $\hat\beta_0$, $\hat\beta_1$, and $\hat\beta_2$? How do these relate to the true $\beta_0$, $\beta_1$, and $\beta_2$? Can you reject the null hypothesis H0 : $\beta_1=0$? How about the null hypothesis H0 : $\beta_2=0$?
+
+(d) Now fit a least squares regression to predict `y` using only `x1`. Comment on your results. Can you reject the null hypothesis H0: $\beta_1 =0$?
+
+(e) Now fit a least squares regression to predict `y` using only `x2`. Comment on your results. Can you reject the null hypothesis H0: $\beta_2 =0$?
+
+(f) Do the results obtained in (c)–(e) contradict each other? Explain your answer.
+
+(g) Now suppose we obtain one additional observation, which was unfortunately mismeasured. 
+```
+x1 <- c(x1, 0.1) 
+x2 <- c(x2, 0.8)
+y <- c(y, 6)
+```
+Re-fit the linear models from (c) to (e) using this new data. What effect does this new observation have on the each of the models? In each model, is this observation an outlier? A high-leverage point? Both? Explain your answers.
+
+
+# 15. This problem involves the Boston data set, which we saw in the lab for this chapter. 
+We will now try to predict per capita crime rate using the other variables in this data set. In other words, per capita crime rate is the response, and the other variables are the predictors.
+
+(a)  For each predictor, fit a simple linear regression model to predict the response. Describe your results. In which of the models is there a statistically significant association between the predictor and the response? Create some plots to back up your assertions.
+
+(b) Fit a multiple regression model to predict the response using all of the predictors. Describe your results. For which predictors can we reject the null hypothesis $H_0 : \beta_j = 0$?
+
+(c) How do your results from (a) compare to your results from (b)? Create a plot displaying the univariate regression coefficients from (a) on the x-axis, and the multiple regression coefficients from (b) on the y-axis. That is, each predictor is displayed as a single point in the plot. Its coefficient in a simple linear regression model is shown on the x-axis, and its coefficient estimate in the multiple linear regression model is shown on the y-axis.
+
+(d) Is there evidence of non-linear association between any of the predictors and the response? To answer this question, for each predictor X, fit a model of the form
+\[
+Y = \beta_0 +\beta_1X +\beta_2X^2 +\beta_3X^3 + \epsilon.
+\]
+
