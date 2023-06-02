@@ -54,11 +54,19 @@ knitr::opts_chunk$set(
 
     (b) Compute the matrix of correlations between the variables using the function `cor()`. You will need to exclude the name variable, which is qualitative.
     
+        We randomize the order of the rows of our data set so that AutoCorrelation Function (ACF) values for nonzero lags for our model are insignificant, and so that an assumption that the residuals of a multiple linear regression model are uncorrelated is met.
+    
         ```{r}
         library(TomLeversRPackage)
         index_of_column_name <- get_column_index(Auto, "name")
         data_frame_of_columns_except_name <- Auto[, -index_of_column_name]
-        cor(data_frame_of_columns_except_name)
+        set.seed(0)
+        number_of_rows <- nrow(data_frame_of_columns_except_name)
+        vector_of_random_row_indices <- sample(1:number_of_rows)
+        data_frame_of_columns_except_name <-
+            data_frame_of_columns_except_name[vector_of_random_row_indices, ]
+        correlation_matrix <- cor(data_frame_of_columns_except_name)
+        correlation_matrix
         ```
 
     (c) Use the `lm()` function to perform a multiple linear regression with `mpg` as the response and all other variables except name as the predictors. Use the `summary()` function to print the results. Comment on the output. For instance:
@@ -66,7 +74,7 @@ knitr::opts_chunk$set(
         ```{r}
         linear_model <- lm(
             formula = mpg ~ cylinders + displacement + horsepower + weight + acceleration + year + origin,
-            data = Auto
+            data = data_frame_of_columns_except_name
         )
         summarize_linear_model(linear_model)
         ```
@@ -91,7 +99,7 @@ knitr::opts_chunk$set(
         
         iii. What does the coefficient for the year variable suggest?
         
-             The coefficient for predictor year $\beta_{year} = 0.751$ suggests that for every increase of $1$ year, response miles per gallon $mpg$ increases by $0.751$, all other predictors being equal.
+             The coefficient for predictor year $\beta_{year} = 0.751$ suggests that for every increase of $1$ year, response fuel efficiency $mpg$ increases by $0.751$, all other predictors being equal.
 
     (d) Use the `plot()` function to produce diagnostic plots of the linear regression fit. Comment on any problems you see with the fit. Do the residual plots suggest any unusually large outliers? Does the leverage plot identify any observations with unusually high leverage?
     
@@ -162,21 +170,277 @@ knitr::opts_chunk$set(
         For the linear model $mpg = \beta_0 + \beta_1 \ cylinders + \beta_2 \ displacement + \beta_3 \ weight + \beta_4 \ cylinders \ displacement + \beta_5 \ displacement \ weight$, since the $p$ value for the predictive term $displacement \ weight$ is less than significance level $0.05$, this predictive term is statistically significant. Since the $p$ value for the predictive term $cylinders \ displacement$ is greater than significance level $0.05$, each predictive term is statistically insignificant.
     
         ```{r}
-        linear_model <- lm(formula = mpg ~ cylinders * displacement, data = Auto)
+        linear_model <- lm(
+            formula = mpg ~ cylinders * displacement,
+            data = data_frame_of_columns_except_name
+        )
         summarize_linear_model(linear_model)
         linear_model <- lm(
             formula = mpg ~ displacement + weight + displacement : weight,
-            data = Auto
+            data = data_frame_of_columns_except_name
         )
         summarize_linear_model(linear_model)
         linear_model <- lm(
             mpg ~ cylinders * displacement + displacement * weight,
-            data = Auto
+            data = data_frame_of_columns_except_name
         )
         summarize_linear_model(linear_model)
         ```
 
     (f) Try a few different transformations of the variables, such as $\log(X)$, $\sqrt{X}$, $X^2$. Comment on your findings.
+    
+        We study fuel efficiency by constructing a multiple linear regression model. Below, we describe a process to determine a recommended multiple linear regression model.
+        
+        We consider $p = 7$ simple linear regression models, each with response $mpg$ and one of the $p = 7$ predictors. For each simple linear regression model, we meet simple linear regression assumptions that 1) the relationship between response and predictor is linear, 3) the variance of residuals is constant, and 2) the mean residual is $0$. To meet these assumptions, we examine residual plots and apply transformations.
+        
+        Specifically, we consider the plot of residuals vs. predicted values for each simple linear regression model. The residual plots for predictors $cylinders$, $displacement$, $horsepower$, and $weight$ exhibits a right-opening, positively biased funnel shape suggesting that the residuals of the appropriate simple linear regression model have variance that increases with $mpg$ and mean residual greater $0$. The residual plots for the simple linear regression models with predictors $displacement$, $horsepower$, $weight$, and $origin$ additionally offer an impression of a "U" shaped band, suggesting that the relationship between $mpg$ and predictor may be nonlinear.
+        
+        We consider the Box Cox maximum likelihood estimate of parameter $\lambda$ for each simple linear regression model. The Box Cox maximum likelihood estimate of parameter $\lambda$ for predictors $cylinders$, $displacement$, $horsepower$, $weight$, $acceleration$, and $year$ are $-0.293$, $-0.354$, $-0.475$, $-0.333$, $0.091$, and $0.253$. We create simple linear regression models with response $mpg^{-0.5}$ for each predictor $cylinders$, $displacement$, $horsepower$, and $weight$. We create a simple linear regression model with response $ln(mpg)$ for predictor $acceleration$. We create a simple linear regression model with response $sqrt(mpg)$ for predictor $year$. For each simple linear regression model with transformed response, we consider a plot of residuals versus predictor values.
+        
+        Following *Introduction to Linear Regression Analysis* (Sixth Edition) by Douglas C. Montgomery et al., for each plot of residuals versus predictor values, an impression of a horizontal band containing the residuals, centered at $e = 0$, is desirable. A nonlinear pattern in general implies that the assumed relationship between a transformed response and the predictor is not correct. A curved band that looks quartic suggests a transformation $x' = x^4$. The plots of residuals versus predictor for predictors $displacement$, $horsepower$, $weight$, $acceleration$, $year$, and $origin$ offer an impression of a horizontal band. The plot of residuals versus predictor for predictor $cylinders$ has a curved band that looks quartic. We apply the transformation $x' = x^4$ to $cylinders$.
+        
+        It is not helpful to create a simple linear model with response $sqrt(origin)$ even when we subsequently transform $origin$ according to $origin' = origin^2$.
+        
+        We consider the residual plot for $mpg^{-0.5} = cylinders^4$ and the residual plots for each simple linear regression model not on $cylinders$ with transformed response. These simple linear regression models offer the impression of a horizontal band centered at $e = 0$. The above simple linear regression assumptions are met for these simple linear regression models. As a reminder, these simple linear regression assumptions are 1) the relationship between response and predictor is linear, 3) the variance of residuals is constant, and 2) the mean residual is $0$.
+        
+        We present below the plots of AutoCorrelation Function Value vs. Lag for the simple linear regression model $mpg^{-0.5} = cylinders^4$ and the other simple linear regression models not on $cylinders$ with transformed response. Most AutoCorrelation Function values are insignificant for these models. The remaining AutoCorrelation Function values for these models are approximately insignificant. A simple linear regression assumption that residuals are uncorrelated is met approximately for these models.
+        
+        Additionally, we consider the QQ plots for the simple linear regression model $mpg^{-0.5} = cylinders^4$ and the other simple linear regression models not on $cylinders$ with transformed response. The distribution of quantiles for $mpg^{-0.5} = cylinders^4$ is normal. The distribution of quantiles for $displacement$ and $origin$ are skewed right. The distribution of quantiles for $horsepower$ is mildly lightly tailed. The distribution of quantiles for $weight$ is lightly tailed. The distribution of quantiles for $acceleration$ and $year$ are heavy tailed. A simple linear regression assumption that residuals are normally distributed is approximately met for these simple linear regression models. Simple linear regression is robust to this assumption.
+        
+        After analyzing the correlation matrix for transformed predictors, because $cylinders^4$ and $displacement$ are at least moderately correlated with all other predictors other than $year$, we choose as our working model a simple linear regression model on either $cylinders$ or $displacement$. Specifically, we choose the model with lower Akaike Information Criterion (AIC):
+        $$mpg^{-0.5} = \beta_0 + \beta_1 \ displacement$$
+        We can consider studying fuel efficiency with our working model. Alternatively, since we considered simple linear regression model $mpg^{0.5} = \beta_0 + \beta_1 \ year$ and the response of our working model is $mpg^{-0.5}$, we can consider a multiple linear regression model with predictor $year^{-1}$. Based on the output of R's forward-selection function, we determine that a multiple linhear regression model with $year^{-1}$ has a lower AIC than our working model. We choose as our working multiple linear regression model for studying fuel efficiency:
+        $$mpg^{-0.5} = \beta_0 + \beta_1 \ displacement + \beta_2 \ year^{-1}$$
+        Following "Detecting Multicollinearity Using Variance Inflation Factors" ([https://online.stat.psu.edu/stat462/node/180/](https://online.stat.psu.edu/stat462/node/180/)), the variance inflation factor $VIF_j$ corresponding to predictor $x_j$ in a multiple linear regression model quantifies how much the variance of the estimated coefficient $\beta_j$ corresponding to predictor $x_j$ is inflated due to multicollinearity / correlation between predictor $x_j$ and other predictors. In particular, the variance inflation factor for predictor $x_j$
+        $$VIF_j = \frac{1}{1 - {R_j}^2}$$
+        where ${R_j}^2$ is the coefficient of determination obtained by regressing predictor $x_j$ on the remaining predictors. A VIF of 1 means that there is no correlation among predictor $x_j$ and the remaining predictors and that the variance of the regression coefficient corresponding to predictor $x_j$ is not inflated. The general rule of thumb is that VIF's exceeding $4$ warrant further investigation, while VIF's exceeding $10$ are signs of serious multicollinearity requiring correction.
+        
+        The Variance Inflation Factors for our working multiple linear regression model are both $1.141$, suggesting that multicollinearity between $cylinders^4$ and $year^{-1}$ is acceptable.
+        
+        Summarizing, above we assessed linear regression models by residual analysis, correlation analysis, AIC, forward selection, and multicollinearity. Through residual analysis, correlation analysis, and AIC, we chose intermediary working model $mpg^{0.5} = \beta_0 + \beta_1 \ cylinders^4$. Through forward selection we added $year^{-1}$. We recommend our working multiple linear regression model
+        $$mpg^{-0.5} = \beta_0 + \beta_1 \ displacement + \beta_2 \ year^{-1}$$
+        For our recommended multiple linear regression model, a plot of residuals versus predicted values, a QQ plot, a Scale / Spread - Location plot, a plot of standardized residuals versus leverage, and a plot of AutoCorrelation Function values vs. lag are presented below.
+        Assumptions for this multiple linear regression model are met.
+        * The relationship between fuel efficiency $mpg^{-0.5}$, $cylinders^4$, and $year^{-1}$ is linear; the residuals are evenly scattered across $e = 0$.
+        * The mean residual is $0$; the residuals are evenly scattered across $e = 0$.
+        * The variance of the residuals is constant; the residuals are evenly spread for different predicted values.
+        * The residuals are uncorrelated; AutoCorrelation Function values are insignificant.
+        * The distribution of residuals is mildly lightly tailed. The residuals are approximately normally distributed.
+        
+        Using the summary of our recommended model above, we conduct an ANOVA $F$ Test / Partial $F$ Test involving all predictors. The null and alternate hypothesis for this test are $H_0: \boldsymbol{\beta} = \boldsymbol{0}$ and $H_1: \boldsymbol{\beta} \neq 0$. A test statistic $F_0 = 614.7$ is greater than a critical value $F_{\alpha = 0.05, \ df_R = 2, \ df_{Res} = 389} = 3.019$. We reject the null hypothesis that all regression coefficients are $0$ and prefer our recommended multiple linear regression model to an intercept only model.
+        
+        Since each test statistic $t$ in the summary of our recommended model is greater than a critical value $t_{\alpha/2 = 0.05/2, \ df_{Res} = 389} = 1.649$, for each corresponding predictor, we reject a null hypothesis that the regression coefficient for that predictor is $0$, and conclude that each predictor is significant in the context of the multiple linear regression model / all predictors.
+        
+        Since the multiple and adjusted coefficients of determination $R^2$ for our recommended model are $0.760$ and $0.758$, a high proportion of variation in $mpg^{-0.5}$ can be explained by the predictors $cylinders^4$ and $year^{-1}$. However, because these coefficients are both less than a common threshold of $0.8$, our linear model may not be good for prediction.
+
+        ```{r, echo = FALSE, eval = FALSE}
+        # full model: mpg ~ cylinders + displacement + horsepower + weight + acceleration + year + origin
+        linear_model <- lm(
+            formula = mpg ~ cylinders,
+            data = data_frame_of_columns_except_name
+        )
+        generate_residual_plot(
+            linear_model = linear_model,
+            should_plot_residuals_versus_predicted_values = TRUE
+        )
+        perform_Box_Cox_Method(
+            linear_model,
+            vector_of_values_of_lambda = seq(-1, 1, 0.1),
+            whether_to_plot = TRUE
+        )
+        linear_model <- lm(
+            formula = I(mpg^{-1/2}) ~ cylinders,
+            data = data_frame_of_columns_except_name
+        )
+        generate_residual_plot(
+            linear_model = linear_model,
+            should_plot_residuals_versus_predicted_values = TRUE
+        )
+        linear_model <- lm(
+            formula = I(mpg^{-1/2}) ~ I(cylinders^4),
+            data = data_frame_of_columns_except_name
+        )
+        generate_residual_plot(
+            linear_model = linear_model,
+            should_plot_residuals_versus_predicted_values = TRUE
+        )
+        acf(linear_model$residuals)
+        qqnorm(linear_model$residuals)
+        qqline(linear_model$residuals, col = "red")
+        linear_model <- lm(
+            formula = mpg ~ displacement,
+            data = data_frame_of_columns_except_name
+        )
+        generate_residual_plot(
+            linear_model = linear_model,
+            should_plot_residuals_versus_predicted_values = TRUE
+        )
+        perform_Box_Cox_Method(
+            linear_model,
+            vector_of_values_of_lambda = seq(-1, 1, 0.1),
+            whether_to_plot = TRUE
+        )
+        linear_model <- lm(
+            formula = I(mpg^{-1/2}) ~ displacement,
+            data = data_frame_of_columns_except_name
+        )
+        generate_residual_plot(
+            linear_model = linear_model,
+            should_plot_residuals_versus_predicted_values = TRUE
+        )
+        acf(linear_model$residuals)
+        qqnorm(linear_model$residuals)
+        qqline(linear_model$residuals, col = "red")
+        linear_model <- lm(
+            formula = mpg ~ horsepower,
+            data = data_frame_of_columns_except_name
+        )
+        generate_residual_plot(
+            linear_model = linear_model,
+            should_plot_residuals_versus_predicted_values = TRUE
+        )
+        perform_Box_Cox_Method(
+            linear_model,
+            vector_of_values_of_lambda = seq(-1, 1, 0.1),
+            whether_to_plot = TRUE
+        )
+        linear_model <- lm(
+            formula = I(mpg^{-1/2}) ~ horsepower,
+            data = data_frame_of_columns_except_name
+        )
+        generate_residual_plot(
+            linear_model = linear_model,
+            should_plot_residuals_versus_predicted_values = TRUE
+        )
+        acf(linear_model$residuals)
+        qqnorm(linear_model$residuals)
+        qqline(linear_model$residuals, col = "red")
+        linear_model <- lm(
+            formula = mpg ~ weight,
+            data = data_frame_of_columns_except_name
+        )
+        generate_residual_plot(
+            linear_model = linear_model,
+            should_plot_residuals_versus_predicted_values = TRUE
+        )
+        perform_Box_Cox_Method(
+            linear_model,
+            vector_of_values_of_lambda = seq(-1, 1, 0.1),
+            whether_to_plot = TRUE
+        )
+        linear_model <- lm(
+            formula = I(mpg^{-1/2}) ~ weight,
+            data = data_frame_of_columns_except_name
+        )
+        generate_residual_plot(
+            linear_model = linear_model,
+            should_plot_residuals_versus_predicted_values = TRUE
+        )
+        acf(linear_model$residuals)
+        qqnorm(linear_model$residuals)
+        qqline(linear_model$residuals, col = "red")
+        linear_model <- lm(
+            formula = mpg ~ acceleration,
+            data = data_frame_of_columns_except_name
+        )
+        generate_residual_plot(
+            linear_model = linear_model,
+            should_plot_residuals_versus_predicted_values = TRUE
+        )
+        perform_Box_Cox_Method(
+            linear_model,
+            vector_of_values_of_lambda = seq(-1, 1, 0.1),
+            whether_to_plot = TRUE
+        )
+        linear_model <- lm(
+            formula = log(mpg) ~ acceleration,
+            data = data_frame_of_columns_except_name
+        )
+        generate_residual_plot(
+            linear_model = linear_model,
+            should_plot_residuals_versus_predicted_values = TRUE
+        )
+        acf(linear_model$residuals)
+        qqnorm(linear_model$residuals)
+        qqline(linear_model$residuals, col = "red")
+        linear_model <- lm(
+            formula = mpg ~ year,
+            data = data_frame_of_columns_except_name
+        )
+        generate_residual_plot(
+            linear_model = linear_model,
+            should_plot_residuals_versus_predicted_values = TRUE
+        )
+        perform_Box_Cox_Method(
+            linear_model,
+            vector_of_values_of_lambda = seq(-1, 1, 0.1),
+            whether_to_plot = TRUE
+        )
+        linear_model <- lm(
+            formula = sqrt(mpg) ~ year,
+            data = data_frame_of_columns_except_name
+        )
+        generate_residual_plot(
+            linear_model = linear_model,
+            should_plot_residuals_versus_predicted_values = TRUE
+        )
+        acf(linear_model$residuals)
+        qqnorm(linear_model$residuals)
+        qqline(linear_model$residuals, col = "red")
+        linear_model <- lm(
+            formula = mpg ~ origin,
+            data = data_frame_of_columns_except_name
+        )
+        generate_residual_plot(
+            linear_model = linear_model,
+            should_plot_residuals_versus_predicted_values = TRUE
+        )
+        acf(linear_model$residuals)
+        qqnorm(linear_model$residuals)
+        qqline(linear_model$residuals, col = "red")
+        transformed_data_frame <- data_frame_of_columns_except_name
+        transformed_data_frame$cylinders <- (transformed_data_frame$cylinders)^4
+        correlation_matrix <- cor(transformed_data_frame)
+        analyze_correlation_matrix(correlation_matrix)
+        linear_model <- lm(
+            formula = I(mpg^{-0.5}) ~ I(cylinders^4),
+            data = data_frame_of_columns_except_name
+        )
+        calculate_AIC(linear_model)
+        linear_model <- lm(
+            formula = I(mpg^{-0.5}) ~ displacement,
+            data = data_frame_of_columns_except_name
+        )
+        calculate_AIC(linear_model)
+        simple_linear_regression_model <- lm(
+            formula = I(mpg^{-0.5}) ~ I(cylinders^4),
+            data = data_frame_of_columns_except_name
+        )
+        multiple_linear_regression_model <- lm(
+            formula = I(mpg^{-0.5}) ~ I(cylinders^4) + I(year^{-1}),
+            data = data_frame_of_columns_except_name
+        )
+        step(
+            object = simple_linear_regression_model,
+            scope = list(
+                lower = simple_linear_regression_model,
+                upper = multiple_linear_regression_model
+            ),
+            direction = "forward"
+        )
+        library(car)
+        vif(multiple_linear_regression_model)
+        ```
+        
+        ```{r}
+        multiple_linear_regression_model <- lm(
+            formula = I(mpg^{-0.5}) ~ I(cylinders^4) + I(year^{-1}),
+            data = data_frame_of_columns_except_name
+        )
+        plot(multiple_linear_regression_model)
+        acf(multiple_linear_regression_model$residuals)
+        summarize_linear_model(multiple_linear_regression_model)
+        ```
 
 # 14. This problem focuses on the collinearity problem.
 
