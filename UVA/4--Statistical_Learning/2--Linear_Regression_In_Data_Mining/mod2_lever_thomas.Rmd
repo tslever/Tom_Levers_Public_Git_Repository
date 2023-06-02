@@ -129,6 +129,34 @@ knitr::opts_chunk$set(
         plot(linear_model)
         ```
         
+        We use the Student's $t$ distribution and the Bonferroni procedure to find a cutoff value for outlier detection using externally studentized residuals. Let $n = 101$ be the number of observations and let $df_{Res}$ be the number of degrees of freedom for our recommended model. If magnitude of externally studentized residual $|t_i|$ is greater than a critical value $t_{\alpha/(2n), df_{Res} - 1}$, observation $i$ is deemd an outlier. Our new observation is an outlier.
+        
+        A leverage $h_{ii}$ is used to identify how far observation $i$ is from the centroid of the predictor space. If leverage $h_{ii} > \frac{2p}{n}$, then observation $i$ is deemed to have high leverage and is outlying in the predictor space. High leverage observations are data points that are most likely to be influential. There are $32$ outliers and $17$ high-leverage observations.
+        
+        ```{r}
+        significance_level <- 0.05
+        number_of_observations <- get_number_of_observations(linear_model)
+        residual_degrees_of_freedom <-
+            calculate_residual_degrees_of_freedom(linear_model)
+        critical_value_tc <- calculate_critical_value_tc(
+            significance_level,
+            number_of_observations,
+            residual_degrees_of_freedom - 1,
+            hypothesis_test_is_two_tailed = FALSE
+        )
+        externally_studentized_residuals <- rstudent(linear_model)
+        vector_of_outliers <- externally_studentized_residuals[
+            abs(externally_studentized_residuals) > critical_value_tc
+        ]
+        length(vector_of_outliers)
+        leverages <- lm.influence(linear_model)$hat
+        number_of_variables <- get_number_of_variables(linear_model)
+        high_leverages <-
+            leverages[leverages > 2 * number_of_variables / number_of_observations]
+        indices_of_high_leverage_observations <- as.numeric(names(high_leverages))
+        length(indices_of_high_leverage_observations)
+        ```
+        
         According to [https://data.library.virginia.edu/diagnostic-plots/](https://data.library.virginia.edu/diagnostic-plots/), a plot of residuals vs. fitted values shows if residuals have non-linear patterns. There could be a non-linear relationship between predictor variables and an outcome variable, and the pattern could show up in this plot if the model doesn't capture the non-linear relationship. If you find equally spread residuals around a horizontal line without distinct patterns, that is a good indication you don't have non-linear relationships."
         
         Our plot of residuals vs. fitted values exhibits a "U" shape. According to [https://mathstat.slu.edu/~speegle/_book_summer_2021/SimpleReg.html](https://mathstat.slu.edu/~speegle/_book_summer_2021/SimpleReg.html), "A pattern such as a U-shape is evidence of a lurking variable that we have not taken into account. A lurking variable could be information related to the data that we did not collect, or it could be that our model should include a quadratic term."
@@ -442,36 +470,182 @@ knitr::opts_chunk$set(
         summarize_linear_model(multiple_linear_regression_model)
         ```
 
-# 14. This problem focuses on the collinearity problem.
+14. This problem focuses on the collinearity problem.
 
-(a) Perform the following commands in R. 
-```
-set.seed(1)
-x1 = runif(100)
-x2 = 0.5*x1 + rnorm(100)/10
-y = 2 + 2*x1 + 0.3*x2 + rnorm(100)
-```
+    (a) Perform the following commands in R. 
 
-The last line corresponds to creating a linear model in which $y$ is a function of $x1$ and $x2$. Write out the form of the linear model. What are the regression coefficients?
+        ```{r}
+        set.seed(1)
+        x1 = runif(100)
+        x2 = 0.5 * x1 + rnorm(100) / 10
+        y = 2 + 2 * x1 + 0.3 * x2 + rnorm(100)
+        ```
 
-(b) What is the correlation between `x1` and `x2`? Create a scatterplot displaying the relationship between the variables.
+        The last line corresponds to creating a linear model in which $y$ is a function of $x1$ and $x2$. Write out the form of the linear model. What are the regression coefficients?
+        
+        $$\boldsymbol{y}\left(\boldsymbol{x}_1, \boldsymbol{x}_2\right) = \boldsymbol{\beta}_0 + \beta_1 \boldsymbol{x}_1 + \beta_2 \boldsymbol{x}_2$$
+        $$\boldsymbol{\beta}_0 = 2 + rnorm(100)$$
+        $$\beta_1 = 2$$
+        $$\beta_2 = 0.3$$
+        $$y\left(x_1, x_2\right) = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \epsilon$$
+        $$\beta_0 = 2 + rnorm(1)$$
+        $$\beta_1 = 2$$
+        $$\beta_2 = 0.3$$
 
-(c) Using this data, fit a least squares regression to predict `y` using `x1` and `x2`. Describe the results obtained. What are $\hat\beta_0$, $\hat\beta_1$, and $\hat\beta_2$? How do these relate to the true $\beta_0$, $\beta_1$, and $\beta_2$? Can you reject the null hypothesis H0 : $\beta_1=0$? How about the null hypothesis H0 : $\beta_2=0$?
+    (b) What is the correlation between `x1` and `x2`? Create a scatterplot displaying the relationship between the variables.
 
-(d) Now fit a least squares regression to predict `y` using only `x1`. Comment on your results. Can you reject the null hypothesis H0: $\beta_1 =0$?
+        The correlation between $x_1$ and $x_2$ is $0.835$.
+        
+        ```{r}
+        data_frame <- data.frame(x1 = x1, x2 = x2, y = y)
+        cor(data_frame)
+        pairs(data_frame)
+        ```
 
-(e) Now fit a least squares regression to predict `y` using only `x2`. Comment on your results. Can you reject the null hypothesis H0: $\beta_2 =0$?
+    (c) Using this data, fit a least squares regression to predict `y` using `x1` and `x2`. Describe the results obtained. What are $\hat\beta_0$, $\hat\beta_1$, and $\hat\beta_2$? How do these relate to the true $\beta_0$, $\beta_1$, and $\beta_2$? Can you reject the null hypothesis $H_0: \beta_1 = 0$? How about the null hypothesis $H_0: \beta_2 = 0$?
+    
+        $$\hat{\beta}_0 = 2.131$$
+        $$\hat{\beta}_1 = 1.440$$
+        $$\hat{\beta}_2 = 1.010$$
+        
+        These estimates of regression coefficients are the centers of the below $95$ percent confidence intervals for the true regression coefficients.
+        
+        A critical value $t_{\alpha/2 = 0.05/2, \ df_{Res} = 97} = 1.661$. The summary for the above linear model provides test statistics for predictors. In parallel, the summary provides probabilities where each probability $p$ is the probability that the magnitude $|t|$ of a random test statistic is greater than the magnitude $|t_0|$ of the appropriate test statistic. Because the magnitude of the test statistic for $x_1$ is greater than the critical value, and the probability for $x_1$ is less than the significance level $\alpha = 0.05$, we reject the null hypothesis $H_0: \beta_1 = 0$ and the null hypothesis that $x_1$ is insignificant in predicting the response in the context of the model and can be removed from the model. We have sufficient evidence to support the alternate hypothesis that $x_1$ is significant in predicting the response in the context of the model and cannot be removed from the model. Because the magnitude of the test statistic for $x_2$ is less than the critical value, and the probability for $x_2$ is greater than the significance level $\alpha = 0.05$, we fail to reject the null hypothesis $H_0: \beta_2 = 0$ and the null hypothesis that $x_2$ is insignificant in predicting the response in the context of the model and can be removed from the model. We have insufficient evidence to support the alternate hypothesis that $x_2$ is significant in predicting the response in the context of the model and cannot be removed from the model. We recommend removing $x_2$ from the model.
+        
+        ```{r}
+        linear_model <- lm(formula = y ~ x1 + x2, data = data_frame)
+        summarize_linear_model(linear_model)
+        confint(object = linear_model, level = 0.95)
+        ```
 
-(f) Do the results obtained in (c)–(e) contradict each other? Explain your answer.
+    (d) Now fit a least squares regression to predict `y` using only `x1`. Comment on your results. Can you reject the null hypothesis $H_0: \beta_1 = 0$?
+    
+        A critical value $t_{\alpha/2 = 0.05/2, \ df_{Res} = 98} = 1.661$. The summary for the above linear model provides test statistics for predictor $x_1$. In parallel, the summary provides probabilities where each probability $p$ is the probability that the magnitude $|t|$ of a random test statistic is greater than the magnitude $|t_0|$ of the appropriate test statistic. Because the magnitude of the test statistic for $x_1$ is greater than the critical value, and the probability for $x_1$ is less than the significance level $\alpha = 0.05$, we reject the null hypothesis $H_0: \beta_1 = 0$ and the null hypothesis that $x_1$ is insignificant in predicting the response in the context of the model and can be removed from the model. We have sufficient evidence to support the alternate hypothesis that $x_1$ is significant in predicting the response in the context of the model and cannot be removed from the model.
+    
+        ```{r}
+        linear_model <- lm(formula = y ~ x1, data = data_frame)
+        summarize_linear_model(linear_model)
+        ```
 
-(g) Now suppose we obtain one additional observation, which was unfortunately mismeasured. 
-```
-x1 <- c(x1, 0.1) 
-x2 <- c(x2, 0.8)
-y <- c(y, 6)
-```
-Re-fit the linear models from (c) to (e) using this new data. What effect does this new observation have on the each of the models? In each model, is this observation an outlier? A high-leverage point? Both? Explain your answers.
+    (e) Now fit a least squares regression to predict `y` using only `x2`. Comment on your results. Can you reject the null hypothesis $H_0: \beta_2 = 0$?
+    
+        A critical value $t_{\alpha/2 = 0.05/2, \ df_{Res} = 98} = 1.661$. The summary for the above linear model provides test statistics for predictor $x_1$. In parallel, the summary provides probabilities where each probability $p$ is the probability that the magnitude $|t|$ of a random test statistic is greater than the magnitude $|t_0|$ of the appropriate test statistic. Because the magnitude of the test statistic for $x_2$ is greater than the critical value, and the probability for $x_2$ is less than the significance level $\alpha = 0.05$, we reject the null hypothesis $H_0: \beta_2 = 0$ and the null hypothesis that $x_2$ is insignificant in predicting the response in the context of the model and can be removed from the model. We have sufficient evidence to support the alternate hypothesis that $x_2$ is significant in predicting the response in the context of the model and cannot be removed from the model.
+    
+        ```{r}
+        linear_model <- lm(formula = y ~ x2, data = data_frame)
+        summarize_linear_model(linear_model)
+        ```
 
+    (f) Do the results obtained in (c)–(e) contradict each other? Explain your answer.
+    
+        These results do not contradict each other. The significance of predictors in predicting a response is in context to the model as a whole. $x_2$ is significant to a simple linear regression model involving $y$ and $x_2$. $x_2$ is insignificant to a simple linear regression model involving $y$, $x_1$, and $x_2$.
+
+    (g) Now suppose we obtain one additional observation, which was unfortunately mismeasured.
+    
+        ```{r}
+        x1 <- c(x1, 0.1) 
+        x2 <- c(x2, 0.8)
+        y <- c(y, 6)
+        ```
+        
+        Re-fit the linear models from (c) to (e) using this new data. What effect does this new observation have on the each of the models? In each model, is this observation an outlier? A high-leverage point? Both? Explain your answers.
+        
+        This new observation for $y\left(x_1, x_2\right) = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \epsilon$ causes $\beta_0$ to change by a factor of $(\beta_{0, f} - \beta_{0, i})/\beta_{0, i} = (2.2267 - 2.1305)/2.1305 = 0.045$, $\beta_1$ to change by a factor of $-0.625$, and $\beta_2$ to change by a factor of $1.490$. The residual standard error changes by a factor of $0.018$ and by $1$ degree of freedom. The multiple and adjusted coefficients of determination $R^2$ change by factors of $0.048$ and $0.054$. The $F$ statistic changes by a factor of $0.071$ and $0$ and $1$ degrees of freedom. The number of observations changes by $1$. The estimated variance of errors changes by a factor of $0.035$. The prediction coefficient of determination $R^2$ changes by a coefficient of $0.134$.
+        
+        We use the Student's $t$ distribution and the Bonferroni procedure to find a cutoff value for outlier detection using externally studentized residuals. Let $n = 101$ be the number of observations and let $df_{Res}$ be the number of degrees of freedom for our recommended model. If magnitude of externally studentized residual $|t_i|$ is greater than a critical value $t_{\alpha/(2n), df_{Res} - 1}$, observation $i$ is deemd an outlier. Our new observation is an outlier.
+        
+        A leverage $h_{ii}$ is used to identify how far observation $i$ is from the centroid of the predictor space. If leverage $h_{ii} > \frac{2p}{n}$, then observation $i$ is deemed to have high leverage and is outlying in the predictor space. High leverage observations are data points that are most likely to be influential. Our observation is a high-leverage observation.
+        
+        ```{r}
+        data_frame <- data.frame(x1 = x1, x2 = x2, y = y)
+        linear_model <- lm(formula = y ~ x1 + x2, data = data_frame)
+        summarize_linear_model(linear_model)
+        significance_level <- 0.05
+        number_of_observations <- get_number_of_observations(linear_model)
+        residual_degrees_of_freedom <-
+            calculate_residual_degrees_of_freedom(linear_model)
+        critical_value_tc <- calculate_critical_value_tc(
+            significance_level,
+            number_of_observations,
+            residual_degrees_of_freedom - 1,
+            hypothesis_test_is_two_tailed = FALSE
+        )
+        externally_studentized_residuals <- rstudent(linear_model)
+        vector_of_outliers <- externally_studentized_residuals[
+            abs(externally_studentized_residuals) > critical_value_tc
+        ]
+        vector_of_outliers
+        leverages <- lm.influence(linear_model)$hat
+        number_of_variables <- get_number_of_variables(linear_model)
+        high_leverages <-
+            leverages[leverages > 2 * number_of_variables / number_of_observations]
+        indices_of_high_leverage_observations <- as.numeric(names(high_leverages))
+        indices_of_high_leverage_observations
+        ```
+        
+        This new observation for $y\left(x_1\right) = \beta_0 + \beta_1 x_1 + \epsilon$ causes $\beta_0$ to change by a factor of $0.068$ and $\beta_1$ to change by a factor of $-0.106$. The residual standard error changes by a factor of $0.053$ and by $1$ degree of freedom. The multiple and adjusted coefficients of determination $R^2$ change by factors of $-0.228$ and $-0.239$. The $F$ statistic changes by a factor of $-0.263$ and $0$ and $1$ degrees of freedom. The number of observations changes by $1$. The estimated variance of errors changes by a factor of $0.110$. The prediction coefficient of determination $R^2$ changes by a coefficient of $0.300$.
+        
+        We use the Student's $t$ distribution and the Bonferroni procedure to find a cutoff value for outlier detection using externally studentized residuals. Let $n = 101$ be the number of observations and let $df_{Res}$ be the number of degrees of freedom for our recommended model. If magnitude of externally studentized residual $|t_i|$ is greater than a critical value $t_{\alpha/(2n), df_{Res} - 1}$, observation $i$ is deemd an outlier. Our new observation is an outlier.
+        
+        A leverage $h_{ii}$ is used to identify how far observation $i$ is from the centroid of the predictor space. If leverage $h_{ii} > \frac{2p}{n}$, then observation $i$ is deemed to have high leverage and is outlying in the predictor space. High leverage observations are data points that are most likely to be influential. Our observation is not a high-leverage observation.
+        
+        ```{r}
+        linear_model <- lm(formula = y ~ x1, data = data_frame)
+        summarize_linear_model(linear_model)
+        significance_level <- 0.05
+        number_of_observations <- get_number_of_observations(linear_model)
+        residual_degrees_of_freedom <-
+            calculate_residual_degrees_of_freedom(linear_model)
+        critical_value_tc <- calculate_critical_value_tc(
+            significance_level,
+            number_of_observations,
+            residual_degrees_of_freedom - 1,
+            hypothesis_test_is_two_tailed = FALSE
+        )
+        externally_studentized_residuals <- rstudent(linear_model)
+        vector_of_outliers <- externally_studentized_residuals[
+            abs(externally_studentized_residuals) > critical_value_tc
+        ]
+        vector_of_outliers
+        leverages <- lm.influence(linear_model)$hat
+        number_of_variables <- get_number_of_variables(linear_model)
+        high_leverages <-
+            leverages[leverages > 2 * number_of_variables / number_of_observations]
+        indices_of_high_leverage_observations <- as.numeric(names(high_leverages))
+        indices_of_high_leverage_observations
+        ```
+        
+        This new observation for $y\left(x_1\right) = \beta_0 + \beta_2 x_2 + \epsilon$ causes $\beta_0$ to change by a factor of $-0.019$ and $\beta_2$ to change by a factor of $0.076$. The residual standard error changes by a factor of $0.002$ and by $1$ degree of freedom. The multiple and adjusted coefficients of determination $R^2$ change by factors of $0.204$ and $0.216$. The $F$ statistic changes by a factor of $0.271$ and $0$ and $1$ degrees of freedom. The number of observations changes by $1$. The estimated variance of errors changes by a factor of $0.003$. The prediction coefficient of determination $R^2$ changes by a coefficient of $0.266$.
+        
+        We use the Student's $t$ distribution and the Bonferroni procedure to find a cutoff value for outlier detection using externally studentized residuals. Let $n = 101$ be the number of observations and let $df_{Res}$ be the number of degrees of freedom for our recommended model. If magnitude of externally studentized residual $|t_i|$ is greater than a critical value $t_{\alpha/(2n), df_{Res} - 1}$, observation $i$ is deemd an outlier. Our new observation is not an outlier.
+        
+        A leverage $h_{ii}$ is used to identify how far observation $i$ is from the centroid of the predictor space. If leverage $h_{ii} > \frac{2p}{n}$, then observation $i$ is deemed to have high leverage and is outlying in the predictor space. High leverage observations are data points that are most likely to be influential. Our observation is a high-leverage observation.
+        
+        ```{r}
+        linear_model <- lm(formula = y ~ x2, data = data_frame)
+        summarize_linear_model(linear_model)
+        significance_level <- 0.05
+        number_of_observations <- get_number_of_observations(linear_model)
+        residual_degrees_of_freedom <-
+            calculate_residual_degrees_of_freedom(linear_model)
+        critical_value_tc <- calculate_critical_value_tc(
+            significance_level,
+            number_of_observations,
+            residual_degrees_of_freedom - 1,
+            hypothesis_test_is_two_tailed = FALSE
+        )
+        externally_studentized_residuals <- rstudent(linear_model)
+        vector_of_outliers <- externally_studentized_residuals[
+            abs(externally_studentized_residuals) > critical_value_tc
+        ]
+        vector_of_outliers
+        leverages <- lm.influence(linear_model)$hat
+        number_of_variables <- get_number_of_variables(linear_model)
+        high_leverages <-
+            leverages[leverages > 2 * number_of_variables / number_of_observations]
+        indices_of_high_leverage_observations <- as.numeric(names(high_leverages))
+        indices_of_high_leverage_observations
+        ```
 
 # 15. This problem involves the Boston data set, which we saw in the lab for this chapter. 
 We will now try to predict per capita crime rate using the other variables in this data set. In other words, per capita crime rate is the response, and the other variables are the predictors.
