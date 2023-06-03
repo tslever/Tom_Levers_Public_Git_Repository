@@ -53,7 +53,7 @@ summarize_linear_model <- function(linear_model) {
     significance_level <- 0.05
     number_of_confidence_intervals <- 1
     residual_degrees_of_freedom <- calculate_residual_degrees_of_freedom(linear_model)
-    critical_value_t <- calculate_critical_value_tc(significance_level, number_of_confidence_intervals, residual_degrees_of_freedom, hypothesis_test_is_two_tailed = FALSE)
+    critical_value_t <- calculate_critical_value_tc(significance_level, number_of_confidence_intervals, residual_degrees_of_freedom, hypothesis_test_is_two_tailed = TRUE)
     line_with_critical_value_t <- paste("Critical value t(alpha/2 = ",  significance_level, "/2, DFRes = ", residual_degrees_of_freedom, "): ", critical_value_t, sep = "")
     summary_output <- append(summary_output, line_with_critical_value_t)
 
