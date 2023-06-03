@@ -1,7 +1,7 @@
 ---
 title: "DS-6030 Homework Module 2"
 author: "Tom Lever"
-date: 05/31/2023
+date: 06/03/2023
 output:
   pdf_document: default
   html_document: default
@@ -18,8 +18,8 @@ knitr::opts_chunk$set(
     #fig.width = 5.5, # set figure width
     fig.align = "center", # set figure position
     #out.width = "49%", # set width of displayed images
-    warning = FALSE, # do not show R warnings
-    message = FALSE # do not show R messages
+    warning = TRUE, # do not show R warnings
+    message = TRUE # do not show R messages
 )
 ```
 
@@ -54,7 +54,7 @@ knitr::opts_chunk$set(
 
     (b) Compute the matrix of correlations between the variables using the function `cor()`. You will need to exclude the name variable, which is qualitative.
     
-        We randomize the order of the rows of our data set so that AutoCorrelation Function (ACF) values for nonzero lags for our model are insignificant, and so that an assumption that the residuals of a multiple linear regression model are uncorrelated is met.
+        We randomize the order of the rows of our data set so that AutoCorrelation Function (ACF) values for nonzero lags for a multiple linear regression model are insignificant, and so that an assumption that the residuals of our model are uncorrelated is met.
     
         ```{r}
         library(TomLeversRPackage)
@@ -87,11 +87,11 @@ knitr::opts_chunk$set(
             
             We assume that the errors for the above linear model are random, are independent, and follow a normal distribution with mean $E\left(\epsilon_i\right) = 0$ and variance $Var\left(\epsilon_i\right) = \sigma^2$. There is a relationship between the predictors and the response if at least one of the predictor variables in the set $\{cylinders, displacement, horsepower, weight, acceleration, year, origin\}$ contributes significantly to the model. We conduct a test of the null hypothesis $H_0: \beta_{cylinders} = \beta_{displacement} = \beta_{horsepower} = \beta_{weight} = \beta_{acceleration} = \beta_{year} = \beta_{origin} = 0$ that all coefficients in the set $\{\beta_{cylinders}, \beta_{displacement}, \beta_{horsepower}, \beta_{weight}, \beta_{acceleration}, \beta_{year}, \beta_{origin}\}$ are $0$. The alternate hypothesis is $H_1: \beta_{cylinders} \neq 0 \ or \ \beta_{displacement} \neq 0 \ or \ \beta_{horsepower} \neq 0 \ or \ \beta_{weight} \neq 0 \ or \ \beta_{acceleration} \neq 0 \ or \ \beta_{year} \neq 0 \ or \ \beta_{origin} \neq 0$ that at least one coefficient in the set $\{\beta_{cylinders}, \beta_{displacement}, \beta_{horsepower}, \beta_{weight}, \beta_{acceleration}, \beta_{year}, \beta_{origin}\}$ is not $0$. The alternate hypothesis is also $H_1: \beta_i \neq 0 \ for \ i \in \{\beta_{cylinders}, \beta_{displacement}, \beta_{horsepower}, \beta_{weight}, \beta_{acceleration}, \beta_{year}, \beta_{origin}\}$. If we reject the null hypothesis, at least one of the predictor variables contributes significantly to the model.
             
-        ```{r}
-        test_null_hypothesis_involving_MLR_coefficients(linear_model, 0.05)
-        ```
-        
-        Alternately, since the test statistic $F_0 = 252.428$ is greater than the critical value $F_{\alpha = 0.05, \ df_R = p = 7, \ df_{Res} = n - v = 392 - 8} = 2.033$, we reject the null hypothesis and support the alternate hypothesis. Since we reject the null hypothesis and support the alternate hypothesis, at least one of the predictors contributes significantly to the model. Since at least one of the predictors contributes significantly to the model, there a relationship between the predictors and the response.
+            ```{r}
+            test_null_hypothesis_involving_MLR_coefficients(linear_model, 0.05)
+            ```
+            
+            Alternately, since the test statistic $F_0 = 252.428$ is greater than the critical value $F_{\alpha = 0.05, \ df_R = p = 7, \ df_{Res} = n - v = 392 - 8} = 2.033$, we reject the null hypothesis and support the alternate hypothesis. Since we reject the null hypothesis and support the alternate hypothesis, at least one of the predictors contributes significantly to the model. Since at least one of the predictors contributes significantly to the model, there a relationship between the predictors and the response.
         
         ii. Which predictors appear to have a statistically significant relationship to the response?
         
@@ -466,7 +466,7 @@ knitr::opts_chunk$set(
             data = data_frame_of_columns_except_name
         )
         plot(multiple_linear_regression_model)
-        acf(multiple_linear_regression_model$residuals)
+        acf(multiple_linear_regression_model$residuals, main = "ACF Values vs. Lag")
         summarize_linear_model(multiple_linear_regression_model)
         ```
 
