@@ -651,7 +651,7 @@ knitr::opts_chunk$set(
 
     (a) For each predictor, fit a simple linear regression model to predict the response. Describe your results. In which of the models is there a statistically significant association between the predictor and the response? Create some plots to back up your assertions.
     
-        For a simple linear regression model of $crim$ on a predictor of the Boston data set, the critical value $t_{\alpha/2 = 0.05/2, \ df_{Res} = 504} = 1.648$. The summary for each model provides test statistics for the appropriate predictor. In parallel, the summary provides probabilities where each probability $p$ is the probability that the magnitude $|t|$ of a random test statistic is greater than the magnitude $|t_0|$ of the appropriate test statistic. Because the magnitude of the test statistic for proportion of residential land zoned for lots over $25,000$ square feet $zn$ is greater than the critical value, and the probability for $zn$ is less than the significance level $\alpha = 0.05$, we reject the null hypothesis $H_0: \beta_2 = 0$ and the null hypothesis that $zn$ is insignificant in predicting the response in the context of the model and can be removed from the model. We have sufficient evidence to support the alternate hypothesis that $zn$ is significant in predicting the response in the context of the model and cannot be removed from the model.
+        For a simple linear regression model of $crim$ on a predictor of the Boston data set, the critical value $t_{\alpha/2 = 0.05/2, \ df_{Res} = 504} = 1.965$. The summary for each model provides test statistics for the appropriate predictor. In parallel, the summary provides probabilities where each probability $p$ is the probability that the magnitude $|t|$ of a random test statistic is greater than the magnitude $|t_0|$ of the appropriate test statistic. Because the magnitude of the test statistic for proportion of residential land zoned for lots over $25,000$ square feet $zn$ is greater than the critical value, and the probability for $zn$ is less than the significance level $\alpha = 0.05$, we reject the null hypothesis $H_0: \beta_2 = 0$ and the null hypothesis that $zn$ is insignificant in predicting the response in the context of the model and can be removed from the model. We have sufficient evidence to support the alternate hypothesis that $zn$ is significant in predicting the response in the context of the model and cannot be removed from the model.
     
         Similarly, proportion of non-retail business acres per town $indus$, nitrogen oxides concentration in parts per $10$ million $nox$, average number of rooms per dwelling $rm$, proportion of owner-occupied units built prior to 1940 $age$, weighted mean of distances to five Boston employment centers $dis$, index of accessibility to radial highways $rad$, full-value property-tax rate per $10,000$ dollars $tax$, pupil-teacher ratio by town $ptratio$, percent of population with lower status $lstat$, and median value of owner-occupied homes in thousands of dollars $medv$ are significant. An indicator of whether a census tract bounds the Charles River $chas$ is insignificant.
     
@@ -659,6 +659,12 @@ knitr::opts_chunk$set(
         colnames(ISLR2::Boston)
         linear_model <- lm(formula = crim ~ chas, data = ISLR2::Boston)
         summarize_linear_model(linear_model)
+        plot(x = ISLR2::Boston$nox, y = ISLR2::Boston$crim)
+        plot(x = ISLR2::Boston$rm, y = ISLR2::Boston$crim)
+        plot(x = ISLR2::Boston$age, y = ISLR2::Boston$crim)
+        plot(x = ISLR2::Boston$dis, y = ISLR2::Boston$crim)
+        plot(x = ISLR2::Boston$lstat, y = ISLR2::Boston$crim)
+        plot(x = ISLR2::Boston$medv, y = ISLR2::Boston$crim)
         ```
 
     (b) Fit a multiple regression model to predict the response using all of the predictors. Describe your results. For which predictors can we reject the null hypothesis $H_0 : \beta_j = 0$?
@@ -737,8 +743,36 @@ knitr::opts_chunk$set(
     )
     ```
 
-(d) Is there evidence of non-linear association between any of the predictors and the response? To answer this question, for each predictor X, fit a model of the form
-\[
-Y = \beta_0 +\beta_1X +\beta_2X^2 +\beta_3X^3 + \epsilon.
-\]
+    (d) Is there evidence of non-linear association between any of the predictors and the response? To answer this question, for each predictor X, fit a model of the form
+        $$Y = \beta_0 +\beta_1X +\beta_2X^2 +\beta_3X^3 + \epsilon$$
+        For a multiple linear regression model of $crim$ on powers of a predictor of the Boston data set, the critical value $t_{\alpha/2 = 0.05/2, \ df_{Res} = 504} = 1.965$. The summary for the model for each predictor provides test statistics for the powers of the predictor. In parallel, the summary provides probabilities where each probability $p$ is the probability that the magnitude $|t|$ of a random test statistic is greater than the magnitude $|t_0|$ of the appropriate test statistic. Because the magnitude of the test statistic for the first-degree power of proportion of residential land zoned for lots over $25,000$ square feet $zn$ is greater than the critical value, and the probability for the first-degree power of $zn$ is less than the significance level $\alpha = 0.05$, we reject the null hypothesis $H_0: \beta_1 = 0$ and the null hypothesis that $zn$ is insignificant in predicting the response in the context of the model and can be removed from the model. We have sufficient evidence to support the alternate hypothesis that $zn$ is significant in predicting the response in the context of the model and cannot be removed from the model. Other powers of $zn$ are insignificant. There is no evidence of non-linear association between $zn$ and the response.
+    
+        First-, second-, and third-degree powers of $indus$ are significant. There is evidence of non-linear association between $indus$ and the response.
+        
+        First-degree power of $chas$ is significant. Test statistics do not exist for other powers. There is no evidence of non-linear association between $chas$ and the response.
+        
+        First-, second-, and third-degree powers of $nox$ are significant. There is evidence of non-linear association between $nox$ and the response.
+        
+        First-, second-, and third-degree powers of $rm$ are insignificant. There is no evidence of non-linear association between $rm$ and the response.
+        
+        Second- and third-degree powers of $age$ are significant. There is evidence of non-linear association between $age$ and the response.
+        
+        First-, second-, and third-degree powers of $dis$ are significant. There is evidence of non-linear association between $dis$ and the response.
+        
+        First-, second-, and third-degree powers of $rad$ are insignificant. There is no evidence of non-linear association between $rad$ and the response.
+        
+        First-, second-, and third-degree powers of $tax$ are insignificant. There is no evidence of non-linear association between $tax$ and the response.
+        
+        First-, second-, and third-degree powers of $ptratio$ are significant. There is evidence of non-linear association between $ptratio$ and the response.
+        
+        First-, second-, and third-degree powers of $lstat$ are insignificant. There is no evidence of non-linear association between $lstat$ and the response.
+        
+        First-, second-, and third-degree powers of $medv$ are significant. There is evidence of non-linear association between $medv$ and the response.
 
+        ```{r}
+        linear_model_of_powers <- lm(
+            formula = crim ~ medv + I(medv^2) + I(medv^3),
+            data = ISLR2::Boston
+        )
+        summarize_linear_model(linear_model_of_powers)
+        ```
