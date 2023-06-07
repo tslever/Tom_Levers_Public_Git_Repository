@@ -1,0 +1,397 @@
+# Chapter 4 Lab: Logistic Regression, LDA, QDA, and KNN
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(error=TRUE,        # Keep compiling upon error
+                      collapse=FALSE,    # collapse by default
+                      echo=TRUE,         # echo code by default
+                      comment = "#>",    # change comment character
+                      fig.width = 5.5,     # set figure width
+                      fig.align = "center",# set figure position
+                      out.width = "80%", # set width of displayed images
+                      warning=FALSE,     # do not show R warnings
+                      message=FALSE)     # do not show R messages
+```
+
+## The Stock Market Data
+
+``` {r Smarket}
+library(ISLR)
+names(Smarket)
+#dim(Smarket)
+library(tidyverse)
+Smarket %>% dim()
+#summary(Smarket)
+Smarket %>% summary()
+#pairs(Smarket)
+library(GGally)
+Smarket %>% ggpairs(upper=list(continuous=wrap("cor", size=3)))
+
+#cor(Smarket)
+#cor(Smarket[,-9])
+library(dplyr)
+Smarket %>% dplyr::select(-Direction) %>% cor()
+
+#attach(Smarket)
+#plot(Volume)
+Smarket %>% dplyr::select(Volume) %>% 
+  ggplot(aes(x=seq_along(Volume), y=Volume)) + geom_point()
+```
+
+## Logistic Regression
+
+`install.packages('yardstick')`
+`install.packages('caret')`
+`install.packages("e1071")`
+
+``` {r LR}
+#glm.fits=glm(Direction~Lag1+Lag2+Lag3+Lag4+Lag5+Volume,data=Smarket,family=binomial)
+glm.fits <- glm(Direction~Lag1+Lag2+Lag3+Lag4+Lag5+Volume, data=Smarket,
+                family=binomial)
+#summary(glm.fits)
+#coef(glm.fits)
+#summary(glm.fits)$coef
+library(broom)
+glm.fits %>% glance()
+glm.fits %>% tidy()
+#summary(glm.fits)$coef[,4]
+glm.fits %>% tidy() %>% dplyr::select(estimate) 
+
+#glm.probs=predict(glm.fits,type="response")
+# glm.probs[1:10]
+glm.logOdds <- glm.fits %>% augment() %>% dplyr::select(.fitted) 
+glm.logOdds %>% slice(1:10)
+
+#https://hausetutorials.netlify.app/posts/2019-04-13-logistic-regression/
+inverse_logit <- function(x) {
+  1 / (1 + exp(-x))
+}
+glm.fits %>% augment() %>%
+  mutate(.predicted_probability = inverse_logit(.fitted)) %>% 
+  dplyr::select(.fitted, .predicted_probability) %>% slice(1:10) 
+
+
+#contrasts(Direction)
+Smarket[['Direction']] %>% contrasts()
+
+#glm.pred=rep("Down",1250)
+#glm.pred[glm.probs>.5]="Up"
+library(forcats)
+glm.logOdds_predictions <- glm.fits %>% augment() %>% 
+  dplyr::select(Direction, .fitted)  %>% 
+  mutate(.prediction=ifelse(.fitted<0, "Down", "Up")) %>%
+  mutate(.prediction=fct_relevel(as_factor(.prediction), c("Down", "Up"))) 
+glm.logOdds_predictions %>% dplyr::select(.prediction)
+
+#table(glm.pred,Direction)
+library(yardstick)
+glm.logOdds_predictions %>% conf_mat(Direction, .prediction)
+#(507+145)/1250 
+library(caret)
+caret::confusionMatrix(glm.logOdds_predictions$.prediction, 
+                       glm.logOdds_predictions$Direction)
+
+#mean(glm.pred==Direction)
+glm.logOdds_predictions %>% dplyr::select(Direction, .prediction) %>% 
+  mutate(correct = as.numeric(Direction==.prediction)) %>% 
+  dplyr::select(correct) %>% colMeans()
+
+#train=(Year<2005)
+#Smarket.2005=Smarket[!train,]
+#dim(Smarket.2005)
+#Direction.2005=Direction[!train]
+Smarket <- Smarket %>% mutate(train = Year<2005)
+Smarket.2005 <- Smarket %>% filter(!train)
+Smarket %>% dim()
+Smarket.2005 %>% dim()
+
+#glm.fits=glm(Direction~Lag1+Lag2+Lag3+Lag4+Lag5+Volume,data=Smarket,family=binomial,subset=train)
+#glm.probs=predict(glm.fits,Smarket.2005,type="response")
+#glm.pred=rep("Down",252)
+#glm.pred[glm.probs>.5]="Up"
+#table(glm.pred,Direction.2005)
+glm.fits <- glm(Direction~Lag1+Lag2+Lag3+Lag4+Lag5+Volume,
+                data=Smarket, family=binomial, subset=train)
+glm.logOdds_predictions <- glm.fits %>% augment(newdata=Smarket.2005) %>% 
+  dplyr::select(Direction, .fitted)  %>% 
+  mutate(.prediction=ifelse(.fitted<0, "Down", "Up")) %>%
+  mutate(.prediction=fct_relevel(as_factor(.prediction), c("Down", "Up"))) 
+glm.logOdds_predictions %>% conf_mat(Direction, .prediction)
+
+#mean(glm.pred==Direction.2005)
+#mean(glm.pred!=Direction.2005)
+glm.logOdds_predictions %>% 
+  mutate(correct = as.numeric(Direction==.prediction)) %>% 
+  dplyr::select(correct) %>% colSums()
+
+glm.logOdds_predictions %>% 
+  mutate(incorrect = as.numeric(Direction!=.prediction)) %>% 
+  dplyr::select(incorrect) %>% colSums()
+
+caret::confusionMatrix(glm.logOdds_predictions$.prediction, 
+                       glm.logOdds_predictions$Direction)
+
+#glm.fits=glm(Direction~Lag1+Lag2,data=Smarket,family=binomial,subset=train)
+#glm.probs=predict(glm.fits,Smarket.2005,type="response")
+#glm.pred=rep("Down",252)
+#glm.pred[glm.probs>.5]="Up"
+#table(glm.pred,Direction.2005)
+glm.fits <- glm(Direction~Lag1+Lag2, data=Smarket, 
+                family=binomial, subset=train)
+glm.logOdds_predictions <- glm.fits %>% augment(newdata=Smarket.2005) %>% 
+  dplyr::select(Direction, .fitted)  %>% 
+  mutate(.prediction=ifelse(.fitted<0, "Down", "Up")) %>%
+  mutate(.prediction=fct_relevel(as_factor(.prediction), c("Down", "Up"))) 
+glm.logOdds_predictions %>% conf_mat(Direction, .prediction)
+
+
+#mean(glm.pred==Direction.2005)
+#106/(106+76)
+# That's accuracy and precision TP/(TP+FP) -- get those here; but
+# but *very* mindful of specifying your positve/negative clsses correctly
+caret::confusionMatrix(glm.logOdds_predictions$.prediction, 
+                       glm.logOdds_predictions$Direction,
+                       positive="Up", mode="prec_recall")
+
+#predict(glm.fits,newdata=data.frame(Lag1=c(1.2,1.5),Lag2=c(1.1,-0.8)),type="response")
+glm.fits %>% augment(newdata=tibble(Lag1=c(1.2,1.5),Lag2=c(1.1,-0.8))) %>%
+  mutate(.predicted_probability = inverse_logit(.fitted))
+  
+```
+
+## Linear Discriminant Analysis
+
+``` {r lda}
+library(MASS)
+#lda.fit=lda(Direction~Lag1+Lag2,data=Smarket,subset=train)
+lda.fit <- lda(Direction~Lag1+Lag2, data=Smarket, subset=train)
+lda.fit # No tidy method for objects of class lda
+
+#plot(lda.fit)
+library(purrr)
+lda.pred <- predict(lda.fit) %>% purrr::map(as_tibble) %>% 
+  purrr::map(add_rownames) %>% purrr::reduce(left_join, by='rowname') %>%
+  rename(class=value, posterior_Down=Down, posterior_Up=Up)
+Y <- Smarket %>% filter(train) %>% dplyr::select(Direction)
+lda.pred.augmented <- lda.pred %>% add_column(Y) 
+lda.pred.augmented %>% ggplot(aes(x=LD1, fill=Direction)) +
+  geom_histogram(alpha = 0.5, position="identity") 
+
+#lda.pred=predict(lda.fit, Smarket.2005)
+#names(lda.pred)
+#lda.class=lda.pred$class
+#table(lda.class,Direction.2005)
+lda.pred <- predict(lda.fit, Smarket.2005) %>% purrr::map(as_tibble) %>% 
+  purrr::map(add_rownames) %>% purrr::reduce(left_join, by='rowname') %>%
+  rename(prediction=value, posterior_Down=Down, posterior_Up=Up)
+lda.pred
+Y <- Smarket %>% filter(!train) %>% dplyr::select(Direction)
+lda.pred.augmented <- lda.pred %>% add_column(Y) 
+lda.pred.augmented %>% conf_mat(Direction, prediction)
+
+#mean(lda.class==Direction.2005)
+lda.pred.augmented %>% 
+  mutate(correct = as.numeric(prediction==Direction)) %>% 
+  dplyr::select(correct) %>% colMeans()
+
+#sum(lda.pred$posterior[,1]>=.5)
+lda.pred.augmented %>% 
+  mutate(called_down = as.numeric(posterior_Down>=0.5)) %>% 
+  dplyr::select(called_down) %>% colSums()
+
+#sum(lda.pred$posterior[,1]<.5)
+lda.pred.augmented %>% 
+  mutate(called_up = as.numeric(posterior_Down<0.5)) %>% 
+  dplyr::select(called_up) %>% colSums()
+
+#lda.pred$posterior[1:20,1]
+#lda.class[1:20]
+lda.pred.augmented %>% slice(1:20)
+
+#sum(lda.pred$posterior[,1]>.9)
+lda.pred.augmented %>% 
+  mutate(called_down = as.numeric(posterior_Down>=0.9)) %>% 
+  dplyr::select(called_down) %>% colSums()
+```
+
+## Quadratic Discriminant Analysis
+
+```{r qda}
+#qda.fit=qda(Direction~Lag1+Lag2,data=Smarket,subset=train)
+qda.fit <- qda(Direction~Lag1+Lag2, data=Smarket, subset=train)
+qda.fit # No tidy method for objects of class lda
+#qda.class=predict(qda.fit,Smarket.2005)$class
+#table(qda.class,Direction.2005)
+qda.pred <- tibble(prediction=predict(qda.fit, Smarket.2005)$class) %>% 
+  add_column(Smarket.2005 %>% dplyr::select(Direction)) 
+qda.pred %>% conf_mat(Direction, prediction)
+
+#mean(qda.class==Direction.2005)
+qda.pred %>% mutate(correct = as.numeric(prediction==Direction)) %>% 
+  dplyr::select(correct) %>% colMeans()
+```
+
+
+## K-Nearest Neighbors
+
+```{r knn}
+library(class)
+#train.X=cbind(Lag1,Lag2)[train,]
+#test.X=cbind(Lag1,Lag2)[!train,]
+#train.Direction=Direction[train]
+X.train <- Smarket %>% filter(train) %>% dplyr::select(Lag1, Lag2) %>% 
+  as.matrix()
+X.test <- Smarket %>% filter(!train) %>% dplyr::select(Lag1, Lag2) %>% 
+  as.matrix()
+Y.train <- Smarket %>% filter(train) %>% dplyr::select(Direction) %>% 
+  as.matrix()
+set.seed(1)
+#knn.pred=knn(train.X,test.X,train.Direction,k=1)
+#table(knn.pred,Direction.2005)
+Y.test <- Smarket %>% filter(!train) %>% dplyr::select(Direction)
+tibble(yhat = knn(X.train, X.test, Y.train, k=1), y = Y.test[['Direction']]) %>%
+  conf_mat(y, yhat)
+
+# (83+43)/252
+tibble(yhat = knn(X.train, X.test, Y.train, k=1), y = Y.test[['Direction']]) %>%
+  mutate(correct = as.numeric(yhat==y)) %>% 
+  dplyr::select(correct) %>% colMeans()
+
+#knn.pred=knn(train.X,test.X,train.Direction,k=3)
+#table(knn.pred,Direction.2005)
+tibble(yhat = knn(X.train, X.test, Y.train, k=3), y = Y.test[['Direction']]) %>%
+  conf_mat(y, yhat)
+
+#mean(knn.pred==Direction.2005)
+tibble(yhat = knn(X.train, X.test, Y.train, k=3), y = Y.test[['Direction']]) %>%
+  mutate(correct = as.numeric(yhat==y)) %>% 
+  dplyr::select(correct) %>% colMeans()
+```
+
+## An Application to Caravan Insurance Data
+
+`install.packages("tidymodels")`
+```{r Caravan}
+#dim(Caravan)
+Caravan %>% dim()
+attach(Caravan)
+#summary(Purchase)
+Purchase %>% summary()
+348/5822
+
+#standardized.X=scale(Caravan[,-86])
+set.seed(1)
+train_indices <- sample(1:5822, 1000, replace=FALSE)
+# ALWAYS shuffle your data sets in case their is order bias... like in this one.
+# And I've removed `AZEILPL` which is all 0 except for 3 rows...
+XY.train <- Caravan %>% slice(train_indices) %>% dplyr::select(-AZEILPL)
+XY.test <- Caravan %>% slice(-train_indices)
+library(tidymodels)
+rec <- recipes::recipe(Purchase~., data=XY.train)
+scaled_trans <- rec %>% recipes::step_center(-Purchase) %>%
+                        recipes::step_scale(-Purchase)
+scaled_obj <- recipes::prep(scaled_trans, training=XY.train)
+XY.train.transformed <- recipes::bake(scaled_obj, XY.train)
+XY.test.transformed <- recipes::bake(scaled_obj, XY.test)
+#XY.train.transformed %>% mutate_all(is.na) %>% colSums() %>% max()
+
+# Note: testing data should not be used at all in the standardization process
+# it should be processed just the way the training data was processed as if it
+# was totally new data.  This is why the `recipes::recipe` approach here is so
+# nice!  It will use the same scale-centering for the test data as the train 
+# data!
+
+#var(Caravan[,1])
+#var(Caravan[,2])
+Caravan %>% dplyr::select(1) %>% var()
+Caravan %>% dplyr::select(2) %>% var()
+#var(standardized.X[,1])
+#var(standardized.X[,2])
+XY.train.transformed %>% dplyr::select(1) %>% var()
+XY.train.transformed %>% dplyr::select(2) %>% var()
+XY.test.transformed %>% dplyr::select(1) %>% var()
+XY.test.transformed %>% dplyr::select(2) %>% var()
+# This above IS CORRECT... below is not the right way to do this... it opens up
+# the risk of huge test sample bias relative to the fitted model.  E.g., data in
+# the test sample will not be on the same scale as in the training sample if
+# they have different centerings/scalings(!). So the below is not right, sadly.
+
+#test=1:1000
+#train.X=standardized.X[-test,]
+#test.X=standardized.X[test,]
+#train.Y=Purchase[-test]
+#test.Y=Purchase[test]
+
+############################################################################
+# Q: why was it **EXTREMELY** important that we standardized our features? #
+############################################################################
+set.seed(1)
+#knn.pred=knn(train.X,test.X,train.Y,k=1)
+pred <- knn(as.matrix(XY.train.transformed %>% dplyr::select(-Purchase)),
+            as.matrix(XY.test.transformed %>% dplyr::select(-Purchase)),
+            as.matrix(XY.train.transformed %>% dplyr::select(Purchase)), k=1)
+
+#mean(test.Y!=knn.pred)
+tibble(yhat=pred, y=XY.test.transformed[['Purchase']]) %>%
+  mutate(incorrect = as.numeric(yhat!=y)) %>% 
+  dplyr::select(incorrect) %>% colMeans()
+#mean(test.Y!="No")
+XY.test.transformed %>% 
+  mutate(Purchase_Percent = as.numeric(Purchase!="No")) %>% 
+  dplyr::select(Purchase_Percent) %>% colMeans()
+
+#table(knn.pred,test.Y)
+tibble(yhat=pred, y=XY.test.transformed[['Purchase']]) %>% conf_mat(y, yhat)
+#9/(68+9) # <- the answer is a little bit different because 
+#              (a) I dropped `AZEILPL` and
+#              (b) I standardized differently/not incorrectly
+#              (c) and I used a slightly different (shuffled) training set
+
+#knn.pred=knn(train.X,test.X,train.Y,k=3)
+#table(knn.pred,test.Y)
+pred <- knn(as.matrix(XY.train.transformed %>% dplyr::select(-Purchase)),
+            as.matrix(XY.test.transformed %>% dplyr::select(-Purchase)),
+            as.matrix(XY.train.transformed %>% dplyr::select(Purchase)), k=3)
+tibble(yhat=pred, y=XY.test.transformed[['Purchase']]) %>% conf_mat(y, yhat)
+#5/26 # <- the answer is a little bit different because 
+#          (a) I dropped `AZEILPL` and
+#          (b) I standardized differently/not incorrectly
+#          (c) and I used a slightly different (shuffled) training set
+
+
+#knn.pred=knn(train.X,test.X,train.Y,k=5)
+#table(knn.pred,test.Y)
+pred <- knn(as.matrix(XY.train.transformed %>% dplyr::select(-Purchase)),
+            as.matrix(XY.test.transformed %>% dplyr::select(-Purchase)),
+            as.matrix(XY.train.transformed %>% dplyr::select(Purchase)), k=5)
+tibble(yhat=pred, y=XY.test.transformed[['Purchase']]) %>% conf_mat(y, yhat)
+#4/15 # <- the answer is a little bit different because 
+#          (a) I dropped `AZEILPL` and
+#          (b) I standardized differently/not incorrectly
+#          (c) and I used a slightly different (shuffled) training set
+
+
+#glm.fits=glm(Purchase~.,data=Caravan,family=binomial,subset=-test)
+glm.fits <- glm(Purchase~.-AZEILPL-APLEZIER, data=Caravan, 
+                family=binomial, subset=train_indices)
+##############################################################################
+# Q: why wasn't it important that we didn't standardized our features above? #
+##############################################################################
+
+#glm.probs=predict(glm.fits,Caravan[test,],type="response")
+#glm.pred=rep("No",1000)
+#glm.pred[glm.probs>.5]="Yes"
+#table(glm.pred,test.Y)
+glm.fits %>% augment() %>% 
+  mutate(yhat = as_factor(ifelse(.fitted>0, "Yes", "No"))) %>%
+  conf_mat(truth=Purchase, estimate=yhat)
+
+#glm.pred=rep("No",1000)
+#glm.pred[glm.probs>.25]="Yes"
+#table(glm.pred,test.Y)
+glm.fits %>% augment() %>% 
+  mutate(yhat = as_factor(ifelse(inverse_logit(.fitted)>0.25, "Yes", "No"))) %>%
+  conf_mat(truth=Purchase, estimate=yhat)
+
+#11/(22+11)  # <- the answer is a little bit different because 
+#                 I used a slightly different (shuffled) training set
+```
