@@ -24,15 +24,15 @@ knitr::opts_chunk$set(
 )
 ```
 
-In this project, we build a model that would help us locate people displaced by the earthquake in Haiti in $2010$. More specifically, we build in a timely manner an accurate model that classifies pixels in geo-referenced aerial images of Haiti in $2010$ as depicting vegetation, soil, rooftops, various non-tarp surfaces, and blue tarps. People whose homes had been destroyed by the earthquake often created temporary shelters using blue tarps. Blue tarps were good indicators of where displaced people lived.
+In this project, we build a model that would help us locate people displaced by the earthquake in Haiti in $2010$. More specifically, we build in a timely manner an accurate model that classifies pixels in geo-referenced aerial images of Haiti in $2010$ as depicting blue tarps or depicting objects that are not blue tarps. People whose homes had been destroyed by the earthquake often created temporary shelters using blue tarps. Blue tarps were good indicators of where displaced people lived.
 
 Our training data was collected likely by applying a Region Of Interest (ROI) Tool to a high-resolution, orthorectified / geo-referenced image of Haiti in 2010. One ROI tool is described at [https://www.l3harrisgeospatial.com/docs/regionofinteresttool.html](https://www.l3harrisgeospatial.com/docs/regionofinteresttool.html). Classes may be assigned to pixels by defining Regions Of Interest.
 
 Our training data frame consists of $63,241$ observations. Each observation consists of a class in the set $\{Vegetation, \ Soil, \ Rooftop, \ Various \ Non-Tarp, \ Blue \ Tarp\}$ and a pixel. A pixel is a colored dot. A pixel is represented by a tuple of intensities of color $Red$, $Green$, and $Blue$ in the range $0$ to $255$.
 
-According to [https://www.esri.com/about/newsroom/insider/what-is-orthorectified-imagery/](https://www.esri.com/about/newsroom/insider/what-is-orthorectified-imagery/), an orthorectified image is an accurately georeferenced image that has been processed so that all pixels are in an accurate $(x, y)$ position on the ground. "Orthorectified images have been processed to apply corrections for optical distortions from the sensor system, and apparent changes in the position of ground objects caused by the perspective of the sensor view angle and ground terrain."
+According to [https://www.esri.com/about/newsroom/insider/what-is-orthorectified-imagery/](https://www.esri.com/about/newsroom/insider/what-is-orthorectified-imagery/), an orthorectified image is an accurately georeferenced image that has been processed so that all pixels are in an accurate $(x, y)$ position on the ground. Orthorectified images have been processed to apply corrections for optical distortions from the sensor system, and apparent changes in the position of ground objects caused by the perspective of the sensor view angle and ground terrain.
 
-We use $10$-fold cross-validation to evaluate the performance of $5$ classifiers. A classifier will classify a pixel as belonging to a class.
+We use $10$-fold cross-validation to evaluate the performance of $5$ classifiers. A classifier will classify a pixel as depicting a blue tarp or depicting an object that is not a blue tarp.
 
 We load a data frame of classes and pixels based on an orthorectified image of Haiti at [https://www.kaggle.com/datasets/billbasener/pixel-values-from-images-over-haiti?datasetId=1899167](https://www.kaggle.com/datasets/billbasener/pixel-values-from-images-over-haiti?datasetId=1899167).
 
@@ -45,79 +45,3 @@ head(x = data_frame_of_classes_and_pixels, n = 3)
 
 TODO: Consider 5 number summaries and means and standard deviations of Red, Green, and Blue. and across classes.
 
-According to [https://stats.oarc.ucla.edu/r/dae/multinomial-logistic-regression/](https://stats.oarc.ucla.edu/r/dae/multinomial-logistic-regression/), "Below we use the `multinom` function from the `nnet` package to estimate a multinomial logistic regression model... we need to choose the level of our outcome that we wish to use as our baseline and specify this in the `relevel` function. Then, we run our model using `multinom`. The `multinom` package does not include `p`-value calculation for the regression coefficients, so we calculate `p`-values using Wald tests (here [two-tailed] $z$-tests)."
-
-```{r}
-library(nnet)
-factor_Class <- factor(x = data_frame_of_classes_and_pixels$Class)
-data_frame_of_classes_and_pixels$Class <- relevel(
-    x = factor_Class,
-    ref = "Blue Tarp"
-)
-logistic_regression_model <- nnet::multinom(
-    formula = Class ~ Red + Green + Blue,
-    data = data_frame_of_classes_and_pixels
-)
-summary_of_logistic_regression_model <- summary(object = logistic_regression_model)
-summary_of_logistic_regression_model
-coefficients <- summary_of_logistic_regression_model$coefficients
-standard_errors <- summary_of_logistic_regression_model$standard.errors
-z_scores <- coefficients / standard_errors
-magnitudes_of_z_score <- abs(x = z_scores)
-cumulative_density_function_values <- pnorm(q = magnitudes_of_z_score, mean = 0, sd = 1)
-areas_in_one_tail <- 1 - cumulative_density_function_values
-p_values <- areas_in_one_tail * 2
-p_values
-```
-
-The final negative log-likelihood $l$ of our logistic regression model is $23,072.995$. The residual deviance $d = 2l = 46,145.990$.
-
-TODO: Compare nested logistic regression models using residual deviance $d$.
-
-The summary for our logistic regression model includes a data frame of coefficients. Each row of coefficients corresponds to a model equation. Interpreting the rows,
-$$\begin{array}{ll} ln\left[\frac{P\left(Class = Rooftop\right)}{P\left(Class = Blue \ Tarp\right)}\right]
-    & = \beta_{Rooftop, \ Intercept} + \beta_{Rooftop, \ Red} \ Red + \beta_{Rooftop, \ Green} \ Green + \beta_{Rooftop, \ Blue} \ Blue \\
-    & = -3.001 + 0.239 \ Red + 0.0857 \ Green - 0.306 \ Blue
-\end{array}$$
-$$\begin{array}{ll} ln\left[\frac{P\left(Class = Soil\right)}{P\left(Class = Blue \ Tarp\right)}\right]
-    & = \beta_{Soil, \ Intercept} + \beta_{Soil, \ Red} \ Red + \beta_{Soil, \ Green} \ Green + \beta_{Soil, \ Blue} \ Blue \\
-    & = -11.994 + 0.317 \ Red + 0.136 \ Green - 0.412 \ Blue
-\end{array}$$
-Odds and relative risk are synonymous.
-An increase of $1$ unit in predictor $Red$ is associated with a change of $0.239$ in the log odds of a pixel depicting a rooftop versus a pixel depicting a blue tarp.
-An increase of $1$ unit in predictor $Blue$ is associated with a change of $-0.412$ in the log odds of a pixel depicting soil versus a pixel depicting a blue tarp.
-Each predictor coefficient represents the log odds for a change of $1$ unit in the predictor.
-
-```{r}
-exp(x = coefficients)
-```
-
-The odds of a pixel depicting various non-tarp objects versus a pixel depicting a blue tarp is $1.132$ for an increase of $1$ unit in predictor $Green$.
-The odds of a pixel depicting vegetation versus a pixel depicting a blue tarp is $0.442$ for an increase of $1$ unit in predictor $Blue$.
-
-The predicted probabilities for our first $3$ observations and each class are presented below.
-
-```{r}
-predicted_probabilities <- fitted(object = logistic_regression_model)
-head(x = predicted_probabilities, n = 3)
-```
-
-The below data frame allows us to consider the changes in predicted probability associated with holding the intensity of color $Red$ equal to the mean intensity of color $Red$, holding the intensity of color $Green$ equal to the mean intensity of color $Green$, and increasing the intensity of color $Blue$ from $0$ to $255$ inclusive linearly across $10$ intensities. As the intensity of color $Blue$ increases from $0$ to $255$, the predicted probability of a pixel depicting a blue tarp increases from $0$ to $1$ and the predicted probability of a pixel depicting vegetation decreases from $1$ to $0$.
-
-```{r}
-library(pracma)
-mean_intensity_of_color_Red <- mean(data_frame_of_classes_and_pixels$Red)
-mean_intensity_of_color_Green <- mean(data_frame_of_classes_and_pixels$Green)
-linearly_spaced_intensities <- pracma::linspace(x1 = 0, x2 = 255, n = 10)
-data_frame <- data.frame(
-    Red = mean_intensity_of_color_Red,
-    Green = mean_intensity_of_color_Green,
-    Blue = linearly_spaced_intensities
-)
-predicted_probabilities <- predict(
-    object = logistic_regression_model,
-    newdata = data_frame,
-    type = "probs"
-)
-predicted_probabilities
-```
