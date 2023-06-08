@@ -1,5 +1,5 @@
 ---
-title: "Evaluating Performance of Tarp Classifiers"
+title: "Building A Model That Helps Locating Displaced People"
 author: "Tom Lever"
 date: 06/08/2023
 output:
@@ -24,12 +24,22 @@ knitr::opts_chunk$set(
 )
 ```
 
-We use $10$-fold cross-validation to evaluate the performance of $5$ classifiers. A classifier will classify a pixel as belonging to a class in the set $\{Tarp, Vegetation\}$. A pixel is represented by a tuple of $3$ integers. These integers represent intensities of color red, green, and blue and lie between $0$ and $255$ inclusive.
+In this project, we build a model that would help us locate people displaced by the earthquake in Haiti in $2010$. More specifically, we build in a timely manner an accurate model that classifies pixels in geo-referenced aerial images of Haiti in $2010$ as depicting vegetation, soil, rooftops, various non-tarp surfaces, and blue tarps. People whose homes had been destroyed by the earthquake often created temporary shelters using blue tarps. Blue tarps were good indicators of where displaced people lived.
+
+Our training data was collected likely by applying a Region Of Interest (ROI) Tool to a high-resolution, orthorectified / geo-referenced image of Haiti in 2010. One ROI tool is described at [https://www.l3harrisgeospatial.com/docs/regionofinteresttool.html](https://www.l3harrisgeospatial.com/docs/regionofinteresttool.html). Classes may be assigned to pixels by defining Regions Of Interest.
+
+Our training data frame consists of $63,241$ observations. Each observation consists of a class in the set $\{Vegetation, \ Soil, \ Rooftop, \ Various \ Non-Tarp, \ Blue \ Tarp\}$ and a pixel. A pixel is a colored dot. A pixel is represented by a tuple of intensities of color $Red$, $Green$, and $Blue$ in the range $0$ to $255$.
+
+According to [https://www.esri.com/about/newsroom/insider/what-is-orthorectified-imagery/](https://www.esri.com/about/newsroom/insider/what-is-orthorectified-imagery/), an orthorectified image is an accurately georeferenced image that has been processed so that all pixels are in an accurate $(x, y)$ position on the ground. "Orthorectified images have been processed to apply corrections for optical distortions from the sensor system, and apparent changes in the position of ground objects caused by the perspective of the sensor view angle and ground terrain."
+
+We use $10$-fold cross-validation to evaluate the performance of $5$ classifiers. A classifier will classify a pixel as belonging to a class.
 
 We load a data frame of classes and pixels based on an orthorectified image of Haiti at [https://www.kaggle.com/datasets/billbasener/pixel-values-from-images-over-haiti?datasetId=1899167](https://www.kaggle.com/datasets/billbasener/pixel-values-from-images-over-haiti?datasetId=1899167).
 
 ```{r}
-data_frame_of_classes_and_pixels <- read.csv(file = 'Data_Frame_Of_Classes_And_Pixels.csv')
+data_frame_of_classes_and_pixels <- read.csv(
+    file = 'Data_Frame_Of_Classes_And_Pixels.csv'
+)
 head(x = data_frame_of_classes_and_pixels, n = 3)
 ```
 
