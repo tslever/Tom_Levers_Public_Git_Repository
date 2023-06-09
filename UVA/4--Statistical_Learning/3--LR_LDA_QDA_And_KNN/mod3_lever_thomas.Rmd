@@ -44,30 +44,164 @@ knitr::opts_chunk$set(
 
         False. As above, we expect Linear Discriminant Analysis to perform better on the test set when the Bayes decision boundary is linear as QDA might overfit the data.
 
-# 13. This question should be answered using the `Weekly` data set, which is part of the ISLR2 package. 
-This data is similar in nature to the `Smarket` data from this chapter’s lab, except that it contains 1,089 weekly returns for 21 years, from the beginning of 1990 to the end of 2010.
 
-(a) Produce some numerical and graphical summaries of the `Weekly` data. Do there appear to be any patterns?
+13. This question should be answered using the `Weekly` data set, which is part of the `ISLR2` package.
 
-(b) Use the full data set to perform a logistic regression with `Direction` as the response and the five lag variables plus `Volume` as predictors. Use the summary function to print the results. Do any of the predictors appear to be statistically significant? If so, which ones?
+    This data is similar in nature to the `Smarket` data from this chapter’s lab, except that it contains $1,089$ weekly returns for 21 years, from the beginning of 1990 to the end of 2010.
 
-(c) Compute the confusion matrix and overall fraction of correct predictions. Explain what the confusion matrix is telling you about the types of mistakes made by logistic regression.
+    (a) Produce some numerical and graphical summaries of the `Weekly` data. Do there appear to be any patterns?
+    
+        ```{r}
+        library(ISLR2)
+        head(x = Weekly, n = 3)
+        ```
+        
+        The columns of `Weekly` are
+        - $Year$: The year that the observation was recorded
+        - $Lag1$: Percentage returns $1$ week previous
+        - $Lag2$: Percentage returns $2$ weeks previous
+        - $Lag3$: Percentage returns $3$ weeks previous
+        - $Lag4$: Percentage returns $4$ weeks previous
+        - $Lag5$: Percentage returns $5$ weeks previous
+        - $Volume$: Volume of stock market movement / volume of stock market activity / volume of shares traded / average number of daily shares traded in billions this week
+        - $Today$: Percentage return in the S&P500 this week
+        - $Direction$: Factor with levels `Down` and `Up` indicating whether the market had a positive or negative return on a given week
+        
+        ```{r}
+        summary(Weekly)
+        ```
+        
+        The years that an observation was recorded vary from $1990$ to $2010$.
+        Minimum, first-quartile, median, mean, third-quartile, and maximum lags are similar across $Lag1$, $Lag2$, $Lag3$, $Lag4$, and $Lag5$ and $Today$.
+        The market had a negative return for $484$ weeks. The market had a positive return for $605$ weeks.
+        If we predicted that the market had a positive return for every one of the $1,089$ weeks, we would be correct $605 / 1,089 = 55.6$ percent of the time.
+        
+        ```{r}
+        pairs(Weekly)
+        plot(
+            x = Weekly$Year,
+            y = Weekly$Volume,
+            xlab = "Year",
+            ylab = "Volume",
+            main = "Volume vs. Year"
+        )
+        ```
+        
+        $Volume$ seems to grow exponentially with $Year$.
+        
+        ```{r}
+        library(TomLeversRPackage)
+        index_of_Direction <- get_index_of_column_of_data_frame(Weekly, "Direction")
+        data_frame_without_Direction <- Weekly[, -index_of_Direction]
+        correlation_matrix <- cor(data_frame_without_Direction)
+        analyze_correlation_matrix(correlation_matrix)
+        ```
+        
+        $Volume$ has a high positive correlation with $Year$.
 
+    (b) Use the full data set to perform a logistic regression with `Direction` as the response and the five lag variables plus `Volume` as predictors. Use the summary function to print the results. Do any of the predictors appear to be statistically significant? If so, which ones?
+    
+        ```{r}
+        logistic_regression_model <- glm(
+            formula = Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + Lag5 + Volume,
+            data = Weekly,
+            family = binomial
+        )
+        summary(logistic_regression_model)
+        calculate_critical_value_zc(
+            significance_level = 0.05,
+            hypothesis_test_is_two_tailed = TRUE
+        )
+        ```
+        
+        A critical value $z_{\alpha/2 = 0.05/2} = 1.960$. The summary for the above logistic regression model provides test statistics for predictors. In parallel, the summary provides probabilities where each probability $p$ is the probability that the magnitude $|z|$ of a random test statistic is greater than the magnitude $|z_0|$ of the appropriate test statistic. Because the magnitude of the test statistic for $Lag2$ is greater than the critical value, and the probability for this predictor is less than the significance level $\alpha = 0.05$, we reject the null hypothesis that $Lag2$ is insignificant in predicting the response in the context of the model and can be removed from the model. For $Lag2$ we have sufficient evidence to support the alternate hypothesis that the predictor is significant in predicting the response in the context of the model and cannot be removed from the model.
 
-(d) Now fit the logistic regression model using a training data period from 1990 to 2008, with Lag2 as the only predictor. Compute the confusion matrix and the overall fraction of correct predictions for the held out data (that is, the data from 2009 and 2010).
+    (c) Compute the confusion matrix and overall fraction of correct predictions. Explain what the confusion matrix is telling you about the types of mistakes made by logistic regression.
+    
+        ```{r}
+        # vector_of_predicted_probabilities is a vector of predicted probabilities that
+        # an observation corresponds to the market having a positive return that week
+        vector_of_predicted_probabilities <- predict(
+            object = logistic_regression_model,
+            Weekly,
+            type = "response"
+        )
+        map_of_binary_value_to_direction <- contrasts(x = Weekly$Direction)
+        map_of_binary_value_to_direction
+        number_of_observations <- nrow(Weekly)
+        vector_of_predicted_directions <- rep("Down", number_of_observations)
+        condition <- vector_of_predicted_probabilities > 0.5
+        vector_of_predicted_directions[condition] = "Up"
+        confusion_matrix <- table(vector_of_predicted_directions, Weekly$Direction)
+        confusion_matrix
+        number_of_true_negatives <- confusion_matrix[1, 1]
+        number_of_false_negatives <- confusion_matrix[1, 2]
+        number_of_false_positives <- confusion_matrix[2, 1]
+        number_of_true_positives <- confusion_matrix[2, 2]
+        number_of_correct_predictions <-
+            number_of_true_negatives + number_of_true_positives
+        fraction_of_correct_predictions <-
+            number_of_correct_predictions / number_of_observations
+        fraction_of_correct_predictions
+        ```
+        
+        The overall fraction of correct predictions is $611 / 1,089$. The confusion matrix is telling us that there are $48$ false negatives and $430$ false positives. A false negative is an instance of our logistic regression predicting that the market had a negative return on a week when the market had a positive return on that week. A false positive is an instance of our logistic regression predicting that the market had a positive return on a week when the market had a negative return on that week.
 
+    (d) Now fit the logistic regression model using a training data period from 1990 to 2008, with Lag2 as the only predictor. Compute the confusion matrix and the overall fraction of correct predictions for the held out data (that is, the data from 2009 and 2010).
+    
+        ```{r}
+        condition <- (Weekly$Year >= 1990) & (Weekly$Year <= 2008)
+        Weekly_from_1990_to_2008_inclusive <- Weekly[condition, ]
+        condition <- (Weekly$Year > 2008) & (Weekly$Year <= 2010)
+        Weekly_from_2009_to_2010_inclusive <- Weekly[condition, ]
+        logistic_regression_model <- glm(
+            formula = Direction ~ Lag2,
+            data = Weekly_from_1990_to_2008_inclusive,
+            family = binomial
+        )
+        # vector_of_predicted_probabilities is a vector of predicted probabilities that
+        # an observation corresponds to the market having a positive return that week
+        vector_of_predicted_probabilities <- predict(
+            object = logistic_regression_model,
+            Weekly_from_2009_to_2010_inclusive,
+            type = "response"
+        )
+        map_of_binary_value_to_direction <-
+            contrasts(x = Weekly_from_1990_to_2008_inclusive$Direction)
+        map_of_binary_value_to_direction
+        number_of_observations <- nrow(Weekly_from_2009_to_2010_inclusive)
+        vector_of_predicted_directions <- rep("Down", number_of_observations)
+        condition <- vector_of_predicted_probabilities > 0.5
+        vector_of_predicted_directions[condition] = "Up"
+        confusion_matrix <- table(
+            vector_of_predicted_directions,
+            Weekly_from_2009_to_2010_inclusive$Direction
+        )
+        confusion_matrix
+        number_of_true_negatives <- confusion_matrix[1, 1]
+        number_of_false_negatives <- confusion_matrix[1, 2]
+        number_of_false_positives <- confusion_matrix[2, 1]
+        number_of_true_positives <- confusion_matrix[2, 2]
+        number_of_correct_predictions <-
+            number_of_true_negatives + number_of_true_positives
+        fraction_of_correct_predictions <-
+            number_of_correct_predictions / number_of_observations
+        fraction_of_correct_predictions
+        ```
+        
+        The overall fraction of correct predictions is $65 / 104$.
 
-(e) Repeat (d) using LDA.
+    (e) Repeat (d) using LDA.
 
-(f) Repeat (d) using QDA.
+    (f) Repeat (d) using QDA.
 
-(g) Repeat (d) using KNN with $K=1$.
+    (g) Repeat (d) using KNN with $K=1$.
 
-(h) Repeat (d) using naive Bayes. (skip this exercise)
+    (h) Repeat (d) using naive Bayes. (skip this exercise)
 
-(i) Which of these methods appears to provide the best results on this data?
+    (i) Which of these methods appears to provide the best results on this data?
 
-(j) Experiment with different combinations of predictors, including possible transformations and interactions, for each of the methods. Report the variables, method, and associated confu- sion matrix that appears to provide the best results on the held out data. Note that you should also experiment with values for $K$ in the KNN classifier.
+    (j) Experiment with different combinations of predictors, including possible transformations and interactions, for each of the methods. Report the variables, method, and associated confu- sion matrix that appears to provide the best results on the held out data. Note that you should also experiment with values for $K$ in the KNN classifier.
 
 
 # 14. In this problem, you will develop a model to predict whether a given car gets high or low gas mileage based on the `Auto` data set.
