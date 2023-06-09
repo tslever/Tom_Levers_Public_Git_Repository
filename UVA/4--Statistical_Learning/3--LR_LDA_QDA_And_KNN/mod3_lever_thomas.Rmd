@@ -97,8 +97,8 @@ knitr::opts_chunk$set(
         analyze_correlation_matrix(correlation_matrix)
         ```
         
-        $Volume$ has a high positive correlation with $Year$.
-
+        $Volume$ has a high positive correlation with $Year$. All other pairs of variables have correlations that are negligible.
+ 
     (b) Use the full data set to perform a logistic regression with `Direction` as the response and the five lag variables plus `Volume` as predictors. Use the summary function to print the results. Do any of the predictors appear to be statistically significant? If so, which ones?
     
         ```{r}
@@ -145,7 +145,7 @@ knitr::opts_chunk$set(
         fraction_of_correct_predictions
         ```
         
-        The overall fraction of correct predictions is $611 / 1,089$. The confusion matrix is telling us that there are $48$ false negatives and $430$ false positives. A false negative is an instance of our logistic regression predicting that the market had a negative return on a week when the market had a positive return on that week. A false positive is an instance of our logistic regression predicting that the market had a positive return on a week when the market had a negative return on that week.
+        The overall fraction of correct predictions is $611 / 1,089$. The confusion matrix is telling us that there are $48$ false negatives and $430$ false positives. A false negative is an instance of our logistic regression predicting that the market had a negative return on a week when the market had a positive return on that week. A false positive is an instance of our logistic regression predicting that the market had a positive return on a week when the market had a negative return on that week. The training error rate is $43.9$ percent. For weeks when the market had a positive return, the model is correct $92.1$ percent of the time / has a sensitivity, recall, hit rate, and True Positive Rate $TPR = \frac{TP}{P} = \frac{TP}{TP + FN} = \frac{557}{557 + 48} = 0.921$. For weeks when the market had a negative return, the model is correct $11.2$ percent of the time / has a specificity, selectivity, and True Negative Rate $TNR = \frac{TN}{N} = \frac{TN}{TN + FP} = \frac{54}{54 + 430} = 0.112$.
 
     (d) Now fit the logistic regression model using a training data period from 1990 to 2008, with Lag2 as the only predictor. Compute the confusion matrix and the overall fraction of correct predictions for the held out data (that is, the data from 2009 and 2010).
     
@@ -189,7 +189,7 @@ knitr::opts_chunk$set(
         fraction_of_correct_predictions
         ```
         
-        The overall fraction of correct predictions is $65 / 104$.
+        The overall fraction of correct predictions is $65 / 104$. The test error rate is $37.5$ percent. For weeks when the market had a positive return, the model is correct $92.1$ percent of the time / has a sensitivity, recall, hit rate, and True Positive Rate $TPR = \frac{TP}{P} = \frac{TP}{TP + FN} = \frac{56}{56 + 5} = 0.918$. For weeks when the market had a negative return, the model is correct $11.2$ percent of the time / has a specificity, selectivity, and True Negative Rate $TNR = \frac{TN}{N} = \frac{TN}{TN + FP} = \frac{34}{34 + 9} = 0.209$.
 
     (e) Repeat (d) using LDA.
     
@@ -287,6 +287,7 @@ knitr::opts_chunk$set(
         vector_of_directions <- prediction$class
         confusion_matrix <-
             table(vector_of_directions, Weekly_from_2009_to_2010_inclusive$Direction)
+        confusion_matrix
         number_of_true_negatives <- confusion_matrix[1, 1]
         number_of_false_negatives <- confusion_matrix[1, 2]
         number_of_false_positives <- confusion_matrix[2, 1]
@@ -298,9 +299,33 @@ knitr::opts_chunk$set(
         fraction_of_correct_predictions
         ```
         
-        The overall fraction of correct predictions is $65 / 104$.
+        The overall fraction of correct predictions is $65 / 104$. Our Linear Discriminant Analysis model has fraction of correct predictions equal to that of our Logistic Regression model. The test error rate is $37.5$ percent. For weeks when the market had a positive return, the model is correct $92.1$ percent of the time / has a sensitivity, recall, hit rate, and True Positive Rate $TPR = \frac{TP}{P} = \frac{TP}{TP + FN} = \frac{56}{56 + 5} = 0.918$. For weeks when the market had a negative return, the model is correct $11.2$ percent of the time / has a specificity, selectivity, and True Negative Rate $TNR = \frac{TN}{N} = \frac{TN}{TN + FP} = \frac{34}{34 + 9} = 0.209$.
 
     (f) Repeat (d) using QDA.
+    
+        ```{r}
+        QDA_model <- qda(
+            formula = Direction ~ Lag2,
+            data = Weekly_from_1990_to_2008_inclusive
+        )
+        QDA_model
+        prediction <- predict(QDA_model, newdata = Weekly_from_2009_to_2010_inclusive)
+        vector_of_directions <- prediction$class
+        confusion_matrix <-
+            table(vector_of_directions, Weekly_from_2009_to_2010_inclusive$Direction)
+        confusion_matrix
+        number_of_true_negatives <- confusion_matrix[1, 1]
+        number_of_false_negatives <- confusion_matrix[1, 2]
+        number_of_false_positives <- confusion_matrix[2, 1]
+        number_of_true_positives <- confusion_matrix[2, 2]
+        number_of_correct_predictions <-
+            number_of_true_negatives + number_of_true_positives
+        fraction_of_correct_predictions <-
+            number_of_correct_predictions / number_of_observations
+        fraction_of_correct_predictions
+        ```
+        
+        The overall fraction of correct predictions is $61 / 104$. Our Quadratic Discriminant Analysis model predicts all observations as having direction "Up". Our Logistic Regression and Linear Discriminant Analysis models have fractions of correct predictions greater than that of our Quadratic Discriminant Analysis model. The test error rate is $41.3$ percent. For weeks when the market had a positive return, the model is correct $92.1$ percent of the time / has a sensitivity, recall, hit rate, and True Positive Rate $TPR = \frac{TP}{P} = \frac{TP}{TP + FN} = \frac{61}{61 + 0} = 1$. For weeks when the market had a negative return, the model is correct $0$ percent of the time / has a specificity, selectivity, and True Negative Rate $TNR = \frac{TN}{N} = \frac{TN}{TN + FP} = \frac{0}{0 + 43} = 0$.
 
     (g) Repeat (d) using KNN with $K=1$.
 
