@@ -123,7 +123,7 @@ knitr::opts_chunk$set(
         # an observation corresponds to the market having a positive return that week
         vector_of_predicted_probabilities <- predict(
             object = logistic_regression_model,
-            Weekly,
+            newdata = Weekly,
             type = "response"
         )
         map_of_binary_value_to_direction <- contrasts(x = Weekly$Direction)
@@ -163,7 +163,7 @@ knitr::opts_chunk$set(
         # an observation corresponds to the market having a positive return that week
         vector_of_predicted_probabilities <- predict(
             object = logistic_regression_model,
-            Weekly_from_2009_to_2010_inclusive,
+            newdata = Weekly_from_2009_to_2010_inclusive,
             type = "response"
         )
         map_of_binary_value_to_direction <-
@@ -192,6 +192,91 @@ knitr::opts_chunk$set(
         The overall fraction of correct predictions is $65 / 104$.
 
     (e) Repeat (d) using LDA.
+    
+        ```{r}
+        library(MASS)
+        LDA_model <- lda(
+            formula = Direction ~ Lag2,
+            data = Weekly_from_1990_to_2008_inclusive
+        )
+        LDA_model
+        ```
+        
+        According to [https://www.andreaperlato.com/mlpost/linear-discriminant-analysis/](https://www.andreaperlato.com/mlpost/linear-discriminant-analysis/), "Linear Discriminant Analysis was originally developed by R.A. Fisher to classify subjects into one of... two clearly defined groups. It was later expanded to classify subjects into more than two groups. [LDA] helps to find linear combination[s] of original variables that provide[s] the best possible separation between the groups."
+        
+        According to [http://strata.uga.edu/8370/lecturenotes/discriminantFunctionAnalysis.html](http://strata.uga.edu/8370/lecturenotes/discriminantFunctionAnalysis.html), LDA for two groups "seeks a linear function that will maximum the differences among the groups... LDA will find an equation that maximizes the separation of the two groups using the variables measured for the cases in those two groups. If there are three variables in the data set $(x, y, z)$, the discriminant function has the following linear form:
+        $$DF = a \left(x - \bar{x}\right) + b \left(y - \bar{y}\right) + c \left(z - \bar{z}\right)$$
+        where $a$, $b$, and $c$ are the coefficients (slopes) of the discriminant function. Each sample or case will therefore have a single value called its score.
+        
+        Linear Discriminant Analysis "produces a number of discriminant functions (similar to principal components, and sometimes called axes) equal to the number of groups to be distinguished minus one."
+        
+        For our LDA model, we have two groups. One group contains observations where each observation corresponds to a week when the market had a positive return. One group contains observations where each observation corresponds to a week when the market had a negative return. We have one predictor: $Lag2$.
+        
+        "Coefficients of linear discriminants" "reports the coefficients of the discriminant function ($a$, $b$, and $c$). Because there are two groups, there are $2 - 1 = 1$ discriminant functions. Our one discriminant function
+        
+        $$LD1 = \beta_{Lag2} \left(Lag2 - \bar{Lag2}\right) = 0.441 \left(Lag2 - 0.151\right)$$
+        
+        The group means are "average values of each of the variables for each of your groups." The mean value for $Lag2$ for our observations between $1990$ and $2008$ and for the group of weeks when the market had a positive return is $0.260$. The mean value for $Lag2$ for our observations between $1990$ and $2008$ and for the group of weeks when the market had a negative return is $-0.036$. For a week when the market had a positive return, the return two weeks previously was likely positive. For a week when the market had a negative return, the return two weeks previously was likely negative.
+        
+        "The prior probabilities of the groups... reflect... the proportion of each group within the dataset. In other words, if you had no measurements and the number of measured samples represented the actual abundances of the groups, the prior probabilities would describe the probability that any unknown sample would belong to each of the groups." The market had a positive return on a given week $55.2$ percent of the time.
+        
+        "Distribution Of Discriminant Function Values Corresponding To Observations With Direction 'Up'" and "Distribution of Discriminant Function Values Corresponding To Observations With Direction 'Down'" are plotted below.
+        
+        ```{r}
+        # The height of each version of the below histograms
+        # produced by `plot(LDA_model)` is about 2.25 inches.
+        vector_of_predictions <-
+            predict(LDA_model, newdata = Weekly_from_1990_to_2008_inclusive)
+        vector_of_discriminant_function_values <- vector_of_predictions$x
+        training_observations_have_direction_Up <-
+            (Weekly$Year <= 2008) & (Weekly$Direction == "Up")
+        training_observations_have_direction_Down <-
+            (Weekly$Year <= 2008) & (Weekly$Direction == "Down")
+        indices_of_observations_with_direction_Up <-
+            which(training_observations_have_direction_Up)
+        indices_of_observations_with_direction_Down <-
+            which(training_observations_have_direction_Down)
+        vector_of_discriminant_function_values_corresponding_to_direction_Up <-
+            vector_of_discriminant_function_values[
+                indices_of_observations_with_direction_Up
+            ]
+        vector_of_discriminant_function_values_corresponding_to_direction_Down <-
+            vector_of_discriminant_function_values[
+                indices_of_observations_with_direction_Up
+            ]
+        hist(
+            x = vector_of_discriminant_function_values_corresponding_to_direction_Up,
+            xlim = c(-8, 6),
+            breaks = 20,
+            xlab = paste(
+                "Discriminant Function Values Corresponding To\n",
+                "Observations With Direction 'Up'",
+                sep = ""
+            ),
+            ylab = "Frequency",
+            main = paste(
+                "Distribution Of Discriminant Function Values Corresponding To\n",
+                "Observations With Direction 'Up'",
+                sep = ""
+            )
+        )
+        hist(
+            x = vector_of_discriminant_function_values_corresponding_to_direction_Down,
+            xlim = c(-8, 6),
+            breaks = 20,
+            xlab = paste(
+                "Discriminant Function Values Corresponding To\n",
+                "Observations With Direction 'Down'",
+                sep = ""
+            ),
+            ylab = "Frequency",
+            main = paste(
+                "Distribution Of Discriminant Function Values Corresponding To\n",
+                "Observations With Direction 'Down'",
+                sep = ""
+            )
+        )
+        ```
 
     (f) Repeat (d) using QDA.
 
