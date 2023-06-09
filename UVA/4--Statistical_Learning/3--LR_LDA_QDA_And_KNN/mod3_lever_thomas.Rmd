@@ -1,47 +1,48 @@
 ---
 title: "DS-6030 Homework Module 3"
-author: "Name"
+author: "Tom Lever"
+date: 06/08/2023
 output:
-  pdf_document:
-    toc: no
+  pdf_document: default
+  html_document: default
+urlcolor: blue
 ---
 
 <!--- Below are global settings for knitr. You can override any of them by adding the changes to individual chunks --->
-
-
-```{r global_options, include=FALSE}
-knitr::opts_chunk$set(error=TRUE,        # Keep compiling upon error
-                      collapse=FALSE,    # collapse by default
-                      echo=TRUE,         # echo code by default
-                      comment = "#>",    # change comment character
-                      fig.width = 5.5,     # set figure width
-                      fig.align = "center",# set figure position
-                      out.width = "49%", # set width of displayed images
-                      warning=FALSE,     # do not show R warnings
-                      message=FALSE)     # do not show R messages
+```{r global_options, include = FALSE}
+# This chunk is called global_options. Due to `include = FALSE`, when the document is rendered, the chunk will be executed, but the results and code will not be included in the rendered document
+knitr::opts_chunk$set(
+    error = TRUE, # Keep compiling upon error
+    collapse = FALSE, # code and corresponding output appear in knit file in separate blocks
+    echo = TRUE, # echo code by default
+    comment = "#", # change comment character
+    #fig.width = 5.5, # set figure width
+    fig.align = "center", # set figure position
+    #out.width = "49%", # set width of displayed images
+    warning = TRUE, # do not show R warnings
+    message = TRUE # do not show R messages
+)
 ```
 
-<!--- Change font size for headers --->
-<style>
-h1.title { font-size: 28px; }
-h1 { font-size: 22px; }
-h2 { font-size: 18px; }
-h3 { font-size: 14px; }
-</style>
+**DS 6030 | Spring 2023 | University of Virginia **
 
-**DS 6030 | Spring 2022 | University of Virginia **
+5.  We now examine the differences between LDA and QDA.
 
+    (a) If the Bayes decision boundary is linear, do we expect LDA or QDA to perform better on the training set? On the test set?
+    
+        If the Bayes decision boundary is linear, we expect Quadratic Discriminant Analysis to perform better on the training set. According to [https://online.stat.psu.edu/stat508/lesson/9/9.2/9.2.8](https://online.stat.psu.edu/stat508/lesson/9/9.2/9.2.8), "QDA, because it allows for more flexibility for the covariance matrix, tends to fit the data better than LDA". We expect Linear Discriminant Analysis to perform better on the test set as the Bayes decision boundary is linear and QDA might overfit the data / follow errors too closely / yield a small training Mean Squared Error but a large test MSE / work too hard to find patterns in the training data and pick up some patterns that are just caused by random chance rather than by true properties of the function relating predictors and response.
 
-# 5. We now examine the differences between LDA and QDA.
+    (b) If the Bayes decision boundary is non-linear, do we expect LDA or QDA to perform better on the training set? On the test set?
+    
+        If the Bayes decision boundary is non-linear, we expect QDA to perform better on the training set and test set "because it allows for more flexibility for the covariance matrix".
 
-(a) If the Bayes decision boundary is linear, do we expect LDA or QDA to perform better on the training set? On the test set?
+    (c) In general, as the sample size $n$ increases, do we expect the test prediction accuracy of QDA relative to LDA to improve, decline, or be unchanged? Why?
+    
+        According to [https://cseweb.ucsd.edu/classes/sp12/cse151-a/lecture11-final.pdf](https://cseweb.ucsd.edu/classes/sp12/cse151-a/lecture11-final.pdf), "Variance depends on the training set size. It decreases with more training data, and increases with more complicated classifiers". As the sample size $n$ increases, we expect the test prediction accuracy of QDA relative to LDA to improve as QDA is a more complicated, flexible model than LDA with less bias and more variance than LDA and the variance of QDA decreases as sample size increases.
 
-(b) If the Bayes decision boundary is non-linear, do we expect LDA or QDA to perform better on the training set? On the test set?
+    (d) True or False: Even if the Bayes decision boundary for a given problem is linear, we will probably achieve a superior test error rate using QDA rather than LDA because QDA is flexible enough to model a linear decision boundary. Justify your answer.
 
-(c) In general, as the sample size n increases, do we expect the test prediction accuracy of QDA relative to LDA to improve, decline, or be unchanged? Why?
-
-(d) True or False: Even if the Bayes decision boundary for a given problem is linear, we will probably achieve a superior test error rate using QDA rather than LDA because QDA is flexible enough to model a linear decision boundary. Justify your answer.
-
+        False. As above, we expect Linear Discriminant Analysis to perform better on the test set when the Bayes decision boundary is linear as QDA might overfit the data.
 
 # 13. This question should be answered using the `Weekly` data set, which is part of the ISLR2 package. 
 This data is similar in nature to the `Smarket` data from this chapter’s lab, except that it contains 1,089 weekly returns for 21 years, from the beginning of 1990 to the end of 2010.
