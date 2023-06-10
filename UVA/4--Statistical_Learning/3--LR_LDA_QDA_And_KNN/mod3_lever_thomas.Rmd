@@ -214,7 +214,7 @@ knitr::opts_chunk$set(
         
         "Coefficients of linear discriminants" "reports the coefficients of the discriminant function ($a$, $b$, and $c$). Because there are two groups, there are $2 - 1 = 1$ discriminant functions. Our one discriminant function
         
-        $$LD1 = \beta_{Lag2} \left(Lag2 - \bar{Lag2}\right) = 0.441 \left(Lag2 - 0.151\right)$$
+        $$LD1 = \beta_{Lag2} \left(Lag2 - \bar{Lag2}\right) = 0.441 \left(Lag2 - 0.128\right)$$
         
         The group means are "average values of each of the variables for each of your groups." The mean value for $Lag2$ for our observations between $1990$ and $2008$ and for the group of weeks when the market had a positive return is $0.260$. The mean value for $Lag2$ for our observations between $1990$ and $2008$ and for the group of weeks when the market had a negative return is $-0.036$. For a week when the market had a positive return, the return two weeks previously was likely positive. For a week when the market had a negative return, the return two weeks previously was likely negative.
         
