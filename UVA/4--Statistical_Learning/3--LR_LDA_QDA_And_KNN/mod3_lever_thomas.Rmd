@@ -119,7 +119,7 @@ knitr::opts_chunk$set(
     (c) Compute the confusion matrix and overall fraction of correct predictions. Explain what the confusion matrix is telling you about the types of mistakes made by logistic regression.
     
         ```{r}
-        calculate_performance(
+        generate_summary_of_performance(
             type_of_model = "LR",
             formula = Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + Lag5 + Volume,
             training_data = Weekly,
@@ -127,7 +127,7 @@ knitr::opts_chunk$set(
         )
         ```
         
-        The overall fraction of correct predictions is $611 / 1,089$. The confusion matrix is telling us that there are $48$ false negatives and $430$ false positives. A false negative is an instance of our logistic regression predicting that the market had a negative return on a week when the market had a positive return on that week. A false positive is an instance of our logistic regression predicting that the market had a positive return on a week when the market had a negative return on that week. The training error rate is $43.9$ percent. For weeks when the market had a positive return, the model is correct $92.1$ percent of the time / has a sensitivity, recall, hit rate, and True Positive Rate $TPR = \frac{TP}{P} = \frac{TP}{TP + FN} = \frac{557}{557 + 48} = 0.921$. For weeks when the market had a negative return, the model is correct $11.2$ percent of the time / has a specificity, selectivity, and True Negative Rate $TNR = \frac{TN}{N} = \frac{TN}{TN + FP} = \frac{54}{54 + 430} = 0.112$.
+        The overall fraction of correct predictions is $611 / 1,089$. The confusion matrix is telling us that there are $48$ false negatives and $430$ false positives. A false negative is an instance of our logistic regression predicting that the market had a negative return on a week when the market had a positive return on that week. A false positive is an instance of our logistic regression predicting that the market had a positive return on a week when the market had a negative return on that week. The training error rate is $43.9$ percent. For weeks when the market had a positive return, the model is correct $92.1$ percent of the time / has a sensitivity, recall, hit rate, and True Positive Rate $TPR = 0.921$. For weeks when the market had a negative return, the model is correct $11.2$ percent of the time / has a specificity, selectivity, and True Negative Rate $TNR = 0.112$.
 
     (d) Now fit the logistic regression model using a training data period from 1990 to 2008, with Lag2 as the only predictor. Compute the confusion matrix and the overall fraction of correct predictions for the held out data (that is, the data from 2009 and 2010).
     
@@ -455,19 +455,19 @@ knitr::opts_chunk$set(
         
         ```{r}
         library(TomLeversRPackage)
-        calculate_performance(
+        generate_summary_of_performance(
             type_of_model = "LR",
             formula = Direction ~ Lag1,
             training_data = Weekly_from_1990_to_2008_inclusive,
             test_data = Weekly_from_2009_to_2010_inclusive
         )
-        calculate_performance(
+        generate_summary_of_performance(
             type_of_model = "LR",
             formula = Direction ~ Lag2,
             training_data = Weekly_from_1990_to_2008_inclusive,
             test_data = Weekly_from_2009_to_2010_inclusive
         )
-        calculate_performance(
+        generate_summary_of_performance(
             type_of_model = "LR",
             formula = Direction ~ Lag1 + Lag2,
             training_data = Weekly_from_1990_to_2008_inclusive,
@@ -475,7 +475,7 @@ knitr::opts_chunk$set(
         )
         # Lag1:Lag2 denotes an interation term.
         # Lag1*Lag2 denotes Lag1 + Lag2 + Lag1:Lag2
-        calculate_performance(
+        generate_summary_of_performance(
             type_of_model = "LR",
             formula = Direction ~ Lag1:Lag2,
             training_data = Weekly_from_1990_to_2008_inclusive,
@@ -486,19 +486,19 @@ knitr::opts_chunk$set(
         Since our Logistic Regression and LDA models with formulas $Direction \sim Lag2$ have the same fraction of correct predictions, we assume our LDA models will behave similarly to our Logistic Regression models. We compare LDA models with formulas $Direction \sim Lag1$, $Direction \sim Lag2$, $Direction \sim Lag1 + Lag2$, and $Direction \sim Lag1 \ Lag2$.
         
         ```{r}
-        calculate_performance(
+        generate_summary_of_performance(
             type_of_model = "LDA",
             formula = Direction ~ Lag1,
             training_data = Weekly_from_1990_to_2008_inclusive,
             test_data = Weekly_from_2009_to_2010_inclusive
         )
-        calculate_performance(
+        generate_summary_of_performance(
             type_of_model = "LDA",
             formula = Direction ~ Lag2,
             training_data = Weekly_from_1990_to_2008_inclusive,
             test_data = Weekly_from_2009_to_2010_inclusive
         )
-        calculate_performance(
+        generate_summary_of_performance(
             type_of_model = "LDA",
             formula = Direction ~ Lag1 + Lag2,
             training_data = Weekly_from_1990_to_2008_inclusive,
@@ -506,7 +506,7 @@ knitr::opts_chunk$set(
         )
         # Lag1:Lag2 denotes an interation term.
         # Lag1*Lag2 denotes Lag1 + Lag2 + Lag1:Lag2
-        calculate_performance(
+        generate_summary_of_performance(
             type_of_model = "LDA",
             formula = Direction ~ Lag1:Lag2,
             training_data = Weekly_from_1990_to_2008_inclusive,
@@ -517,31 +517,31 @@ knitr::opts_chunk$set(
         We experiment with Quadratic Discriminant Analysis models. A QDA model with formula $Direction \sim Lag2$ has a fraction of correct predictions of $0.587$ that is less than the fraction of correct predictions of an LDA model with formula $Direction \sim Lag2$ of $0.625$. We attempt to compensate for the increase in variance with a common transform of predictor $Lag2$. Applying the absolute-value and log or square-root functions to predictor $Lag2$ has no effect. Applying the square function to predictor $Lag2$ results in a drop in fraction of correct predictions to $0.567$.
         
         ```{r}
-        calculate_performance(
+        generate_summary_of_performance(
             type_of_model = "QDA",
             formula = Direction ~ Lag1,
             training_data = Weekly_from_1990_to_2008_inclusive,
             test_data = Weekly_from_2009_to_2010_inclusive
         )
-        calculate_performance(
+        generate_summary_of_performance(
             type_of_model = "QDA",
             formula = Direction ~ Lag2,
             training_data = Weekly_from_1990_to_2008_inclusive,
             test_data = Weekly_from_2009_to_2010_inclusive
         )
-        calculate_performance(
+        generate_summary_of_performance(
             type_of_model = "QDA",
             formula = Direction ~ Lag1 + Lag2,
             training_data = Weekly_from_1990_to_2008_inclusive,
             test_data = Weekly_from_2009_to_2010_inclusive
         )
-        calculate_performance(
+        generate_summary_of_performance(
             type_of_model = "QDA",
             formula = Direction ~ Lag1:Lag2,
             training_data = Weekly_from_1990_to_2008_inclusive,
             test_data = Weekly_from_2009_to_2010_inclusive
         )
-        calculate_performance(
+        generate_summary_of_performance(
             type_of_model = "QDA",
             formula = Direction ~ I(Lag2^2),
             training_data = Weekly_from_1990_to_2008_inclusive,
@@ -553,14 +553,14 @@ knitr::opts_chunk$set(
 
         ```{r}
         set.seed(1)
-        calculate_performance(
+        generate_summary_of_performance(
             type_of_model = "KNN",
             formula = Direction ~ Lag2,
             training_data = Weekly_from_1990_to_2008_inclusive,
             test_data = Weekly_from_2009_to_2010_inclusive,
             K = 187
         )
-        calculate_performance(
+        generate_summary_of_performance(
             type_of_model = "KNN",
             formula = Direction ~ Lag1 + Lag2,
             training_data = Weekly_from_1990_to_2008_inclusive,
