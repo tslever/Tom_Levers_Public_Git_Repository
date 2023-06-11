@@ -3,6 +3,7 @@
 #' @param model The model for which to calculate the fraction of correct predictions given a data set for which to predict
 #' @return fraction_of_correct_predictions
 #' @examples fraction_of_correct_predictions <- calculate_fraction_of_correct_predictions(model = Direction_vs_Lag2, data_set = Weekly_from_2009_to_2010_inclusive)
+#' @import class
 
 #' @export
 generate_summary_of_performance <- function(type_of_model, formula, training_data, test_data, K = 1) {
