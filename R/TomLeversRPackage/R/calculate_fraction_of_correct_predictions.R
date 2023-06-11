@@ -65,12 +65,25 @@ calculate_performance <- function(type_of_model, formula, training_data, test_da
  number_of_true_positives <- confusion_matrix[2, 2]
  number_of_correct_predictions <-
   number_of_true_negatives + number_of_true_positives
- fraction_of_correct_predictions <-
+ decimal_of_correct_predictions <-
   number_of_correct_predictions / number_of_test_observations
- performance <- list(
+ error_rate <- 1 - decimal_of_correct_predictions
+ fraction_of_correct_predictions <- paste(number_of_correct_predictions, " / ", number_of_test_observations, sep = "")
+ rate_of_true_positives <- number_of_true_positives / (number_of_true_positives + number_of_false_negatives)
+ rate_of_true_negatives <- number_of_true_negatives / (number_of_true_negatives + number_of_false_positives)
+ summary_of_performance <- list(
      confusion_matrix = confusion_matrix,
+     decimal_of_correct_predictions = decimal_of_correct_predictions,
+     error_rate = error_rate,
      fraction_of_correct_predictions = fraction_of_correct_predictions,
-     map_of_binary_value_to_response_value = map_of_binary_value_to_response_value
+     map_of_binary_value_to_response_value = map_of_binary_value_to_response_value,
+     equation_for_number_of_true_negatives = paste("TN = CM[1, 1] = ", number_of_true_negatives, sep = ""),
+     equation_for_number_of_false_negatives = paste("FN = CM[1, 2] = ", number_of_false_negatives, sep = ""),
+     equation_for_number_of_false_positives = paste("FP = CM[2, 1] = ", number_of_false_positives, sep = ""),
+     equation_for_number_of_true_positives = paste("TP = CM[2, 2] = ", number_of_true_positives, sep = ""),
+     equation_for_true_positive_rate = paste("TPR = Sensitivity = Recall = Hit Rate = TP/P = TP/(TP+FN) = ", rate_of_true_positives, sep = ""),
+     equation_for_true_negative_rate = paste("TNR = Specificity = Selectivity = TN/N = TN/(TN+FP) = ", rate_of_true_negatives, sep = "")
  )
- return(performance)
+ class(summary_of_performance) <- "summary_of_performance"
+ return(summary_of_performance)
 }
