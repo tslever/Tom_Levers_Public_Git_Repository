@@ -534,6 +534,19 @@ knitr::opts_chunk$set(
             data_set = Weekly_from_2009_to_2010_inclusive
         )
         ```
+        
+        We experiment with Quadratic Discriminant Analysis models. A QDA model with formula $Direction \sim Lag2$ has a fraction of correct predictions of $0.587$ that is less than the fraction of correct predictions of an LDA model with formula $Direction \sim Lag2$ of $0.625$. We attempt to compensate for the increase in variance with a common transform of predictor $Lag2$. Applying the absolute-value and log or square-root functions to predictor $Lag2$ has no effect. Applying the square function to predictor $Lag2$ results in a drop in fraction of correct predictions to $0.567$.
+        
+        ```{r}
+        QDA_Model_With_Formula_Direction_Vs_Square_Of_Lag2 <- qda(
+            formula = Direction ~ I(Lag2^2),
+            data = Weekly_from_1990_to_2008_inclusive
+        )
+        calculate_fraction_of_correct_predictions(
+            model = QDA_Model_With_Formula_Direction_Vs_Square_Of_Lag2,
+            data_set = Weekly_from_2009_to_2010_inclusive
+        )
+        ```
 
 # 14. In this problem, you will develop a model to predict whether a given car gets high or low gas mileage based on the `Auto` data set.
 
