@@ -22,7 +22,6 @@ generate_summary_of_performance <- function(type_of_model, formula, training_dat
   condition <- vector_of_predicted_probabilities > 0.5
   vector_of_predicted_directions[condition] = "Up"
   name_of_response <- names(LR_model$model)[1]
-  map_of_binary_value_to_response_value <- contrasts(x = training_data[, name_of_response])
  } else if (type_of_model == "LDA") {
   LDA_model <- lda(
    formula = formula,
@@ -59,6 +58,7 @@ generate_summary_of_performance <- function(type_of_model, formula, training_dat
   vector_of_predicted_directions,
   test_data[, name_of_response]
  )
+ map_of_binary_value_to_response_value <- contrasts(x = training_data[, name_of_response])
  number_of_true_negatives <- confusion_matrix[1, 1]
  number_of_false_negatives <- confusion_matrix[1, 2]
  number_of_false_positives <- confusion_matrix[2, 1]
