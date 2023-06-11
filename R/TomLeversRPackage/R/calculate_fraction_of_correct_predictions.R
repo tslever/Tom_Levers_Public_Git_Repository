@@ -5,8 +5,7 @@
 #' @examples fraction_of_correct_predictions <- calculate_fraction_of_correct_predictions(model = Direction_vs_Lag2, data_set = Weekly_from_2009_to_2010_inclusive)
 
 #' @export
-calculate_fraction_of_correct_predictions <- function(type_of_model, formula, training_data, test_data, K = 1) {
- number_of_training_observations <- nrow(training_data)
+calculate_performance <- function(type_of_model, formula, training_data, test_data, K = 1) {
  number_of_test_observations <- nrow(test_data)
  if (type_of_model == "LR") {
   LR_model <- glm(
@@ -23,6 +22,7 @@ calculate_fraction_of_correct_predictions <- function(type_of_model, formula, tr
   condition <- vector_of_predicted_probabilities > 0.5
   vector_of_predicted_directions[condition] = "Up"
   name_of_response <- names(LR_model$model)[1]
+  map_of_binary_value_to_response_value <- contrasts(x = training_data[, name_of_response])
  } else if (type_of_model == "LDA") {
   LDA_model <- lda(
    formula = formula,
@@ -66,6 +66,11 @@ calculate_fraction_of_correct_predictions <- function(type_of_model, formula, tr
  number_of_correct_predictions <-
   number_of_true_negatives + number_of_true_positives
  fraction_of_correct_predictions <-
-  number_of_correct_predictions / number_of_observations
- return(fraction_of_correct_predictions)
+  number_of_correct_predictions / number_of_test_observations
+ performance <- list(
+     confusion_matrix = confusion_matrix,
+     fraction_of_correct_predictions = fraction_of_correct_predictions,
+     map_of_binary_value_to_response_value = map_of_binary_value_to_response_value
+ )
+ return(performance)
 }
