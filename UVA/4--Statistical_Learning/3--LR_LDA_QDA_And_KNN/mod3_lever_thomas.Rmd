@@ -338,11 +338,9 @@ knitr::opts_chunk$set(
     
         ```{r}
         library(class)
-        number_of_observations_for_training <- nrow(Weekly_from_1990_to_2008_inclusive)
         matrix_of_values_of_predictors_for_training <- matrix(
             data = Weekly_from_1990_to_2008_inclusive$Lag2
         )
-        number_of_observations_for_testing <- nrow(Weekly_from_2009_to_2010_inclusive)
         matrix_of_values_of_predictors_for_testing <- matrix(
             data = Weekly_from_2009_to_2010_inclusive$Lag2
         )
@@ -547,6 +545,80 @@ knitr::opts_chunk$set(
             data_set = Weekly_from_2009_to_2010_inclusive
         )
         ```
+        
+        We experiment with different values of $K$ for our $K$ Nearest Neighbors classifier from part (g). We also experiment with different predictors for a KNN classifier. For our KNN classifier from part (g), increasing $K$ and decreasing variance by a factor of $187$ results in an increase in fraction of correct predictions from $0.5$ to $0.635$. For a KNN classifier with predictors $Lag1$ and $Lag2$ and $K = 375$, the fraction of correct predictions was $0.644$.
+
+        ```{r}
+        library(class)
+        matrix_of_values_of_predictors_for_training <- matrix(
+            data = Weekly_from_1990_to_2008_inclusive$Lag2
+        )
+        matrix_of_values_of_predictors_for_testing <- matrix(
+            data = Weekly_from_2009_to_2010_inclusive$Lag2
+        )
+        vector_of_directions_for_training <- Weekly_from_1990_to_2008_inclusive$Direction
+        set.seed(1)
+        vector_of_directions <- knn(
+            train = matrix_of_values_of_predictors_for_training,
+            test = matrix_of_values_of_predictors_for_testing,
+            cl = vector_of_directions_for_training,
+            k = 187
+        )
+        confusion_matrix <-
+            table(vector_of_directions, Weekly_from_2009_to_2010_inclusive$Direction)
+        confusion_matrix
+        number_of_true_negatives <- confusion_matrix[1, 1]
+        number_of_false_negatives <- confusion_matrix[1, 2]
+        number_of_false_positives <- confusion_matrix[2, 1]
+        number_of_true_positives <- confusion_matrix[2, 2]
+        number_of_correct_predictions <-
+            number_of_true_negatives + number_of_true_positives
+        fraction_of_correct_predictions <-
+            number_of_correct_predictions / number_of_observations
+        fraction_of_correct_predictions
+        ```
+        
+        ```{r}
+        library(class)
+        matrix_of_values_of_predictors_for_training <- matrix(
+            cbind(
+                Weekly_from_1990_to_2008_inclusive$Lag1,
+                Weekly_from_1990_to_2008_inclusive$Lag2
+            ),
+            nrow = 985,
+            ncol = 2
+        )
+        matrix_of_values_of_predictors_for_testing <- matrix(
+            cbind(
+                Weekly_from_2009_to_2010_inclusive$Lag1,
+                Weekly_from_2009_to_2010_inclusive$Lag2
+            ),
+            nrow = 104,
+            ncol = 2
+        )
+        vector_of_directions_for_training <- Weekly_from_1990_to_2008_inclusive$Direction
+        set.seed(1)
+        vector_of_directions <- knn(
+            train = matrix_of_values_of_predictors_for_training,
+            test = matrix_of_values_of_predictors_for_testing,
+            cl = vector_of_directions_for_training,
+            k = 350
+        )
+        confusion_matrix <-
+            table(vector_of_directions, Weekly_from_2009_to_2010_inclusive$Direction)
+        confusion_matrix
+        number_of_true_negatives <- confusion_matrix[1, 1]
+        number_of_false_negatives <- confusion_matrix[1, 2]
+        number_of_false_positives <- confusion_matrix[2, 1]
+        number_of_true_positives <- confusion_matrix[2, 2]
+        number_of_correct_predictions <-
+            number_of_true_negatives + number_of_true_positives
+        fraction_of_correct_predictions <-
+            number_of_correct_predictions / number_of_observations
+        fraction_of_correct_predictions
+        ```
+        
+        Through our experiments we discovered that our KNN models with optimized $K$ had highest fractions of correct predictions of $0.644$ and $0.635$. LR and LDA models with formula $Direction \sim Lag2$ had fractions of correct predictions of $0.625$ based on confusion matrices presented in parts (d) and (e).
 
 # 14. In this problem, you will develop a model to predict whether a given car gets high or low gas mileage based on the `Auto` data set.
 
