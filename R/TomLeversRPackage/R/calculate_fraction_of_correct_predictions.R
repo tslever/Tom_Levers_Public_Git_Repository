@@ -5,7 +5,8 @@
 #' @examples fraction_of_correct_predictions <- calculate_fraction_of_correct_predictions(model = Direction_vs_Lag2, data_set = Weekly_from_2009_to_2010_inclusive)
 
 #' @export
-calculate_fraction_of_correct_predictions <- function(type_of_model, formula, training_data, test_data) {
+calculate_fraction_of_correct_predictions <- function(type_of_model, formula, training_data, test_data, K = 1) {
+ number_of_training_observations <- nrow(training_data)
  number_of_test_observations <- nrow(test_data)
  if (type_of_model == "LR") {
   LR_model <- glm(
@@ -38,6 +39,19 @@ calculate_fraction_of_correct_predictions <- function(type_of_model, formula, tr
   prediction <- predict(QDA_model, newdata = test_data)
   vector_of_predicted_directions <- prediction$class
   name_of_response <- names(attr(QDA_model$terms, "dataClasses"))[1]
+ } else if (type_of_model == "KNN") {
+  names_of_variables <- all.vars(formula)
+  name_of_response <- names_of_variables[1]
+  vector_of_names_of_predictors <- names_of_variables[-1]
+  matrix_of_values_of_predictors_for_training <- as.matrix(x = training_data[, vector_of_names_of_predictors])
+  matrix_of_values_of_predictors_for_testing <- as.matrix(x = test_data[, vector_of_names_of_predictors])
+  vector_of_response_values_for_training <- training_data[, name_of_response]
+  vector_of_predicted_directions <- knn(
+   train = matrix_of_values_of_predictors_for_training,
+   test = matrix_of_values_of_predictors_for_testing,
+   cl = vector_of_response_values_for_training,
+   k = K
+  )
  } else {
   stop("A fraction of correct predictions may not be yet calculated for models of the class of parameter model.")
  }

@@ -8,7 +8,8 @@ calculate_fraction_of_correct_predictions(
   type_of_model,
   formula,
   training_data,
-  test_data
+  test_data,
+  K = 1
 )
 }
 \arguments{
