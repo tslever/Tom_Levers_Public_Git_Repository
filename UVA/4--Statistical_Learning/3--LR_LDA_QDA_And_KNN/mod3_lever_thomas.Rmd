@@ -102,12 +102,12 @@ knitr::opts_chunk$set(
     (b) Use the full data set to perform a logistic regression with `Direction` as the response and the five lag variables plus `Volume` as predictors. Use the summary function to print the results. Do any of the predictors appear to be statistically significant? If so, which ones?
     
         ```{r}
-        logistic_regression_model <- glm(
+        LR_Model_With_Formula_Direction_Vs_Lag1_Lag2_Lag3_Lag4_Lag5_and_Volume <- glm(
             formula = Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + Lag5 + Volume,
             data = Weekly,
             family = binomial
         )
-        summary(logistic_regression_model)
+        summary(LR_Model_With_Formula_Direction_Vs_Lag1_Lag2_Lag3_Lag4_Lag5_and_Volume)
         calculate_critical_value_zc(
             significance_level = 0.05,
             hypothesis_test_is_two_tailed = TRUE
@@ -122,7 +122,7 @@ knitr::opts_chunk$set(
         # vector_of_predicted_probabilities is a vector of predicted probabilities that
         # an observation corresponds to the market having a positive return that week
         vector_of_predicted_probabilities <- predict(
-            object = logistic_regression_model,
+            object = LR_Model_With_Formula_Direction_Vs_Lag1_Lag2_Lag3_Lag4_Lag5_and_Volume,
             newdata = Weekly,
             type = "response"
         )
@@ -154,15 +154,16 @@ knitr::opts_chunk$set(
         Weekly_from_1990_to_2008_inclusive <- Weekly[condition, ]
         condition <- (Weekly$Year > 2008) & (Weekly$Year <= 2010)
         Weekly_from_2009_to_2010_inclusive <- Weekly[condition, ]
-        logistic_regression_model <- glm(
+        LR_Model_With_Formula_Direction_Vs_Lag2 <- glm(
             formula = Direction ~ Lag2,
             data = Weekly_from_1990_to_2008_inclusive,
             family = binomial
         )
+        LR_Model_With_Formula_Direction_Vs_Lag2
         # vector_of_predicted_probabilities is a vector of predicted probabilities that
         # an observation corresponds to the market having a positive return that week
         vector_of_predicted_probabilities <- predict(
-            object = logistic_regression_model,
+            object = LR_Model_With_Formula_Direction_Vs_Lag2,
             newdata = Weekly_from_2009_to_2010_inclusive,
             type = "response"
         )
@@ -195,11 +196,11 @@ knitr::opts_chunk$set(
     
         ```{r}
         library(MASS)
-        LDA_model <- lda(
+        LDA_Model_With_Formula_Direction_Vs_Lag2 <- lda(
             formula = Direction ~ Lag2,
             data = Weekly_from_1990_to_2008_inclusive
         )
-        LDA_model
+        LDA_Model_With_Formula_Direction_Vs_Lag2
         ```
         
         According to [https://www.andreaperlato.com/mlpost/linear-discriminant-analysis/](https://www.andreaperlato.com/mlpost/linear-discriminant-analysis/), "Linear Discriminant Analysis was originally developed by R.A. Fisher to classify subjects into one of... two clearly defined groups. It was later expanded to classify subjects into more than two groups. [LDA] helps to find linear combination[s] of original variables that provide[s] the best possible separation between the groups."
@@ -223,9 +224,12 @@ knitr::opts_chunk$set(
         "Distribution Of Discriminant Function Values Corresponding To Observations With Direction 'Up'" and "Distribution of Discriminant Function Values Corresponding To Observations With Direction 'Down'" are plotted below. There is poor "separation of the groups" along discriminant function 1". 
         
         ```{r}
-        # The height of each version of the below histograms
-        # produced by `plot(LDA_model)` is about 2.25 inches.
-        prediction <- predict(LDA_model, newdata = Weekly_from_1990_to_2008_inclusive)
+        # The height of each version of the below histograms produced by
+        # `plot(LDA_Model_With_Formula_Direction_Vs_Lag2)` is about 2.25 inches.
+        prediction <- predict(
+            object = LDA_Model_With_Formula_Direction_Vs_Lag2,
+            newdata = Weekly_from_1990_to_2008_inclusive
+        )
         vector_of_discriminant_function_values <- prediction$x
         training_observations_have_direction_Up <-
             Weekly_from_1990_to_2008_inclusive$Direction == "Up"
@@ -275,15 +279,18 @@ knitr::opts_chunk$set(
                 sep = ""
             )
         )
-        #ldahist(
+        #ldahist
         #    data = vector_of_discriminant_function_values,
         #    g = Weekly_from_1990_to_2008_inclusive$Direction
         #)
-        #plot(LDA_model)
+        #plot(LDA_Model_With_Formula_Direction_Vs_Lag2)
         ```
         
         ```{r}
-        prediction <- predict(LDA_model, newdata = Weekly_from_2009_to_2010_inclusive)
+        prediction <- predict(
+            object = LDA_Model_With_Formula_Direction_Vs_Lag2,
+            newdata = Weekly_from_2009_to_2010_inclusive
+        )
         vector_of_directions <- prediction$class
         confusion_matrix <-
             table(vector_of_directions, Weekly_from_2009_to_2010_inclusive$Direction)
@@ -369,8 +376,164 @@ knitr::opts_chunk$set(
     
         Our Logistic Regression and Linear Discriminant Analysis models have the greatest overall fraction of correct predictions of $65 / 104$. Our Quadratic Discriminant Analysis model has an overall fraction of correct predictions of $61 / 104$. Our K Nearest Neighbors model has an overall fraction of correct predictions of $52 / 104$.
 
-    (j) Experiment with different combinations of predictors, including possible transformations and interactions, for each of the methods. Report the variables, method, and associated confu- sion matrix that appears to provide the best results on the held out data. Note that you should also experiment with values for $K$ in the KNN classifier.
+    (j) Experiment with different combinations of predictors, including possible transformations and interactions, for each of the methods. Report the variables, method, and associated confusion matrix that appears to provide the best results on the held out data. Note that you should also experiment with values for $K$ in the KNN classifier.
+    
+        According to [https://cran.r-project.org/web/packages/DHARMa/vignettes/DHARMa.html](https://cran.r-project.org/web/packages/DHARMa/vignettes/DHARMa.html), "The DHARMa package uses a simulation-based approach to create readily interpretable scaled (quantile) residuals for fitted (generalized) linear mixed models. The resulting residuals are standardized to values between $0$ and $1$ and can be interpreted as intuitively as residuals from linear regression."
+        
+        "The interpretation of conventional residuals for generalized linear (mixed) models and other hierarchical statistical models is often problematic... [M]isspecifications in GL(M)Ms cannot reliably be diagnosed with standard residual plots, and thus GLMMs are often not as thoroughly checked as they should."
+        
+        "One reason why GL(M)Ms' residuals are harder to interpret is that the expected distribution of the data (aka predictive distribution) changes with the fitted values. Reweighting with the expected dispersion, as done in Pearson residuals, or using deviance residuals, helps to some extent, but it does not lead to visually homogeneous residuals, even if the model is correctly specified. As a result, standard residual plots, when interpreted in the same way as for linear models, such as non-normality, [and] heteroscedasticity, even if the model is correctly specified. Questions on the R mailing lists and forums show that practitioners are regularly confused about whether such patterns in GL(M)M residuals are a problem or not."
+        
+        "[E]ven experienced statistical analysts currently have few options to diagnose misspecification problems in GL(M)Ms. In my experience, the current standard practice is to eyeball the residual plots for major misspecifications, potentially have a look at the random effect distribution, and then run a test for overdispersion, which is usually positive, after which the model is modified twoard an overdispersed / zero-inflated distribution. This approach, however, has a number of drawbacks, notably:"
+        
+        - "Overdispersion is often the result of missing predictors or a misspecified model structure. Standard residual plots make it difficult to identify these problems by examining residual correlations or patterns of residuals against predictors..."
+        
+        - "Moreover, if residuals are checked, they are usually checked conditional on the fitted random effect estimates. Thus, standard checks only check the final level of the random structure in a GL(M)M. One can perform extra checks on the random effects, but it is somewhat unsatisfactory that there is no check on the entire model structure."
+        
+        "DHARMa aims at solving these problems by creating readily interpretable residuals for generalized linear (mixed) models that are standardized to values between $0$ and $1$, and that can be interpreted as intuitively as residuals for the linear model. This is achieved by a simulation-based approach, similar to the Bayesian $p$-value or the parametric bootstrap, that transforms the residuals to a standardized scale. The basic steps are:
+        
+        - "Simulate new response data from the fitted model for each observation."
+        
+        - "For each observation, calculate the empirical cumulative density function for the simulated [response data], which describes the possible values [of the response] (and their probabilit[ies]) at the predictor combination of the observed value, assuming the fitted model is correct.
+        
+        - "The residual is defined as the value of the empirical [cumulative] density function at the value of the observed data, so a residual of $0$ means that all simulated values are larger than the observed value, and a residual of $0.5$ means half of the simulated values are larger than the observed value."
+        
+        "The key advantage of this definition is that the so-defined residuals always have the same, known distribution, independent of the model that is fit, if the model is correctly specified. To see this, note that, if the observed data was created from the same data-generating process that we simulate from, all values of the cumulative distribution should appear with equal probability. That means we expect the distribution of the residuals to be flat, regardless of the model structure (Poisson, binomial, random effects and so on)."
+    
+        ```{r}
+        library(DHARMa)
+        LR_Model_With_Formula_Direction_Vs_Lag1 <- glm(
+            formula = Direction ~ Lag1,
+            data = Weekly_from_1990_to_2008_inclusive,
+            family = binomial
+        )
+        DHARMa <- simulateResiduals(
+            fittedModel = LR_Model_With_Formula_Direction_Vs_Lag1,
+            plot = TRUE
+        )
+        simulated_residuals <- residuals(DHARMa)
+        acf(simulated_residuals)
+        ```
+    
+        ```{r}
+        DHARMa <- simulateResiduals(
+            fittedModel = LR_Model_With_Formula_Direction_Vs_Lag2,
+            plot = TRUE
+        )
+        simulated_residuals <- residuals(DHARMa)
+        acf(simulated_residuals)
+        ```
+        
+        Assumptions for the following logistic model are met.
+        $$Direction = ln\left[\frac{P(Y = 1 \ | \ Lag2)}{1 - P(Y = 1 \ | \ Lag2)}\right] = \beta_0 + \beta_1 \ Lag2 = 0.203 + 0.058 \ Lag2$$
 
+        - The relationship between $L$ and $X$ is linear; the residuals are evenly scattered across $e = 0.5$.
+        
+        - The mean residual is $0.5$; the residuals are evenly scattered across $e = 0.5$.
+        
+        - The variance of the residuals is constant; the residuals are evenly spread for different predicted values.
+        
+        - The residuals are uncorrelated; AutoCorrelation Function values are approximately insignificant. The logistic regression model is robust to this assumption.
+        
+        - The residuals are normally distributed.
+
+        ```{r}
+        intercept_only_model <- glm(
+            formula = Direction ~ 1,
+            data = Weekly_from_1990_to_2008_inclusive,
+            family = binomial
+        )
+        full_model <- glm(
+            formula = Direction ~ Year + Lag1 + Lag2 + Lag3 + Lag4 + Lag5 + Volume,
+            data = Weekly_from_1990_to_2008_inclusive,
+            family = binomial
+        )
+        step(
+            intercept_only_model,
+            scope = list(lower = intercept_only_model, upper = full_model),
+            direction = "both"
+        )
+        ```
+        
+        Logistic Regression model with formulas $Direction \sim Lag1$ and $Direction \sim Lag2$ have the same Akaike Information Criterion. An LR model with formula $Direction \sim Lag1 + Lag2$ has a smaller Akaike Information Criterion. Logistic regression models with further predictors have higher Akaike Information Criteria. We choose as a working model an LR model with formula $Direction \sim Lag1 + Lag2$. Assumptions for this model are met.
+        
+        ```{r}
+        LR_Model_With_Formula_Direction_Vs_Lag1_And_Lag2 <- glm(
+            formula = Direction ~ Lag1 + Lag2,
+            data = Weekly_from_1990_to_2008_inclusive,
+            family = binomial
+        )
+        DHARMa <- simulateResiduals(
+            fittedModel = LR_Model_With_Formula_Direction_Vs_Lag1_And_Lag2,
+            plot = TRUE
+        )
+        simulated_residuals <- residuals(DHARMa)
+        acf(simulated_residuals)
+        ```
+        
+        Evaluating the fraction of correct predictions for various Logistic Regression models involving $Lag1$ and $Lag2$, the fraction of correct predictions is highest for an LR model with formula $Direction \sim Lag2$.
+        
+        ```{r}
+        library(TomLeversRPackage)
+        calculate_fraction_of_correct_predictions(
+            model = LR_Model_With_Formula_Direction_Vs_Lag1,
+            data_set = Weekly_from_2009_to_2010_inclusive
+        )
+        calculate_fraction_of_correct_predictions(
+            model = LR_Model_With_Formula_Direction_Vs_Lag2,
+            data_set = Weekly_from_2009_to_2010_inclusive
+        )
+        calculate_fraction_of_correct_predictions(
+            model = LR_Model_With_Formula_Direction_Vs_Lag1_And_Lag2,
+            data_set = Weekly_from_2009_to_2010_inclusive
+        )
+        # Lag1:Lag2 denotes an interation term.
+        # Lag1*Lag2 denotes Lag1 + Lag2 + Lag1:Lag2
+        LR_Model_With_Formula_Direction_Vs_Interaction_Of_Lag1_And_Lag2 <- glm(
+            formula = Direction ~ Lag1:Lag2,
+            data = Weekly_from_1990_to_2008_inclusive,
+            family = binomial
+        )
+        calculate_fraction_of_correct_predictions(
+            model = LR_Model_With_Formula_Direction_Vs_Interaction_Of_Lag1_And_Lag2,
+            data_set = Weekly_from_2009_to_2010_inclusive
+        )
+        ```
+        
+        Since our Logistic Regression and LDA models with formulas $Direction \sim Lag2$ have the same fraction of correct predictions, we assume our LDA models will behave similarly to our Logistic Regression models. We compare LDA models with formulas $Direction \sim Lag1$, $Direction \sim Lag2$, $Direction \sim Lag1 + Lag2$, and $Direction \sim Lag1 \ Lag2$.
+        
+        ```{r}
+        LDA_Model_With_Formula_Direction_Vs_Lag1 <- lda(
+            formula = Direction ~ Lag1,
+            data = Weekly_from_1990_to_2008_inclusive
+        )
+        calculate_fraction_of_correct_predictions(
+            model = LDA_Model_With_Formula_Direction_Vs_Lag1,
+            data_set = Weekly_from_2009_to_2010_inclusive
+        )
+        calculate_fraction_of_correct_predictions(
+            model = LDA_Model_With_Formula_Direction_Vs_Lag2,
+            data_set = Weekly_from_2009_to_2010_inclusive
+        )
+        LDA_Model_With_Formula_Direction_Vs_Lag1_And_Lag2 <- lda(
+            formula = Direction ~ Lag1 + Lag2,
+            data = Weekly_from_1990_to_2008_inclusive
+        )
+        calculate_fraction_of_correct_predictions(
+            model = LDA_Model_With_Formula_Direction_Vs_Lag1_And_Lag2,
+            data_set = Weekly_from_2009_to_2010_inclusive
+        )
+        # Lag1:Lag2 denotes an interation term.
+        # Lag1*Lag2 denotes Lag1 + Lag2 + Lag1:Lag2
+        LDA_Model_With_Formula_Direction_Vs_Interaction_Of_Lag1_And_Lag2 <- lda(
+            formula = Direction ~ Lag1:Lag2,
+            data = Weekly_from_1990_to_2008_inclusive
+        )
+        calculate_fraction_of_correct_predictions(
+            model = LDA_Model_With_Formula_Direction_Vs_Interaction_Of_Lag1_And_Lag2,
+            data_set = Weekly_from_2009_to_2010_inclusive
+        )
+        ```
 
 # 14. In this problem, you will develop a model to predict whether a given car gets high or low gas mileage based on the `Auto` data set.
 
