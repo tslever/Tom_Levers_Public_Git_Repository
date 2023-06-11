@@ -5,7 +5,7 @@
 #' @examples fraction_of_correct_predictions <- calculate_fraction_of_correct_predictions(model = Direction_vs_Lag2, data_set = Weekly_from_2009_to_2010_inclusive)
 
 #' @export
-calculate_performance <- function(type_of_model, formula, training_data, test_data, K = 1) {
+generate_summary_of_performance <- function(type_of_model, formula, training_data, test_data, K = 1) {
  number_of_test_observations <- nrow(test_data)
  if (type_of_model == "LR") {
   LR_model <- glm(
