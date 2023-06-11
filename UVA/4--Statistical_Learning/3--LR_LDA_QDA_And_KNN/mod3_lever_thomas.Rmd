@@ -534,7 +534,17 @@ knitr::opts_chunk$set(
         summary_of_performance$decimal_of_correct_predictions
         ```
         
-        Through our experiments we discovered that our KNN model with predictors $Lag1$ and $Lag2$ and $K = 350$ had highest fraction of correct predictions of $0.644$ based on above confusion matrix. LR and LDA models with formula $Direction \sim Lag2$ had fractions of correct predictions of $0.625$ based on confusion matrices presented in parts (d) and (e).
+        Through our experiments we discovered that our KNN model with predictors $Lag1$ and $Lag2$ and $K = 350$ had highest fraction of correct predictions of $0.644$ based on above confusion matrix. LR and LDA models with formula $Direction \sim Lag2$ had fractions of correct predictions of $0.625$ based on confusion matrices presented in parts (d) and (e). The summary of performance for our $KNN$ classifier is below.
+        
+        ```{r}
+        generate_summary_of_performance(
+            type_of_model = "KNN",
+            formula = Direction ~ Lag1 + Lag2,
+            training_data = Weekly_from_1990_to_2008_inclusive,
+            test_data = Weekly_from_2009_to_2010_inclusive,
+            K = 350
+        )
+        ```
 
 # 14. In this problem, you will develop a model to predict whether a given car gets high or low gas mileage based on the `Auto` data set.
 
