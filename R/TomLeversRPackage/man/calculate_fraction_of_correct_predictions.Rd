@@ -4,7 +4,12 @@
 \alias{calculate_fraction_of_correct_predictions}
 \title{calculate_fraction_of_correct_predictions}
 \usage{
-calculate_fraction_of_correct_predictions(model, data_set)
+calculate_fraction_of_correct_predictions(
+  type_of_model,
+  formula,
+  training_data,
+  test_data
+)
 }
 \arguments{
 \item{model}{The model for which to calculate the fraction of correct predictions given a data set for which to predict}
