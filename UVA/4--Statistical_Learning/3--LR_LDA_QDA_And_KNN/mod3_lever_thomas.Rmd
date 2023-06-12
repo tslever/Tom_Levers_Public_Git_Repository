@@ -560,6 +560,7 @@ knitr::opts_chunk$set(
         mpg01 <- rep(0, number_of_observations)
         condition <- Auto$mpg > median_fuel_efficiency
         mpg01[condition] <- 1
+        mpg01 <- factor(mpg01)
         data_frame <- data.frame(Auto, mpg01)
         ```
 
@@ -644,13 +645,67 @@ knitr::opts_chunk$set(
         ```
 
     (c) Split the data into a training set and a test set.
+    
+        ```{r}
+        set.seed(1)
+        vector_of_random_indices <- sample(1:number_of_observations)
+        shuffled_data_frame <- data_frame[vector_of_random_indices, ]
+        number_of_training_data <- 392 / 14 * 12
+        training_data <- shuffled_data_frame[1:number_of_training_data, ]
+        testing_data <-
+            shuffled_data_frame[(number_of_training_data + 1) : number_of_observations, ]
+        ```
 
     (d) Perform LDA on the training data in order to predict `mpg01` using the variables that seemed most associated with `mpg01` in (b). What is the test error of the model obtained?
+    
+        ```{r}
+        generate_summary_of_performance(
+            type_of_model = "LDA",
+            formula = mpg01 ~ cylinders + displacement + weight,
+            training_data = training_data,
+            test_data = testing_data
+        )
+        ```
+        
+        The test error rate of our LDA model with formula $mpg01 \sim cylinders + displacement + weight$ is $8.9$ percent.
 
     (e) Perform QDA on the training data in order to predict `mpg01` using the variables that seemed most associated with `mpg01` in (b). What is the test error of the model obtained?
+    
+        ```{r}
+        generate_summary_of_performance(
+            type_of_model = "QDA",
+            formula = mpg01 ~ cylinders + displacement + weight,
+            training_data = training_data,
+            test_data = testing_data
+        )
+        ```
+        
+        The test error rate of our QDA model with formula $mpg01 \sim cylinders + displacement + weight$ is $10.7$ percent.
 
     (f) Perform logistic regression on the training data in order to predict `mpg01` using the variables that seemed most associated with `mpg01` in (b). What is the test error of the model obtained?
+    
+        ```{r}
+        generate_summary_of_performance(
+            type_of_model = "LR",
+            formula = mpg01 ~ cylinders + displacement + weight,
+            training_data = training_data,
+            test_data = testing_data
+        )
+        ```
+        
+        The test error rate of our LR model with formula $mpg01 \sim cylinders + displacement + weight$ is $12.5$ percent.
 
     (g) Perform naive Bayes on the training data in order to predict `mpg01` using the variables that seemed most associated with `mpg01` in (b). What is the test error of the model obtained? (skip this exercise)
 
     (h) Perform KNN on the training data, with several values of $K$, in order to predict `mpg01`. Use only the variables that seemed most associated with `mpg01` in (b). What test errors do you obtain? Which value of $K$ seems to perform the best on this data set?
+    
+        ```{r}
+        generate_summary_of_performance(
+            type_of_model = "KNN",
+            formula = mpg01 ~ cylinders + displacement + weight,
+            training_data = training_data,
+            test_data = testing_data
+        )
+        ```
+        
+        The test error rate of our LDA model with formula $mpg01 \sim cylinders + displacement + weight$ is $12.5$ percent.
