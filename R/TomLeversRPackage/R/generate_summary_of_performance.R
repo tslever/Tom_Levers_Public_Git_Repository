@@ -1,8 +1,12 @@
-#' @title calculate_fraction_of_correct_predictions
-#' @description Calculates the fraction of correct predictions for a model given a data set for which to predict
-#' @param model The model for which to calculate the fraction of correct predictions given a data set for which to predict
-#' @return fraction_of_correct_predictions
-#' @examples fraction_of_correct_predictions <- calculate_fraction_of_correct_predictions(model = Direction_vs_Lag2, data_set = Weekly_from_2009_to_2010_inclusive)
+#' @title generate_summary_of_performance
+#' @description Generates a summary of performance for a model given a data set for which to predict
+#' @param type_of_model The type of model. An element in the set {"LR", "LDA", "QDA", "KNN"}.
+#' @param formula The formula for the model
+#' @param training_data A data frame of training data
+#' @param test_data A data frame of test data
+#' @param K The parameter of a K Nearest Neighbors model
+#' @return summary_of_performance The summary of performance
+#' @examples summary_of_performance <- generate_summary_of_performance(type_of_model = "KNN", formula = Direction ~ Lag1 + Lag2, training_data = ISLR2::Weekly_from_1990_to_2008_inclusive, test_data = ISLR2::Weekly_from_2009_to_2010_inclusive, K = 350)
 #' @import class
 
 #' @export
