@@ -22,6 +22,7 @@ optimize_K <- function(formula, training_data, testing_data) {
  vector_of_response_values_for_training <- training_data[, name_of_response]
  vector_of_values_of_K <- integer(0)
  vector_of_decimals_of_correct_predictions <- double(0)
+ vector_of_testing_error_rates <- double(0)
  for (K in seq(from = 1, to = number_of_training_observations, by = floor(number_of_training_observations / 100))) {
   vector_of_predicted_values <- knn(
    train = matrix_of_values_of_predictors_for_training,
@@ -37,8 +38,10 @@ optimize_K <- function(formula, training_data, testing_data) {
   number_of_true_positives <- confusion_matrix[2, 2]
   number_of_correct_predictions <- number_of_true_negatives + number_of_true_positives
   decimal_of_correct_predictions <- number_of_correct_predictions / number_of_testing_observations
+  testing_error_rate <- 1 - decimal_of_correct_predictions
   vector_of_values_of_K <- append(vector_of_values_of_K, K)
   vector_of_decimals_of_correct_predictions <- append(vector_of_decimals_of_correct_predictions, decimal_of_correct_predictions)
+  vector_of_testing_error_rates <- append(vector_of_testing_error_rates, testing_error_rate)
  }
  data_frame_of_values_of_K_and_decimals_of_correct_predictions <- data.frame(K = vector_of_values_of_K, decimal_of_correct_predictions = vector_of_decimals_of_correct_predictions)
  maximum_decimal_of_correct_predictions <- max(vector_of_decimals_of_correct_predictions)
@@ -62,7 +65,28 @@ optimize_K <- function(formula, training_data, testing_data) {
    plot.title = element_text(hjust = 0.5, size = 11),
    axis.text.x = element_text(angle = 0)
   )
- summary_of_optimizing_K <- list(Decimal_Of_Correct_Predictions_Vs_K = Decimal_Of_Correct_Predictions_Vs_K, vector_of_optimal_values_of_K = vector_of_optimal_values_of_K)
+ Error_Rates_Vs_K <- ggplot(
+  data = data_frame_of_values_of_K_and_decimals_of_correct_predictions,
+  mapping = aes(
+   x = K,
+   y = vector_of_testing_error_rates
+  )
+ ) +
+  geom_point(alpha = 0.5) +
+  labs(
+   x = "K",
+   y = "testing error rate",
+   title = "Testing Error Rate Vs. K"
+  ) +
+  theme(
+   plot.title = element_text(hjust = 0.5, size = 11),
+   axis.text.x = element_text(angle = 0)
+  )
+ summary_of_optimizing_K <- list(
+  Decimal_Of_Correct_Predictions_Vs_K = Decimal_Of_Correct_Predictions_Vs_K,
+  Error_Rates_Vs_K = Error_Rates_Vs_K,
+  vector_of_optimal_values_of_K = vector_of_optimal_values_of_K
+ )
  class(summary_of_optimizing_K) <- "summary_of_optimizing_K"
  return(summary_of_optimizing_K)
 }
