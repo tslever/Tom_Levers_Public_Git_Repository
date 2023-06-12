@@ -706,6 +706,11 @@ knitr::opts_chunk$set(
             training_data = training_data,
             test_data = testing_data
         )
+        optimize_K(
+            formula = mpg01 ~ cylinders + displacement + weight,
+            training_data = training_data,
+            testing_data = testing_data
+        )
         ```
         
         The test error rate of our LDA model with formula $mpg01 \sim cylinders + displacement + weight$ is $12.5$ percent.
