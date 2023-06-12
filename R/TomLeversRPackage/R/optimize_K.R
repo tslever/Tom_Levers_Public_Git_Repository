@@ -11,7 +11,6 @@
 
 #' @export
 optimize_K <- function(formula, training_data, testing_data) {
-
  number_of_training_observations <- nrow(training_data)
  number_of_testing_observations <- nrow(testing_data)
  names_of_variables <- all.vars(formula)
@@ -21,45 +20,69 @@ optimize_K <- function(formula, training_data, testing_data) {
  matrix_of_values_of_predictors_for_testing <- as.matrix(x = testing_data[, vector_of_names_of_predictors])
  vector_of_response_values_for_training <- training_data[, name_of_response]
  vector_of_values_of_K <- integer(0)
- vector_of_decimals_of_correct_predictions <- double(0)
+ vector_of_decimals_of_correct_predictions_for_training_data <- double(0)
+ vector_of_decimals_of_correct_predictions_for_testing_data <- double(0)
+ vector_of_training_error_rates <- double(0)
  vector_of_testing_error_rates <- double(0)
  for (K in seq(from = 1, to = number_of_training_observations, by = floor(number_of_training_observations / 100))) {
-  vector_of_predicted_values <- knn(
+  vector_of_predicted_values_for_training_data <- knn(
+   train = matrix_of_values_of_predictors_for_training,
+   test = matrix_of_values_of_predictors_for_training,
+   cl = vector_of_response_values_for_training,
+   k = K
+  )
+  confusion_matrix_for_training_data <- table(vector_of_predicted_values_for_training_data, training_data[, name_of_response])
+  number_of_true_negatives_for_training_data <- confusion_matrix_for_training_data[1, 1]
+  number_of_true_positives_for_training_data <- confusion_matrix_for_training_data[2, 2]
+  number_of_correct_predictions_for_training_data <- number_of_true_negatives_for_training_data + number_of_true_positives_for_training_data
+  decimal_of_correct_predictions_for_training_data <- number_of_correct_predictions_for_training_data / number_of_training_observations
+  training_error_rate <- 1 - decimal_of_correct_predictions_for_training_data
+  vector_of_values_of_K <- append(vector_of_values_of_K, K)
+  vector_of_decimals_of_correct_predictions_for_training_data <- append(vector_of_decimals_of_correct_predictions_for_training_data, decimal_of_correct_predictions_for_training_data)
+  vector_of_training_error_rates <- append(vector_of_training_error_rates, training_error_rate)
+  vector_of_predicted_values_for_testing_data <- knn(
    train = matrix_of_values_of_predictors_for_training,
    test = matrix_of_values_of_predictors_for_testing,
    cl = vector_of_response_values_for_training,
    k = K
   )
-  confusion_matrix <- table(vector_of_predicted_values, testing_data[, name_of_response])
-  map_of_binary_value_to_response_value <- contrasts(x = training_data[, name_of_response])
-  number_of_true_negatives <- confusion_matrix[1, 1]
-  #number_of_false_negatives <- confusion_matrix[1, 2]
-  #number_of_false_positives <- confusion_matrix[2, 1]
-  number_of_true_positives <- confusion_matrix[2, 2]
-  number_of_correct_predictions <- number_of_true_negatives + number_of_true_positives
-  decimal_of_correct_predictions <- number_of_correct_predictions / number_of_testing_observations
-  testing_error_rate <- 1 - decimal_of_correct_predictions
-  vector_of_values_of_K <- append(vector_of_values_of_K, K)
-  vector_of_decimals_of_correct_predictions <- append(vector_of_decimals_of_correct_predictions, decimal_of_correct_predictions)
+  confusion_matrix_for_testing_data <- table(vector_of_predicted_values_for_testing_data, testing_data[, name_of_response])
+  number_of_true_negatives_for_testing_data <- confusion_matrix_for_testing_data[1, 1]
+  number_of_true_positives_for_testing_data <- confusion_matrix_for_testing_data[2, 2]
+  number_of_correct_predictions_for_testing_data <- number_of_true_negatives_for_testing_data + number_of_true_positives_for_testing_data
+  decimal_of_correct_predictions_for_testing_data <- number_of_correct_predictions_for_testing_data / number_of_testing_observations
+  testing_error_rate <- 1 - decimal_of_correct_predictions_for_testing_data
+  vector_of_decimals_of_correct_predictions_for_testing_data <- append(vector_of_decimals_of_correct_predictions_for_testing_data, decimal_of_correct_predictions_for_testing_data)
   vector_of_testing_error_rates <- append(vector_of_testing_error_rates, testing_error_rate)
  }
- data_frame_of_values_of_K_and_decimals_of_correct_predictions <- data.frame(K = vector_of_values_of_K, decimal_of_correct_predictions = vector_of_decimals_of_correct_predictions)
- maximum_decimal_of_correct_predictions <- max(vector_of_decimals_of_correct_predictions)
- are_the_maximum_decimals_of_correct_predictions <- vector_of_decimals_of_correct_predictions == maximum_decimal_of_correct_predictions
- vector_of_indices_of_maximum_decimals_of_correct_predictions <- which(are_the_maximum_decimals_of_correct_predictions)
- vector_of_optimal_values_of_K <- vector_of_values_of_K[vector_of_indices_of_maximum_decimals_of_correct_predictions]
- Decimal_Of_Correct_Predictions_Vs_K <- ggplot(
+ data_frame_of_values_of_K_and_decimals_of_correct_predictions <- data.frame(K = vector_of_values_of_K, decimal_of_correct_predictions_for_training_data = vector_of_decimals_of_correct_predictions_for_training_data, decimal_of_correct_predictions_for_testing_data = vector_of_decimals_of_correct_predictions_for_testing_data)
+ maximum_decimal_of_correct_predictions_for_testing_data <- max(vector_of_decimals_of_correct_predictions_for_testing_data)
+ are_the_maximum_decimals_of_correct_predictions_for_testing_data <- vector_of_decimals_of_correct_predictions_for_testing_data == maximum_decimal_of_correct_predictions_for_testing_data
+ vector_of_indices_of_maximum_decimals_of_correct_predictions_for_testing_data <- which(are_the_maximum_decimals_of_correct_predictions_for_testing_data)
+ vector_of_optimal_values_of_K_for_testing_data <- vector_of_values_of_K[vector_of_indices_of_maximum_decimals_of_correct_predictions_for_testing_data]
+ index <- -1
+ training_decimal <- -1.0
+ for (i in vector_of_indices_of_maximum_decimals_of_correct_predictions_for_testing_data) {
+  corresponding_decimal_of_correct_predictions_for_training_data <- vector_of_decimals_of_correct_predictions_for_training_data[i]
+  if (corresponding_decimal_of_correct_predictions_for_training_data == training_decimal) {
+   stop("optimize_K yet cannot optimize K when two KNN models have the maximum decimals of correct predictions for testing data and the same decimals of correct predictions for training data.")
+  }
+  if (corresponding_decimal_of_correct_predictions_for_training_data > training_decimal) {
+   training_decimal <- corresponding_decimal_of_correct_predictions_for_training_data
+   index <- i
+  }
+ }
+ optimal_K <- vector_of_values_of_K[index]
+ Decimals_Of_Correct_Predictions_Vs_K <- ggplot(
   data = data_frame_of_values_of_K_and_decimals_of_correct_predictions,
-  mapping = aes(
-   x = K,
-   y = decimal_of_correct_predictions
-  )
+  mapping = aes(x = K)
  ) +
-  geom_point(alpha = 0.5) +
+  geom_point(aes(y = vector_of_decimals_of_correct_predictions_for_training_data, color = "Training"), alpha = 0.5) +
+  geom_point(aes(y = vector_of_decimals_of_correct_predictions_for_testing_data, color = "Testing"), alpha = 0.5) +
   labs(
    x = "K",
-   y = "decimal of correct predictions",
-   title = "Decimal Of Correct Predictions Vs. K"
+   y = "decimals of correct predictions",
+   title = "Decimals Of Correct Predictions Vs. K"
   ) +
   theme(
    plot.title = element_text(hjust = 0.5, size = 11),
@@ -67,25 +90,23 @@ optimize_K <- function(formula, training_data, testing_data) {
   )
  Error_Rates_Vs_K <- ggplot(
   data = data_frame_of_values_of_K_and_decimals_of_correct_predictions,
-  mapping = aes(
-   x = K,
-   y = vector_of_testing_error_rates
-  )
+  mapping = aes(x = K)
  ) +
-  geom_point(alpha = 0.5) +
+  geom_point(aes(y = vector_of_training_error_rates, color = "Training"), alpha = 0.5) +
+  geom_point(aes(y = vector_of_testing_error_rates, color = "Testing"), alpha = 0.5) +
   labs(
    x = "K",
-   y = "testing error rate",
-   title = "Testing Error Rate Vs. K"
+   y = "error rates",
+   title = "Error Rates Vs. K"
   ) +
   theme(
    plot.title = element_text(hjust = 0.5, size = 11),
    axis.text.x = element_text(angle = 0)
   )
  summary_of_optimizing_K <- list(
-  Decimal_Of_Correct_Predictions_Vs_K = Decimal_Of_Correct_Predictions_Vs_K,
+  Decimals_Of_Correct_Predictions_Vs_K = Decimals_Of_Correct_Predictions_Vs_K,
   Error_Rates_Vs_K = Error_Rates_Vs_K,
-  vector_of_optimal_values_of_K = vector_of_optimal_values_of_K
+  optimal_K = optimal_K
  )
  class(summary_of_optimizing_K) <- "summary_of_optimizing_K"
  return(summary_of_optimizing_K)
