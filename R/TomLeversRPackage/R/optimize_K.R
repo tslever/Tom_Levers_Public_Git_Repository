@@ -24,7 +24,12 @@ optimize_K <- function(formula, training_data, testing_data) {
  vector_of_decimals_of_correct_predictions_for_testing_data <- double(0)
  vector_of_training_error_rates <- double(0)
  vector_of_testing_error_rates <- double(0)
- for (K in seq(from = 1, to = number_of_training_observations, by = floor(number_of_training_observations / 100))) {
+ increment = floor(number_of_training_observations / 100)
+ if (increment %% 2 == 1) {
+  increment <- increment - 1
+ }
+ #for (K in seq(from = 1, to = 100, by = 10)) {
+ for (K in seq(from = 1, to = number_of_training_observations / 2, by = increment)) {
   vector_of_predicted_values_for_training_data <- knn(
    train = matrix_of_values_of_predictors_for_training,
    test = matrix_of_values_of_predictors_for_training,
@@ -56,23 +61,24 @@ optimize_K <- function(formula, training_data, testing_data) {
   vector_of_testing_error_rates <- append(vector_of_testing_error_rates, testing_error_rate)
  }
  data_frame_of_values_of_K_and_decimals_of_correct_predictions <- data.frame(K = vector_of_values_of_K, decimal_of_correct_predictions_for_training_data = vector_of_decimals_of_correct_predictions_for_training_data, decimal_of_correct_predictions_for_testing_data = vector_of_decimals_of_correct_predictions_for_testing_data)
+ minimum_testing_error_rate <- min(vector_of_testing_error_rates)
  maximum_decimal_of_correct_predictions_for_testing_data <- max(vector_of_decimals_of_correct_predictions_for_testing_data)
  are_the_maximum_decimals_of_correct_predictions_for_testing_data <- vector_of_decimals_of_correct_predictions_for_testing_data == maximum_decimal_of_correct_predictions_for_testing_data
  vector_of_indices_of_maximum_decimals_of_correct_predictions_for_testing_data <- which(are_the_maximum_decimals_of_correct_predictions_for_testing_data)
  vector_of_optimal_values_of_K_for_testing_data <- vector_of_values_of_K[vector_of_indices_of_maximum_decimals_of_correct_predictions_for_testing_data]
- index <- -1
+ indices <- integer(0)
  training_decimal <- -1.0
  for (i in vector_of_indices_of_maximum_decimals_of_correct_predictions_for_testing_data) {
   corresponding_decimal_of_correct_predictions_for_training_data <- vector_of_decimals_of_correct_predictions_for_training_data[i]
-  if (corresponding_decimal_of_correct_predictions_for_training_data == training_decimal) {
-   stop("optimize_K yet cannot optimize K when two KNN models have the maximum decimals of correct predictions for testing data and the same decimals of correct predictions for training data.")
-  }
-  if (corresponding_decimal_of_correct_predictions_for_training_data > training_decimal) {
+  #if (corresponding_decimal_of_correct_predictions_for_training_data == training_decimal) {
+   #stop("optimize_K yet cannot optimize K when two KNN models have the maximum decimal of correct predictions for testing data and the same decimals of correct predictions for training data.")
+  #}
+  if (corresponding_decimal_of_correct_predictions_for_training_data >= training_decimal) {
    training_decimal <- corresponding_decimal_of_correct_predictions_for_training_data
-   index <- i
+   indices <- append(indices, i)
   }
  }
- optimal_K <- vector_of_values_of_K[index]
+ optimal_K <- vector_of_values_of_K[indices]
  Decimals_Of_Correct_Predictions_Vs_K <- ggplot(
   data = data_frame_of_values_of_K_and_decimals_of_correct_predictions,
   mapping = aes(x = K)
@@ -106,6 +112,8 @@ optimize_K <- function(formula, training_data, testing_data) {
  summary_of_optimizing_K <- list(
   Decimals_Of_Correct_Predictions_Vs_K = Decimals_Of_Correct_Predictions_Vs_K,
   Error_Rates_Vs_K = Error_Rates_Vs_K,
+  minimum_testing_error_rate = minimum_testing_error_rate,
+  maximum_decimal_of_correct_predictions_for_testing_data = maximum_decimal_of_correct_predictions_for_testing_data,
   optimal_K = optimal_K
  )
  class(summary_of_optimizing_K) <- "summary_of_optimizing_K"
