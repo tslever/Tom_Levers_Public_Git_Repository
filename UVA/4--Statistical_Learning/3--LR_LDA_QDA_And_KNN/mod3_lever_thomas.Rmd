@@ -26,6 +26,7 @@ knitr::opts_chunk$set(
 
 **DS 6030 | Spring 2023 | University of Virginia **
 
+<!--
 5.  We now examine the differences between LDA and QDA.
 
     (a) If the Bayes decision boundary is linear, do we expect LDA or QDA to perform better on the training set? On the test set?
@@ -546,21 +547,110 @@ knitr::opts_chunk$set(
         )
         ```
 
-# 14. In this problem, you will develop a model to predict whether a given car gets high or low gas mileage based on the `Auto` data set.
+-->
 
+14. In this problem, you will develop a model to predict whether a given car gets high or low gas mileage based on the `Auto` data set.
 
-(a) Create a binary variable, `mpg01`, that contains a 1 if `mpg` contains a value above its median, and a 0 if `mpg` contains a value below its median. You can compute the median using the `median()` function. Note you may find it helpful to use the `data.frame()` function to create a single data set containing both `mpg01` and the other `Auto` variables.
+    (a) Create a binary variable, `mpg01`, that contains a 1 if `mpg` contains a value above its median, and a 0 if `mpg` contains a value below its median. You can compute the median using the `median()` function. Note you may find it helpful to use the `data.frame()` function to create a single data set containing both `mpg01` and the other `Auto` variables.
+    
+        ```{r}
+        head(Auto, n = 3)
+        median_fuel_efficiency <- median(Auto$mpg)
+        number_of_observations <- nrow(Auto)
+        mpg01 <- rep(0, number_of_observations)
+        condition <- Auto$mpg > median_fuel_efficiency
+        mpg01[condition] <- 1
+        data_frame <- data.frame(Auto, mpg01)
+        ```
 
-(b) Explore the data graphically in order to investigate the association between `mpg01` and the other features. Which of the other features seem most likely to be useful in predicting `mpg01`? Scatterplots and boxplots may be useful tools to answer this question. Describe your findings.
+    (b) Explore the data graphically in order to investigate the association between `mpg01` and the other features. Which of the other features seem most likely to be useful in predicting `mpg01`? Scatterplots and boxplots may be useful tools to answer this question. Describe your findings.
+    
+        Response $mpg01$ has a high positive correlation with $mpg$, high negative correlations with $cylinders$, $displacement$, and $weight$, a moderate positive correlation with $origin$, a moderate negative correlation with $horsepower$, and low positive correlations with $acceleration$ and $year$. $mpg$, $cylinders$, $displacement$, and $weight$ seem most likely to be useful in predicting $mpg01$.
+        
+        According to scatterplots, boxplots, and a barplot, obviously, all low fuel efficiencies correspond to $mpg01 = 0$ and all high fuel efficiencies correspond to $mpg01 = 1$. All non-outlying high fuel efficiencies correspond to the first quarter of number of cylinders and to four cylinders. High displacements correspond to low fuel efficiency; all non-outlying high fuel efficiencies correspond to the first quarter of displacements. High horsepowers correspond to low fuel efficiency; all non-outlying high fuel efficiencies correspond to the first half of horsepowers. High weights correspond to low fuel efficiency; all non-outlying high fuel efficiencies correspond to the first half of weights. Low accelerations correspond to low fuel efficiency; the first quartile of accelerations corresponding to high fuel efficiencies is greater than the median acceleration corresponding to low fuel efficiencies. The first quartile of years corresponding to high fuel efficiencies is higher than the median year corresponding to low fuel efficiencies; fuel efficiency increases with year. A supermajority of American automobiles have low fuel efficiencies. A supermajority of European automobiles have high fuel efficiencies. A supermajority of Japanese automobiles have high fuel efficiencies. A supermajority of automobiles with low fuel efficiency are American. Automobiles with high fuel efficiency are evenly distributed across American, European, and Japanese origin. There are about 3 times as many American automobiles as European automobiles and about 3 times as many American automobiles as Japanese automobiles.
+        
+        ```{r}
+        library(TomLeversRPackage)
+        index_of_column_name <- get_index_of_column_of_data_frame(data_frame, "name")
+        data_frame_of_columns_except_name <- data_frame[, -index_of_column_name]
+        correlation_matrix <- cor(data_frame_of_columns_except_name)
+        analyze_correlation_matrix(correlation_matrix)
+        plot(x = data_frame$mpg, y = data_frame$mpg01)
+        boxplot(data_frame$mpg ~ data_frame$mpg01, data = data_frame)
+        plot(x = data_frame$cylinders, y = data_frame$mpg01)
+        boxplot(data_frame$cylinders ~ data_frame$mpg01, data = data_frame)
+        plot(x = data_frame$displacement, y = data_frame$mpg01)
+        boxplot(data_frame$displacement ~ data_frame$mpg01, data = data_frame)
+        plot(x = data_frame$horsepower, y = data_frame$mpg01)
+        boxplot(data_frame$horsepower ~ data_frame$mpg01, data = data_frame)
+        plot(x = data_frame$weight, y = data_frame$mpg01)
+        boxplot(data_frame$weight ~ data_frame$mpg01, data = data_frame)
+        plot(x = data_frame$acceleration, y = data_frame$mpg01)
+        boxplot(data_frame$acceleration ~ data_frame$mpg01, data = data_frame)
+        plot(x = data_frame$year, y = data_frame$mpg01)
+        boxplot(data_frame$year ~ data_frame$mpg01, data = data_frame)
+        plot(x = data_frame$origin, y = data_frame$mpg01)
+        boxplot(data_frame$origin ~ data_frame$mpg01, data = data_frame)
+        table_of_origins_and_indicators_of_fuel_efficiency <- table(
+            data_frame$origin,
+            data_frame$mpg01
+        )
+        table_of_proportions_split_by_rows <- prop.table(
+            x = table_of_origins_and_indicators_of_fuel_efficiency,
+            margin = 1
+        )
+        table_of_percents <- table_of_proportions_split_by_rows * 100
+        table_of_rounded_percents <- round(table_of_percents, 2)
+        table_of_rounded_percents
+        table_of_proportions_split_by_rows <- prop.table(
+            x = table_of_origins_and_indicators_of_fuel_efficiency,
+            margin = 2
+        )
+        table_of_percents <- table_of_proportions_split_by_rows * 100
+        table_of_rounded_percents <- round(table_of_percents, 2)
+        table_of_rounded_percents
+        vector_of_English_indicators_of_origin <-
+            rep("American", number_of_observations)
+        condition <- data_frame$origin == 2
+        vector_of_English_indicators_of_origin[condition] <- "European"
+        condition <- data_frame$origin == 3
+        vector_of_English_indicators_of_origin[condition] <- "Japanese"
+        vector_of_English_indicators_of_fuel_efficiency <-
+            rep("low", number_of_observations)
+        condition <- data_frame$mpg01 == 1
+        vector_of_English_indicators_of_fuel_efficiency[condition] <- "high"
+        library(ggplot2)
+        ggplot(
+            data = data_frame,
+            mapping = aes(
+                x = vector_of_English_indicators_of_origin,
+                fill = vector_of_English_indicators_of_fuel_efficiency
+            )
+        ) +
+            geom_bar(position = "stack") +
+            labs(
+                x = "origin",
+                y = "count",
+                title = "Fuel Efficiency By Origin"
+            ) +
+             theme(
+                 plot.title = element_text(hjust = 0.5)
+             ) +
+             guides(
+                 fill = guide_legend(
+                     title = "Fuel Efficiency"
+                 )
+             )
+        ```
 
-(c) Split the data into a training set and a test set.
+    (c) Split the data into a training set and a test set.
 
-(d) Perform LDA on the training data in order to predict `mpg01` using the variables that seemed most associated with `mpg01` in (b). What is the test error of the model obtained?
+    (d) Perform LDA on the training data in order to predict `mpg01` using the variables that seemed most associated with `mpg01` in (b). What is the test error of the model obtained?
 
-(e) Perform QDA on the training data in order to predict `mpg01` using the variables that seemed most associated with `mpg01` in (b). What is the test error of the model obtained?
+    (e) Perform QDA on the training data in order to predict `mpg01` using the variables that seemed most associated with `mpg01` in (b). What is the test error of the model obtained?
 
-(f) Perform logistic regression on the training data in order to predict `mpg01` using the variables that seemed most associated with `mpg01` in (b). What is the test error of the model obtained?
+    (f) Perform logistic regression on the training data in order to predict `mpg01` using the variables that seemed most associated with `mpg01` in (b). What is the test error of the model obtained?
 
-(g) Perform naive Bayes on the training data in order to predict `mpg01` using the variables that seemed most associated with `mpg01` in (b). What is the test error of the model obtained? (skip this exercise)
+    (g) Perform naive Bayes on the training data in order to predict `mpg01` using the variables that seemed most associated with `mpg01` in (b). What is the test error of the model obtained? (skip this exercise)
 
-(h) Perform KNN on the training data, with several values of $K$, in order to predict `mpg01`. Use only the variables that seemed most associated with `mpg01` in (b). What test errors do you obtain? Which value of $K$ seems to perform the best on this data set?
+    (h) Perform KNN on the training data, with several values of $K$, in order to predict `mpg01`. Use only the variables that seemed most associated with `mpg01` in (b). What test errors do you obtain? Which value of $K$ seems to perform the best on this data set?
