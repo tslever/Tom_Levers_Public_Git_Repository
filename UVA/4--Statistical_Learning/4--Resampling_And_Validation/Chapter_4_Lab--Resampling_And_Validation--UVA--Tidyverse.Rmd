@@ -1,0 +1,215 @@
+# Chaper 5 Lab: Cross-Validation and the Bootstrap
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(error=TRUE,        # Keep compiling upon error
+                      collapse=FALSE,    # collapse by default
+                      echo=TRUE,         # echo code by default
+                      comment = "#>",    # change comment character
+                      fig.width = 5.5,     # set figure width
+                      fig.align = "center",# set figure position
+                      out.width = "80%", # set width of displayed images
+                      warning=FALSE,     # do not show R warnings
+                      message=FALSE)     # do not show R messages
+```
+
+## The Validation Set Approach
+
+```{r auto}
+library(ISLR)
+set.seed(1)
+train <- sample(392, 196)
+lm.fit <- lm(mpg~horsepower, data=Auto, subset=train)
+# attach(Auto)
+```
+
+```{r mse}
+#mean((mpg-predict(lm.fit,Auto))[-train]^2)
+library(modelr)
+lm.fit %>% modelr::mse(Auto[-train,])
+
+lm.fit2 <- lm(mpg~poly(horsepower,2),data=Auto,subset=train)
+#mean((mpg-predict(lm.fit2,Auto))[-train]^2)
+lm.fit2 %>% modelr::mse(Auto[-train,])
+
+lm.fit3 <- lm(mpg~poly(horsepower,3),data=Auto,subset=train)
+#mean((mpg-predict(lm.fit3,Auto))[-train]^2)
+lm.fit3 %>% modelr::mse(Auto[-train,])
+```
+
+```{r mse_respample}
+set.seed(2)
+train <- sample(392,196)
+lm.fit <- lm(mpg~horsepower, data=Auto, subset=train)
+#mean((mpg-predict(lm.fit,Auto))[-train]^2)
+lm.fit %>% modelr::mse(Auto[-train,])
+
+lm.fit2=lm(mpg~poly(horsepower,2),data=Auto,subset=train)
+#mean((mpg-predict(lm.fit2,Auto))[-train]^2)
+lm.fit2 %>% modelr::mse(Auto[-train,])
+
+lm.fit3=lm(mpg~poly(horsepower,3),data=Auto,subset=train)
+#mean((mpg-predict(lm.fit3,Auto))[-train]^2)
+lm.fit3 %>% modelr::mse(Auto[-train,])
+```
+
+## Leave-One-Out Cross-Validation
+
+`install.packages('rsample')`
+
+```{r loo_cv}
+glm.fit <- glm(mpg~horsepower, data=Auto)
+#coef(glm.fit)
+library(broom)
+glm.fit %>% tidy()
+
+lm.fit <- lm(mpg~horsepower, data=Auto)
+#coef(lm.fit)
+glm.fit %>% tidy()
+
+#library(boot)
+library(rsample)
+library(purrr)
+#glm.fit=glm(mpg~horsepower,data=Auto)
+#cv.err=cv.glm(Auto, glm.fit)
+#https://rsample.tidymodels.org/reference/loo_cv.html
+#https://rsample.tidymodels.org/articles/Working_with_rsets.html
+p='1'
+mod_form <- paste0("mpg~poly(horsepower,",p,")")
+holdout_results <- function(splits, ...) {
+  mod <- glm(..., data=analysis(splits))
+  holdout <- assessment(splits)
+  test_MSE <- mod %>% modelr::mse(holdout)
+  test_MSE
+}
+#cv.err$delta
+rsample::loo_cv(Auto)$splits %>% purrr::map(holdout_results, mod_form) %>%
+  unlist() %>% mean()
+  
+#cv.error=rep(0,5)
+#for (i in 1:5){
+# glm.fit=glm(mpg~poly(horsepower,i),data=Auto)
+# cv.error[i]=cv.glm(Auto,glm.fit)$delta[1]
+# }
+#cv.error
+average_loo <- function(p, data) {
+  mod_form <- paste0("mpg~poly(horsepower,",p,")")
+  average_loo <- rsample::loo_cv(data)$splits %>%  
+    purrr::map(holdout_results, mod_form) %>% unlist() %>% mean()
+  average_loo
+}
+purrr::set_names(as.character(1:5)) %>% purrr::map(average_loo, Auto)
+```
+
+## k-Fold Cross-Validation
+
+`install.packages('caret')`
+
+```{r kFolds}
+set.seed(17)
+#cv.error.10=rep(0,10)
+#for (i in 1:10){
+# glm.fit=glm(mpg~poly(horsepower,i),data=Auto)
+# cv.error.10[i]=cv.glm(Auto,glm.fit,K=10)$delta[1]
+# }
+#cv.error.10
+#https://stackoverflow.com/questions/33470373/applying-k-fold-cross-validation-model-using-caret-package
+#https://stackoverflow.com/questions/41742777/using-poly-function-within-training-model-in-caret-package-resulting-in-datafra
+kfolds_lm.fit <- function(p, data, kfolds) {
+  mod_form <- paste0("mpg~poly(horsepower,",p,")")        
+  caret::train(as.formula(mod_form), data=data, trControl=kfolds, method="lm")
+}
+train_control <- caret::trainControl(method="cv", number=10, 
+                                     savePredictions=TRUE)
+models <- purrr::set_names(as.character(1:10)) %>% 
+  purrr::map(kfolds_lm.fit, Auto, train_control)
+models
+purrr::map(models, (function(x) x$resample))
+```
+
+## The Bootstrap
+
+```{r bootstrap}
+alpha.fn <- function(data,index){
+  X=data$X[index]
+  Y=data$Y[index]
+  return((var(Y)-cov(X,Y))/(var(X)+var(Y)-2*cov(X,Y)))
+}
+alpha.fn(Portfolio,1:100)
+set.seed(1)
+alpha.fn(Portfolio,sample(100,100,replace=T))
+
+#boot(Portfolio,alpha.fn,R=1000)
+#https://www.tidymodels.org/learn/statistics/bootstrap/
+alpha.fn.rsample <- function(x){
+  alpha.fn(analysis(x))        
+}
+bs <- bootstraps(Portfolio, times=1000)$splits %>% purrr::map(alpha.fn.rsample)
+bs_mean <- bs %>% unlist() %>% mean()
+bs_std <- bs %>% unlist() %>% sd()
+library(tibble)
+Bootstrap_Statistics <- tibble(original=alpha.fn(Portfolio),
+                               bias=bs_mean-alpha.fn(Portfolio),
+                               standard_error=bs_std)
+Bootstrap_Statistics
+```
+
+
+
+## Estimating the Accuracy of a Linear Regression Model
+
+```{r bs2}
+#boot.fn=function(data,index)
+# return(coef(lm(mpg~horsepower,data=data,subset=index)))
+#boot.fn(Auto,1:392)
+set.seed(1)
+#boot.fn(Auto,sample(392,392,replace=T))
+#boot.fn(Auto,sample(392,392,replace=T))
+fit.lm <- function(data){
+  lm(mpg~horsepower, data=analysis(data)) %>% tidy()
+}
+bootstraps(Auto, times=2)$splits %>% purrr::map(fit.lm)
+
+#boot(Auto,boot.fn,1000)
+fit.lm.coefs <- function(x){
+  fit.lm(x) %>% dplyr::select(term,estimate)
+}
+bss <- bootstraps(Auto, times=1000)
+bs <- bss$splits %>% purrr::map(fit.lm.coefs)
+library(tidyr)
+bs <- tibble(i=bss$id, bs) %>% tidyr::unnest_wider(bs) %>% 
+        tidyr::unnest(cols=c(term, estimate)) %>%
+        tidyr::pivot_wider(names_from=term, values_from=estimate)
+            
+bs %>% dplyr::select(2:3) %>% colMeans()
+bs %>% dplyr::select(2:3) %>% sapply(sd)
+
+#summary(lm(mpg~horsepower,data=Auto))$coef
+lm(mpg~horsepower, data=Auto) %>% tidy()
+```
+
+```{r bs3}
+#boot.fn=function(data,index)
+# coefficients(lm(mpg~horsepower+I(horsepower^2),data=data,subset=index))
+fit.lm2 <- function(data){
+  lm(mpg~horsepower+I(horsepower^2), data=analysis(data)) %>% tidy()
+}
+fit.lm2.coefs <- function(x){
+  fit.lm2(x) %>% dplyr::select(term,estimate)
+}
+set.seed(1)
+#boot(Auto,boot.fn,1000)
+bss <- bootstraps(Auto, times=1000)
+bs <- bss$splits %>% purrr::map(fit.lm2.coefs)
+bs <- tibble(i=bss$id, bs) %>% unnest_wider(bs) %>% 
+        unnest(cols=c(term, estimate)) %>%
+        pivot_wider(names_from=term, values_from=estimate)
+
+bs %>% dplyr::select(2:4) %>% colMeans()
+bs %>% dplyr::select(2:4) %>% sapply(sd)
+
+#summary(lm(mpg~horsepower+I(horsepower^2),data=Auto))$coef
+lm(mpg~horsepower+I(horsepower^2), data=Auto) %>% tidy()
+```
+
+  
+  
