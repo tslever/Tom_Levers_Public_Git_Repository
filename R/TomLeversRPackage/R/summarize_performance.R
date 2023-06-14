@@ -1,4 +1,4 @@
-#' @title generate_summary_of_performance
+#' @title summarize_performance
 #' @description Generates a summary of performance for a model given a data set for which to predict
 #' @param type_of_model The type of model. An element in the set {"LR", "LDA", "QDA", "KNN"}.
 #' @param formula The formula for the model
@@ -10,7 +10,7 @@
 #' @import class
 
 #' @export
-generate_summary_of_performance <- function(type_of_model, formula, training_data, test_data, K = 1) {
+summarize_performance <- function(type_of_model, formula, training_data, test_data, K = 1) {
  number_of_test_observations <- nrow(test_data)
  if (type_of_model == "LR") {
   LR_model <- glm(
