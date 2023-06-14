@@ -632,13 +632,10 @@ knitr::opts_chunk$set(
     (c) Split the data into a training set and a test set.
     
         ```{r}
-        set.seed(1)
-        vector_of_random_indices <- sample(1:number_of_observations)
-        shuffled_data_frame <- data_frame[vector_of_random_indices, ]
-        number_of_training_data <- 392 / 14 * 12
-        training_data <- shuffled_data_frame[1:number_of_training_data, ]
-        testing_data <-
-            shuffled_data_frame[(number_of_training_data + 1) : number_of_observations, ]
+        proportion_of_training_data <- 12 / 14
+        split_data <- split_data_set_into_training_and_testing_data(data_frame, proportion_of_training_data)
+        training_data <- split_data$training_data
+        testing_data <- split_data$testing_data
         ```
 
     (d) Perform LDA on the training data in order to predict `mpg01` using the variables that seemed most associated with `mpg01` in (b). What is the test error of the model obtained?
