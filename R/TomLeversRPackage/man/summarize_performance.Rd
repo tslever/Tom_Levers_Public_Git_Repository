@@ -7,7 +7,7 @@
 summarize_performance(type_of_model, formula, training_data, test_data, K = 1)
 }
 \arguments{
-\item{type_of_model}{The type of model. An element in the set {"LR", "LDA", "QDA", "KNN"}.}
+\item{type_of_model}{The type of model. An element in the set {"Logistic Regression", "LDA", "QDA", "KNN"}.}
 
 \item{formula}{The formula for the model}
 

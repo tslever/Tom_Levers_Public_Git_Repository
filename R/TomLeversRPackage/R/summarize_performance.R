@@ -1,6 +1,6 @@
 #' @title summarize_performance
 #' @description Generates a summary of performance for a model given a data set for which to predict
-#' @param type_of_model The type of model. An element in the set {"LR", "LDA", "QDA", "KNN"}.
+#' @param type_of_model The type of model. An element in the set {"Logistic Regression", "LDA", "QDA", "KNN"}.
 #' @param formula The formula for the model
 #' @param training_data A data frame of training data
 #' @param test_data A data frame of test data
@@ -12,7 +12,7 @@
 #' @export
 summarize_performance <- function(type_of_model, formula, training_data, test_data, K = 1) {
  number_of_test_observations <- nrow(test_data)
- if (type_of_model == "LR") {
+ if (type_of_model == "Logistic Regression") {
   LR_model <- glm(
    formula = formula,
    data = training_data,
@@ -61,7 +61,8 @@ summarize_performance <- function(type_of_model, formula, training_data, test_da
    k = K
   )
  } else {
-  stop("A fraction of correct predictions may not be yet calculated for models of the class of parameter model.")
+  error_message <- paste("A fraction of correct predictions may not be yet calculated for models of type ", type_of_model, sep = "")
+  stop(error_message)
  }
  confusion_matrix <- table(
   vector_of_predicted_response_values,

@@ -1,13 +1,12 @@
 #' @title calculate_LOOCV_error_rate
 #' @description Calculates LOOCV error rate
-#' @param type_of_model The type of model. An element in the set {"LR"}.
+#' @param type_of_model The type of model. An element in the set {"Logistic Regression"}.
 #' @return LOOCV_error_rate The error rate of Leave One Out Cross Validation
 #' @examples LOOCV_error_rate <- calculate_LOOCV_error_rate(type_of_model = "LR", formula = Direction ~ Lag1 + Lag2, data_frame = ISLR2::Weekly)
-#' @import class
 
 #' @export
 calculate_LOOCV_error_rate <- function(type_of_model, formula, data_frame) {
- if (type_of_model == "LR") {
+ if (type_of_model == "Logistic Regression") {
   number_of_observations <- nrow(data_frame)
   vector_of_indicators_of_error <- integer(0)
   for (i in 1:number_of_observations) {

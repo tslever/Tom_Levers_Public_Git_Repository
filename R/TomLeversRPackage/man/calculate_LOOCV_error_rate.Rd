@@ -7,7 +7,7 @@
 calculate_LOOCV_error_rate(type_of_model, formula, data_frame)
 }
 \arguments{
-\item{type_of_model}{The type of model. An element in the set {"LR"}.}
+\item{type_of_model}{The type of model. An element in the set {"Logistic Regression"}.}
 }
 \value{
 LOOCV_error_rate The error rate of Leave One Out Cross Validation
