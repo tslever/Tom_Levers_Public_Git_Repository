@@ -23,17 +23,21 @@ summarize_performance <- function(type_of_model, formula, training_data, test_da
    newdata = test_data,
    type = "response"
   )
-  vector_of_predicted_directions <- rep("Down", number_of_test_observations)
-  condition <- vector_of_predicted_probabilities > 0.5
-  vector_of_predicted_directions[condition] = "Up"
   name_of_response <- names(LR_model$model)[1]
+  factor_of_response_values <- test_data[, name_of_response]
+  vector_of_levels <- attr(factor_of_response_values, "levels")
+  lower_level <- vector_of_levels[1]
+  upper_level <- vector_of_levels[2]
+  vector_of_predicted_response_values <- rep(lower_level, number_of_test_observations)
+  condition <- vector_of_predicted_probabilities > 0.5
+  vector_of_predicted_response_values[condition] <- upper_level
  } else if (type_of_model == "LDA") {
   LDA_model <- lda(
    formula = formula,
    data = training_data
   )
   prediction <- predict(LDA_model, newdata = test_data)
-  vector_of_predicted_directions <- prediction$class
+  vector_of_predicted_response_values <- prediction$class
   name_of_response <- names(attr(LDA_model$terms, "dataClasses"))[1]
  } else if (type_of_model == "QDA") {
   QDA_model <- qda(
@@ -41,7 +45,7 @@ summarize_performance <- function(type_of_model, formula, training_data, test_da
    data = training_data
   )
   prediction <- predict(QDA_model, newdata = test_data)
-  vector_of_predicted_directions <- prediction$class
+  vector_of_predicted_response_values <- prediction$class
   name_of_response <- names(attr(QDA_model$terms, "dataClasses"))[1]
  } else if (type_of_model == "KNN") {
   names_of_variables <- all.vars(formula)
@@ -50,7 +54,7 @@ summarize_performance <- function(type_of_model, formula, training_data, test_da
   matrix_of_values_of_predictors_for_training <- as.matrix(x = training_data[, vector_of_names_of_predictors])
   matrix_of_values_of_predictors_for_testing <- as.matrix(x = test_data[, vector_of_names_of_predictors])
   vector_of_response_values_for_training <- training_data[, name_of_response]
-  vector_of_predicted_directions <- knn(
+  vector_of_predicted_response_values <- knn(
    train = matrix_of_values_of_predictors_for_training,
    test = matrix_of_values_of_predictors_for_testing,
    cl = vector_of_response_values_for_training,
@@ -60,7 +64,7 @@ summarize_performance <- function(type_of_model, formula, training_data, test_da
   stop("A fraction of correct predictions may not be yet calculated for models of the class of parameter model.")
  }
  confusion_matrix <- table(
-  vector_of_predicted_directions,
+  vector_of_predicted_response_values,
   test_data[, name_of_response]
  )
  map_of_binary_value_to_response_value <- contrasts(x = training_data[, name_of_response])
