@@ -258,33 +258,105 @@ knitr::opts_chunk$set(
         boot(data = Default, statistic = boot.fn, R = 10)
         ```
         
-        BOotstrap estimates of the standard errors of the logistic regression coefficients for `income` and `balance` are $3.324 \times 10^{-6}$ and $1.752 \times 10^{-4}$.
+        Bootstrap estimates of the standard errors of the logistic regression coefficients for `income` and `balance` are $3.324 \times 10^{-6}$ and $1.752 \times 10^{-4}$.
 
     (d) Comment on the estimated standard errors obtained using the `glm()` function and using your bootstrap function.
     
         The rate of difference between the bootstrap estimates of the standard errors of the coefficients of the logistic regression model with formula $default \sim income + balance$ and the single-model estimates are $\left[\left(3.324 \times 10^{-6}\right) - \left(4.985 \times 10^{-6}\right)\right] / \left(4.985 \times 10^{-6}\right) = -0.333$ and $\left[\left(1.752 \times 10^{-4}\right) - \left(2.274 \times 10^{-4}\right)\right] / \left(2.274 \times 10^{-4}\right) = -0.230$.
 
-# 7. In Sections 5.3.2 and 5.3.3, we saw that the `cv.glm()` function can be used in order to compute the LOOCV test error estimate. 
-Alternatively, one could compute those quantities using just the `glm()` and `predict.glm()` functions, and a for loop. You will now take this approach in order to compute the LOOCV error for a simple logistic regression model on the Weekly data set. Recall that in the context of classification problems, the LOOCV error is given in (5.4).
+7.  In Sections 5.3.2 and 5.3.3, we saw that the `cv.glm()` function can be used in order to compute the LOOCV test error estimate.
 
-(a) Fit a logistic regression model that predicts `Direction` using `Lag1` and `Lag2`.
+    Alternatively, one could compute those quantities using just the `glm()` and `predict.glm()` functions, and a for loop. You will now take this approach in order to compute the LOOCV error for a simple logistic regression model on the Weekly data set. Recall that in the context of classification problems, the LOOCV error is given in (5.4).
 
-(b) Fit a logistic regression model that predicts `Direction` using `Lag1` and `Lag2` using all but the first observation.
+    (a) Fit a logistic regression model that predicts `Direction` using `Lag1` and `Lag2`.
+    
+        ```{r}
+        set.seed(1)
+        LR_model <- glm(
+            formula = Direction ~ Lag1 + Lag2,
+            data = Weekly,
+            family = binomial
+        )
+        LR_model
+        ```
 
-(c) Use the model from (b) to predict the direction of the first observation. You can do this by predicting that the first observation will go up if $P$(Direction="Up"|Lag1, Lag2$) > 0.5$. Was this observation correctly classified?
+    (b) Fit a logistic regression model that predicts `Direction` using `Lag1` and `Lag2` using all but the first observation.
+    
+        ```{r}
+        set.seed(1)
+        training_data <- Weekly[-1, ]
+        testing_data <- Weekly[1, ]
+        LR_model <- glm(
+            formula = Direction ~ Lag1 + Lag2,
+            data = training_data,
+            family = binomial
+        )
+        LR_model
+        ```
 
-(d) Write a `for` loop from $i=1$ to $i=n$, where $n$ is the number of observations in the data set, that performs each of the following steps:
+    (c) Use the model from (b) to predict the direction of the first observation. You can do this by predicting that the first observation will go up if $P$(Direction="Up"|Lag1, Lag2$) > 0.5$. Was this observation correctly classified?
+    
+        ```{r}
+        number_of_test_observations <- nrow(testing_data)
+        vector_of_predicted_probabilities <- predict(
+            object = LR_model,
+            newdata = testing_data,
+            type = "response"
+        )
+        vector_of_predicted_directions <- rep("Down", number_of_test_observations)
+        condition <- vector_of_predicted_probabilities > 0.5
+        vector_of_predicted_directions[condition] = "Up"
+        vector_of_predicted_directions
+        testing_data
+        ```
+        
+        The first observation was incorrectly classified.
 
-  i. Fit a logistic regression model using all but the $i$-th observation to predict `Direction` using `Lag1` and `Lag2`.
+    (d) Write a `for` loop from $i=1$ to $i=n$, where $n$ is the number of observations in the data set, that performs each of the following steps:
 
-  ii. Compute the posterior probability of the market moving up for the $i$-th observation.
+        i.  Fit a logistic regression model using all but the $i$-th observation to predict `Direction` using `Lag1` and `Lag2`.
+        
+        ii. Compute the posterior probability of the market moving up for the $i$-th observation.
 
-  iii. Use the posterior probability for the $i$-th observation in order to predict whether or not the market moves up.
+        iii. Use the posterior probability for the $i$-th observation in order to predict whether or not the market moves up.
 
-  iv. Determine whether or not an error was made in predicting the direction for the $i$-th observation. If an error was made, then indicate this as a 1, and otherwise indicate it as a 0.
+        iv. Determine whether or not an error was made in predicting the direction for the $i$-th observation. If an error was made, then indicate this as a 1, and otherwise indicate it as a 0.
+        
+            ```{r}
+            number_of_observations <- nrow(Weekly)
+            formula <- Direction ~ Lag1 + Lag2
+            vector_of_indicators_of_error <- integer(0)
+            for (i in 1:number_of_observations) {
+                training_data <- Weekly[-i, ]
+                testing_data <- Weekly[i, ]
+                LR_model <- glm(
+                    formula = formula,
+                    data = training_data,
+                    family = binomial
+                )
+                vector_of_predicted_probabilities <- predict(
+                    object = LR_model,
+                    newdata = testing_data,
+                    type = "response"
+                )
+                vector_of_predicted_directions <- rep("Down", number_of_test_observations)
+                condition <- vector_of_predicted_probabilities > 0.5
+                vector_of_predicted_directions[condition] = "Up"
+                if (vector_of_predicted_directions != testing_data$Direction) {
+                    vector_of_indicators_of_error <-
+                        append(vector_of_indicators_of_error, 1)
+                } else {
+                    vector_of_indicators_of_error <-
+                        append(vector_of_indicators_of_error, 0)
+                }
+            }
+            ```
 
-(e) Take the average of the n numbers obtained in (d)iv in order to obtain the LOOCV estimate for the test error. Comment on the results.
-
+    (e) Take the average of the n numbers obtained in (d) in order to obtain the LOOCV estimate for the test error. Comment on the results.
+    
+        ```{r}
+        mean(vector_of_indicators_of_error)
+        ```
 
 # 8. We will now perform cross-validation on a simulated data set.
 
