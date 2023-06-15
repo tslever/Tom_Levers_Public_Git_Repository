@@ -129,7 +129,7 @@ knitr::opts_chunk$set(
         
             ```{r}
             summary_of_performance <- summarize_performance(
-                type_of_model = "LR",
+                type_of_model = "Logistic Regression",
                 formula = default ~ income + balance,
                 training_data = training_data,
                 test_data = validation_data
@@ -152,7 +152,7 @@ knitr::opts_chunk$set(
             training_data <- split_data$training_data
             validation_data <- split_data$testing_data
             summary_of_performance <- summarize_performance(
-                type_of_model = "LR",
+                type_of_model = "Logistic Regression",
                 formula = default ~ income + balance,
                 training_data = training_data,
                 test_data = validation_data
@@ -192,7 +192,7 @@ knitr::opts_chunk$set(
             training_data <- split_data$training_data
             validation_data <- split_data$testing_data
             summary_of_performance <- summarize_performance(
-                type_of_model = "LR",
+                type_of_model = "Logistic Regression",
                 formula = default
                     ~ income + balance + indicator_of_whether_borrower_is_a_student,
                 training_data = training_data,
@@ -358,30 +358,78 @@ knitr::opts_chunk$set(
         mean(vector_of_indicators_of_error)
         ```
 
-# 8. We will now perform cross-validation on a simulated data set.
+8.  We will now perform cross-validation on a simulated data set.
 
-(a) Generate a simulated data set as follows:
-```
-set.seed(1)
-x <- rnorm(100)
-y <- x - 2*x^2 + rnorm(100)
-```
-In this data set, what is $n$ and what is $p$? Write out the model used to generate the data in equation form.
+    (a) Generate a simulated data set as follows:
+    
+        ```{r}
+        set.seed(1)
+        x <- rnorm(100)
+        y <- x - 2*x^2 + rnorm(100)
+        data_frame <- data.frame(x = x, y = y)
+        ```
 
-(b) Create a scatterplot of `x` against `y`. Comment on what you find.
+        In this data set, what is $n$ and what is $p$? Write out the model used to generate the data in equation form.
+        
+        The number of observations $n = 100$. The number of predictors $p = 1$. The number of predictive terms is $2$. The model used to generate the data
+        
+        $$\boldsymbol{y} = rnorm(100) + \boldsymbol{x} - 2 \boldsymbol{x}^2$$
+        $$y = rnorm(1) + x - 2 x^2$$
 
-(c) Set a random seed, and then compute the LOOCV errors that result from fitting the following four models using least squares:
+    (b) Create a scatterplot of `x` against `y`. Comment on what you find.
+    
+        ```{r}
+        plot(x = x, y = y)
+        ```
+        
+        This scatterplot suggests that $y$ relates to $x$ quadratically.
 
-  i. $Y = \beta_0 + \beta_1X + \epsilon$
-  ii. $Y = \beta_0 + \beta_1X + \beta_2X^2 + \epsilon$
-  iii. $Y = \beta_0 +\beta_1X +\beta_2X^2 +\beta_3X^3 +\epsilon$
-  iv. $Y = \beta_0 +\beta_1X +\beta_2X^2 +\beta_3X^3 +\beta_4X^4 +\epsilon$.
+    (c) Set a random seed, and then compute the LOOCV errors that result from fitting the following four models using least squares:
 
-Note you may find it helpful to use the `data.frame()` function
-to create a single data set containing both `X` and `Y`.
+        i.  $Y = \beta_0 + \beta_1X + \epsilon$
+        
+            ```{r}
+            calculate_LOOCV_error_rate(
+                type_of_model = "Polynomial Regression",
+                formula = y ~ x,
+                data_frame = data_frame
+            )
+            ```
+        
+        ii. $Y = \beta_0 + \beta_1X + \beta_2X^2 + \epsilon$
+        
+            ```{r}
+            calculate_LOOCV_error_rate(
+                type_of_model = "Polynomial Regression",
+                formula = y ~ x + I(x^2),
+                data_frame = data_frame
+            )
+            ```
+        
+        iii. $Y = \beta_0 +\beta_1X +\beta_2X^2 +\beta_3X^3 +\epsilon$
+        
+             ```{r}
+             calculate_LOOCV_error_rate(
+                 type_of_model = "Polynomial Regression",
+                 formula = y ~ x + I(x^2) + I(x^3),
+                 data_frame = data_frame
+             )
+             ```
+        
+        iv. $Y = \beta_0 +\beta_1X +\beta_2X^2 +\beta_3X^3 +\beta_4X^4 +\epsilon$.
+        
+            ```{r}
+            calculate_LOOCV_error_rate(
+                type_of_model = "Polynomial Regression",
+                formula = y ~ x + I(x^2) + I(x^3) + I(x^4),
+                data_frame = data_frame
+            )
+            ```
 
-(d) Repeat (c) using another random seed, and report your results. Are your results the same as what you got in (c)? Why?
+        Note you may find it helpful to use the `data.frame()` function to create a single data set containing both `X` and `Y`.
 
-(e) Which of the models in (c) had the smallest LOOCV error? Is this what you expected? Explain your answer.
+    (d) Repeat (c) using another random seed, and report your results. Are your results the same as what you got in (c)? Why?
 
-(f) Comment on the statistical significance of the coefficient estimates that results from fitting each of the models in (c) using least squares. Do these results agree with the conclusions drawn based on the cross-validation results?
+    (e) Which of the models in (c) had the smallest LOOCV error? Is this what you expected? Explain your answer.
+
+    (f) Comment on the statistical significance of the coefficient estimates that results from fitting each of the models in (c) using least squares. Do these results agree with the conclusions drawn based on the cross-validation results?
