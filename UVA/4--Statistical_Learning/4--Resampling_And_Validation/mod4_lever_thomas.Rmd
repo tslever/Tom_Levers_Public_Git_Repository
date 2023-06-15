@@ -208,17 +208,61 @@ knitr::opts_chunk$set(
         
         Including a dummy variable for student does not lead to a reduction in mean validation error rate; the mean validation error rate is higher by $0.1$ percent and its standard deviation is slightly lower.
 
-# 6. We continue to consider the use of a logistic regression model to predict the probability of `default` using `income` and `balance` on the `Default` data set. 
-In particular, we will now compute estimates for the standard errors of the `income` and `balance` logistic regression coefficients in two different ways: (1) using the bootstrap, and (2) using the standard formula for computing the standard errors in the `glm()` function. Do not forget to set a random seed before beginning your analysis.
+6.  We continue to consider the use of a logistic regression model to predict the probability of `default` using `income` and `balance` on the `Default` data set.
 
-(a) Using the `summary()` and `glm()` functions, determine the estimated standard errors for the coefficients associated with `income` and `balance` in a multiple logistic regression model that uses both predictors.
+    In particular, we will now compute estimates for the standard errors of the `income` and `balance` logistic regression coefficients in two different ways: (1) using the bootstrap, and (2) using the standard formula for computing the standard errors in the `glm()` function. Do not forget to set a random seed before beginning your analysis.
 
-(b) Write a function, `boot.fn()`, that takes as input the `Default` data set as well as an index of the observations, and that outputs the coefficient estimates for income and balance in the multiple logistic regression model.
+    (a) Using the `summary()` and `glm()` functions, determine the estimated standard errors for the coefficients associated with `income` and `balance` in a multiple logistic regression model that uses both predictors.
+    
+        ```{r}
+        set.seed(1)
+        LR_model <- glm(
+            formula = default ~ income + balance,
+            data = Default,
+            family = binomial
+        )
+        summary(LR_model)
+        ```
+        
+        The estimated standard errors for the coefficients associated with `income` and `balance` in a multiple logistic regression model with formula $default \sim income + balance$ are $4.985 \times 10^{-6}$ and $2.274 \times 10^{-4}$, respectively.
 
-(c) Use the `boot()` function together with your `boot.fn()` function to estimate the standard errors of the logistic regression coefficients for `income` and `balance`.
+    (b) Write a function, `boot.fn()`, that takes as input the `Default` data set as well as an index of the observations, and that outputs the coefficient estimates for income and balance in the multiple logistic regression model.
+    
+        ```{r}
+        boot.fn <- function(Default, vector_of_indices_of_training_observations) {
+            LR_model <- glm(
+                formula = default ~ income + balance,
+                data = Default,
+                family = "binomial",
+                subset = vector_of_indices_of_training_observations
+            )
+            vector_of_coefficients <- coef(LR_model)
+            return(vector_of_coefficients)
+        }
+        set.seed(1)
+        vector_of_random_indices <- sample(1:number_of_observations)
+        boot.fn(
+            Default = Default,
+            vector_of_indices_of_training_observations = vector_of_random_indices
+        )
+        ```
 
-(d) Comment on the estimated standard errors obtained using the `glm()` function and using your bootstrap function.
+    (c) Use the `boot()` function together with your `boot.fn()` function to estimate the standard errors of the logistic regression coefficients for `income` and `balance`.
+    
+        ```{r}
+        library(boot)
+        set.seed(1)
+        # statistic is a function which when applied to data
+        # returns a vector containing statistic(s) of interest.
+        # R is the number of bootstrap replicates.
+        boot(data = Default, statistic = boot.fn, R = 10)
+        ```
+        
+        BOotstrap estimates of the standard errors of the logistic regression coefficients for `income` and `balance` are $3.324 \times 10^{-6}$ and $1.752 \times 10^{-4}$.
 
+    (d) Comment on the estimated standard errors obtained using the `glm()` function and using your bootstrap function.
+    
+        The rate of difference between the bootstrap estimates of the standard errors of the coefficients of the logistic regression model with formula $default \sim income + balance$ and the single-model estimates are $\left[\left(3.324 \times 10^{-6}\right) - \left(4.985 \times 10^{-6}\right)\right] / \left(4.985 \times 10^{-6}\right) = -0.333$ and $\left[\left(1.752 \times 10^{-4}\right) - \left(2.274 \times 10^{-4}\right)\right] / \left(2.274 \times 10^{-4}\right) = -0.230$.
 
 # 7. In Sections 5.3.2 and 5.3.3, we saw that the `cv.glm()` function can be used in order to compute the LOOCV test error estimate. 
 Alternatively, one could compute those quantities using just the `glm()` and `predict.glm()` functions, and a for loop. You will now take this approach in order to compute the LOOCV error for a simple logistic regression model on the Weekly data set. Recall that in the context of classification problems, the LOOCV error is given in (5.4).
