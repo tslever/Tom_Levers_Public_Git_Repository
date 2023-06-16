@@ -4,7 +4,7 @@
 \alias{calculate_LOOCV_error_rate}
 \title{calculate_LOOCV_error_rate}
 \usage{
-calculate_LOOCV_error_rate(type_of_model, formula, data_frame)
+calculate_LOOCV_error_rate(type_of_model, formula, data_frame, number_of_folds)
 }
 \arguments{
 \item{type_of_model}{The type of model. An element in the set {"Logistic Regression"}.}

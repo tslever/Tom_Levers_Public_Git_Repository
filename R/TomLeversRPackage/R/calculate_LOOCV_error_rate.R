@@ -5,13 +5,15 @@
 #' @examples LOOCV_error_rate <- calculate_LOOCV_error_rate(type_of_model = "LR", formula = Direction ~ Lag1 + Lag2, data_frame = ISLR2::Weekly)
 
 #' @export
-calculate_LOOCV_error_rate <- function(type_of_model, formula, data_frame) {
+calculate_LOOCV_error_rate <- function(type_of_model, formula, data_frame, number_of_folds) {
  number_of_observations <- nrow(data_frame)
  if (type_of_model == "Polynomial Regression") {
   vector_of_mean_squared_errors <- double(0)
-  for (i in 1:number_of_observations) {
-   training_data <- data_frame[-i, ]
-   testing_data <- data_frame[i, ]
+  number_of_data_per_fold <- ceiling(number_of_observations / number_of_folds)
+  for (i in 1:(number_of_folds-1)) {
+   vector_of_indices_of_observations_in_fold <- c((1+number_of_data_per_fold*(i-1)):(number_of_data_per_fold*i))
+   training_data <- data_frame[-vector_of_indices_of_observations_in_fold, ]
+   testing_data <- data_frame[vector_of_indices_of_observations_in_fold, ]
    linear_regression_model <- glm(
     formula = formula,
     data = training_data
@@ -19,6 +21,16 @@ calculate_LOOCV_error_rate <- function(type_of_model, formula, data_frame) {
    mean_squared_error <- calculate_mean_squared_error(linear_regression_model)
    vector_of_mean_squared_errors <- append(vector_of_mean_squared_errors, mean_squared_error)
   }
+  i <- number_of_folds
+  vector_of_indices_of_observations_in_fold <- c((1+number_of_data_per_fold*(i-1)):number_of_observations)
+  training_data <- data_frame[-vector_of_indices_of_observations_in_fold, ]
+  testing_data <- data_frame[vector_of_indices_of_observations_in_fold, ]
+  linear_regression_model <- glm(
+   formula = formula,
+   data = training_data
+  )
+  mean_squared_error <- calculate_mean_squared_error(linear_regression_model)
+  vector_of_mean_squared_errors <- append(vector_of_mean_squared_errors, mean_squared_error)
   LOOCV_error_rate <- mean(vector_of_mean_squared_errors)
   return(LOOCV_error_rate)
  } else if (type_of_model == "Logistic Regression") {
