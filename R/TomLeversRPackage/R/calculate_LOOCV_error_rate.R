@@ -41,10 +41,11 @@ calculate_LOOCV_error_rate <- function(type_of_model, formula, data_frame) {
    vector_of_levels <- attr(factor_of_response_values, "levels")
    lower_level <- vector_of_levels[1]
    upper_level <- vector_of_levels[2]
-   vector_of_predicted_directions <- rep(lower_level, number_of_test_observations)
+   number_of_test_observations <- nrow(testing_data)
+   vector_of_predicted_response_values <- rep(lower_level, number_of_test_observations)
    condition <- vector_of_predicted_probabilities > 0.5
-   vector_of_predicted_directions[condition] <- upper_level
-   if (vector_of_predicted_directions != testing_data[, name_of_response]) {
+   vector_of_predicted_response_values[condition] <- upper_level
+   if (vector_of_predicted_response_values != testing_data[, name_of_response]) {
     vector_of_indicators_of_error <- append(vector_of_indicators_of_error, 1)
    } else {
     vector_of_indicators_of_error <- append(vector_of_indicators_of_error, 0)
