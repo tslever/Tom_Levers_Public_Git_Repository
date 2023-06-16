@@ -42,9 +42,9 @@ head(x = data_frame_of_classes_and_pixels, n = 2)
 tail(x = data_frame_of_classes_and_pixels, n = 2)
 ```
 
-We build binary classifiers that classify pixels as depicting blue tarps or depciting objects that are not blue tarps. We may ignore non-binary classifiers that predict probabilities for all classes and may be used to locate pixels that more likely depict blue tarps than objects that are not blue tarps. We may ignore non-binary classifiers since the intensity space for pixels representing blue tarps is distinct from the intensity space for pixels representing objects that are not blue tarps. See "Figure 1: Distribution Of Classes In Intensity Space".
+We build binary classifiers that classify pixels as depicting blue tarps or depicting objects that are not blue tarps. We may ignore non-binary classifiers that predict probabilities for all classes and may be used to locate pixels that more likely depict blue tarps than objects that are not blue tarps. We may ignore non-binary classifiers since the intensity space for pixels representing blue tarps is distinct from the intensity space for pixels representing objects that are not blue tarps. See "Figure 1: Distribution Of Classes In Intensity Space".
 
-```{r, fig.cap = "Distribution Of Classes In Intensity Space"}
+```{r, fig.cap = "Distribution Of Classes In Intensity Space", eval = FALSE}
 library(rgl)
 vector_of_possible_colors <- c("green", "brown", "black", "orange", "blue")
 number_of_observations <- nrow(data_frame_of_classes_and_pixels)
@@ -80,16 +80,31 @@ number_of_observations <- nrow(data_frame_of_classes_and_pixels)
 column_of_indicators <- rep(0, number_of_observations)
 condition <- data_frame_of_classes_and_pixels$Class == "Blue Tarp"
 column_of_indicators[condition] <- 1
+factor_of_indicators <- factor(column_of_indicators)
 data_frame_of_indicators_and_pixels <- data.frame(
-    Indicator = column_of_indicators,
+    Indicator = factor_of_indicators,
     Red = data_frame_of_classes_and_pixels$Red,
     Green = data_frame_of_classes_and_pixels$Green,
     Blue = data_frame_of_classes_and_pixels$Blue
 )
+#vector_of_random_indices <- sample(1:number_of_observations)
+#data_frame_of_indicators_and_pixels <- data_frame_of_indicators_and_pixels[vector_of_random_indices, ]
 head(x = data_frame_of_indicators_and_pixels, n = 2)
 tail(x = data_frame_of_indicators_and_pixels, n = 2)
 ```
 
 We use $10$-fold cross-validation to evaluate the performance of $5$ classifiers. A classifier will classify a pixel as depicting a blue tarp or depicting an object that is not a blue tarp.
+
+We use $10$-fold cross-validation to evaluate the performance of logistic-regression models.
+
+```{r}
+library(TomLeversRPackage)
+calculate_CV_error_rate(
+    type_of_model = "Logistic Regression",
+    formula = Indicator ~ Blue,
+    data_frame = data_frame_of_indicators_and_pixels,
+    number_of_folds = 1
+)
+```
 
 TODO: Consider 5 number summaries and means and standard deviations of Red, Green, and Blue. and across classes.
