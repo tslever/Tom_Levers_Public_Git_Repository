@@ -389,6 +389,7 @@ knitr::opts_chunk$set(
         i.  $Y = \beta_0 + \beta_1X + \epsilon$
         
             ```{r}
+            set.seed(1)
             calculate_LOOCV_error_rate(
                 type_of_model = "Polynomial Regression",
                 formula = y ~ x,
@@ -429,7 +430,53 @@ knitr::opts_chunk$set(
         Note you may find it helpful to use the `data.frame()` function to create a single data set containing both `X` and `Y`.
 
     (d) Repeat (c) using another random seed, and report your results. Are your results the same as what you got in (c)? Why?
+    
+        ```{r}
+        set.seed(2)
+        calculate_LOOCV_error_rate(
+            type_of_model = "Polynomial Regression",
+            formula = y ~ x,
+            data_frame = data_frame
+        )
+        calculate_LOOCV_error_rate(
+            type_of_model = "Polynomial Regression",
+            formula = y ~ x + I(x^2),
+            data_frame = data_frame
+        )
+        calculate_LOOCV_error_rate(
+            type_of_model = "Polynomial Regression",
+            formula = y ~ x + I(x^2) + I(x^3),
+            data_frame = data_frame
+        )
+        calculate_LOOCV_error_rate(
+            type_of_model = "Polynomial Regression",
+            formula = y ~ x + I(x^2) + I(x^3) + I(x^4),
+            data_frame = data_frame
+        )
+        ```
+        
+        Given that each LOOCV error rate that is averaged is based on the same training and testing data sets regardless of seed, our results are the same as what we got in (c).
 
     (e) Which of the models in (c) had the smallest LOOCV error? Is this what you expected? Explain your answer.
+    
+        The quartic model in (c) has the smallest LOOCV error. The average mean squared error for the quartic model is slightly less than the average mean squared error for the quadratic model. We expected the average mean squared error for the quadratic model to be less than the average mean squared error for the other models, though it seems reasonable that polynomial of degree greater than $2$ would fit noisy data from a quadratic function better than the quadratic function.
 
     (f) Comment on the statistical significance of the coefficient estimates that results from fitting each of the models in (c) using least squares. Do these results agree with the conclusions drawn based on the cross-validation results?
+    
+        ```{r}
+        polynomial_model <- glm(formula = y ~ x, data = data_frame)
+        summary(polynomial_model)$coefficients
+        polynomial_model <- glm(formula = y ~ x + I(x^2), data = data_frame)
+        summary(polynomial_model)$coefficients
+        polynomial_model <- glm(formula = y ~ x + I(x^2) + I(x^3), data = data_frame)
+        summary(polynomial_model)$coefficients
+        polynomial_model <- glm(formula = y ~ x + I(x^2) + I(x^3) + I(x^4), data = data_frame)
+        summary(polynomial_model)$coefficients
+        ```
+        
+        $x$ is significant in the context of the first-degree polynomial model.
+        $x$ and $x^2$ are significant in the context of the second-degree polynomial model.
+        $x$ and $x^2$ but not $x^3$ are significant in the context of the third-degree polynomial model.
+        $x$ and $x^2$ but not $x^3$ and $x^4$ are significant in the context of the four-degree polynomial model.
+        
+        These results seem to suggest that a quadratic model might be the best fit. Given that the average mean squared errors for our nonlinear models are similar, these results agree with the conclusions drawn based on the cross-validation results.
