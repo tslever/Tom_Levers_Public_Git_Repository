@@ -99,7 +99,7 @@ We use $10$-fold cross-validation to evaluate the performance of logistic-regres
 
 ```{r}
 library(TomLeversRPackage)
-calculate_CV_error_rate(
+summarize_performance_of_cross_validated_models(
     type_of_model = "Logistic Regression",
     formula = Indicator ~ Blue,
     data_frame = data_frame_of_indicators_and_pixels,
