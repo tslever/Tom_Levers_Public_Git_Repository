@@ -97,14 +97,56 @@ We use $10$-fold cross-validation to evaluate the performance of $5$ classifiers
 
 We use $10$-fold cross-validation to evaluate the performance of logistic-regression models.
 
-```{r}
+```{r, eval = FALSE}
 library(TomLeversRPackage)
+plot_ROC_curve_for_cross_validated_models(
+ type_of_model = "Logistic Regression",
+ formula = Indicator ~ Red,
+ data_frame = data_frame_of_indicators_and_pixels,
+ number_of_folds = 5,
+ step = 0.1
+)
+plot_ROC_curve_for_cross_validated_models(
+ type_of_model = "Logistic Regression",
+ formula = Indicator ~ Green,
+ data_frame = data_frame_of_indicators_and_pixels,
+ number_of_folds = 5,
+ step = 0.1
+)
+plot_ROC_curve_for_cross_validated_models(
+ type_of_model = "Logistic Regression",
+ formula = Indicator ~ Blue,
+ data_frame = data_frame_of_indicators_and_pixels,
+ number_of_folds = 5,
+ step = 0.1
+)
+plot_ROC_curve_for_cross_validated_models(
+ type_of_model = "Logistic Regression",
+ formula = Indicator ~ Red + Green,
+ data_frame = data_frame_of_indicators_and_pixels,
+ number_of_folds = 5,
+ step = 0.1
+)
+plot_ROC_curve_for_cross_validated_models(
+ type_of_model = "Logistic Regression",
+ formula = Indicator ~ Red + Blue,
+ data_frame = data_frame_of_indicators_and_pixels,
+ number_of_folds = 5,
+ step = 0.1
+)
+plot_ROC_curve_for_cross_validated_models(
+ type_of_model = "Logistic Regression",
+ formula = Indicator ~ Green + Blue,
+ data_frame = data_frame_of_indicators_and_pixels,
+ number_of_folds = 5,
+ step = 0.1
+)
 plot_ROC_curve_for_cross_validated_models(
  type_of_model = "Logistic Regression",
  formula = Indicator ~ Red + Green + Blue,
  data_frame = data_frame_of_indicators_and_pixels,
- number_of_folds = 1,
- step = 0.2
+ number_of_folds = 5,
+ step = 0.1
 )
 ```
 
