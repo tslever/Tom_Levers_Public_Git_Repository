@@ -87,8 +87,8 @@ data_frame_of_indicators_and_pixels <- data.frame(
     Green = data_frame_of_classes_and_pixels$Green,
     Blue = data_frame_of_classes_and_pixels$Blue
 )
-#vector_of_random_indices <- sample(1:number_of_observations)
-#data_frame_of_indicators_and_pixels <- data_frame_of_indicators_and_pixels[vector_of_random_indices, ]
+vector_of_random_indices <- sample(1:number_of_observations)
+data_frame_of_indicators_and_pixels <- data_frame_of_indicators_and_pixels[vector_of_random_indices, ]
 head(x = data_frame_of_indicators_and_pixels, n = 2)
 tail(x = data_frame_of_indicators_and_pixels, n = 2)
 ```
@@ -99,11 +99,12 @@ We use $10$-fold cross-validation to evaluate the performance of logistic-regres
 
 ```{r}
 library(TomLeversRPackage)
-summarize_performance_of_cross_validated_models(
-    type_of_model = "Logistic Regression",
-    formula = Indicator ~ Blue,
-    data_frame = data_frame_of_indicators_and_pixels,
-    number_of_folds = 1
+plot_ROC_curve_for_cross_validated_models(
+ type_of_model = "Logistic Regression",
+ formula = Indicator ~ Red + Green + Blue,
+ data_frame = data_frame_of_indicators_and_pixels,
+ number_of_folds = 1,
+ step = 0.2
 )
 ```
 
