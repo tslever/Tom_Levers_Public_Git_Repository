@@ -2,19 +2,19 @@
 % Please edit documentation in R/calculate_CV_error_rate.R
 \name{calculate_CV_error_rate}
 \alias{calculate_CV_error_rate}
-\title{calculate_LOOCV_error_rate}
+\title{calculate_CV_error_rate}
 \usage{
 calculate_CV_error_rate(type_of_model, formula, data_frame, number_of_folds)
 }
 \arguments{
-\item{type_of_model}{The type of model. An element in the set {"Logistic Regression"}.}
+\item{type_of_model}{The type of model. An element in the set {"Polynomial Regression", Logistic Regression"}.}
 }
 \value{
-LOOCV_error_rate The error rate of Leave One Out Cross Validation
+CV_error_rate The error rate of Leave One Out Cross Validation
 }
 \description{
-Calculates LOOCV error rate
+Calculates CV error rate
 }
 \examples{
-LOOCV_error_rate <- calculate_LOOCV_error_rate(type_of_model = "LR", formula = Direction ~ Lag1 + Lag2, data_frame = ISLR2::Weekly)
+CV_error_rate <- calculate_CV_error_rate(type_of_model = "LR", formula = Direction ~ Lag1 + Lag2, data_frame = ISLR2::Weekly)
 }
