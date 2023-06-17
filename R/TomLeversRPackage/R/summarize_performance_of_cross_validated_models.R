@@ -5,7 +5,7 @@
 #' @examples summary_of_performance_of_cross_validated_models <- summarize_performance_of_cross_validated_models(type_of_model = "LR", formula = Direction ~ Lag1 + Lag2, data_frame = ISLR2::Weekly)
 
 #' @export
-summarize_performance_of_cross_validated_models <- function(type_of_model, formula, data_frame, number_of_folds) {
+summarize_performance_of_cross_validated_models <- function(type_of_model, formula, data_frame, number_of_folds, threshold = 0.5) {
  number_of_observations <- nrow(data_frame)
  number_of_data_per_fold <- ceiling(number_of_observations / number_of_folds)
  if (type_of_model == "Polynomial Regression") {
@@ -39,7 +39,8 @@ summarize_performance_of_cross_validated_models <- function(type_of_model, formu
     type_of_model = type_of_model,
     formula = formula,
     training_data = training_data,
-    test_data = testing_data
+    test_data = testing_data,
+    threshold = threshold
    )
    vector_of_rates_of_errors <- append(vector_of_rates_of_errors, summary_of_performance$rate_of_errors)
    vector_of_rates_of_true_positives <- append(vector_of_rates_of_true_positives, summary_of_performance$rate_of_true_positives)

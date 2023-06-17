@@ -9,7 +9,8 @@ summarize_performance_of_cross_validated_models(
   type_of_model,
   formula,
   data_frame,
-  number_of_folds
+  number_of_folds,
+  threshold = 0.5
 )
 }
 \arguments{
