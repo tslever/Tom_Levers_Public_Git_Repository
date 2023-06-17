@@ -1,16 +1,16 @@
-#' @title summarize_performance
-#' @description Generates a summary of performance for a model given a data set for which to predict
+#' @title summarize_performance_of_one_model
+#' @description Generates a summary of performance for one model given a data set for which to predict
 #' @param type_of_model The type of model. An element in the set {"Polynomial Regression", "Logistic Regression", "LDA", "QDA", "KNN"}.
 #' @param formula The formula for the model
 #' @param training_data A data frame of training data
 #' @param test_data A data frame of test data
 #' @param K The parameter of a K Nearest Neighbors model
-#' @return summary_of_performance The summary of performance
-#' @examples summary_of_performance <- generate_summary_of_performance(type_of_model = "KNN", formula = Direction ~ Lag1 + Lag2, training_data = ISLR2::Weekly_from_1990_to_2008_inclusive, test_data = ISLR2::Weekly_from_2009_to_2010_inclusive, K = 350)
+#' @return summary_of_performance_of_one_model The summary of performance
+#' @examples summary_of_performance_of_one_model <- summarize_performance_of_one_model(type_of_model = "KNN", formula = Direction ~ Lag1 + Lag2, training_data = ISLR2::Weekly_from_1990_to_2008_inclusive, test_data = ISLR2::Weekly_from_2009_to_2010_inclusive, K = 350)
 #' @import class
 
 #' @export
-summarize_performance <- function(type_of_model, formula, training_data, test_data, K = 1) {
+summarize_performance_of_one_model <- function(type_of_model, formula, training_data, test_data, K = 1) {
  number_of_test_observations <- nrow(test_data)
  if (type_of_model == "Polynomial Regression") {
   linear_regression_model <- glm(
@@ -100,7 +100,7 @@ summarize_performance <- function(type_of_model, formula, training_data, test_da
  rate_of_false_positives <- number_of_false_positives / (number_of_false_positives + number_of_true_negatives)
  rate_of_true_positives <- number_of_true_positives / (number_of_true_positives + number_of_false_negatives)
  rate_of_true_negatives <- number_of_true_negatives / (number_of_true_negatives + number_of_false_positives)
- summary_of_performance <- list(
+ summary_of_performance_of_one_model <- list(
   confusion_matrix = confusion_matrix,
   decimal_of_correct_predictions = decimal_of_correct_predictions,
   rate_of_errors = rate_of_errors,
@@ -116,6 +116,6 @@ summarize_performance <- function(type_of_model, formula, training_data, test_da
   rate_of_true_positives = rate_of_true_positives,
   equation_for_true_negative_rate = paste("TNR = Specificity = Selectivity = TN/N = TN/(TN+FP) = ", rate_of_true_negatives, sep = "")
  )
- class(summary_of_performance) <- "summary_of_performance"
- return(summary_of_performance)
+ class(summary_of_performance_of_one_model) <- "summary_of_performance"
+ return(summary_of_performance_of_one_model)
 }
