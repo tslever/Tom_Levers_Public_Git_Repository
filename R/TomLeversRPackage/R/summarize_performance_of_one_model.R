@@ -10,7 +10,7 @@
 #' @import class
 
 #' @export
-summarize_performance_of_one_model <- function(type_of_model, formula, training_data, test_data, K = 1) {
+summarize_performance_of_one_model <- function(type_of_model, formula, training_data, test_data, K = 1, threshold = 0.5) {
  number_of_test_observations <- nrow(test_data)
  if (type_of_model == "Polynomial Regression") {
   linear_regression_model <- glm(
@@ -36,7 +36,7 @@ summarize_performance_of_one_model <- function(type_of_model, formula, training_
   lower_level <- vector_of_levels[1]
   upper_level <- vector_of_levels[2]
   vector_of_predicted_response_values <- rep(lower_level, number_of_test_observations)
-  condition <- vector_of_predicted_probabilities > 0.5
+  condition <- vector_of_predicted_probabilities > threshold
   vector_of_predicted_response_values[condition] <- upper_level
  } else if (type_of_model == "LDA") {
   LDA_model <- lda(

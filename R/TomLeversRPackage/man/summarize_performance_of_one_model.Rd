@@ -9,7 +9,8 @@ summarize_performance_of_one_model(
   formula,
   training_data,
   test_data,
-  K = 1
+  K = 1,
+  threshold = 0.5
 )
 }
 \arguments{
