@@ -8,6 +8,7 @@
 #' @return summary_of_performance_of_one_model The summary of performance
 #' @examples summary_of_performance_of_one_model <- summarize_performance_of_one_model(type_of_model = "KNN", formula = Direction ~ Lag1 + Lag2, training_data = ISLR2::Weekly_from_1990_to_2008_inclusive, test_data = ISLR2::Weekly_from_2009_to_2010_inclusive, K = 350)
 #' @import class
+#' @import MASS
 
 #' @export
 summarize_performance_of_one_model <- function(type_of_model, formula, training_data, test_data, K = 1, threshold = 0.5) {
