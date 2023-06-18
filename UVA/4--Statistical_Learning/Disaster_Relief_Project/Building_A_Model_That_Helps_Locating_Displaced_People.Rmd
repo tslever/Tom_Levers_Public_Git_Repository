@@ -34,7 +34,7 @@ According to [https://www.esri.com/about/newsroom/insider/what-is-orthorectified
 
 We load a data frame of classes and pixels based on an orthorectified image of Haiti at [https://www.kaggle.com/datasets/billbasener/pixel-values-from-images-over-haiti?datasetId=1899167](https://www.kaggle.com/datasets/billbasener/pixel-values-from-images-over-haiti?datasetId=1899167).
 
-```{r}
+```{r, echo = FALSE}
 data_frame_of_classes_and_pixels <- read.csv(
     file = "Data_Frame_Of_Classes_And_Pixels.csv"
 )
@@ -44,7 +44,7 @@ tail(x = data_frame_of_classes_and_pixels, n = 2)
 
 We build binary classifiers that classify pixels as depicting blue tarps or depicting objects that are not blue tarps. We may ignore non-binary classifiers that predict probabilities for all classes and may be used to locate pixels that more likely depict blue tarps than objects that are not blue tarps. We may ignore non-binary classifiers since the intensity space for pixels representing blue tarps is distinct from the intensity space for pixels representing objects that are not blue tarps. See "Figure 1: Distribution Of Classes In Intensity Space".
 
-```{r, fig.cap = "Distribution Of Classes In Intensity Space", eval = FALSE}
+```{r, fig.cap = "Distribution Of Classes In Intensity Space", echo = FALSE, eval = FALSE}
 library(rgl)
 vector_of_possible_colors <- c("green", "brown", "black", "orange", "blue")
 number_of_observations <- nrow(data_frame_of_classes_and_pixels)
@@ -74,7 +74,7 @@ rglwidget()
 
 In order to build binary classifiers, we create a data frame with a column of indicators of whether of not a pixel depicts a blue tarp instead of a column of classes.
 
-```{r, fig.cap = "Distribution Of Classes In Intensity Space"}
+```{r, fig.cap = "Distribution Of Classes In Intensity Space", echo = FALSE}
 library(rgl)
 number_of_observations <- nrow(data_frame_of_classes_and_pixels)
 column_of_indicators <- rep(0, number_of_observations)
@@ -97,57 +97,11 @@ We use $10$-fold cross-validation to evaluate the performance of $5$ classifiers
 
 We use $10$-fold cross-validation to evaluate the performance of logistic-regression models.
 
-```{r, eval = FALSE}
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "ROC curve for Indicator vs. Red + Green + Blue"}
+formula <- Indicator ~ Red + Green + Blue
 library(TomLeversRPackage)
-plot_ROC_curve_for_cross_validated_models(
- type_of_model = "Logistic Regression",
- formula = Indicator ~ Red,
- data_frame = data_frame_of_indicators_and_pixels,
- number_of_folds = 5,
- step = 0.1
-)
-plot_ROC_curve_for_cross_validated_models(
- type_of_model = "Logistic Regression",
- formula = Indicator ~ Green,
- data_frame = data_frame_of_indicators_and_pixels,
- number_of_folds = 5,
- step = 0.1
-)
-plot_ROC_curve_for_cross_validated_models(
- type_of_model = "Logistic Regression",
- formula = Indicator ~ Blue,
- data_frame = data_frame_of_indicators_and_pixels,
- number_of_folds = 5,
- step = 0.1
-)
-plot_ROC_curve_for_cross_validated_models(
- type_of_model = "Logistic Regression",
- formula = Indicator ~ Red + Green,
- data_frame = data_frame_of_indicators_and_pixels,
- number_of_folds = 5,
- step = 0.1
-)
-plot_ROC_curve_for_cross_validated_models(
- type_of_model = "Logistic Regression",
- formula = Indicator ~ Red + Blue,
- data_frame = data_frame_of_indicators_and_pixels,
- number_of_folds = 5,
- step = 0.1
-)
-plot_ROC_curve_for_cross_validated_models(
- type_of_model = "Logistic Regression",
- formula = Indicator ~ Green + Blue,
- data_frame = data_frame_of_indicators_and_pixels,
- number_of_folds = 5,
- step = 0.1
-)
-plot_ROC_curve_for_cross_validated_models(
- type_of_model = "Logistic Regression",
- formula = Indicator ~ Red + Green + Blue,
- data_frame = data_frame_of_indicators_and_pixels,
- number_of_folds = 5,
- step = 0.1
+summarize_performance_of_cross_validated_models_using_dplyr(
+    formula = Indicator ~ Red + Green + Blue,
+    data_frame = data_frame_of_indicators_and_pixels
 )
 ```
-
-TODO: Consider 5 number summaries and means and standard deviations of Red, Green, and Blue. and across classes.
