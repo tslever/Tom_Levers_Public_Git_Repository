@@ -8,32 +8,24 @@
 #' @import rsample
 
 #' @export
-summarize_performance_of_cross_validated_models_using_dplyr <- function(formula, data_frame) {
+summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_model, formula, data_frame) {
  generate_data_frame_of_predicted_probabilities_and_indicators <-
   function(train_test_split) {
-   formula <- formula
    training_data <- analysis(x = train_test_split)
+   testing_data <- assessment(x = train_test_split)
    logistic_regression_model <- glm(
     formula = formula,
     data = training_data,
     family = binomial
    )
-   testing_data <- assessment(x = train_test_split)
    vector_of_predicted_probabilities <- predict(
     object = logistic_regression_model,
     newdata = testing_data,
     type = "response"
    )
-   data_frame_with_variables_needed_to_use_formula <- model.frame(
-    formula = formula,
-    data = testing_data
-   )
-   vector_of_predicted_indicators_of_whether_murder_rate_is_higher_than_mean <-
-    model.response(data = data_frame_with_variables_needed_to_use_formula)
    data_frame_of_predicted_probabilities_and_indicators <- data.frame(
-    predicted_probability = vector_of_predicted_probabilities,
-    predicted_indicator =
-     vector_of_predicted_indicators_of_whether_murder_rate_is_higher_than_mean
+    actual_indicator = testing_data$Indicator,
+    predicted_probability = vector_of_predicted_probabilities
    )
    return(data_frame_of_predicted_probabilities_and_indicators)
   }
@@ -49,13 +41,13 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(formula,
   group_by(id) %>%
   summarise(
    sensitivity = pROC::roc(
-    predicted_indicator,
-    predicted_probability,
+    response = actual_indicator,
+    predictor = predicted_probability,
     plot = FALSE
    )$sensitivities,
    specificity = pROC::roc(
-    predicted_indicator,
-    predicted_probability,
+    response = actual_indicator,
+    predictor = predicted_probability,
     plot = FALSE
    )$specificities,
    range_of_numbers_of_observations = 1:length(sensitivity)
@@ -114,8 +106,8 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(formula,
   group_by(id) %>%
   summarise(
    AUC = pROC::roc(
-    predicted_indicator,
-    predicted_probability,
+    response = actual_indicator,
+    predictor = predicted_probability,
     plot = FALSE
    )$auc[1]
   )
