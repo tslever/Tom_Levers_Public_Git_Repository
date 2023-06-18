@@ -1,11 +1,11 @@
-#' @title summarize_performance_of_cross_validated_models
-#' @description Summarizes performance of cross-validated models
+#' @title summarize_performance_of_cross_validated_models_using_base_R
+#' @description Summarizes performance of cross-validated models_using_base_R
 #' @param type_of_model The type of model. An element in the set {"Polynomial Regression", Logistic Regression"}.
-#' @return summary_of_performance_of_cross_validated_models The summary of performance of cross-validated models
-#' @examples summary_of_performance_of_cross_validated_models <- summarize_performance_of_cross_validated_models(type_of_model = "LR", formula = Direction ~ Lag1 + Lag2, data_frame = ISLR2::Weekly)
+#' @return summary_of_performance_of_cross_validated_models_using_base_R The summary of performance of cross-validated models using base R
+#' @examples summary_of_performance_of_cross_validated_models_using_base_R <- summarize_performance_of_cross_validated_models_using_base_R(type_of_model = "LR", formula = Direction ~ Lag1 + Lag2, data_frame = ISLR2::Weekly)
 
 #' @export
-summarize_performance_of_cross_validated_models <- function(type_of_model, formula, data_frame, number_of_folds, threshold = 0.5) {
+summarize_performance_of_cross_validated_models_using_base_R <- function(type_of_model, formula, data_frame, number_of_folds, threshold = 0.5) {
  number_of_observations <- nrow(data_frame)
  number_of_data_per_fold <- ceiling(number_of_observations / number_of_folds)
  if (type_of_model == "Polynomial Regression") {
