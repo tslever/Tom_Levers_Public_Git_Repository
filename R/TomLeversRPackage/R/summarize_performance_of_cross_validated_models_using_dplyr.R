@@ -40,6 +40,16 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
     data_frame_of_predicted_probabilities <- prediction$posterior
     index_of_column_1 <- get_index_of_column_of_data_frame(data_frame_of_predicted_probabilities, 1)
     vector_of_predicted_probabilities <- data_frame_of_predicted_probabilities[, index_of_column_1]
+   } else if (type_of_model == "KNN") {
+    names_of_variables <- all.vars(formula)
+    name_of_response <- names_of_variables[1]
+    vector_of_names_of_predictors <- names_of_variables[-1]
+    matrix_of_values_of_predictors_for_training <- as.matrix(x = training_data[, vector_of_names_of_predictors])
+    matrix_of_values_of_predictors_for_testing <- as.matrix(x = testing_data[, vector_of_names_of_predictors])
+    vector_of_response_values_for_training <- training_data[, name_of_response]
+    data_frame_of_predicted_probabilities <- predict(caret::knn3(matrix_of_values_of_predictors_for_training, vector_of_response_values_for_training, k = 3), matrix_of_values_of_predictors_for_testing)
+    index_of_column_1 <- get_index_of_column_of_data_frame(data_frame_of_predicted_probabilities, 1)
+    vector_of_predicted_probabilities <- data_frame_of_predicted_probabilities[, index_of_column_1]
    } else {
     error_message <- paste("The performance of models of type ", type_of_model, " cannot be yet summarized.", sep = "")
     stop(error_message)

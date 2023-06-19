@@ -29,7 +29,7 @@ optimize_K <- function(formula, training_data, testing_data) {
  }
  #for (K in seq(from = 1, to = 100, by = 10)) {
  for (K in seq(from = 1, to = number_of_training_observations / 2, by = increment)) {
-  vector_of_predicted_values_for_training_data <- knn(
+  vector_of_predicted_values_for_training_data <- class::knn(
    train = matrix_of_values_of_predictors_for_training,
    test = matrix_of_values_of_predictors_for_training,
    cl = vector_of_response_values_for_training,
@@ -44,7 +44,7 @@ optimize_K <- function(formula, training_data, testing_data) {
   vector_of_values_of_K <- append(vector_of_values_of_K, K)
   vector_of_decimals_of_correct_predictions_for_training_data <- append(vector_of_decimals_of_correct_predictions_for_training_data, decimal_of_correct_predictions_for_training_data)
   vector_of_training_error_rates <- append(vector_of_training_error_rates, training_error_rate)
-  vector_of_predicted_values_for_testing_data <- knn(
+  vector_of_predicted_values_for_testing_data <- class::knn(
    train = matrix_of_values_of_predictors_for_training,
    test = matrix_of_values_of_predictors_for_testing,
    cl = vector_of_response_values_for_training,

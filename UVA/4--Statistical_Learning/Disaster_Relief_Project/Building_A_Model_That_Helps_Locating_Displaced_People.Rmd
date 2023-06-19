@@ -114,4 +114,9 @@ summarize_performance_of_cross_validated_models_using_dplyr(
     formula = Indicator ~ Red + Green + Blue,
     data_frame = data_frame_of_indicators_and_pixels
 )
+summarize_performance_of_cross_validated_models_using_dplyr(
+    type_of_model = "KNN",
+    formula = Indicator ~ Red + Green + Blue,
+    data_frame = data_frame_of_indicators_and_pixels
+)
 ```
