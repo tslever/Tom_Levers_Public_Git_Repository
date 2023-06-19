@@ -24,12 +24,19 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
      newdata = testing_data,
      type = "response"
     )
-   } else if (type_of_model == "LDA") {
-    LDA_model <- MASS::lda(
-     formula = formula,
-     data = training_data
-    )
-    prediction <- predict(LDA_model, newdata = testing_data)
+   } else if (type_of_model == "LDA" | type_of_model == "QDA") {
+    if (type_of_model == "LDA") {
+     model <- MASS::lda(
+      formula = formula,
+      data = training_data
+     )
+    } else if (type_of_model == "QDA") {
+     model <- MASS::qda(
+      formula = formula,
+      data = training_data
+     )
+    }
+    prediction <- predict(model, newdata = testing_data)
     data_frame_of_predicted_probabilities <- prediction$posterior
     index_of_column_1 <- get_index_of_column_of_data_frame(data_frame_of_predicted_probabilities, 1)
     vector_of_predicted_probabilities <- data_frame_of_predicted_probabilities[, index_of_column_1]
