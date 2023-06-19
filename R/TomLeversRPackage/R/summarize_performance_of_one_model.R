@@ -7,8 +7,6 @@
 #' @param K The parameter of a K Nearest Neighbors model
 #' @return summary_of_performance_of_one_model The summary of performance
 #' @examples summary_of_performance_of_one_model <- summarize_performance_of_one_model(type_of_model = "KNN", formula = Direction ~ Lag1 + Lag2, training_data = ISLR2::Weekly_from_1990_to_2008_inclusive, test_data = ISLR2::Weekly_from_2009_to_2010_inclusive, K = 350)
-#' @import class
-#' @import MASS
 
 #' @export
 summarize_performance_of_one_model <- function(type_of_model, formula, training_data, test_data, K = 1, threshold = 0.5) {
@@ -40,7 +38,7 @@ summarize_performance_of_one_model <- function(type_of_model, formula, training_
   condition <- vector_of_predicted_probabilities > threshold
   vector_of_predicted_response_values[condition] <- upper_level
  } else if (type_of_model == "LDA") {
-  LDA_model <- lda(
+  LDA_model <- MASS::lda(
    formula = formula,
    data = training_data
   )
@@ -48,7 +46,7 @@ summarize_performance_of_one_model <- function(type_of_model, formula, training_
   vector_of_predicted_response_values <- prediction$class
   name_of_response <- names(attr(LDA_model$terms, "dataClasses"))[1]
  } else if (type_of_model == "QDA") {
-  QDA_model <- qda(
+  QDA_model <- MASS::qda(
    formula = formula,
    data = training_data
   )

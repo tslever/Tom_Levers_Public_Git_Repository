@@ -1,14 +1,6 @@
 Authors@R: person("Tom", "Lever", email = "thomas.lever.business@gmail.com", role = c("cre", "aut"))
 BugReports: https://github.com/tslever/TomLeversRPackage/issues
 Depends: R (>= 4.2.1)
-Imports:
-    class (>= 7.3-21),
-    dplyr (>= 1.1.2),
-    ggplot2 (>= 3.3.6),
-    leaps (>= 3.1),
-    lmtest (>= 0.9-40),
-    MASS (>= 7.3-57),
-    rsample (>= 1.1.1)
 Description: Contains Tom Lever's R functions
 Encoding: UTF-8
 LazyData: true

@@ -5,7 +5,6 @@
 #' @param whether_to_plot Defaults to true
 #' @return result_of_Box_Cox_Method
 #' @examples result_of_Box_Cox_Method <- perform_Box_Cox_Method(linear_model)
-#' @import MASS
 
 #' @export
 perform_Box_Cox_Method <- function(linear_model, vector_of_values_of_lambda, whether_to_plot) {
