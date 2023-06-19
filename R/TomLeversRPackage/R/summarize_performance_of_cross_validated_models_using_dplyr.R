@@ -13,16 +13,30 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   function(train_test_split) {
    training_data <- analysis(x = train_test_split)
    testing_data <- assessment(x = train_test_split)
-   logistic_regression_model <- glm(
-    formula = formula,
-    data = training_data,
-    family = binomial
-   )
-   vector_of_predicted_probabilities <- predict(
-    object = logistic_regression_model,
-    newdata = testing_data,
-    type = "response"
-   )
+   if (type_of_model == "Logistic Regression") {
+    logistic_regression_model <- glm(
+     formula = formula,
+     data = training_data,
+     family = binomial
+    )
+    vector_of_predicted_probabilities <- predict(
+     object = logistic_regression_model,
+     newdata = testing_data,
+     type = "response"
+    )
+   } else if (type_of_model == "LDA") {
+    LDA_model <- MASS::lda(
+     formula = formula,
+     data = training_data
+    )
+    prediction <- predict(LDA_model, newdata = testing_data)
+    data_frame_of_predicted_probabilities <- prediction$posterior
+    index_of_column_1 <- get_index_of_column_of_data_frame(data_frame_of_predicted_probabilities, 1)
+    vector_of_predicted_probabilities <- data_frame_of_predicted_probabilities[, index_of_column_1]
+   } else {
+    error_message <- paste("The performance of models of type ", type_of_model, " cannot be yet summarized.", sep = "")
+    stop(error_message)
+   }
    data_frame_of_predicted_probabilities_and_indicators <- data.frame(
     actual_indicator = testing_data$Indicator,
     predicted_probability = vector_of_predicted_probabilities

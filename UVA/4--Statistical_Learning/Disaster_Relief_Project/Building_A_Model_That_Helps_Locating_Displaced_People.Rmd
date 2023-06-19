@@ -98,9 +98,14 @@ We use $10$-fold cross-validation to evaluate the performance of $5$ classifiers
 We use $10$-fold cross-validation to evaluate the performance of logistic-regression models.
 
 ```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "ROC curve for Indicator vs. Red + Green + Blue"}
-formula <- Indicator ~ Red + Green + Blue
 library(TomLeversRPackage)
 summarize_performance_of_cross_validated_models_using_dplyr(
+    type_of_model = "Logistic Regression",
+    formula = Indicator ~ Red + Green + Blue,
+    data_frame = data_frame_of_indicators_and_pixels
+)
+summarize_performance_of_cross_validated_models_using_dplyr(
+    type_of_model = "LDA",
     formula = Indicator ~ Red + Green + Blue,
     data_frame = data_frame_of_indicators_and_pixels
 )
