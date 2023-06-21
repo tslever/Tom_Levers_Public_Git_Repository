@@ -34,6 +34,8 @@ According to [https://www.esri.com/about/newsroom/insider/what-is-orthorectified
 
 We load a data frame of classes and pixels based on an orthorectified image of Haiti at [https://www.kaggle.com/datasets/billbasener/pixel-values-from-images-over-haiti?datasetId=1899167](https://www.kaggle.com/datasets/billbasener/pixel-values-from-images-over-haiti?datasetId=1899167).
 
+
+
 ```{r, echo = FALSE}
 data_frame_of_classes_and_pixels <- read.csv(
     file = "Data_Frame_Of_Classes_And_Pixels.csv"
@@ -89,6 +91,15 @@ data_frame_of_indicators_and_pixels <- data.frame(
 )
 vector_of_random_indices <- sample(1:number_of_observations)
 data_frame_of_indicators_and_pixels <- data_frame_of_indicators_and_pixels[vector_of_random_indices, ]
+mean_Red_intensity <- mean(data_frame_of_indicators_and_pixels$Red)
+standard_deviation_of_Red_intensity <- sd(data_frame_of_indicators_and_pixels$Red)
+mean_Green_intensity <- mean(data_frame_of_indicators_and_pixels$Green)
+standard_deviation_of_Green_intensity <- sd(data_frame_of_indicators_and_pixels$Green)
+mean_Blue_intensity <- mean(data_frame_of_indicators_and_pixels$Blue)
+standard_deviation_of_Blue_intensity <- sd(data_frame_of_indicators_and_pixels$Blue)
+data_frame_of_indicators_and_pixels$Red <- (data_frame_of_indicators_and_pixels$Red - mean_Red_intensity) / standard_deviation_of_Red_intensity
+data_frame_of_indicators_and_pixels$Green <- (data_frame_of_indicators_and_pixels$Green - mean_Green_intensity) / standard_deviation_of_Green_intensity
+data_frame_of_indicators_and_pixels$Blue <- (data_frame_of_indicators_and_pixels$Blue - mean_Blue_intensity) / standard_deviation_of_Blue_intensity
 head(x = data_frame_of_indicators_and_pixels, n = 2)
 tail(x = data_frame_of_indicators_and_pixels, n = 2)
 ```
@@ -97,7 +108,7 @@ We use $10$-fold cross-validation to evaluate the performance of $5$ classifiers
 
 We use $10$-fold cross-validation to evaluate the performance of logistic-regression models.
 
-```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "ROC curve for Indicator vs. Red + Green + Blue", eval = FALSE}
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "ROC curve for Indicator vs. Red + Green + Blue"}
 library(TomLeversRPackage)
 summarize_performance_of_cross_validated_models_using_dplyr(
     type_of_model = "Logistic Regression",
@@ -116,12 +127,14 @@ summarize_performance_of_cross_validated_models_using_dplyr(
 )
 ```
 
-```{r}
+```{r, warning = FALSE, message = FALSE, eval = FALSE}
 library(TomLeversRPackage)
-summarize_performance_of_cross_validated_models_using_dplyr(
-    type_of_model = "KNN",
-    formula = Indicator ~ Red + Green + Blue,
-    data_frame = data_frame_of_indicators_and_pixels,
-    K = 3
-)
+for (i in 1:99) {
+ print(summarize_performance_of_cross_validated_models_using_dplyr(
+     type_of_model = "KNN",
+     formula = Indicator ~ Red + Green + Blue,
+     data_frame = data_frame_of_indicators_and_pixels,
+     K = i
+ )$mean_AUC)
+}
 ```
