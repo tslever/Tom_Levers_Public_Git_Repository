@@ -60,7 +60,7 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
    )
    return(data_frame_of_predicted_probabilities_and_indicators)
   }
- data_frame_of_sensitivities_and_specificities <-
+ data_frame_of_sensitivities_and_FPRs <-
   rsample::vfold_cv(data_frame, v = 10, repeats = 1) %>%
   mutate(
    predicted_probability = purrr::map(
@@ -71,31 +71,24 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   tidyr::unnest(predicted_probability) %>%
   group_by(id) %>%
   summarise(
-   sensitivity = pROC::roc(
-    response = actual_indicator,
-    predictor = predicted_probability,
-    plot = FALSE
-   )$sensitivities,
-   specificity = pROC::roc(
-    response = actual_indicator,
-    predictor = predicted_probability,
-    plot = FALSE
-   )$specificities,
+   sensitivity = provide_data_for_ROC_curve(actual_indicator, predicted_probability)$TPR,
+   FPR = provide_data_for_ROC_curve(actual_indicator, predicted_probability)$FPR,
    range_of_numbers_of_observations = 1:length(sensitivity)
   )
- data_frame_of_average_sensitivities_and_specificities <-
-  data_frame_of_sensitivities_and_specificities %>%
+ data_frame_of_average_sensitivities_and_FPRs <-
+  data_frame_of_sensitivities_and_FPRs %>%
   ungroup %>%
   group_by(range_of_numbers_of_observations) %>%
   summarise(
    sensitivity = mean(sensitivity),
-   specificity = mean(specificity),
+   FPR = mean(FPR),
    id = "Average"
   )
- data_frame_of_sensitivities_and_specificities <-
+ mean_AUC <- Bolstad2::sintegral(data_frame_of_average_sensitivities_and_FPRs$FPR, data_frame_of_average_sensitivities_and_FPRs$sensitivity)$int
+ data_frame_of_sensitivities_and_FPRs <-
   bind_rows(
-   data_frame_of_sensitivities_and_specificities,
-   data_frame_of_average_sensitivities_and_specificities
+   data_frame_of_sensitivities_and_FPRs,
+   data_frame_of_average_sensitivities_and_FPRs
   ) %>%
   mutate(
    colour = factor(
@@ -112,8 +105,8 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   )
  library(ggplot2)
  ROC_curve <- ggplot(
-  data = data_frame_of_sensitivities_and_specificities,
-  mapping = aes(x = 1 - sensitivity, y = specificity, group = id, colour = colour)
+  data = data_frame_of_sensitivities_and_FPRs,
+  mapping = aes(x = FPR, y = sensitivity, group = id, colour = colour)
  ) +
   geom_line(mapping = aes(size = colour, alpha = colour)) +
   scale_colour_manual(values = c("black", "red")) +
@@ -121,28 +114,7 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   scale_alpha_manual(values = c(0.3, 1)) +
   theme_classic() +
   theme(legend.position = c(0.75, 0.15)) +
-  labs(x = "1 - Sensitivity", y = "Specificity", colour = "", alpha = "", size = "")
- data_frame_of_id_and_AUC <- rsample::vfold_cv(
-  data = data_frame,
-  v = 10,
-  repeats = 1
- ) %>%
-  mutate(
-   predicted_probability = purrr::map(
-    splits,
-    generate_data_frame_of_predicted_probabilities_and_indicators
-   )
-  ) %>%
-  tidyr::unnest(predicted_probability) %>%
-  group_by(id) %>%
-  summarise(
-   AUC = pROC::roc(
-    response = actual_indicator,
-    predictor = predicted_probability,
-    plot = FALSE
-   )$auc[1]
-  )
- mean_AUC <- mean(data_frame_of_id_and_AUC$AUC)
+  labs(x = "FPR", y = "TPR", colour = "", alpha = "", size = "")
  ROC_curve_and_mean_AUC <- list(
   ROC_curve = ROC_curve,
   mean_AUC = mean_AUC
