@@ -5,6 +5,7 @@
 #' @return summary_of_performance_of_cross_validated_models_using_dplyr The summary of performance of cross-validated models using dplyr
 #' @examples summary_of_performance_of_cross_validated_models_using_dplyr <- summarize_performance_of_cross_validated_models_using_dplyr(Indicator ~ Red + Green + Blue, data_frame = data_frame_of_indicators_and_pixels)
 #' @import dplyr
+#' @import ggplot2
 #' @import rsample
 
 #' @export
@@ -71,8 +72,10 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   tidyr::unnest(predicted_probability) %>%
   group_by(id) %>%
   summarise(
+   threshold = provide_data_for_ROC_and_PR_curves(actual_indicator, predicted_probability)$threshold,
    precision = provide_data_for_ROC_and_PR_curves(actual_indicator, predicted_probability)$PPV,
    recall = provide_data_for_ROC_and_PR_curves(actual_indicator, predicted_probability)$TPR,
+   F1_measure = (1 + 1^2) * precision * recall / (1^2 * precision + recall),
    range_of_numbers_of_observations = 1:length(recall)
   )
  data_frame_of_average_sensitivities_and_FPRs <-
@@ -80,44 +83,47 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   ungroup %>%
   group_by(range_of_numbers_of_observations) %>%
   summarise(
+   threshold = mean(threshold),
    precision = mean(precision),
    recall = mean(recall),
+   F1_measure = mean(F1_measure),
    id = "Average"
   )
- mean_AUC <- Bolstad2::sintegral(data_frame_of_average_sensitivities_and_FPRs$recall, data_frame_of_average_sensitivities_and_FPRs$precision)$int
- data_frame_of_sensitivities_and_FPRs <-
-  bind_rows(
-   data_frame_of_sensitivities_and_FPRs,
-   data_frame_of_average_sensitivities_and_FPRs
-  ) %>%
-  mutate(
-   colour = factor(
-    ifelse(
-     test = id == "Average",
-     yes = "Average",
-     no = "Individual"
-    ),
-    levels = c(
-     "Individual",
-     "Average"
-    )
-   )
-  )
- library(ggplot2)
+ #mean_AUC <- Bolstad2::sintegral(data_frame_of_average_sensitivities_and_FPRs$recall, data_frame_of_average_sensitivities_and_FPRs$precision)$int
+ #data_frame_of_sensitivities_and_FPRs <-
+ # bind_rows(
+ #  data_frame_of_sensitivities_and_FPRs,
+ #  data_frame_of_average_sensitivities_and_FPRs
+ # ) %>%
+ # mutate(
+ #  colour = factor(
+ #   ifelse(
+ #    test = id == "Average",
+ #    yes = "Average",
+ #    no = "Individual"
+ #   ),
+ #   levels = c(
+ #    "Individual",
+ #    "Average"
+ #   )
+ #  )
+ # )
  ROC_curve <- ggplot(
-  data = data_frame_of_sensitivities_and_FPRs,
-  mapping = aes(x = recall, y = precision, group = id, colour = colour)
+  data = data_frame_of_average_sensitivities_and_FPRs,
+  mapping = aes(x = threshold)
  ) +
-  geom_line(mapping = aes(size = colour, alpha = colour)) +
-  scale_colour_manual(values = c("black", "red")) +
-  scale_size_manual(values = c(0.5, 1.25)) +
-  scale_alpha_manual(values = c(0.3, 1)) +
-  theme_classic() +
+  geom_line(mapping = aes(y = F1_measure, color = "Average F measure")) +
+  geom_line(mapping = aes(y = precision, color = "Average Precision")) +
+  geom_line(mapping = aes(y = recall, color = "Average Recall")) +
+  scale_colour_manual(values = c("green4", "purple", "red")) +
   theme(legend.position = c(0.75, 0.15)) +
-  labs(x = "recall", y = "precision", colour = "", alpha = "", size = "")
+  labs(x = "threshold", y = "performance metric")
+ maximum_average_F1_measure <- max(data_frame_of_average_sensitivities_and_FPRs$F1_measure, na.rm = TRUE)
+ index_of_column_F1_measure <- get_index_of_column_of_data_frame(data_frame_of_average_sensitivities_and_FPRs, "F1_measure")
+ index_of_maximum_average_F1_measure <- which(data_frame_of_average_sensitivities_and_FPRs[, index_of_column_F1_measure] == maximum_average_F1_measure)
  ROC_curve_and_mean_AUC <- list(
   ROC_curve = ROC_curve,
-  mean_AUC = mean_AUC
+  data_frame_corresponding_to_maximum_average_F1_measure = data_frame_of_average_sensitivities_and_FPRs[index_of_maximum_average_F1_measure, c("threshold", "precision", "recall", "F1_measure")]
  )
  return(ROC_curve_and_mean_AUC)
 }

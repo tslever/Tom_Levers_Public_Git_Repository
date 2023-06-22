@@ -9,7 +9,7 @@
 
 #' @export
 provide_data_for_ROC_and_PR_curves <- function(vector_of_actual_indicators, vector_of_predicted_probabilities) {
- sequence <- seq(from = 0, to = 1, by = 0.005)
+ sequence <- seq(from = 0, to = 1, by = 0.01)
  data_frame_of_thresholds_TPRs_FPRs_and_PPVs <- setNames(
   object = data.frame(
    matrix(

@@ -104,9 +104,15 @@ head(x = data_frame_of_indicators_and_pixels, n = 2)
 tail(x = data_frame_of_indicators_and_pixels, n = 2)
 ```
 
-We use $10$-fold cross-validation to evaluate the performance of $5$ classifiers. A classifier will classify a pixel as depicting a blue tarp or depicting an object that is not a blue tarp.
+We use $10$-fold cross-validation to evaluate the performance of $5$ classifiers. A classifier will classify a pixel as depicting a blue tarp or depicting an object that is not a blue tarp. We consider graphs each with an increasing purple curve representing Average Precision vs. Threshold, a decreasing red curve representing Average Recall vs. Threshold, and a forest-green curve representing Average F1 Measure vs. Threshold.
+
+A threshold is a probability between $0$ and $1$. A model classifies a pixel as representing a blue tarp if the model the probability that the pixel represents a blue tarp that the model predicts is greater than the threshold. Precision is the ratio of true positives to predicted positives. Recall is the ratio of true positives to actual positives. An $F1$ measure is the harmonic mean of precision and recall.
+
+When tuning the thresholds of our models we prioritize recall at least as much as precision. We prioritize identifying as many positives correctly as possible over having predicted positives be correct. We recommend models with thresholds less than or equal to the least threshold corresponding to the maximum $F1$ measure.
 
 We use $10$-fold cross-validation to evaluate the performance of logistic-regression models.
+
+We use $10$-fold cross-validation to evaluation the performance of a logistic-regression model with formula $Indicator \sim Red + Green + Blue$.
 
 ```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For Logistic Regression Model With Formula Indicator vs. Red + Green + Blue"}
 library(TomLeversRPackage)
