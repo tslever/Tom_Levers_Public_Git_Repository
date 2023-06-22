@@ -71,20 +71,20 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   tidyr::unnest(predicted_probability) %>%
   group_by(id) %>%
   summarise(
-   sensitivity = provide_data_for_ROC_curve(actual_indicator, predicted_probability)$TPR,
-   FPR = provide_data_for_ROC_curve(actual_indicator, predicted_probability)$FPR,
-   range_of_numbers_of_observations = 1:length(sensitivity)
+   precision = provide_data_for_ROC_and_PR_curves(actual_indicator, predicted_probability)$PPV,
+   recall = provide_data_for_ROC_and_PR_curves(actual_indicator, predicted_probability)$TPR,
+   range_of_numbers_of_observations = 1:length(recall)
   )
  data_frame_of_average_sensitivities_and_FPRs <-
   data_frame_of_sensitivities_and_FPRs %>%
   ungroup %>%
   group_by(range_of_numbers_of_observations) %>%
   summarise(
-   sensitivity = mean(sensitivity),
-   FPR = mean(FPR),
+   precision = mean(precision),
+   recall = mean(recall),
    id = "Average"
   )
- mean_AUC <- Bolstad2::sintegral(data_frame_of_average_sensitivities_and_FPRs$FPR, data_frame_of_average_sensitivities_and_FPRs$sensitivity)$int
+ mean_AUC <- Bolstad2::sintegral(data_frame_of_average_sensitivities_and_FPRs$recall, data_frame_of_average_sensitivities_and_FPRs$precision)$int
  data_frame_of_sensitivities_and_FPRs <-
   bind_rows(
    data_frame_of_sensitivities_and_FPRs,
@@ -106,7 +106,7 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
  library(ggplot2)
  ROC_curve <- ggplot(
   data = data_frame_of_sensitivities_and_FPRs,
-  mapping = aes(x = FPR, y = sensitivity, group = id, colour = colour)
+  mapping = aes(x = recall, y = precision, group = id, colour = colour)
  ) +
   geom_line(mapping = aes(size = colour, alpha = colour)) +
   scale_colour_manual(values = c("black", "red")) +
@@ -114,7 +114,7 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   scale_alpha_manual(values = c(0.3, 1)) +
   theme_classic() +
   theme(legend.position = c(0.75, 0.15)) +
-  labs(x = "FPR", y = "TPR", colour = "", alpha = "", size = "")
+  labs(x = "recall", y = "precision", colour = "", alpha = "", size = "")
  ROC_curve_and_mean_AUC <- list(
   ROC_curve = ROC_curve,
   mean_AUC = mean_AUC
