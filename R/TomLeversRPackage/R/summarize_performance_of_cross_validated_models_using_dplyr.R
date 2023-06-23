@@ -116,7 +116,7 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   mapping = aes(x = threshold)
  ) +
   geom_line(mapping = aes(y = decimal_of_true_positives, color = "Average Decimal Of True Predictions")) +
-  geom_line(mapping = aes(y = F1_measure, color = "Average F measure")) +
+  geom_line(mapping = aes(y = F1_measure, color = "Average F1 measure")) +
   geom_line(mapping = aes(y = precision, color = "Average Precision")) +
   geom_line(mapping = aes(y = recall, color = "Average Recall")) +
   scale_colour_manual(values = c("#008080", "green4", "purple", "red")) +

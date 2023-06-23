@@ -74,7 +74,7 @@ plot3d(
 rglwidget()
 ```
 
-In order to build binary classifiers, we create a data frame with a column of indicators of whether of not a pixel depicts a blue tarp instead of a column of classes.
+In order to build binary classifiers, we create a data frame with a column of indicators of whether of not a pixel depicts a blue tarp instead of a column of classes. We normalize as opposed to standardize intensities given that distributions of intensity are not normal.
 
 ```{r, fig.cap = "Distribution Of Classes In Intensity Space", echo = FALSE}
 library(rgl)
@@ -91,39 +91,55 @@ data_frame_of_indicators_and_pixels <- data.frame(
 )
 vector_of_random_indices <- sample(1:number_of_observations)
 data_frame_of_indicators_and_pixels <- data_frame_of_indicators_and_pixels[vector_of_random_indices, ]
-mean_Red_intensity <- mean(data_frame_of_indicators_and_pixels$Red)
-standard_deviation_of_Red_intensity <- sd(data_frame_of_indicators_and_pixels$Red)
-mean_Green_intensity <- mean(data_frame_of_indicators_and_pixels$Green)
-standard_deviation_of_Green_intensity <- sd(data_frame_of_indicators_and_pixels$Green)
-mean_Blue_intensity <- mean(data_frame_of_indicators_and_pixels$Blue)
-standard_deviation_of_Blue_intensity <- sd(data_frame_of_indicators_and_pixels$Blue)
-data_frame_of_indicators_and_pixels$Red <- (data_frame_of_indicators_and_pixels$Red - mean_Red_intensity) / standard_deviation_of_Red_intensity
-data_frame_of_indicators_and_pixels$Green <- (data_frame_of_indicators_and_pixels$Green - mean_Green_intensity) / standard_deviation_of_Green_intensity
-data_frame_of_indicators_and_pixels$Blue <- (data_frame_of_indicators_and_pixels$Blue - mean_Blue_intensity) / standard_deviation_of_Blue_intensity
+#mean_Red_intensity <- mean(data_frame_of_indicators_and_pixels$Red)
+#standard_deviation_of_Red_intensity <- sd(data_frame_of_indicators_and_pixels$Red)
+#mean_Green_intensity <- mean(data_frame_of_indicators_and_pixels$Green)
+#standard_deviation_of_Green_intensity <- sd(data_frame_of_indicators_and_pixels$Green)
+#mean_Blue_intensity <- mean(data_frame_of_indicators_and_pixels$Blue)
+#standard_deviation_of_Blue_intensity <- sd(data_frame_of_indicators_and_pixels$Blue)
+#data_frame_of_indicators_and_pixels$Red <- (data_frame_of_indicators_and_pixels$Red - mean_Red_intensity) / standard_deviation_of_Red_intensity
+#data_frame_of_indicators_and_pixels$Green <- (data_frame_of_indicators_and_pixels$Green - mean_Green_intensity) / standard_deviation_of_Green_intensity
+#data_frame_of_indicators_and_pixels$Blue <- (data_frame_of_indicators_and_pixels$Blue - mean_Blue_intensity) / standard_deviation_of_Blue_intensity
+data_frame_of_indicators_and_pixels$Red <- data_frame_of_indicators_and_pixels$Red / 255
+data_frame_of_indicators_and_pixels$Green <- data_frame_of_indicators_and_pixels$Green / 255
+data_frame_of_indicators_and_pixels$Blue <- data_frame_of_indicators_and_pixels$Blue / 255
 head(x = data_frame_of_indicators_and_pixels, n = 2)
 tail(x = data_frame_of_indicators_and_pixels, n = 2)
 ```
 
-We use $10$-fold cross-validation to evaluate the performance of $5$ classifiers. A classifier will classify a pixel as depicting a blue tarp or depicting an object that is not a blue tarp. We consider graphs each with an increasing purple curve representing Average Precision vs. Threshold, a decreasing red curve representing Average Recall vs. Threshold, and a forest-green curve representing Average F1 Measure vs. Threshold.
+We use $10$-fold cross-validation to evaluate the performance of $5$ classifiers. A classifier will classify a pixel as depicting a blue tarp or depicting an object that is not a blue tarp. We consider graphs each with an increasing purple curve representing Average Precision vs. Threshold, a decreasing red curve representing Average Recall vs. Threshold, a forest-green curve representing Average F1 Measure vs. Threshold, and a teal curve representing Average Decimal Of True Positives vs. Threshold.
 
-A threshold is a probability between $0$ and $1$. A model classifies a pixel as representing a blue tarp if the model the probability that the pixel represents a blue tarp that the model predicts is greater than the threshold. Precision is the ratio of true positives to predicted positives. Recall is the ratio of true positives to actual positives. An $F1$ measure is the harmonic mean of precision and recall.
+A threshold is a probability between $0$ and $1$. A model classifies a pixel as representing a blue tarp if the model the probability that the pixel represents a blue tarp that the model predicts is greater than the threshold. Precision is the ratio of true positives to predicted positives. Recall is the ratio of true positives to actual positives. An F1 measure is the harmonic mean of precision and recall. A decimal of true positives is the ratio of number of true positives to total number of predictions.
 
-When tuning the thresholds of our models we prioritize recall at least as much as precision. We prioritize identifying as many positives correctly as possible over having predicted positives be correct. We recommend models with thresholds less than or equal to the least threshold corresponding to the maximum $F1$ measure.
+When tuning the thresholds of our models we prioritize recall at least as much as precision. We prioritize identifying as many positives correctly as possible over having predicted positives be correct. We recommend models with thresholds less than or equal to the threshold $t$ that corresponds to the maximum F1 measure and that is least. Note that precision will decrease more rapidly than recall will increase for thresholds less than $t$. Our ideal threshold may be $t$ or may be the highest threshold at which the derivative of Average Precision vs. Threshold is $1$.
 
-We use $10$-fold cross-validation to evaluate the performance of logistic-regression models.
+We consider how the number of refugees to visit may change with precision. We assume that the testing data consists of actual indicators and random pixels from the training image. Suppose precision $PPV = TP / \hat{P} = 0.944$. Suppose decimal of true positives $TPD = TP / n = 0.0296$. The decimal of predicted positives $PPD = \hat{P} / n = TPD / PPV = \frac{TP/n}{TP/\hat{P}} = 0.0296 / 0.944 = 0.0313$. The number of pixels in our training image is $4441 \times 6833 = 30,345,353$. The number of pixels in our training image that might be predicted to represent blue tarps is $949,810$. Considering a blue tarp in the top left corner of our training image, the number of pixels representing one blue tarp may be $36 \times 36 = 1,296$. The predicted number of blue tarps in our training image may be $733$. We assume that there is one refugee per blue tarp. If we change precision by a factor of -0.139 to 0.8125, the predicted number of blue tarps in our training image may increase by $120$ to $853$. The number of true positives may increase by $4$ and the number of false negatives may decrease by $4$.
 
-We use $10$-fold cross-validation to evaluation the performance of a logistic-regression model with formula $Indicator \sim Red + Green + Blue$.
+Suppose the width of our training image is $1,500 \ ft$. Then our training image's height is about $2,308 \ ft$ and its area is about $0.124 \ mi^2$. Suppose the area of Léogâne is $148.7 \ mi^2. There are about $1,200$ areas like that depicted in our training image in Léogâne.
 
-```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For Logistic Regression Model With Formula Indicator vs. Red + Green + Blue"}
+We use $10$-fold cross-validation to evaluate the performance of logistic-regression models. We perform manual bidirectional selection. According to [https://www.ibm.com/docs/en/contentclassificatio/8.8?topic=analysis-category-graph-precision-recall-vs-threshold](https://www.ibm.com/docs/en/contentclassificatio/8.8?topic=analysis-category-graph-precision-recall-vs-threshold), "The ideal threshold setting is the highest possible recall and precision rate. This goal is not always achievable, because the higher the recall rate, the lower the precision rate, and vice versa. Setting the most appropriate threshold for a category is a trade-off between these two rates." We consider the ideal threshold setting to correspond to the highest F1 measure. First, we consider the addition to an intercept only logistic regression model of one of the predictive terms $Red$, $Green$, $Blue$, $log(Red)$, $log(Green)$, $log(Blue)$, $sqrt(Red)$, $sqrt(Green)$, $sqrt(Blue)$, $Red^2$, $Green^2$, and $Blue^2$. The logistic regression model with formula $Indicator ~ Blue^2$ has the highest F1 measure. We consider the addition of each of the above predictive terms as well as $Red:Green$, $Red:Blue$, and $Green:Blue$. The logistic regression model with formula $Indicator ~ Blue^2 + Red:Green$ has the highest F1 measure. We do not remove predictive term $Blue^2$ from this model. We consider the addition of each of the above predictive terms. The logistic regression model with formula $Indicator ~ Blue^2 + Red:Green + Green$ has the highest F1 measure. We do not remove any predictive term because we have already considered submodels. We consider the addition of each of the above predictive terms. No model has a higher F1 measure than the logistic regression model with formula $Indicator ~ Blue^2 + Red:Green + Green$.
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For Logistic Regression Model With Formula Indicator vs. Blue Squared + Interaction Of Red And Green + Green"}
 library(TomLeversRPackage)
+#summarize_performance_of_cross_validated_models_using_dplyr(
+#    type_of_model = "Logistic Regression",
+#    formula = Indicator ~ I(Blue^2),
+#    data_frame = data_frame_of_indicators_and_pixels
+#)
+#print("Indicator ~ I(Blue^2) + Red:Green")
+#summarize_performance_of_cross_validated_models_using_dplyr(
+#    type_of_model = "Logistic Regression",
+#    formula = Indicator ~ I(Blue^2) + Red:Green,
+#    data_frame = data_frame_of_indicators_and_pixels
+#)
 summarize_performance_of_cross_validated_models_using_dplyr(
     type_of_model = "Logistic Regression",
-    formula = Indicator ~ Red + Green + Blue,
+    formula = Indicator ~ I(Blue^2) + Red:Green + Green,
     data_frame = data_frame_of_indicators_and_pixels
 )
 ```
 
-```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For Linear Discriminant Analysis Model With Formula Indicator vs. Red + Green + Blue"}
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For Linear Discriminant Analysis Model With Formula Indicator vs. Red + Green + Blue", eval = FALSE}
 summarize_performance_of_cross_validated_models_using_dplyr(
     type_of_model = "LDA",
     formula = Indicator ~ Red + Green + Blue,
@@ -131,7 +147,7 @@ summarize_performance_of_cross_validated_models_using_dplyr(
 )
 ```
 
-```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For Quadratic Discriminant Analysis Model With Formula Indicator vs. Red + Green + Blue"}
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For Quadratic Discriminant Analysis Model With Formula Indicator vs. Red + Green + Blue", eval = FALSE}
 summarize_performance_of_cross_validated_models_using_dplyr(
     type_of_model = "QDA",
     formula = Indicator ~ Red + Green + Blue,
@@ -139,7 +155,7 @@ summarize_performance_of_cross_validated_models_using_dplyr(
 )
 ```
 
-```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For K Nearest Neighbors Model With Formula Indicator vs. Red + Green + Blue And K = 3"}
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For K Nearest Neighbors Model With Formula Indicator vs. Red + Green + Blue And K = 3", eval = FALSE}
 summarize_performance_of_cross_validated_models_using_dplyr(
     type_of_model = "KNN",
     formula = Indicator ~ Red + Green + Blue,
