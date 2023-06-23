@@ -10,6 +10,7 @@
 
 #' @export
 summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_model, formula, data_frame, K = 1) {
+ print(formula)
  generate_data_frame_of_predicted_probabilities_and_indicators <-
   function(train_test_split) {
    training_data <- analysis(x = train_test_split)
@@ -72,10 +73,11 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   tidyr::unnest(predicted_probability) %>%
   group_by(id) %>%
   summarise(
-   threshold = provide_data_for_ROC_and_PR_curves(actual_indicator, predicted_probability)$threshold,
-   precision = provide_data_for_ROC_and_PR_curves(actual_indicator, predicted_probability)$PPV,
-   recall = provide_data_for_ROC_and_PR_curves(actual_indicator, predicted_probability)$TPR,
+   threshold = provide_performance_metrics(actual_indicator, predicted_probability)$threshold,
+   precision = provide_performance_metrics(actual_indicator, predicted_probability)$PPV,
+   recall = provide_performance_metrics(actual_indicator, predicted_probability)$TPR,
    F1_measure = (1 + 1^2) * precision * recall / (1^2 * precision + recall),
+   decimal_of_true_positives = provide_performance_metrics(actual_indicator, predicted_probability)$decimal_of_true_positives,
    range_of_numbers_of_observations = 1:length(recall)
   )
  data_frame_of_average_sensitivities_and_FPRs <-
@@ -87,6 +89,7 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
    precision = mean(precision),
    recall = mean(recall),
    F1_measure = mean(F1_measure),
+   decimal_of_true_positives = mean(decimal_of_true_positives),
    id = "Average"
   )
  #mean_AUC <- Bolstad2::sintegral(data_frame_of_average_sensitivities_and_FPRs$recall, data_frame_of_average_sensitivities_and_FPRs$precision)$int
@@ -112,18 +115,19 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   data = data_frame_of_average_sensitivities_and_FPRs,
   mapping = aes(x = threshold)
  ) +
+  geom_line(mapping = aes(y = decimal_of_true_positives, color = "Average Decimal Of True Predictions")) +
   geom_line(mapping = aes(y = F1_measure, color = "Average F measure")) +
   geom_line(mapping = aes(y = precision, color = "Average Precision")) +
   geom_line(mapping = aes(y = recall, color = "Average Recall")) +
-  scale_colour_manual(values = c("green4", "purple", "red")) +
-  theme(legend.position = c(0.75, 0.15)) +
+  scale_colour_manual(values = c("#008080", "green4", "purple", "red")) +
+  theme(legend.position = c(0.5, 0.25)) +
   labs(x = "threshold", y = "performance metric")
  maximum_average_F1_measure <- max(data_frame_of_average_sensitivities_and_FPRs$F1_measure, na.rm = TRUE)
  index_of_column_F1_measure <- get_index_of_column_of_data_frame(data_frame_of_average_sensitivities_and_FPRs, "F1_measure")
  index_of_maximum_average_F1_measure <- which(data_frame_of_average_sensitivities_and_FPRs[, index_of_column_F1_measure] == maximum_average_F1_measure)
  ROC_curve_and_mean_AUC <- list(
   ROC_curve = ROC_curve,
-  data_frame_corresponding_to_maximum_average_F1_measure = data_frame_of_average_sensitivities_and_FPRs[index_of_maximum_average_F1_measure, c("threshold", "precision", "recall", "F1_measure")]
+  data_frame_corresponding_to_maximum_average_F1_measure = data_frame_of_average_sensitivities_and_FPRs[index_of_maximum_average_F1_measure, c("threshold", "decimal_of_true_positives", "precision", "recall", "F1_measure")]
  )
  return(ROC_curve_and_mean_AUC)
 }
