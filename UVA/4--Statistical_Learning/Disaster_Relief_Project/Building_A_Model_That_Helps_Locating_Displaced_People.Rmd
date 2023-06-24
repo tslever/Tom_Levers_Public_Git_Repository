@@ -117,7 +117,11 @@ We consider how the number of refugees to visit may change with precision. We as
 
 Suppose the width of our training image is $1,500 \ ft$. Then our training image's height is about $2,308 \ ft$ and its area is about $0.124 \ mi^2$. Suppose the area of Léogâne is $148.7 \ mi^2. There are about $1,200$ areas like that depicted in our training image in Léogâne.
 
-We use $10$-fold cross-validation to evaluate the performance of logistic-regression models. We perform manual bidirectional selection. According to [https://www.ibm.com/docs/en/contentclassificatio/8.8?topic=analysis-category-graph-precision-recall-vs-threshold](https://www.ibm.com/docs/en/contentclassificatio/8.8?topic=analysis-category-graph-precision-recall-vs-threshold), "The ideal threshold setting is the highest possible recall and precision rate. This goal is not always achievable, because the higher the recall rate, the lower the precision rate, and vice versa. Setting the most appropriate threshold for a category is a trade-off between these two rates." We consider the ideal threshold setting to correspond to the highest F1 measure. First, we consider the addition to an intercept only logistic regression model of one of the predictive terms $Red$, $Green$, $Blue$, $log(Red)$, $log(Green)$, $log(Blue)$, $sqrt(Red)$, $sqrt(Green)$, $sqrt(Blue)$, $Red^2$, $Green^2$, and $Blue^2$. The logistic regression model with formula $Indicator ~ Blue^2$ has the highest F1 measure. We consider the addition of each of the above predictive terms as well as $Red:Green$, $Red:Blue$, and $Green:Blue$. The logistic regression model with formula $Indicator ~ Blue^2 + Red:Green$ has the highest F1 measure. We do not remove predictive term $Blue^2$ from this model. We consider the addition of each of the above predictive terms. The logistic regression model with formula $Indicator ~ Blue^2 + Red:Green + Green$ has the highest F1 measure. We do not remove any predictive term because we have already considered submodels. We consider the addition of each of the above predictive terms. No model has a higher F1 measure than the logistic regression model with formula $Indicator ~ Blue^2 + Red:Green + Green$.
+We use $10$-fold cross-validation to evaluate the performance of logistic-regression models. We perform manual bidirectional selection. According to [https://www.ibm.com/docs/en/contentclassificatio/8.8?topic=analysis-category-graph-precision-recall-vs-threshold](https://www.ibm.com/docs/en/contentclassificatio/8.8?topic=analysis-category-graph-precision-recall-vs-threshold), "The ideal threshold setting is the highest possible recall and precision rate. This goal is not always achievable, because the higher the recall rate, the lower the precision rate, and vice versa. Setting the most appropriate threshold for a category is a trade-off between these two rates." We consider the ideal threshold setting to correspond to the highest F1 measure. First, we consider the addition to an intercept only logistic regression model of one of the predictive terms $Red$, $Green$, $Blue$, $log(Red)$, $log(Green)$, $log(Blue)$, $sqrt(Red)$, $sqrt(Green)$, $sqrt(Blue)$, $Red^2$, $Green^2$, and $Blue^2$. The logistic regression model with formula $Indicator ~ Blue^2$ has the highest F1 measure. We consider the addition of each of the above predictive terms as well as $Red:Green$, $Red:Blue$, and $Green:Blue$. The logistic regression model with formula $Indicator ~ Blue^2 + Red:Green$ has the highest F1 measure. We do not remove predictive term $Blue^2$ from this model. We consider the addition of each of the above predictive terms. The logistic regression model with formula $Indicator ~ Blue^2 + Red:Green + Green$ has the highest F1 measure of $0.943$. We do not remove any predictive term because we have already considered submodels. We consider the addition of each of the above predictive terms. No model has a higher F1 measure than the logistic regression model with formula $Indicator ~ Blue^2 + Red:Green + Green$.
+
+Following the same process, our best Linear Discriminant Analysis model has formula $Indicator ~ Blue^2 + Red:Blue + sqrt(Blue) + log(Blue) + Blue$ and F1 measure $0.906$.
+
+Our best Quadratic Discriminant Analysis model has formula $Indicator ~ Blue^2 + Red^2 + Red:Green + Red + Blue + Green$ and F1 measure $0.952$.
 
 ```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For Logistic Regression Model With Formula Indicator vs. Blue Squared + Interaction Of Red And Green + Green"}
 library(TomLeversRPackage)
@@ -139,18 +143,58 @@ summarize_performance_of_cross_validated_models_using_dplyr(
 )
 ```
 
-```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For Linear Discriminant Analysis Model With Formula Indicator vs. Red + Green + Blue", eval = FALSE}
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For Linear Discriminant Analysis Model With Formula Indicator vs. Blue Squared + Interaction Of Red And Blue + Square Root Of Blue + Natural Logarithm Of Blue + Blue", eval = TRUE}
+#summarize_performance_of_cross_validated_models_using_dplyr(
+#    type_of_model = "LDA",
+#    formula = Indicator ~ I(Blue^2),
+#    data_frame = data_frame_of_indicators_and_pixels
+#)
+#summarize_performance_of_cross_validated_models_using_dplyr(
+#    type_of_model = "LDA",
+#    formula = Indicator ~ I(Blue^2) + Red:Blue,
+#    data_frame = data_frame_of_indicators_and_pixels
+#)
+#summarize_performance_of_cross_validated_models_using_dplyr(
+#    type_of_model = "LDA",
+#    formula = Indicator ~ I(Blue^2) + Red:Blue + sqrt(Blue),
+#    data_frame = data_frame_of_indicators_and_pixels
+#)
 summarize_performance_of_cross_validated_models_using_dplyr(
     type_of_model = "LDA",
-    formula = Indicator ~ Red + Green + Blue,
+    formula = Indicator ~ I(Blue^2) + Red:Blue + sqrt(Blue) + log(Blue) + Blue,
     data_frame = data_frame_of_indicators_and_pixels
 )
 ```
 
-```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For Quadratic Discriminant Analysis Model With Formula Indicator vs. Red + Green + Blue", eval = FALSE}
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For Quadratic Discriminant Analysis Model With Formula Indicator vs. Blue Squared + Red Squared + Interaction Of Red And Green + Red + Natural Logarithm Of Blue + Natural Logarithm Of Green", eval = TRUE}
+#summarize_performance_of_cross_validated_models_using_dplyr(
+#    type_of_model = "QDA",
+#    formula = Indicator ~ I(Blue^2),
+#    data_frame = data_frame_of_indicators_and_pixels
+#)
+#summarize_performance_of_cross_validated_models_using_dplyr(
+#    type_of_model = "QDA",
+#    formula = Indicator ~ I(Blue^2) + I(Red^2),
+#    data_frame = data_frame_of_indicators_and_pixels
+#)
+#summarize_performance_of_cross_validated_models_using_dplyr(
+#    type_of_model = "QDA",
+#    formula = Indicator ~ I(Blue^2) + I(Red^2) + Red:Green,
+#    data_frame = data_frame_of_indicators_and_pixels
+#)
+#summarize_performance_of_cross_validated_models_using_dplyr(
+#    type_of_model = "QDA",
+#    formula = Indicator ~ I(Blue^2) + I(Red^2) + Red:Green + Red,
+#    data_frame = data_frame_of_indicators_and_pixels
+#)
+#summarize_performance_of_cross_validated_models_using_dplyr(
+#    type_of_model = "QDA",
+#    formula = Indicator ~ I(Blue^2) + I(Red^2) + Red:Green + Red + log(Blue),
+#    data_frame = data_frame_of_indicators_and_pixels
+#)
 summarize_performance_of_cross_validated_models_using_dplyr(
     type_of_model = "QDA",
-    formula = Indicator ~ Red + Green + Blue,
+    formula = Indicator ~ I(Blue^2) + I(Red^2) + Red:Green + Red + log(Blue) + log(Green),
     data_frame = data_frame_of_indicators_and_pixels
 )
 ```
