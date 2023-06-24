@@ -1,0 +1,496 @@
+# Chapter 6 Lab 1: Subset Selection Methods
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(error=TRUE,        # Keep compiling upon error
+                      collapse=FALSE,    # collapse by default
+                      echo=TRUE,         # echo code by default
+                      comment = "#>",    # change comment character
+                      fig.width = 5.5,     # set figure width
+                      fig.align = "center",# set figure position
+                      out.width = "80%", # set width of displayed images
+                      warning=FALSE,     # do not show R warnings
+                      message=FALSE)     # do not show R messages
+```
+
+## Best Subset Selection
+
+### Missing Data 
+```{r hitters}
+#library(ISLR)
+#fix(Hitters)
+#names(Hitters)
+#dim(Hitters)
+library(tidyverse)
+library(tibble)
+hitters <- ISLR::Hitters %>% tibble()
+#sum(is.na(Hitters$Salary))
+hitters
+hitters %>% summary()
+#Hitters=na.omit(Hitters)
+hitters_drop_na <- hitters %>% tidyr::drop_na()
+hitters_drop_na
+#dim(Hitters)
+#sum(is.na(Hitters))
+```
+
+### Model Space
+
+`install.packages('leaps')`
+
+```{r leaps}
+library(leaps)
+regfit.full <- leaps::regsubsets(Salary~., hitters_drop_na)
+#summary(regfit.full)
+regfit.full %>% broom::tidy()
+
+regfit.full <- regsubsets(Salary~., data=hitters_drop_na, nvmax=19)
+#reg.summary=summary(regfit.full)
+reg.summary <- regfit.full %>% broom::tidy() 
+#names(reg.summary)
+reg.summary %>% names()
+
+#reg.summary$rsq
+reg.summary %>% dplyr::select(r.squared)
+```
+
+### Model Scores
+
+`install.packages('leaps')`
+
+```{r scores}
+#par(mfrow=c(2,2))
+library(gridExtra)
+#plot(reg.summary$rss,xlab="Number of Variables",ylab="RSS",type="l")
+RSSs <- tibble(RSS=regfit.full$rss) %>% 
+  ggplot(aes(x=seq_along(RSS), y=RSS)) + geom_line() +
+  xlab("Number of Variables")
+#plot(reg.summary$adjr2,xlab="Number of Variables",ylab="Adjusted RSq",type="l")
+#which.max(reg.summary$adjr2)
+#points(11,reg.summary$adjr2[11], col="red",cex=2,pch=20)
+adjR2s <- reg.summary %>%
+  ggplot(aes(x=seq_along(adj.r.squared), y=adj.r.squared)) + geom_line() +
+  geom_point(reg.summary, color='red', size=5,
+             mapping=aes(x=which.max(adj.r.squared), y=max(adj.r.squared))) +
+  xlab("Number of Variables") 
+
+#plot(reg.summary$cp,xlab="Number of Variables",ylab="Cp",type='l')
+#which.min(reg.summary$cp)
+#points(10,reg.summary$cp[10],col="red",cex=2,pch=20)
+mallows_cps <- reg.summary %>%
+  ggplot(aes(x=seq_along(mallows_cp), y=mallows_cp)) + geom_line() +
+  geom_point(reg.summary, color='red', size=5,
+             mapping=aes(x=which.min(mallows_cp), y=min(mallows_cp))) +
+  xlab("Number of Variables") 
+
+#which.min(reg.summary$bic)
+#plot(reg.summary$bic,xlab="Number of Variables",ylab="BIC",type='l')
+#points(6,reg.summary$bic[6],col="red",cex=2,pch=20)
+BICs <- reg.summary %>%
+  ggplot(aes(x=seq_along(BIC), y=BIC)) + geom_line() +
+  geom_point(reg.summary, color='red', size=5,
+             mapping=aes(x=which.min(BIC), y=min(BIC))) +
+  xlab("Number of Variables") 
+
+grid.arrange(RSSs, adjR2s, mallows_cps, BICs, nrow=2)
+```
+
+### Model Search
+```{r search}
+
+# https://stackoverflow.com/questions/53705656/multiplying-all-columns-in-dataframe-by-single-column
+# https://www.r-graph-gallery.com/79-levelplot-with-ggplot2.html
+# https://stackoverflow.com/questions/16220812/how-do-i-change-the-na-color-from-gray-to-white-in-a-ggplot-choropleth-map
+# https://www.datanovia.com/en/blog/ggplot-axis-ticks-set-and-rotate-text-labels/
+model_search <- function(var){
+  reg.summary %>% arrange(reg.summary[[var]]) %>% dplyr::select(1:20) %>%
+    mutate_all(function(col){sort(reg.summary[[var]])*col}) %>% 
+    rowid_to_column() %>% tidyr::pivot_longer(cols=2:21) %>% na_if(0) %>%
+    ggplot(aes(x=name, y=rowid, fill=value)) + geom_tile() +
+    scale_fill_continuous(na.value="transparent") + 
+    theme(axis.text.x = element_text(angle = 45)) + ggtitle(var)
+}
+
+#plot(regfit.full,scale="r2")
+#plot(regfit.full,scale="adjr2")
+#plot(regfit.full,scale="Cp")
+#plot(regfit.full,scale="bic")
+searches <- set_names(c("r.squared", "adj.r.squared", "BIC", "mallows_cp")) %>%
+  purrr::map(model_search)
+grid.arrange(grobs=searches, nrow=2)
+
+```
+
+### Model Selection
+```{r selection}
+coef(regfit.full,6) %>% broom::tidy()
+```
+
+
+## Forward and Backward Stepwise Selection
+
+```{r stepwise}
+regfit.fwd <- regsubsets(Salary~., data=hitters_drop_na, nvmax=19, method="forward")
+#summary(regfit.fwd)
+regfit.fwd %>% broom::tidy()
+
+regfit.bwd <- regsubsets(Salary~., data=hitters_drop_na, nvmax=19, method="backward")
+#summary(regfit.bwd)
+regfit.bwd %>% broom::tidy()
+
+coef(regfit.full,7)
+coef(regfit.fwd,7)
+coef(regfit.bwd,7)
+```
+
+## Choosing Among Models I
+
+```{r choosing_traintest}
+set.seed(1)
+train <- sample(c(TRUE,FALSE), nrow(hitters_drop_na), rep=TRUE)
+#test=(!train)
+regfit.best <- regsubsets(Salary~., data=hitters_drop_na[train,], nvmax=19)
+test.mat <- model.matrix(Salary~., data=hitters_drop_na[!train,])
+
+#val.errors=rep(NA,19)
+#for(i in 1:19){
+#   coefi=coef(regfit.best,id=i)
+#   pred=test.mat[,names(coefi)]%*%coefi
+#   val.errors[i]=mean((Hitters$Salary[test]-pred)^2)
+MSE <- function(id){
+  coefi <- coef(regfit.best, id=id)
+  pred <- test.mat[,names(coefi)] %*% coefi
+  mean((hitters_drop_na$Salary[!train]-pred)^2)
+}
+library(purrr)
+val.errors <- set_names(1:19) %>% purrr::map(MSE)
+val.errors
+
+#which.min(val.errors)
+val.errors %>% bind_cols() %>% which.min()
+
+#coef(regfit.best,10)
+val.errors %>% bind_cols() %>% which.min() %>% 
+  purrr::map(function(id) coef(regfit.best,id))
+
+```
+
+## Choosing Among Models II
+
+```{r choosing_kfolds}
+#predict.regsubsets=function(object,newdata,id,...){
+#  form=as.formula(object$call[[2]])
+#  mat=model.matrix(form,newdata)
+#  coefi=coef(object,id=id)
+#  xvars=names(coefi)
+#  mat[,xvars]%*%coefi
+#  }
+#regfit.best=regsubsets(Salary~.,data=Hitters,nvmax=19)
+#coef(regfit.best,10)
+
+outcome <- 'Salary'
+hitters_drop_na_regsubsetsNaming <- hitters_drop_na
+names(hitters_drop_na_regsubsetsNaming)[[14]] <- 'LeagueN'
+names(hitters_drop_na_regsubsetsNaming)[[15]] <- 'DivisionW'
+names(hitters_drop_na_regsubsetsNaming)[[20]] <- 'NewLeagueN'
+features <- names(hitters_drop_na_regsubsetsNaming)
+features <- features[features!=outcome]
+p <- length(features)
+regfit.best %>% broom::tidy() 
+
+#https://dplyr.tidyverse.org/reference/group_split.html
+#https://jennybc.github.io/purrr-tutorial/ls03_map-function-syntax.html#anonymous_function,_conventional
+#https://purrr.tidyverse.org/reference/map.html#arguments
+models <- regfit.best %>% broom::tidy() %>% dplyr::select(2:(p+1)) %>% 
+  tibble::rowid_to_column() %>% dplyr::group_split(rowid, .keep=FALSE) %>% 
+  purrr::map(~ names(.x)[c(.x, recursive=TRUE)])
+
+set.seed(1)
+#folds=sample(1:k,nrow(Hitters),replace=TRUE)
+library(rsample)
+folds <- hitters_drop_na_regsubsetsNaming %>% rsample::vfold_cv(breaks=10)
+
+model_kfolds_fit <- 
+purrr::map(folds$splits, 
+           ~ purrr::map(models, 
+                        ~ lm(Salary~., data=analysis(.y)[,append(.x,'Salary')]),
+                        .y=.x))
+
+#cv.errors=matrix(NA,k,19, dimnames=list(NULL, paste(1:19)))
+#for(j in 1:k){
+#  best.fit=regsubsets(Salary~.,data=Hitters[folds!=j,],nvmax=19)
+#  for(i in 1:19){
+#    pred=predict(best.fit,Hitters[folds==j,],id=i)
+#    cv.errors[j,i]=mean( (Hitters$Salary[folds==j]-pred)^2)
+#    }
+#  }
+
+model_kfolds_aveMSE <- 
+purrr::imap(1:length(folds$splits), 
+           ~ purrr::map(1:length(models), 
+                        ~ mean((testing(folds$splits[[.y]])$Salary
+                               - predict(model_kfolds_fit[[.y]][[.x]], 
+                                   testing(folds$splits[[.y]])))^2),
+                         .y=.x))
+
+#mean.cv.errors=apply(cv.errors,2,mean)
+#mean.cv.errors
+#par(mfrow=c(1,1))
+#plot(mean.cv.errors,type='b')
+ave_model_kfolds_aveMSE <- model_kfolds_aveMSE %>% tibble() %>% 
+  unnest_wider(col=c(.)) %>% colMeans() 
+
+tibble(MSE=as.vector(ave_model_kfolds_aveMSE)) %>% 
+  ggplot(aes(x=seq_along(MSE), MSE)) + geom_line() + 
+  xlab('Number of Features') + ggtitle('Kfolds Average Out of Fold Error')
+
+#reg.best=regsubsets(Salary~.,data=Hitters, nvmax=19)
+#coef(reg.best,11)
+```
+
+
+## Chapter 6 Lab 2: Ridge Regression and the Lasso
+
+We already have our data ready to go!
+```{r setup}
+#x=model.matrix(Salary~.,Hitters)[,-1]
+#y=Hitters$Salary
+```
+
+### Ridge Regression
+
+Well glmnet is good... but let's use the caret wrapper! 
+Which is kinda even better...
+Try `?caret::models` to see all the models it has available!
+
+`install.packages('glmnet')`
+```{r ridge}
+
+#library(glmnet)
+#grid=10^seq(10,-2,length=100)
+#ridge.mod=glmnet(x,y,alpha=0,lambda=grid)
+
+# BEST PRACTICE
+# just gonna go straight to the adult version...
+hitters_drop_na <- sample_n(hitters_drop_na, nrow(hitters_drop_na))
+train_indices <- sample(1:nrow(hitters_drop_na), nrow(hitters_drop_na)/2)
+
+library(caret)
+# https://www.datacareer.ch/blog/ridge-and-lasso-in-r/
+ridgeCV <- caret::train(Salary~., data=hitters_drop_na[train_indices,],
+                        method="glmnet", 
+             tuneGrid=data.frame(alpha=rep(0,100), 
+                                 lambda=10^seq(4,0,length=100)),
+             trControl=trainControl("cv", number=5, returnResamp='all'))
+#dim(coef(ridge.mod))
+coef(ridgeCV$finalModel, ridgeCV$bestTune$lambda) %>% length()
+
+
+#ridge.mod$lambda[50]
+ridgeCV$results$lambda[50]
+#coef(ridge.mod)[,50]
+coef(ridgeCV$finalModel)[,50]
+#sqrt(sum(coef(ridge.mod)[-1,50]^2))
+sqrt(sum(coef(ridgeCV$finalModel)[-1,50]^2))
+
+#ridge.mod$lambda[60]
+ridgeCV$results$lambda[60]
+#coef(ridge.mod)[,60]
+coef(ridgeCV$finalModel)[,60]
+#sqrt(sum(coef(ridge.mod)[-1,60]^2))
+sqrt(sum(coef(ridgeCV$finalModel)[-1,60]^2))
+```
+
+#### K-folds
+
+```{r ridge_cv}
+#predict(ridge.mod,s=50,type="coefficients")[1:20,]
+#set.seed(1)
+#train=sample(1:nrow(x), nrow(x)/2)
+#test=(-train)
+#y.test=y[test]
+#ridge.mod=glmnet(x[train,],y[train],alpha=0,lambda=grid, thresh=1e-12)
+#ridge.pred=predict(ridge.mod,s=4,newx=x[test,])
+#mean((ridge.pred-y.test)^2)
+#mean((mean(y[train])-y.test)^2)
+#ridge.pred=predict(ridge.mod,s=1e10,newx=x[test,])
+#mean((ridge.pred-y.test)^2)
+#ridge.pred=predict(ridge.mod,s=0,newx=x[test,],exact=T,x=x[train,],y=y[train])
+#mean((ridge.pred-y.test)^2)
+#lm(y~x, subset=train)
+#predict(ridge.mod,s=0,exact=T,type="coefficients",x=x[train,],y=y[train])[1:20,]
+#set.seed(1)
+#cv.out=cv.glmnet(x[train,],y[train],alpha=0)
+#plot(cv.out)
+
+# we're way past the above -- we've already go it; and, we've got it for k-folds
+ridgeCV$results %>% ggplot(aes(seq_along(RMSE), RMSE)) + 
+  geom_line(size=2, color='red')
+
+ridgeCV$resample %>% 
+  dplyr::arrange(ridgeCV$resample$lambda) %>%
+  dplyr::group_split(Resample) %>% 
+  purrr::map(rowid_to_column) %>%
+  dplyr::bind_rows() %>%
+  ggplot(aes(rowid, RMSE)) + geom_point() +
+  geom_smooth(formula='y~x', method='loess', span=.5) + 
+  geom_line(ridgeCV$results, 
+            mapping=aes(seq_along(RMSE), RMSE),
+            size=2, color='red')
+```
+
+#### use/predict with it
+
+```{r ridge_cv_use}
+#bestlam=cv.out$lambda.min
+bestlam <- ridgeCV$bestTune$lambda
+bestlam
+
+#ridge.pred=predict(ridge.mod,s=bestlam,newx=x[test,])
+hitters_drop_na_regsubsetsNaming <- hitters_drop_na
+names(hitters_drop_na_regsubsetsNaming)[[14]] <- 'LeagueN'
+names(hitters_drop_na_regsubsetsNaming)[[15]] <- 'DivisionW'
+names(hitters_drop_na_regsubsetsNaming)[[20]] <- 'NewLeagueN'
+x <- hitters_drop_na_regsubsetsNaming[, ridgeCV$finalModel$xNames]
+# https://stat.ethz.ch/R-manual/R-patched/library/base/html/data.matrix.html
+ridge.pred <- predict(ridgeCV$finalModel, newx=data.matrix(x[-train_indices,]))
+yhat <- ridge.pred[,which.min(ridgeCV$results$RMSE)]
+y <- hitters_drop_na_regsubsetsNaming$Salary[-train_indices]
+#mean((ridge.pred-y.test)^2)
+mean((y-yhat)^2)
+
+#out=glmnet(x,y,alpha=0)
+#predict(out,type="coefficients",s=bestlam)[1:20,]
+coef(ridgeCV$finalModel, ridgeCV$bestTune$lambda)
+```
+
+## The Lasso
+
+```{r lasso}
+#lasso.mod=glmnet(x[train,],y[train],alpha=1,lambda=grid)
+#plot(lasso.mod)
+set.seed(1)
+lassoCV <- caret::train(Salary~., data=hitters_drop_na[train_indices,],
+                        method="glmnet", 
+             tuneGrid=data.frame(alpha=rep(1,100), 
+                                 lambda=10^seq(4,-2,length=100)),
+             trControl=trainControl("cv", number=5, returnResamp='all'))
+
+#cv.out=cv.glmnet(x[train,],y[train],alpha=1)
+#plot(cv.out)
+lassoCV$results %>% ggplot(aes(seq_along(RMSE), RMSE)) + 
+  geom_line(size=2, color='red')
+
+lassoCV$resample %>% 
+  dplyr::arrange(lassoCV$resample$lambda) %>%
+  dplyr::group_split(Resample) %>% 
+  purrr::map(rowid_to_column) %>%
+  dplyr::bind_rows() %>%
+  ggplot(aes(rowid, RMSE)) + geom_point() +
+  geom_smooth(formula='y~x', method='loess', span=.5) + 
+  geom_line(lassoCV$results, 
+            mapping=aes(seq_along(RMSE), RMSE),
+            size=2, color='red')
+
+
+#bestlam=cv.out$lambda.min
+#lasso.pred=predict(lasso.mod,s=bestlam,newx=x[test,])
+#mean((lasso.pred-y.test)^2)
+lasso.pred <- predict(lassoCV$finalModel, newx=data.matrix(x[-train_indices,]))
+yhat <- lasso.pred[,which.min(lassoCV$results$RMSE)]
+y <- hitters_drop_na_regsubsetsNaming$Salary[-train_indices]
+mean((y-yhat)^2)
+
+#out=glmnet(x,y,alpha=1,lambda=grid)
+#lasso.coef=predict(out,type="coefficients",s=bestlam)[1:20,]
+#lasso.coef
+coef(lassoCV$finalModel, lassoCV$bestTune$lambda)
+#lasso.coef[lasso.coef!=0]
+```
+
+## Chapter 6 Lab 3: PCR and PLS Regression
+
+`install.packages('pls')`
+
+### Principal Components Regression
+
+```{r pcr}
+#http://www.sthda.com/english/articles/37-model-selection-essentials-in-r/152-principal-component-and-partial-least-squares-regression-essentials/
+#https://rstudio-pubs-static.s3.amazonaws.com/579414_4aea8984cf1d47abac389fde7eb6d24d.html
+#library(pls) <- detach('package:pls', unload=TRUE)
+set.seed(2)
+#pcr.fit=pcr(Salary~., data=Hitters,scale=TRUE, validation="CV")
+pcr.fits <- train(Salary~., data=hitters_drop_na[train_indices,], method="pcr",
+                  tuneLength=19, #tuneGrid=data.frame(ncomp=seq(1,19)),
+                  scale=TRUE, 
+                  trControl=trainControl("cv", number=10, returnResamp='all'))
+#summary(pcr.fit)
+summary(pcr.fits)
+
+#validationplot(pcr.fit,val.type="MSEP")
+pcr.fits$results %>% dplyr::mutate(MSE=RMSE^2) %>% 
+  ggplot(aes(seq_along(MSE), MSE)) + geom_line(size=2, color='red')
+
+pcr.fits$resample %>% 
+  dplyr::mutate(MSE=RMSE^2) %>%
+  dplyr::group_split(Resample) %>% 
+  dplyr::bind_rows() %>%
+  ggplot(aes(ncomp, MSE)) + geom_point() +
+  geom_line(pcr.fits$results%>%dplyr::mutate(MSE=RMSE^2), 
+            mapping=aes(seq_along(MSE), MSE),
+            size=2, color='red')
+
+#pcr.pred=predict(pcr.fit,x[test,],ncomp=7)
+pcr.pred <- predict(pcr.fits, newdata=hitters_drop_na[-train_indices,])
+#mean((pcr.pred-y.test)^2)
+mean((hitters_drop_na$Salary[-train_indices]-pcr.pred)^2)
+# COMPARE THIS TO THE CV-BASED MSE 
+# `pcr.fits$results %>% dplyr::mutate(MSE=RMSE^2) %>% slice(pcr.fits$bestTune%>%pull())`
+
+
+#pcr.fit=pcr(y~x,scale=TRUE,ncomp=7)
+#summary(pcr.fit$coefficients)
+pcr.fits$finalModel %>% summary()
+
+#https://stackoverflow.com/questions/40493412/how-to-pick-a-different-model-from-the-finalmodel-in-caret
+pcr.fits7 <- update(pcr.fits, param = list(ncomp = 7))
+pcr.fits7$finalModel %>% summary()
+```
+
+
+## Partial Least Squares
+
+```{r pls}
+set.seed(1)
+#pls.fit=plsr(Salary~., data=Hitters,subset=train,scale=TRUE, validation="CV")
+pls.fits <- train(Salary~., data=hitters_drop_na[train_indices,], method="pls",
+                  tuneLength=19, #tuneGrid=data.frame(ncomp=seq(1,19)),
+                  scale=TRUE, 
+                  trControl=trainControl("cv", number=10, returnResamp='all'))
+
+#summary(pls.fit)
+pls.fits$finalModel %>% summary()
+
+#validationplot(pls.fit,val.type="MSEP")
+pls.fits$results %>% dplyr::mutate(MSE=RMSE^2) %>% 
+  ggplot(aes(seq_along(MSE), MSE)) + geom_line(size=2, color='red')
+
+pls.fits$resample %>% 
+  dplyr::mutate(MSE=RMSE^2) %>%
+  dplyr::group_split(Resample) %>% 
+  dplyr::bind_rows() %>%
+  ggplot(aes(ncomp, MSE)) + geom_point() +
+  geom_line(pls.fits$results%>%dplyr::mutate(MSE=RMSE^2), 
+            mapping=aes(seq_along(MSE), MSE),
+            size=2, color='red')
+
+#pls.pred=predict(pls.fit,x[test,],ncomp=2)
+pls.pred <- predict(pls.fits, newdata=hitters_drop_na[-train_indices,])
+#mean((pls.pred-y.test)^2)
+mean((hitters_drop_na$Salary[-train_indices]-pls.pred)^2)
+# COMPARE THIS TO THE CV-BASED MSE 
+# `pls.fits$results %>% dplyr::mutate(MSE=RMSE^2) %>% slice(pls.fits$bestTune%>%pull())`
+
+#pls.fit=plsr(Salary~., data=Hitters,scale=TRUE,ncomp=2)
+#summary(pls.fit)
+pls.fits$finalModel %>% summary()
+```
