@@ -1,0 +1,142 @@
+---
+title: "DS-6030 Homework Module 5"
+author: "Tom Lever"
+date: 06/24/2023
+output:
+  pdf_document: default
+  html_document: default
+urlcolor: blue
+---
+
+<!--- Below are global settings for knitr. You can override any of them by adding the changes to individual chunks --->
+```{r global_options, include = FALSE}
+# This chunk is called global_options. Due to `include = FALSE`, when the document is rendered, the chunk will be executed, but the results and code will not be included in the rendered document
+knitr::opts_chunk$set(
+    error = TRUE, # Keep compiling upon error
+    collapse = FALSE, # code and corresponding output appear in knit file in separate blocks
+    echo = TRUE, # echo code by default
+    comment = "#", # change comment character
+    #fig.width = 5.5, # set figure width
+    fig.align = "center", # set figure position
+    #out.width = "49%", # set width of displayed images
+    warning = TRUE, # do not show R warnings
+    message = TRUE # do not show R messages
+)
+```
+
+**DS 6030 | Spring 2023 | University of Virginia **
+
+8.  In this exercise, we will generate simulated data, and will then use this data to perform best subset selection.
+
+    (a) Use the `rnorm()` function to generate a predictor $X$ of length $n = 100$, as well as a noise vector $\epsilon$ of length $n = 100$.
+    
+        ```{r}
+        set.seed(2)
+        X <- rnorm(n = 100, mean = 0, sd = 1)
+        epsilon <- rnorm(n = 100, mean = 0, sd = 1*10^{-6})
+        X[1:3]
+        epsilon[1:3]
+        ```
+
+    (b) Generate a response vector $Y$ of length $n = 100$ according to the model $Y = \beta_0 + \beta_1X + \beta_2X^2 + \beta_3X^3 + \epsilon$, where $\beta_0$, $\beta_1$, $\beta_2$, $\beta_3$  are constants of your choice.
+    
+        ```{r}
+        beta_0 <- 1
+        beta_1 <- 2
+        beta_2 <- 3
+        beta_3 <- 4
+        Y <- beta_0 + beta_1 * X + beta_2 * I(X^2) + beta_3 * I(X^3) + epsilon
+        Y[1:3]
+        ```
+
+    (c) Use the `regsubsets()` function to perform best subset selection in order to choose the best model containing the predictors $X, X^2 \dots, X^{10}$. What is the best model obtained according to $Cp$, BIC, and adjusted $R^2$? Show some plots to provide evidence for your answer, and report the coefficients of the best model obtained. Note you will need to use the `data.frame()` function to create a single data set containing both $X$ and $Y$.
+    
+        ```{r, eval=TRUE, echo=TRUE, results="show", message=FALSE}
+        data_frame <- data.frame(X = X, Y = Y)
+        head(data_frame, n = 3)
+        library(leaps)
+        formula <- Y ~ X + I(X^2) + I(X^3) + I(X^4) + I(X^5) + I(X^6) + I(X^7) + I(X^8) + I(X^9) + I(X^10)
+        subset_selection_object <- regsubsets(
+            x = formula,
+            data = data_frame
+        )
+        summary_for_subset_selection_object <- summary(object = subset_selection_object)
+        Mallows_Cp <- summary_for_subset_selection_object$cp
+        index_of_model_with_minimum_Mallows_Cp <- which.min(Mallows_Cp)
+        coefficients <- coef(
+            subset_selection_object, index_of_model_with_minimum_Mallows_Cp
+        )
+        coefficients
+        Schwartz_BIC <- summary_for_subset_selection_object$bic
+        index_of_model_with_minimum_Schwartz_BIC <- which.min(Schwartz_BIC)
+        coefficients <- coef(
+            subset_selection_object, index_of_model_with_minimum_Schwartz_BIC
+        )
+        coefficients
+        adjusted_R2 <- summary_for_subset_selection_object$adjr2
+        index_of_model_with_maximum_adjusted_R2 <- which.max(adjusted_R2)
+        coefficients <- coef(
+            subset_selection_object, index_of_model_with_maximum_adjusted_R2
+        )
+        coefficients
+        plot(Mallows_Cp, xlab = "Number of variables", ylab = "C_p", type = "l")
+        index_of_minimum_Mallows_Cp <- which.min(Mallows_Cp)
+        minimum_Mallows_Cp <- Mallows_Cp[index_of_minimum_Mallows_Cp]
+        points(index_of_minimum_Mallows_Cp, minimum_Mallows_Cp, col = "red", cex = 2, pch = 20)
+        plot(Schwartz_BIC, xlab = "Number of variables", ylab = "Schwartz BIC", type = "l")
+        index_of_minimum_Schwartz_BIC <- which.min(Schwartz_BIC)
+        minimum_Schwartz_BIC <- Schwartz_BIC[index_of_minimum_Schwartz_BIC]
+        points(index_of_minimum_Schwartz_BIC, minimum_Schwartz_BIC, col = "red", cex = 2, pch = 20)
+        plot(adjusted_R2, xlab = "Number of variables", ylab = "Adjusted R^2", type = "l")
+        index_of_maximum_adjusted_R2 <- which.max(adjusted_R2)
+        maximum_adjusted_R2 <- adjusted_R2[index_of_maximum_adjusted_R2]
+        points(index_of_maximum_adjusted_R2, maximum_adjusted_R2, col = "red", cex = 2, pch = 20)
+        ```
+        
+        The best model obtained according to Mallow's $C_p$, the Schwartz Bayesian Information Criterion, and adjusted $R^2$ is
+        $$Y = \beta_0 + \beta_1 X + \beta_2 X^2 + \beta_3 X^3 = 1 + 2 X + 3 X^2 + 4 X^3$$
+
+    (d) Repeat (c), using forward stepwise selection and also using backwards stepwise selection. How does your answer compare to the results in (c)?
+    
+        The models chosen by forward and backward selection involve the true predictive terms and their coefficients.
+    
+        ```{r}
+        intercept_only_model <- lm(formula = Y ~ 1, data = data_frame)
+        full_model <- lm(formula = formula, data = data_frame)
+        step(
+            intercept_only_model,
+            scope = list(lower = intercept_only_model, upper = full_model),
+            direction = "forward"
+        )
+        step(
+            full_model,
+            scope = list(lower = intercept_only_model, upper = full_model),
+            direction = "backward"
+        )
+        step(
+            full_model,
+            scope = list(lower = intercept_only_model, upper = full_model),
+            direction = "both"
+        )
+        ```
+
+    (e) Now fit a lasso model to the simulated data, again using $X, X^2 \dots, X^{10}$ as predictors. Use cross-validation to select the optimal value of $\lambda$. Create plots of the cross-validation error as a function of $\lambda$. Report the resulting coefficient estimates, and discuss the results obtained.
+
+    (f) Now generate a response vector $Y$ according to the model $Y = \beta_0 + \beta_7X^7 + \epsilon$, and perform best subset selection and the lasso. Discuss the results obtained.
+
+
+# 9. In this exercise, we will predict the number of applications received using the other variables in the College data set.
+
+(a) Split the data set into a training set and a test set.
+
+(b) Fit a linear model using least squares on the training set, and report the test error obtained.
+
+(c) Fit a ridge regression model on the training set, with $\lambda$ chosen by cross-validation. Report the test error obtained.
+
+(d) Fit a lasso model on the training set, with $\lambda$ chosen by cross-validation. Report the test error obtained, along with the number of non-zero coefficient estimates.
+
+(e) Fit a PCR model on the training set, with $M$ chosen by cross-validation. Report the test error obtained, along with the value of $M$ selected by cross-validation.
+
+(f) Fit a PLS model on the training set, with $M$ chosen by cross-validation. Report the test error obtained, along with the value of $M$ selected by cross-validation.
+
+(g) Comment on the results obtained. How accurately can we predict the number of college applications received? Is there much difference among the test errors resulting from these five approaches?
