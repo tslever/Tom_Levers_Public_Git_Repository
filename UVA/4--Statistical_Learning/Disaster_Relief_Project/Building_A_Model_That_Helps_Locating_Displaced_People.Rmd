@@ -143,11 +143,11 @@ summarize_performance_of_cross_validated_models_using_dplyr(
 )
 ```
 
-```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For Logistic Regression Model With Formula Indicator vs. TBD", eval = FALSE}
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For Logistic Ridge Regression Model With Formula Indicator vs. Square Root Of Red + Natural Logarithm Of Blue + Interaction Of Green And Blue", eval = TRUE}
 library(TomLeversRPackage)
 summarize_performance_of_cross_validated_models_using_dplyr(
     type_of_model = "Logistic Ridge Regression",
-    formula = Indicator ~ Red + Blue + Green,
+    formula = Indicator ~ sqrt(Red) + log(Blue) + Green:Blue,
     data_frame = data_frame_of_indicators_and_pixels
 )
 ```
@@ -210,7 +210,7 @@ summarize_performance_of_cross_validated_models_using_dplyr(
 )
 ```
 
-```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For K Nearest Neighbors Model With Formula Indicator vs. Red:Blue And Possibly More Predictive Terms", eval = TRUE}
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For K Nearest Neighbors Model With Formula Indicator vs. Red:Blue And Possibly More Predictive Terms", eval = FALSE}
 library(TomLeversRPackage)
 summarize_performance_of_cross_validated_models_using_dplyr(
     type_of_model = "KNN",
