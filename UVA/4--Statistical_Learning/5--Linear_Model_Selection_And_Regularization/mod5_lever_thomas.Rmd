@@ -141,6 +141,18 @@ knitr::opts_chunk$set(
         ```
 
     (e) Now fit a lasso model to the simulated data, again using $X, X^2 \dots, X^{10}$ as predictors. Use cross-validation to select the optimal value of $\lambda$. Create plots of the cross-validation error as a function of $\lambda$. Report the resulting coefficient estimates, and discuss the results obtained.
+    
+        ```{r}
+        full_model_matrix <- model.matrix(object = formula, data = data_frame)[, -1]
+        the_cv.glmnet <- glmnet::cv.glmnet(x = full_model_matrix, y = Y, alpha = 1)
+        plot(the_cv.glmnet)
+        optimal_value_of_lambda <- the_cv.glmnet$lambda.min
+        optimal_value_of_lambda
+        polynomial_lasso_regression_model <- glmnet::glmnet(full_model_matrix, y = Y, alpha = 1)
+        predict(object = polynomial_lasso_regression_model, s = optimal_value_of_lambda, type = "coefficients")
+        ```
+        
+        The models chosen by polynomial lasso regression involve the true predictive terms and rough approximations of their coefficients. $\beta_0 = 1.364$, $\beta_1 = 1.991$, $\beta_2 = 2.730$, and $\beta_3 = 3.899$.
 
     (f) Now generate a response vector $Y$ according to the model $Y = \beta_0 + \beta_7X^7 + \epsilon$, and perform best subset selection and the lasso. Discuss the results obtained.
 
