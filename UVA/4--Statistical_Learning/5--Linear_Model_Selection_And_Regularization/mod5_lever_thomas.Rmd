@@ -155,8 +155,37 @@ knitr::opts_chunk$set(
         The models chosen by polynomial lasso regression involve the true predictive terms and rough approximations of their coefficients. $\beta_0 = 1.364$, $\beta_1 = 1.991$, $\beta_2 = 2.730$, and $\beta_3 = 3.899$.
 
     (f) Now generate a response vector $Y$ according to the model $Y = \beta_0 + \beta_7X^7 + \epsilon$, and perform best subset selection and the lasso. Discuss the results obtained.
-
-
+    
+        ```{r}
+        beta_7 <- 8
+        Y <- beta_0 + beta_7 * I(X^7) + epsilon
+        data_frame <- data.frame(X = X, Y = Y)
+        head(data_frame, n = 3)
+        #library(leaps)
+        formula <- Y ~ X + I(X^2) + I(X^3) + I(X^4) + I(X^5) + I(X^6) + I(X^7) + I(X^8) + I(X^9) + I(X^10)
+        subset_selection_object <- regsubsets(
+            x = formula,
+            data = data_frame,
+            method = "exhaustive"
+        )
+        analyze_subset_selection_object(subset_selection_object)
+        ```
+    
+        The best model obtained according to Mallow's $C_p$, the Schwartz Bayesian Information Criterion, and adjusted $R^2$ is
+        $$Y = \beta_0 + \beta_7 X^7 = 1 + 8 X^7$$
+        
+        ```{r}
+        full_model_matrix <- model.matrix(object = formula, data = data_frame)[, -1]
+        the_cv.glmnet <- glmnet::cv.glmnet(x = full_model_matrix, y = Y, alpha = 1)
+        plot(the_cv.glmnet)
+        optimal_value_of_lambda <- the_cv.glmnet$lambda.min
+        optimal_value_of_lambda
+        polynomial_lasso_regression_model <- glmnet::glmnet(full_model_matrix, y = Y, alpha = 1)
+        predict(object = polynomial_lasso_regression_model, s = optimal_value_of_lambda, type = "coefficients")
+        ```
+        
+        The models chosen by polynomial lasso regression involve the true predictive terms and rough approximations of their coefficients. $\beta_0 = 1.364$ and $\beta_7 = 7.767$.
+    
 # 9. In this exercise, we will predict the number of applications received using the other variables in the College data set.
 
 (a) Split the data set into a training set and a test set.
