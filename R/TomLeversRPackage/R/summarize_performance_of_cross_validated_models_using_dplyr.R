@@ -26,6 +26,14 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
      newdata = testing_data,
      type = "response"
     )
+   } else if (type_of_model == "Logistic Ridge Regression") {
+    training_model_matrix <- model.matrix(object = formula, data = training_data)[, -1]
+    vector_of_indicators <- training_data$Indicator
+    the_cv.glmnet <- glmnet::cv.glmnet(x = training_model_matrix, y = vector_of_indicators, alpha = 0, family = "binomial")
+    logistic_regression_with_lasso_model <- glmnet::glmnet(x = training_model_matrix, y = vector_of_indicators, alpha = 1, family = "binomial", lambda = the_cv.glmnet$lambda.min)
+    print(the_cv.glmnet$lambda.min)
+    testing_model_matrix <- model.matrix(object = formula, data = testing_data)[, -1]
+    vector_of_predicted_probabilities <- predict(object = logistic_regression_with_lasso_model, newx = testing_model_matrix, type = "response")
    } else if (type_of_model == "LDA" | type_of_model == "QDA") {
     if (type_of_model == "LDA") {
      model <- MASS::lda(
@@ -60,6 +68,7 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
     actual_indicator = testing_data$Indicator,
     predicted_probability = vector_of_predicted_probabilities
    )
+   colnames(data_frame_of_predicted_probabilities_and_indicators) <- c("actual_indicator", "predicted_probability")
    return(data_frame_of_predicted_probabilities_and_indicators)
   }
  data_frame_of_sensitivities_and_FPRs <-
