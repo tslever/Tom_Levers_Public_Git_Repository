@@ -20,16 +20,17 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   the_cv.glmnet <- glmnet::cv.glmnet(x = full_model_matrix, y = full_vector_of_indicators, alpha = 0, family = "binomial")
   print(paste("lambda = ", the_cv.glmnet$lambda.min, sep = ""))
  } else if (type_of_model == "KNN") {
-  the_trainControl <- caret::trainControl(method  = "cv", number = 10)
-  list_of_training_information <- caret::train(
-   formula,
-   method = "knn",
-   tuneGrid = expand.grid(k = 1:nrow(data_frame)),
-   trControl = the_trainControl,
-   metric = "Accuracy",
-   data = data_frame
-  )
-  K = list_of_training_information$bestTune
+  #the_trainControl <- caret::trainControl(method  = "cv", number = 10)
+  #list_of_training_information <- caret::train(
+  # formula,
+  # method = "knn",
+  # tuneGrid = expand.grid(k = round(x = pracma::linspace(x1 = 1, x2 = 100, n = 10), digits = 0)),
+  # trControl = the_trainControl,
+  # metric = "Accuracy",
+  # data = data_frame
+  #)
+  #K = list_of_training_information$bestTune
+  K = floor(sqrt(nrow(data_frame)))
   print(paste("K = ", K, sep = ""))
  }
  generate_data_frame_of_predicted_probabilities_and_indicators <-

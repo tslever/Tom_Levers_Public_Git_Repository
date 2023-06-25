@@ -123,7 +123,7 @@ Following the same process, our best Linear Discriminant Analysis model has form
 
 Our best Quadratic Discriminant Analysis model has formula $Indicator ~ Blue^2 + Red^2 + Red:Green + Red + Blue + Green$ and F1 measure $0.952$.
 
-```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For Logistic Regression Model With Formula Indicator vs. Blue Squared + Interaction Of Red And Green + Green"}
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For Logistic Regression Model With Formula Indicator vs. Blue Squared + Interaction Of Red And Green + Green", eval = FALSE}
 library(TomLeversRPackage)
 #summarize_performance_of_cross_validated_models_using_dplyr(
 #    type_of_model = "Logistic Regression",
@@ -143,7 +143,17 @@ summarize_performance_of_cross_validated_models_using_dplyr(
 )
 ```
 
-```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For Linear Discriminant Analysis Model With Formula Indicator vs. Blue Squared + Interaction Of Red And Blue + Square Root Of Blue + Natural Logarithm Of Blue + Blue", eval = TRUE}
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For Logistic Regression Model With Formula Indicator vs. TBD", eval = FALSE}
+library(TomLeversRPackage)
+summarize_performance_of_cross_validated_models_using_dplyr(
+    type_of_model = "Logistic Ridge Regression",
+    formula = Indicator ~ Red + Blue + Green,
+    data_frame = data_frame_of_indicators_and_pixels
+)
+```
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For Linear Discriminant Analysis Model With Formula Indicator vs. Blue Squared + Interaction Of Red And Blue + Square Root Of Blue + Natural Logarithm Of Blue + Blue", eval = FALSE}
+library(TomLeversRPackage)
 #summarize_performance_of_cross_validated_models_using_dplyr(
 #    type_of_model = "LDA",
 #    formula = Indicator ~ I(Blue^2),
@@ -166,7 +176,8 @@ summarize_performance_of_cross_validated_models_using_dplyr(
 )
 ```
 
-```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For Quadratic Discriminant Analysis Model With Formula Indicator vs. Blue Squared + Red Squared + Interaction Of Red And Green + Red + Natural Logarithm Of Blue + Natural Logarithm Of Green", eval = TRUE}
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For Quadratic Discriminant Analysis Model With Formula Indicator vs. Blue Squared + Red Squared + Interaction Of Red And Green + Red + Natural Logarithm Of Blue + Natural Logarithm Of Green", eval = FALSE}
+library(TomLeversRPackage)
 #summarize_performance_of_cross_validated_models_using_dplyr(
 #    type_of_model = "QDA",
 #    formula = Indicator ~ I(Blue^2),
@@ -199,23 +210,11 @@ summarize_performance_of_cross_validated_models_using_dplyr(
 )
 ```
 
-```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For K Nearest Neighbors Model With Formula Indicator vs. Red + Green + Blue And K = 3", eval = FALSE}
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For K Nearest Neighbors Model With Formula Indicator vs. Red:Blue And Possibly More Predictive Terms", eval = TRUE}
+library(TomLeversRPackage)
 summarize_performance_of_cross_validated_models_using_dplyr(
     type_of_model = "KNN",
-    formula = Indicator ~ Red + Green + Blue,
-    data_frame = data_frame_of_indicators_and_pixels,
-    K = 3
- )
-```
-
-```{r, warning = FALSE, message = FALSE, eval = FALSE}
-library(TomLeversRPackage)
-for (i in 1:99) {
- print(summarize_performance_of_cross_validated_models_using_dplyr(
-     type_of_model = "KNN",
-     formula = Indicator ~ Red + Green + Blue,
-     data_frame = data_frame_of_indicators_and_pixels,
-     K = i
- )$mean_AUC)
-}
+    formula = Indicator ~ Red:Blue,
+    data_frame = data_frame_of_indicators_and_pixels
+)
 ```
