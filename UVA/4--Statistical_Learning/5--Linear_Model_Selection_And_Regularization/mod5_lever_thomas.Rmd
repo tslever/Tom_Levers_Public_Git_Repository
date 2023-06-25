@@ -58,39 +58,64 @@ knitr::opts_chunk$set(
         formula <- Y ~ X + I(X^2) + I(X^3) + I(X^4) + I(X^5) + I(X^6) + I(X^7) + I(X^8) + I(X^9) + I(X^10)
         subset_selection_object <- regsubsets(
             x = formula,
-            data = data_frame
+            data = data_frame,
+            method = "exhaustive"
         )
-        summary_for_subset_selection_object <- summary(object = subset_selection_object)
-        Mallows_Cp <- summary_for_subset_selection_object$cp
-        index_of_model_with_minimum_Mallows_Cp <- which.min(Mallows_Cp)
-        coefficients <- coef(
-            subset_selection_object, index_of_model_with_minimum_Mallows_Cp
-        )
-        coefficients
-        Schwartz_BIC <- summary_for_subset_selection_object$bic
-        index_of_model_with_minimum_Schwartz_BIC <- which.min(Schwartz_BIC)
-        coefficients <- coef(
-            subset_selection_object, index_of_model_with_minimum_Schwartz_BIC
-        )
-        coefficients
-        adjusted_R2 <- summary_for_subset_selection_object$adjr2
-        index_of_model_with_maximum_adjusted_R2 <- which.max(adjusted_R2)
-        coefficients <- coef(
-            subset_selection_object, index_of_model_with_maximum_adjusted_R2
-        )
-        coefficients
-        plot(Mallows_Cp, xlab = "Number of variables", ylab = "C_p", type = "l")
-        index_of_minimum_Mallows_Cp <- which.min(Mallows_Cp)
-        minimum_Mallows_Cp <- Mallows_Cp[index_of_minimum_Mallows_Cp]
-        points(index_of_minimum_Mallows_Cp, minimum_Mallows_Cp, col = "red", cex = 2, pch = 20)
-        plot(Schwartz_BIC, xlab = "Number of variables", ylab = "Schwartz BIC", type = "l")
-        index_of_minimum_Schwartz_BIC <- which.min(Schwartz_BIC)
-        minimum_Schwartz_BIC <- Schwartz_BIC[index_of_minimum_Schwartz_BIC]
-        points(index_of_minimum_Schwartz_BIC, minimum_Schwartz_BIC, col = "red", cex = 2, pch = 20)
-        plot(adjusted_R2, xlab = "Number of variables", ylab = "Adjusted R^2", type = "l")
-        index_of_maximum_adjusted_R2 <- which.max(adjusted_R2)
-        maximum_adjusted_R2 <- adjusted_R2[index_of_maximum_adjusted_R2]
-        points(index_of_maximum_adjusted_R2, maximum_adjusted_R2, col = "red", cex = 2, pch = 20)
+        analyze_subset_selection_object <- function(subset_selection_object) {
+         summary_for_subset_selection_object <- summary(object = subset_selection_object)
+         Mallows_Cp <- summary_for_subset_selection_object$cp
+         index_of_model_with_minimum_Mallows_Cp <- which.min(Mallows_Cp)
+         coefficients_by_Mallows_Cp <- coef(
+             subset_selection_object, index_of_model_with_minimum_Mallows_Cp
+         )
+         Schwartz_BIC <- summary_for_subset_selection_object$bic
+         index_of_model_with_minimum_Schwartz_BIC <- which.min(Schwartz_BIC)
+         coefficients_by_Schwartz_BIC <- coef(
+             subset_selection_object, index_of_model_with_minimum_Schwartz_BIC
+         )
+         adjusted_R2 <- summary_for_subset_selection_object$adjr2
+         index_of_model_with_maximum_adjusted_R2 <- which.max(adjusted_R2)
+         coefficients_by_adjusted_R2 <- coef(
+             subset_selection_object, index_of_model_with_maximum_adjusted_R2
+         )
+         plot(Mallows_Cp, xlab = "Number Of Variables", ylab = "C_p", type = "l")
+         index_of_minimum_Mallows_Cp <- which.min(Mallows_Cp)
+         minimum_Mallows_Cp <- Mallows_Cp[index_of_minimum_Mallows_Cp]
+         points(
+             index_of_minimum_Mallows_Cp,
+             minimum_Mallows_Cp,
+             col = "red",
+             cex = 2,
+             pch = 20
+         )
+         plot(Schwartz_BIC, xlab = "Number Of Variables", ylab = "Schwartz BIC", type = "l")
+         index_of_minimum_Schwartz_BIC <- which.min(Schwartz_BIC)
+         minimum_Schwartz_BIC <- Schwartz_BIC[index_of_minimum_Schwartz_BIC]
+         points(
+             index_of_minimum_Schwartz_BIC,
+             minimum_Schwartz_BIC,
+             col = "red",
+             cex = 2,
+             pch = 20
+         )
+         plot(adjusted_R2, xlab = "Number Of Variables", ylab = "Adjusted R^2", type = "l")
+         index_of_maximum_adjusted_R2 <- which.max(adjusted_R2)
+         maximum_adjusted_R2 <- adjusted_R2[index_of_maximum_adjusted_R2]
+         points(
+             index_of_maximum_adjusted_R2,
+             maximum_adjusted_R2,
+             col = "red",
+             cex = 2,
+             pch = 20
+         )
+         coefficients <- list(
+             coefficients_by_Mallows_Cp = coefficients_by_Mallows_Cp,
+             coefficients_by_Schwartz_BIC = coefficients_by_Schwartz_BIC,
+             coefficients_by_adjusted_R2 = coefficients_by_adjusted_R2
+         )
+         return(coefficients)
+        }
+        analyze_subset_selection_object(subset_selection_object)
         ```
         
         The best model obtained according to Mallow's $C_p$, the Schwartz Bayesian Information Criterion, and adjusted $R^2$ is
@@ -101,23 +126,18 @@ knitr::opts_chunk$set(
         The models chosen by forward and backward selection involve the true predictive terms and their coefficients.
     
         ```{r}
-        intercept_only_model <- lm(formula = Y ~ 1, data = data_frame)
-        full_model <- lm(formula = formula, data = data_frame)
-        step(
-            intercept_only_model,
-            scope = list(lower = intercept_only_model, upper = full_model),
-            direction = "forward"
+        subset_selection_object <- regsubsets(
+            x = formula,
+            data = data_frame,
+            method = "forward"
         )
-        step(
-            full_model,
-            scope = list(lower = intercept_only_model, upper = full_model),
-            direction = "backward"
+        analyze_subset_selection_object(subset_selection_object)
+        subset_selection_object <- regsubsets(
+            x = formula,
+            data = data_frame,
+            method = "backward"
         )
-        step(
-            full_model,
-            scope = list(lower = intercept_only_model, upper = full_model),
-            direction = "both"
-        )
+        analyze_subset_selection_object(subset_selection_object)
         ```
 
     (e) Now fit a lasso model to the simulated data, again using $X, X^2 \dots, X^{10}$ as predictors. Use cross-validation to select the optimal value of $\lambda$. Create plots of the cross-validation error as a function of $\lambda$. Report the resulting coefficient estimates, and discuss the results obtained.
