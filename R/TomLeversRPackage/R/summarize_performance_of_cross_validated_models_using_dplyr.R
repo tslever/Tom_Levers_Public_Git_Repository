@@ -9,7 +9,7 @@
 #' @import rsample
 
 #' @export
-summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_model, formula, data_frame, K = 1) {
+summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_model, formula, data_frame) {
  formula_string <- format(formula)
  print("Summary for model")
  print(paste("of type ", type_of_model, sep = ""))
@@ -19,6 +19,18 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   full_vector_of_indicators <- data_frame$Indicator
   the_cv.glmnet <- glmnet::cv.glmnet(x = full_model_matrix, y = full_vector_of_indicators, alpha = 0, family = "binomial")
   print(paste("lambda = ", the_cv.glmnet$lambda.min, sep = ""))
+ } else if (type_of_model == "KNN") {
+  the_trainControl <- caret::trainControl(method  = "cv", number = 10)
+  list_of_training_information <- caret::train(
+   formula,
+   method = "knn",
+   tuneGrid = expand.grid(k = 1:nrow(data_frame)),
+   trControl = the_trainControl,
+   metric = "Accuracy",
+   data = data_frame
+  )
+  K = list_of_training_information$bestTune
+  print(paste("K = ", K, sep = ""))
  }
  generate_data_frame_of_predicted_probabilities_and_indicators <-
   function(train_test_split) {
@@ -64,7 +76,15 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
     matrix_of_values_of_predictors_for_training <- as.matrix(x = training_data[, vector_of_names_of_predictors])
     matrix_of_values_of_predictors_for_testing <- as.matrix(x = testing_data[, vector_of_names_of_predictors])
     vector_of_response_values_for_training <- training_data[, name_of_response]
-    data_frame_of_predicted_probabilities <- predict(caret::knn3(matrix_of_values_of_predictors_for_training, vector_of_response_values_for_training, k = K), matrix_of_values_of_predictors_for_testing)
+
+    data_frame_of_predicted_probabilities <- predict(
+     object = caret::knn3(
+      matrix_of_values_of_predictors_for_training,
+      vector_of_response_values_for_training,
+      k = K
+     ),
+     matrix_of_values_of_predictors_for_testing
+    )
     index_of_column_1 <- get_index_of_column_of_data_frame(data_frame_of_predicted_probabilities, 1)
     vector_of_predicted_probabilities <- data_frame_of_predicted_probabilities[, index_of_column_1]
    } else {
