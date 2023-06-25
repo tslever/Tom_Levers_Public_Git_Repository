@@ -10,7 +10,16 @@
 
 #' @export
 summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_model, formula, data_frame, K = 1) {
- print(formula)
+ formula_string <- format(formula)
+ print("Summary for model")
+ print(paste("of type ", type_of_model, sep = ""))
+ print(paste("with formula ", formula_string, sep = ""))
+ if (type_of_model == "Logistic Ridge Regression") {
+  full_model_matrix <- model.matrix(object = formula, data = data_frame)[, -1]
+  full_vector_of_indicators <- data_frame$Indicator
+  the_cv.glmnet <- glmnet::cv.glmnet(x = full_model_matrix, y = full_vector_of_indicators, alpha = 0, family = "binomial")
+  print(paste("lambda = ", the_cv.glmnet$lambda.min, sep = ""))
+ }
  generate_data_frame_of_predicted_probabilities_and_indicators <-
   function(train_test_split) {
    training_data <- analysis(x = train_test_split)
@@ -28,10 +37,8 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
     )
    } else if (type_of_model == "Logistic Ridge Regression") {
     training_model_matrix <- model.matrix(object = formula, data = training_data)[, -1]
-    vector_of_indicators <- training_data$Indicator
-    the_cv.glmnet <- glmnet::cv.glmnet(x = training_model_matrix, y = vector_of_indicators, alpha = 0, family = "binomial")
-    logistic_regression_with_lasso_model <- glmnet::glmnet(x = training_model_matrix, y = vector_of_indicators, alpha = 1, family = "binomial", lambda = the_cv.glmnet$lambda.min)
-    print(the_cv.glmnet$lambda.min)
+    training_vector_of_indicators <- training_data$Indicator
+    logistic_regression_with_lasso_model <- glmnet::glmnet(x = training_model_matrix, y = training_vector_of_indicators, alpha = 1, family = "binomial", lambda = the_cv.glmnet$lambda.min)
     testing_model_matrix <- model.matrix(object = formula, data = testing_data)[, -1]
     vector_of_predicted_probabilities <- predict(object = logistic_regression_with_lasso_model, newx = testing_model_matrix, type = "response")
    } else if (type_of_model == "LDA" | type_of_model == "QDA") {
