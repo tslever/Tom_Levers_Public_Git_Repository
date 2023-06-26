@@ -140,6 +140,11 @@ knitr::opts_chunk$set(
         analyze_subset_selection_object(subset_selection_object)
         ```
 
+        The best model obtained according to Mallow's $C_p$, the Schwartz Bayesian Information Criterion, and adjusted $R^2$ is
+        $$Y = \beta_0 + \beta_1 X + \beta_2 X^2 + \beta_3 X^3 = 1 + 2 X + 3 X^2 + 4 X^3$$
+        
+        These results are identical to those in part (c).
+
     (e) Now fit a lasso model to the simulated data, again using $X, X^2 \dots, X^{10}$ as predictors. Use cross-validation to select the optimal value of $\lambda$. Create plots of the cross-validation error as a function of $\lambda$. Report the resulting coefficient estimates, and discuss the results obtained.
     
         ```{r}
@@ -214,12 +219,20 @@ knitr::opts_chunk$set(
     ```{r}
     formula = Apps ~ .
     linear_model <- lm(formula, data = training_data)
-    vector_of_predicted_numbers_of_applications <- predict(
+    calculate_mean_squared_error(linear_model)
+    y_hat_linear <- predict(
         object = linear_model,
         testing_data
     )
-    calculate_mean_squared_error(linear_model)
+    testing_vector_of_numbers_of_applications <-
+        colleges$Apps[vector_of_indices_of_testing_data]
+    y <- testing_vector_of_numbers_of_applications
+    y_bar <- mean(testing_vector_of_numbers_of_applications)
+    R_squared <- 1 - mean((y_hat_linear - y)^2) / mean((y_bar - y)^2)
+    R_squared
     ```
+    
+    The resulting mean squared error of prediction $MSEP_{linear} = 1,043,968$.
 
 (c) Fit a ridge regression model on the training set, with $\lambda$ chosen by cross-validation. Report the test error obtained.
 
@@ -233,22 +246,22 @@ knitr::opts_chunk$set(
     plot(the_cv.glmnet)
     optimal_value_of_lambda <- the_cv.glmnet$lambda.min
     optimal_value_of_lambda
+    training_data_frame <- colleges[vector_of_indices_of_training_data, ]
     training_model_matrix <- model.matrix(
         object = formula,
-        data = colleges[vector_of_indices_of_training_data, ]
+        data = training_data_frame
     )[, -1]
     training_vector_of_numbers_of_applications <-
         colleges$Apps[vector_of_indices_of_training_data]
-    testing_vector_of_numbers_of_applications <-
-        colleges$Apps[vector_of_indices_of_testing_data]
     polynomial_ridge_regression_model <- glmnet::glmnet(
         x = training_model_matrix,
         y = training_vector_of_numbers_of_applications,
         alpha = 0
     )
+    testing_data_frame <- colleges[vector_of_indices_of_testing_data, ]
     testing_model_matrix <- model.matrix(
         object = formula,
-        data = colleges[vector_of_indices_of_testing_data, ]
+        data = testing_data_frame
     )[, -1]
     vector_of_predicted_numbers_of_applications <- predict(
         object = polynomial_ridge_regression_model,
@@ -261,7 +274,12 @@ knitr::opts_chunk$set(
     vector_of_squared_residuals <- vector_of_residuals^2
     mean_squared_error <- mean(vector_of_squared_residuals)
     mean_squared_error
+    y_hat_ridge <- vector_of_predicted_numbers_of_applications
+    R_squared <- 1 - mean((y_hat_ridge - y)^2) / mean((y_bar - y)^2)
+    R_squared
     ```
+    
+    The resulting mean squared error of prediction $MSEP_{ridge} = 1,071,002$. $MSEP_{linear} < MSEP_{ridge}$.
 
 (d) Fit a lasso model on the training set, with $\lambda$ chosen by cross-validation. Report the test error obtained, along with the number of non-zero coefficient estimates.
 
@@ -275,9 +293,10 @@ knitr::opts_chunk$set(
     plot(the_cv.glmnet)
     optimal_value_of_lambda <- the_cv.glmnet$lambda.min
     optimal_value_of_lambda
+    
     training_model_matrix <- model.matrix(
         object = formula,
-        data = colleges[vector_of_indices_of_training_data, ]
+        data = training_data_frame
     )[, -1]
     training_vector_of_numbers_of_applications <-
         colleges$Apps[vector_of_indices_of_training_data]
@@ -290,7 +309,7 @@ knitr::opts_chunk$set(
     )
     testing_model_matrix <- model.matrix(
         object = formula,
-        data = colleges[vector_of_indices_of_testing_data, ]
+        data = testing_data_frame
     )[, -1]
     vector_of_predicted_numbers_of_applications <- predict(
         object = polynomial_lasso_regression_model,
@@ -308,10 +327,61 @@ knitr::opts_chunk$set(
         s = optimal_value_of_lambda,
         type = "coefficients"
     )
+    y_hat_lasso <- vector_of_predicted_numbers_of_applications
+    R_squared <- 1 - mean((y_hat_lasso - y)^2) / mean((y_bar - y)^2)
+    R_squared
     ```
+    
+    The number of non-zero coefficients $M = 17$, which is equal to the number of non-zero coefficients. The resulting mean squared error of prediction $MSEP_{lasso} = 1,168,351$. $MSEP_{linear} < MSEP_{ridge} < MSEP_{lasso}$.
 
 (e) Fit a PCR model on the training set, with $M$ chosen by cross-validation. Report the test error obtained, along with the value of $M$ selected by cross-validation.
 
+    ```{r}
+    library(pls)
+    the_mvr <- pcr(formula, data = training_data_frame, scale = TRUE, validation = "CV")
+    validationplot(the_mvr, val.type = "MSEP")
+    vector_of_predicted_numbers_of_applications <- predict(
+        object = the_mvr,
+        testing_data_frame,
+        ncomp = 17
+    )
+    vector_of_residuals <-
+        vector_of_predicted_numbers_of_applications -
+        testing_vector_of_numbers_of_applications
+    vector_of_squared_residuals <- vector_of_residuals^2
+    mean_squared_error <- mean(vector_of_squared_residuals)
+    mean_squared_error
+    y_hat_PCR <- vector_of_predicted_numbers_of_applications
+    R_squared <- 1 - mean((y_hat_PCR - y)^2) / mean((y_bar - y)^2)
+    R_squared
+    ```
+    
+    The resulting mean squared error of prediction $MSEP_{PCR} = 1,231,856$. $MSEP_{linear} < MSEP_{ridge} < MSEP_{lasso} < MSEP_{PCR}$.
+
 (f) Fit a PLS model on the training set, with $M$ chosen by cross-validation. Report the test error obtained, along with the value of $M$ selected by cross-validation.
 
+    ```{r}
+    library(pls)
+    the_mvr <- plsr(formula, data = training_data_frame, scale = TRUE, validation = "CV")
+    validationplot(the_mvr, val.type = "MSEP")
+    vector_of_predicted_numbers_of_applications <- predict(
+        object = the_mvr,
+        testing_data_frame,
+        ncomp = 17
+    )
+    vector_of_residuals <-
+        vector_of_predicted_numbers_of_applications -
+        testing_vector_of_numbers_of_applications
+    vector_of_squared_residuals <- vector_of_residuals^2
+    mean_squared_error <- mean(vector_of_squared_residuals)
+    mean_squared_error
+    y_hat_PLSR <- vector_of_predicted_numbers_of_applications
+    R_squared <- 1 - mean((y_hat_PLSR - y)^2) / mean((y_bar - y)^2)
+    R_squared
+    ```
+
+    The number of non-zero coefficients estimates is $17$. The resulting mean squared error of prediction $MSEP_{PLSR} = 1,231,856$. $MSEP_{linear} < MSEP_{ridge} < MSEP_{lasso} < MSEP_{PCR}; MSEP_{PCR} = MSEP_{PLSR}$.
+
 (g) Comment on the results obtained. How accurately can we predict the number of college applications received? Is there much difference among the test errors resulting from these five approaches?
+
+    As above, $MSEP_{linear} < MSEP_{ridge} < MSEP_{lasso} < MSEP_{PCR}; MSEP_{PCR} = MSEP_{PLSR}$. The mean squared error of prediction of the linear model $MSEP_{linear} = 1,043,968$. The mean squared error of prediction of the PLSR model $MSEP_{PLSR} = 1,231,856$. The rate of difference between these errors is $-0.153$. There is a strong effect for each model; ${R^2}_{linear} = {R^2}_{PCR} = {R^2}_{PLSR}; {R^2}_{linear} < {R^2}_{lasso} < {R^2}_{ridge}$.
