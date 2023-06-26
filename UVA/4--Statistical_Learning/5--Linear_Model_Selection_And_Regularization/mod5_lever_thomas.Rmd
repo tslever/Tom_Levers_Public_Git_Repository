@@ -224,7 +224,7 @@ knitr::opts_chunk$set(
 (c) Fit a ridge regression model on the training set, with $\lambda$ chosen by cross-validation. Report the test error obtained.
 
     ```{r}
-    full_model_matrix <- model.matrix(object = formula, data = data_frame)[, -1]
+    full_model_matrix <- model.matrix(object = formula, data = colleges)[, -1]
     the_cv.glmnet <- glmnet::cv.glmnet(
         x = full_model_matrix,
         y = colleges$Apps,
@@ -255,13 +255,60 @@ knitr::opts_chunk$set(
         s = optimal_value_of_lambda,
         newx = testing_model_matrix
     )[, 1]
-    vector_of_residuals <- vector_of_predicted_numbers_of_applications - testing_vector_of_numbers_of_applications
+    vector_of_residuals <-
+        vector_of_predicted_numbers_of_applications -
+        testing_vector_of_numbers_of_applications
     vector_of_squared_residuals <- vector_of_residuals^2
     mean_squared_error <- mean(vector_of_squared_residuals)
     mean_squared_error
     ```
 
 (d) Fit a lasso model on the training set, with $\lambda$ chosen by cross-validation. Report the test error obtained, along with the number of non-zero coefficient estimates.
+
+    ```{r}
+    full_model_matrix <- model.matrix(object = formula, data = colleges)[, -1]
+    the_cv.glmnet <- glmnet::cv.glmnet(
+        x = full_model_matrix,
+        y = colleges$Apps,
+        alpha = 1
+    )
+    plot(the_cv.glmnet)
+    optimal_value_of_lambda <- the_cv.glmnet$lambda.min
+    optimal_value_of_lambda
+    training_model_matrix <- model.matrix(
+        object = formula,
+        data = colleges[vector_of_indices_of_training_data, ]
+    )[, -1]
+    training_vector_of_numbers_of_applications <-
+        colleges$Apps[vector_of_indices_of_training_data]
+    testing_vector_of_numbers_of_applications <-
+        colleges$Apps[vector_of_indices_of_testing_data]
+    polynomial_lasso_regression_model <- glmnet::glmnet(
+        x = training_model_matrix,
+        y = training_vector_of_numbers_of_applications,
+        alpha = 1
+    )
+    testing_model_matrix <- model.matrix(
+        object = formula,
+        data = colleges[vector_of_indices_of_testing_data, ]
+    )[, -1]
+    vector_of_predicted_numbers_of_applications <- predict(
+        object = polynomial_lasso_regression_model,
+        s = optimal_value_of_lambda,
+        newx = testing_model_matrix
+    )[, 1]
+    vector_of_residuals <-
+        vector_of_predicted_numbers_of_applications -
+        testing_vector_of_numbers_of_applications
+    vector_of_squared_residuals <- vector_of_residuals^2
+    mean_squared_error <- mean(vector_of_squared_residuals)
+    mean_squared_error
+    predict(
+        object = polynomial_lasso_regression_model,
+        s = optimal_value_of_lambda,
+        type = "coefficients"
+    )
+    ```
 
 (e) Fit a PCR model on the training set, with $M$ chosen by cross-validation. Report the test error obtained, along with the value of $M$ selected by cross-validation.
 
