@@ -190,9 +190,76 @@ knitr::opts_chunk$set(
 
 (a) Split the data set into a training set and a test set.
 
+    ```{r}
+    colleges <- ISLR2::College
+    head(colleges, n = 3)
+    proportion_of_training_data <- 0.9
+    library(TomLeversRPackage)
+    split_data <- split_data_set_into_training_and_testing_data(
+        data_frame = colleges,
+        proportion_of_training_data = proportion_of_training_data
+    )
+    vector_of_indices_of_training_data <- split_data$vector_of_indices_of_training_data
+    vector_of_indices_of_training_data[1:3]
+    vector_of_indices_of_testing_data <- split_data$vector_of_indices_of_testing_data
+    vector_of_indices_of_testing_data[1:3]
+    training_data <- split_data$training_data
+    head(training_data, n = 3)
+    testing_data <- split_data$testing_data
+    head(testing_data, n = 3)
+    ```
+
 (b) Fit a linear model using least squares on the training set, and report the test error obtained.
 
+    ```{r}
+    formula = Apps ~ .
+    linear_model <- lm(formula, data = training_data)
+    vector_of_predicted_numbers_of_applications <- predict(
+        object = linear_model,
+        testing_data
+    )
+    calculate_mean_squared_error(linear_model)
+    ```
+
 (c) Fit a ridge regression model on the training set, with $\lambda$ chosen by cross-validation. Report the test error obtained.
+
+    ```{r}
+    full_model_matrix <- model.matrix(object = formula, data = data_frame)[, -1]
+    the_cv.glmnet <- glmnet::cv.glmnet(
+        x = full_model_matrix,
+        y = colleges$Apps,
+        alpha = 0
+    )
+    plot(the_cv.glmnet)
+    optimal_value_of_lambda <- the_cv.glmnet$lambda.min
+    optimal_value_of_lambda
+    training_model_matrix <- model.matrix(
+        object = formula,
+        data = colleges[vector_of_indices_of_training_data, ]
+    )[, -1]
+    training_vector_of_numbers_of_applications <-
+        colleges$Apps[vector_of_indices_of_training_data]
+    testing_vector_of_numbers_of_applications <-
+        colleges$Apps[vector_of_indices_of_testing_data]
+    polynomial_ridge_regression_model <- glmnet::glmnet(
+        x = training_model_matrix,
+        y = training_vector_of_numbers_of_applications,
+        alpha = 0
+    )
+    testing_model_matrix <- model.matrix(
+        object = formula,
+        data = colleges[vector_of_indices_of_testing_data, ]
+    )[, -1]
+    vector_of_predicted_numbers_of_applications <- predict(
+        object = polynomial_ridge_regression_model,
+        s = optimal_value_of_lambda,
+        newx = testing_model_matrix
+    )[, 1]
+    vector_of_residuals <- vector_of_predicted_numbers_of_applications - testing_vector_of_numbers_of_applications
+    vector_of_squared_residuals <- vector_of_residuals^2
+    mean_squared_error <- mean(vector_of_squared_residuals)
+    mean_squared_error
+    ```
 
 (d) Fit a lasso model on the training set, with $\lambda$ chosen by cross-validation. Report the test error obtained, along with the number of non-zero coefficient estimates.
 
