@@ -20,20 +20,19 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   the_cv.glmnet <- glmnet::cv.glmnet(x = full_model_matrix, y = full_vector_of_indicators, alpha = 0, family = "binomial")
   print(paste("lambda = ", the_cv.glmnet$lambda.min, sep = ""))
  } else if (type_of_model == "KNN") {
-  #the_trainControl <- caret::trainControl(method  = "cv", number = 10)
-  #list_of_training_information <- caret::train(
-  # formula,
-  # method = "knn",
-  # tuneGrid = expand.grid(k = round(x = pracma::linspace(x1 = 1, x2 = 100, n = 10), digits = 0)),
-  # trControl = the_trainControl,
-  # metric = "Accuracy",
-  # data = data_frame
-  #)
-  #K = list_of_training_information$bestTune
-  K = floor(sqrt(nrow(data_frame)))
+  the_trainControl <- caret::trainControl(method  = "cv", number = 10)
+  list_of_training_information <- caret::train(
+   form = formula,
+   method = "knn",
+   tuneGrid = expand.grid(k = seq(from = 1, to = 3, by = 1)),
+   trControl = the_trainControl,
+   metric = "Accuracy",
+   data = data_frame
+  )
+  K = list_of_training_information$bestTune
   print(paste("K = ", K, sep = ""))
  }
- generate_data_frame_of_predicted_probabilities_and_indicators <-
+ generate_data_frame_of_actual_indicators_and_predicted_probabilities <-
   function(train_test_split) {
    training_data <- analysis(x = train_test_split)
    testing_data <- assessment(x = train_test_split)
@@ -77,13 +76,13 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
     matrix_of_values_of_predictors_for_training <- as.matrix(x = training_data[, vector_of_names_of_predictors])
     matrix_of_values_of_predictors_for_testing <- as.matrix(x = testing_data[, vector_of_names_of_predictors])
     vector_of_response_values_for_training <- training_data[, name_of_response]
-
+    the_knn3 <- caret::knn3(
+     matrix_of_values_of_predictors_for_training,
+     vector_of_response_values_for_training,
+     k = K
+    )
     data_frame_of_predicted_probabilities <- predict(
-     object = caret::knn3(
-      matrix_of_values_of_predictors_for_training,
-      vector_of_response_values_for_training,
-      k = K
-     ),
+     object = the_knn3,
      matrix_of_values_of_predictors_for_testing
     )
     index_of_column_1 <- get_index_of_column_of_data_frame(data_frame_of_predicted_probabilities, 1)
@@ -92,19 +91,19 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
     error_message <- paste("The performance of models of type ", type_of_model, " cannot be yet summarized.", sep = "")
     stop(error_message)
    }
-   data_frame_of_predicted_probabilities_and_indicators <- data.frame(
+   data_frame_of_actual_indicators_and_predicted_probabilities <- data.frame(
     actual_indicator = testing_data$Indicator,
     predicted_probability = vector_of_predicted_probabilities
    )
-   colnames(data_frame_of_predicted_probabilities_and_indicators) <- c("actual_indicator", "predicted_probability")
-   return(data_frame_of_predicted_probabilities_and_indicators)
+   colnames(data_frame_of_actual_indicators_and_predicted_probabilities) <- c("actual_indicator", "predicted_probability")
+   return(data_frame_of_actual_indicators_and_predicted_probabilities)
   }
- data_frame_of_sensitivities_and_FPRs <-
+ data_frame_of_performance_metrics <-
   rsample::vfold_cv(data_frame, v = 10, repeats = 1) %>%
   mutate(
    predicted_probability = purrr::map(
     splits,
-    generate_data_frame_of_predicted_probabilities_and_indicators
+    generate_data_frame_of_actual_indicators_and_predicted_probabilities
    )
   ) %>%
   tidyr::unnest(predicted_probability) %>%
@@ -115,12 +114,12 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
    recall = provide_performance_metrics(actual_indicator, predicted_probability)$TPR,
    F1_measure = (1 + 1^2) * precision * recall / (1^2 * precision + recall),
    decimal_of_true_positives = provide_performance_metrics(actual_indicator, predicted_probability)$decimal_of_true_positives,
-   range_of_numbers_of_observations = 1:length(recall)
+   number_of_observations = 1:length(recall)
   )
- data_frame_of_average_sensitivities_and_FPRs <-
-  data_frame_of_sensitivities_and_FPRs %>%
+ data_frame_of_average_performance_metrics <-
+  data_frame_of_performance_metrics %>%
   ungroup %>%
-  group_by(range_of_numbers_of_observations) %>%
+  group_by(number_of_observations) %>%
   summarise(
    threshold = mean(threshold),
    precision = mean(precision),
@@ -129,27 +128,8 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
    decimal_of_true_positives = mean(decimal_of_true_positives),
    id = "Average"
   )
- #mean_AUC <- Bolstad2::sintegral(data_frame_of_average_sensitivities_and_FPRs$recall, data_frame_of_average_sensitivities_and_FPRs$precision)$int
- #data_frame_of_sensitivities_and_FPRs <-
- # bind_rows(
- #  data_frame_of_sensitivities_and_FPRs,
- #  data_frame_of_average_sensitivities_and_FPRs
- # ) %>%
- # mutate(
- #  colour = factor(
- #   ifelse(
- #    test = id == "Average",
- #    yes = "Average",
- #    no = "Individual"
- #   ),
- #   levels = c(
- #    "Individual",
- #    "Average"
- #   )
- #  )
- # )
- ROC_curve <- ggplot(
-  data = data_frame_of_average_sensitivities_and_FPRs,
+ plot_of_performance_metrics_vs_threshold <- ggplot(
+  data = data_frame_of_average_performance_metrics,
   mapping = aes(x = threshold)
  ) +
   geom_line(mapping = aes(y = decimal_of_true_positives, color = "Average Decimal Of True Predictions")) +
@@ -159,12 +139,12 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   scale_colour_manual(values = c("#008080", "green4", "purple", "red")) +
   theme(legend.position = c(0.5, 0.25)) +
   labs(x = "threshold", y = "performance metric")
- maximum_average_F1_measure <- max(data_frame_of_average_sensitivities_and_FPRs$F1_measure, na.rm = TRUE)
- index_of_column_F1_measure <- get_index_of_column_of_data_frame(data_frame_of_average_sensitivities_and_FPRs, "F1_measure")
- index_of_maximum_average_F1_measure <- which(data_frame_of_average_sensitivities_and_FPRs[, index_of_column_F1_measure] == maximum_average_F1_measure)
- ROC_curve_and_mean_AUC <- list(
-  ROC_curve = ROC_curve,
-  data_frame_corresponding_to_maximum_average_F1_measure = data_frame_of_average_sensitivities_and_FPRs[index_of_maximum_average_F1_measure, c("threshold", "decimal_of_true_positives", "precision", "recall", "F1_measure")]
+ maximum_average_F1_measure <- max(data_frame_of_average_performance_metrics$F1_measure, na.rm = TRUE)
+ index_of_column_F1_measure <- get_index_of_column_of_data_frame(data_frame_of_average_performance_metrics, "F1_measure")
+ index_of_maximum_average_F1_measure <- which(data_frame_of_average_performance_metrics[, index_of_column_F1_measure] == maximum_average_F1_measure)
+ summary_of_performance_of_cross_validated_models <- list(
+  plot_of_performance_metrics_vs_threshold = plot_of_performance_metrics_vs_threshold,
+  data_frame_corresponding_to_maximum_average_F1_measure = data_frame_of_average_performance_metrics[index_of_maximum_average_F1_measure, c("threshold", "decimal_of_true_positives", "precision", "recall", "F1_measure")]
  )
- return(ROC_curve_and_mean_AUC)
+ return(summary_of_performance_of_cross_validated_models)
 }
