@@ -6,6 +6,9 @@ output:
   pdf_document: default
   html_document: default
 urlcolor: blue
+header-includes:
+ \usepackage{float}
+ \floatplacement{figure}{H}
 ---
 
 <!--- Below are global settings for knitr. You can override any of them by adding the changes to individual chunks --->
@@ -32,7 +35,7 @@ In this project, we build a model that would help us locate people displaced by 
 
 Our training data was collected likely by applying a Region Of Interest (ROI) Tool to high-resolution, orthorectified / geo-referenced image of Haiti in 2010. The image is presented in Figure 1 and is sourced from `HaitiOrthorectifiedImage.tif` at [Pixel Values from Images over Haiti](https://www.kaggle.com/datasets/billbasener/pixel-values-from-images-over-haiti?datasetId=1899167). One ROI tool is described at [Region of Interest (ROI) Tool](https://www.l3harrisgeospatial.com/docs/regionofinteresttool.html). Classes may be assigned to pixels by defining Regions Of Interest.
 
-![Orthorectified Image Of Haiti In 2010](Screenshot_Of_Orthorectified_Image_Of_Haiti_In_2010.png)
+![Orthorectified Image Of Haiti In 2010](Screenshot_Of_Orthorectified_Image_Of_Haiti_In_2010.png){#id .class height=25%}
 
 According to [What is orthorectified imagery?](https://www.esri.com/about/newsroom/insider/what-is-orthorectified-imagery/), an orthorectified image is an accurately georeferenced image that has been processed so that all pixels are in an accurate $(x, y)$ position on the ground. Orthorectified images have been processed to apply corrections for optical distortions from the sensor system, and apparent changes in the position of ground objects caused by the perspective of the sensor view angle and ground terrain.
 
@@ -69,14 +72,27 @@ webshot2::webshot(
 )
 ```
 
+We consider the distributions of intensities of color $Red$, $Green$, and $Blue$. See Figures 3, 4, and 5. No distribution of intensities of color is normal.
+
+```{r, fig.cap = "Distribution Of Intensities Of Color Red", fig.width = 2.625, fig.height = 1.875}
+TomLeversRPackage::plot_distribution(data_frame_of_classes_and_pixels, "Red", "red")
+```
+
+```{r, fig.cap = "Distribution Of Intensities Of Color Green", fig.width = 2.625, fig.height = 1.875}
+TomLeversRPackage::plot_distribution(data_frame_of_classes_and_pixels, "Green", "green")
+```
+
+```{r, fig.cap = "Distribution Of Intensities Of Color Blue", fig.width = 2.625, fig.height = 1.875}
+TomLeversRPackage::plot_distribution(data_frame_of_classes_and_pixels, "Blue", "blue")
+```
+
 # Methods
 
 We build binary classifiers that classify pixels as depicting blue tarps or depicting objects that are not blue tarps. We may ignore non-binary classifiers that predict probabilities for all classes and may be used to locate pixels that more likely depict blue tarps than objects that are not blue tarps. We may ignore non-binary classifiers since the intensity space for pixels representing blue tarps is distinct from the intensity space for pixels representing objects that are not blue tarps.
 
-In order to build binary classifiers, we create a data frame with a column of indicators of whether of not a pixel depicts a blue tarp instead of a column of classes. We normalize as opposed to standardize intensities given that distributions of intensity are not normal. We add columns corresponding to standardized intensities and intensities standardized after transforming by the natural logarithm, the square root, the square, and interactions
+In order to build binary classifiers, we create a data frame with a column of indicators of whether of not a pixel depicts a blue tarp instead of a column of classes. We normalize as opposed to standardize intensities given that distributions of intensity are not normal. We add columns corresponding to standardized intensities and intensities standardized after transforming by the natural logarithm, the square root, the square, and interactions.
 
-```{r, fig.cap = "Distribution Of Classes In Intensity Space", echo = FALSE}
-library(rgl)
+```{r}
 number_of_observations <- nrow(data_frame_of_classes_and_pixels)
 column_of_indicators <- rep(0, number_of_observations)
 condition <- data_frame_of_classes_and_pixels$Class == "Blue Tarp"
