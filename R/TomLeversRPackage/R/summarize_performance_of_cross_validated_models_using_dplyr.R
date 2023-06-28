@@ -10,10 +10,17 @@
 
 #' @export
 summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_model, formula, data_frame) {
- formula_string <- format(formula)
  print("Summary for model")
  print(paste("of type ", type_of_model, sep = ""))
- print(paste("with formula ", formula_string, sep = ""))
+ vector_of_variables <- all.vars(formula)
+ print(paste(vector_of_variables[1], " ~ ", sep = ""))
+ print(paste("    ", vector_of_variables[2], sep = ""))
+ number_of_variables <- length(vector_of_variables)
+ if (number_of_variables > 2) {
+  for (i in 3:number_of_variables) {
+   print(paste("    + ", vector_of_variables[i], sep = ""))
+  }
+ }
  if (type_of_model == "Logistic Ridge Regression") {
   full_model_matrix <- model.matrix(object = formula, data = data_frame)[, -1]
   full_vector_of_indicators <- data_frame$Indicator
