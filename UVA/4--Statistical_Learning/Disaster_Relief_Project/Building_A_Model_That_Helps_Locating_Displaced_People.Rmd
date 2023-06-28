@@ -74,7 +74,7 @@ plot3d(
 rglwidget()
 ```
 
-In order to build binary classifiers, we create a data frame with a column of indicators of whether of not a pixel depicts a blue tarp instead of a column of classes. We normalize as opposed to standardize intensities given that distributions of intensity are not normal.
+In order to build binary classifiers, we create a data frame with a column of indicators of whether of not a pixel depicts a blue tarp instead of a column of classes. We normalize as opposed to standardize intensities given that distributions of intensity are not normal. We add columns corresponding to standardized intensities and intensities standardized after transforming by the natural logarithm, the square root, the square, and interactions
 
 ```{r, fig.cap = "Distribution Of Classes In Intensity Space", echo = FALSE}
 library(rgl)
@@ -91,20 +91,46 @@ data_frame_of_indicators_and_pixels <- data.frame(
 )
 vector_of_random_indices <- sample(1:number_of_observations)
 data_frame_of_indicators_and_pixels <- data_frame_of_indicators_and_pixels[vector_of_random_indices, ]
-#mean_Red_intensity <- mean(data_frame_of_indicators_and_pixels$Red)
-#standard_deviation_of_Red_intensity <- sd(data_frame_of_indicators_and_pixels$Red)
-#mean_Green_intensity <- mean(data_frame_of_indicators_and_pixels$Green)
-#standard_deviation_of_Green_intensity <- sd(data_frame_of_indicators_and_pixels$Green)
-#mean_Blue_intensity <- mean(data_frame_of_indicators_and_pixels$Blue)
-#standard_deviation_of_Blue_intensity <- sd(data_frame_of_indicators_and_pixels$Blue)
-#data_frame_of_indicators_and_pixels$Red <- (data_frame_of_indicators_and_pixels$Red - mean_Red_intensity) / standard_deviation_of_Red_intensity
-#data_frame_of_indicators_and_pixels$Green <- (data_frame_of_indicators_and_pixels$Green - mean_Green_intensity) / standard_deviation_of_Green_intensity
-#data_frame_of_indicators_and_pixels$Blue <- (data_frame_of_indicators_and_pixels$Blue - mean_Blue_intensity) / standard_deviation_of_Blue_intensity
-data_frame_of_indicators_and_pixels$Red <- data_frame_of_indicators_and_pixels$Red / 255
-data_frame_of_indicators_and_pixels$Green <- data_frame_of_indicators_and_pixels$Green / 255
-data_frame_of_indicators_and_pixels$Blue <- data_frame_of_indicators_and_pixels$Blue / 255
-head(x = data_frame_of_indicators_and_pixels, n = 2)
-tail(x = data_frame_of_indicators_and_pixels, n = 2)
+library(TomLeversRPackage)
+data_frame_of_indicators_and_pixels[, "Scaled_Red"] <- normalize_vector(data_frame_of_indicators_and_pixels[, "Red"])
+data_frame_of_indicators_and_pixels[, "Scaled_Green"] <- normalize_vector(data_frame_of_indicators_and_pixels[, "Green"])
+data_frame_of_indicators_and_pixels[, "Scaled_Blue"] <- normalize_vector(data_frame_of_indicators_and_pixels[, "Blue"])
+data_frame_of_indicators_and_pixels[, "Scaled_Natural_Logarithm_Of_Red"] <- normalize_vector(
+ log(data_frame_of_indicators_and_pixels[, "Red"])
+)
+data_frame_of_indicators_and_pixels[, "Scaled_Natural_Logarithm_Of_Green"] <- normalize_vector(
+ log(data_frame_of_indicators_and_pixels[, "Green"])
+)
+data_frame_of_indicators_and_pixels[, "Scaled_Natural_Logarithm_Of_Blue"] <- normalize_vector(
+ log(data_frame_of_indicators_and_pixels[, "Blue"])
+)
+data_frame_of_indicators_and_pixels[, "Scaled_Square_Root_Of_Red"] <- normalize_vector(
+ sqrt(data_frame_of_indicators_and_pixels[, "Red"])
+)
+data_frame_of_indicators_and_pixels[, "Scaled_Square_Root_Of_Green"] <- normalize_vector(
+ sqrt(data_frame_of_indicators_and_pixels[, "Green"])
+)
+data_frame_of_indicators_and_pixels[, "Scaled_Square_Root_Of_Blue"] <- normalize_vector(
+ sqrt(data_frame_of_indicators_and_pixels[, "Blue"])
+)
+data_frame_of_indicators_and_pixels[, "Scaled_Square_Of_Red"] <- normalize_vector(
+ I(data_frame_of_indicators_and_pixels[, "Red"]^2)
+)
+data_frame_of_indicators_and_pixels[, "Scaled_Square_Of_Green"] <- normalize_vector(
+ I(data_frame_of_indicators_and_pixels[, "Green"]^2)
+)
+data_frame_of_indicators_and_pixels[, "Scaled_Square_Of_Blue"] <- normalize_vector(
+ I(data_frame_of_indicators_and_pixels[, "Blue"]^2)
+)
+data_frame_of_indicators_and_pixels[, "Scaled_Interaction_Of_Red_And_Green"] <- normalize_vector(
+ as.numeric(interaction(data_frame_of_indicators_and_pixels$Red, data_frame_of_indicators_and_pixels$Green))
+)
+data_frame_of_indicators_and_pixels[, "Scaled_Interaction_Of_Red_And_Blue"] <- normalize_vector( 
+ as.numeric(interaction(data_frame_of_indicators_and_pixels$Red, data_frame_of_indicators_and_pixels$Blue))
+)
+data_frame_of_indicators_and_pixels[, "Scaled_Interaction_Of_Green_And_Blue"] <- normalize_vector( 
+ as.numeric(interaction(data_frame_of_indicators_and_pixels$Green, data_frame_of_indicators_and_pixels$Blue))
+)
 ```
 
 We use $10$-fold cross-validation to evaluate the performance of $5$ classifiers. A classifier will classify a pixel as depicting a blue tarp or depicting an object that is not a blue tarp. We consider graphs each with an increasing purple curve representing Average Precision vs. Threshold, a decreasing red curve representing Average Recall vs. Threshold, a forest-green curve representing Average F1 Measure vs. Threshold, and a teal curve representing Average Decimal Of True Positives vs. Threshold.
@@ -117,104 +143,51 @@ We consider how the number of refugees to visit may change with precision. We as
 
 Suppose the width of our training image is $1,500 \ ft$. Then our training image's height is about $2,308 \ ft$ and its area is about $0.124 \ mi^2$. Suppose the area of Léogâne is $148.7 \ mi^2. There are about $1,200$ areas like that depicted in our training image in Léogâne.
 
-We use $10$-fold cross-validation to evaluate the performance of logistic-regression models. We perform manual bidirectional selection. According to [https://www.ibm.com/docs/en/contentclassificatio/8.8?topic=analysis-category-graph-precision-recall-vs-threshold](https://www.ibm.com/docs/en/contentclassificatio/8.8?topic=analysis-category-graph-precision-recall-vs-threshold), "The ideal threshold setting is the highest possible recall and precision rate. This goal is not always achievable, because the higher the recall rate, the lower the precision rate, and vice versa. Setting the most appropriate threshold for a category is a trade-off between these two rates." We consider the ideal threshold setting to correspond to the highest F1 measure. First, we consider the addition to an intercept only logistic regression model of one of the predictive terms $Red$, $Green$, $Blue$, $log(Red)$, $log(Green)$, $log(Blue)$, $sqrt(Red)$, $sqrt(Green)$, $sqrt(Blue)$, $Red^2$, $Green^2$, and $Blue^2$. The logistic regression model with formula $Indicator ~ Blue^2$ has the highest F1 measure. We consider the addition of each of the above predictive terms as well as $Red:Green$, $Red:Blue$, and $Green:Blue$. The logistic regression model with formula $Indicator ~ Blue^2 + Red:Green$ has the highest F1 measure. We do not remove predictive term $Blue^2$ from this model. We consider the addition of each of the above predictive terms. The logistic regression model with formula $Indicator ~ Blue^2 + Red:Green + Green$ has the highest F1 measure of $0.943$. We do not remove any predictive term because we have already considered submodels. We consider the addition of each of the above predictive terms. No model has a higher F1 measure than the logistic regression model with formula $Indicator ~ Blue^2 + Red:Green + Green$.
+We use $10$-fold cross-validation to evaluate the performance of logistic-regression models. We perform manual bidirectional selection. According to [https://www.ibm.com/docs/en/contentclassificatio/8.8?topic=analysis-category-graph-precision-recall-vs-threshold](https://www.ibm.com/docs/en/contentclassificatio/8.8?topic=analysis-category-graph-precision-recall-vs-threshold), "The ideal threshold setting is the highest possible recall and precision rate. This goal is not always achievable, because the higher the recall rate, the lower the precision rate, and vice versa. Setting the most appropriate threshold for a category is a trade-off between these two rates." We consider the ideal threshold setting to correspond to the highest F1 measure. First, we consider the addition to an intercept only logistic regression model of one of the predictive terms $Red$, $Green$, $Blue$, $log(Red)$, $log(Green)$, $log(Blue)$, $sqrt(Red)$, $sqrt(Green)$, $sqrt(Blue)$, $Red^2$, $Green^2$, and $Blue^2$. The logistic regression model with formula $Indicator ~ Blue^2$ has the highest F1 measure. We consider the addition of each of the above predictive terms as well as $Red:Green$, $Red:Blue$, and $Green:Blue$. The logistic regression model with formula $Indicator ~ Blue^2 + Red^2$ has the highest F1 measure. We do not remove either predictive term from this model. We follow this process until we arrive at a logistic regression model with formula $Indicator ~ norm(Blue^2) + norm(Red^2) + Green:Blue + norm(sqrt(Blue))$ with F1 measure $0.946$. Neither removing nor adding a predictor to this model results in a model with higher F1 measure.
 
-Following the same process, our best Linear Discriminant Analysis model has formula $Indicator ~ Blue^2 + Red:Blue + sqrt(Blue) + log(Blue) + Blue$ and F1 measure $0.906$.
+Following the same process, our best Logistic Ridge Regression model has formula $Indicator ~ norm(log(Blue)) + norm(sqrt(Red))$ and F1 measure $0.922$.
 
-Our best Quadratic Discriminant Analysis model has formula $Indicator ~ Blue^2 + Red^2 + Red:Green + Red + Blue + Green$ and F1 measure $0.952$.
+Our best Linear Discriminant Analysis model has formula $Indicator ~ log(Blue) + sqrt(Red)$ and F1 measure $0.892$.
 
-```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For Logistic Regression Model With Formula Indicator vs. Blue Squared + Interaction Of Red And Green + Green", eval = FALSE}
+Our best Quadratic Discriminant Analysis model has formula $Indicator ~ Blue^2 + Red^2 + Red:Green + Red + Blue + Green$ and F1 measure $0.939$.
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Prediction Metrics Vs. Thresholds For Logistic Regression Model With Formula Indicator vs. Scaled Square Of Blue + Scaled Square Of Red + Scaled Interaction Of Green And Blue + Scaled Square Root Of Blue", eval = FALSE}
 library(TomLeversRPackage)
-#summarize_performance_of_cross_validated_models_using_dplyr(
-#    type_of_model = "Logistic Regression",
-#    formula = Indicator ~ I(Blue^2),
-#    data_frame = data_frame_of_indicators_and_pixels
-#)
-#print("Indicator ~ I(Blue^2) + Red:Green")
-#summarize_performance_of_cross_validated_models_using_dplyr(
-#    type_of_model = "Logistic Regression",
-#    formula = Indicator ~ I(Blue^2) + Red:Green,
-#    data_frame = data_frame_of_indicators_and_pixels
-#)
 summarize_performance_of_cross_validated_models_using_dplyr(
     type_of_model = "Logistic Regression",
-    formula = Indicator ~ I(Blue^2) + Red:Green + Green,
+    formula = Indicator ~ Scaled_Square_Of_Blue + Scaled_Square_Of_Red + Scaled_Interaction_Of_Green_And_Blue + Scaled_Square_Root_Of_Blue,
     data_frame = data_frame_of_indicators_and_pixels
 )
 ```
 
-```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For Logistic Ridge Regression Model With Formula Indicator vs. Square Root Of Red + Natural Logarithm Of Blue + Interaction Of Green And Blue", eval = TRUE}
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Prediction Metrics Vs. Thresholds For Logistic Ridge Regression Model With Formula Indicator vs. Scaled Natural Logarithm Of Blue + Scaled Square Root Of Red", eval = FALSE}
 library(TomLeversRPackage)
 summarize_performance_of_cross_validated_models_using_dplyr(
     type_of_model = "Logistic Ridge Regression",
-    formula = Indicator ~ sqrt(Red) + log(Blue) + Green:Blue,
+    formula = Indicator ~ Scaled_Natural_Logarithm_Of_Blue + Scaled_Square_Root_Of_Red,
     data_frame = data_frame_of_indicators_and_pixels
 )
 ```
 
-```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For Linear Discriminant Analysis Model With Formula Indicator vs. Blue Squared + Interaction Of Red And Blue + Square Root Of Blue + Natural Logarithm Of Blue + Blue", eval = FALSE}
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Prediction Metrics Vs. Thresholds For Linear Discriminant Analysis Model With Formula Indicator vs. Scaled Blue + Scaled Square Of Red + Scaled Square Of Green", eval = FALSE}
 library(TomLeversRPackage)
-#summarize_performance_of_cross_validated_models_using_dplyr(
-#    type_of_model = "LDA",
-#    formula = Indicator ~ I(Blue^2),
-#    data_frame = data_frame_of_indicators_and_pixels
-#)
-#summarize_performance_of_cross_validated_models_using_dplyr(
-#    type_of_model = "LDA",
-#    formula = Indicator ~ I(Blue^2) + Red:Blue,
-#    data_frame = data_frame_of_indicators_and_pixels
-#)
-#summarize_performance_of_cross_validated_models_using_dplyr(
-#    type_of_model = "LDA",
-#    formula = Indicator ~ I(Blue^2) + Red:Blue + sqrt(Blue),
-#    data_frame = data_frame_of_indicators_and_pixels
-#)
 summarize_performance_of_cross_validated_models_using_dplyr(
     type_of_model = "LDA",
-    formula = Indicator ~ I(Blue^2) + Red:Blue + sqrt(Blue) + log(Blue) + Blue,
+    formula = Indicator ~ Scaled_Blue + Scaled_Square_Of_Red + Scaled_Square_Of_Green,
     data_frame = data_frame_of_indicators_and_pixels
 )
 ```
 
-```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For Quadratic Discriminant Analysis Model With Formula Indicator vs. Blue Squared + Red Squared + Interaction Of Red And Green + Red + Natural Logarithm Of Blue + Natural Logarithm Of Green", eval = FALSE}
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Prediction Metrics Vs. Thresholds For Quadratic Discriminant Analysis Model With Formula Indicator vs. Scaled Square Of Blue + Scaled Square Of Red + Scaled Red + Scaled Natural Logarithm Of Blue", eval = FALSE}
 library(TomLeversRPackage)
-#summarize_performance_of_cross_validated_models_using_dplyr(
-#    type_of_model = "QDA",
-#    formula = Indicator ~ I(Blue^2),
-#    data_frame = data_frame_of_indicators_and_pixels
-#)
-#summarize_performance_of_cross_validated_models_using_dplyr(
-#    type_of_model = "QDA",
-#    formula = Indicator ~ I(Blue^2) + I(Red^2),
-#    data_frame = data_frame_of_indicators_and_pixels
-#)
-#summarize_performance_of_cross_validated_models_using_dplyr(
-#    type_of_model = "QDA",
-#    formula = Indicator ~ I(Blue^2) + I(Red^2) + Red:Green,
-#    data_frame = data_frame_of_indicators_and_pixels
-#)
-#summarize_performance_of_cross_validated_models_using_dplyr(
-#    type_of_model = "QDA",
-#    formula = Indicator ~ I(Blue^2) + I(Red^2) + Red:Green + Red,
-#    data_frame = data_frame_of_indicators_and_pixels
-#)
-#summarize_performance_of_cross_validated_models_using_dplyr(
-#    type_of_model = "QDA",
-#    formula = Indicator ~ I(Blue^2) + I(Red^2) + Red:Green + Red + log(Blue),
-#    data_frame = data_frame_of_indicators_and_pixels
-#)
 summarize_performance_of_cross_validated_models_using_dplyr(
     type_of_model = "QDA",
-    formula = Indicator ~ I(Blue^2) + I(Red^2) + Red:Green + Red + log(Blue) + log(Green),
+    formula = Indicator ~ Scaled_Square_Of_Blue + Scaled_Square_Of_Red + Scaled_Red + Scaled_Natural_Logarithm_Of_Blue,
     data_frame = data_frame_of_indicators_and_pixels
 )
 ```
 
-```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Precision / Recall Curve For K Nearest Neighbors Model With Formula Indicator vs. Red:Blue And Possibly More Predictive Terms", eval = FALSE}
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Prediction Metrics Vs. Thresholds For K Nearest Neighbors Model With Formula Indicator vs. ?", eval = FALSE}
 library(TomLeversRPackage)
-summarize_performance_of_cross_validated_models_using_dplyr(
-    type_of_model = "KNN",
-    formula = Indicator ~ Red:Blue,
-    data_frame = data_frame_of_indicators_and_pixels
-)
+
 ```
