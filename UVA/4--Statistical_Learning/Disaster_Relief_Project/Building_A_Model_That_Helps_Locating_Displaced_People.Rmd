@@ -143,13 +143,17 @@ We consider how the number of refugees to visit may change with precision. We as
 
 Suppose the width of our training image is $1,500 \ ft$. Then our training image's height is about $2,308 \ ft$ and its area is about $0.124 \ mi^2$. Suppose the area of Léogâne is $148.7 \ mi^2. There are about $1,200$ areas like that depicted in our training image in Léogâne.
 
-We use $10$-fold cross-validation to evaluate the performance of logistic-regression models. We perform manual bidirectional selection. According to [https://www.ibm.com/docs/en/contentclassificatio/8.8?topic=analysis-category-graph-precision-recall-vs-threshold](https://www.ibm.com/docs/en/contentclassificatio/8.8?topic=analysis-category-graph-precision-recall-vs-threshold), "The ideal threshold setting is the highest possible recall and precision rate. This goal is not always achievable, because the higher the recall rate, the lower the precision rate, and vice versa. Setting the most appropriate threshold for a category is a trade-off between these two rates." We consider the ideal threshold setting to correspond to the highest F1 measure. First, we consider the addition to an intercept only logistic regression model of one of the predictive terms $Red$, $Green$, $Blue$, $log(Red)$, $log(Green)$, $log(Blue)$, $sqrt(Red)$, $sqrt(Green)$, $sqrt(Blue)$, $Red^2$, $Green^2$, and $Blue^2$. The logistic regression model with formula $Indicator ~ Blue^2$ has the highest F1 measure. We consider the addition of each of the above predictive terms as well as $Red:Green$, $Red:Blue$, and $Green:Blue$. The logistic regression model with formula $Indicator ~ Blue^2 + Red^2$ has the highest F1 measure. We do not remove either predictive term from this model. We follow this process until we arrive at a logistic regression model with formula $Indicator ~ norm(Blue^2) + norm(Red^2) + Green:Blue + norm(sqrt(Blue))$ with F1 measure $0.946$. Neither removing nor adding a predictor to this model results in a model with higher F1 measure.
+We use $10$-fold cross-validation to evaluate the performance of logistic-regression models. We perform manual bidirectional selection. According to [https://www.ibm.com/docs/en/contentclassificatio/8.8?topic=analysis-category-graph-precision-recall-vs-threshold](https://www.ibm.com/docs/en/contentclassificatio/8.8?topic=analysis-category-graph-precision-recall-vs-threshold), "The ideal threshold setting is the highest possible recall and precision rate. This goal is not always achievable, because the higher the recall rate, the lower the precision rate, and vice versa. Setting the most appropriate threshold for a category is a trade-off between these two rates." We consider the ideal threshold setting to correspond to the highest F1 measure. First, we consider the addition to an intercept only logistic regression model of one of the predictive terms $Red$, $Green$, $Blue$, $log(Red)$, $log(Green)$, $log(Blue)$, $sqrt(Red)$, $sqrt(Green)$, $sqrt(Blue)$, $Red^2$, $Green^2$, and $Blue^2$. The logistic regression model with formula $Indicator \sim Blue^2$ has the highest F1 measure. We consider the addition of each of the above predictive terms as well as $Red:Green$, $Red:Blue$, and $Green:Blue$. The logistic regression model with formula $Indicator \sim Blue^2 + Red^2$ has the highest F1 measure. We do not remove either predictive term from this model. We follow this process until we arrive at a logistic regression model with formula $Indicator \sim normalizeBlue^2) + normalizeRed^2) + Green:Blue + normalizesqrt(Blue))$ with F1 measure $0.946$. Neither removing nor adding a predictor to this model results in a model with higher F1 measure.
 
-Following the same process, our best Logistic Ridge Regression model has formula $Indicator ~ norm(log(Blue)) + norm(sqrt(Red))$ and F1 measure $0.922$.
+Following the same process, our best Logistic Ridge Regression model has formula $Indicator \sim normalizelog(Blue)) + normalizesqrt(Red))$ and F1 measure $0.922$.
 
-Our best Linear Discriminant Analysis model has formula $Indicator ~ log(Blue) + sqrt(Red)$ and F1 measure $0.892$.
+Our best Linear Discriminant Analysis model has formula $Indicator \sim log(Blue) + sqrt(Red)$ and F1 measure $0.892$.
 
-Our best Quadratic Discriminant Analysis model has formula $Indicator ~ Blue^2 + Red^2 + Red:Green + Red + Blue + Green$ and F1 measure $0.939$.
+Our best Quadratic Discriminant Analysis model has formula $Indicator \sim Blue^2 + Red^2 + Red:Green + Red + Blue + Green$ and F1 measure $0.939$.
+
+Our best KNN model has formula $Indicator \sim normalizeRed:Blue) + normalizeGreen:Blue) + normalizesqrt(Blue))$ and F1 measure $0.943$.
+
+Our Logistic Regression model has the best performance according to F1 measures, followed by our KNN, QDA, Logistic Ridge Regression, and LDA models.
 
 ```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Prediction Metrics Vs. Thresholds For Logistic Regression Model With Formula Indicator vs. Scaled Square Of Blue + Scaled Square Of Red + Scaled Interaction Of Green And Blue + Scaled Square Root Of Blue", eval = FALSE}
 library(TomLeversRPackage)
@@ -187,7 +191,11 @@ summarize_performance_of_cross_validated_models_using_dplyr(
 )
 ```
 
-```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Prediction Metrics Vs. Thresholds For K Nearest Neighbors Model With Formula Indicator vs. ?", eval = FALSE}
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Prediction Metrics Vs. Thresholds For K Nearest Neighbors Model With Formula Indicator vs. ?", eval = TRUE}
 library(TomLeversRPackage)
-
+summarize_performance_of_cross_validated_models_using_dplyr(
+    type_of_model = "KNN",
+    formula = Indicator ~ Scaled_Interaction_Of_Red_And_Blue + Scaled_Interaction_Of_Green_And_Blue + Scaled_Square_Root_Of_Blue,
+    data_frame = data_frame_of_indicators_and_pixels
+)
 ```
