@@ -11,16 +11,22 @@
 #' @export
 summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_model, formula, data_frame) {
  print(paste("Summary for model of type ", type_of_model, sep = ""))
- vector_of_variables <- all.vars(formula)
- print(paste(vector_of_variables[1], " ~ ", sep = ""))
- print(paste("    ", vector_of_variables[2], sep = ""))
- number_of_variables <- length(vector_of_variables)
+ names_of_variables <- all.vars(formula)
+ name_of_response <- names_of_variables[1]
+ vector_of_names_of_predictors <- names_of_variables[-1]
+ print(paste(names_of_variables[1], " ~ ", sep = ""))
+ print(paste("    ", names_of_variables[2], sep = ""))
+ number_of_variables <- length(names_of_variables)
  if (number_of_variables > 2) {
   for (i in 3:number_of_variables) {
-   print(paste("    + ", vector_of_variables[i], sep = ""))
+   print(paste("    + ", names_of_variables[i], sep = ""))
   }
  }
  if (type_of_model == "Logistic Ridge Regression") {
+  matrix_of_predictors <- as.matrix(data_frame[, vector_of_names_of_predictors])
+  vector_of_response_values <- as.numeric(data_frame[, name_of_response])
+  the_glmnet <- glmnet::glmnet(x = matrix_of_predictors, y = vector_of_response_values, family = "binomial", alpha = 0)
+  sequence_of_lambda_values <- the_glmnet$lambda
   the_trainControl <- caret::trainControl(method  = "cv", summaryFunction = calculate_F1_measure)
   list_of_training_information <- caret::train(
    form = formula,
@@ -28,7 +34,7 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
    method = "glmnet",
    metric = "F1_measure",
    trControl = the_trainControl,
-   tuneGrid = expand.grid(alpha = 0, lambda = seq(from = 0.002, to = 0.004, by = 0.0001))
+   tuneGrid = expand.grid(alpha = 0, lambda = sequence_of_lambda_values)
   )
   optimal_value_of_lambda = list_of_training_information$bestTune$lambda
   print(paste("optimal value of lambda = ", optimal_value_of_lambda, sep = ""))
@@ -83,9 +89,6 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
     index_of_column_1 <- get_index_of_column_of_data_frame(data_frame_of_predicted_probabilities, 1)
     vector_of_predicted_probabilities <- data_frame_of_predicted_probabilities[, index_of_column_1]
    } else if (type_of_model == "KNN") {
-    names_of_variables <- all.vars(formula)
-    name_of_response <- names_of_variables[1]
-    vector_of_names_of_predictors <- names_of_variables[-1]
     matrix_of_values_of_predictors_for_training <- as.matrix(x = training_data[, vector_of_names_of_predictors])
     matrix_of_values_of_predictors_for_testing <- as.matrix(x = testing_data[, vector_of_names_of_predictors])
     vector_of_response_values_for_training <- training_data[, name_of_response]
@@ -122,76 +125,79 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   tidyr::unnest(predicted_probability) %>%
   group_by(id) %>%
   reframe(
-   threshold = provide_performance_metrics(actual_indicator, predicted_probability)$threshold,
-   fall_out = provide_performance_metrics(actual_indicator, predicted_probability)$FPR,
-   precision = provide_performance_metrics(actual_indicator, predicted_probability)$PPV,
-   recall = provide_performance_metrics(actual_indicator, predicted_probability)$TPR,
-   F1_measure = (1 + 1^2) * precision * recall / (1^2 * precision + recall),
+   accuracy = provide_performance_metrics(actual_indicator, predicted_probability)$accuracy,
    decimal_of_true_positives = provide_performance_metrics(actual_indicator, predicted_probability)$decimal_of_true_positives,
-   number_of_observations = 1:length(recall)
+   PPV = provide_performance_metrics(actual_indicator, predicted_probability)$PPV,
+   TPR = provide_performance_metrics(actual_indicator, predicted_probability)$TPR,
+   F1_measure = (1 + 1^2) * PPV * TPR / (1^2 * PPV + TPR),
+   FPR = provide_performance_metrics(actual_indicator, predicted_probability)$FPR,
+   number_of_observations = 1:length(TPR),
+   threshold = provide_performance_metrics(actual_indicator, predicted_probability)$threshold,
   )
  data_frame_of_average_performance_metrics <-
   data_frame_of_performance_metrics %>%
   ungroup %>%
   group_by(number_of_observations) %>%
   reframe(
-   threshold = mean(threshold),
-   fall_out = mean(fall_out),
-   precision = mean(precision),
-   recall = mean(recall),
-   F1_measure = mean(F1_measure),
+   accuracy = mean(accuracy),
    decimal_of_true_positives = mean(decimal_of_true_positives),
+   F1_measure = mean(F1_measure),
+   FPR = mean(FPR),
+   PPV = mean(PPV),
+   threshold = mean(threshold),
+   TPR = mean(TPR),
    id = "Average"
   )
  data_frame_of_average_performance_metrics <- data_frame_of_average_performance_metrics[complete.cases(data_frame_of_average_performance_metrics), ]
- ROC_curve <- ggplot(
-  data = data_frame_of_average_performance_metrics,
-  mapping = aes(x = fall_out)
- ) +
-  geom_line(mapping = aes(y = recall)) +
-  labs(x = "fall-out", y = "recall", title = "ROC Curve And Recall Vs. Fall-Out") +
-  theme(
-   plot.title = element_text(hjust = 0.5, size = 11),
-  )
- data_frame_of_precision_and_recall <- data_frame_of_average_performance_metrics[, c("precision", "recall")]
- number_of_thresholds <- nrow(data_frame_of_precision_and_recall)
- data_frame_of_precision_and_recall[number_of_thresholds + 1, "precision"] = 1
- data_frame_of_precision_and_recall[number_of_thresholds + 1, "recall"] = 0
- PR_curve <- ggplot(
-  data = data_frame_of_precision_and_recall,
-  mapping = aes(x = recall)
- ) +
-  geom_line(mapping = aes(y = precision)) +
-  labs(x = "recall", y = "precision", title = "Precision-Recall Curve") +
-  theme(
-   plot.title = element_text(hjust = 0.5, size = 11),
-  )
  plot_of_performance_metrics_vs_threshold <- ggplot(
   data = data_frame_of_average_performance_metrics,
   mapping = aes(x = threshold)
  ) +
+  geom_line(mapping = aes(y = accuracy, color = "Average Accuracy")) +
   geom_line(mapping = aes(y = decimal_of_true_positives, color = "Average Decimal Of True Predictions")) +
   geom_line(mapping = aes(y = F1_measure, color = "Average F1 measure")) +
-  geom_line(mapping = aes(y = precision, color = "Average Precision")) +
-  geom_line(mapping = aes(y = recall, color = "Average Recall")) +
-  scale_colour_manual(values = c("#008080", "green4", "purple", "red")) +
-  theme(legend.position = c(0.5, 0.25)) +
+  geom_line(mapping = aes(y = PPV, color = "Average PPV")) +
+  geom_line(mapping = aes(y = TPR, color = "Average TPR")) +
+  scale_colour_manual(values = c("red", "orange", "yellow", "green", "blue")) +
+  theme(legend.position = c(0.5, 0.5)) +
   labs(x = "threshold", y = "performance metric", title = "Performance Metrics Vs. Threshold") +
+  theme(
+   plot.title = element_text(hjust = 0.5, size = 11),
+  )
+ data_frame_of_PPV_and_TPR <- data_frame_of_average_performance_metrics[, c("PPV", "TPR")]
+ number_of_thresholds <- nrow(data_frame_of_PPV_and_TPR)
+ data_frame_of_PPV_and_TPR[number_of_thresholds + 1, "PPV"] = 1
+ data_frame_of_PPV_and_TPR[number_of_thresholds + 1, "TPR"] = 0
+ PR_curve <- ggplot(
+  data = data_frame_of_PPV_and_TPR,
+  mapping = aes(x = TPR)
+ ) +
+  geom_line(mapping = aes(y = PPV)) +
+  labs(x = "TPR", y = "PPV", title = "PPV-TPR Curve") +
+  theme(
+   plot.title = element_text(hjust = 0.5, size = 11),
+  )
+ ROC_curve <- ggplot(
+  data = data_frame_of_average_performance_metrics,
+  mapping = aes(x = FPR)
+ ) +
+  geom_line(mapping = aes(y = TPR)) +
+  labs(x = "FPR", y = "TPR", title = "ROC Curve And TPR Vs. FPR") +
   theme(
    plot.title = element_text(hjust = 0.5, size = 11),
   )
  maximum_average_F1_measure <- max(data_frame_of_average_performance_metrics$F1_measure, na.rm = TRUE)
  index_of_column_F1_measure <- get_index_of_column_of_data_frame(data_frame_of_average_performance_metrics, "F1_measure")
  index_of_maximum_average_F1_measure <- which(data_frame_of_average_performance_metrics[, index_of_column_F1_measure] == maximum_average_F1_measure)
- area_under_PR_curve <- MESS::auc(data_frame_of_precision_and_recall$recall, data_frame_of_precision_and_recall$precision)
- area_under_ROC_curve <- MESS::auc(data_frame_of_average_performance_metrics$fall_out, data_frame_of_average_performance_metrics$recall)
+ area_under_PR_curve <- MESS::auc(data_frame_of_PPV_and_TPR$TPR, data_frame_of_PPV_and_TPR$PPV)
+ area_under_ROC_curve <- MESS::auc(data_frame_of_average_performance_metrics$FPR, data_frame_of_average_performance_metrics$TPR)
  summary_of_performance_of_cross_validated_models <- list(
   area_under_PR_curve = area_under_PR_curve,
   area_under_ROC_curve = area_under_ROC_curve,
   plot_of_performance_metrics_vs_threshold = plot_of_performance_metrics_vs_threshold,
   PR_curve = PR_curve,
   ROC_curve = ROC_curve,
-  data_frame_corresponding_to_maximum_average_F1_measure = data_frame_of_average_performance_metrics[index_of_maximum_average_F1_measure, c("threshold", "decimal_of_true_positives", "fall_out", "precision", "recall", "F1_measure")]
+  data_frame_corresponding_to_maximum_average_F1_measure = data_frame_of_average_performance_metrics[index_of_maximum_average_F1_measure, c("accuracy", "decimal_of_true_positives", "F1_measure", "FPR", "PPV", "threshold", "TPR")]
  )
  return(summary_of_performance_of_cross_validated_models)
 }
