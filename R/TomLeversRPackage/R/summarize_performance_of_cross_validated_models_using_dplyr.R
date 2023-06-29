@@ -166,8 +166,11 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   )
  data_frame_of_PPV_and_TPR <- data_frame_of_average_performance_metrics[, c("PPV", "TPR")]
  number_of_thresholds <- nrow(data_frame_of_PPV_and_TPR)
- data_frame_of_PPV_and_TPR[number_of_thresholds + 1, "PPV"] = 1
- data_frame_of_PPV_and_TPR[number_of_thresholds + 1, "TPR"] = 0
+ data_frame_of_PPV_and_TPR[number_of_thresholds + 1, "PPV"] <- 1
+ data_frame_of_PPV_and_TPR[number_of_thresholds + 1, "TPR"] <- 0
+ number_of_thresholds <- nrow(data_frame_of_PPV_and_TPR)
+ data_frame_of_PPV_and_TPR[number_of_thresholds + 1, "PPV"] <- 0
+ data_frame_of_PPV_and_TPR[number_of_thresholds + 1, "TPR"] <- 1
  PR_curve <- ggplot(
   data = data_frame_of_PPV_and_TPR,
   mapping = aes(x = TPR)
@@ -177,8 +180,15 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   theme(
    plot.title = element_text(hjust = 0.5, size = 11),
   )
+ data_frame_of_TPR_and_FPR <- data_frame_of_average_performance_metrics[, c("TPR", "FPR")]
+ number_of_thresholds <- nrow(data_frame_of_TPR_and_FPR)
+ data_frame_of_TPR_and_FPR[number_of_thresholds + 1, "TPR"] <- 0
+ data_frame_of_TPR_and_FPR[number_of_thresholds + 1, "FPR"] <- 0
+ number_of_thresholds <- nrow(data_frame_of_TPR_and_FPR)
+ data_frame_of_TPR_and_FPR[number_of_thresholds + 1, "TPR"] <- 1
+ data_frame_of_TPR_and_FPR[number_of_thresholds + 1, "FPR"] <- 1
  ROC_curve <- ggplot(
-  data = data_frame_of_average_performance_metrics,
+  data = data_frame_of_TPR_and_FPR,
   mapping = aes(x = FPR)
  ) +
   geom_line(mapping = aes(y = TPR)) +
@@ -190,7 +200,7 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
  index_of_column_F1_measure <- get_index_of_column_of_data_frame(data_frame_of_average_performance_metrics, "F1_measure")
  index_of_maximum_average_F1_measure <- which(data_frame_of_average_performance_metrics[, index_of_column_F1_measure] == maximum_average_F1_measure)
  area_under_PR_curve <- MESS::auc(data_frame_of_PPV_and_TPR$TPR, data_frame_of_PPV_and_TPR$PPV)
- area_under_ROC_curve <- MESS::auc(data_frame_of_average_performance_metrics$FPR, data_frame_of_average_performance_metrics$TPR)
+ area_under_ROC_curve <- MESS::auc(data_frame_of_TPR_and_FPR$FPR, data_frame_of_TPR_and_FPR$TPR)
  summary_of_performance_of_cross_validated_models <- list(
   area_under_PR_curve = area_under_PR_curve,
   area_under_ROC_curve = area_under_ROC_curve,
