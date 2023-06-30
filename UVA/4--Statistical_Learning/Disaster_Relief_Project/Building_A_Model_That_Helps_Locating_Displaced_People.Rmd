@@ -181,8 +181,7 @@ The third dimension of our grid is value of primary hyperparameter. For Logistic
 
 The fourth dimension of our grid is value of threshold. Varying the threshold according to which a binary classifier classifies an observations as corresponding to a blue tarp or not will result in different numbers of false negatives, false positives, true negatives, and true positives and different F1 measures. We seek to maximize F1 measure.
 
-According to *An Introduction to Statistical Learning (Second Edition)* by James et al., for models with categorical predictors such as binary classifiers, "$k$-fold cross validation involves randomly dividing a set of observations into $k$ groups, or folds, of approximately equal size. The first fold is treated as a validation set, and the method is fit on the remaining $k - 1$ folds." A performance metric like F1 measure is "computed on the observations in the held-out fold. This procedure is repeated $k$ times; each time, a different group of observations is treated as a validation set. This process results in $k$ estimates of the" performance metric, $F_1, F_2, ..., F_k$. "The $k$-fold cross validation estimate is computed by averaging these values":
-$$(F1 \ measure) = \frac{1}{k} \sum_{i = 1}^k \left[(F1 \ measure)_k\right]$$
+According to *An Introduction to Statistical Learning (Second Edition)* by James et al., for models with categorical predictors such as binary classifiers, "$k$-fold cross validation involves randomly dividing a set of observations into $k$ groups, or folds, of approximately equal size. The first fold is treated as a validation set, and the method is fit on the remaining $k - 1$ folds." A performance metric like F1 measure is "computed on the observations in the held-out fold. This procedure is repeated $k$ times; each time, a different group of observations is treated as a validation set. This process results in $k$ estimates of the" performance metric, $F_1, F_2, ..., F_k$. "The $k$-fold cross validation estimate is computed by averaging these values".
 
 "[W]e are interested only in the location of the [maximum] point in the estimated test [F1 measure] curve. This is because we might be performing cross-validation on a number of statistical learning methods, or on a single method using different [hyperparameters], in order to identify the method that results in the [highest F1 measure. D]espite the fact that they sometimes [misestimate] the true test [F1 measure, most] of the CV curves [of F1 measure vs. threshold] come close to identifying the correct [threshold] corresponding to the [highest F1 measure]."
 
@@ -192,60 +191,109 @@ As described below, we apply cross validation to averaging performance metrics a
 
 To search for an optimal Logistic Regression binary classifier, we perform manual bidirectional selection. Through $10$-fold cross validation we calculate the average F1 measure for $10$ Logistic Regression binary classifiers with formula $Indicator \sim normalize(Red)$ that were trained on $9$ tenths of our data frame of indicators and pixels and tested on $1$ tenth of our data frame. Similarly, we calculate the average F1 measure for Logistic Regression binary classifiers with formula $Indicator \sim normalize(Green), Indicator \sim normalize(Blue), ..., Indicator \sim normalize\left(Blue^2\right)$. On one knit of this paper, the Logistic Regression binary classifiers with formula $Indicator \sim normalize(Blue)$ have the highest average F1 measure of $0.445$. We consider the average F1 measures for Logistic Regression binary classifiers with formulas $Indicator \sim normalize(Blue) + normalize(Red), ..., Indicator \sim normalize(Blue) + normalize(Green : Blue)$. The Logistic Regression binary classifiers with formula $Indicator \sim normalize(Blue) + normalize(Red)$ have the highest average F1 measure of $0.931$. We have already considered the average F1 measures for logistic binary classifiers with formulas $Indicator \sim normalize(Red)$ and $Indicator \sim normalize(Blue)$. We consider the average F1 measures for Logistic Regression binary classifiers with formulas $Indicator \sim normalize(Blue) + normalize(Red) + normalize(Green), ..., Indicator \sim normalize(Blue) + normalize(Red) + normalize(Green:Blue)$. The Logistic Regression binary classifiers with formula $Indicator \sim normalize(Blue) + normalize(Red) + normalize\left(Green^2\right)$ have the highest average F1 measure of $0.942$. The average F1 measure for Logistic Regression binary classifiers with formula $Indicator \sim normalize(Red) + normalize\left(Green^2\right)$ is $0.449$. We consider the average F1 measures for Logistic Regression binary classifiers with formulas $Indicator \sim normalize(Blue) + normalize(Red) + normalize\left(Green^2\right) + normalize(Green), ..., Indicator \sim normalize(Blue) + normalize(Red) + normalize\left(Green^2\right) + normalize(Green:Blue)$. None of these binary classifiers have average F1 measures greater than $0.942$.
 
-```{r, fig.cap = "Prediction Metrics Vs. Thresholds For Logistic Regression Model With Formula Indicator vs. Normalized Blue + Normalized Red + Normalized Square Of Green", eval = FALSE}
-summarize_performance_of_cross_validated_models_using_dplyr(
+```{r, eval = TRUE}
+summary_of_performance <- summarize_performance_of_cross_validated_models_using_dplyr(
     type_of_model = "Logistic Regression",
     formula = Indicator ~ Normalized_Blue + Normalized_Red + Normalized_Square_Of_Green,
     data_frame = data_frame_of_indicators_and_pixels
 )
+# "glm.fit: fitted probabilities numerically 0 or 1" occurs due to predicted
+# probabilities of the Logistic Regression binary classifier being close to 0 and 1.
+# "collapsing to unique ’x’ values" is an artifact of MESS::auc.
+```
+
+```{r, fig.cap = "Prediction Metrics Vs. Thresholds For Logistic Regression Model With Formula Indicator vs. Normalized Blue + Normalized Red + Normalized Square Of Green"}
+summary_of_performance$plot_of_performance_metrics_vs_threshold
+```
+
+```{r, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Logistic Regression Model With Formula Indicator vs. Normalized Blue + Normalized Red + Normalized Square Of Green"}
+summary_of_performance$PR_curve
+summary_of_performance$ROC_curve
+summary_of_performance$data_frame_of_performance_metrics
 ```
 
 To search for an optimal Logistic Ridge Regression binary classifier, we perform manual bidirectional selection as above. For a given formula, before cross validation, we search for one value of hyperparameter $\lambda$. We use `caret::train` to choose $\lambda = 0.0035$ for all of our Logistic Ridge Regression models. According to the [documentation for `caret::train`](https://www.rdocumentation.org/packages/caret/versions/4.47/topics/train), `caret::train` "sets up a grid of tuning parameters for a number of classification and regression routines, fits each model, and calculates a resampling based performance measure". Our inputs include our formula specifying response and predictive terms, our full data frame of indicators and pixels, the method "glmnet", the metric "F1_measure", a `trainControl` object, and a data frame containing one row for each combination of $\alpha = 0$ and value of $\lambda$ to be evaluated. We construct the `trainControl` object with method "cv" denoting resampling method cross validation and summary function `calculate_F1_measure` to compute F1 measures across resamples. $\alpha = 0$ indicates a combination of ridge regression and lasso regression that is effectively ridge regression. $\lambda$ is a constant that determines the importance of squares of coefficients to the quantity to be minimized when conducting Logistic Regression. We use $glmnet::glmnet$ to choose a sequence of values of $lambda$ to be evaluated. According to the [documentation for `glmnet::glmnet`](https://www.rdocumentation.org/packages/glmnet/versions/4.1-7/topics/glmnet), `glmnet` fits "a generalized linear model via penalized maximum likelihood." Our inputs include a matrix of the values of the predictive terms in our data frame of indicators and pixels, a vector of response values, an indication that the generalized linear model is a Logistic Regression model, and $alpha = 0$.
 
 Our optimal Logistic Ridge Regression binary classifier has formula $Indicator \sim normalize(log(Blue)) + normalize(sqrt(Red))$. On one knit of this paper, the maximum average F1 measure is $0.921$.
 
-```{r, fig.cap = "PR AUC, ROC AUC, Prediction Metrics Vs. Thresholds, PR Curve, ROC Curve, And Performance Table For Logistic Ridge Regression Model With Formula Indicator Vs. Normalized Natural Logarithm Of Blue + Normalized Square Root Of Red", eval = FALSE}
-library(TomLeversRPackage)
-summarize_performance_of_cross_validated_models_using_dplyr(
+```{r, eval = TRUE}
+summary_of_performance <- summarize_performance_of_cross_validated_models_using_dplyr(
     type_of_model = "Logistic Ridge Regression",
     formula = Indicator ~ Normalized_Natural_Logarithm_Of_Blue + Normalized_Square_Root_Of_Red,
     data_frame = data_frame_of_indicators_and_pixels
 )
 ```
 
+```{r, fig.cap = "Prediction Metrics Vs. Thresholds For Logistic Ridge Regression Model With Formula Indicator Vs. Normalized Natural Logarithm Of Blue + Normalized Square Root Of Red"}
+summary_of_performance$plot_of_performance_metrics_vs_threshold
+```
+
+```{r, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Logistic Ridge Regression Model With Formula Indicator Vs. Normalized Natural Logarithm Of Blue + Normalized Square Root Of Red"}
+summary_of_performance$PR_curve
+summary_of_performance$ROC_curve
+summary_of_performance$data_frame_of_performance_metrics
+```
+
 To search for an optimal Logistic Ridge Regression binary classifier, we perform manual bidirectional selection as above. Our optimal Logistic Ridge Regression binary classifier has formula $Indicator \sim normalize(Blue) + normalize\left(Red^2\right) + normalize\left(Green^2\right)$. On one knit of this paper, the maximum average F1 measure is $0.891$.
 
-```{r, fig.cap = "PR AUC, ROC AUC, Prediction Metrics Vs. Thresholds, PR Curve, ROC Curve, And Performance Table For Linear Discriminant Analysis Model With Formula Indicator Vs. Normalized Blue + Normalized Square Of Red + Normalized Square Of Green", eval = FALSE}
-library(TomLeversRPackage)
-summarize_performance_of_cross_validated_models_using_dplyr(
+```{r, eval = TRUE}
+summary_of_performance <- summarize_performance_of_cross_validated_models_using_dplyr(
     type_of_model = "LDA",
     formula = Indicator ~ Normalized_Blue + Normalized_Square_Of_Red + Normalized_Square_Of_Green,
     data_frame = data_frame_of_indicators_and_pixels
 )
 ```
 
+```{r, fig.cap = "Prediction Metrics Vs. Thresholds For Linear Discriminant Analysis Model With Formula Indicator Vs. Normalized Blue + Normalized Square Of Red + Normalized Square Of Green"}
+summary_of_performance$plot_of_performance_metrics_vs_threshold
+```
+
+```{r, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Linear Discriminant Analysis Model With Formula Indicator Vs. Normalized Blue + Normalized Square Of Red + Normalized Square Of Green"}
+summary_of_performance$PR_curve
+summary_of_performance$ROC_curve
+summary_of_performance$data_frame_of_performance_metrics
+```
+
 To search for an optimal Logistic Ridge Regression binary classifier, we perform manual bidirectional selection as above. Our optimal Logistic Ridge Regression binary classifier has formula $Indicator \sim normalize\left(Blue^2\right) + normalize\left(Red^2\right) + normalize\left(Red\right)$. On one knit of this paper, the maximum average F1 measure is $0.938$.
 
-```{r, fig.cap = "PR AUC, ROC AUC, Prediction Metrics Vs. Thresholds, PR Curve, ROC Curve, And Performance Table For Quadratic Discriminant Analysis Model With Formula Indicator Vs. Normalized Square Of Blue + Normalized Square Of Red + Normalized Red + Normalized Natural Logarithm Of Blue", eval = FALSE}
-library(TomLeversRPackage)
-summarize_performance_of_cross_validated_models_using_dplyr(
+```{r, eval = TRUE}
+summary_of_performance <- summarize_performance_of_cross_validated_models_using_dplyr(
     type_of_model = "QDA",
     formula = Indicator ~ Normalized_Square_Of_Blue + Normalized_Square_Of_Red + Normalized_Red + Normalized_Natural_Logarithm_Of_Blue,
     data_frame = data_frame_of_indicators_and_pixels
 )
 ```
 
+```{r, fig.cap = "Prediction Metrics Vs. Thresholds For Quadratic Discriminant Analysis Model With Formula Indicator Vs. Normalized Square Of Blue + Normalized Square Of Red + Normalized Red + Normalized Natural Logarithm Of Blue"}
+summary_of_performance$plot_of_performance_metrics_vs_threshold
+```
+
+```{r, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Quadratic Discriminant Analysis Model With Formula Indicator Vs. Normalized Square Of Blue + Normalized Square Of Red + Normalized Red + Normalized Natural Logarithm Of Blue"}
+summary_of_performance$PR_curve
+summary_of_performance$ROC_curve
+summary_of_performance$data_frame_of_performance_metrics
+```
+
 To search for an optimal $K$ Nearest Neighbors binary classifier, we perform manual bidirectional selection as above. For a given formula, before cross validation, we search for one value of hyperparameter $K$. We use `caret::train` to choose $K = 3$ for all of our Logistic Ridge Regression models. According to the [documentation for `caret::train`](https://www.rdocumentation.org/packages/caret/versions/4.47/topics/train), `caret::train` "sets up a grid of tuning parameters for a number of classification and regression routines, fits each model, and calculates a resampling based performance measure". Our inputs include our formula specifying response and predictive terms, our full data frame of indicators and pixels, the method "knn", the metric "F1_measure", a `trainControl` object, and a data frame containing one row for each $K$ to be evaluated. Dr. Peter Gedeck recommended evaluating $K \in \{1, 2, 3\}$. We construct the `trainControl` object with method "cv" denoting resampling method cross validation and summary function `calculate_F1_measure` to compute F1 measures across resamples. $K$ is a constant that determines the number of neighboring training vectors consisting of predictive terms used to determine the probability that a testing vector consisting of predictive terms corresponds to a blue tarp.
 
 Our optimal $KNN$ binary classifier has formula $Indicator \sim normalize(Red:Blue) + normalize(Green:Blue) + normalize\left(\sqrt{Blue}\right)$. On one knit of this paper, the maximum average F1 measure is $0.921$.
 
-```{r, fig.cap = "PR AUC, ROC AUC, Prediction Metrics Vs. Thresholds, PR Curve, ROC Curve, And Performance Table For KNN Model With Formula Indicator Vs. Normalized Interaction Of Red And Blue And Normalized Interaction Of Green And Blue", eval = FALSE}
-library(TomLeversRPackage)
-summarize_performance_of_cross_validated_models_using_dplyr(
+```{r, eval = TRUE}
+summary_of_performance <- summarize_performance_of_cross_validated_models_using_dplyr(
     type_of_model = "KNN",
     formula = Indicator ~ Normalized_Interaction_Of_Red_And_Blue + Normalized_Interaction_Of_Green_And_Blue + Normalized_Square_Root_Of_Blue,
     data_frame = data_frame_of_indicators_and_pixels
 )
+```
+
+```{r, fig.cap = "Prediction Metrics Vs. Thresholds For KNN Model With Formula Indicator Vs. Normalized Interaction Of Red And Blue And Normalized Interaction Of Green And Blue"}
+summary_of_performance$plot_of_performance_metrics_vs_threshold
+```
+
+```{r, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For KNN Model With Formula Indicator Vs. Normalized Interaction Of Red And Blue And Normalized Interaction Of Green And Blue"}
+summary_of_performance$PR_curve
+summary_of_performance$ROC_curve
+summary_of_performance$data_frame_of_performance_metrics
 ```
 
 # Performance Table
