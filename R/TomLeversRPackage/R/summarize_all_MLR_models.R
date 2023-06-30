@@ -21,7 +21,7 @@ summarize_all_MLR_models <- function(data_set, response, maximum_number_of_model
  )
  residual_plots <- vector()
  formula_for_full_model <- reformulate(termlabels = ".", response = response)
- subset_selection_object <- regsubsets(formula_for_full_model, data = data_set, nbest = maximum_number_of_models_in_summary_data_frame_for_each_number_of_variables, really.big = TRUE, nvmax = NULL)
+ subset_selection_object <- leaps::regsubsets(formula_for_full_model, data = data_set, nbest = maximum_number_of_models_in_summary_data_frame_for_each_number_of_variables, really.big = TRUE, nvmax = NULL)
  summary_for_subset_selection_object <- summary(subset_selection_object)
  mask_of_predictors_for_all_models <- summary_for_subset_selection_object$which
  names_of_intercept_and_predictors <- colnames(mask_of_predictors_for_all_models)
@@ -118,7 +118,7 @@ summarize_all_MLR_models <- function(data_set, response, maximum_number_of_model
    )
   residual_plots[[i]] <- list(residual_plot)
   if (Box_Cox_Method_should_be_performed) {
-      result_of_Box_Cox_Method <- perform_Box_Cox_Method(linear_model, whether_to_plot = FALSE)
+      result_of_Box_Cox_Method <- perform_Box_Cox_Method(linear_model, seq(from = -10, to = 10, by = 0.1), whether_to_plot = FALSE)
       maximum_likelihood_estimate_of_parameter_lambda <- result_of_Box_Cox_Method$maximum_likelihood_estimate_of_parameter_lambda
       lambdas[[i]] <- maximum_likelihood_estimate_of_parameter_lambda
   }

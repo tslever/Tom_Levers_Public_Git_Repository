@@ -11,6 +11,6 @@ test_that("summarize_all_MLR_models works",  {
     for (name_of_variable in names_of_variables) {
         functions_to_apply[name_of_variable] <- column
     }
-    summary_of_all_MLR_models <- summarize_all_MLR_models(cement, "y", maximum_number_of_MLR_models_for_one_number_of_predictors, functions_to_apply)
+    summary_of_all_MLR_models <- summarize_all_MLR_models(cement, "y", maximum_number_of_MLR_models_for_one_number_of_predictors, functions_to_apply, Box_Cox_Method_should_be_performed = TRUE)
     #print(summary_of_all_MLR_models$data_frame)
 })
