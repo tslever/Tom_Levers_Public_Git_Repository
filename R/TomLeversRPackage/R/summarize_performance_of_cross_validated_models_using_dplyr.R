@@ -36,8 +36,8 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
    trControl = the_trainControl,
    tuneGrid = expand.grid(alpha = 0, lambda = sequence_of_lambda_values)
   )
-  optimal_value_of_lambda = list_of_training_information$bestTune$lambda
-  print(paste("optimal value of lambda = ", optimal_value_of_lambda, sep = ""))
+  optimal_lambda = list_of_training_information$bestTune$lambda
+  print(paste("optimal value of lambda = ", optimal_lambda, sep = ""))
  } else if (type_of_model == "KNN") {
   the_trainControl <- caret::trainControl(method  = "cv", summaryFunction = calculate_F1_measure)
   list_of_training_information <- caret::train(
@@ -48,7 +48,7 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
    trControl = the_trainControl,
    tuneGrid = expand.grid(k = seq(from = 1, to = 3, by = 1))
   )
-  K = list_of_training_information$bestTune
+  optimal_K = list_of_training_information$bestTune
   print(paste("optimal value of K = ", K, sep = ""))
  }
  generate_data_frame_of_actual_indicators_and_predicted_probabilities <-
@@ -69,7 +69,7 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
    } else if (type_of_model == "Logistic Ridge Regression") {
     training_model_matrix <- model.matrix(object = formula, data = training_data)[, -1]
     training_vector_of_indicators <- training_data$Indicator
-    logistic_regression_with_lasso_model <- glmnet::glmnet(x = training_model_matrix, y = training_vector_of_indicators, alpha = 1, family = "binomial", lambda = optimal_value_of_lambda)
+    logistic_regression_with_lasso_model <- glmnet::glmnet(x = training_model_matrix, y = training_vector_of_indicators, alpha = 1, family = "binomial", lambda = optimal_lambda)
     testing_model_matrix <- model.matrix(object = formula, data = testing_data)[, -1]
     vector_of_predicted_probabilities <- predict(object = logistic_regression_with_lasso_model, newx = testing_model_matrix, type = "response")
    } else if (type_of_model == "LDA" | type_of_model == "QDA") {
@@ -95,7 +95,7 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
     the_knn3 <- caret::knn3(
      matrix_of_values_of_predictors_for_training,
      vector_of_response_values_for_training,
-     k = K
+     k = optimal_K
     )
     data_frame_of_predicted_probabilities <- predict(
      object = the_knn3,
@@ -199,15 +199,27 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
  maximum_average_F1_measure <- max(data_frame_of_average_performance_metrics$F1_measure, na.rm = TRUE)
  index_of_column_F1_measure <- get_index_of_column_of_data_frame(data_frame_of_average_performance_metrics, "F1_measure")
  index_of_maximum_average_F1_measure <- which(data_frame_of_average_performance_metrics[, index_of_column_F1_measure] == maximum_average_F1_measure)
- area_under_PR_curve <- MESS::auc(data_frame_of_PPV_and_TPR$TPR, data_frame_of_PPV_and_TPR$PPV)
- area_under_ROC_curve <- MESS::auc(data_frame_of_TPR_and_FPR$FPR, data_frame_of_TPR_and_FPR$TPR)
+ data_frame_corresponding_to_maximum_average_F1_measure <-
+  data_frame_of_average_performance_metrics[index_of_maximum_average_F1_measure, c("threshold", "accuracy", "TPR", "FPR", "PPV", "F1_measure")] %>%
+  rename(corresponding_threshold = threshold, corresponding_accuracy = accuracy, corresponding_TPR = TPR, corresponding_FPR = FPR, corresponding_PPV = PPV, optimal_F1_measure = F1_measure)
+ data_frame_of_performance_metrics <- data.frame(
+  corresponding_threshold = data_frame_corresponding_to_maximum_average_F1_measure$corresponding_threshold,
+  alpha = ifelse(test = type_of_model == "Logistic Ridge Regression", yes = 0, no = NA),
+  optimal_lambda = ifelse(test = type_of_model == "Logistic Ridge Regression", yes = optimal_lambda, no = NA),
+  optimal_K = ifelse(test = type_of_model == "KNN", yes = optimal_K, no = NA),
+  optimal_PR_AUC = MESS::auc(data_frame_of_PPV_and_TPR$TPR, data_frame_of_PPV_and_TPR$PPV),
+  optimal_ROC_AUC = MESS::auc(data_frame_of_TPR_and_FPR$FPR, data_frame_of_TPR_and_FPR$TPR),
+  corresponding_accuracy = data_frame_corresponding_to_maximum_average_F1_measure$corresponding_accuracy,
+  corresponding_TPR = data_frame_corresponding_to_maximum_average_F1_measure$corresponding_TPR,
+  corresponding_FPR = data_frame_corresponding_to_maximum_average_F1_measure$corresponding_FPR,
+  corresponding_PPV = data_frame_corresponding_to_maximum_average_F1_measure$corresponding_PPV,
+  optimal_F1_measure = data_frame_corresponding_to_maximum_average_F1_measure$optimal_F1_measure
+ )
  summary_of_performance_of_cross_validated_models <- list(
-  area_under_PR_curve = area_under_PR_curve,
-  area_under_ROC_curve = area_under_ROC_curve,
   plot_of_performance_metrics_vs_threshold = plot_of_performance_metrics_vs_threshold,
   PR_curve = PR_curve,
   ROC_curve = ROC_curve,
-  data_frame_corresponding_to_maximum_average_F1_measure = data_frame_of_average_performance_metrics[index_of_maximum_average_F1_measure, c("accuracy", "decimal_of_true_positives", "F1_measure", "FPR", "PPV", "threshold", "TPR")]
+  data_frame_of_performance_metrics = data_frame_of_performance_metrics
  )
  return(summary_of_performance_of_cross_validated_models)
 }
