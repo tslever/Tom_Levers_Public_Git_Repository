@@ -49,7 +49,7 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
    tuneGrid = expand.grid(k = seq(from = 1, to = 3, by = 1))
   )
   optimal_K = list_of_training_information$bestTune
-  print(paste("optimal value of K = ", K, sep = ""))
+  print(paste("optimal value of K = ", optimal_K, sep = ""))
  }
  generate_data_frame_of_actual_indicators_and_predicted_probabilities <-
   function(train_test_split) {

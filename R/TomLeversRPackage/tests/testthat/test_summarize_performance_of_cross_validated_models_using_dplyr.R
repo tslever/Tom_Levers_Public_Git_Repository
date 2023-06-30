@@ -59,7 +59,7 @@ test_that("summarize_performance_of_cross_validated_models_using_dplyr works",  
  data_frame_of_indicators_and_pixels <-
   data_frame_of_indicators_and_pixels[vector_of_random_indices, ]
  summarize_performance_of_cross_validated_models_using_dplyr(
-  type_of_model = "Logistic Ridge Regression",
+  type_of_model = "KNN",
   formula = Indicator ~ Normalized_Natural_Logarithm_Of_Blue + Normalized_Square_Root_Of_Red,
   data_frame = data_frame_of_indicators_and_pixels
  )
