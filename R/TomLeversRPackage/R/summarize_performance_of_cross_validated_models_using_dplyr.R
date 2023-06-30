@@ -202,6 +202,7 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
  data_frame_corresponding_to_maximum_average_F1_measure <-
   data_frame_of_average_performance_metrics[index_of_maximum_average_F1_measure, c("threshold", "accuracy", "TPR", "FPR", "PPV", "F1_measure")] %>%
   rename(corresponding_threshold = threshold, corresponding_accuracy = accuracy, corresponding_TPR = TPR, corresponding_FPR = FPR, corresponding_PPV = PPV, optimal_F1_measure = F1_measure)
+ data_frame_corresponding_to_maximum_average_F1_measure <- data_frame_corresponding_to_maximum_average_F1_measure[1, ]
  data_frame_of_performance_metrics <- data.frame(
   corresponding_threshold = data_frame_corresponding_to_maximum_average_F1_measure$corresponding_threshold,
   alpha = ifelse(test = type_of_model == "Logistic Ridge Regression", yes = 0, no = NA),
