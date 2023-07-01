@@ -102,9 +102,21 @@ Receiver Operator Characteristic (ROC) graphs are graphs of TPR Vs. FPR for diff
 
 "People often replace the False Positive Rate with Precision... If there were lots of samples that were not [Blue Tarps] relative to the number of [Blue Tarp] samples, then Precision might be more useful than the False Positive Rate. This is because Precision does not include the number of True Negatives in its calculation, and is not effected by the imbalance. In practice, this sort of imbalance occurs when studying a rare [occurrence]. In this case, the study will contain many more [pixels not corresponding to blue tarps than corresponding to blue tarps]. We may consider maximizing PR AUC among binary classifiers and tuning a binary classifier's thresholds to minimize the distance between the corresponding point (TPR, PR) and (1, 1).
 
-According to [Category graph: Precision-Recall vs. Threshold](https://www.ibm.com/docs/en/contentclassificatio/8.8?topic=analysis-category-graph-precision-recall-vs-threshold), "The ideal threshold setting is the highest possible recall and precision rate. This goal is not always achievable, because the higher the recall rate, the lower the precision rate, and vice versa. Setting the most appropriate threshold for a category is a trade-off between these two rates." We consider the ideal threshold setting to correspond to the highest F1 measure.
+According to [Category graph: Precision-Recall vs. Threshold](https://www.ibm.com/docs/en/contentclassificatio/8.8?topic=analysis-category-graph-precision-recall-vs-threshold), "The ideal threshold setting is the highest possible recall and precision rate. This goal is not always achievable, because the higher the recall rate, the lower the precision rate, and vice versa. Setting the most appropriate threshold for a category is a trade-off between these two rates."
 
-When tuning hyperparameter threshold, $\lambda$ for Logistic Ridge Regression models, and $K$ for KNN models, we prioritize TPR at least as much as PPV. We prioritize identifying as many positives correctly as possible over having predicted positives be correct. We recommend models with thresholds less than or equal to the threshold $t$ that corresponds to the maximum F1 measure and that is least. Note that PPV will decrease more rapidly than TPR will increase as threshold decreases below $t$. Our ideal threshold may be $t$ or may be the highest threshold less than $t$ at which the derivative of Average PPV vs. Threshold is $1$.
+According to [Optimal Thresholding of Classifiers to Maximize F1 Measure](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4442797/), "The [balanced] harmonic mean of precision and recall, the F1 measure is widely used to evaluate the success of a binary classifier when one class is rare." According to [The truth of the F-measure](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://www.cs.odu.edu/~mukka/cs795sum11dm/Lecturenotes/Day3/F-measure-YS-26Oct07.pdf), "the F-measure was first introduced to evaluation tasks of information extraction technology at the Fourth Message Understanding Conference (MUC-4) in 1992."
+
+The average of two ratios (e.g., precision and recall) is the balanced harmonic mean of those two ratios. According to [Harmonic mean](https://en.wikipedia.org/wiki/Harmonic_mean), "For instance, if a vehicle travels a certain distance $d$ outbound at a speed $s_1$ (e.g., $60 \ km/h$) and returns the distance at a speed $s_2$ (e.g., $20 \ km/h$), then its average speed is the harmonic mean of $s_1$ and $s_2$ ($30 \ km/h$), not the arithmetic mean ($40 \ km/h$). The total travel time is the same as if it had traveled the whole distance at that average speed. This can be proven as follows:
+$$Average \ speed \ for \ the \ entire \ journey = \frac{Total \ distance \ traveled}{Sum \ of \ time \ for \ each \ segment} = \frac{D}{T} = \frac{D}{t_1 + t_2} = \frac{2d}{\frac{d}{s_1} + \frac{d}{s_2}} = \frac{2}{\frac{1}{s_1} + \frac{1}{s_2}}$$
+
+"[I]f each sub-trip covers the same distance, then the average speed is the [balanced] harmonic mean of [each] sub-trip speed." If one sub-trip covers a greater distance than the other sub-trip, "then a weighted harmonic mean is needed." To return to the F1 measure, if each of precision and recall has the same weight, then the F1 measure is the balanced harmonic mean of each of precision and recall. This balanced harmonic mean is
+$$F1 = \frac{2}{\frac{1}{P} + \frac{1}{R}}$$
+
+If recall has more weight than precision, then a weighted harmonic mean is needed. This weighted harmonic mean is
+$$F_{w_P, \ w_R} = \frac{w_P + w_R}{\frac{w_P}{P} + \frac{w_R}{R}}$$
+When searching for our optimal binary classifier, we choose as our optimal binary classifier the binary classifier with the highest F1 measure and $F_{w_P = 1, \ w_R = 1}$.
+
+Regarding the weight of PPV and the weight of TPR, we prioritize TPR at least as much as PPV. We prioritize identifying as many pixels corresponding to blue tarps correctly as possible at least as much as having predictions that pixels correspond to blue tarps be correct. As we move toward providing resources for refugees, we may wish to prioritize identifying as many pixels corresponding to blue tarps as possible more than having predictions that pixels correspond to blue tarps be correct.
 
 ## Data Frame For Modeling
 
@@ -214,7 +226,7 @@ summary_of_performance$plot_of_performance_metrics_vs_threshold
 ```{r, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Logistic Regression Model With Formula Indicator vs. Normalized Blue + Normalized Red + Normalized Square Of Green", eval = TRUE}
 summary_of_performance$PR_curve
 summary_of_performance$ROC_curve
-summary_of_performance$data_frame_of_optimal_performance_metrics
+t(summary_of_performance$data_frame_of_optimal_performance_metrics)
 ```
 
 To search for an optimal Logistic Ridge Regression binary classifier, we perform manual bidirectional selection as above.
@@ -261,7 +273,7 @@ summary_of_performance$plot_of_performance_metrics_vs_threshold
 ```{r, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Logistic Ridge Regression Model With Formula Indicator Vs. Normalized Natural Logarithm Of Blue + Normalized Square Root Of Red", eval = TRUE}
 summary_of_performance$PR_curve
 summary_of_performance$ROC_curve
-summary_of_performance$data_frame_of_optimal_performance_metrics
+t(summary_of_performance$data_frame_of_optimal_performance_metrics)
 ```
 
 To search for an optimal LDA binary classifier, we perform manual bidirectional selection as above. Our optimal LDA binary classifier has formula $Indicator \sim normalize(Blue) + normalize(Red^2) + normalize\left(Green^2\right)$. The maximum average F1 measure is $0.891$; the corresponding threshold is $0.69$.
@@ -283,7 +295,7 @@ summary_of_performance$plot_of_performance_metrics_vs_threshold
 ```{r, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Linear Discriminant Analysis Model With Formula Indicator Vs. Normalized Blue + Normalized Square Of Red + Normalized Square Of Green", eval = TRUE}
 summary_of_performance$PR_curve
 summary_of_performance$ROC_curve
-summary_of_performance$data_frame_of_optimal_performance_metrics
+t(summary_of_performance$data_frame_of_optimal_performance_metrics)
 ```
 
 To search for an optimal QDA binary classifier, we perform manual bidirectional selection as above. Our optimal QDA binary classifier has formula $Indicator \sim normalize\left(Blue^2\right) + normalize\left(Red^2\right) + normalize\left(Red\right)$. The maximum average F1 measure is $0.939$; the corresponding threshold is $0.960$.
@@ -305,7 +317,7 @@ summary_of_performance$plot_of_performance_metrics_vs_threshold
 ```{r, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Quadratic Discriminant Analysis Model With Formula Indicator Vs. Normalized Square Of Blue + Normalized Square Of Red + Normalized Red + Normalized Natural Logarithm Of Blue", eval = TRUE}
 summary_of_performance$PR_curve
 summary_of_performance$ROC_curve
-summary_of_performance$data_frame_of_optimal_performance_metrics
+t(summary_of_performance$data_frame_of_optimal_performance_metrics)
 ```
 
 To search for an optimal $K$ Nearest Neighbors binary classifier, we perform manual bidirectional selection as above.
@@ -333,17 +345,23 @@ summary_of_performance$plot_of_performance_metrics_vs_threshold
 ```{r, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For KNN Model With Formula Indicator Vs. Normalized Interaction Of Red And Blue And Normalized Interaction Of Green And Blue", eval = TRUE}
 summary_of_performance$PR_curve
 summary_of_performance$ROC_curve
-summary_of_performance$data_frame_of_optimal_performance_metrics
+t(summary_of_performance$data_frame_of_optimal_performance_metrics)
 ```
 
 # Performance Table
 
 Per our [Performance Table](https://github.com/tslever/Tom_Levers_Public_Git_Repository/tree/main/UVA/4--Statistical_Learning/Disaster_Relief_Project), our KNN binary classifier with $K = 1$ and threshold $t = 0.080$ has the best optimal F1 measure and corresponding accuracy. Our KNN binary classifier has the second-best corresponding TPR, FPR, and PPV. However, our KNN binary classifier has the second-worst Area Under The Precision-Recall Curve and Area Under The ROC Curve. Our Logistic Regression binary classifier has the best Area Under The Precision-Recall Curve, Area Under The ROC Curve, and corresponding TPR. Our Logistic Regression binary classifier has the second-best corresponding optimal measure and corresponding accuracy. However, our Logistic Regression binary classifier has the worst corresponding FPR and PPV. Beautifully, our QDA binary classifier is completely middle of the road. Our Logistic Ridge Regression binary classifier is second-best in Area Under The Precision-Recall Curve and Area Under The ROC curve and second-worst in everything else. Our LDA binary classifier has the best corresponding FPR and PPV and is worst in everything else.
 
+We calculate binary-classifier scores for each type of binary classifier. Each binary-classifier score is a weighted sum of the first $7$ colored performance metrics above it in the Performance Table.
+
 ![Performance Table](Performance_Table.png)
 
 # Conclusions
 
-We consider how the number of refugees to visit may change with PPV. We assume that the testing data consists of actual indicators and random pixels from the training image. Suppose PPV $PPV = TP / \hat{P} = 0.944$. Suppose decimal of true positives $TPD = TP / n = 0.0296$. The decimal of predicted positives $PPD = \hat{P} / n = TPD / PPV = \frac{TP/n}{TP/\hat{P}} = 0.0296 / 0.944 = 0.0313$. The number of pixels in our training image is $4441 \times 6833 = 30,345,353$. The number of pixels in our training image that might be predicted to represent blue tarps is $949,810$. Considering a blue tarp in the top left corner of our training image, the number of pixels representing one blue tarp may be $36 \times 36 = 1,296$. The predicted number of blue tarps in our training image may be $733$. We assume that there is one refugee per blue tarp. If we change PPV by a factor of -0.139 to 0.8125, the predicted number of blue tarps in our training image may increase by $120$ to $853$. The number of true positives may increase by $4$ and the number of false negatives may decrease by $4$.
+Our KNN binary classifier has the highest binary classifier score, the highest optimal F1 measure, and the highest corresponding accuracy among our optimal binary classifiers. On these bases, we recommend our KNN binary classifier.
 
-Suppose the width of our training image is $1,500 \ ft$. Then our training image's height is about $2,308 \ ft$ and its area is about $0.124 \ mi^2$. Suppose the area of Léogâne is $148.7 \ mi^2. There are about $1,200$ areas like that depicted in our training image in Léogâne.
+That being said, we determined the optimal binary classifier for each type of binary classifier based on an industry standard; i.e., the use of F1 measure. Leaders responsible for deploying resources to refugees may wish to replicate this research by choosing optimal binary classifiers for each type of binary classifier based on an F measure where PPV and TPR have different weights. Leaders may wish to choose thresholds for a binary classifier that results in greater TPR than the TPR corresponding to the maximum average F1 measure for that binary classifier. In such a case our Logistic Regression binary classifier may outperform our KNN binary classifier.
+
+Results may improve by hybridizing our Logistic Ridge Regression binary classifier with a Logistic Lasso Regression binary classifier by specifying $alpha$ to be greater than $0$ and less than or equal to $1$. Results may improve by developing software that can find the minimum in a relatively continuous plot of F1 measure Vs. $log(\lambda)$. Results may improve by considering values of $K$ between $1$ and the number of observations in our full data frame of indicators and pixels $n$.
+
+According to Our KNN and Logistic Regression binary classifiers performed adequately and similarly. Given that KNN and Logistic Regression binary classifiers.
