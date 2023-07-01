@@ -8,7 +8,8 @@
 summarize_performance_of_cross_validated_models_using_dplyr(
   type_of_model,
   formula,
-  data_frame
+  data_frame,
+  optimal_lambda = NULL
 )
 }
 \arguments{

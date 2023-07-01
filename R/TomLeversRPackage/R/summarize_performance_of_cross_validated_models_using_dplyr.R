@@ -9,7 +9,7 @@
 #' @import rsample
 
 #' @export
-summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_model, formula, data_frame) {
+summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_model, formula, data_frame, optimal_lambda = NULL) {
  print(paste("Summary for model of type ", type_of_model, sep = ""))
  names_of_variables <- all.vars(formula)
  name_of_response <- names_of_variables[1]
@@ -23,20 +23,23 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   }
  }
  if (type_of_model == "Logistic Ridge Regression") {
-  matrix_of_predictors <- as.matrix(data_frame[, vector_of_names_of_predictors])
-  vector_of_response_values <- as.numeric(data_frame[, name_of_response])
-  the_glmnet <- glmnet::glmnet(x = matrix_of_predictors, y = vector_of_response_values, family = "binomial", alpha = 0)
-  sequence_of_lambda_values <- the_glmnet$lambda
-  the_trainControl <- caret::trainControl(method  = "cv", summaryFunction = calculate_F1_measure)
-  list_of_training_information <- caret::train(
-   form = formula,
-   data = data_frame,
-   method = "glmnet",
-   metric = "F1_measure",
-   trControl = the_trainControl,
-   tuneGrid = expand.grid(alpha = 0, lambda = sequence_of_lambda_values)
-  )
-  optimal_lambda = list_of_training_information$bestTune$lambda
+  if (is.null(optimal_lambda)) {
+   matrix_of_predictors <- as.matrix(data_frame[, vector_of_names_of_predictors])
+   vector_of_response_values <- as.numeric(data_frame[, name_of_response])
+   the_glmnet <- glmnet::glmnet(x = matrix_of_predictors, y = vector_of_response_values, family = "binomial", alpha = 0)
+   sequence_of_lambda_values <- the_glmnet$lambda
+   print(paste("sequence of lambda values = {", sequence_of_lambda_values[1], ", ", sequence_of_lambda_values[2], ", ..., ", sequence_of_lambda_values[length(sequence_of_lambda_values)], "}", sep = ""))
+   the_trainControl <- caret::trainControl(method  = "cv", summaryFunction = calculate_F1_measure)
+   list_of_training_information <- caret::train(
+    form = formula,
+    data = data_frame,
+    method = "glmnet",
+    metric = "F1_measure",
+    trControl = the_trainControl,
+    tuneGrid = expand.grid(alpha = 0, lambda = sequence_of_lambda_values)
+   )
+   optimal_lambda = list_of_training_information$bestTune$lambda
+  }
   print(paste("optimal value of lambda = ", optimal_lambda, sep = ""))
  } else if (type_of_model == "KNN") {
   the_trainControl <- caret::trainControl(method  = "cv", summaryFunction = calculate_F1_measure)
@@ -48,6 +51,7 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
    trControl = the_trainControl,
    tuneGrid = expand.grid(k = seq(from = 1, to = 3, by = 1))
   )
+  print(plot(list_of_training_information))
   optimal_K = list_of_training_information$bestTune
   print(paste("optimal value of K = ", optimal_K, sep = ""))
  }
@@ -69,7 +73,7 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
    } else if (type_of_model == "Logistic Ridge Regression") {
     training_model_matrix <- model.matrix(object = formula, data = training_data)[, -1]
     training_vector_of_indicators <- training_data$Indicator
-    logistic_regression_with_lasso_model <- glmnet::glmnet(x = training_model_matrix, y = training_vector_of_indicators, alpha = 1, family = "binomial", lambda = optimal_lambda)
+    logistic_regression_with_lasso_model <- glmnet::glmnet(x = training_model_matrix, y = training_vector_of_indicators, alpha = 0, family = "binomial", lambda = optimal_lambda)
     testing_model_matrix <- model.matrix(object = formula, data = testing_data)[, -1]
     vector_of_predicted_probabilities <- predict(object = logistic_regression_with_lasso_model, newx = testing_model_matrix, type = "response")
    } else if (type_of_model == "LDA" | type_of_model == "QDA") {
@@ -160,7 +164,7 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   geom_line(mapping = aes(y = TPR, color = "Average TPR")) +
   scale_colour_manual(values = c("red", "orange", "yellow", "green", "blue")) +
   theme(legend.position = c(0.5, 0.5)) +
-  labs(x = "threshold", y = "performance metric", title = "Performance Metrics Vs. Threshold") +
+  labs(x = "threshold", y = "performance metric", title = "Average Performance Metrics Vs. Threshold") +
   theme(
    plot.title = element_text(hjust = 0.5, size = 11),
   )
@@ -203,7 +207,7 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   data_frame_of_average_performance_metrics[index_of_maximum_average_F1_measure, c("threshold", "accuracy", "TPR", "FPR", "PPV", "F1_measure")] %>%
   rename(corresponding_threshold = threshold, corresponding_accuracy = accuracy, corresponding_TPR = TPR, corresponding_FPR = FPR, corresponding_PPV = PPV, optimal_F1_measure = F1_measure)
  data_frame_corresponding_to_maximum_average_F1_measure <- data_frame_corresponding_to_maximum_average_F1_measure[1, ]
- data_frame_of_performance_metrics <- data.frame(
+ data_frame_of_optimal_performance_metrics <- data.frame(
   corresponding_threshold = data_frame_corresponding_to_maximum_average_F1_measure$corresponding_threshold,
   alpha = ifelse(test = type_of_model == "Logistic Ridge Regression", yes = 0, no = NA),
   optimal_lambda = ifelse(test = type_of_model == "Logistic Ridge Regression", yes = optimal_lambda, no = NA),
@@ -220,7 +224,7 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   plot_of_performance_metrics_vs_threshold = plot_of_performance_metrics_vs_threshold,
   PR_curve = PR_curve,
   ROC_curve = ROC_curve,
-  data_frame_of_performance_metrics = data_frame_of_performance_metrics
+  data_frame_of_optimal_performance_metrics = data_frame_of_optimal_performance_metrics
  )
  return(summary_of_performance_of_cross_validated_models)
 }
