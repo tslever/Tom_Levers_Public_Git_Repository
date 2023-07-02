@@ -227,6 +227,8 @@ summary_of_performance$plot_of_performance_metrics_vs_threshold
 summary_of_performance$PR_curve
 summary_of_performance$ROC_curve
 t(summary_of_performance$data_frame_of_optimal_performance_metrics)
+data_frame_of_fold_ids_and_maximum_F1_measures_for_Logistic_Regression <- 
+    summary_of_performance$data_frame_of_fold_ids_and_maximum_F1_measures
 ```
 
 To search for an optimal Logistic Ridge Regression binary classifier, we perform manual bidirectional selection as above.
@@ -346,6 +348,8 @@ summary_of_performance$plot_of_performance_metrics_vs_threshold
 summary_of_performance$PR_curve
 summary_of_performance$ROC_curve
 t(summary_of_performance$data_frame_of_optimal_performance_metrics)
+data_frame_of_fold_ids_and_maximum_F1_measures_for_KNN <- 
+    summary_of_performance$data_frame_of_fold_ids_and_maximum_F1_measures
 ```
 
 # Performance Table
@@ -364,4 +368,28 @@ That being said, we determined the optimal binary classifier for each type of bi
 
 Results may improve by hybridizing our Logistic Ridge Regression binary classifier with a Logistic Lasso Regression binary classifier by specifying $alpha$ to be greater than $0$ and less than or equal to $1$. Results may improve by developing software that can find the minimum in a relatively continuous plot of F1 measure Vs. $log(\lambda)$. Results may improve by considering values of $K$ between $1$ and the number of observations in our full data frame of indicators and pixels $n$.
 
-According to Our KNN and Logistic Regression binary classifiers performed adequately and similarly. Given that KNN and Logistic Regression binary classifiers.
+According to [Data Scientist Stephen Allwright](https://stephenallwright.com/good-f1-score/), "A good F1 score is dependent on the data you are working with and the use case. For example, a model predicting the occurrence of a disease would have a very different expectation than a custometer churn model. However, there is a general rule of thumb when it comes to F1 scores, which is as follows:"
+
+- An F1 score greater than $0.9$ is very good.
+- An F1 score of $0.8$ to $0.9$ is good.
+- An F1 score of $0.5$ to $0.8$ is okay.
+- An F1 score less than $0.5$ is not good.
+
+All of our binary classifiers are adequately performing. Our Logistic Regression and KNN binary classifiers have a statistically insignificant difference in average maximum F1 measures. Following [Text-Mining Evaluation: Statistical Tests](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://enable.unc.edu/wp-content/uploads/2018/06/7.TextMining.Evaluation.pdf), we train and test our Logistic Regression and KNN binary classifiers using $10$-fold cross validation. We use the same folds for both systems. We calculate maximum F1 measures for each held-out fold. We construct a data frame of fold ID's and maximum F1 measure for each binary classifier and fold. We calculate the average maximum F1 measures across held-out folds. We consider the difference between the average maximum F1 measures to be a test statistic. We consider an alternate hypothesis to be that our Logistic Regression binary classifier has a higher average maximum F1 measure than our KNN binary classifier for all possible test sets. We consider a null hypothesis to be that our Logistic Regression binary classifier has an equal average maximum F1 measure to that of our KNN binary classifier. We consider a $p$ value to be the probability of observing that the difference in average maximum F1 measures for a random sample / test set is greater than our test statistic. We consider our confidence level to be $CL = 0.95$ and our significance level to be $\alpha = 1 - CL = 0.05$. If the $p$ value is greater than or equal to the significance level $\alpha$, we fail to reject the null hypothesis that our Logistic Regression binary classifier has an average maximum F1 measure equal to that of our KNN binary classifier. If the $p$ value is less than or equal to the significance level $\alpha$, we reject the null hypothesis and have sufficient evidence to support the alternate hypothesis that our Logistic Regression binary classifier has an average maximum F1 measure greater than that of our KNN binary classifier.
+
+To calculate our $p$ value, we conduct Fisher's Randomization Test. We calculate our $p$ value as the ratio of a count $C$ and a number of iterations $I$. Our count $C$ is the number of iterations $i \leq I$ for which a modified difference between an average maximum F1 measure for Logistic Regression and an average maximum F1 for KNN is greater than our test statistic. For each iteration, an average maximum F1 measure for Logistic Regression is computed effectively by tossing a fair coin for each row in our data frame of fold ID's and maximum F1 measures, if heads swapping the maximum F1 measures for the present fold, and calculating the mean of the maximum F1 measures in the column corresponding to Logistic Regression. An average maximum F1 measure for KNN is computed similarly. A modified difference between the average maximum F1 measure for Logistic Regression and the average maximum F1 measure for KNN is compared to our test statistic. If the modified difference is greater than our test statistic, count $C$ is incremented. Our $p$ value is the ratio of count $C$ and number of iterations $I$.
+
+The $p$ value for our Logistic Regression and KNN binary classifiers is $0.4$. The probability of observing a random test statistic greater than our test statistic is $0.4$. Because our $p$ value is greater than our significance level, we cannot confidently say that our test statistic is not due to random chance. Our difference between the average maximum F1 measures of our Logistic Regression and KNN models is statistically insignificant.
+
+```{r}
+calculate_probability_for_randomization_test(
+    data_frame_of_fold_ids_and_maximum_F1_measures_for_Logistic_Regression,
+    data_frame_of_fold_ids_and_maximum_F1_measures_for_KNN
+)
+```
+
+We are able to use predictive modeling tools as our data set of classes and pixels may be represented as a complete data frame of natural numbers. We are able to use classifiers as the data in column $Class$ is nominal. We are able to use binary classifiers as pixels representing blue tarps exist in a distinct subspace defined by intensities of color $Red$, $Green$, and $Blue$. We are able to normalize intensities of color $Red$, $Green$, and $Blue$.
+
+Our data set seems particularly well-suited to the class of prediction methods Binary Classifier as our data set is complete, observations may be represented as natural numbers, class of pixel is nominal, and pixels representing blue tarps exist in a distinct subspace defined by intensities of color $Red$, $Green$, and $Blue$.
+
+Given that according to Stephen Allwright the maximum average F1 measures of our binary classifiers are very good, our research may be very effective in terms of locating people displaced by the earthquake in Haiti in $2010$ and helping to save human life.
