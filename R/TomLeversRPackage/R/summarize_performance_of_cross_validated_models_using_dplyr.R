@@ -131,12 +131,14 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   reframe(
    accuracy = provide_performance_metrics(actual_indicator, predicted_probability)$accuracy,
    decimal_of_true_positives = provide_performance_metrics(actual_indicator, predicted_probability)$decimal_of_true_positives,
-   PPV = provide_performance_metrics(actual_indicator, predicted_probability)$PPV,
-   TPR = provide_performance_metrics(actual_indicator, predicted_probability)$TPR,
-   F1_measure = (1 + 1^2) * PPV * TPR / (1^2 * PPV + TPR),
+   F1_measure = provide_performance_metrics(actual_indicator, predicted_probability)$F1_measure,
    FPR = provide_performance_metrics(actual_indicator, predicted_probability)$FPR,
-   number_of_observations = 1:length(TPR),
+   number_of_negatives = provide_performance_metrics(actual_indicator, predicted_probability)$number_of_negatives,
+   number_of_observations = 1:length(accuracy),
+   number_of_positives = provide_performance_metrics(actual_indicator, predicted_probability)$number_of_positives,
+   PPV = provide_performance_metrics(actual_indicator, predicted_probability)$PPV,
    threshold = provide_performance_metrics(actual_indicator, predicted_probability)$threshold,
+   TPR = provide_performance_metrics(actual_indicator, predicted_probability)$TPR,
   )
  data_frame_of_fold_ids_and_maximum_F1_measures <- data_frame_of_performance_metrics[complete.cases(data_frame_of_performance_metrics), ] %>% group_by(id) %>% summarise(maximum_F1_measure = max(F1_measure))
  data_frame_of_average_performance_metrics <-
@@ -148,10 +150,12 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
    decimal_of_true_positives = mean(decimal_of_true_positives),
    F1_measure = mean(F1_measure),
    FPR = mean(FPR),
+   id = "Average",
+   number_of_negatives = mean(number_of_negatives),
+   number_of_positives = mean(number_of_positives),
    PPV = mean(PPV),
    threshold = mean(threshold),
    TPR = mean(TPR),
-   id = "Average"
   )
  data_frame_of_average_performance_metrics <- data_frame_of_average_performance_metrics[complete.cases(data_frame_of_average_performance_metrics), ]
  plot_of_performance_metrics_vs_threshold <- ggplot(
@@ -171,10 +175,12 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   )
  data_frame_of_PPV_and_TPR <- data_frame_of_average_performance_metrics[, c("PPV", "TPR")]
  number_of_thresholds <- nrow(data_frame_of_PPV_and_TPR)
+ number_of_negatives <- data_frame_of_average_performance_metrics[1, "number_of_negatives"]
+ number_of_positives <- data_frame_of_average_performance_metrics[1, "number_of_positives"]
  data_frame_of_PPV_and_TPR[number_of_thresholds + 1, "PPV"] <- 1
  data_frame_of_PPV_and_TPR[number_of_thresholds + 1, "TPR"] <- 0
  number_of_thresholds <- nrow(data_frame_of_PPV_and_TPR)
- data_frame_of_PPV_and_TPR[number_of_thresholds + 1, "PPV"] <- 0
+ data_frame_of_PPV_and_TPR[number_of_thresholds + 1, "PPV"] <- number_of_positives / (number_of_negatives + number_of_positives)
  data_frame_of_PPV_and_TPR[number_of_thresholds + 1, "TPR"] <- 1
  PR_curve <- ggplot(
   data = data_frame_of_PPV_and_TPR,
