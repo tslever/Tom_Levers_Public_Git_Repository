@@ -52,6 +52,8 @@ tail(x = data_frame_of_classes_and_pixels, n = 2)
 
 We conduct exploratory data analysis by considering the distributions of intensities of color $Red$, $Green$, and $Blue$. See Figures 3, 4, and 5. No distribution of intensities of color is normal.
 
+Please explore [TomLeversRPackage](https://github.com/tslever/Tom_Levers_Public_Git_Repository/tree/main/R/TomLeversRPackage).
+
 ```{r, fig.cap = "Distribution Of Intensities Of Color Red", fig.width = 2.625, fig.height = 1.875}
 library(TomLeversRPackage)
 plot_distribution(data_frame_of_classes_and_pixels, "Red", "red")
