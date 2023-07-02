@@ -57,6 +57,8 @@ knitr::opts_chunk$set(
             
             ![]("MSE_Vs_Degree_For_Validation-Set_Approach.png")
         
+            According to [What are the advantages and disadvantages of using $k$-fold cross-validation for predictive analytics?](https://www.linkedin.com/advice/0/what-advantages-disadvantages-using-k-fold#:~:text=K%2Dfold%20cross%2Dvalidation%20has%20some%20drawbacks%20that%20need%20to,testing%20the%20model%20multiple%20times.), "K-fold cross-validation has some drawbacks that need to be considered. It increases the computational cost and time, as it requires training and testing the model multiple times. Additionally, it may not be suitable for some types of data, such as time-series or spatial data, due to the order or location of the observations. Furthermore, it may introduce bias if the data is not well distributed or balanced across the folds. Lastly, it may not account for the uncertainty or variability of the model's performance, as it only gives a point estimate."
+        
         ii. LOOCV?
         
             LOOCV is a special case of $k$-fold CV in which $k$ is set to equal [number of observations] $n$... LOOCV requires fitting the statistical learning method $n$ times. This has the potential to be computationally expensive... But cross-validation is a very general approach that can be applied to almost any statistical learning method. Some statistical learning methods have computationally intensive fitting procedures, and so performing LOOCV may pose computational problems, especially in $n$ is extremely large. In contrast, performing $10$-fold CV requires fitting the learning procedure only ten times, which may be much more feasible.
@@ -84,7 +86,7 @@ knitr::opts_chunk$set(
         i. Split the sample set into a training set and a validation set.
 
             ```{r}
-            set.seed(i)
+            set.seed(1)
             library(TomLeversRPackage)
             split_data <- split_data_set_into_training_and_testing_data(
                 data_frame = Default,
@@ -364,14 +366,14 @@ knitr::opts_chunk$set(
     
         ```{r}
         set.seed(1)
+        y <- rnorm(100)
         x <- rnorm(100)
         y <- x - 2*x^2 + rnorm(100)
-        data_frame <- data.frame(x = x, y = y)
         ```
 
         In this data set, what is $n$ and what is $p$? Write out the model used to generate the data in equation form.
         
-        The number of observations $n = 100$. The number of predictors $p = 1$. The number of predictive terms is $2$. The model used to generate the data
+        The number of observations $n = 100$. The number of predictors $p = 2$. Here, a predictor is considered to be a predictive term as opposed single variable $x$. The model used to generate the data
         
         $$\boldsymbol{y} = rnorm(100) + \boldsymbol{x} - 2 \boldsymbol{x}^2$$
         $$y = rnorm(1) + x - 2 x^2$$
@@ -390,46 +392,30 @@ knitr::opts_chunk$set(
         
             ```{r}
             set.seed(1)
-            number_of_observations <- nrow(data_frame)
-            calculate_LOOCV_error_rate(
-                type_of_model = "Polynomial Regression",
-                formula = y ~ x,
-                data_frame = data_frame,
-                number_of_folds = number_of_observations
-            )
+            data_frame <- data.frame(x = x, y = y)
+            glm_1 <- glm(formula = y ~ x)
+            boot::cv.glm(data = data_frame, glmfit = glm_1)$delta[1]
             ```
         
         ii. $Y = \beta_0 + \beta_1X + \beta_2X^2 + \epsilon$
         
             ```{r}
-            calculate_LOOCV_error_rate(
-                type_of_model = "Polynomial Regression",
-                formula = y ~ x + I(x^2),
-                data_frame = data_frame,
-                number_of_folds = number_of_observations
-            )
+            glm_2 <- glm(formula = y ~ poly(x, 2))
+            boot::cv.glm(data = data_frame, glmfit = glm_2)$delta[1]
             ```
         
         iii. $Y = \beta_0 +\beta_1X +\beta_2X^2 +\beta_3X^3 +\epsilon$
         
              ```{r}
-             calculate_LOOCV_error_rate(
-                 type_of_model = "Polynomial Regression",
-                 formula = y ~ x + I(x^2) + I(x^3),
-                 data_frame = data_frame,
-                 number_of_folds = number_of_observations
-             )
+             glm_3 <- glm(formula = y ~ poly(x, 3))
+             boot::cv.glm(data = data_frame, glmfit = glm_3)$delta[1]
              ```
         
         iv. $Y = \beta_0 +\beta_1X +\beta_2X^2 +\beta_3X^3 +\beta_4X^4 +\epsilon$.
         
             ```{r}
-            calculate_LOOCV_error_rate(
-                type_of_model = "Polynomial Regression",
-                formula = y ~ x + I(x^2) + I(x^3) + I(x^4),
-                data_frame = data_frame,
-                number_of_folds = number_of_observations
-            )
+            glm_4 <- glm(formula = y ~ poly(x, 4))
+            boot::cv.glm(data = data_frame, glmfit = glm_4)$delta[1]
             ```
 
         Note you may find it helpful to use the `data.frame()` function to create a single data set containing both `X` and `Y`.
@@ -438,30 +424,14 @@ knitr::opts_chunk$set(
     
         ```{r}
         set.seed(2)
-        calculate_LOOCV_error_rate(
-            type_of_model = "Polynomial Regression",
-            formula = y ~ x,
-            data_frame = data_frame,
-            number_of_folds = number_of_observations
-        )
-        calculate_LOOCV_error_rate(
-            type_of_model = "Polynomial Regression",
-            formula = y ~ x + I(x^2),
-            data_frame = data_frame,
-            number_of_folds = number_of_observations
-        )
-        calculate_LOOCV_error_rate(
-            type_of_model = "Polynomial Regression",
-            formula = y ~ x + I(x^2) + I(x^3),
-            data_frame = data_frame,
-            number_of_folds = number_of_observations
-        )
-        calculate_LOOCV_error_rate(
-            type_of_model = "Polynomial Regression",
-            formula = y ~ x + I(x^2) + I(x^3) + I(x^4),
-            data_frame = data_frame,
-            number_of_folds = number_of_observations
-        )
+        glm_1 <- glm(formula = y ~ x)
+        boot::cv.glm(data = data_frame, glmfit = the_glm)$delta[1]
+        glm_2 <- glm(formula = y ~ poly(x, 2))
+        boot::cv.glm(data = data_frame, glmfit = glm_2)$delta[1]
+        glm_3 <- glm(formula = y ~ poly(x, 3))
+        boot::cv.glm(data = data_frame, glmfit = glm_3)$delta[1]
+        glm_4 <- glm(formula = y ~ poly(x, 4))
+        boot::cv.glm(data = data_frame, glmfit = glm_4)$delta[1]
         ```
         
         Given that each LOOCV error rate that is averaged is based on the same training and testing data sets regardless of seed, our results are the same as what we got in (c).
@@ -473,14 +443,10 @@ knitr::opts_chunk$set(
     (f) Comment on the statistical significance of the coefficient estimates that results from fitting each of the models in (c) using least squares. Do these results agree with the conclusions drawn based on the cross-validation results?
     
         ```{r}
-        polynomial_model <- glm(formula = y ~ x, data = data_frame)
-        summary(polynomial_model)$coefficients
-        polynomial_model <- glm(formula = y ~ x + I(x^2), data = data_frame)
-        summary(polynomial_model)$coefficients
-        polynomial_model <- glm(formula = y ~ x + I(x^2) + I(x^3), data = data_frame)
-        summary(polynomial_model)$coefficients
-        polynomial_model <- glm(formula = y ~ x + I(x^2) + I(x^3) + I(x^4), data = data_frame)
-        summary(polynomial_model)$coefficients
+        summary(glm_1)$coefficients
+        summary(glm_2)$coefficients
+        summary(glm_3)$coefficients
+        summary(glm_4)$coefficients
         ```
         
         $x$ is significant in the context of the first-degree polynomial model.
