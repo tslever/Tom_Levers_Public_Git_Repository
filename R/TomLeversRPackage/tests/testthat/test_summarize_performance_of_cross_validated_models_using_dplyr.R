@@ -60,7 +60,7 @@ test_that("summarize_performance_of_cross_validated_models_using_dplyr works",  
   data_frame_of_indicators_and_pixels[vector_of_random_indices, ]
 
  summary_of_performance <- summarize_performance_of_cross_validated_models_using_dplyr(
-  type_of_model = "KNN",
+  type_of_model = "Logistic Regression",
   formula = Indicator ~ Normalized_Interaction_Of_Red_And_Blue + Normalized_Interaction_Of_Green_And_Blue + Normalized_Square_Root_Of_Blue,
   data_frame = data_frame_of_indicators_and_pixels
  )

@@ -138,6 +138,7 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
    number_of_observations = 1:length(TPR),
    threshold = provide_performance_metrics(actual_indicator, predicted_probability)$threshold,
   )
+ data_frame_of_fold_ids_and_maximum_F1_measures <- data_frame_of_performance_metrics[complete.cases(data_frame_of_performance_metrics), ] %>% group_by(id) %>% summarise(maximum_F1_measure = max(F1_measure))
  data_frame_of_average_performance_metrics <-
   data_frame_of_performance_metrics %>%
   ungroup %>%
@@ -208,12 +209,12 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   rename(corresponding_threshold = threshold, corresponding_accuracy = accuracy, corresponding_TPR = TPR, corresponding_FPR = FPR, corresponding_PPV = PPV, optimal_F1_measure = F1_measure)
  data_frame_corresponding_to_maximum_average_F1_measure <- data_frame_corresponding_to_maximum_average_F1_measure[1, ]
  optimal_F1_measure <- data_frame_corresponding_to_maximum_average_F1_measure$optimal_F1_measure
- number_of_thresholds <- nrow(data_frame_of_average_performance_metrics)
- significance_level <- 0.05
- critical_value_tc <- qt(p = significance_level / 2, df = number_of_thresholds - 1, lower.tail = FALSE)
- standard_error_of_optimal_F1_measure <- sqrt(optimal_F1_measure * (1 - optimal_F1_measure) / number_of_thresholds)
- lower_bound_of_CI_for_optimal_F1_measure <- optimal_F1_measure - critical_value_tc * standard_error_of_optimal_F1_measure
- upper_bound_of_CI_for_optimal_F1_measure <- optimal_F1_measure + critical_value_tc * standard_error_of_optimal_F1_measure
+ #number_of_thresholds <- nrow(data_frame_of_average_performance_metrics)
+ #significance_level <- 0.05
+ #critical_value_tc <- qt(p = significance_level / 2, df = number_of_thresholds - 1, lower.tail = FALSE)
+ #standard_error_of_optimal_F1_measure <- sqrt(optimal_F1_measure * (1 - optimal_F1_measure) / number_of_thresholds)
+ #lower_bound_of_CI_for_optimal_F1_measure <- optimal_F1_measure - critical_value_tc * standard_error_of_optimal_F1_measure
+ #upper_bound_of_CI_for_optimal_F1_measure <- optimal_F1_measure + critical_value_tc * standard_error_of_optimal_F1_measure
  data_frame_of_optimal_performance_metrics <- data.frame(
   corresponding_threshold = data_frame_corresponding_to_maximum_average_F1_measure$corresponding_threshold,
   alpha = ifelse(test = type_of_model == "Logistic Ridge Regression", yes = 0, no = NA),
@@ -225,19 +226,14 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   corresponding_TPR = data_frame_corresponding_to_maximum_average_F1_measure$corresponding_TPR,
   corresponding_FPR = data_frame_corresponding_to_maximum_average_F1_measure$corresponding_FPR,
   corresponding_PPV = data_frame_corresponding_to_maximum_average_F1_measure$corresponding_PPV,
-  optimal_F1_measure = optimal_F1_measure,
-  significance_level = significance_level,
-  number_of_thresholds = number_of_thresholds,
-  critical_value_tc = critical_value_tc,
-  standard_error_of_optimal_F1_measure = standard_error_of_optimal_F1_measure,
-  lower_bound_of_CI_for_optimal_F1_measure = lower_bound_of_CI_for_optimal_F1_measure,
-  upper_bound_of_CI_for_optimal_F1_measure = upper_bound_of_CI_for_optimal_F1_measure
+  optimal_F1_measure = optimal_F1_measure
  )
  summary_of_performance_of_cross_validated_models <- list(
   plot_of_performance_metrics_vs_threshold = plot_of_performance_metrics_vs_threshold,
   PR_curve = PR_curve,
   ROC_curve = ROC_curve,
-  data_frame_of_optimal_performance_metrics = data_frame_of_optimal_performance_metrics
+  data_frame_of_optimal_performance_metrics = data_frame_of_optimal_performance_metrics,
+  data_frame_of_fold_ids_and_maximum_F1_measures = data_frame_of_fold_ids_and_maximum_F1_measures
  )
  return(summary_of_performance_of_cross_validated_models)
 }
