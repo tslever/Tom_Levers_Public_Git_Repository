@@ -1,0 +1,338 @@
+# Chapter 7 Lab: Non-linear Modeling
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(error=TRUE,        # Keep compiling upon error
+                      collapse=FALSE,    # collapse by default
+                      echo=TRUE,         # echo code by default
+                      comment = "#>",    # change comment character
+                      fig.width = 5.5,     # set figure width
+                      fig.align = "center",# set figure position
+                      out.width = "80%", # set width of displayed images
+                      warning=FALSE,     # do not show R warnings
+                      message=FALSE)     # do not show R messages
+```
+
+
+```{r setup}
+#library(ISLR)
+#attach(Wage)
+library(tidyverse)
+```
+
+## Polynomial Regression and Step Functions
+
+I have not made a final hold out test data set... 
+If we're doing classical statistics then we're relying on uncertainty 
+characterization as opposed to model tuning approaches.  
+
+```{r data, fig.width=8}
+#fit=lm(wage~poly(age,4),data=Wage)
+#coef(summary(fit))
+fit <- lm(wage~poly(age,4), data=ISLR::Wage)
+fit %>% broom::tidy()
+
+#fit2=lm(wage~poly(age,4,raw=T),data=Wage)
+#coef(summary(fit2))
+fit2 <- lm(wage~poly(age,4,raw=T), data=ISLR::Wage)
+fit2 %>% broom::tidy()
+
+#fit2a=lm(wage~age+I(age^2)+I(age^3)+I(age^4),data=Wage)
+#coef(fit2a)
+fit2a <- lm(wage~age+I(age^2)+I(age^3)+I(age^4), data=ISLR::Wage)
+fit2a %>% broom::tidy()
+
+#fit2b=lm(wage~cbind(age,age^2,age^3,age^4),data=Wage)
+fit2b <- lm(wage~cbind(age,age^2,age^3,age^4), data=ISLR::Wage)
+fit2b %>% broom::tidy()
+
+#agelims=range(age)
+#age.grid=seq(from=agelims[1],to=agelims[2])
+
+age_poly <- poly(ISLR::Wage$age, degree = 4)
+X <- age_poly %>% as_tibble() %>%
+  set_names(paste0("age_poly",as.character(1:4)))
+wage <- ISLR::Wage %>% as_tibble()
+wage[,names(X)] <- X
+
+fit <- lm(wage~age_poly1+age_poly2+age_poly3+age_poly4, data=wage)
+fit %>% broom::tidy()
+
+age.grid <- wage %>% dplyr::select(age) %>% modelr::seq_range(n=30)
+age_poly.grid <- predict(age_poly, newdata=age.grid) %>% as_tibble() %>%
+  set_names(paste0("age_poly",as.character(1:4))) %>% add_column(age=age.grid)
+
+#preds=predict(fit,newdata=list(age=age.grid),se=TRUE)
+#se.bands=cbind(preds$fit+2*preds$se.fit,preds$fit-2*preds$se.fit)
+
+#install.packages("tidypredict")
+library(tidypredict)
+prediction_interval <- age_poly.grid %>% 
+  mutate(pred=!!tidypredict_fit(fit),
+         pm_int=!!tidypredict_interval(fit, interval=0.95)) %>%
+  mutate(lower=pred-pm_int, upper=pred+pm_int)
+
+#par(mfrow=c(1,2),mar=c(4.5,4.5,1,1),oma=c(0,0,4,0))
+#plot(age,wage,xlim=agelims,cex=.5,col="darkgrey")
+#title("Degree-4 Polynomial",outer=T)
+#lines(age.grid,preds$fit,lwd=2,col="blue")
+#matlines(age.grid,se.bands,lwd=1,col="blue",lty=3)
+
+# https://stackoverflow.com/questions/7714677/scatterplot-with-too-many-points
+ggplot() + geom_hex(wage, mapping=aes(x=age, y=wage)) + 
+  geom_jitter(wage, mapping=aes(x=age, y=wage),
+              shape='.', size=.1, color='white', height=2) +
+  geom_ribbon(data=prediction_interval, fill = "black", alpha = 0.2, 
+              mapping=aes(x=age, ymin=lower, ymax=upper)) + 
+  stat_smooth(wage, mapping=aes(x=age, y=wage),
+              method='lm', formula='y~poly(x,4)', se=TRUE, alpha=1) +
+  geom_line(prediction_interval, mapping=aes(x=age, y=pred)) -> fit.plot
+              
+# preds2=predict(fit2,newdata=list(age=age.grid),se=TRUE)
+preds2 <- predict(fit2, newdata=list(age=age.grid), se=TRUE)
+#max(abs(preds$fit-preds2$fit))
+max(abs(preds2$fit-prediction_interval$pred))
+
+fit.1 <- lm(wage~age, data=ISLR::Wage)
+fit.2 <- lm(wage~poly(age,2), data=ISLR::Wage)
+fit.3 <- lm(wage~poly(age,3), data=ISLR::Wage)
+fit.4 <- lm(wage~poly(age,4), data=ISLR::Wage)
+fit.5 <- lm(wage~poly(age,5), data=ISLR::Wage)
+anova(fit.1,fit.2,fit.3,fit.4,fit.5)
+
+#coef(summary(fit.5))
+#(-11.983)^2
+fit.5 %>% tidy()
+fit.5 %>% tidy() %>% slice(3) %>% select(statistic) %>% 
+  mutate(F_score=statistic^2) %>% select(F_score) %>% pull()
+
+fit.1 <- lm(wage~education+age, data=ISLR::Wage)
+fit.2 <- lm(wage~education+poly(age,2), data=ISLR::Wage)
+fit.3 <- lm(wage~education+poly(age,3), data=ISLR::Wage)
+anova(fit.1,fit.2,fit.3)
+
+#fit=glm(I(wage>250)~poly(age,4),data=Wage,family=binomial)
+wage %>% mutate(rich = wage>250) -> wage
+fit_glm <- glm(rich~age_poly1+age_poly2+age_poly3+age_poly4, 
+               data=wage, family=binomial)
+preds <- fit_glm %>% predict(newdata=age_poly.grid, se=TRUE)
+pfit <- exp(preds$fit)/(1+exp(preds$fit))
+se.bands.logit <- cbind(preds$fit+2*preds$se.fit, preds$fit-2*preds$se.fit)
+se.bands <- exp(se.bands.logit)/(1+exp(se.bands.logit))
+
+#preds=predict(fit,newdata=list(age=age.grid),type="response",se=T)
+#plot(age,I(wage>250),xlim=agelims,type="n",ylim=c(0,.2))
+#points(jitter(age), I((wage>250)/5),cex=.5,pch="|",col="darkgrey")
+#lines(age.grid,pfit,lwd=2, col="blue")
+#matlines(age.grid,se.bands,lwd=1,col="blue",lty=3)
+fit_glm.pred <- se.bands %>% as_tibble() %>% set_names(c("upper","lower")) %>%
+  add_column(pfit=pfit)
+fit_glm.pred[,names(age_poly.grid)] <- age_poly.grid
+
+ggplot() + geom_line(fit_glm.pred, mapping=aes(x=age, y=pfit)) +
+  geom_ribbon(fit_glm.pred, mapping=aes(x=age, ymin=lower, ymax=upper),
+              alpha=0.5, fill='blue') +
+  geom_jitter(wage%>%mutate(rich=(as.numeric(rich)-0.5)/5), 
+              shape='|', mapping=aes(x=age, rich), height=.025) -> fit_glm.plot
+  
+gridExtra::grid.arrange(grobs=list(fit.plot,fit_glm.plot), ncol=2)
+
+#table(cut(age,4))
+#fit=lm(wage~cut(age,4),data=Wage)
+#coef(summary(fit))
+table(cut(ISLR::Wage$age,4))
+lm(wage~cut(age,4), data=ISLR::Wage) %>% tidy()
+```
+
+
+
+## Splines
+
+A (degree 2) truncated power basis function gives us
+
+|derivative|function            | | regime     |
+|--------|----------------------|-|------------|
+|$f(x)$  |$x+x^2$               |:|$x<\epsilon$|
+|$f(x)$  |$x+x^2+(x-\epsilon)^2$|:|$x>\epsilon$|
+|$f'(x)$ |$2x$                  |:|$x<\epsilon$|
+|$f'(x)$ |$2x+(2x-2\epsilon)$   |:|$x>\epsilon$|
+|$f''(x)$|$2$                   |:|$x<\epsilon$|
+|$f''(x)$|$4$                   |:|$x>\epsilon$|
+
+and you can see that the discontinuity only appears at $\epsilon$ in the 
+second derivative of the function.
+
+```{r bsplines}
+# B-Splines, however, are just a different way to construct a set of basis 
+# functions around your selected knots that provide the same degree of 
+# continuity in your fitted response curve:
+# https://stats.stackexchange.com/questions/168351/truncated-power-basis-function-and-continuity-in-b-splines
+
+#library(splines)
+#fit=lm(wage~bs(age,knots=c(25,40,60)),data=Wage)
+
+B_Spline <- splines::bs(wage$age, knots=c(25,40,60)) 
+B_Spline_X <- B_Spline %>% as_tibble() %>%
+  set_names(paste0('degree3Bspline',as.character(1:dim(B_Spline)[2])))
+wage[,names(B_Spline_X)] <- B_Spline_X
+
+linear_form <- formula(paste0("wage~", paste0(names(B_Spline_X), collapse="+")))
+fit_bspline <- lm(linear_form , data=wage)
+
+#pred=predict(fit,newdata=list(age=age.grid),se=T)
+
+age_bspline.grid <- predict(B_Spline, newx=age.grid) %>% 
+  as_tibble() %>% set_names(names(B_Spline_X)) %>% add_column(age=age.grid)
+#predict(fit_bspline, newdata=age_bspline.grid, se=TRUE)
+prediction_interval_bspline <- age_bspline.grid %>% 
+  mutate(pred=!!tidypredict_fit(fit_bspline),
+         pm_int=!!tidypredict_interval(fit_bspline, interval=0.95)) %>%
+  mutate(lower=pred-pm_int, upper=pred+pm_int)
+
+#plot(age,wage,col="gray")
+#lines(age.grid,pred$fit,lwd=2)
+#lines(age.grid,pred$fit+2*pred$se,lty="dashed")
+#lines(age.grid,pred$fit-2*pred$se,lty="dashed")
+
+# https://stackoverflow.com/questions/7714677/scatterplot-with-too-many-points
+ggplot() + 
+  stat_density_2d(wage, mapping=aes(x=age, y=wage, fill=stat(density)), 
+                  geom='raster', contour=FALSE) +  
+  scale_fill_viridis_c() +
+  geom_jitter(wage, mapping=aes(x=age, y=wage), 
+              shape='.', color='white', height=2, width=1.5) +
+  geom_ribbon(prediction_interval_bspline, alpha=0.2, fill='white',
+              mapping=aes(x=age, ymin=lower, ymax=upper)) +
+    stat_smooth(wage, mapping=aes(x=age, y=wage),
+              method='loess', formula='y~x', se=TRUE, alpha=1) +
+  geom_line(prediction_interval_bspline, mapping=aes(x=age, y=pred)) -> 
+  splines.plot
+```
+
+
+Natural splines force the fitted response surface to be first order (linear)
+at the extremes of any knots:
+
+$$x\beta_1 + (x-k_1)^3\beta_2 1_{[k_1,k_2)}(x) + (x-k_2)^3\beta_3 1_{[k_2,k_3)}(x) + 
+(x-k_3)\beta_3 1_{[k_3,\infty)}(x)$$
+
+```{r nslines}
+#dim(bs(age,knots=c(25,40,60)))
+#dim(bs(age,df=6))
+#attr(bs(age,df=6),"knots")
+dim(splines::bs(wage$age, knots=c(25,40,60)))
+dim(splines::bs(wage$age, df=6))
+attr(splines::bs(wage$age, df=6), "knots")
+
+#fit2=lm(wage~ns(age,df=4),data=Wage)
+
+N_Spline <- splines::ns(wage$age, df=4)
+N_Spline_X <- N_Spline %>% as_tibble() %>%
+  set_names(paste0('naturalCubicBasisFunction',as.character(1:dim(N_Spline)[2])))
+wage[,names(N_Spline_X)] <-N_Spline_X
+
+linear_form <- formula(paste0("wage~", paste0(names(N_Spline_X), collapse="+")))
+fit_nspline <- lm(linear_form , data=wage)
+
+#pred2=predict(fit2,newdata=list(age=age.grid),se=T)
+
+age_nspline.grid <- predict(N_Spline, newx=age.grid) %>% 
+  as_tibble() %>% set_names(names(N_Spline_X)) %>% add_column(age=age.grid)
+#predict(fit_bspline, newdata=age_bspline.grid, se=TRUE)
+prediction_interval_nspline <- age_nspline.grid %>% 
+  mutate(pred=!!tidypredict_fit(fit_nspline),
+         pm_int=!!tidypredict_interval(fit_nspline, interval=0.95)) %>%
+  mutate(lower=pred-pm_int, upper=pred+pm_int)
+
+#lines(age.grid, pred2$fit,col="red",lwd=2)
+splines.plot + geom_line(prediction_interval_nspline, 
+                         mapping=aes(x=age, y=pred), color='red')
+```     
+
+```{r smoothing}
+#plot(age,wage,xlim=agelims,cex=.5,col="darkgrey")
+#title("Smoothing Spline")
+#fit=smooth.spline(age,wage,df=16)
+#fit2=smooth.spline(age,wage,cv=TRUE)
+#fit2$df
+#lines(fit,col="red",lwd=2)
+#lines(fit2,col="blue",lwd=2)
+#legend("topright",legend=c("16 DF","6.8 DF"),col=c("red","blue"),lty=1,lwd=2,cex=.8)
+
+#plot(age,wage,xlim=agelims,cex=.5,col="darkgrey")
+#title("Local Regression")
+#fit=loess(wage~age,span=.2,data=Wage)
+#fit2=loess(wage~age,span=.5,data=Wage)
+#lines(age.grid,predict(fit,data.frame(age=age.grid)),col="red",lwd=2)
+#lines(age.grid,predict(fit2,data.frame(age=age.grid)),col="blue",lwd=2)
+#legend("topright",legend=c("Span=0.2","Span=0.5"),col=c("red","blue"),lty=1,lwd=2,cex=.8)
+
+# https://stackoverflow.com/questions/7714677/scatterplot-with-too-many-points
+ggplot() + geom_density_2d(wage, mapping=aes(x=age, y=wage, color='data')) +
+  ggtitle("Smoothing Splines and Loess") +
+  geom_path(as_tibble(predict(smooth.spline(wage$age, wage$wage, df=16))),
+            mapping=aes(x=x,y=y, color='Smoothing Spline: 16 df'), size=1) +
+  geom_path(as_tibble(predict(smooth.spline(wage$age, wage$wage, cv=TRUE))),
+            mapping=aes(x=x,y=y,color='Smoothing Spline: CV df'), size=1) +
+  geom_smooth(wage, mapping=aes(x=age, y=wage, color='Loess (span=0.2)'),
+              method='loess', formula='y~x', span=0.2, se=FALSE) +
+  geom_smooth(wage, mapping=aes(x=age, y=wage, color='Loess (span=0.5)'),
+              method='loess', formula='y~x', span=0.5, se=FALSE) 
+
+```
+
+
+# GAMs
+
+```{r gams, fig.height=2}
+
+gam1 <- lm(wage~splines::ns(year,4)+splines::ns(age,5)+education, data=wage)
+library(gam)
+
+gam.m3 <- gam(wage~s(year,4)+s(age,5)+education, data=wage)
+par(mfrow=c(1,3))
+plot(gam.m3, se=TRUE, col="blue")
+
+plot.Gam(gam1, se=TRUE, col="red")
+
+gam.m1 <- gam(wage~s(age,5)+education, data=wage)
+gam.m2 <- gam(wage~year+s(age,5)+education, data=wage)
+anova(gam.m1,gam.m2,gam.m3, test="F")
+
+summary(gam.m3)
+
+preds <- predict(gam.m2, newdata=wage)
+
+gam.lo <- gam(wage~s(year,df=4)+lo(age,span=0.7)+education, data=wage)
+plot.Gam(gam.lo, se=TRUE, col="green")
+```
+
+```{r gams_2}
+gam.lo.i <- gam(wage~lo(year,age,span=0.5)+education, data=wage)
+library(akima)
+#par(mfrow=c(1,2))
+plot(gam.lo.i, theta=75, phi=-30)
+```
+
+
+```{r gams_3, fig.height=2}
+gam.lr<-gam(I(wage>250)~year+s(age,df=5)+education, family=binomial, data=wage)
+par(mfrow=c(1,3))
+plot(gam.lr, se=TRUE, col="green")
+
+table(wage$education, I(wage$wage>250))
+
+gam.lr.s <- gam(I(wage>250)~year+s(age,df=5)+education, 
+                family=binomial, data=wage, subset=(education!="1. < HS Grad"))
+plot(gam.lr.s, se=TRUE, col="green")
+
+```
+
+
+
+
+
+
+
+
+
+
