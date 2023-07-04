@@ -38,11 +38,10 @@ knitr::opts_chunk$set(
         set.seed(4)
         range_of_degrees <- 1:10
         number_of_degrees <- length(range_of_degrees)
-        cross_validation_estimates_of_prediction_errors <-
-            rep(NA, number_of_degrees)
-        for (i in range_of_degrees) {
-            the_glm <- glm(wage ~ poly(age, i), data = Wage)
-            cross_validation_estimates_of_prediction_errors[i] <-
+        cross_validation_estimates_of_prediction_errors <- rep(NA, number_of_degrees)
+        for (degree in range_of_degrees) {
+            the_glm <- glm(wage ~ poly(age, degree), data = Wage)
+            cross_validation_estimates_of_prediction_errors[degree] <-
                 boot::cv.glm(Wage, the_glm, K = 10)$delta[1]
         }
         plot(
@@ -77,8 +76,44 @@ knitr::opts_chunk$set(
         lines(sequence_of_ages, vector_of_predicted_wages, col = "red", lwd = 2)
         ```
 
-(b) Fit a step function to predict wage using age, and perform cross-validation to choose the optimal number of cuts. Make a plot of the fit obtained.
-
+    (b) Fit a step function to predict wage using age, and perform cross-validation to choose the optimal number of cuts. Make a plot of the fit obtained.
+    
+        A cross-validated estimate of prediction error is minimum for $8$ intervals.
+    
+        ```{r}
+        range_of_numbers_of_intervals <- 2:10
+        number_of_numbers_of_intervals <- length(range_of_numbers_of_intervals)
+        cross_validation_estimates_of_prediction_errors <-
+            rep(NA, number_of_numbers_of_intervals)
+        for (number_of_intervals in range_of_numbers_of_intervals) {
+            Wage$interval <- cut(Wage$age, number_of_intervals)
+            the_glm <- glm(wage ~ interval, data = Wage)
+            cross_validation_estimates_of_prediction_errors[number_of_intervals - 1] <-
+               boot::cv.glm(Wage, the_glm, K = 10)$delta[1]
+        }
+        plot(
+            x = range_of_numbers_of_intervals,
+            y = cross_validation_estimates_of_prediction_errors,
+            xlab = "number of intervals",
+            ylab = "cross validation estimate of prediction errors",
+            type = "l"
+        )
+        optimal_number_of_intervals <-
+            which.min(cross_validation_estimates_of_prediction_errors)
+        points(
+            x = optimal_number_of_intervals + 1,
+            y = cross_validation_estimates_of_prediction_errors[
+                optimal_number_of_intervals
+            ],
+            col = "red",
+            cex = 2,
+            pch = 20
+        )
+        the_glm <- glm(wage ~ cut(age, optimal_number_of_intervals), data = Wage)
+        plot(wage ~ age, data = Wage)
+        vector_of_predicted_wages <- predict(object = the_glm, newdata = list_with_age)
+        lines(sequence_of_ages, vector_of_predicted_wages, col = "red", lwd = 2)
+        ```
 
 # 9. This question uses the variables `dis` (the weighted mean of distances to five Boston employment centers) and `nox` (nitrogen oxides concentration in parts per 10 million) from the Boston data. We will treat `dis` as the predictor and nox as the response.
 
