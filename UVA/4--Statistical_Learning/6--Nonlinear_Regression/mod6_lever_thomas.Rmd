@@ -1,40 +1,81 @@
 ---
 title: "DS-6030 Homework Module 6"
-author: "Name"
+author: "Tom Lever"
+date: 07/03/2023
 output:
-  pdf_document:
-    toc: no
+  pdf_document: default
+  html_document: default
+urlcolor: blue
 ---
 
 <!--- Below are global settings for knitr. You can override any of them by adding the changes to individual chunks --->
-
-
-```{r global_options, include=FALSE}
-knitr::opts_chunk$set(error=TRUE,        # Keep compiling upon error
-                      collapse=FALSE,    # collapse by default
-                      echo=TRUE,         # echo code by default
-                      comment = "#>",    # change comment character
-                      fig.width = 5.5,     # set figure width
-                      fig.align = "center",# set figure position
-                      out.width = "49%", # set width of displayed images
-                      warning=FALSE,     # do not show R warnings
-                      message=FALSE)     # do not show R messages
+```{r global_options, include = FALSE}
+# This chunk is called global_options. Due to `include = FALSE`, when the document is rendered, the chunk will be executed, but the results and code will not be included in the rendered document
+knitr::opts_chunk$set(
+    error = TRUE, # Keep compiling upon error
+    collapse = FALSE, # code and corresponding output appear in knit file in separate blocks
+    echo = TRUE, # echo code by default
+    comment = "#", # change comment character
+    #fig.width = 5.5, # set figure width
+    fig.align = "center", # set figure position
+    #out.width = "49%", # set width of displayed images
+    warning = TRUE, # do not show R warnings
+    message = TRUE # do not show R messages
+)
 ```
 
-<!--- Change font size for headers --->
-<style>
-h1.title { font-size: 28px; }
-h1 { font-size: 22px; }
-h2 { font-size: 18px; }
-h3 { font-size: 14px; }
-</style>
+**DS 6030 | Spring 2023 | University of Virginia **
 
-**DS 6030 | Spring 2022 | University of Virginia **
+6.  In this exercise, you will further analyze the `Wage` data set considered throughout this chapter.
 
+    (a) Perform polynomial regression to predict wage using age. Use cross-validation to select the optimal degree $d$ for the polynomial. What degree was chosen, and how does this compare to the results of hypothesis testing using ANOVA? Make a plot of the resulting polynomial fit to the data.
 
-# 6. In this exercise, you will further analyze the `Wage` data set considered throughout this chapter.
+        The optimal degree for a polynomial regression to predict wage vs. age is $d = 4$.
+        According to the documentation for `anova`, "When given a sequence of objects, `anova` tests the models against one another in the order specified... It produces a table which tests whether the model terms [for a given model] are significant [in the context of the previous model]." Examining the column of $p$ values in below table, a term of degree $1$ is significant in the context of an intercept-only model, a term of degree $2$ is significant in the context of a polynomial of degree $2$, a term of degree $3$ is significant in the context of a polynomial of degree $2$, a term of degree $4$ is approximately significant in the context of a polynomial of degree $4$, but a term of degree $5$ is insignificant in the context of a polynomial of degree $4$. This interpretation accords with using cross-validation to select the optimal degree for the polynomial.
 
-(a) Perform polynomial regression to predict wage using age. Use cross-validation to select the optimal degree $d$ for the polynomial. What degree was chosen, and how does this compare to the results of hypothesis testing using ANOVA? Make a plot of the resulting polynomial fit to the data.
+        ```{r}
+        library(ISLR2)
+        set.seed(4)
+        range_of_degrees <- 1:10
+        number_of_degrees <- length(range_of_degrees)
+        cross_validation_estimates_of_prediction_errors <-
+            rep(NA, number_of_degrees)
+        for (i in range_of_degrees) {
+            the_glm <- glm(wage ~ poly(age, i), data = Wage)
+            cross_validation_estimates_of_prediction_errors[i] <-
+                boot::cv.glm(Wage, the_glm, K = 10)$delta[1]
+        }
+        plot(
+            x = range_of_degrees,
+            y = cross_validation_estimates_of_prediction_errors,
+            xlab = "degree",
+            ylab = "cross validation estimate of prediction error",
+            type = "l"
+        )
+        optimal_degree <-
+            which.min(cross_validation_estimates_of_prediction_errors)
+        points(
+            x = optimal_degree,
+            y = cross_validation_estimates_of_prediction_errors[optimal_degree],
+            col = "red",
+            cex = 2,
+            pch = 20
+        )
+        lm_0 <- lm(wage ~ 1, data = Wage)
+        lm_1 <- lm(wage ~ age, data = Wage)
+        lm_2 <- lm(wage ~ poly(age, 2), data = Wage)
+        lm_3 <- lm(wage ~ poly(age, 3), data = Wage)
+        lm_4 <- lm(wage ~ poly(age, 4), data = Wage)
+        lm_5 <- lm(wage ~ poly(age, 5), data = Wage)
+        anova(lm_0, lm_1, lm_2, lm_3, lm_4, lm_5)
+        plot(wage ~ age, data = Wage)
+        minimum_age <- min(Wage$age)
+        maximum_age <- max(Wage$age)
+        sequence_of_ages <- seq(from = minimum_age, to = maximum_age)
+        list_with_age <- list(age = sequence_of_ages)
+        vector_of_predicted_wages <- predict(object = lm_4, newdata = list_with_age)
+        lines(sequence_of_ages, vector_of_predicted_wages, col = "red", lwd = 2)
+        ```
 
 (b) Fit a step function to predict wage using age, and perform cross-validation to choose the optimal number of cuts. Make a plot of the fit obtained.
 
