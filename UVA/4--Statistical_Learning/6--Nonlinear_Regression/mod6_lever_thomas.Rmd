@@ -571,9 +571,38 @@ knitr::opts_chunk$set(
         TomLeversRPackage::analyze_subset_selection_object(subset_selection_object)
         ```
         
-        The names of the $14$ predictors of the best $14$-predictor model according to forward selection are $PrivateYes$, $Apps$, $Accept$, $Enroll$, $Top10perc$, $F.Undergrad$, $Room.Board$, $Personal$, $PhD$, $Terminal$, $S.F.Ratio$, $perc.alumni$, $Expend$, and $Grad.Rate$.
+        The names of the $14$ predictors of the best $14$-predictor model according to forward selection are $Private$, $Apps$, $Accept$, $Enroll$, $Top10perc$, $F.Undergrad$, $Room.Board$, $Personal$, $PhD$, $Terminal$, $S.F.Ratio$, $perc.alumni$, $Expend$, and $Grad.Rate$.
 
     (b) Fit a GAM on the training data, using out-of-state tuition as the response and the features selected in the previous step as the predictors. Plot the results, and explain your findings.
+    
+        According to the documentation for `gam::s`, `s` is a "symbolic wrapper to indicate a smooth term in a formala argument to gam."
+    
+        Below is a plot of a Generalized Additive Model (GAM) with subplots of `s(x = x, df = 4)`, where $x$ represents one of our 14 predictors. In these plots, the function of $Room.Board$ looks relatively linear. We can perform a series of ANOVA tests in order to determine which of these three models is best: a GAM that excludes $Room.Board$ (M1), a GAM that uses a linear function
+of $Room.Board$ (M2), or a GAM that uses a spline function of $Room.Board$ (M3).
+    
+        ```{r}
+        library(gam)
+        the_gam <- gam(
+            Outstate ~
+                Private +
+                s(Apps, df = 4) +
+                s(Accept, df = 4) +
+                s(Enroll, df = 4) +
+                s(Top10perc, df = 4) +
+                s(F.Undergrad, df = 4) +
+                s(Room.Board, df = 4) +
+                s(Personal, df = 4) +
+                s(PhD, df = 4) +
+                s(Terminal, df = 4) +
+                s(S.F.Ratio, df = 4) +
+                s(perc.alumni, df = 4) +
+                s(Expend, df = 4) +
+                s(Grad.Rate, df = 4),
+            data = training_data
+        )
+        par(mfrow = c(3, 5))
+        plot(the_gam, se = TRUE)
+        ```
 
     (c) Evaluate the model obtained on the test set, and explain the results obtained.
 
