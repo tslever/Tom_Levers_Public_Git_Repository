@@ -344,7 +344,6 @@ knitr::opts_chunk$set(
         ```{r}
         library(ggplot2)
         library(MASS)
-        set.seed(1)
         lm_4 <- lm(nox ~ splines::bs(dis, df = 4), data = Boston)
         summary(lm_4)
         data_frame_of_weighted_means_of_distances_and_predicted_NOx_concentrations <-
@@ -547,12 +546,35 @@ knitr::opts_chunk$set(
     )
     ```
 
-# 10. This question relates to the College data set.
+10. This question relates to the College data set.
 
-(a) Split the data into a training set and a test set. Using out-of-state tuition as the response and the other variables as the predictors, perform forward stepwise selection on the training set in order to identify a satisfactory model that uses just a subset of the predictors.
+    (a) Split the data into a training set and a test set. Using out-of-state tuition as the response and the other variables as the predictors, perform forward stepwise selection on the training set in order to identify a satisfactory model that uses just a subset of the predictors.
+    
+        According to Mallow's $C_p$, adjusted $R^2$, and Schwartz Bayesian Information Criterion approximately, the best model by forward selection on the training set is a model that uses $14$ predictors.
+    
+        ```{r}
+        library(leaps)
+        colleges <- College
+        list_of_training_and_testing_data <- 
+            TomLeversRPackage::split_data_set_into_training_and_testing_data(
+                data_frame = colleges,
+                proportion_of_training_data = 0.9
+            )
+        training_data <- list_of_training_and_testing_data$training_data
+        testing_data <- list_of_training_and_testing_data$testing_data
+        subset_selection_object <- regsubsets(
+            Outstate ~ .,
+            data = training_data,
+            nvmax = 17,
+            method = "forward"
+        )
+        TomLeversRPackage::analyze_subset_selection_object(subset_selection_object)
+        ```
+        
+        The names of the $14$ predictors of the best $14$-predictor model according to forward selection are $PrivateYes$, $Apps$, $Accept$, $Enroll$, $Top10perc$, $F.Undergrad$, $Room.Board$, $Personal$, $PhD$, $Terminal$, $S.F.Ratio$, $perc.alumni$, $Expend$, and $Grad.Rate$.
 
-(b) Fit a GAM on the training data, using out-of-state tuition as the response and the features selected in the previous step as the predictors. Plot the results, and explain your findings.
+    (b) Fit a GAM on the training data, using out-of-state tuition as the response and the features selected in the previous step as the predictors. Plot the results, and explain your findings.
 
-(c) Evaluate the model obtained on the test set, and explain the results obtained.
+    (c) Evaluate the model obtained on the test set, and explain the results obtained.
 
-(d) For which variables, if any, is there evidence of a non-linear relationship with the response?
+    (d) For which variables, if any, is there evidence of a non-linear relationship with the response?
