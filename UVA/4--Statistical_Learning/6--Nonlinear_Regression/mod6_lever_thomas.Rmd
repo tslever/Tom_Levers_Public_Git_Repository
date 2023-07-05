@@ -146,7 +146,11 @@ knitr::opts_chunk$set(
                 object = the_lm,
                 list_with_dis
             )
-            column_label <- paste("NOx_concentration_predicted_by_polynomial_of_degree_", degree, sep = "")
+            column_label <- paste(
+                "NOx_concentration_predicted_by_polynomial_of_degree_",
+                degree,
+                sep = ""
+            )
             data_frame_of_weighted_means_of_distances_and_predicted_NOx_concentrations[
                 ,
                 column_label
@@ -353,7 +357,10 @@ knitr::opts_chunk$set(
             )
         numbers_of_degrees_of_freedom <- 3:10
         for (number_of_degrees_of_freedom in numbers_of_degrees_of_freedom) {
-            the_lm <- lm(nox ~ splines::bs(dis, df = number_of_degrees_of_freedom), data = Boston)
+            the_lm <- lm(
+                nox ~ splines::bs(dis, df = number_of_degrees_of_freedom),
+                data = Boston
+            )
             vector_of_predicted_nitrogen_oxide_concentrations <- predict(
                 object = the_lm,
                 list_with_dis
@@ -526,8 +533,9 @@ knitr::opts_chunk$set(
             nox ~ splines::bs(dis, df = number_of_degrees_of_freedom),
             data = Boston
         )
-        cross_validation_estimates_of_prediction_errors[number_of_degrees_of_freedom - 2] <-
-            boot::cv.glm(Boston, the_glm, K = 10)$delta[1]
+        cross_validation_estimates_of_prediction_errors[
+            number_of_degrees_of_freedom - 2
+        ] <- boot::cv.glm(Boston, the_glm, K = 10)$delta[1]
     }
     plot(
         numbers_of_degrees_of_freedom,
@@ -577,8 +585,7 @@ knitr::opts_chunk$set(
     
         According to the documentation for `gam::s`, `s` is a "symbolic wrapper to indicate a smooth term in a formala argument to gam."
     
-        Below is a plot of a Generalized Additive Model (GAM) with subplots of `s(x = x, df = 4)`, where $x$ represents one of our 14 predictors. In these plots, the function of $Room.Board$ looks relatively linear. We can perform a series of ANOVA tests in order to determine which of these three models is best: a GAM that excludes $Room.Board$ (M1), a GAM that uses a linear function
-of $Room.Board$ (M2), or a GAM that uses a spline function of $Room.Board$ (M3).
+        Below is a plot of a Generalized Additive Model (GAM) with subplots of `s(x = x, df = 4)` vs. $x$, where $x$ represents one of our 14 predictors. In these plots, the function of $Room.Board$ looks relatively linear. We can perform a series of ANOVA tests in order to determine which of these three models is best: a GAM that excludes $Room.Board$ (M1), a GAM that uses a linear function of $Room.Board$ (M2), or a GAM that uses a spline function of $Room.Board$ (M3).
     
         ```{r}
         library(gam)
@@ -602,8 +609,82 @@ of $Room.Board$ (M2), or a GAM that uses a spline function of $Room.Board$ (M3).
         )
         par(mfrow = c(3, 5))
         plot(the_gam, se = TRUE)
+        the_gam_without_Room_And_Board <- gam(
+            Outstate ~
+                Private +
+                s(Apps, df = 4) +
+                s(Accept, df = 4) +
+                s(Enroll, df = 4) +
+                s(Top10perc, df = 4) +
+                s(F.Undergrad, df = 4) +
+                s(Personal, df = 4) +
+                s(PhD, df = 4) +
+                s(Terminal, df = 4) +
+                s(S.F.Ratio, df = 4) +
+                s(perc.alumni, df = 4) +
+                s(Expend, df = 4) +
+                s(Grad.Rate, df = 4),
+            data = training_data
+        )
+        the_gam_with_linear_Room_And_Board <- gam(
+            Outstate ~
+                Private +
+                s(Apps, df = 4) +
+                s(Accept, df = 4) +
+                s(Enroll, df = 4) +
+                s(Top10perc, df = 4) +
+                s(F.Undergrad, df = 4) +
+                Room.Board +
+                s(Personal, df = 4) +
+                s(PhD, df = 4) +
+                s(Terminal, df = 4) +
+                s(S.F.Ratio, df = 4) +
+                s(perc.alumni, df = 4) +
+                s(Expend, df = 4) +
+                s(Grad.Rate, df = 4),
+            data = training_data
+        )
+        anova(
+            the_gam_without_Room_And_Board,
+            the_gam_with_linear_Room_And_Board,
+            the_gam
+        )
         ```
+        
+        We find that there is compelling evidence that a GAM with a linear function of $Room.Board$ is better than a GAM that does not include $Room.Board$ at all. However, there is no evidence that a non-linear function of $Room.Board$ is needed. In other words, based on the results of this ANOVA, M2 is preferred.
 
     (c) Evaluate the model obtained on the test set, and explain the results obtained.
+    
+        ```{r}
+        vector_of_predicted_out_of_state_tuitions <- predict(the_gam, testing_data)
+        vector_of_residuals <-
+            testing_data$Outstate - vector_of_predicted_out_of_state_tuitions
+        residual_sum_of_squares <- t(vector_of_residuals) %*% vector_of_residuals
+        residual_sum_of_squares <- residual_sum_of_squares[1, 1]
+        number_of_observations <- nrow(testing_data)
+        number_of_variables <- 14
+        residual_mean_square <-
+            residual_sum_of_squares / (number_of_observations - number_of_variables)
+        response_values <- testing_data$Outstate
+        sum_of_response_values <- sum(response_values)
+        square_of_sum_of_response_values <- sum_of_response_values^2
+        total_sum_of_squares <-
+            (t(response_values) %*% response_values) -
+            (square_of_sum_of_response_values / number_of_observations)
+        total_mean_square <- total_sum_of_squares / (number_of_observations - 1)
+        adjusted_coefficient_of_determination_R2 <-
+            1 - (residual_mean_square / total_mean_square)
+        adjusted_coefficient_of_determination_R2
+        ```
+        
+        Our GAM with 14 predictors has an adjusted coefficient of determination $R^2$ of $0.785$, which indicates that our GAM predicts out of state tuition decently.
 
     (d) For which variables, if any, is there evidence of a non-linear relationship with the response?
+    
+        The “Anova for Parametric Effects” p-values demonstrate that predictors with low $p$ values are all highly statistically significant, even when only assuming a linear relationship. Alternatively, the “Anova for Nonparametric Effects” $p$ values age correspond to a null hypothesis of a linear relationship versus the alternative of a non-linear relationship.
+        
+        There is evidence of a nonlinear relationship for $Apps$, $Accept$, $Personal$, $S.F.Ratio$, $Expend$, and $Grad.Rate$.
+        
+        ```{r}
+        summary(the_gam)
+        ```
