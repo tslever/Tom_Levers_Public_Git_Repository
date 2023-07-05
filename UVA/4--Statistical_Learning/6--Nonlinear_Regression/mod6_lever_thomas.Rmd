@@ -134,6 +134,7 @@ knitr::opts_chunk$set(
             to = maximum_weighted_mean_of_distances,
             by = 0.1
         )
+        list_with_dis <- list(dis = sequence_of_weighted_means_of_distances)
         data_frame_of_weighted_means_of_distances_and_predicted_NOx_concentrations <-
             data.frame(
                 weighted_mean_of_distances =
@@ -141,7 +142,6 @@ knitr::opts_chunk$set(
             )
         for (degree in range_of_degrees) {
             the_lm <- lm(nox ~ poly(dis, degree), data = Boston)
-            list_with_dis <- list(dis = sequence_of_weighted_means_of_distances)
             vector_of_predicted_nitrogen_oxide_concentrations <- predict(
                 object = the_lm,
                 list_with_dis
@@ -339,25 +339,213 @@ knitr::opts_chunk$set(
 
     (d) Use the `bs()` function to fit a regression spline to predict `nox` using `dis`. Report the output for the fit using four degrees of freedom. How did you choose the knots? Plot the resulting fit.
     
-    The R interpreter determines knots automatically.
+        The R interpreter determines knots automatically.
+    
+        ```{r}
+        library(ggplot2)
+        library(MASS)
+        set.seed(1)
+        lm_4 <- lm(nox ~ splines::bs(dis, df = 4), data = Boston)
+        summary(lm_4)
+        data_frame_of_weighted_means_of_distances_and_predicted_NOx_concentrations <-
+            data.frame(
+                weighted_mean_of_distances =
+                    sequence_of_weighted_means_of_distances
+            )
+        numbers_of_degrees_of_freedom <- 3:10
+        for (number_of_degrees_of_freedom in numbers_of_degrees_of_freedom) {
+            the_lm <- lm(nox ~ splines::bs(dis, df = number_of_degrees_of_freedom), data = Boston)
+            vector_of_predicted_nitrogen_oxide_concentrations <- predict(
+                object = the_lm,
+                list_with_dis
+            )
+            column_label <- paste(
+                "NOx_concentration_predicted_by_B_spline_with_DF_",
+                number_of_degrees_of_freedom,
+                sep = ""
+            )
+            data_frame_of_weighted_means_of_distances_and_predicted_NOx_concentrations[
+                ,
+                column_label
+            ] <- vector_of_predicted_nitrogen_oxide_concentrations
+        }
+        ggplot() +
+         geom_point(
+             data = Boston,
+             mapping = aes(
+                 x = dis,
+                 y = nox,
+                 color = "Actual"
+             )
+         ) +
+         geom_line(
+             data = data_frame_of_weighted_means_of_distances_and_predicted_NOx_concentrations,
+             mapping = aes(
+                 x = weighted_mean_of_distances,
+                 y = NOx_concentration_predicted_by_B_spline_with_DF_4,
+                 color = "[NOx]; DF = 4"
+             )
+         ) +
+         labs(
+             x = "weighted mean of distances",
+             y = "nitrogen oxide concentration",
+             title = "Nitrogen Oxide Concentration Vs. Weighted Mean Of Distances"
+         ) +
+         theme(
+          plot.title = element_text(hjust = 0.5, size = 11),
+         )
+        ```
 
-    ```{r}
-    the_lm <- lm(nox ~ splines::bs(dis, df = 4), data = Boston)
-    summary(the_lm)
-    vector_of_predicted_nitrogen_oxide_concentrations <- predict(the_lm, list_with_dis)
-    plot(nox ~ dis, data = Boston)
-    lines(
-        sequence_of_weighted_means_of_distances,
-        vector_of_predicted_nitrogen_oxide_concentrations,
-        col = "red",
-        lwd = 2
-    )
-    ```
+    (e) Now fit a regression spline for a range of degrees of freedom, and plot the resulting fits and report the resulting RSS. Describe the results obtained.
 
-(e) Now fit a regression spline for a range of degrees of freedom, and plot the resulting fits and report the resulting RSS. Describe the results obtained.
+        ```{r}
+        ggplot() +
+         geom_point(
+             data = Boston,
+             mapping = aes(
+                 x = dis,
+                 y = nox,
+                 color = "Actual"
+             )
+         ) +
+         geom_line(
+             data = data_frame_of_weighted_means_of_distances_and_predicted_NOx_concentrations,
+             mapping = aes(
+                 x = weighted_mean_of_distances,
+                 y = NOx_concentration_predicted_by_B_spline_with_DF_3,
+                 color = "[NOx]; DF = 3"
+             )
+         ) +
+         geom_line(
+             data = data_frame_of_weighted_means_of_distances_and_predicted_NOx_concentrations,
+             mapping = aes(
+                 x = weighted_mean_of_distances,
+                 y = NOx_concentration_predicted_by_B_spline_with_DF_4,
+                 color = "[NOx]; DF = 4"
+             )
+         ) +
+         geom_line(
+             data = data_frame_of_weighted_means_of_distances_and_predicted_NOx_concentrations,
+             mapping = aes(
+                 x = weighted_mean_of_distances,
+                 y = NOx_concentration_predicted_by_B_spline_with_DF_5,
+                 color = "[NOx]; DF = 5"
+             )
+         ) +
+         geom_line(
+             data = data_frame_of_weighted_means_of_distances_and_predicted_NOx_concentrations,
+             mapping = aes(
+                 x = weighted_mean_of_distances,
+                 y = NOx_concentration_predicted_by_B_spline_with_DF_6,
+                 color = "[NOx]; DF = 6"
+             )
+         ) +
+         geom_line(
+             data = data_frame_of_weighted_means_of_distances_and_predicted_NOx_concentrations,
+             mapping = aes(
+                 x = weighted_mean_of_distances,
+                 y = NOx_concentration_predicted_by_B_spline_with_DF_7,
+                 color = "[NOx]; DF = 7"
+             )
+         ) +
+         geom_line(
+             data = data_frame_of_weighted_means_of_distances_and_predicted_NOx_concentrations,
+             mapping = aes(
+                 x = weighted_mean_of_distances,
+                 y = NOx_concentration_predicted_by_B_spline_with_DF_8,
+                 color = "[NOx]; DF = 8"
+             )
+         ) +
+         geom_line(
+             data = data_frame_of_weighted_means_of_distances_and_predicted_NOx_concentrations,
+             mapping = aes(
+                 x = weighted_mean_of_distances,
+                 y = NOx_concentration_predicted_by_B_spline_with_DF_9,
+                 color = "[NOx]; DF = 9"
+             )
+         ) +
+         geom_line(
+             data = data_frame_of_weighted_means_of_distances_and_predicted_NOx_concentrations,
+             mapping = aes(
+                 x = weighted_mean_of_distances,
+                 y = NOx_concentration_predicted_by_B_spline_with_DF_10,
+                 color = "[NOx]; DF = 10"
+             )
+         ) +
+         labs(
+             x = "weighted mean of distances",
+             y = "nitrogen oxide concentration",
+             title = "Nitrogen Oxide Concentration Vs. Weighted Mean Of Distances"
+         ) +
+         theme(
+          plot.title = element_text(hjust = 0.5, size = 11),
+         )
+        ```
+        
+        Per a plot of residual sum of squares vs. number of degrees of freedom of B-spline, residual sum of squares decreases with number of degrees of freedom of B-spline to a minimum for number of degrees of freedom $10$.
+    
+        ```{r}
+        numbers_of_degrees_of_freedom <- 3:10
+        number_of_numbers_of_degrees_of_freedom <- length(numbers_of_degrees_of_freedom)
+        vector_of_residual_sums_of_squares <-
+            rep(NA, number_of_numbers_of_degrees_of_freedom)
+        for (number_of_degrees_of_freedom in numbers_of_degrees_of_freedom) {
+            the_lm <- lm(
+                nox ~ splines::bs(dis, df = number_of_degrees_of_freedom),
+                data = Boston
+            )
+            vector_of_residual_sums_of_squares[number_of_degrees_of_freedom - 2] <- 
+                sum(the_lm$residuals^2)
+        }
+        plot(
+            x = numbers_of_degrees_of_freedom,
+            y = vector_of_residual_sums_of_squares,
+            xlab = "number of degrees of freedom",
+            ylab = "residual sum of squares",
+            type = "l"
+        )
+        optimal_number_of_degrees_of_freedom <-
+            which.min(vector_of_residual_sums_of_squares)
+        points(
+            x = optimal_number_of_degrees_of_freedom + 2,
+            y = vector_of_residual_sums_of_squares[
+                optimal_number_of_degrees_of_freedom
+            ],
+            col = "red",
+            cex = 2,
+            pch = 20
+        )
+        ```
 
 (f) Perform cross-validation or another approach in order to select the best degrees of freedom for a regression spline on this data. Describe your results.
 
+    ```{r, warning = FALSE}
+    cross_validation_estimates_of_prediction_errors <-
+        rep(NA, number_of_numbers_of_degrees_of_freedom)
+    for (number_of_degrees_of_freedom in numbers_of_degrees_of_freedom) {
+        the_glm <- glm(
+            nox ~ splines::bs(dis, df = number_of_degrees_of_freedom),
+            data = Boston
+        )
+        cross_validation_estimates_of_prediction_errors[number_of_degrees_of_freedom - 2] <-
+            boot::cv.glm(Boston, the_glm, K = 10)$delta[1]
+    }
+    plot(
+        numbers_of_degrees_of_freedom,
+        cross_validation_estimates_of_prediction_errors,
+        xlab = "number of degrees of freedom",
+        ylab = "cross validation estimate of prediction error",
+        type = "l"
+    )
+    optimal_degree <- which.min(cross_validation_estimates_of_prediction_errors)
+    points(
+        x = optimal_degree + 2,
+        y = cross_validation_estimates_of_prediction_errors[optimal_degree],
+        col = "red",
+        cex = 2,
+        pch = 20
+    )
+    ```
 
 # 10. This question relates to the College data set.
 
