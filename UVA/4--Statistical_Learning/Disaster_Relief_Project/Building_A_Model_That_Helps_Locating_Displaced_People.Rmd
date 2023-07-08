@@ -260,6 +260,18 @@ the_cv.glmnet <- glmnet::cv.glmnet(
     lambda = sequence_of_lambda_values
 )
 plot(the_cv.glmnet)
+#Gedeck, Peter (tux3md) Thursday, July 6, 2023 6:54 PM
+#In class, the question was raised on how to create the lambda tuning graph for cv.glmnet using ggplot2. Here is code that works #with cvob being the result of the cv.glmnet function.
+#df = data.frame(
+#    lambda=cvob$lambda,
+#    cvm=cvob$cvm,
+#    cvup=cvob$cvup,
+#    cvlo=cvob$cvlo
+#)
+#ggplot(df, aes(x=lambda, y=cvm, ymin=cvlo, ymax=cvup)) +
+#    geom_point() +
+#    scale_x_log10() +
+#    geom_errorbar()
 optimal_lambda <- the_cv.glmnet$lambda.min
 optimal_lambda
 summary_of_performance <- summarize_performance_of_cross_validated_models_using_dplyr(
