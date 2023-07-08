@@ -1,0 +1,97 @@
+---
+title: "DS-6030 Homework Module 7"
+author: "Tom Lever"
+date: 07/08/2023
+output:
+  pdf_document: default
+  html_document: default
+urlcolor: blue
+---
+
+<!--- Below are global settings for knitr. You can override any of them by adding the changes to individual chunks --->
+```{r global_options, include = FALSE}
+# This chunk is called global_options. Due to `include = FALSE`, when the document is rendered, the chunk will be executed, but the results and code will not be included in the rendered document
+knitr::opts_chunk$set(
+    error = TRUE, # Keep compiling upon error
+    collapse = FALSE, # code and corresponding output appear in knit file in separate blocks
+    echo = TRUE, # echo code by default
+    comment = "#", # change comment character
+    #fig.width = 5.5, # set figure width
+    fig.align = "center", # set figure position
+    #out.width = "49%", # set width of displayed images
+    warning = TRUE, # do not show R warnings
+    message = TRUE # do not show R messages
+)
+```
+
+**DS 6030 | Spring 2023 | University of Virginia **
+
+8.  In the lab, a classification tree was applied to the Carseats data set after converting Sales into a qualitative response variable. 
+
+    Now we will seek to predict Sales using regression trees and related approaches, treating the response as a quantitative variable.
+
+    (a) Split the data set into a training set and a test set.
+    
+        ```{r}
+        set.seed(1)
+        library(ISLR2)
+        library(TomLeversRPackage)
+        training_and_testing_data <- split_data_set_into_training_and_testing_data(
+            Carseats,
+            proportion_of_training_data = 0.9
+        )
+        training_data <- training_and_testing_data$training_data
+        testing_data <- training_and_testing_data$testing_data
+        head(training_data, n = 2)
+        head(testing_data, n = 2)
+        ```
+
+    (b) Fit a regression tree to the training set. Plot the tree, and interpret the results. What test MSE do you obtain?
+    
+        ```{r, fig.height = 10, fig.width = 14}
+        library(tree)
+        the_tree <- tree(Sales ~ ., data = training_data)
+        summary(the_tree)
+        plot(the_tree)
+        text(the_tree, pretty = 0)
+        vector_of_predicted_sales <- predict(the_tree, newdata = testing_data)
+        vector_of_actual_sales <- testing_data$Sales
+        calculate_mean_squared_error(vector_of_predicted_sales, vector_of_actual_sales)
+        ```
+        
+        When shelf location is good and price is less than $109.5$ monetary units, our tree predicts that 12.190 thousand child car seats will be sold at each location in each time period.
+        
+        The test Mean Squared Error of our tree when predicting sales is $4.896 \ thousands^2$.
+
+    (c) Use cross-validation in order to determine the optimal level of tree complexity. Does pruning the tree improve the test MSE?
+
+    (d) Use the bagging approach in order to analyze this data. What test MSE do you obtain? Use the `importance()` function to determine which variables are most important.
+
+    (e) Use random forests to analyze this data. What test MSE do you obtain? Use the `importance()` function to determine which variables are most important. Describe the effect of m, the number of variables considered at each split, on the error rate obtained.
+
+    (f) Now analyze the data using BART, and report your results. (skip this exercise)
+
+# 9. This problem involves the OJ data set which is part of the ISLR package.
+
+(a) Create a training set containing a random sample of 800 observations, and a test set containing the remaining observations.
+
+
+(b) Fit a tree to the training data, with Purchase as the response and the other variables as predictors. Use the `summary()` function to produce summary statistics about the tree, and describe the results obtained. What is the training error rate? How many terminal nodes does the tree have?
+
+(c) Type in the name of the tree object in order to get a detailed text output. Pick one of the terminal nodes, and interpret the information displayed.
+
+(d) Create a plot of the tree, and interpret the results.
+
+(e) Predict the response on the test data, and produce a confusion matrix comparing the test labels to the predicted test labels. What is the test error rate?
+
+(f) Apply the `cv.tree()` function to the training set in order to determine the optimal tree size.
+
+(g) Produce a plot with tree size on the x-axis and cross-validated classification error rate on the y-axis.
+
+(h) Which tree size corresponds to the lowest cross-validated classification error rate?
+
+(i) Produce a pruned tree corresponding to the optimal tree size obtained using cross-validation. If cross-validation does not lead to selection of a pruned tree, then create a pruned tree with five terminal nodes.
+
+(j) Compare the training error rates between the pruned and unpruned trees. Which is higher?
+
+(k) Compare the test error rates between the pruned and unpruned trees. Which is higher?
