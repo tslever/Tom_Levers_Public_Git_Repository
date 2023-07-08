@@ -4,7 +4,10 @@
 \alias{calculate_mean_squared_error}
 \title{calculate_mean_squared_error}
 \usage{
-calculate_mean_squared_error(model)
+calculate_mean_squared_error(
+  vector_of_predicted_response_values,
+  vector_of_actual_response_values
+)
 }
 \arguments{
 \item{model}{The model}
