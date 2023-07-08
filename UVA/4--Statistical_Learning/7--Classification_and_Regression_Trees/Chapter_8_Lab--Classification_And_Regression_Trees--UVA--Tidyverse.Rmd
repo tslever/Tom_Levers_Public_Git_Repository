@@ -1,0 +1,359 @@
+# Chapter 8 Lab: Decision Trees
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(error=TRUE,        # Keep compiling upon error
+                      collapse=FALSE,    # collapse by default
+                      echo=TRUE,         # echo code by default
+                      comment = "#>",    # change comment character
+                      fig.width = 5.5,     # set figure width
+                      fig.align = "center",# set figure position
+                      out.width = "80%", # set width of displayed images
+                      warning=FALSE,     # do not show R warnings
+                      message=FALSE)     # do not show R messages
+```
+
+
+We'll use `install.packages('rpart')` which has a more caret-like interface.
+
+```{r setup}
+#library(tree)
+#library(ISLR)
+#attach(Carseats)
+carseats <- ISLR::Carseats
+
+#High=factor(ifelse(Sales<=8,"No","Yes"))
+High <- factor(ifelse(carseats$Sales<=8, "No", "Yes"))
+
+library(tidyverse)
+#Carseats=data.frame(Carseats,High)
+carseats <- tibble(carseats) %>% add_column(High)
+```
+
+## Fitting Classification Trees
+
+```{r DT_1}
+
+# https://daviddalpiaz.github.io/r4sl/trees.html
+# https://www.gormanalysis.com/blog/decision-trees-in-r-using-rpart/
+
+#tree.carseats=tree(High~.-Sales,Carseats)
+# more caret-like interface
+# more control than `tree::tree`
+# CV-driven auto-selection: "the automatic is strong with this one" -- Edward
+set.seed(1)
+tree.carseats <- rpart::rpart(High~.-Sales, data=carseats, 
+                              method='class', parms=list(split='information'))
+                              #control = rpart::rpart.control(maxdepth=1) 
+tree.carseats.party <- partykit::as.party(tree.carseats)
+
+#summary(tree.carseats)
+tree.carseats.party
+```
+
+The `party` class in `install.packages('partykit')` extends ggplot to trees
+with `ggparty` `install.packages('ggparty')`
+
+```{r DT_2}
+# https://cran.r-project.org/web/packages/ggparty/vignettes/ggparty-graphic-partying.html
+# https://cran.r-project.org/web/packages/partykit/vignettes/constparty.pdf
+
+#plot(tree.carseats)
+#text(tree.carseats,pretty=0)
+ggparty::ggparty(tree.carseats.party) +
+  ggparty::geom_edge() +
+  ggparty::geom_edge_label() +
+  ggparty::geom_node_label(aes(label=splitvar), ids="inner") + # geom_node_splitvar() +
+  ggparty::geom_node_plot(gglist = list(geom_bar(aes(x="",fill=High)),
+                                        coord_polar("y"),
+                                        theme_void()))
+
+#tree.carseats
+```
+
+```{r DT_3}
+set.seed(2)
+#train=sample(1:nrow(Carseats), 200)
+#Carseats.test=Carseats[-train,]
+#High.test=High[-train]
+#tree.carseats=tree(High~.-Sales,Carseats,subset=train)
+#tree.pred=predict(tree.carseats,Carseats.test,type="class")
+#table(tree.pred,High.test)
+#(86+57)/200
+
+carseats.tree_fits <- caret::train(High~.-Sales, data=carseats, 
+                                   method='rpart', tuneLength=30,
+                      trControl=caret::trainControl("cv", number=5,
+                                                    returnResamp='all',
+                                                    savePredictions=TRUE,
+                                                    classProbs=TRUE))
+caret::confusionMatrix(carseats.tree_fits)
+```
+
+- Gini and Entropy (i.e., "information") are attempting to make pure leaf nodes
+- Selecting complexity for accuracy is trying to maximize (TP+FP)/N
+- Deviance (-2 log likelihood) is trying to make a tree model that 
+  makes accurate *probability* predictions in each leaf node...
+  - -2 log [bernoulli] likelihood is -2[ylog(p)+(1-y)log(1-p)]
+    - optimizing (minimizing) for this (deviance) is different than 
+      optimizing (maximizing) for ((TP+FP)/N) accuracy
+- Choosing based on accuracy (i.e., make the most "right" calls means... i.e. 
+  make a "good" classifier assuming TP and TN are equally "good"), and
+- choosing based on deviance (i.e., make your probability predictions as close
+  to correct as possible... make a good probabilistic model)
+- are different things and (probably) *will* choose different trees!!!  
+
+```{r DT_4}
+set.seed(3)
+#cv.carseats=cv.tree(tree.carseats,FUN=prune.misclass)
+#names(cv.carseats)
+
+
+# note above that `tuneLength=30` doesn't actually control what `rpart` does...
+# so here we instead just match what r part does
+tree.carseats.cp <- as_tibble(tree.carseats$cptable)$CP
+carseats.tree_fits <- caret::train(High~.-Sales, data=carseats, 
+                                   method='rpart', 
+                                   tuneGrid=data.frame(cp=tree.carseats.cp),
+                                   metric="logLoss",
+                      trControl=caret::trainControl("cv", number=5,
+                                                    returnResamp='all',
+                                                    savePredictions=TRUE,
+                                                    classProbs=TRUE, 
+                                                    summaryFunction=mnLogLoss))
+# *also note that* 
+# THIS DOES NOT WORK:
+# https://stackoverflow.com/questions/40493412/how-to-pick-a-different-model-from-the-finalmodel-in-caret
+# THIS DOES NOT WORK:
+#tmp <- update(carseats.tree_fits, param=list(.cp=carseats.tree_fits$results$cp[21]))
+# THIS DOES NOT WORK:
+#tmp <- update(carseats.tree_fits, param=list(.cp=0.03658537))
+# I suspect it's because `carseats.tree_fits$finalModel` is not the full rpart fit
+
+# ...
+# very disappointing from caret... 
+# I just wanted to switch over to each model to check it's $T$ (ISLR 8.4)
+# ... oh well... we'll do it this way:
+
+#cv.carseats
+#par(mfrow=c(1,2))
+#plot(cv.carseats$size,cv.carseats$dev,type="b")
+#plot(cv.carseats$k,cv.carseats$dev,type="b")
+
+# https://cran.r-project.org/web/packages/latex2exp/vignettes/using-latex2exp.html
+# http://www.sthda.com/english/wiki/ggplot2-axis-ticks-a-guide-to-customize-tick-marks-and-labels
+# `size` in `cv.tree` is `|T|` in the ISLR -- i.e., the number of terminal nodes
+as_tibble(tree.carseats$cptable) %>% 
+  mutate(x=rank(CP)) %>%
+  rename(cp=CP) %>% 
+  arrange(cp) %>%
+  mutate(T = nsplit+1) %>%
+  right_join(as_tibble(carseats.tree_fits$resample), by="cp") %>%
+  ggplot(mapping=aes(size=T, x=x, y=logLoss)) + geom_point() +
+  xlab(latex2exp::TeX("$cp=k=\\alpha$")) +
+  scale_x_continuous(breaks=1:length(tree.carseats.cp), 
+        labels=round(rev(tree.carseats.cp),3))
+
+```
+
+```{r DT_5}
+#prune.carseats=prune.misclass(tree.carseats,best=9)
+#plot(prune.carseats)
+#text(prune.carseats,pretty=0)
+
+best.logloss <- partykit::as.party(carseats.tree_fits$finalModel)
+colnames(best.logloss$data)[1] <- "High"
+
+ggparty::ggparty(best.logloss) +
+  ggparty::geom_edge() +
+  ggparty::geom_edge_label() +
+  ggparty::geom_node_label(aes(label=splitvar), ids="inner") + 
+  ggparty::geom_node_plot(gglist = list(geom_bar(aes(x="",fill=High)),
+                                        coord_polar("y"),
+                                        theme_void()))
+
+```
+
+```{r DT_6}
+#tree.pred=predict(prune.carseats,Carseats.test,type="class")
+#table(tree.pred,High.test)
+#(94+60)/200
+
+caret::confusionMatrix(carseats.tree_fits)
+```
+
+```{r DT_7}
+
+#prune.carseats=prune.misclass(tree.carseats,best=15)
+#plot(prune.carseats)
+#text(prune.carseats,pretty=0)
+set.seed(1)
+tree.carseats.deeper <- rpart::rpart(High~.-Sales, data=carseats, 
+                                     method='class', parms=list(split='gini'),
+                                     control=rpart::rpart.control(minsplit=6, 
+                                               minbucket=3, cp=0, maxdepth=9))
+
+# https://datascience.stackexchange.com/questions/31346/caret-and-rpart-does-caret-automatically-prune-rpart-trees/31355
+
+prune_level <- tree.carseats.deeper$cptable[13,'CP']
+tree.carseats.deeper.pruned <- rpart::prune(tree.carseats.deeper, 
+                                            cp=prune_level)
+
+ggparty::ggparty(partykit::as.party(tree.carseats.deeper.pruned), 
+                 horizontal=TRUE) +
+  ggparty::geom_edge() +
+  ggparty::geom_edge_label() +
+  ggparty::geom_node_label(aes(label=splitvar), ids="inner") + 
+  ggparty::geom_node_plot(gglist = list(geom_bar(aes(x="",fill=High)),
+                                        coord_polar("y"),
+                                        theme_void()))
+
+```
+
+```{r DT_8}
+set.seed(1)
+tree.carseats.deeper.pruned <- caret::train(High~.-Sales, data=carseats, 
+                               method='rpart', 
+                               control=rpart::rpart.control(minsplit=6, 
+                                                            minbucket=3, 
+                                                            cp=0, 
+                                                            maxdepth=9),
+                               tuneGrid=data.frame(cp=prune_level),
+                               trControl=caret::trainControl("cv", number=5,
+                                                             returnResamp='all'))
+
+
+
+#tree.pred=predict(prune.carseats,Carseats.test,type="class")
+#table(tree.pred,High.test)
+#(86+62)/200
+caret::confusionMatrix(tree.carseats.deeper.pruned)
+
+```
+
+## Fitting Regression Trees
+
+```{r RT_1}
+#library(MASS)
+boston <- MASS::Boston
+set.seed(1)
+
+#train = sample(1:nrow(Boston), nrow(Boston)/2)
+#tree.boston=tree(medv~.,Boston,subset=train)
+#summary(tree.boston)
+
+tree.boston <- rpart::rpart(medv~., data=boston, method='anova')
+tree.boston.party <- partykit::as.party(tree.boston)
+tree.boston.party
+```
+
+```{r RT_2}
+#plot(tree.boston)
+#text(tree.boston,pretty=0)
+
+ggparty::ggparty(tree.boston.party, horizontal=TRUE) +
+  ggparty::geom_edge() +
+  ggparty::geom_edge_label() +
+  ggparty::geom_node_label(aes(label=splitvar), ids="inner") + 
+  ggparty::geom_node_plot(gglist = list(geom_histogram(aes(x=medv), binwidth=3),
+                                        theme(axis.title.x = element_blank(),
+                                              axis.title.y = element_blank()))) +
+  ggtitle('Decision Tree and resulting `medv` bins')
+
+# http://www.sthda.com/english/wiki/ggplot2-title-main-axis-and-legend-titles
+```
+
+```{r RT_3}
+
+#cv.boston=cv.tree(tree.boston)
+#plot(cv.boston$size,cv.boston$dev,type='b')
+# `size` in `cv.tree` is `|T|` in the ISLR -- i.e., the number of terminal nodes
+set.seed(1)
+c <- rpart::rpart.control(minsplit=6,  minbucket=3, cp=0, maxdepth=9)
+tree.v2.boston <- rpart::rpart(medv~., data=boston, method='anova', control=c)
+tree.v2.boston.cp <- as_tibble(tree.v2.boston$cptable)$CP
+set.seed(1)
+boston.caret_rpart <- caret::train(medv~., data=boston, 
+                                   method='rpart', 
+                                   tuneGrid=data.frame(cp=tree.v2.boston.cp),
+                                   control=c,
+                      trControl=caret::trainControl("cv", number=5,
+                                                    returnResamp='all'))
+as_tibble(tree.v2.boston$cptable) %>% 
+  mutate(size=nsplit+1) %>%
+  rename(cp=CP) %>% 
+  inner_join(as_tibble(boston.caret_rpart$resample), by="cp") %>%
+  ggplot() + geom_point(aes(x=size, y=RMSE, size=cp)) + xlab('|T|') +
+  ggtitle("Deviance is RSS for linear model regression: RMSE=mean+root on that")
+
+```
+
+```{r RT_4}
+#prune.boston=prune.tree(tree.boston,best=5)
+#plot(prune.boston)
+#text(prune.boston,pretty=0)
+
+# ggparty::ggparty(partykit::as.party(boston.caret_rpart$finalModel))$data
+# `as.party` is not putting the bin averages, etc. into the info column...
+# we'll just go with count for now until I figure out how to make 
+# rpart and party work a little more smoothely together...
+# (a) the way the book plots would certainly be more straightforward here
+# (b) one way the books method is better is that "height" means something
+partykit::as.party(boston.caret_rpart$finalModel) %>%
+  ggparty::ggparty(horizontal=TRUE) +
+  ggparty::geom_edge() +
+  ggparty::geom_edge_label() +
+  ggparty::geom_node_label(aes(label=splitvar), ids="inner") +
+  ggparty::geom_node_label(aes(label=nodesize), ids="terminal") +
+  ggtitle('Decision Tree and resulting counts in each bin')
+```
+
+- the heights on this plot show improvement gains in RSS...
+- this is better than the ggparty version which doesn't show this
+- but, it's very hard to use this plot with the way the text all bunches up
+- they need to give a `horiztonal=FALSE` option, but they don't immediately
+- ...
+- my god all of the functionality I've been demonstrating is super garbage
+- you're probably gonna wanna just stick with what base R gives you as described
+  in the book...
+
+```{r RT_5}
+# https://stackoverflow.com/questions/50602385/how-to-plot-a-decision-tree-horizontally-in-r-markdown
+plot(boston.caret_rpart$finalModel, horiz=TRUE)
+text(boston.caret_rpart$finalModel, pretty=0)
+```
+
+
+```{r RT_6}
+#yhat=predict(tree.boston,newdata=Boston[-train,])
+#boston.test=Boston[-train,"medv"]
+#plot(yhat,boston.test)
+#abline(0,1)
+
+# http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/#a-colorblind-friendly-palette
+cbbPalette <- c("#009E73", "#CC79A7", "#F0E442", "#000000", "#E69F00", 
+                "#56B4E9", "#0072B2", "#D55E00")
+tibble(y=boston$medv, 
+       yhat_1=predict(tree.boston, newx=boston),
+       yhat_2=predict(boston.caret_rpart, newx=boston)) %>%
+  ggplot() + geom_point(aes(x=y,y=yhat_1,color="More Prunning")) +
+  geom_point(aes(x=y,y=yhat_2,color="Less Prunning")) +
+  scale_colour_manual(values=cbbPalette) + ylab("Decision Tree Predictions") +
+  geom_abline(intercept=0, slope=1) 
+# https://ggplot2.tidyverse.org/reference/geom_abline.html
+
+```
+
+```{r RT_7}
+#mean((yhat-boston.test)^2)
+
+# instead, just look at it for every model.
+# or better yet go look ath the RMSE versus |T| plot above to see it visually
+# and with the uncertainty... 
+boston.caret_rpart
+```
+
+
+
+
+
+
