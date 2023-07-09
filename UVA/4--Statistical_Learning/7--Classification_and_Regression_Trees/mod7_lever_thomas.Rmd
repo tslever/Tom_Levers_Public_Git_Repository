@@ -85,13 +85,38 @@ knitr::opts_chunk$set(
         plot(pruned_tree)
         text(pruned_tree, pretty = 0)
         vector_of_predicted_sales <- predict(pruned_tree, newdata = testing_data)
-        vector_of_actual_sales <- testing_data$Sales
         calculate_mean_squared_error(vector_of_predicted_sales, vector_of_actual_sales)
         ```
         
-        The Mean Squared Error for the pruned tree is greater and less desirable than the Mean Squared Error for the full tree.
+        The test Mean Squared Error for the pruned tree is greater and less desirable than the Mean Squared Error for the full tree.
 
     (d) Use the bagging approach in order to analyze this data. What test MSE do you obtain? Use the `importance()` function to determine which variables are most important.
+    
+        Per *An Introduction to Statistical Learning* (Second Edition), bagging "is simply a special case of a random forest with [the number of variables randomly sampled as candidates at each split] $m = p$ the number of predictors." 
+    
+        ```{r}
+        library(randomForest)
+        index_of_column_Sales <-
+            get_index_of_column_of_data_frame(training_data, "Sales")
+        data_frame_of_predictors <- training_data[, -index_of_column_Sales]
+        data_frame_of_sales <- training_data[, index_of_column_Sales]
+        number_of_predictors <- ncol(data_frame_of_predictors)
+        BAg <- randomForest(
+            x = data_frame_of_predictors,
+            y = data_frame_of_sales,
+            mtry = number_of_predictors,
+            importance = TRUE
+        )
+        vector_of_predicted_sales <- predict(BAg, newdata = testing_data)
+        calculate_mean_squared_error(vector_of_predicted_sales, vector_of_actual_sales)
+        importance(BAg)
+        ```
+        
+        The test Mean Squared Error for our bootstrap aggregation (BAg) is $2.974$, which is $0.607$ of the MSE for our full tree and $0.438$ of the MSE for our pruned tree.
+        
+        According to [In a random forest, is larger %IncMSE better or worse?](https://stats.stackexchange.com/questions/162465/in-a-random-forest-is-larger-incmse-better-or-worse), "%IncMSE is the most robust and informative measure. IT is the increase in mse of predictions(estimated with out-of-bag-CV) as a result of variable j being permuted(values randomly shuffled)... the higher the number, the more important."
+        
+        $%IncMSE$ is highest for $Price$ followed by $ShelveLoc$; $Price$ and $ShelveLoc$ are the two most important variables.
 
     (e) Use random forests to analyze this data. What test MSE do you obtain? Use the `importance()` function to determine which variables are most important. Describe the effect of m, the number of variables considered at each split, on the error rate obtained.
 
