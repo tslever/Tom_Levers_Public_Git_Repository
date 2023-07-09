@@ -6,7 +6,8 @@
 \usage{
 split_data_set_into_training_and_testing_data(
   data_frame,
-  proportion_of_training_data
+  number_of_training_data = NULL,
+  proportion_of_training_data = NULL
 )
 }
 \arguments{

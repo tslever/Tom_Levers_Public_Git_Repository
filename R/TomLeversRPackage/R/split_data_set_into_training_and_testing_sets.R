@@ -6,10 +6,15 @@
 #' @examples split_data <- split_data_set_into_training_and_testing_sets(data_frame = Default, proportion_of_training_data = 0.5)
 
 #' @export
-split_data_set_into_training_and_testing_data <- function(data_frame, proportion_of_training_data) {
+split_data_set_into_training_and_testing_data <- function(data_frame, number_of_training_data = NULL, proportion_of_training_data = NULL) {
  number_of_observations <- nrow(data_frame)
  vector_of_random_indices <- sample(1:number_of_observations)
- number_of_training_data <- ceiling(number_of_observations * proportion_of_training_data)
+ if (is.null(number_of_training_data)) {
+     number_of_training_data <- ceiling(number_of_observations * proportion_of_training_data)
+ }
+ if (is.null(number_of_training_data)) {
+    stop("Both number_of_training_data and proportion_of_training_data are NULL.")
+ }
  vector_of_indices_of_training_data <- vector_of_random_indices[1:number_of_training_data]
  vector_of_indices_of_testing_data <- vector_of_random_indices[(number_of_training_data + 1) : number_of_observations]
  training_data <- data_frame[vector_of_indices_of_training_data, ]
