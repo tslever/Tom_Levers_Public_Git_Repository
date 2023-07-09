@@ -230,7 +230,24 @@ knitr::opts_chunk$set(
         
         Per our full tree, the most important predictor of whether a customer will purchase Citrus Hill or Minute Maid orange juice is loyalty to Citrus Hill. The split criterion for the first non-root / internal node / the first pair of branches is $LoyalCH$. The split criteria for the second internal node in the second echelon is also $LoyalCH$.
 
-(e) Predict the response on the test data, and produce a confusion matrix comparing the test labels to the predicted test labels. What is the test error rate?
+    (e) Predict the response on the test data, and produce a confusion matrix comparing the test labels to the predicted test labels. What is the test error rate?
+
+        ```{r}
+        vector_of_predicted_purchases <- predict(full_tree, testing_data, type = "class")
+        confusion_matrix <- table(vector_of_predicted_purchases, testing_data$Purchase)
+        confusion_matrix
+        number_of_purchases_of_Citrus_Hill_orange_juice_predicted_correctly <- 144
+        number_of_purchases_of_Minute_Maid_orange_juice_predicted_correctly <- 70
+        number_of_purchases_predicted_correctly <-
+            number_of_purchases_of_Citrus_Hill_orange_juice_predicted_correctly +
+            number_of_purchases_of_Minute_Maid_orange_juice_predicted_correctly
+        number_of_purchases <- nrow(testing_data)
+        test_accuracy <- number_of_purchases_predicted_correctly / number_of_purchases
+        test_error_rate <- 1 - test_accuracy
+        test_error_rate
+        ```
+        
+        The test error rate is about $0.207$.
 
 (f) Apply the `cv.tree()` function to the training set in order to determine the optimal tree size.
 
