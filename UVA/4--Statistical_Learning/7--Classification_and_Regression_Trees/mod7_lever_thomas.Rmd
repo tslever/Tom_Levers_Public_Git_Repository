@@ -42,8 +42,6 @@ knitr::opts_chunk$set(
         )
         training_data <- training_and_testing_data$training_data
         testing_data <- training_and_testing_data$testing_data
-        head(training_data, n = 2)
-        head(testing_data, n = 2)
         ```
 
     (b) Fit a regression tree to the training set. Plot the tree, and interpret the results. What test MSE do you obtain?
@@ -67,21 +65,21 @@ knitr::opts_chunk$set(
     
         ```{r}
         object_of_types_prune_and_tree_sequence <- cv.tree(full_tree)
-        vector_of_numbers_of_leaves <- object_of_types_prune_and_tree_sequence$size
+        vector_of_sizes <- object_of_types_prune_and_tree_sequence$size
         vector_of_deviances <- object_of_types_prune_and_tree_sequence$dev
-        plot(vector_of_numbers_of_leaves, vector_of_deviances, type = "l")
+        plot(vector_of_sizes, vector_of_deviances, type = "l")
         index_of_minimum_deviance <- which.min(vector_of_deviances)
-        optimal_number_of_leaves <-
-            vector_of_numbers_of_leaves[index_of_minimum_deviance]
+        optimal_size <-
+            vector_of_sizes[index_of_minimum_deviance]
         minimum_deviance <- min(vector_of_deviances)
         points(
-            optimal_number_of_leaves,
+            optimal_size,
             minimum_deviance,
             col = "red",
             cex = 2,
             pch = 20
         )
-        pruned_tree <- prune.tree(full_tree, best = optimal_number_of_leaves)
+        pruned_tree <- prune.tree(full_tree, best = optimal_size)
         plot(pruned_tree)
         text(pruned_tree, pretty = 0)
         vector_of_predicted_sales <- predict(pruned_tree, newdata = testing_data)
@@ -139,7 +137,7 @@ knitr::opts_chunk$set(
         )
         ```
         
-        The test Mean Squared Error for our bootstrap aggregation (BAg) is $2.974$, which is $0.607$ of the MSE for our full tree and $0.438$ of the MSE for our pruned tree.
+        The test Mean Squared Error for our bootstrap aggregation (BAg) is $2.913$, which is $0.595$ of the MSE for our full tree and $0.429$ of the MSE for our pruned tree.
         
         According to [In a random forest, is larger %IncMSE better or worse?](https://stats.stackexchange.com/questions/162465/in-a-random-forest-is-larger-incmse-better-or-worse), "%IncMSE is the most robust and informative measure. IT is the increase in mse of predictions(estimated with out-of-bag-CV) as a result of variable j being permuted(values randomly shuffled)... the higher the number, the more important."
         
@@ -234,7 +232,8 @@ knitr::opts_chunk$set(
 
         ```{r}
         vector_of_predicted_purchases <- predict(full_tree, testing_data, type = "class")
-        confusion_matrix <- table(vector_of_predicted_purchases, testing_data$Purchase)
+        vector_of_actual_purchases <- testing_data$Purchase
+        confusion_matrix <- table(vector_of_predicted_purchases, vector_of_actual_purchases)
         confusion_matrix
         number_of_purchases_of_Citrus_Hill_orange_juice_predicted_correctly <- 144
         number_of_purchases_of_Minute_Maid_orange_juice_predicted_correctly <- 70
@@ -249,14 +248,56 @@ knitr::opts_chunk$set(
         
         The test error rate is about $0.207$.
 
-(f) Apply the `cv.tree()` function to the training set in order to determine the optimal tree size.
+    (f) Apply the `cv.tree()` function to the training set in order to determine the optimal tree size.
+    
+        ```{r}
+        object_of_types_prune_and_tree_sequence <-
+            cv.tree(full_tree, FUN = prune.misclass)
+        vector_of_sizes <- object_of_types_prune_and_tree_sequence$size
+        vector_of_numbers_of_errors <- object_of_types_prune_and_tree_sequence$dev
+        minimum_number_of_errors <- min(vector_of_numbers_of_errors)
+        index_of_minimum_number_of_errors <- which.min(vector_of_numbers_of_errors)
+        optimal_size <-
+            vector_of_sizes[index_of_minimum_number_of_errors]
+        optimal_size
+        ```
+        
+        The optimal tree size is $3$.
 
-(g) Produce a plot with tree size on the x-axis and cross-validated classification error rate on the y-axis.
+    (g) Produce a plot with tree size on the x-axis and cross-validated classification error rate on the y-axis.
+    
+        ```{r}
+        plot(
+            vector_of_sizes,
+            vector_of_numbers_of_errors,
+            type = "l",
+            xlab = "tree size",
+            ylab = "cross-validated number of classification errors"
+        )
+        points(
+            optimal_size,
+            minimum_number_of_errors,
+            col = "red",
+            cex = 2,
+            pch = 20
+        )
+        ```
 
-(h) Which tree size corresponds to the lowest cross-validated classification error rate?
+    (h) Which tree size corresponds to the lowest cross-validated classification error rate?
 
-(i) Produce a pruned tree corresponding to the optimal tree size obtained using cross-validation. If cross-validation does not lead to selection of a pruned tree, then create a pruned tree with five terminal nodes.
+        A tree size of $3$ corresponds to the lowest cross-validated classification number of errors.
 
-(j) Compare the training error rates between the pruned and unpruned trees. Which is higher?
+    (i) Produce a pruned tree corresponding to the optimal tree size obtained using cross-validation. If cross-validation does not lead to selection of a pruned tree, then create a pruned tree with five terminal nodes.
 
-(k) Compare the test error rates between the pruned and unpruned trees. Which is higher?
+        ```{r}
+        pruned_tree <- prune.tree(full_tree, best = optimal_size)
+        plot(pruned_tree)
+        text(pruned_tree, pretty = 0)
+        ```
+
+    (j) Compare the training error rates between the pruned and unpruned trees. Which is higher?
+
+
+
+    (k) Compare the test error rates between the pruned and unpruned trees. Which is higher?
+
