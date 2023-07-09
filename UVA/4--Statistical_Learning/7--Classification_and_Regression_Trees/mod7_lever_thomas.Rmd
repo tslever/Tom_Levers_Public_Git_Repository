@@ -101,7 +101,7 @@ knitr::opts_chunk$set(
         data_frame_of_predictors <- training_data[, -index_of_column_Sales]
         data_frame_of_sales <- training_data[, index_of_column_Sales]
         number_of_predictors <- ncol(data_frame_of_predictors)
-        get_test_MSE_and_vector_of_ordered_percents_increase_for_random_forest <-
+        get_test_MSE_and_vector_of_ordered_percents_increase_in_MSE_for_random_forest <-
             function(mtry) {
             the_randomForest <- randomForest(
                 formula = Sales ~ .,
@@ -124,17 +124,17 @@ knitr::opts_chunk$set(
                 vector_of_percents_increase_in_MSE[
                     vector_of_indices_of_ordered_percents_increase_in_MSE
                 ]
-            list_of_test_MSE_and_vector_of_ordered_percents_increase_for_random_forest <-
+            list_of_test_MSE_and_vector_of_ordered_percents_increase_in_MSE_for_random_forest <-
                 list(
                     test_MSE = test_MSE,
                     vector_of_ordered_percents_increase_in_MSE =
                         vector_of_ordered_percents_increase_in_MSE
                 )
             return(
-                list_of_test_MSE_and_vector_of_ordered_percents_increase_for_random_forest
+                list_of_test_MSE_and_vector_of_ordered_percents_increase_in_MSE_for_random_forest
             )
         }
-        get_test_MSE_and_vector_of_ordered_percents_increase_for_random_forest(
+        get_test_MSE_and_vector_of_ordered_percents_increase_in_MSE_for_random_forest(
             mtry = number_of_predictors
         )
         ```
@@ -147,7 +147,47 @@ knitr::opts_chunk$set(
 
     (e) Use random forests to analyze this data. What test MSE do you obtain? Use the `importance()` function to determine which variables are most important. Describe the effect of m, the number of variables considered at each split, on the error rate obtained.
     
+        ```{r}
+        data_frame_of_values_of_mtry_and_test_MSEs <- data.frame(
+            matrix(NA, nrow = number_of_predictors, ncol = 2)
+        )
+        colnames(data_frame_of_values_of_mtry_and_test_MSEs) <- c("mtry", "test_MSE")
+        for (mtry in 1:number_of_predictors) {
+            print(paste("mtry: ", mtry, sep = ""))
+            data_frame_of_values_of_mtry_and_test_MSEs[mtry, "mtry"] <- mtry
+            test_MSE_and_vector_of_ordered_percents_increase_in_MSE <- 
+                get_test_MSE_and_vector_of_ordered_percents_increase_in_MSE_for_random_forest(
+                    mtry = mtry
+                )
+            test_MSE <- test_MSE_and_vector_of_ordered_percents_increase_in_MSE$test_MSE
+            vector_of_ordered_percents_increase_in_MSE <-
+                test_MSE_and_vector_of_ordered_percents_increase_in_MSE$
+                    vector_of_ordered_percents_increase_in_MSE
+            print(vector_of_ordered_percents_increase_in_MSE)
+            data_frame_of_values_of_mtry_and_test_MSEs[mtry, "test_MSE"] <- test_MSE
+        }
+        print(data_frame_of_values_of_mtry_and_test_MSEs)
+        vector_of_values_of_mtry <- data_frame_of_values_of_mtry_and_test_MSEs$mtry
+        vector_of_test_MSEs <- data_frame_of_values_of_mtry_and_test_MSEs$test_MSE
+        plot(
+            x = vector_of_values_of_mtry,
+            y = vector_of_test_MSEs,
+            type = "l"
+        )
+        index_of_minimum_test_MSE <- which.min(vector_of_test_MSEs)
+        optimal_value_of_mtry <-
+            vector_of_values_of_mtry[index_of_minimum_test_MSE]
+        minimum_test_MSE <- min(vector_of_test_MSEs)
+        points(
+            optimal_value_of_mtry,
+            minimum_test_MSE,
+            col = "red",
+            cex = 2,
+            pch = 20
+        )
+        ```
         
+        See above plot for test Mean Squared Errors for different values of the number of variables randomly sampled as candidates at each split. Test MSE decreases exponentially with number of variables. In all cases $ShelveLoc$ and $Price$ are the most important predictors.
 
     (f) Now analyze the data using BART, and report your results. (skip this exercise)
 
