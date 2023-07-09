@@ -191,12 +191,27 @@ knitr::opts_chunk$set(
 
     (f) Now analyze the data using BART, and report your results. (skip this exercise)
 
-# 9. This problem involves the OJ data set which is part of the ISLR package.
+9.  This problem involves the OJ data set which is part of the ISLR package.
 
-(a) Create a training set containing a random sample of 800 observations, and a test set containing the remaining observations.
+    (a) Create a training set containing a random sample of 800 observations, and a test set containing the remaining observations.
 
+        ```{r}
+        training_and_testing_data <- split_data_set_into_training_and_testing_data(
+            OJ,
+            number_of_training_data = 800
+        )
+        training_data <- training_and_testing_data$training_data
+        testing_data <- training_and_testing_data$testing_data
+        ```
 
-(b) Fit a tree to the training data, with Purchase as the response and the other variables as predictors. Use the `summary()` function to produce summary statistics about the tree, and describe the results obtained. What is the training error rate? How many terminal nodes does the tree have?
+    (b) Fit a tree to the training data, with Purchase as the response and the other variables as predictors. Use the `summary()` function to produce summary statistics about the tree, and describe the results obtained. What is the training error rate? How many terminal nodes does the tree have?
+
+        ```{r}
+        full_tree <- tree(Purchase ~ ., data = OJ)
+        summary(full_tree)
+        ```
+        
+        Our full tree is a classification tree that predicts whether a customer will purchase Citrus Hill or Minute Maid orange juice. A tree is grown by binary recursive partitioning using the response in the specified formula, $Purchase$, and choosing splits from the terms of the right-hand-side, which in our case are all terms besides $Purchase$. The predictors actually used in tree construction are $LoyalCH$, $PriceDiff$, and $ListPriceDiff$. $Purchase$ is a factor with levels $CH$ and $MM$ indicating whether the customer purchased Citrus Hill or Minute Maid Orange Juice. $LoyaltyCH$ seems to be a rate of customer brand loyalty for CH between $0$ and $1$. $PriceDiff$ seems to be net sale price of Minute Maid orange juice less net sale price of Citrus Hill orange juice in dollars. $ListPriceDiff$ seems to be the list price of Minute Maid orange juice less list price of Citrus Hill orange juice in dollars. In our full tree there are $8$ terminal nodes / leaves. The residual mean deviance for our full tree is $804 / (1070 - 8)$. The training error rate / misclassification error rate for our full tree is $175 / 1070$.
 
 (c) Type in the name of the tree object in order to get a detailed text output. Pick one of the terminal nodes, and interpret the information displayed.
 
