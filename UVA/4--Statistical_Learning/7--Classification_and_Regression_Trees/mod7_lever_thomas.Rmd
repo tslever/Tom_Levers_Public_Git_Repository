@@ -231,19 +231,25 @@ knitr::opts_chunk$set(
     (e) Predict the response on the test data, and produce a confusion matrix comparing the test labels to the predicted test labels. What is the test error rate?
 
         ```{r}
-        vector_of_predicted_purchases <- predict(full_tree, testing_data, type = "class")
-        vector_of_actual_purchases <- testing_data$Purchase
-        confusion_matrix <- table(vector_of_predicted_purchases, vector_of_actual_purchases)
-        confusion_matrix
-        number_of_purchases_of_Citrus_Hill_orange_juice_predicted_correctly <- 144
-        number_of_purchases_of_Minute_Maid_orange_juice_predicted_correctly <- 70
-        number_of_purchases_predicted_correctly <-
-            number_of_purchases_of_Citrus_Hill_orange_juice_predicted_correctly +
-            number_of_purchases_of_Minute_Maid_orange_juice_predicted_correctly
-        number_of_purchases <- nrow(testing_data)
-        test_accuracy <- number_of_purchases_predicted_correctly / number_of_purchases
-        test_error_rate <- 1 - test_accuracy
-        test_error_rate
+        calculate_error_rate <- function(the_tree, data_frame) {
+            vector_of_predicted_purchases <- predict(the_tree, data_frame, type = "class")
+            vector_of_actual_purchases <- data_frame$Purchase
+            confusion_matrix <- table(vector_of_predicted_purchases, vector_of_actual_purchases)
+            print(confusion_matrix)
+            number_of_purchases_of_Citrus_Hill_orange_juice_predicted_correctly <-
+                confusion_matrix[1, 1]
+            number_of_purchases_of_Minute_Maid_orange_juice_predicted_correctly <-
+                confusion_matrix[2, 2]
+            number_of_purchases_predicted_correctly <-
+                number_of_purchases_of_Citrus_Hill_orange_juice_predicted_correctly +
+                number_of_purchases_of_Minute_Maid_orange_juice_predicted_correctly
+            number_of_purchases <- nrow(data_frame)
+            accuracy <- number_of_purchases_predicted_correctly / number_of_purchases
+            error_rate <- 1 - accuracy
+            return(error_rate)
+        }
+        set.seed(1)
+        calculate_error_rate(full_tree, testing_data)
         ```
         
         The test error rate is about $0.207$.
@@ -297,7 +303,22 @@ knitr::opts_chunk$set(
 
     (j) Compare the training error rates between the pruned and unpruned trees. Which is higher?
 
-
+        ```{r}
+        set.seed(1)
+        calculate_error_rate(full_tree, training_data)
+        set.seed(1)
+        calculate_error_rate(pruned_tree, training_data)
+        ```
+        
+        The error rate for the pruned tree is higher.
 
     (k) Compare the test error rates between the pruned and unpruned trees. Which is higher?
 
+        ```{r}
+        set.seed(1)
+        calculate_error_rate(full_tree, testing_data)
+        set.seed(1)
+        calculate_error_rate(pruned_tree, testing_data)
+        ```
+        
+        The error rate for the pruned tree is higher.
