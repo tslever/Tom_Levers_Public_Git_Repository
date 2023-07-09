@@ -187,7 +187,7 @@ knitr::opts_chunk$set(
         )
         ```
         
-        See above plot for test Mean Squared Errors for different values of the number of variables randomly sampled as candidates at each split. Test MSE decreases exponentially with number of variables. In all cases $ShelveLoc$ and $Price$ are the most important predictors.
+        See above plot for test Mean Squared Errors for different values of the number of variables randomly sampled as candidates at each split $m$. Test MSE decreases parabolically with number of variables to a minimum for $m = 8$. In all cases $ShelveLoc$ and $Price$ are the most important predictors.
 
     (f) Now analyze the data using BART, and report your results. (skip this exercise)
 
