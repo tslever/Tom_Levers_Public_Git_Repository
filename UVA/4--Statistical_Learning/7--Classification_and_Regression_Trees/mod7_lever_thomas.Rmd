@@ -101,24 +101,53 @@ knitr::opts_chunk$set(
         data_frame_of_predictors <- training_data[, -index_of_column_Sales]
         data_frame_of_sales <- training_data[, index_of_column_Sales]
         number_of_predictors <- ncol(data_frame_of_predictors)
-        BAg <- randomForest(
-            x = data_frame_of_predictors,
-            y = data_frame_of_sales,
-            mtry = number_of_predictors,
-            importance = TRUE
+        get_test_MSE_and_vector_of_ordered_percents_increase_for_random_forest <-
+            function(mtry) {
+            the_randomForest <- randomForest(
+                formula = Sales ~ .,
+                data = training_data,
+                mtry = mtry,
+                importance = TRUE
+            )
+            vector_of_predicted_sales <-
+                predict(the_randomForest, newdata = testing_data)
+            test_MSE <- calculate_mean_squared_error(
+                vector_of_predicted_sales,
+                vector_of_actual_sales
+            )
+            matrix_of_importance_metrics <- importance(the_randomForest)
+            vector_of_percents_increase_in_MSE <-
+               matrix_of_importance_metrics[, "%IncMSE"]
+            vector_of_indices_of_ordered_percents_increase_in_MSE <-
+                order(vector_of_percents_increase_in_MSE, decreasing = TRUE)
+            vector_of_ordered_percents_increase_in_MSE <- 
+                vector_of_percents_increase_in_MSE[
+                    vector_of_indices_of_ordered_percents_increase_in_MSE
+                ]
+            list_of_test_MSE_and_vector_of_ordered_percents_increase_for_random_forest <-
+                list(
+                    test_MSE = test_MSE,
+                    vector_of_ordered_percents_increase_in_MSE =
+                        vector_of_ordered_percents_increase_in_MSE
+                )
+            return(
+                list_of_test_MSE_and_vector_of_ordered_percents_increase_for_random_forest
+            )
+        }
+        get_test_MSE_and_vector_of_ordered_percents_increase_for_random_forest(
+            mtry = number_of_predictors
         )
-        vector_of_predicted_sales <- predict(BAg, newdata = testing_data)
-        calculate_mean_squared_error(vector_of_predicted_sales, vector_of_actual_sales)
-        importance(BAg)
         ```
         
         The test Mean Squared Error for our bootstrap aggregation (BAg) is $2.974$, which is $0.607$ of the MSE for our full tree and $0.438$ of the MSE for our pruned tree.
         
         According to [In a random forest, is larger %IncMSE better or worse?](https://stats.stackexchange.com/questions/162465/in-a-random-forest-is-larger-incmse-better-or-worse), "%IncMSE is the most robust and informative measure. IT is the increase in mse of predictions(estimated with out-of-bag-CV) as a result of variable j being permuted(values randomly shuffled)... the higher the number, the more important."
         
-        $%IncMSE$ is highest for $Price$ followed by $ShelveLoc$; $Price$ and $ShelveLoc$ are the two most important variables.
+        $\%IncMSE$ is highest for $ShelveLoc$ followed by $Price$; $ShelveLoc$ and $Price$ are the two most important variables.
 
     (e) Use random forests to analyze this data. What test MSE do you obtain? Use the `importance()` function to determine which variables are most important. Describe the effect of m, the number of variables considered at each split, on the error rate obtained.
+    
+        
 
     (f) Now analyze the data using BART, and report your results. (skip this exercise)
 
