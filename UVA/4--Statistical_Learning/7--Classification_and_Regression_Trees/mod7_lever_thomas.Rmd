@@ -216,14 +216,19 @@ knitr::opts_chunk$set(
     (c) Type in the name of the tree object in order to get a detailed text output. Pick one of the terminal nodes, and interpret the information displayed.
     
         ```{r}
-        plot(full_tree)
-        text(full_tree, pretty = 0)
         full_tree
         ```
         
-        A terminal node / leaf / branch to leaf is indicated by an asterisk. Because `full_tree` outputs information for each of two branches for each internal node / node other than the root node / trunk and the leaves, we speak in terms of branches. Let us consider the terminal node / leaf / branch to leaf labeled $8$. The prediction of the full tree associated with this branch to leaf is $MM$. We arrive at this branch when the split criterion $LoyalCH$ is less than $0.504$, less than $0.276$, and less than $0.036$. The split criterion associated with this branch is $LoyalCH < 0.036$. The number of observations / purchases in our data set is $1070$. $469$ purchases are by customers with loyalty to Citrus Hill less than $0.504$. $223$ purchases are by customers with loyalty to Citrus Hill less than $0.276$. $75$ purchases are by customers with loyalty to Citrus Hill less than $0.036$. The number of purchases associated with our branch is $75$ with a deviance of $10.62$. $0.013$ of purchases associated with our branch were of Citrus Hill orange juice. $0.987$ of purchases associated with our branch were of Minute Maid orange juice.
+        A terminal node / leaf / branch to leaf is indicated by an asterisk. Because `full_tree` outputs information for each of two branches for each internal node / node other than the root node / trunk and the leaves, we speak in terms of branches. Let us consider the terminal node / leaf / branch to leaf labeled $8$. The prediction of the full tree associated with this branch to leaf is $MM$. We arrive at this branch when the split criterion $LoyalCH$ is less than $0.504$, less than $0.276$, and less than $0.036$. The split criterion associated with this branch is $LoyalCH < 0.036$. The number of observations / purchases in our data set is $1070$. $469$ purchases are by customers with loyalty to Citrus Hill less than $0.504$. Of those customers, $223$ purchases are by customers with loyalty to Citrus Hill less than $0.276$. Of those customers, $75$ purchases are by customers with loyalty to Citrus Hill less than $0.036$. The number of purchases associated with our branch is $75$ with a deviance of $10.62$. $0.013$ of purchases associated with our branch were of Citrus Hill orange juice. $0.987$ of purchases associated with our branch were of Minute Maid orange juice.
 
-(d) Create a plot of the tree, and interpret the results.
+    (d) Create a plot of the tree, and interpret the results.
+    
+        ```{r}
+        plot(full_tree)
+        text(full_tree, pretty = 0)
+        ```
+        
+        Per our full tree, the most important predictor of whether a customer will purchase Citrus Hill or Minute Maid orange juice is loyalty to Citrus Hill. The split criterion for the first non-root / internal node / the first pair of branches is $LoyalCH$. The split criteria for the second and third internal nodes / the nodes in the second echelon is also $LoyalCH$. The split criterion for the fourth internal node / the left-most node in third echelon is also $LoyalCH$.
 
 (e) Predict the response on the test data, and produce a confusion matrix comparing the test labels to the predicted test labels. What is the test error rate?
 
