@@ -109,10 +109,64 @@ knitr::opts_chunk$set(
     
         ```{r}
         set.seed(1)
+        Caravan$Purchase <- ifelse(Caravan$Purchase == "Yes", 1, 0)
         training_data <- Caravan[1:1000, ]
         testing_data <- Caravan[-c(1:1000), ]
         ```
 
-(b) Fit a boosting model to the training set with `Purchase` as the response and the other variables as predictors. Use 1,000 trees, and a shrinkage value of 0.01. Which predictors appear to be the most important?
+    (b) Fit a boosting model to the training set with `Purchase` as the response and the other variables as predictors. Use 1,000 trees, and a shrinkage value of 0.01. Which predictors appear to be the most important?
+    
+        ```{r}
+        the_gbm.object <- gbm::gbm(
+            formula = Purchase ~ .,
+            distribution = "adaboost",
+            data = training_data,
+            n.trees = 1000,
+            shrinkage = 0.01
+        )
+        summary(the_gbm.object)
+        ```
+        
+        According to [Understanding Gradient Boosting Machines](https://towardsdatascience.com/understanding-gradient-boosting-machines-9be756fe76ab), an "important feature in the gbm modelling is the Variable Importance. Applying the summary function to a gbm output produces both a Variable Importance Table and a Plot of the model. This table [above] ranks the individual variables based on their relative influence, which is a measure indicating the relative importance of each variable in training the model."
+        
+        $PPERSAUT$ and $MKOOPKLA$ appear to our most important predictors.
 
-(c) Use the boosting model to predict the response on the test data. Predict that a person will make a purchase if the estimated probability of purchase is greater than 20 %. Form a confusion matrix. What fraction of the people predicted to make a purchase do in fact make one? How does this compare with the results obtained from applying KNN or logistic regression to this data set?
+    (c) Use the boosting model to predict the response on the test data. Predict that a person will make a purchase if the estimated probability of purchase is greater than 20 %. Form a confusion matrix. What fraction of the people predicted to make a purchase do in fact make one? How does this compare with the results obtained from applying KNN or logistic regression to this data set?
+
+        ```{r}
+        vector_of_predicted_probabilities <- predict(
+            object = the_gbm.object,
+            testing_data,
+            n.trees = 1000,
+            type = "response"
+        )
+        vector_of_predictions <- ifelse(
+            test = vector_of_predicted_probabilities > 0.2,
+            yes = 1,
+            no = 0
+        )
+        table(testing_data$Purchase, vector_of_predictions)
+        ```
+        
+        The fraction of the people predicted to make a purchase that do in fact make one and the precision of our Generalized Boosting Model for an AdaBoost distribution and threshold of $0.2$ $PPV = \frac{TP}{TP + FP} = \frac{19}{19 + 63} = 0.232$.
+        
+        ```{r}
+        logistic_regression_model <- glm(
+            formula = Purchase ~ .,
+            data = training_data,
+            family = "binomial"
+        )
+        vector_of_predicted_probabilities <- predict(
+            object = logistic_regression_model,
+            testing_data,
+            type = "response"
+        )
+        vector_of_predictions <- ifelse(
+            test = vector_of_predicted_probabilities > 0.2,
+            yes = 1,
+            no = 0
+        )
+        table(testing_data$Purchase, vector_of_predictions)
+        ```
+        
+        The precision of a logistic regression model with threshold $0.2$ is $PPV = \frac{58}{58 + 350} = 0.142$. The rate of difference in precision between our Generalized Boosting Model and our logistic regression model is $\frac{0.232 - 0.142}{0.142} = 0.634$.
