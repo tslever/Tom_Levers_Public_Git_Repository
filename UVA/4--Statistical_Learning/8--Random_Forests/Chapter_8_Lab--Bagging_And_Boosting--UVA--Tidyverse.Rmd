@@ -1,0 +1,205 @@
+# Chapter 8 Lab: Ensembling
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(error=TRUE,        # Keep compiling upon error
+                      collapse=FALSE,    # collapse by default
+                      echo=TRUE,         # echo code by default
+                      comment = "#>",    # change comment character
+                      fig.width = 5.5,     # set figure width
+                      fig.align = "center",# set figure position
+                      out.width = "80%", # set width of displayed images
+                      warning=FALSE,     # do not show R warnings
+                      message=FALSE)     # do not show R messages
+```
+
+## Bagging and Random Forests
+
+```{r setup}
+library(tidyverse)
+boston <- MASS::Boston
+```
+
+### bagging
+
+```{r bagging_1}
+
+#library(randomForest)
+set.seed(1)
+#bag.boston=randomForest(medv~.,data=Boston,subset=train,mtry=13,importance=TRUE)
+bagging.caret <- caret::train(medv~., data=boston, method='rf', 
+                              importance=FALSE, ntree=500, 
+                              tuneGrid=data.frame(mtry=c(ncol(boston)-1)),
+                 trControl=caret::trainControl("cv", number=5,
+                                               savePredictions=TRUE,
+                                               returnResamp='all'))
+# https://www.jmlr.org/papers/volume18/17-269/17-269.pdf
+
+#bag.boston
+bagging.caret$finalModel
+```
+
+```{r bagging_2}
+#yhat.bag = predict(bag.boston,newdata=Boston[-train,])
+#plot(yhat.bag, boston.test)
+#abline(0,1)
+bagging.caret$pred %>% ggplot(aes(x=obs, y=pred)) + geom_point() + 
+  geom_abline(intercept=0, slope=1)
+```
+
+```{r bagging_3}
+#mean((yhat.bag-boston.test)^2)
+bagging.caret
+```
+
+```{r bagging_4}
+#bag.boston=randomForest(medv~.,data=Boston,subset=train,mtry=13,ntree=25)
+#yhat.bag = predict(bag.boston,newdata=Boston[-train,])
+#mean((yhat.bag-boston.test)^2)
+
+set.seed(1)
+bagging.caret <- caret::train(medv~., data=boston, method='rf', 
+                              importance=FALSE, ntree=25, 
+                              tuneGrid=data.frame(mtry=c(ncol(boston)-1)),
+                 trControl=caret::trainControl("cv", number=5,
+                                               savePredictions=TRUE,
+                                               returnResamp='all'))
+bagging.caret
+```
+
+### random forest
+
+```{r rf_1}
+
+set.seed(1)
+#rf.boston=randomForest(medv~.,data=Boston,subset=train,mtry=6,importance=TRUE)
+rf.caret <- caret::train(medv~., data=boston, method='rf', 
+                         importance=TRUE, tuneGrid=data.frame(mtry=6),
+            trControl=caret::trainControl("cv", number=5,
+                                          savePredictions=TRUE,
+                                          returnResamp='all'))
+
+#yhat.rf = predict(rf.boston,newdata=Boston[-train,])
+#mean((yhat.rf-boston.test)^2)
+rf.caret
+```
+
+```{r rf_2}
+#importance(rf.boston)
+randomForest::importance(rf.caret$finalModel)
+```
+
+```{r rf_3}
+
+# https://stats.stackexchange.com/questions/162465/in-a-random-forest-is-larger-incmse-better-or-worse
+# http://www.sthda.com/english/wiki/ggplot2-barplots-quick-start-guide-r-software-and-data-visualization
+# https://ggplot2.tidyverse.org/reference/geom_bar.html
+
+#varImpPlot(rf.boston)
+importance <- sort(randomForest::importance(rf.caret$finalModel)[,'%IncMSE'])
+importance %>% bind_rows() %>% 
+  tidyr::pivot_longer(cols=names(importance)) %>%
+  dplyr::rename(`relative importance`=value) %>%
+  dplyr::mutate(name = factor(name, levels=name)) %>% 
+  ggplot(aes(y=name, x=`relative importance`)) + geom_bar(stat='identity', orientation="y")
+```
+
+## Boosting
+### I.e., Gradient Boosted Trees
+
+```{r gb_1}
+#library(gbm)
+set.seed(1)
+#boost.boston=gbm(medv~.,data=Boston[train,],distribution="gaussian",n.trees=5000,interaction.depth=4)
+
+gbt.caret <- caret::train(medv~., data=boston, method='gbm', verbose=FALSE,
+                          tuneGrid=expand.grid(n.trees=1:10000, 
+                                              shrinkage=c(0.001, 0.01, 0.1, 1.0),
+                                              interaction.depth=1,
+                                              n.minobsinnode=10),
+                          trControl=caret::trainControl("cv", number=5))
+
+#summary(boost.boston)
+gbt.caret$finalModel %>% summary()
+```
+
+
+```{r gb_2}
+
+#par(mfrow=c(1,2))
+#plot(boost.boston,i="rm")
+#plot(boost.boston,i="lstat")
+plot(gbt.caret$finalModel, i="rm")
+```
+
+```{r gb_3}
+plot(gbt.caret$finalModel, i="lstat")
+```
+
+- the `gbm` library calls these "Marginal plots" (`?gbm::plot.gbm`)
+- they are also called partial dependence plots 
+  - and are similar to partial effects plots
+  - https://stats.stackexchange.com/questions/371439/partial-effects-plots-vs-partial-dependence-plots-for-random-forests
+- here's how the above plots are made:
+
+```{r gb_4}
+
+boston_permuted <- boston
+
+PDP_mean <- function(lstat_setting){
+  boston_permuted$lstat <- lstat_setting
+  predict(gbt.caret, newdata=boston_permuted) %>% mean()
+}
+PDP_mean_sd <- function(lstat_setting){
+  boston_permuted$lstat <- lstat_setting
+  std <- predict(gbt.caret, newdata=boston_permuted) %>% sd()
+  std/sqrt(length(nrow(boston_permuted)))
+}
+
+m <- 50
+boston %>% dplyr::select(lstat) %>% modelr::seq_range(n=m) %>%
+  purrr::set_names() %>% purrr::map(~ PDP_mean(.x)) -> trend
+boston %>% dplyr::select(lstat) %>% modelr::seq_range(n=m) %>%
+  purrr::set_names() %>% purrr::map(~ PDP_mean_sd(.x)) -> trend_sd
+
+ggplot() + 
+  geom_line(data=tibble::tibble(lstat=as.numeric(names(unlist(trend))),
+                                `ave(y) and sd(ave(y))`=unlist(trend)), 
+            mapping=aes(x=lstat, y=`ave(y) and sd(ave(y))`)) +
+  geom_ribbon(data=tibble::tibble(
+                   upper=unlist(trend)+2*unlist(trend_sd),
+                   lower=unlist(trend)-2*unlist(trend_sd),
+                   lstat=as.numeric(names(unlist(trend)))), 
+              mapping=aes(x=lstat, ymin=lower, ymax=upper), 
+              fill = "black", alpha = 0.2)
+```
+
+- Look at the how the learning rate $\alpha$ (shrinkage) matters!
+- And how overfitting happens if it's set too high!
+- There are a ton of other tuning dials that are available with gradient 
+  boosting that can purther improve these curves
+- We need to do a grid search, i.e., a parameter sweep, over all the dials 
+  available for gradient bosting in order to get this to beat the random forest
+
+```{r gb_5}
+
+#yhat.boost=predict(boost.boston,newdata=Boston[-train,],n.trees=5000)
+#mean((yhat.boost-boston.test)^2)
+#boost.boston=gbm(medv~.,data=Boston[train,],distribution="gaussian",n.trees=5000,interaction.depth=4,shrinkage=0.2,verbose=F)
+#yhat.boost=predict(boost.boston,newdata=Boston[-train,],n.trees=5000)
+#mean((yhat.boost-boston.test)^2)
+
+# http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/#a-colorblind-friendly-palette
+cbbPalette <- c("#009E73", "#CC79A7", "#000000", "#E69F00", 
+                "#F0E442", "#56B4E9", "#0072B2", "#D55E00")
+# https://www.r-graph-gallery.com/line-chart-several-groups-ggplot2.html
+gbt.caret$results %>% dplyr::mutate(shrinkage = factor(shrinkage)) %>%
+  ggplot(aes(x=n.trees, y=RMSE, group=shrinkage, color=shrinkage)) +
+  geom_line() + scale_colour_manual(values=cbbPalette) +
+  ggtitle("K-folds average out-of-sample RMSE")
+
+```
+
+
+
+
+
