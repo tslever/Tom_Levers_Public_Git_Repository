@@ -31,7 +31,7 @@ knitr::opts_chunk$set(
     Create a plot displaying the test error resulting from random forests on this data set for a more comprehensive range of values for mtry and ntree. You can model your plot after Figure 8.10. Describe the results obtained.
 
     ```{r}
-    library(MASS)
+    library(ISLR2)
     library(randomForest)
     library(TomLeversRPackage)
     
@@ -101,11 +101,17 @@ knitr::opts_chunk$set(
     )
     ```
     
-    Above is a plot of Test Mean Squared Error for random forests predicting median value of owner-occupied homes in thousands of dollars based on the other variables of data set `MASS::Boston`. Variable $mtry$ represents the number of variables considered at each split. Red, green, and blue curves correspond to random forests with $mtry$ equal to the number of predictors, half the number of predictors, and the square root of the number of predictors, respectively. For each curve, Test Mean Squared Error decreases exponentially with number of trees. A random forest with $mtry$ equal to the square root of the number of predictors and a number of trees less than $25$ has the lowest Test Mean Squared Error and performs best.
+    Above is a plot of Test Mean Squared Error for random forests predicting median value of owner-occupied homes in thousands of dollars based on the other variables of data set `ISLR2::Boston`. Variable $mtry$ represents the number of variables considered at each split. Red, green, and blue curves correspond to random forests with $mtry$ equal to the number of predictors, half the number of predictors, and the square root of the number of predictors, respectively. For each curve, Test Mean Squared Error decreases exponentially with number of trees. A random forest with $mtry$ equal to the number of predictors and a number of trees less than $25$ has the lowest Test Mean Squared Error and performs best.
 
-# 11. This question uses the `Caravan` data set.
+11. This question uses the `Caravan` data set.
 
-(a) Create a training set consisting of the first 1,000 observations, and a test set consisting of the remaining observations.
+    (a) Create a training set consisting of the first 1,000 observations, and a test set consisting of the remaining observations.
+    
+        ```{r}
+        set.seed(1)
+        training_data <- Caravan[1:1000, ]
+        testing_data <- Caravan[-c(1:1000), ]
+        ```
 
 (b) Fit a boosting model to the training set with `Purchase` as the response and the other variables as predictors. Use 1,000 trees, and a shrinkage value of 0.01. Which predictors appear to be the most important?
 
