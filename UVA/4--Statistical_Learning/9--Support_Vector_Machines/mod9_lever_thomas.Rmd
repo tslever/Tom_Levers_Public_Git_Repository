@@ -1,0 +1,71 @@
+---
+title: "DS-6030 Homework Module 9"
+author: "Name"
+output:
+  pdf_document:
+    toc: no
+---
+
+<!--- Below are global settings for knitr. You can override any of them by adding the changes to individual chunks --->
+
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(error=TRUE,        # Keep compiling upon error
+                      collapse=FALSE,    # collapse by default
+                      echo=TRUE,         # echo code by default
+                      comment = "#>",    # change comment character
+                      fig.width = 5.5,     # set figure width
+                      fig.align = "center",# set figure position
+                      out.width = "49%", # set width of displayed images
+                      warning=FALSE,     # do not show R warnings
+                      message=FALSE)     # do not show R messages
+```
+
+<!--- Change font size for headers --->
+<style>
+h1.title { font-size: 28px; }
+h1 { font-size: 22px; }
+h2 { font-size: 18px; }
+h3 { font-size: 14px; }
+</style>
+
+**DS 6030 | Spring 2022 | University of Virginia **
+
+
+# 7. In this problem, you will use support vector approaches in order to predict whether a given car gets high or low gas mileage based on the `Auto` data set.
+
+(a) Create a binary variable that takes on a 1 for cars with gas mileage above the median, and a 0 for cars with gas mileage below the median.
+
+(b) Fit a support vector classifier to the data with various values of `cost`, in order to predict whether a car gets high or low gas mileage. Report the cross-validation errors associated with different values of this parameter. Comment on your results.
+
+(c) Now repeat (b), this time using SVMs with radial and polynomial basis kernels, with different values of `gamma` and `degree` and `cost.` Comment on your results.
+
+(d) Make some plots to back up your assertions in (b) and (c).
+> Hint: In the lab, we used the plot() function for svm objects only in cases with $p = 2$. When $p > 2$, you can use the `plot()` function to create plots displaying pairs of variables at a time. Essentially, instead of typing
+```
+plot(svmfit, dat)
+```
+where svmfit contains your fitted model and dat is a data frame containing your data, you can type
+```
+plot(svmfit, dat, x1 ~ x4)
+```
+in order to plot just the first and fourth variables. However, you must replace `x1` and `x4` with the correct variable names. To find out more, type `?plot.svm`.
+
+
+# 8. This problem involves the OJ data set which is part of the ISLR2 package.
+
+(a) Create a training set containing a random sample of 800 observations, and a test set containing the remaining observations.
+
+(b) Fit a support vector classifier to the training data using `cost=0.01`, with `Purchase` as the response and the other variables as predictors. Use the `summary()` function to produce summary statistics, and describe the results obtained.
+
+(c) What are the training and test error rates?
+
+(d) Use the `tune()` function to select an optimal `cost`. Consider values in the range 0.01 to 10.
+
+(e) Compute the training and test error rates using this new value for `cost`.
+
+(f) Repeat parts (b) through (e) using a support vector machine with a radial kernel. Use the default value for `gamma`.
+
+(g) Repeat parts (b) through (e) using a support vector machine with a polynomial kernel. Set `degree=2`.
+
+(h) Overall, which approach seems to give the best results on this data?
