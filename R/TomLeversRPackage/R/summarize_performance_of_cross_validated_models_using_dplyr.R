@@ -49,7 +49,7 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
    method = "knn",
    metric = "F1_measure",
    trControl = the_trainControl,
-   tuneGrid = expand.grid(k = seq(from = 1, to = 3, by = 1))
+   tuneGrid = expand.grid(k = seq(from = 1, to = 25, by = 1))
   )
   print(plot(list_of_training_information))
   optimal_K = list_of_training_information$bestTune
