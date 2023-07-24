@@ -178,38 +178,190 @@ knitr::opts_chunk$set(
         The fact that the support vector classifier's decision rule is based on a potentially small subset of the training observations (the support vectors) means that it is quite robust to the behavior of observations that are far away from the hyperplane. This property is distinct from other classification methods, such as linear discriminant analysis. Recall that the LDA classification rule depends on the mean of all of the observations within each class, as well as the within-class covariance matrix computed using all of the observations. In contrast, logistic regression, unlike LDA, has very low sensitivity to observations far from the decision boundary. In fact the support vector classifier and logistic regression are closely related.
         
         A support vector machine with a linear kernel is a support vector classifier.
-    
+
         ```{r}
         set.seed(1)
         the_tune <- e1071::tune(
             METHOD = e1071::svm,
-            train.x = indicator_of_whether_gas_mileage_is_high ~ . - mpg,
+            train.x = indicator_of_whether_gas_mileage_is_high ~ .,
             data = Auto,
             kernel = "linear",
             ranges = list(
-                cost = c(0.01, 0.1, 1, 10, 100, 1000)
+                cost = c(0.01, 0.1, 1, 10, 100)
             )
         )
         summary(the_tune)
         ```
         
-        A support vector classifier with a cost $C = 0.1$ has a lowest $10$-fold cross validation error rate of $0.087$.
+        A support vector classifier / support vector machine with linear kernel with a cost $C = 1$ has a lowest $10$-fold cross validation error rate of $0.0103$.
 
-    (c) Now repeat (b), this time using SVMs with radial and polynomial basis kernels, with different values of `gamma` and `degree` and `cost.` Comment on your results.
+    (c) Now repeat (b), this time using SVM's with radial and polynomial basis kernels, with different values of `gamma` and `degree` and `cost.` Comment on your results.
+    
+        The support vector classifier is a natural approach for classification in the two-class setting, if the boundary between the two classes is linear. However, in practice we are sometimes faced with non-linear class boundaries.
+        
+        We know that the performance of linear regression can suffer when there is a nonlinear relationship between the predictors and the outcome. In that case, we consider enlarging the feature space using functions of the predictors, such as quadratic and cubic terms, in order to address this non-linearity. In the case of the support vector classifier, we could address the problem of possibly non-linear boundaries between classes in a similar way, by enlarging the feature space using quadratic, cubic, and even higher-order polynomial functions of the predictors. For instance, rather than fitting a support vector classifier using $p$ features $x_{*1}$, $x_{*2}$, $\cdots$, $x_{*p}$, we could instead fit a support vector classifier using the $2p$ features $x_{*1}$, $x_{*1}^2$, $x_{*2}$, $x_{*2}^2$, $\cdots$, $x_{*p}$, $x_{*p}^2$. Then our optimization problem would become
+        
+        "Maximize margin $M$,
+        
+        by determining a maximal margin hyperplane,
+        
+        with parameters $\beta_0$, $\beta_{11}$, $\beta_{12}$, $\beta_{21}$, $\beta_{22}$, $\cdots$, $\beta_{p1}$, $\beta_{p2}$, $\epsilon_1$, $\epsilon_2$, $\cdots$, $\epsilon_n$,
+        
+        and associated margin $M$,
+        
+        subject to the length of vector of parameters $\left(\beta_0, \beta_{11}, \beta_{12}, \beta_{21}, \beta_{22}, \cdots, \beta_{p1}, \beta_{p2}\right)$ being $1$, i.e.,
+        
+        $\sum_{j = 1}^p \left[\sum_{k = 1}^2 \left( \beta_{jk}^2\right)\right] = 1$,
+        
+        $y_i h_i = y_i \cdot \left(\beta_0 + \sum_{j = 1}^p \left[\beta_{j1} x_{ij}\right] + \sum_{j = 1}^p \left[\beta_{j2} x_{ij}^2\right]\right) \geq M \cdot \left(1 - \epsilon_i\right) \ \forall i \in [1, n]$,
+        
+        $\epsilon_i \geq 0 \ \forall i \in [1, n]$, and
+        
+        $\sum_{i = 1}^n \left[\epsilon_i\right] \leq C \ \forall i \in [1, n]$."
+        
+        Why does this lead to a non-linear decision boundary? In the enlarged feature space, the deicison boundary that results from the above optimization problem is in fact linear. But in the original feature space, the decision boundary is of the form $q(x) = 0$, where $q$ is a quadratic polynomial, and its solutions are generally non-linear. One might additionally want to enlarge the feature space with higher-order polynomial terms, or with interaction terms of the form $x_{*j} x_{*k}$ for $j \neq k$. Alternatively, other functions of the predictors could be considered rather than polynomials. It is not hard to see that there are many possible ways to enlarge the feature space, and that unless we are careful, we could end up with a huge number of features. Then computations would become unmanageable. The support vector machie allows us to enlarge the feature space used by the support vector classifier in a way that leads to efficient computations.
+        
+        The support vector machine (SVM) is an extension of the support vector classifier that results from enlarging the feature space in a specific way, using kernels. We will now discuss this extension. The main idea is that we may want to enlarge our feature space in order to accommodate a non-linear boundary between the classes. The kernel approach that we describe here is simply an efficient computational appraoch for enacting this idea.
+        
+        We have not discussed exactly how the support vector classifier is computed because the details become somewhat technical. However, it turns out that the solution to the support vector classifier problem involves only the inner products of the observations (as opposed to the observations themselves). The inner product of two $p$-vectors $x_i$ and $x_j$ is defined as $\langle x_i, x_j \rangle = \sum_{k = 1}^p \left[ x_{ij} x_{jk} \right]$. It can be shown that the linear support vector classifier can be represented as
+        
+        $$f(x) = \beta_0 + \sum_{i = 1}^n \left[\alpha_i \langle x, x_i \rangle\right]$$
+        
+        where there are $n$ training-observation parameters $\alpha_i$, one per training observation. To estimate the parameters $\alpha_1$, $\alpha_2$, $\cdots$, $\alpha_n$ and $\beta_0$, all we need are the $\left(\begin{matrix}n\\2\end{matrix}\right)$ inner products $\langle x_i, x_j \rangle$ between all pairs of training observations. $\left(\begin{matrix}n\\2\end{matrix}\right) = \frac{n(n-1)}{2}$ gives the number of pairs among a set of $n$ items.
+        
+        Notice that in the representation of a linear support vector classifier, in order to evaluate te function $f(x)$, we need to compute the inner product between the new point $x$ and each of the training points $x_i$. However, it turns out that $\alpha_i$ is nonzero only for the support vectors in the solution; that is, if a training observation is not a support vector, then its training-observation parameter $\alpha_i$ equals $0$. So if $S$ is the collection of indices of these support points, we can rewrite any solution function that is the representation of a linear support-vector classifier as
+        
+        $$f(x) = \beta_0 + \sum_{i \in S} \left[\alpha_i \langle x, x_i \rangle\right]$$
+        
+        which typically involves far fewer terms than the number inner products between $x$ and each of the training points $x_i$.
+        
+        To summarize, in representing the linear support vector classifier $f(x)$, and in computing its coefficient $\beta_0$ and its training-observation parameters $\alpha_i$, all we need are inner products.
+        
+        Now suppose that every time the inner product $\langle x_i, x_j \rangle$ appears in the representation of a linear support vector classifier, or in a calculation of the solution for the linear support vector classifier, we replace the inner product with a generalization of the inner product of the form $K\left(x_i, x_j\right)$, where $K$ is some function that we will refer to as a kernel. A kernel is a function that quantifies the similarity of two observations. For instance, we could simply take
+        
+        $$K\left(x_i, x_j\right) = \sum_{k = 1}^p \left[x_{ik} x_{jk}\right]$$
+        
+        which would just give us back the linear support vector classifier. This equation is known as a linear kernel because the support vector classifier is linear in the features; the linear kernel essentially quantifies the similarity of a pair of observations using Pearson (standard) correlation. But one could instead choose another form for $K\left(x_i, x_j\right)$. For instance, one could define kernel
+        
+        $$K\left(x_i, x_j\right) = \left(1 + \sum_{k = 1}^p \left[x_{ik} x_{jk}\right]\right)^d$$
+        
+        This is known as a polynomial kernel of degree $d$, where $d$ is a positive integer. Using such a kernel with $d > 1$, instead of the standard linear kernel, in the support vector classifier algorithm leads to a much more flexible decision boundary. It essentially amounts to fitting a support vector classifier in a higher-dimensional space involving polynomials of degree $d$, rather than in the original feature space. When the support vector classifier is combined with a non-linear kernel such as a polynomial kernel, the resulting classifier is known as a support vector machine. Note that in this case the non-linear function has the form
+        
+        $$f(x) = \beta_0 + \sum_{i \in S} \left[\alpha_i K\left(x, x_i\right)\right]$$
+        
+        When $d = 1$, then the SVM reduces to the support vector classifier seen earlier in this chapter.
+        
+        The polynomial kernel presented above is one example of a possible non-linear kernel, but alternatives abound. Another populat choice is the radial kernel, which takes the form
+        
+        $$K\left(x_i, x_j\right) = exp\left\{-\gamma \sum_{k = 1}^p \left[\left(x_{ik} - x_{jk}\right)^2\right]\right\}$$
+        
+        For this radial kernel, $\gamma$ is a positive constant.
+        
+        How does the radial kernel actually work? If a given test observation $x_{test} = \left(x_{test, 1}, x_{test, 2}, \cdots, x_{test, p}\right)$ is far from a training observation $x_i$ in terms of Euclidean distance, then $\sum_{k = 1}^p \left[\left(x_{ik} - x_{jk}\right)^2\right]$ will be large, and so $K\left(x_{test}, x_i\right)$ will be tiny. This means that in the above formula for a support vector machine, $x_i$ will play virtually no role in $f\left(x_{test}\right)$. Recall that the predicted class label for the test observation $x_{test}$ is based on the sign of $f\left(x_{test}\right)$. In other words, training observations that are far from $x_{test}$ will play essentially no role in the predicted class label for $x_{test}$. This means that the radial kernel has very local behavior, in the sense that only nearby training observations have an effect on the class label of a test observation.
+        
+        What is the advantage of using a kernel rather than simply enlarging the feature space using functions of the original features? One advantage is computation, and it amounts to the fact that using kernels, one need only compute $K\left(x_i, x_j\right)$ for all distinct pairs of $i$ and $j$. This can be done without explicitly working in the enlarged feature space. This is important because in many applications of SVM's, the enlarged feature space is so large that computations are intractable. For some kernels, such as the radial kernel, the feature space is implicit and infinite-dimensional, so we could never do the computations there anyway!
+        
+        ```{r}
+        set.seed(1)
+        the_tune <- e1071::tune(
+            METHOD = e1071::svm,
+            train.x = indicator_of_whether_gas_mileage_is_high ~ .,
+            data = Auto,
+            kernel = "polynomial",
+            ranges = list(
+                cost = c(0.01, 0.1, 1, 10, 100),
+                degree = c(2, 3, 4)
+            )
+        )
+        summary(the_tune)
+        ```
+        
+        A support vector machine with polynomial kernel of degree $d = 2$ with a cost $C = 100$ has a lowest $10$-fold cross validation error rate of $0.301$.
+        
+        ```{r}
+        set.seed(1)
+        the_tune <- e1071::tune(
+            METHOD = e1071::svm,
+            train.x = indicator_of_whether_gas_mileage_is_high ~ .,
+            data = Auto,
+            ranges = list(
+                cost = c(0.01, 0.1, 1, 10, 100, 1000),
+                gamma = c(0.01, 0.1, 1, 10, 100, 1000)
+            )
+        )
+        summary(the_tune)
+        ```
+        
+        A support vector machine with radial kernel with constant $\gamma = 0.01$ and cost $C = 100$ has a lowest $10$-fold cross validation error rate of $0.013$.
 
-    (d) Make some plots to back up your assertions in (b) and (c). \> Hint: In the lab, we used the plot() function for svm objects only in cases with $p = 2$. When $p > 2$, you can use the `plot()` function to create plots displaying pairs of variables at a time. Essentially, instead of typing
+    (d) Make some plots to back up your assertions in (b) and (c).
+    
+        Hint: In the lab, we used the plot() function for svm objects only in cases with $p = 2$. When $p > 2$, you can use the `plot` function to create plots displaying pairs of variables at a time. Essentially, instead of typing
 
-    ```         
-    plot(svmfit, dat)
-    ```
+        ```{r, eval = FALSE}         
+        plot(svmfit, dat)
+        ```
 
-    where svmfit contains your fitted model and dat is a data frame containing your data, you can type
+        where `svmfit` contains your fitted model and `dat` is a data frame containing your data, you can type
 
-    ```         
-    plot(svmfit, dat, x1 ~ x4)
-    ```
+        ```{r, eval = FALSE}         
+        plot(svmfit, dat, x1 ~ x4)
+        ```
 
-    in order to plot just the first and fourth variables. However, you must replace `x1` and `x4` with the correct variable names. To find out more, type `?plot.svm`.
+        in order to plot just the first and fourth variables. However, you must replace `x1` and `x4` with the correct variable names. To find out more, type `?plot.svm`.
+        
+        Since Support Vector Machines rely on calculating Euclidean distances, we
+        
+        ```{r}
+        linear_SVM <- e1071::svm(
+            formula = indicator_of_whether_gas_mileage_is_high ~ .,
+            data = Auto,
+            kernel = "linear",
+            cost = 1
+        )
+        polynomial_SVM <- e1071::svm(
+            formula = indicator_of_whether_gas_mileage_is_high ~ .,
+            data = Auto,
+            kernel = "polynomial",
+            cost = 100,
+            degree = 2
+        )
+        radial_SVM <- e1071::svm(
+            formula = indicator_of_whether_gas_mileage_is_high ~ .,
+            data = Auto,
+            kernel = "radial",
+            cost = 100,
+            gamma = 0.01
+        )
+        plot_gas_mileage_vs_non_factor_predictor = function(SVM) {
+            for (
+                name_of_column in c(
+                    "cylinders",
+                    "displacement",
+                    "horsepower",
+                    "weight",
+                    "acceleration",
+                    "year",
+                    "origin"
+                )
+            ) {
+                formula_as_string = paste("mpg ~ ", name_of_column, sep = "")
+                formula = as.formula(formula_as_string)
+                plot(x = SVM, data = Auto, formula = formula)
+            }
+        }
+        plot_gas_mileage_vs_non_factor_predictor(linear_SVM)
+        plot_gas_mileage_vs_non_factor_predictor(polynomial_SVM)
+        plot_gas_mileage_vs_non_factor_predictor(radial_SVM)
+        ```
+        
+        X's indicate support vectors. Light pink indicates a point with an actual indicator of whether gas mileage is high of $1$. Black indicates a point with an actual indicator of whether gas mileage is high of $0$. Dark pink indicates a point with with a predicted indicator of whether gas mileage is high of $1$. Yellow indicates a point with an predicted indicator of whether gas mileage is high of $0$.
+        
+        Our Linear SVM Classification Plots back up our assertions by showing that for non-factor predictors other than $year$, all points with an actual indicator of whether gas mileage is high of $0$ are correctly classified and most points with an actual indicator of whether gas mileage is high of $1$ are correctly classified.
+        
+        Our Polynomial SVM Classification Plots suggest that a point is always classified as having having an indicator of whether gas mileage is high of $1$.
+        
+        Our Radial SVM Classification Plot for $mpg$ and $acceleration$ backs up our assertions similarly to our Linear SVM Classification Plots. Our Radial SVM Classification Plots for $mpg$ and $horsepower$ and $mpg$ and $origin$ suggests that a point is always classified as having an indicator of whether gas mileage is high of $1$. Our Radial SVM Classification Plots for $mpg$ and $cylinders$, $mpg$ and $displacement$, $mpg$ and $weight$, and $mpg$ and $year$ suggest that all points with an actual indicator of whether gas mileage is high of $1$ are correctly classified and most points with an actual indicator of whether gas mileage is high of $0$ are classified as having actual indicator of whether gas mileage is high of $1$.
 
 8.  This problem involves the OJ data set which is part of the ISLR2 package.
 
