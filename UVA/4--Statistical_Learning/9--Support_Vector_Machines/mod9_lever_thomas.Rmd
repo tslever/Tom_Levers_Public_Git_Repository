@@ -30,7 +30,7 @@ knitr::opts_chunk$set(
 
     (a) Create a binary variable that takes on a 1 for cars with gas mileage above the median, and a 0 for cars with gas mileage below the median.
 
-        ```{r}
+        ```{r, eval = TRUE}
         library(ISLR2)
         condition <- Auto$mpg > median(Auto$mpg)
         vector_of_indicators_of_whether_gas_mileage_is_high <- ifelse(
@@ -179,7 +179,7 @@ knitr::opts_chunk$set(
         
         A support vector machine with a linear kernel is a support vector classifier.
 
-        ```{r}
+        ```{r, eval = TRUE}
         set.seed(1)
         the_tune <- e1071::tune(
             METHOD = e1071::svm,
@@ -261,7 +261,7 @@ knitr::opts_chunk$set(
         
         What is the advantage of using a kernel rather than simply enlarging the feature space using functions of the original features? One advantage is computation, and it amounts to the fact that using kernels, one need only compute $K\left(x_i, x_j\right)$ for all distinct pairs of $i$ and $j$. This can be done without explicitly working in the enlarged feature space. This is important because in many applications of SVM's, the enlarged feature space is so large that computations are intractable. For some kernels, such as the radial kernel, the feature space is implicit and infinite-dimensional, so we could never do the computations there anyway!
         
-        ```{r}
+        ```{r, eval = TRUE}
         set.seed(1)
         the_tune <- e1071::tune(
             METHOD = e1071::svm,
@@ -278,12 +278,13 @@ knitr::opts_chunk$set(
         
         A support vector machine with polynomial kernel of degree $d = 2$ with a cost $C = 100$ has a lowest $10$-fold cross validation error rate of $0.301$.
         
-        ```{r}
+        ```{r, eval = TRUE}
         set.seed(1)
         the_tune <- e1071::tune(
             METHOD = e1071::svm,
             train.x = indicator_of_whether_gas_mileage_is_high ~ .,
             data = Auto,
+            kernel = "radial",
             ranges = list(
                 cost = c(0.01, 0.1, 1, 10, 100, 1000),
                 gamma = c(0.01, 0.1, 1, 10, 100, 1000)
@@ -310,9 +311,7 @@ knitr::opts_chunk$set(
 
         in order to plot just the first and fourth variables. However, you must replace `x1` and `x4` with the correct variable names. To find out more, type `?plot.svm`.
         
-        Since Support Vector Machines rely on calculating Euclidean distances, we
-        
-        ```{r}
+        ```{r, eval = TRUE}
         linear_SVM <- e1071::svm(
             formula = indicator_of_whether_gas_mileage_is_high ~ .,
             data = Auto,
@@ -366,17 +365,280 @@ knitr::opts_chunk$set(
 8.  This problem involves the OJ data set which is part of the ISLR2 package.
 
     (a) Create a training set containing a random sample of 800 observations, and a test set containing the remaining observations.
+    
+        ```{r, eval = TRUE}
+        training_and_testing_data <-
+            TomLeversRPackage::split_data_set_into_training_and_testing_data(
+                ISLR2::OJ,
+                number_of_training_data = 800
+            )
+        training_data <- training_and_testing_data$training_data
+        testing_data <- training_and_testing_data$testing_data
+        head(training_data, n = 2)
+        head(testing_data, n = 2)
+        ```
 
     (b) Fit a support vector classifier to the training data using `cost=0.01`, with `Purchase` as the response and the other variables as predictors. Use the `summary()` function to produce summary statistics, and describe the results obtained.
+    
+        ```{r, eval = TRUE}
+        set.seed(1)
+        linear_SVM <- e1071::svm(
+            Purchase ~ .,
+            data = training_data,
+            kernel = "linear",
+            cost = 0.01
+        )
+        summary(linear_SVM)
+        ```
+        
+        For our support vector classifier / support vector machine with linear kernel, 437 of 800 training points are support vectors. 218 of the support vectors correspond to purchases of Minute-Maid orange juice. 219 of the support vectors correspond to purchases of Citrus Hill orange juice.
 
     (c) What are the training and test error rates?
+    
+        ```{r}
+        vector_of_predicted_purchases <- predict(linear_SVM, training_data)
+        summary_of_performance <- TomLeversRPackage::summarize_performance_of_model(
+            training_data$Purchase,
+            vector_of_predicted_purchases
+        )
+        summary_of_performance
+        ```
+        
+        The training error rate is immediately above.
+        
+        ```{r}
+        vector_of_predicted_purchases <- predict(linear_SVM, testing_data)
+        summary_of_performance <- TomLeversRPackage::summarize_performance_of_model(
+            testing_data$Purchase,
+            vector_of_predicted_purchases
+        )
+        summary_of_performance
+        ```
+        
+        The testing error rate is immediately above.
 
     (d) Use the `tune()` function to select an optimal `cost`. Consider values in the range 0.01 to 10.
+    
+        ```{r}
+        set.seed(1)
+        the_tune <- e1071::tune(
+            METHOD = e1071::svm,
+            train.x = Purchase ~ .,
+            data = training_data,
+            kernel = "linear",
+            ranges = list(
+                cost = 10^seq(from = -2, to = 1, by = 0.25)
+            )
+        )
+        the_summary <- summary(the_tune)
+        the_summary
+        best_cost <- the_summary$best.parameters["cost"]
+        best_cost
+        ```
+        
+        The optimal cost is immediately above.
 
     (e) Compute the training and test error rates using this new value for `cost`.
+    
+        ```{r}
+        linear_SVM <- e1071::svm(
+            Purchase ~ .,
+            data = training_data,
+            kernel = "linear",
+            cost = best_cost
+        )
+        vector_of_predicted_purchases <- predict(linear_SVM, training_data)
+        summary_of_performance <- TomLeversRPackage::summarize_performance_of_model(
+            training_data$Purchase,
+            vector_of_predicted_purchases
+        )
+        summary_of_performance
+        ```
+        
+        The training error rate is given immediately above.
+        
+        ```{r}
+        vector_of_predicted_purchases <- predict(linear_SVM, testing_data)
+        summary_of_performance <- TomLeversRPackage::summarize_performance_of_model(
+            testing_data$Purchase,
+            vector_of_predicted_purchases
+        )
+        summary_of_performance
+        ```
+        
+        The testing error rate is given immediately above.
 
     (f) Repeat parts (b) through (e) using a support vector machine with a radial kernel. Use the default value for `gamma`.
+    
+        ```{r, eval = TRUE}
+        set.seed(1)
+        radial_SVM <- e1071::svm(
+            Purchase ~ .,
+            data = training_data,
+            kernel = "radial",
+            cost = 0.01
+        )
+        summary(radial_SVM)
+        ```
+        
+        For our support vector machine with radial kernel, 639 of 800 training points are support vectors. 320 of the support vectors correspond to purchases of Minute-Maid orange juice. 319 of the support vectors correspond to purchases of Citrus Hill orange juice.
+
+        ```{r}
+        vector_of_predicted_purchases <- predict(radial_SVM, training_data)
+        summary_of_performance <- TomLeversRPackage::summarize_performance_of_model(
+            training_data$Purchase,
+            vector_of_predicted_purchases
+        )
+        summary_of_performance
+        ```
+        
+        The training error rate is immediately above.
+        
+        ```{r}
+        vector_of_predicted_purchases <- predict(radial_SVM, testing_data)
+        summary_of_performance <- TomLeversRPackage::summarize_performance_of_model(
+            testing_data$Purchase,
+            vector_of_predicted_purchases
+        )
+        summary_of_performance
+        ```
+        
+        The testing error rate is immediately above.
+        
+        ```{r}
+        set.seed(1)
+        the_tune <- e1071::tune(
+            METHOD = e1071::svm,
+            train.x = Purchase ~ .,
+            data = training_data,
+            kernel = "radial",
+            ranges = list(
+                cost = 10^seq(from = -2, to = 1, by = 0.25)
+            )
+        )
+        the_summary <- summary(the_tune)
+        the_summary
+        best_cost <- the_summary$best.parameters["cost"]
+        best_cost
+        ```
+        
+        The optimal cost is immediately above.
+        
+        ```{r}
+        radial_SVM <- e1071::svm(
+            Purchase ~ .,
+            data = training_data,
+            kernel = "radial",
+            cost = best_cost
+        )
+        vector_of_predicted_purchases <- predict(radial_SVM, training_data)
+        summary_of_performance <- TomLeversRPackage::summarize_performance_of_model(
+            training_data$Purchase,
+            vector_of_predicted_purchases
+        )
+        summary_of_performance
+        ```
+        
+        The training error rate is given immediately above.
+        
+        ```{r}
+        vector_of_predicted_purchases <- predict(radial_SVM, testing_data)
+        summary_of_performance <- TomLeversRPackage::summarize_performance_of_model(
+            testing_data$Purchase,
+            vector_of_predicted_purchases
+        )
+        summary_of_performance
+        ```
+        
+        The testing error rate is given immediately above.
 
     (g) Repeat parts (b) through (e) using a support vector machine with a polynomial kernel. Set `degree=2`.
+    
+        ```{r, eval = TRUE}
+        set.seed(1)
+        polynomial_SVM <- e1071::svm(
+            Purchase ~ .,
+            data = training_data,
+            kernel = "polynomial",
+            cost = 0.01,
+            degree = 2
+        )
+        summary(polynomial_SVM)
+        ```
+        
+        For our support vector machine with polynomial kernel, 619 of 800 training points are support vectors. 307 of the support vectors correspond to purchases of Minute-Maid orange juice. 312 of the support vectors correspond to purchases of Citrus Hill orange juice.
+
+        ```{r}
+        vector_of_predicted_purchases <- predict(polynomial_SVM, training_data)
+        summary_of_performance <- TomLeversRPackage::summarize_performance_of_model(
+            training_data$Purchase,
+            vector_of_predicted_purchases
+        )
+        summary_of_performance
+        ```
+        
+        The training error rate is immediately above.
+        
+        ```{r}
+        vector_of_predicted_purchases <- predict(polynomial_SVM, testing_data)
+        summary_of_performance <- TomLeversRPackage::summarize_performance_of_model(
+            testing_data$Purchase,
+            vector_of_predicted_purchases
+        )
+        summary_of_performance
+        ```
+        
+        The testing error rate is immediately above.
+        
+        ```{r}
+        set.seed(1)
+        the_tune <- e1071::tune(
+            METHOD = e1071::svm,
+            train.x = Purchase ~ .,
+            data = training_data,
+            kernel = "polynomial",
+            ranges = list(
+                cost = 10^seq(from = -2, to = 1, by = 0.25),
+                degree = 2
+            )
+        )
+        the_summary <- summary(the_tune)
+        the_summary
+        best_cost <- the_summary$best.parameters["cost"]
+        best_cost
+        ```
+        
+        The optimal cost is immediately above.
+        
+        ```{r}
+        polynomial_SVM <- e1071::svm(
+            Purchase ~ .,
+            data = training_data,
+            kernel = "polynomial",
+            cost = best_cost,
+            degree = 2
+        )
+        vector_of_predicted_purchases <- predict(polynomial_SVM, training_data)
+        summary_of_performance <- TomLeversRPackage::summarize_performance_of_model(
+            training_data$Purchase,
+            vector_of_predicted_purchases
+        )
+        summary_of_performance
+        ```
+        
+        The training error rate is given immediately above.
+        
+        ```{r}
+        vector_of_predicted_purchases <- predict(polynomial_SVM, testing_data)
+        summary_of_performance <- TomLeversRPackage::summarize_performance_of_model(
+            testing_data$Purchase,
+            vector_of_predicted_purchases
+        )
+        summary_of_performance
+        ```
+        
+        The testing error rate is given immediately above.
 
     (h) Overall, which approach seems to give the best results on this data?
+
+        For one evaluation of test error rate for support vector machines with linear, radial, and polynomial kernels, the support vector machines with linear and radial kernels have lowest test error rates of $0.1814815$.
