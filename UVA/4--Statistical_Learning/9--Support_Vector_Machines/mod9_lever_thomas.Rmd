@@ -181,19 +181,32 @@ knitr::opts_chunk$set(
 
         ```{r, eval = TRUE}
         set.seed(1)
-        the_tune <- e1071::tune(
+        formula_as_string <- paste(
+            "indicator_of_whether_gas_mileage_is_high ~ ",
+            "cylinders + ",
+            "displacement + ",
+            "horsepower + ",
+            "weight + ",
+            "acceleration + ",
+            "year + ",
+            "origin",
+            sep = ""
+        )
+        formula = as.formula(formula_as_string)
+        range_of_costs = 10^seq(from = -3, to = 3, by = 0.25)
+        tune_for_linear_SVM <- e1071::tune(
             METHOD = e1071::svm,
-            train.x = indicator_of_whether_gas_mileage_is_high ~ .,
+            train.x = formula,
             data = Auto,
             kernel = "linear",
             ranges = list(
-                cost = c(0.01, 0.1, 1, 10, 100)
+                cost = range_of_costs
             )
         )
-        summary(the_tune)
+        summary(tune_for_linear_SVM)
         ```
         
-        A support vector classifier / support vector machine with linear kernel with a cost $C = 1$ has a lowest $10$-fold cross validation error rate of $0.0103$.
+        A support vector classifier / support vector machine with linear kernel with a cost $C = 0.562$ has a lowest $10$-fold cross validation error rate of $0.0843$. This is supported by the below plot of error rate vs. cost for our SVM with linear kernel.
 
     (c) Now repeat (b), this time using SVM's with radial and polynomial basis kernels, with different values of `gamma` and `degree` and `cost.` Comment on your results.
     
@@ -263,37 +276,39 @@ knitr::opts_chunk$set(
         
         ```{r, eval = TRUE}
         set.seed(1)
-        the_tune <- e1071::tune(
+        range_of_degrees <- c(1, 2, 3, 4, 5, 6)
+        tune_for_polynomial_SVM <- e1071::tune(
             METHOD = e1071::svm,
-            train.x = indicator_of_whether_gas_mileage_is_high ~ .,
+            train.x = formula,
             data = Auto,
             kernel = "polynomial",
             ranges = list(
-                cost = c(0.01, 0.1, 1, 10, 100),
-                degree = c(2, 3, 4)
+                cost = range_of_costs,
+                degree = range_of_degrees
             )
         )
-        summary(the_tune)
+        summary(tune_for_polynomial_SVM)
         ```
         
-        A support vector machine with polynomial kernel of degree $d = 2$ with a cost $C = 100$ has a lowest $10$-fold cross validation error rate of $0.301$.
+        A support vector machine with polynomial kernel of degree $d = 3$ with a cost $C = 17.783$ has a lowest $10$-fold cross validation error rate of $0.0741$ percent. This is supported by the below plot of error rate vs. cost for our SVM with polynomial kernel.
         
         ```{r, eval = TRUE}
         set.seed(1)
-        the_tune <- e1071::tune(
+        range_of_values_of_gamma <- 10^seq(-1, 1, by = 0.5)
+        tune_for_radial_SVM <- e1071::tune(
             METHOD = e1071::svm,
-            train.x = indicator_of_whether_gas_mileage_is_high ~ .,
+            train.x = formula,
             data = Auto,
             kernel = "radial",
             ranges = list(
-                cost = c(0.01, 0.1, 1, 10, 100, 1000),
-                gamma = c(0.01, 0.1, 1, 10, 100, 1000)
+                cost = range_of_costs,
+                gamma = range_of_values_of_gamma
             )
         )
-        summary(the_tune)
+        summary(tune_for_radial_SVM)
         ```
         
-        A support vector machine with radial kernel with constant $\gamma = 0.01$ and cost $C = 100$ has a lowest $10$-fold cross validation error rate of $0.013$.
+        A support vector machine with radial kernel with constant $\gamma = 1$ and cost $C = 1$ has a lowest $10$-fold cross validation error rate of $0.0663$ percent. This is supported by the below plot of error rate vs. cost for our SVM with radial kernel.
 
     (d) Make some plots to back up your assertions in (b) and (c).
     
@@ -311,56 +326,130 @@ knitr::opts_chunk$set(
 
         in order to plot just the first and fourth variables. However, you must replace `x1` and `x4` with the correct variable names. To find out more, type `?plot.svm`.
         
-        ```{r, eval = TRUE}
-        linear_SVM <- e1071::svm(
-            formula = indicator_of_whether_gas_mileage_is_high ~ .,
-            data = Auto,
-            kernel = "linear",
-            cost = 1
+        ```{r}
+        data_frame <- data.frame(
+            cost = tune_for_linear_SVM$performances$cost,
+            error = tune_for_linear_SVM$performances$error
         )
-        polynomial_SVM <- e1071::svm(
-            formula = indicator_of_whether_gas_mileage_is_high ~ .,
-            data = Auto,
-            kernel = "polynomial",
-            cost = 100,
-            degree = 2
+        library(ggplot2)
+        ggplot(
+            data = data_frame,
+            mapping = aes(
+                x = cost,
+                y = error
+            )
+        ) +
+        geom_point() +
+        geom_line() +
+        scale_x_log10() +
+        scale_colour_distiller(palette = "Spectral")
+        ```
+        
+        As above, minimum error rate for our SVM with linear kernel occurs for cost $C = 10^{-0.25}$.
+        
+        ```{r}
+        data_frame <- data.frame(
+            cost = tune_for_polynomial_SVM$performances$cost,
+            degree = tune_for_polynomial_SVM$performances$degree,
+            error = tune_for_polynomial_SVM$performances$error
         )
-        radial_SVM <- e1071::svm(
-            formula = indicator_of_whether_gas_mileage_is_high ~ .,
-            data = Auto,
-            kernel = "radial",
-            cost = 100,
-            gamma = 0.01
+        library(ggplot2)
+        ggplot(
+            data = data_frame,
+            mapping = aes(
+                x = cost,
+                y = error,
+                group = degree,
+                color = log10(degree)
+            )
+        ) +
+        geom_point() +
+        geom_line() +
+        scale_x_log10() +
+        scale_colour_distiller(palette = "Spectral")
+        ```
+        
+        As above, minimum error rate for our SVM with polynomial kernel occurs for cost $C = 17.783$ and degree $d = 3$.
+        
+        ```{r}
+        data_frame <- data.frame(
+            cost = tune_for_radial_SVM$performances$cost,
+            gamma = tune_for_radial_SVM$performances$gamma,
+            error = tune_for_radial_SVM$performances$error
         )
-        plot_gas_mileage_vs_non_factor_predictor = function(SVM) {
-            for (
-                name_of_column in c(
-                    "cylinders",
-                    "displacement",
-                    "horsepower",
-                    "weight",
-                    "acceleration",
-                    "year",
-                    "origin"
+        library(ggplot2)
+        ggplot(
+            data = data_frame,
+            mapping = aes(
+                x = cost,
+                y = error,
+                group = gamma,
+                color = log10(gamma)
+            )
+        ) +
+        geom_point() +
+        geom_line() +
+        scale_x_log10() +
+        scale_colour_distiller(palette = "Spectral")
+        ```
+        
+        As above, minimum error rate for our SVM with radial kernel occurs for cost $C = 1$ and $\gamma = 1$.
+        
+        ```{r}
+        minimum_acceleration <- min(Auto$acceleration)
+        maximum_acceleration <- max(Auto$acceleration)
+        median_number_of_cylinders <- median(Auto$cylinders)
+        median_displacement <- median(Auto$displacement)
+        median_year <- median(Auto$year)
+        median_indicator_of_origin <- median(Auto$origin)
+        sequence_of_accelerations <- seq(
+            from = minimum_acceleration,
+            to = maximum_acceleration,
+            length.out = 4
+        )
+        for (acceleration in sequence_of_accelerations) {
+            plot(
+                x = tune_for_linear_SVM$best.model,
+                data = Auto,
+                formula = horsepower ~ weight,
+                slice = list(
+                    cylinders = median_number_of_cylinders,
+                    displacement = median_displacement,
+                    acceleration = acceleration,
+                    year = median_year,
+                    origin = median_indicator_of_origin
                 )
-            ) {
-                formula_as_string = paste("mpg ~ ", name_of_column, sep = "")
-                formula = as.formula(formula_as_string)
-                plot(x = SVM, data = Auto, formula = formula)
-            }
+            )
+            plot(
+                x = tune_for_polynomial_SVM$best.model,
+                data = Auto,
+                formula = horsepower ~ weight,
+                slice = list(
+                    cylinders = median_number_of_cylinders,
+                    displacement = median_displacement,
+                    acceleration = acceleration,
+                    year = median_year,
+                    origin = median_indicator_of_origin
+                )
+            )
+            plot(
+                x = tune_for_radial_SVM$best.model,
+                data = Auto,
+                formula = horsepower ~ weight,
+                slice = list(
+                    cylinders = median_number_of_cylinders,
+                    displacement = median_displacement,
+                    acceleration = acceleration,
+                    year = median_year,
+                    origin = median_indicator_of_origin
+                )
+            )
         }
-        plot_gas_mileage_vs_non_factor_predictor(linear_SVM)
-        plot_gas_mileage_vs_non_factor_predictor(polynomial_SVM)
-        plot_gas_mileage_vs_non_factor_predictor(radial_SVM)
         ```
         
         X's indicate support vectors. Light pink indicates a point with an actual indicator of whether gas mileage is high of $1$. Black indicates a point with an actual indicator of whether gas mileage is high of $0$. Dark pink indicates a point with with a predicted indicator of whether gas mileage is high of $1$. Yellow indicates a point with an predicted indicator of whether gas mileage is high of $0$.
         
-        Our Linear SVM Classification Plots back up our assertions by showing that for non-factor predictors other than $year$, all points with an actual indicator of whether gas mileage is high of $0$ are correctly classified and most points with an actual indicator of whether gas mileage is high of $1$ are correctly classified.
-        
-        Our Polynomial SVM Classification Plots suggest that a point is always classified as having having an indicator of whether gas mileage is high of $1$.
-        
-        Our Radial SVM Classification Plot for $mpg$ and $acceleration$ backs up our assertions similarly to our Linear SVM Classification Plots. Our Radial SVM Classification Plots for $mpg$ and $horsepower$ and $mpg$ and $origin$ suggests that a point is always classified as having an indicator of whether gas mileage is high of $1$. Our Radial SVM Classification Plots for $mpg$ and $cylinders$, $mpg$ and $displacement$, $mpg$ and $weight$, and $mpg$ and $year$ suggest that all points with an actual indicator of whether gas mileage is high of $1$ are correctly classified and most points with an actual indicator of whether gas mileage is high of $0$ are classified as having actual indicator of whether gas mileage is high of $1$.
+        SVM's with linear and radial kernels separate training points well from the perspective of a graph of horsepower vs. weight where acceleration is equal to its minimum and other predictors are equal to their medians. Radial SVM performs better than linear SVM. Polynomial SVM performs poorly. As acceleration increases, performance of SVM's generally decrease. Linear boundaries increasingly fail to capture actual positives. Radial boundaries increasingly fail to capture actual positives and become less circular. Polynomial boundaries improve by wrapping more tightly around the actual positives but then increasingly fail to capture actual positives.
 
 8.  This problem involves the OJ data set which is part of the ISLR2 package.
 
