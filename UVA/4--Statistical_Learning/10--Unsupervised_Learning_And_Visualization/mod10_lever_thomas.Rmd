@@ -67,9 +67,51 @@ knitr::opts_chunk$set(
 9.  Consider the `USArrests` data. We will now perform hierarchical clustering on the states.
 
     (a) Using hierarchical clustering with complete linkage and Euclidean distance, cluster the states.
+    
+        ```{r, fig.height = 10, fig.width = 14}
+        USArrests_distance_matrix <- dist(USArrests)
+        hclust_for_USArrests <- hclust(USArrests_distance_matrix, method = "complete")
+        plot(hclust_for_USArrests)
+        ```
 
     (b) Cut the dendrogram at a height that results in three distinct clusters. Which states belong to which clusters?
+    
+        ```{r}
+        vector_with_group_memberships <- cutree(tree = hclust_for_USArrests, k = 3)
+        sorted_vector_with_group_memberships <- sort(vector_with_group_memberships)
+        sorted_vector_with_group_memberships
+        ```
+        
+        As depicted above, in ascending order by group index, states Alabama through South Carolina belong to Group 1. States Arkansas through Wyoming belong to Group 2. States Connecticut through Wisconsin belong to Group 3.
 
     (c) Hierarchically cluster the states using complete linkage and Euclidean distance, after scaling the variables to have standard deviation one.
+    
+        ```{r, fig.height = 10, fig.width = 14}
+        centered_and_scaled_USArrests <- scale(USArrests)
+        centered_and_scaled_USArrests_distance_matrix <-
+            dist(centered_and_scaled_USArrests)
+        hclust_for_centered_and_scaled_USArrests <-
+            hclust(centered_and_scaled_USArrests_distance_matrix, method = "complete")
+        plot(hclust_for_centered_and_scaled_USArrests)
+        ```
 
     (d) What effect does scaling the variables have on the hierarchical clustering obtained? In your opinion, should the variables be scaled before the inter-observation dissimilarities are computed? Provide a justification for your answer.
+    
+        ```{r}
+        vector_with_group_memberships <- cutree(
+            tree = hclust_for_centered_and_scaled_USArrests,
+            k = 3
+        )
+        sorted_vector_with_group_memberships <- sort(vector_with_group_memberships)
+        sorted_vector_with_group_memberships
+        ```
+        
+        As depicted above, in ascending order by group index, states Alabama through Tennessee belong to Group 1. States Arizona through Texas belong to Group 2. States Arkansas through Wyoming belong to Group 3.
+        
+        The states within each group are different. The numbers of states within in group are different. I believe the variables should be scaled before the inter-observation dissimilarities are computed.
+        
+        According to [When is centering and scaling needed before doing hierarchical clustering?](https://datascience.stackexchange.com/questions/22355/when-is-centering-and-scaling-needed-before-doing-hierarchical-clustering), "For some types of well defined data, there may be no need to scale and center. A good example is geolocation data (longitudes and latitudes). If you were seeking to cluster towns, you wouldn't need to scale and center their locations.
+
+        For data that is of different physical measurements or units, its probably a good idea to scale and center. For example, when clustering vehicles, the data may contain attributes such as number of wheels, number of doors, miles per gallon, horsepower etc. In this case it may be a better idea to scale and center since you are unsure of the relationship between each attribute.
+
+        The intuition behind that is that since many clustering algorithms require some definition of distance, if you do not scale and center your data, you may give attributes which have larger magnitudes more importance."
