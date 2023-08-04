@@ -6,7 +6,8 @@
 \usage{
 provide_performance_metrics(
   vector_of_actual_indicators,
-  vector_of_predicted_probabilities
+  vector_of_predicted_probabilities,
+  performance_metric
 )
 }
 \arguments{

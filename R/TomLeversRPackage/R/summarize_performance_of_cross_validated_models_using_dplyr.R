@@ -1,9 +1,11 @@
 #' @title summarize_performance_of_cross_validated_models_using_dplyr
 #' @description Summarizes performance of cross validated models using dplyr
-#' @param formula The formula of the logistic regression model for which to summarize performance of cross validated models using dplyr
-#' @param data_frame The data frame on which to train the logistic regression for which to summarize performance of cross validated models using dplyr
+#' @param type_of_model The type of model for which to summarize performance of cross validated models using dplyr
+#' @param formula The formula of the model for which to summarize performance of cross validated models using dplyr
+#' @param data_frame The data frame for which to summarize performance of trained and cross validated models using dplyr
+#' @param optimal_lambda The optimal value of lambda for which to summarize performance of trained and cross validated logistic ridge regression models
 #' @return summary_of_performance_of_cross_validated_models_using_dplyr The summary of performance of cross-validated models using dplyr
-#' @examples summary_of_performance_of_cross_validated_models_using_dplyr <- summarize_performance_of_cross_validated_models_using_dplyr(Indicator ~ Red + Green + Blue, data_frame = data_frame_of_indicators_and_pixels)
+#' @examples summary_of_performance_of_cross_validated_models_using_dplyr <- summarize_performance_of_cross_validated_models_using_dplyr("Logistic Regression", Indicator ~ Red + Green + Blue, data_frame = data_frame_of_indicators_and_pixels, optimal_lambda = 0.001)
 #' @import dplyr
 #' @import ggplot2
 #' @import rsample
@@ -129,16 +131,16 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   tidyr::unnest(predicted_probability) %>%
   group_by(id) %>%
   reframe(
-   accuracy = provide_performance_metrics(actual_indicator, predicted_probability)$accuracy,
-   decimal_of_true_positives = provide_performance_metrics(actual_indicator, predicted_probability)$decimal_of_true_positives,
-   F1_measure = provide_performance_metrics(actual_indicator, predicted_probability)$F1_measure,
-   FPR = provide_performance_metrics(actual_indicator, predicted_probability)$FPR,
-   number_of_negatives = provide_performance_metrics(actual_indicator, predicted_probability)$number_of_negatives,
+   accuracy = provide_performance_metrics(actual_indicator, predicted_probability, "accuracy"),
+   decimal_of_true_positives = provide_performance_metrics(actual_indicator, predicted_probability, "decimal of true positives"),
+   F1_measure = provide_performance_metrics(actual_indicator, predicted_probability, "F1 measure"),
+   FPR = provide_performance_metrics(actual_indicator, predicted_probability, "FPR"),
+   number_of_negatives = provide_performance_metrics(actual_indicator, predicted_probability, "number of negatives"),
    number_of_observations = 1:length(accuracy),
-   number_of_positives = provide_performance_metrics(actual_indicator, predicted_probability)$number_of_positives,
-   PPV = provide_performance_metrics(actual_indicator, predicted_probability)$PPV,
-   threshold = provide_performance_metrics(actual_indicator, predicted_probability)$threshold,
-   TPR = provide_performance_metrics(actual_indicator, predicted_probability)$TPR,
+   number_of_positives = provide_performance_metrics(actual_indicator, predicted_probability, "number of positives"),
+   PPV = provide_performance_metrics(actual_indicator, predicted_probability, "PPV"),
+   threshold = provide_performance_metrics(actual_indicator, predicted_probability, "threshold"),
+   TPR = provide_performance_metrics(actual_indicator, predicted_probability, "TPR"),
   )
  data_frame_of_fold_ids_and_maximum_F1_measures <- data_frame_of_performance_metrics[complete.cases(data_frame_of_performance_metrics), ] %>% group_by(id) %>% summarise(maximum_F1_measure = max(F1_measure))
  data_frame_of_average_performance_metrics <-

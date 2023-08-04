@@ -13,9 +13,13 @@ summarize_performance_of_cross_validated_models_using_dplyr(
 )
 }
 \arguments{
-\item{formula}{The formula of the logistic regression model for which to summarize performance of cross validated models using dplyr}
+\item{type_of_model}{The type of model for which to summarize performance of cross validated models using dplyr}
 
-\item{data_frame}{The data frame on which to train the logistic regression for which to summarize performance of cross validated models using dplyr}
+\item{formula}{The formula of the model for which to summarize performance of cross validated models using dplyr}
+
+\item{data_frame}{The data frame for which to summarize performance of trained and cross validated models using dplyr}
+
+\item{optimal_lambda}{The optimal value of lambda for which to summarize performance of trained and cross validated logistic ridge regression models}
 }
 \value{
 summary_of_performance_of_cross_validated_models_using_dplyr The summary of performance of cross-validated models using dplyr
@@ -24,5 +28,5 @@ summary_of_performance_of_cross_validated_models_using_dplyr The summary of perf
 Summarizes performance of cross validated models using dplyr
 }
 \examples{
-summary_of_performance_of_cross_validated_models_using_dplyr <- summarize_performance_of_cross_validated_models_using_dplyr(Indicator ~ Red + Green + Blue, data_frame = data_frame_of_indicators_and_pixels)
+summary_of_performance_of_cross_validated_models_using_dplyr <- summarize_performance_of_cross_validated_models_using_dplyr("Logistic Regression", Indicator ~ Red + Green + Blue, data_frame = data_frame_of_indicators_and_pixels, optimal_lambda = 0.001)
 }
