@@ -1,6 +1,5 @@
-vector_of_paths_to_data_files_for_region_78 <- c(
- "C:/Users/Tom/Documents/Tom_Levers_Public_Git_Repository/UVA/4--Statistical_Learning/Disaster_Relief_Project/Hold_Out_Data/orthovnir078_ROI_NON_Blue_Tarps.txt",
- "C:/Users/Tom/Documents/Tom_Levers_Public_Git_Repository/UVA/4--Statistical_Learning/Disaster_Relief_Project/Hold_Out_Data/orthovnir078_ROI_Blue_Tarps.txt"
+vector_of_paths_to_data_files_for_region <- c(
+ "C:/Users/Tom/Documents/Tom_Levers_Public_Git_Repository/UVA/4--Statistical_Learning/Disaster_Relief_Project/Holdout_Data/orthovnir057_ROI_NON_Blue_Tarps.txt"
 )
 generate_data_set_for_region <- function(vector_of_paths_to_data_files_for_region) {
  number_of_paths_to_data_files_for_region <- length(vector_of_paths_to_data_files_for_region)
@@ -23,7 +22,7 @@ generate_data_set_for_region <- function(vector_of_paths_to_data_files_for_regio
  )
  return(data_set_for_region)
 }
-data_set_for_region <- generate_data_set_for_region(vector_of_paths_to_data_files_for_region_78)
+data_set_for_region <- generate_data_set_for_region(vector_of_paths_to_data_files_for_region)
 print(head(data_set_for_region$data_frame))
 print(nrow(data_set_for_region$data_frame))
 print(data_set_for_region$vector_of_numbers_of_rows)
