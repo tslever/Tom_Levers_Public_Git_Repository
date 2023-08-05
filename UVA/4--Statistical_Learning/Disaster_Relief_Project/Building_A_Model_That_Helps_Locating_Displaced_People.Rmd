@@ -33,15 +33,15 @@ In this project, we build a model that would help us locate people displaced by 
 
 # Data
 
-Our training data was collected likely by applying a Region Of Interest (ROI) Tool to high-resolution, orthorectified / geo-referenced image of Haiti in 2010. The image is presented in Figure 1 and is sourced from `HaitiOrthorectifiedImage.tif` at [Pixel Values from Images over Haiti](https://www.kaggle.com/datasets/billbasener/pixel-values-from-images-over-haiti?datasetId=1899167). One ROI tool is described at [Region of Interest (ROI) Tool](https://www.l3harrisgeospatial.com/docs/regionofinteresttool.html). Classes may be assigned to pixels by defining Regions Of Interest.
+Our training and holdout data were collected likely by applying a Region Of Interest (ROI) Tool to high-resolution, orthorectified / geo-referenced images of Haiti in 2010. Our training image is presented in Figure 1 and is sourced from `HaitiOrthorectifiedImage.tif` at [Pixel Values from Images over Haiti](https://www.kaggle.com/datasets/billbasener/pixel-values-from-images-over-haiti?datasetId=1899167). One ROI tool is described at [Region of Interest (ROI) Tool](https://www.l3harrisgeospatial.com/docs/regionofinteresttool.html). Classes may be assigned to pixels by defining Regions Of Interest.
 
 ![Orthorectified Image Of Haiti In 2010](Screenshot_Of_Orthorectified_Image_Of_Haiti_In_2010.png){#id .class height=25%}
 
 According to [What is orthorectified imagery?](https://www.esri.com/about/newsroom/insider/what-is-orthorectified-imagery/), an orthorectified image is an accurately georeferenced image that has been processed so that all pixels are in an accurate $(x, y)$ position on the ground. Orthorectified images have been processed to apply corrections for optical distortions from the sensor system, and apparent changes in the position of ground objects caused by the perspective of the sensor view angle and ground terrain.
 
-Our training data frame is sourced from `HaitiPixels.csv` at [Pixel Values from Images over Haiti](https://www.kaggle.com/datasets/billbasener/pixel-values-from-images-over-haiti?datasetId=1899167). Our training data frame consists of $63,241$ observations. Each observation consists of a class in the set $\{Vegetation, \ Soil, \ Rooftop, \ Various \ Non-Tarp, \ Blue \ Tarp\}$ and a pixel. A pixel is a colored dot. A pixel is represented by a tuple of intensities of color $Red$, $Green$, and $Blue$ in the range $0$ to $255$. See below head and tail of our training data frame.
+Our training data frame is sourced from a CSV file like `HaitiPixels.csv` at [Pixel Values from Images over Haiti](https://www.kaggle.com/datasets/billbasener/pixel-values-from-images-over-haiti?datasetId=1899167). Our training data frame consists of $63,241$ observations. Each training observation consists of a class in the set $\{Vegetation, \ Soil, \ Rooftop, \ Various \ Non-Tarp, \ Blue \ Tarp\}$ and a pixel. A pixel is a colored dot. A pixel is represented by a tuple of intensities of color $Red$, $Green$, and $Blue$ in the range $0$ to $255$. See below head and tail of our training data frame.
 
-```{r}
+```{r, eval = TRUE}
 set.seed(1)
 data_frame_of_classes_and_pixels <- read.csv(
     file = "Data_Frame_Of_Classes_And_Pixels.csv"
@@ -54,22 +54,22 @@ We conduct exploratory data analysis by considering the distributions of intensi
 
 Please explore [TomLeversRPackage](https://github.com/tslever/Tom_Levers_Public_Git_Repository/tree/main/R/TomLeversRPackage).
 
-```{r, fig.cap = "Distribution Of Intensities Of Color Red", fig.width = 2.625, fig.height = 1.875}
+```{r, eval = TRUE, fig.cap = "Distribution Of Intensities Of Color Red", fig.width = 2.625, fig.height = 1.875}
 library(TomLeversRPackage)
 plot_distribution(data_frame_of_classes_and_pixels, "Red", "red")
 ```
 
-```{r, fig.cap = "Distribution Of Intensities Of Color Green", fig.width = 2.625, fig.height = 1.875}
+```{r, eval = TRUE, fig.cap = "Distribution Of Intensities Of Color Green", fig.width = 2.625, fig.height = 1.875}
 plot_distribution(data_frame_of_classes_and_pixels, "Green", "green")
 ```
 
-```{r, fig.cap = "Distribution Of Intensities Of Color Blue", fig.width = 2.625, fig.height = 1.875}
+```{r, eval = TRUE, fig.cap = "Distribution Of Intensities Of Color Blue", fig.width = 2.625, fig.height = 1.875}
 plot_distribution(data_frame_of_classes_and_pixels, "Blue", "blue")
 ```
 
 We examine the distribution of classes (such as $Blue \ Tarp$) in a space defined by intensities of color $Red$, $Green$, and $Blue$. See Figure 2. The intensity space for pixels representing blue tarps is distinct from the intensity sapce for pixels representing objects that are not blue tarps.
 
-```{r, fig.cap = "Distribution Of Classes In Intensity Space"}
+```{r, eval = TRUE, fig.cap = "Distribution Of Classes In Intensity Space"}
 distribution_of_classes_in_intensity_space <- plotly::plot_ly(
     data = data_frame_of_classes_and_pixels,
     x = ~Red,
@@ -95,6 +95,12 @@ webshot2::webshot(
 ## Choosing A Binary Classifier
 
 Since the intensity space for pixels representing blue tarps is distinct from the intensity space for pixels representing objects that are not blue tarps, we consider our optimal model to be a binary classifier that classifies pixels as depicting blue tarps or depicting objects that are not blue tarps. We may ignore non-binary classifiers that predict probabilities for all classes and may be used to locate pixels that more likely depict blue tarps than objects that are not blue tarps.
+
+# Data, Continued
+
+Our holdout data frame is sourced from CSV files like `orthovnir057_ROI_NON_Blue_Tarps.txt`, `orthovnir067_ROI_Blue_Tarps.txt`, `orthovnir067_ROI_NOT_Blue_Tarps.txt`, `orthovnir069_ROI_Blue_Tarps.txt`, `orthovnir069_ROI_NOT_Blue_Tarps.txt`, and `orthovnir078_ROI_NON_Blue_Tarps.txt` at the above link and `orthovnir078_ROI_Blue_Tarps.txt` from Dr. Peter Gedeck. Each holdout observation consists of a class in the set $\{Not \ Blue \ Tarp, \ Blue \ Tarp\}$ and a pixel. See below head and tail of our holdout data frame.
+
+# Methods, Continued
 
 ## Choosing A Performance Metric
 
@@ -124,7 +130,7 @@ Regarding the weight of PPV and the weight of TPR, we prioritize TPR at least as
 
 In order to build binary classifiers, we create a data frame with a column of indicators of whether of not a pixel depicts a blue tarp instead of a column of classes. We add columns corresponding to normalized intensities and intensities normalized after transforming by the natural logarithm, the square root, the square, and interactions. We normalize as opposed to standardize intensities given that distributions of intensity are not normal. We shuffle the rows in the data frame.
 
-```{r}
+```{r, eval = FALSE}
 number_of_observations <- nrow(data_frame_of_classes_and_pixels)
 column_of_indicators <- rep(0, number_of_observations)
 condition <- data_frame_of_classes_and_pixels$Class == "Blue Tarp"
@@ -210,7 +216,7 @@ Our optimal Logistic Regression binary classifier has formula $Indicator \sim no
 
 Average accuracy is nearly $1$ for about $90$ percent of thresholds. Average F1 measure is nearly $0.942$ for thresholds between about $0.1$ and about $0.4$. Average PPV increases linearly from a threshold of about $0.1$ to $1$. Average TPR increases linearly from a threshold of about $0.95$ to $0$. A Precision-Recall curve has an AUC of $0.984$. An ROC curve has an AUC of $0.999$.
 
-```{r, eval = TRUE}
+```{r, eval = FALSE}
 # "glm.fit: fitted probabilities numerically 0 or 1" occurs due to predicted
 # probabilities of the Logistic Regression binary classifier being close to 0 and 1.
 # "collapsing to unique ’x’ values" is an artifact of MESS::auc.
@@ -221,11 +227,11 @@ summary_of_performance <- summarize_performance_of_cross_validated_models_using_
 )
 ```
 
-```{r, fig.cap = "Prediction Metrics Vs. Thresholds For Logistic Regression Model With Formula Indicator vs. Normalized Blue + Normalized Red + Normalized Square Of Green", eval = TRUE}
+```{r, eval = FALSE, fig.cap = "Prediction Metrics Vs. Thresholds For Logistic Regression Model With Formula Indicator vs. Normalized Blue + Normalized Red + Normalized Square Of Green", eval = TRUE}
 summary_of_performance$plot_of_performance_metrics_vs_threshold
 ```
 
-```{r, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Logistic Regression Model With Formula Indicator vs. Normalized Blue + Normalized Red + Normalized Square Of Green", eval = TRUE}
+```{r, eval = FALSE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Logistic Regression Model With Formula Indicator vs. Normalized Blue + Normalized Red + Normalized Square Of Green", eval = TRUE}
 summary_of_performance$PR_curve
 summary_of_performance$ROC_curve
 t(summary_of_performance$data_frame_of_optimal_performance_metrics)
@@ -245,7 +251,7 @@ Our optimal Logistic Ridge Regression binary classifier has formula $Indicator \
 
 Average accuracy is nearly $1$ for about $90$ percent of thresholds but in general is not quite as good as for our optimal Logistic Regression binary classifier. Average F1 measure is nearly $0.934$ for maybe $6$ percent of thresholds; the maximum average F1 measure is lower than that for our optimal Logistic Regression binary classifier and about the maximum for fewer thresholds. Average PPV increases logarithmically from a threshold of about $0.1$ to $1$. From about the optimal threshold PPV is greater than that for our optimal Logistic Regression binary classifier. Average TPR increases in the manner of $y = sqrt(x)$ from a threshold of about $1$ to $0$. Average TPR is generally less than that for our optimal Logistic Regression binary classifier. We prioritize TPR over precision but under F1 measure. A Precision-Recall curve has an AUC of $0.981$. An ROC curve has an AUC of $0.999$. These AUC's are less than those for our optimal Logistic Regression binary classifier.
 
-```{r, eval = TRUE, fig.width = 3.5, fig.height = 2.5}
+```{r, eval = FALSE, fig.width = 3.5, fig.height = 2.5}
 formula <-
     Indicator ~ Normalized_Natural_Logarithm_Of_Blue + Normalized_Square_Root_Of_Red
 full_model_matrix <-
@@ -282,11 +288,11 @@ summary_of_performance <- summarize_performance_of_cross_validated_models_using_
 )
 ```
 
-```{r, fig.cap = "Prediction Metrics Vs. Thresholds For Logistic Ridge Regression Model With Formula Indicator Vs. Normalized Natural Logarithm Of Blue + Normalized Square Root Of Red", eval = TRUE}
+```{r, eval = FALSE, fig.cap = "Prediction Metrics Vs. Thresholds For Logistic Ridge Regression Model With Formula Indicator Vs. Normalized Natural Logarithm Of Blue + Normalized Square Root Of Red", eval = TRUE}
 summary_of_performance$plot_of_performance_metrics_vs_threshold
 ```
 
-```{r, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Logistic Ridge Regression Model With Formula Indicator Vs. Normalized Natural Logarithm Of Blue + Normalized Square Root Of Red", eval = TRUE}
+```{r, eval = FALSE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Logistic Ridge Regression Model With Formula Indicator Vs. Normalized Natural Logarithm Of Blue + Normalized Square Root Of Red", eval = TRUE}
 summary_of_performance$PR_curve
 summary_of_performance$ROC_curve
 t(summary_of_performance$data_frame_of_optimal_performance_metrics)
@@ -296,7 +302,7 @@ To search for an optimal LDA binary classifier, we perform manual bidirectional 
 
 Average accuracy is nearly $1$ for about $95$ percent of thresholds but in general is not quite as good as that for our optimal Logistic Regression binary classifier or that for our optimal Logistic Ridge Regression binary classifier. Average F1 measure is nearly $0.891$ for maybe $6$ percent of thresholds; the maximum average F1 measure is lower than that for our optimal Logistic Regression binary classifier and that for our optimal Logistic Ridge Regression binary classifier. The maximum average F1 measure is about $0.891$ for about the same percent of thresholds as for our optimal Logistic Ridge Regression binary classifier. Average PPV increases logarithmically from a threshold of about $0$ to our optimal threshold of $0.69$, at which point average PPV jumps up to $1$. From about a threshold of $0.69$ PPV is greater than that for our optimal Logistic Regression binary classifier and equal to that for our optimal Logistic Ridge Regression binary classifier. For thresholds lower than our optimal threshold of $0.69$ PPV is less than those for our optimal Logistic Regression and Logistic Ridge Regression binary classifiers. Average TPR generally has a similar trend and is less than that for our optimal Logistic Regression binary classifier. Average TPR is generally less than that for our optimal Logistic Ridge Regression binary classifier for thresholds less than $0.38$ and greater than that for our optimal Logistic Ridge Regression binary classifier for thresholds greater than $0.38$. We prioritize TPR over precision but under F1 measure. A Precision-Recall curve has an AUC of $0.903$. An ROC curve has an AUC of $0.949$. These AUC's are less than those for our optimal Logistic Regression and Logistic Ridge Regression binary classifiers.
 
-```{r, eval = TRUE}
+```{r, eval = FALSE}
 summary_of_performance <- summarize_performance_of_cross_validated_models_using_dplyr(
     type_of_model = "LDA",
     formula = Indicator ~ Normalized_Blue + Normalized_Square_Of_Red + Normalized_Square_Of_Green,
@@ -304,11 +310,11 @@ summary_of_performance <- summarize_performance_of_cross_validated_models_using_
 )
 ```
 
-```{r, fig.cap = "Prediction Metrics Vs. Thresholds For Linear Discriminant Analysis Model With Formula Indicator Vs. Normalized Blue + Normalized Square Of Red + Normalized Square Of Green", eval = TRUE}
+```{r, eval = FALSE, fig.cap = "Prediction Metrics Vs. Thresholds For Linear Discriminant Analysis Model With Formula Indicator Vs. Normalized Blue + Normalized Square Of Red + Normalized Square Of Green", eval = TRUE}
 summary_of_performance$plot_of_performance_metrics_vs_threshold
 ```
 
-```{r, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Linear Discriminant Analysis Model With Formula Indicator Vs. Normalized Blue + Normalized Square Of Red + Normalized Square Of Green", eval = TRUE}
+```{r, eval = FALSE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Linear Discriminant Analysis Model With Formula Indicator Vs. Normalized Blue + Normalized Square Of Red + Normalized Square Of Green", eval = TRUE}
 summary_of_performance$PR_curve
 summary_of_performance$ROC_curve
 t(summary_of_performance$data_frame_of_optimal_performance_metrics)
@@ -318,7 +324,7 @@ To search for an optimal QDA binary classifier, we perform manual bidirectional 
 
 Average accuracy is nearly $1$ for about $95$ percent of thresholds but in general is not quite as good as that for our optimal Logistic Regression binary classifier or that for our optimal Logistic Ridge Regression binary classifier. In generally average accuracy is better than for our LDA binary classifier. Average F1 measure is nearly $0.939$ for few thresholds; the maximum average F1 measure is lower than that for our optimal Logistic Regression binary classifier and that for our optimal Logistic Ridge Regression binary classifier but higher than that for our LDA binary classifier. Average PPV increases in the manner of $y = tan(x)$ from a threshold of about $0$ to $1$. In general PPV is less than that for one of the preceding models. Average TPR is nearly $1$ for thresholds less than $0.75$. We prioritize TPR over precision but under F1 measure. A Precision-Recall curve has an AUC of $0.966$. An ROC curve has an AUC of $0.998$. These AUC's are less than those for our optimal Logistic Regression and Logistic Ridge Regression binary classifiers but greater than that for our LDA binary classifier.
 
-```{r, eval = TRUE}
+```{r, eval = FALSE}
 summary_of_performance <- summarize_performance_of_cross_validated_models_using_dplyr(
     type_of_model = "QDA",
     formula = Indicator ~ Normalized_Square_Of_Blue + Normalized_Square_Of_Red + Normalized_Red + Normalized_Natural_Logarithm_Of_Blue,
@@ -326,11 +332,11 @@ summary_of_performance <- summarize_performance_of_cross_validated_models_using_
 )
 ```
 
-```{r, fig.cap = "Prediction Metrics Vs. Thresholds For Quadratic Discriminant Analysis Model With Formula Indicator Vs. Normalized Square Of Blue + Normalized Square Of Red + Normalized Red + Normalized Natural Logarithm Of Blue", eval = TRUE}
+```{r, eval = FALSE, fig.cap = "Prediction Metrics Vs. Thresholds For Quadratic Discriminant Analysis Model With Formula Indicator Vs. Normalized Square Of Blue + Normalized Square Of Red + Normalized Red + Normalized Natural Logarithm Of Blue", eval = TRUE}
 summary_of_performance$plot_of_performance_metrics_vs_threshold
 ```
 
-```{r, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Quadratic Discriminant Analysis Model With Formula Indicator Vs. Normalized Square Of Blue + Normalized Square Of Red + Normalized Red + Normalized Natural Logarithm Of Blue", eval = TRUE}
+```{r, eval = FALSE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Quadratic Discriminant Analysis Model With Formula Indicator Vs. Normalized Square Of Blue + Normalized Square Of Red + Normalized Red + Normalized Natural Logarithm Of Blue", eval = TRUE}
 summary_of_performance$PR_curve
 summary_of_performance$ROC_curve
 t(summary_of_performance$data_frame_of_optimal_performance_metrics)
@@ -346,7 +352,7 @@ Our optimal $KNN$ binary classifier has formula $Indicator \sim normalize(Red:Bl
 
 Average accuracy is nearly $1$ for about $100$ percent of thresholds and is better than that for any of the previous binary classifiers. Average F1 measure is nearly $0.946$ for $90$ percent of thresholds; the maximum average F1 measure is higher than that for any previous binary classifier. Average F1 measure, PPV, and TPR all jump to about $0.942$ for a threshold of about $0.1$. A Precision-Recall curve has an AUC of $0.948$. An ROC curve has an AUC of $0.997$. These AUC's are less than those for our optimal Logistic Regression, Logistic Ridge Regression, and QDA binary classifiers but greater than that for our LDA binary classifier.
 
-```{r, eval = TRUE}
+```{r, eval = FALSE}
 summary_of_performance <- summarize_performance_of_cross_validated_models_using_dplyr(
     type_of_model = "KNN",
     formula = Indicator ~ Normalized_Interaction_Of_Red_And_Blue + Normalized_Interaction_Of_Green_And_Blue + Normalized_Square_Root_Of_Blue,
@@ -354,11 +360,11 @@ summary_of_performance <- summarize_performance_of_cross_validated_models_using_
 )
 ```
 
-```{r, fig.cap = "Prediction Metrics Vs. Thresholds For KNN Model With Formula Indicator Vs. Normalized Interaction Of Red And Blue And Normalized Interaction Of Green And Blue", eval = TRUE}
+```{r, eval = FALSE, fig.cap = "Prediction Metrics Vs. Thresholds For KNN Model With Formula Indicator Vs. Normalized Interaction Of Red And Blue And Normalized Interaction Of Green And Blue", eval = TRUE}
 summary_of_performance$plot_of_performance_metrics_vs_threshold
 ```
 
-```{r, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For KNN Model With Formula Indicator Vs. Normalized Interaction Of Red And Blue And Normalized Interaction Of Green And Blue", eval = TRUE}
+```{r, eval = FALSE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For KNN Model With Formula Indicator Vs. Normalized Interaction Of Red And Blue And Normalized Interaction Of Green And Blue", eval = TRUE}
 summary_of_performance$PR_curve
 summary_of_performance$ROC_curve
 t(summary_of_performance$data_frame_of_optimal_performance_metrics)
@@ -395,7 +401,7 @@ To calculate our $p$ value, we conduct Fisher's Randomization Test. We calculate
 
 The $p$ value for our Logistic Regression and KNN binary classifiers is $0.4$. The probability of observing a random test statistic greater than our test statistic is $0.4$. Because our $p$ value is greater than our significance level, we cannot confidently say that our test statistic is not due to random chance. Our difference between the average maximum F1 measures of our Logistic Regression and KNN models is statistically insignificant.
 
-```{r}
+```{r, eval = FALSE}
 calculate_probability_for_randomization_test(
     data_frame_of_fold_ids_and_maximum_F1_measures_for_Logistic_Regression,
     data_frame_of_fold_ids_and_maximum_F1_measures_for_KNN
