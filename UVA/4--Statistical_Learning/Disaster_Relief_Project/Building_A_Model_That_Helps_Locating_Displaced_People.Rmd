@@ -43,11 +43,11 @@ Our training data frame is sourced from a CSV file like `HaitiPixels.csv` at [Pi
 
 ```{r, eval = TRUE}
 set.seed(1)
-data_frame_of_classes_and_pixels <- read.csv(
-    file = "Data_Frame_Of_Classes_And_Pixels.csv"
+training_data_frame_of_classes_and_pixels <- read.csv(
+    file = "Training_Data_Frame_Of_Classes_And_Pixels.csv"
 )
-head(x = data_frame_of_classes_and_pixels, n = 2)
-tail(x = data_frame_of_classes_and_pixels, n = 2)
+head(x = training_data_frame_of_classes_and_pixels, n = 2)
+tail(x = training_data_frame_of_classes_and_pixels, n = 2)
 ```
 
 We conduct exploratory data analysis by considering the distributions of intensities of color $Red$, $Green$, and $Blue$. See Figures 3, 4, and 5. No distribution of intensities of color is normal.
@@ -56,22 +56,22 @@ Please explore [TomLeversRPackage](https://github.com/tslever/Tom_Levers_Public_
 
 ```{r, eval = TRUE, fig.cap = "Distribution Of Intensities Of Color Red", fig.width = 2.625, fig.height = 1.875}
 library(TomLeversRPackage)
-plot_distribution(data_frame_of_classes_and_pixels, "Red", "red")
+plot_distribution(training_data_frame_of_classes_and_pixels, "Red", "red")
 ```
 
 ```{r, eval = TRUE, fig.cap = "Distribution Of Intensities Of Color Green", fig.width = 2.625, fig.height = 1.875}
-plot_distribution(data_frame_of_classes_and_pixels, "Green", "green")
+plot_distribution(training_data_frame_of_classes_and_pixels, "Green", "green")
 ```
 
 ```{r, eval = TRUE, fig.cap = "Distribution Of Intensities Of Color Blue", fig.width = 2.625, fig.height = 1.875}
-plot_distribution(data_frame_of_classes_and_pixels, "Blue", "blue")
+plot_distribution(training_data_frame_of_classes_and_pixels, "Blue", "blue")
 ```
 
 We examine the distribution of classes (such as $Blue \ Tarp$) in a space defined by intensities of color $Red$, $Green$, and $Blue$. See Figure 2. The intensity space for pixels representing blue tarps is distinct from the intensity sapce for pixels representing objects that are not blue tarps.
 
 ```{r, eval = TRUE, fig.cap = "Distribution Of Classes In Intensity Space"}
 distribution_of_classes_in_intensity_space <- plotly::plot_ly(
-    data = data_frame_of_classes_and_pixels,
+    data = training_data_frame_of_classes_and_pixels,
     x = ~Red,
     y = ~Green,
     z = ~Blue,
@@ -99,6 +99,15 @@ Since the intensity space for pixels representing blue tarps is distinct from th
 # Data, Continued
 
 Our holdout data frame is sourced from CSV files like `orthovnir057_ROI_NON_Blue_Tarps.txt`, `orthovnir067_ROI_Blue_Tarps.txt`, `orthovnir067_ROI_NOT_Blue_Tarps.txt`, `orthovnir069_ROI_Blue_Tarps.txt`, `orthovnir069_ROI_NOT_Blue_Tarps.txt`, and `orthovnir078_ROI_NON_Blue_Tarps.txt` at the above link and `orthovnir078_ROI_Blue_Tarps.txt` from Dr. Peter Gedeck. Each holdout observation consists of a class in the set $\{Not \ Blue \ Tarp, \ Blue \ Tarp\}$ and a pixel. See below head and tail of our holdout data frame.
+
+```{r, eval = TRUE}
+set.seed(1)
+holdout_data_frame_of_classes_and_pixels <- read.csv(
+    file = "Holdout_Data_Frame_Of_Classes_And_Pixels.csv"
+)
+head(x = holdout_data_frame_of_classes_and_pixels, n = 2)
+tail(x = holdout_data_frame_of_classes_and_pixels, n = 2)
+```
 
 # Methods, Continued
 
@@ -128,66 +137,85 @@ Regarding the weight of PPV and the weight of TPR, we prioritize TPR at least as
 
 ## Data Frame For Modeling
 
-In order to build binary classifiers, we create a data frame with a column of indicators of whether of not a pixel depicts a blue tarp instead of a column of classes. We add columns corresponding to normalized intensities and intensities normalized after transforming by the natural logarithm, the square root, the square, and interactions. We normalize as opposed to standardize intensities given that distributions of intensity are not normal. We shuffle the rows in the data frame.
+In order to build binary classifiers, we create a composite data frame of our training data frame and our holdout data frame; substitute a column of classes for a column of indicators of whether of not a pixel depicts a blue tarp; add columns corresponding to normalized intensities and intensities normalized after transforming by the natural logarithm, the square root, the square, and interactions; and divide the composite data frame into training and holdout data frames again. We normalize as opposed to standardize intensities given that distributions of intensity are not normal. We shuffle the rows in our training and holdout data frames.
 
-```{r, eval = FALSE}
-number_of_observations <- nrow(data_frame_of_classes_and_pixels)
-column_of_indicators <- rep(0, number_of_observations)
-condition <- data_frame_of_classes_and_pixels$Class == "Blue Tarp"
+```{r, eval = TRUE}
+composite_data_frame_of_classes_and_pixels <- rbind(
+    training_data_frame_of_classes_and_pixels,
+    holdout_data_frame_of_classes_and_pixels
+)
+number_of_training_observations <- 
+    nrow(training_data_frame_of_classes_and_pixels)
+number_of_holdout_observations <- 
+    nrow(holdout_data_frame_of_classes_and_pixels)
+number_of_training_and_holdout_observations <-
+    nrow(composite_data_frame_of_classes_and_pixels)
+column_of_indicators <- rep(0, number_of_training_and_holdout_observations)
+condition <- composite_data_frame_of_classes_and_pixels$Class == "Blue Tarp"
 column_of_indicators[condition] <- 1
 factor_of_indicators <- factor(column_of_indicators)
-data_frame_of_indicators_and_pixels <- data.frame(
+composite_data_frame_of_indicators_and_pixels <- data.frame(
     Indicator = factor_of_indicators,
-    Normalized_Red = normalize_vector(data_frame_of_classes_and_pixels[, "Red"]),
-    Normalized_Green = normalize_vector(data_frame_of_classes_and_pixels[, "Green"]),
-    Normalized_Blue = normalize_vector(data_frame_of_classes_and_pixels[, "Blue"]),
+    Normalized_Red = normalize_vector(composite_data_frame_of_classes_and_pixels[, "Red"]),
+    Normalized_Green = normalize_vector(composite_data_frame_of_classes_and_pixels[, "Green"]),
+    Normalized_Blue = normalize_vector(composite_data_frame_of_classes_and_pixels[, "Blue"]),
     Normalized_Natural_Logarithm_Of_Red =
-        normalize_vector(log(data_frame_of_classes_and_pixels[, "Red"])),
+        normalize_vector(log(composite_data_frame_of_classes_and_pixels[, "Red"])),
     Normalized_Natural_Logarithm_Of_Green =
-        normalize_vector(log(data_frame_of_classes_and_pixels[, "Green"])),
+        normalize_vector(log(composite_data_frame_of_classes_and_pixels[, "Green"])),
     Normalized_Natural_Logarithm_Of_Blue =
-        normalize_vector(log(data_frame_of_classes_and_pixels[, "Blue"])),
+        normalize_vector(log(composite_data_frame_of_classes_and_pixels[, "Blue"])),
     Normalized_Square_Root_Of_Red =
-        normalize_vector(sqrt(data_frame_of_classes_and_pixels[, "Red"])),
+        normalize_vector(sqrt(composite_data_frame_of_classes_and_pixels[, "Red"])),
     Normalized_Square_Root_Of_Green =
-        normalize_vector(sqrt(data_frame_of_classes_and_pixels[, "Green"])),
+        normalize_vector(sqrt(composite_data_frame_of_classes_and_pixels[, "Green"])),
     Normalized_Square_Root_Of_Blue =
-        normalize_vector(sqrt(data_frame_of_classes_and_pixels[, "Blue"])),
+        normalize_vector(sqrt(composite_data_frame_of_classes_and_pixels[, "Blue"])),
     Normalized_Square_Of_Red =
-        normalize_vector(I(data_frame_of_classes_and_pixels[, "Red"]^2)),
+        normalize_vector(I(composite_data_frame_of_classes_and_pixels[, "Red"]^2)),
     Normalized_Square_Of_Green =
-        normalize_vector(I(data_frame_of_classes_and_pixels[, "Green"]^2)),
+        normalize_vector(I(composite_data_frame_of_classes_and_pixels[, "Green"]^2)),
     Normalized_Square_Of_Blue =
-        normalize_vector(I(data_frame_of_classes_and_pixels[, "Blue"]^2)),
+        normalize_vector(I(composite_data_frame_of_classes_and_pixels[, "Blue"]^2)),
     Normalized_Interaction_Of_Red_And_Green = normalize_vector(
         as.numeric(
             interaction(
-                data_frame_of_classes_and_pixels$Red,
-                data_frame_of_classes_and_pixels$Green
+                composite_data_frame_of_classes_and_pixels$Red,
+                composite_data_frame_of_classes_and_pixels$Green
             )
         )
     ),
     Normalized_Interaction_Of_Red_And_Blue = normalize_vector(
         as.numeric(
             interaction(
-                data_frame_of_classes_and_pixels$Red,
-                data_frame_of_classes_and_pixels$Blue
+                composite_data_frame_of_classes_and_pixels$Red,
+                composite_data_frame_of_classes_and_pixels$Blue
             )
         )
     ),
     Normalized_Interaction_Of_Green_And_Blue = normalize_vector(
         as.numeric(
             interaction(
-                data_frame_of_classes_and_pixels$Green,
-                data_frame_of_classes_and_pixels$Blue
+                composite_data_frame_of_classes_and_pixels$Green,
+                composite_data_frame_of_classes_and_pixels$Blue
             )
         )
     )
 )
-vector_of_random_indices <- sample(1:number_of_observations)
-data_frame_of_indicators_and_pixels <-
-    data_frame_of_indicators_and_pixels[vector_of_random_indices, ]
-t(data_frame_of_indicators_and_pixels[1, ])
+training_data_frame_of_indicators_and_pixels <- 
+    composite_data_frame_of_indicators_and_pixels[1:number_of_training_observations, ]
+holdout_data_frame_of_indicators_and_pixels <-
+    composite_data_frame_of_indicators_and_pixels[
+        (number_of_training_observations + 1):
+        number_of_training_and_holdout_observations,
+    ]
+vector_of_random_indices <- sample(1:number_of_training_observations)
+training_data_frame_of_indicators_and_pixels <-
+    training_data_frame_of_indicators_and_pixels[vector_of_random_indices, ]
+vector_of_random_indices <- sample(1:number_of_holdout_observations)
+holdout_data_frame_of_indicators_and_pixels <-
+    holdout_data_frame_of_indicators_and_pixels[vector_of_random_indices, ]
+t(training_data_frame_of_indicators_and_pixels[1, ])
 ```
 
 ## Grid Search
