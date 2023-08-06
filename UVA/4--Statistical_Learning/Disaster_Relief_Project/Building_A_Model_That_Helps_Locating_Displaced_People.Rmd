@@ -138,83 +138,105 @@ Regarding the weight of PPV and the weight of TPR, we prioritize TPR at least as
 In order to build binary classifiers, we create a composite data frame of our training data frame and our holdout data frame; substitute a column of classes for a column of indicators of whether of not a pixel depicts a blue tarp; add columns corresponding to normalized intensities and intensities normalized after transforming by the natural logarithm, the square root, the square, and interactions; and divide the composite data frame into training and holdout data frames again. We normalize as opposed to standardize intensities given that distributions of intensity are not normal. We shuffle the rows in our training and holdout data frames.
 
 ```{r, eval = TRUE}
-composite_data_frame_of_classes_and_pixels <- rbind(
-    training_data_frame_of_classes_and_pixels,
-    holdout_data_frame_of_classes_and_pixels
-)
-number_of_training_observations <- 
-    nrow(training_data_frame_of_classes_and_pixels)
-number_of_holdout_observations <- 
-    nrow(holdout_data_frame_of_classes_and_pixels)
-number_of_training_and_holdout_observations <-
-    nrow(composite_data_frame_of_classes_and_pixels)
-column_of_indicators <- rep(0, number_of_training_and_holdout_observations)
-condition <- composite_data_frame_of_classes_and_pixels$Class == "Blue Tarp"
-column_of_indicators[condition] <- 1
-factor_of_indicators <- factor(column_of_indicators)
-composite_data_frame_of_indicators_and_pixels <- data.frame(
-    Indicator = factor_of_indicators,
-    Normalized_Red = normalize_vector(composite_data_frame_of_classes_and_pixels[, "Red"]),
-    Normalized_Green = normalize_vector(composite_data_frame_of_classes_and_pixels[, "Green"]),
-    Normalized_Blue = normalize_vector(composite_data_frame_of_classes_and_pixels[, "Blue"]),
-    Normalized_Natural_Logarithm_Of_Red =
-        normalize_vector(log(composite_data_frame_of_classes_and_pixels[, "Red"])),
-    Normalized_Natural_Logarithm_Of_Green =
-        normalize_vector(log(composite_data_frame_of_classes_and_pixels[, "Green"])),
-    Normalized_Natural_Logarithm_Of_Blue =
-        normalize_vector(log(composite_data_frame_of_classes_and_pixels[, "Blue"])),
-    Normalized_Square_Root_Of_Red =
-        normalize_vector(sqrt(composite_data_frame_of_classes_and_pixels[, "Red"])),
-    Normalized_Square_Root_Of_Green =
-        normalize_vector(sqrt(composite_data_frame_of_classes_and_pixels[, "Green"])),
-    Normalized_Square_Root_Of_Blue =
-        normalize_vector(sqrt(composite_data_frame_of_classes_and_pixels[, "Blue"])),
-    Normalized_Square_Of_Red =
-        normalize_vector(I(composite_data_frame_of_classes_and_pixels[, "Red"]^2)),
-    Normalized_Square_Of_Green =
-        normalize_vector(I(composite_data_frame_of_classes_and_pixels[, "Green"]^2)),
-    Normalized_Square_Of_Blue =
-        normalize_vector(I(composite_data_frame_of_classes_and_pixels[, "Blue"]^2)),
-    Normalized_Interaction_Of_Red_And_Green = normalize_vector(
-        as.numeric(
-            interaction(
-                composite_data_frame_of_classes_and_pixels$Red,
-                composite_data_frame_of_classes_and_pixels$Green
+should_generate_training_and_holdout_data_frames_of_indicators_and_pixels <- FALSE
+if (should_generate_training_and_holdout_data_frames_of_indicators_and_pixels) {
+    composite_data_frame_of_classes_and_pixels <- rbind(
+        training_data_frame_of_classes_and_pixels,
+        holdout_data_frame_of_classes_and_pixels
+    )
+    number_of_training_observations <- 
+        nrow(training_data_frame_of_classes_and_pixels)
+    number_of_holdout_observations <- 
+        nrow(holdout_data_frame_of_classes_and_pixels)
+    number_of_training_and_holdout_observations <-
+        nrow(composite_data_frame_of_classes_and_pixels)
+    column_of_indicators <- rep(0, number_of_training_and_holdout_observations)
+    condition <- composite_data_frame_of_classes_and_pixels$Class == "Blue Tarp"
+    column_of_indicators[condition] <- 1
+    factor_of_indicators <- factor(column_of_indicators)
+    composite_data_frame_of_indicators_and_pixels <- data.frame(
+        Indicator = factor_of_indicators,
+        Normalized_Red = normalize_vector(composite_data_frame_of_classes_and_pixels[, "Red"]),
+        Normalized_Green = normalize_vector(composite_data_frame_of_classes_and_pixels[, "Green"]),
+        Normalized_Blue = normalize_vector(composite_data_frame_of_classes_and_pixels[, "Blue"]),
+        Normalized_Natural_Logarithm_Of_Red =
+            normalize_vector(log(composite_data_frame_of_classes_and_pixels[, "Red"])),
+        Normalized_Natural_Logarithm_Of_Green =
+            normalize_vector(log(composite_data_frame_of_classes_and_pixels[, "Green"])),
+        Normalized_Natural_Logarithm_Of_Blue =
+            normalize_vector(log(composite_data_frame_of_classes_and_pixels[, "Blue"])),
+        Normalized_Square_Root_Of_Red =
+            normalize_vector(sqrt(composite_data_frame_of_classes_and_pixels[, "Red"])),
+        Normalized_Square_Root_Of_Green =
+            normalize_vector(sqrt(composite_data_frame_of_classes_and_pixels[, "Green"])),
+        Normalized_Square_Root_Of_Blue =
+            normalize_vector(sqrt(composite_data_frame_of_classes_and_pixels[, "Blue"])),
+        Normalized_Square_Of_Red =
+            normalize_vector(I(composite_data_frame_of_classes_and_pixels[, "Red"]^2)),
+        Normalized_Square_Of_Green =
+            normalize_vector(I(composite_data_frame_of_classes_and_pixels[, "Green"]^2)),
+        Normalized_Square_Of_Blue =
+            normalize_vector(I(composite_data_frame_of_classes_and_pixels[, "Blue"]^2)),
+        Normalized_Interaction_Of_Red_And_Green = normalize_vector(
+            as.numeric(
+                interaction(
+                    composite_data_frame_of_classes_and_pixels$Red,
+                    composite_data_frame_of_classes_and_pixels$Green
+                )
             )
-        )
-    ),
-    Normalized_Interaction_Of_Red_And_Blue = normalize_vector(
-        as.numeric(
-            interaction(
-                composite_data_frame_of_classes_and_pixels$Red,
-                composite_data_frame_of_classes_and_pixels$Blue
+        ),
+        Normalized_Interaction_Of_Red_And_Blue = normalize_vector(
+            as.numeric(
+                interaction(
+                    composite_data_frame_of_classes_and_pixels$Red,
+                    composite_data_frame_of_classes_and_pixels$Blue
+                )
             )
-        )
-    ),
-    Normalized_Interaction_Of_Green_And_Blue = normalize_vector(
-        as.numeric(
-            interaction(
-                composite_data_frame_of_classes_and_pixels$Green,
-                composite_data_frame_of_classes_and_pixels$Blue
+        ),
+        Normalized_Interaction_Of_Green_And_Blue = normalize_vector(
+            as.numeric(
+                interaction(
+                    composite_data_frame_of_classes_and_pixels$Green,
+                    composite_data_frame_of_classes_and_pixels$Blue
+                )
             )
         )
     )
-)
-training_data_frame_of_indicators_and_pixels <- 
-    composite_data_frame_of_indicators_and_pixels[1:number_of_training_observations, ]
-holdout_data_frame_of_indicators_and_pixels <-
-    composite_data_frame_of_indicators_and_pixels[
-        (number_of_training_observations + 1):
-        number_of_training_and_holdout_observations,
-    ]
-set.seed(1)
-vector_of_random_indices <- sample(1:number_of_training_observations)
-training_data_frame_of_indicators_and_pixels <-
-    training_data_frame_of_indicators_and_pixels[vector_of_random_indices, ]
-set.seed(1)
-vector_of_random_indices <- sample(1:number_of_holdout_observations)
-holdout_data_frame_of_indicators_and_pixels <-
-    holdout_data_frame_of_indicators_and_pixels[vector_of_random_indices, ]
+    training_data_frame_of_indicators_and_pixels <- 
+        composite_data_frame_of_indicators_and_pixels[1:number_of_training_observations, ]
+    holdout_data_frame_of_indicators_and_pixels <-
+        composite_data_frame_of_indicators_and_pixels[
+            (number_of_training_observations + 1):
+            number_of_training_and_holdout_observations,
+        ]
+    set.seed(1)
+    vector_of_random_indices <- sample(1:number_of_training_observations)
+    training_data_frame_of_indicators_and_pixels <-
+        training_data_frame_of_indicators_and_pixels[vector_of_random_indices, ]
+    set.seed(1)
+    vector_of_random_indices <- sample(1:number_of_holdout_observations)
+    holdout_data_frame_of_indicators_and_pixels <-
+        holdout_data_frame_of_indicators_and_pixels[vector_of_random_indices, ]
+    write.csv(
+        training_data_frame_of_indicators_and_pixels,
+        "Training_Data_Frame_Of_Indicators_And_Pixels.csv",
+        row.names = FALSE
+    )
+    write.csv(
+        holdout_data_frame_of_indicators_and_pixels,
+        "Holdout_Data_Frame_Of_Indicators_And_Pixels.csv",
+        row.names = FALSE
+    )
+} else {
+    training_data_frame_of_indicators_and_pixels <-
+        read.csv("Training_Data_Frame_Of_Indicators_And_Pixels.csv", header = TRUE)
+    training_data_frame_of_indicators_and_pixels$Indicator <-
+        factor(training_data_frame_of_indicators_and_pixels$Indicator)
+    holdout_data_frame_of_indicators_and_pixels <-
+        read.csv("Holdout_Data_Frame_Of_Indicators_And_Pixels.csv", header = TRUE)
+    holdout_data_frame_of_indicators_and_pixels$Indicator <-
+        factor(holdout_data_frame_of_indicators_and_pixels$Indicator)
+}
 t(training_data_frame_of_indicators_and_pixels[1, ])
 ```
 
@@ -245,6 +267,27 @@ Our optimal LR classifier has formula $Indicator \sim normalize(Blue) + normaliz
 Average accuracy is nearly $1$ for about $90$ percent of thresholds. Average F1 measure is nearly $0.942$ for thresholds between about $0.1$ and about $0.4$. Average PPV increases linearly from a threshold of about $0.1$ to $1$. Average TPR increases linearly from a threshold of about $0.95$ to $0$. A Precision-Recall curve has an AUC of $0.984$. An ROC curve has an AUC of $0.999$.
 
 ```{r, eval = TRUE}
+set.seed(1)
+summary_of_performance <- summarize_performance_of_cross_validated_models_using_dplyr(
+    type_of_model = "Random Forest",
+    formula = Indicator ~ Normalized_Red + Normalized_Green + Normalized_Blue,
+    data_frame = training_data_frame_of_indicators_and_pixels
+)
+```
+
+```{r, eval = TRUE, fig.cap = "Prediction Metrics Vs. Thresholds For Random Forest Binary Classifier With Formula Indicator vs. Normalized Red + Normalized Green + Normalized Blue"}
+summary_of_performance$plot_of_performance_metrics_vs_threshold
+```
+
+```{r, eval = TRUE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Random Forest Binary Classifier With Formula Indicator vs. Normalized Red + Normalized Green + Normalized Blue"}
+summary_of_performance$PR_curve
+summary_of_performance$ROC_curve
+t(summary_of_performance$data_frame_of_optimal_performance_metrics)
+data_frame_of_fold_ids_and_maximum_F1_measures_for_Random_Forest <-
+    summary_of_performance$data_frame_of_fold_ids_and_maximum_F1_measures
+```
+
+```{r, eval = FALSE}
 # "glm.fit: fitted probabilities numerically 0 or 1" occurs due to predicted
 # probabilities of the Logistic Regression binary classifier being close to 0 and 1.
 # "collapsing to unique ’x’ values" is an artifact of MESS::auc.
@@ -256,11 +299,11 @@ summary_of_performance <- summarize_performance_of_cross_validated_models_using_
 )
 ```
 
-```{r, eval = TRUE, fig.cap = "Prediction Metrics Vs. Thresholds For Logistic Regression Model With Formula Indicator vs. Normalized Blue + Normalized Red + Normalized Square Of Green", eval = TRUE}
+```{r, eval = FALSE, fig.cap = "Prediction Metrics Vs. Thresholds For Logistic Regression Model With Formula Indicator vs. Normalized Blue + Normalized Red + Normalized Square Of Green"}
 summary_of_performance$plot_of_performance_metrics_vs_threshold
 ```
 
-```{r, eval = TRUE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Logistic Regression Model With Formula Indicator vs. Normalized Blue + Normalized Red + Normalized Square Of Green", eval = TRUE}
+```{r, eval = FALSE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Logistic Regression Model With Formula Indicator vs. Normalized Blue + Normalized Red + Normalized Square Of Green"}
 summary_of_performance$PR_curve
 summary_of_performance$ROC_curve
 t(summary_of_performance$data_frame_of_optimal_performance_metrics)

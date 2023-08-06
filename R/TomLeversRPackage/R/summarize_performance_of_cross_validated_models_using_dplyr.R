@@ -19,6 +19,7 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
  print(paste(names_of_variables[1], " ~ ", sep = ""))
  print(paste("    ", names_of_variables[2], sep = ""))
  number_of_variables <- length(names_of_variables)
+ number_of_predictors <- length(vector_of_names_of_predictors)
  if (number_of_variables > 2) {
   for (i in 3:number_of_variables) {
    print(paste("    + ", names_of_variables[i], sep = ""))
@@ -31,7 +32,7 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
    the_glmnet <- glmnet::glmnet(x = matrix_of_predictors, y = vector_of_response_values, family = "binomial", alpha = 0)
    sequence_of_lambda_values <- the_glmnet$lambda
    print(paste("sequence of lambda values = {", sequence_of_lambda_values[1], ", ", sequence_of_lambda_values[2], ", ..., ", sequence_of_lambda_values[length(sequence_of_lambda_values)], "}", sep = ""))
-   the_trainControl <- caret::trainControl(method  = "cv", summaryFunction = calculate_F1_measure)
+   the_trainControl <- caret::trainControl(method  = "cv", summaryFunction = calculate_F1_measure, allowParallel = TRUE)
    list_of_training_information <- caret::train(
     form = formula,
     data = data_frame,
@@ -44,7 +45,7 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   }
   print(paste("optimal value of lambda = ", optimal_lambda, sep = ""))
  } else if (type_of_model == "KNN") {
-  the_trainControl <- caret::trainControl(method  = "cv", summaryFunction = calculate_F1_measure)
+  the_trainControl <- caret::trainControl(method  = "cv", summaryFunction = calculate_F1_measure, allowParallel = TRUE)
   list_of_training_information <- caret::train(
    form = formula,
    data = data_frame,
@@ -56,6 +57,48 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   print(plot(list_of_training_information))
   optimal_K = list_of_training_information$bestTune
   print(paste("optimal value of K = ", optimal_K, sep = ""))
+ } else if (type_of_model == "Random Forest") {
+  random_forest <- list(
+   type = "Classification",
+   library = "randomForest",
+   loop = NULL
+  )
+  random_forest$parameters <- data.frame(
+   parameter = c("mtry", "ntree"),
+   class = c("numeric", "numeric"),
+   label = c("mtry", "ntree")
+  )
+  random_forest$grid <- function(x, y, len = NULL, search = "grid") {}
+  random_forest$fit <- function(x, y, wts, param, lev, last, weights, classProbs) {
+   randomForest::randomForest(x, y, mtry = param$mtry, ntree = param$ntree)
+  }
+  random_forest$predict <- function(modelFit, newdata, preProc = NULL, submodels = NULL) {
+   predict(modelFit, newdata)
+  }
+  random_forest$prob <- function(modelFit, newdata, preProc = NULL, submodels = NULL) {
+   predict(modelFit, newdata, type = "prob")
+  }
+  random_forest$sort = function(x) {
+   x[order(x[,1]),]
+  }
+  random_forest$levels <- function(x) {
+   x$classes
+  }
+  the_trainControl <- caret::trainControl(method = "cv", summaryFunction = calculate_F1_measure, allowParallel = TRUE)
+  the_tuneGrid = expand.grid(.mtry = c(1:number_of_predictors), .ntree = c(1, 2))
+  list_of_training_information <- caret::train(
+   form = formula,
+   data = data_frame,
+   method = random_forest,
+   metric = "F1_measure",
+   trControl = the_trainControl,
+   tuneGrid = the_tuneGrid
+  )
+  print(plot(list_of_training_information))
+  optimal_mtry = list_of_training_information$bestTune$mtry
+  print(paste("optimal value of mtry = ", optimal_mtry, sep = ""))
+  optimal_ntree = list_of_training_information$bestTune$ntree
+  print(paste("optimal value of ntree = ", optimal_ntree, sep = ""))
  }
  generate_data_frame_of_actual_indicators_and_predicted_probabilities <-
   function(train_test_split) {
@@ -109,6 +152,17 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
     )
     index_of_column_1 <- get_index_of_column_of_data_frame(data_frame_of_predicted_probabilities, 1)
     vector_of_predicted_probabilities <- data_frame_of_predicted_probabilities[, index_of_column_1]
+   } else if (type_of_model == "Random Forest") {
+    index_of_column_Indicator <- get_index_of_column_of_data_frame(training_data, "Indicator")
+    data_frame_of_training_predictors <- training_data[, -index_of_column_Indicator]
+    data_frame_of_training_response_values <- training_data[, index_of_column_Indicator]
+    the_randomForest <- randomForest::randomForest(
+     formula,
+     training_data,
+     mtry = optimal_mtry,
+     ntree = optimal_ntree
+    )
+    vector_of_predicted_probabilities <- predict(the_randomForest, newdata = testing_data, type = "prob")[, 2]
    } else {
     error_message <- paste("The performance of models of type ", type_of_model, " cannot be yet summarized.", sep = "")
     stop(error_message)
