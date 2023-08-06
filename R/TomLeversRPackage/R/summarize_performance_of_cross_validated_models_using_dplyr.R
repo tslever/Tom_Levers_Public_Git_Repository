@@ -62,29 +62,20 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
  } else if (type_of_model == "Random Forest") {
   random_forest <- list(
    type = "Classification",
-   library = "randomForest",
-   loop = NULL
+   library = "randomForest"
   )
   random_forest$parameters <- data.frame(
-   parameter = c("mtry", "ntree"),
-   class = c("numeric", "numeric"),
-   label = c("mtry", "ntree")
+   parameter = c("mtry", "ntree")
   )
-  random_forest$grid <- function(x, y, len = NULL, search = "grid") {}
-  random_forest$fit <- function(x, y, wts, param, lev, last, weights, classProbs) {
-   randomForest::randomForest(x, y, mtry = param$mtry, ntree = param$ntree)
+  random_forest$grid <- function() {}
+  random_forest$fit <- function(x, y, parameters, classProbs, last, lev, wts) {
+   randomForest::randomForest(x, y, mtry = parameters$mtry, ntree = parameters$ntree)
   }
-  random_forest$predict <- function(modelFit, newdata, preProc = NULL, submodels = NULL) {
-   predict(modelFit, newdata)
+  random_forest$predict <- function(modelFit, newdata, submodels = NULL) {
+   predict(modelFit, newdata, type = "response")
   }
-  random_forest$prob <- function(modelFit, newdata, preProc = NULL, submodels = NULL) {
+  random_forest$prob <- function(modelFit, newdata) {
    predict(modelFit, newdata, type = "prob")
-  }
-  random_forest$sort = function(x) {
-   x[order(x[,1]),]
-  }
-  random_forest$levels <- function(x) {
-   x$classes
   }
   the_trainControl <- caret::trainControl(method = "cv", summaryFunction = calculate_F1_measure, allowParallel = TRUE)
   the_tuneGrid = expand.grid(.mtry = c(1:number_of_predictors), .ntree = c(1, 2))
@@ -119,8 +110,8 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   }
   SVM_with_linear_kernel$prob <- function(modelFit, newdata) {
    factor_of_predictions_and_predicted_probabilities <- predict(modelFit, newdata = testing_data, probability = TRUE)
-   vector_of_predicted_probabilities <- attr(x = factor_of_predictions_and_predicted_probabilities, which = "probabilities")[, 2]
-   return(vector_of_predicted_probabilities)
+   matrix_of_predicted_probabilities <- attr(x = factor_of_predictions_and_predicted_probabilities, which = "probabilities")
+   return(matrix_of_predicted_probabilities)
   }
   the_trainControl <- caret::trainControl(method = "cv", summaryFunction = calculate_F1_measure, allowParallel = TRUE)
   range_of_costs <- 10^seq(from = 1, to = 3, by = 1)
@@ -154,8 +145,8 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   }
   SVM_with_polynomial_kernel$prob <- function(modelFit, newdata) {
    factor_of_predictions_and_predicted_probabilities <- predict(modelFit, newdata = testing_data, probability = TRUE)
-   vector_of_predicted_probabilities <- attr(x = factor_of_predictions_and_predicted_probabilities, which = "probabilities")[, 2]
-   return(vector_of_predicted_probabilities)
+   matrix_of_predicted_probabilities <- attr(x = factor_of_predictions_and_predicted_probabilities, which = "probabilities")
+   return(matrix_of_predicted_probabilities)
   }
   the_trainControl <- caret::trainControl(method = "cv", summaryFunction = calculate_F1_measure, allowParallel = TRUE)
   range_of_costs <- 10^seq(from = 1, to = 3, by = 1)
@@ -192,8 +183,8 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   }
   SVM_with_radial_kernel$prob <- function(modelFit, newdata) {
    factor_of_predictions_and_predicted_probabilities <- predict(modelFit, newdata = testing_data, probability = TRUE)
-   vector_of_predicted_probabilities <- attr(x = factor_of_predictions_and_predicted_probabilities, which = "probabilities")[, 2]
-   return(vector_of_predicted_probabilities)
+   matrix_of_predicted_probabilities <- attr(x = factor_of_predictions_and_predicted_probabilities, which = "probabilities")
+   return(matrix_of_predicted_probabilities)
   }
   the_trainControl <- caret::trainControl(method = "cv", summaryFunction = calculate_F1_measure, allowParallel = TRUE)
   range_of_costs <- 10^seq(from = 1, to = 3, by = 1)
@@ -275,7 +266,8 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
      mtry = optimal_mtry,
      ntree = optimal_ntree
     )
-    vector_of_predicted_probabilities <- predict(the_randomForest, newdata = testing_data, type = "prob")[, 2]
+    matrix_of_predicted_probabilities <- predict(the_randomForest, newdata = testing_data, type = "prob")
+    vector_of_predicted_probabilities <- matrix_of_predicted_probabilities[, 2]
    } else if (startsWith(type_of_model, "Support-Vector Machine")) {
     SVM = NULL
     if (type_of_model == "Support-Vector Machine With Linear Kernel") {
@@ -309,7 +301,8 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
      stop(error_message)
     }
     factor_of_predictions_and_predicted_probabilities <- predict(SVM, newdata = testing_data, probability = TRUE)
-    vector_of_predicted_probabilities <- attr(x = factor_of_predictions_and_predicted_probabilities, which = "probabilities")[, 2]
+    matrix_of_predicted_probabilities <- attr(x = factor_of_predictions_and_predicted_probabilities, which = "probabilities")
+    vector_predicted_probabilities <- matrix_of_predicted_probabilities[, 2]
    } else {
     error_message <- paste("The performance of models of type ", type_of_model, " cannot be yet summarized.", sep = "")
     stop(error_message)
