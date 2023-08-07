@@ -60,38 +60,75 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   optimal_K = list_of_training_information$bestTune
   print(paste("optimal value of K = ", optimal_K, sep = ""))
  } else if (type_of_model == "Random Forest") {
-  random_forest <- list(
-   type = "Classification",
-   library = "randomForest"
-  )
-  random_forest$parameters <- data.frame(
-   parameter = c("mtry", "ntree")
-  )
-  random_forest$grid <- function() {}
-  random_forest$fit <- function(x, y, parameters, classProbs, last, lev, wts) {
-   randomForest::randomForest(x, y, mtry = parameters$mtry, ntree = parameters$ntree)
+  training_and_testing_data <- split_data_set_into_training_and_testing_data(data_frame = training_data_frame_of_indicators_and_pixels[, names_of_variables], proportion_of_training_data = 0.9)
+  training_data <- training_and_testing_data$training_data
+  testing_data <- training_and_testing_data$testing_data
+  index_of_column_Indicator <- get_index_of_column_of_data_frame(data_frame = training_data, column_name = "Indicator")
+  data_frame_of_training_predictors <- training_data[, -index_of_column_Indicator]
+  data_frame_of_training_response_values <- training_data[, index_of_column_Indicator]
+  data_frame_of_testing_predictors <- testing_data[, -index_of_column_Indicator]
+  data_frame_of_testing_response_values <- testing_data[, index_of_column_Indicator]
+  maximum_number_of_trees = 1000
+  maximum_test_error_rate <- -1
+  minimum_test_error_rate <- 2
+  optimal_number_of_trees <- 0
+  optimal_mtry <- 0
+  vector_of_numbers_of_trees <- numeric(0)
+  vector_of_test_error_rates <- numeric(0)
+  vector_of_values_of_mtry <- factor()
+  for (mtry in 1:number_of_predictors) {
+   the_randomForest <- randomForest::randomForest(
+    x = data_frame_of_training_predictors,
+    y = data_frame_of_training_response_values,
+    xtest = data_frame_of_testing_predictors,
+    ytest = data_frame_of_testing_response_values,
+    mtry = mtry,
+    ntree = maximum_number_of_trees
+   )
+   data_frame_of_error_rates <- the_randomForest$test$err.rate
+   vector_of_test_error_rates_for_present_mtry <- data_frame_of_error_rates[, 1]
+   vector_of_test_error_rates <- c(vector_of_test_error_rates, vector_of_test_error_rates_for_present_mtry)
+   vector_of_values_of_mtry <- c(vector_of_values_of_mtry, factor(rep(x = mtry, times = maximum_number_of_trees)))
+   vector_of_numbers_of_trees <- c(vector_of_numbers_of_trees, 1:maximum_number_of_trees)
+   minimum_test_error_rate_for_present_mtry <- min(vector_of_test_error_rates_for_present_mtry)
+   if (minimum_test_error_rate_for_present_mtry < minimum_test_error_rate) {
+    minimum_test_error_rate <- minimum_test_error_rate_for_present_mtry
+    optimal_mtry <- mtry
+    optimal_number_of_trees <- which.min(vector_of_test_error_rates_for_present_mtry)
+   }
+   maximum_test_error_rate_for_present_mtry <- max(vector_of_test_error_rates_for_present_mtry)
+   if (maximum_test_error_rate_for_present_mtry > maximum_test_error_rate) {
+    maximum_test_error_rate <- maximum_test_error_rate_for_present_mtry
+   }
   }
-  random_forest$predict <- function(modelFit, newdata, submodels = NULL) {
-   predict(modelFit, newdata, type = "response")
-  }
-  random_forest$prob <- function(modelFit, newdata) {
-   predict(modelFit, newdata, type = "prob")
-  }
-  the_trainControl <- caret::trainControl(method = "cv", summaryFunction = calculate_F1_measure, allowParallel = TRUE)
-  the_tuneGrid = expand.grid(.mtry = c(1:number_of_predictors), .ntree = c(1, 2))
-  list_of_training_information <- caret::train(
-   form = formula,
-   data = data_frame,
-   method = random_forest,
-   metric = "F1_measure",
-   trControl = the_trainControl,
-   tuneGrid = the_tuneGrid
-  )
-  print(plot(list_of_training_information))
-  optimal_mtry = list_of_training_information$bestTune$mtry
-  print(paste("optimal value of mtry = ", optimal_mtry, sep = ""))
-  optimal_ntree = list_of_training_information$bestTune$ntree
-  print(paste("optimal value of ntree = ", optimal_ntree, sep = ""))
+  the_ggplot <- ggplot() +
+   geom_line(
+    data = data.frame(
+     number_of_trees = vector_of_numbers_of_trees,
+     test_error_rate = vector_of_test_error_rates,
+     mtry = vector_of_values_of_mtry
+    ),
+    mapping = aes(
+     x = number_of_trees,
+     y = test_error_rate,
+     color = mtry
+    )
+   ) +
+   labs(
+    x = "Number Of Trees",
+    y = "Test Error Rate",
+    title = "Test Error Rate Vs. Number Of Trees"
+   ) +
+   theme(
+    plot.title = element_text(hjust = 0.5, size = 11),
+   )
+  print(the_ggplot)
+  message <- paste("Minimum test error rate: ", minimum_test_error_rate, sep = "")
+  print(message)
+  message <- paste("Value of mtry corresponding to minimum test error rate: ", optimal_mtry, sep = "")
+  print(message)
+  message <- paste("Number of trees corresponding to minimum test error rate: ", optimal_number_of_trees, sep = "")
+  print(message)
  } else if (type_of_model == "Support-Vector Machine With Linear Kernel") {
   SVM_with_linear_kernel <- list(
    type = "Classification",
@@ -264,7 +301,7 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
      formula,
      training_data,
      mtry = optimal_mtry,
-     ntree = optimal_ntree
+     ntree = optimal_number_of_trees
     )
     matrix_of_predicted_probabilities <- predict(the_randomForest, newdata = testing_data, type = "prob")
     vector_of_predicted_probabilities <- matrix_of_predicted_probabilities[, 2]

@@ -138,6 +138,7 @@ Regarding the weight of PPV and the weight of TPR, we prioritize TPR at least as
 In order to build binary classifiers, we create a composite data frame of our training data frame and our holdout data frame; substitute a column of classes for a column of indicators of whether of not a pixel depicts a blue tarp; add columns corresponding to normalized intensities and intensities normalized after transforming by the natural logarithm, the square root, the square, and interactions; and divide the composite data frame into training and holdout data frames again. We normalize as opposed to standardize intensities given that distributions of intensity are not normal. We shuffle the rows in our training and holdout data frames.
 
 ```{r, eval = TRUE}
+training_data_frame_of_indicators_and_pixels <- NULL
 should_generate_training_and_holdout_data_frames_of_indicators_and_pixels <- FALSE
 if (should_generate_training_and_holdout_data_frames_of_indicators_and_pixels) {
     composite_data_frame_of_classes_and_pixels <- rbind(
