@@ -246,13 +246,16 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
    training_data <- analysis(x = train_test_split)
    testing_data <- assessment(x = train_test_split)
    if (type_of_model == "Logistic Regression") {
-    logistic_regression_model <- glm(
+    logistic_regression_classifier <- glm(
      formula = formula,
      data = training_data,
      family = binomial
     )
+    if (!file.exists("logistic_regression_classifier.rds")) {
+     saveRDS(logistic_regression_classifier, "logistic_regression_classifier.rds")
+    }
     vector_of_predicted_probabilities <- predict(
-     object = logistic_regression_model,
+     object = logistic_regression_classifier,
      newdata = testing_data,
      type = "response"
     )
@@ -401,10 +404,12 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   geom_line(mapping = aes(y = PPV, color = "Average PPV")) +
   geom_line(mapping = aes(y = TPR, color = "Average TPR")) +
   scale_colour_manual(values = c("red", "orange", "yellow", "green", "blue")) +
+  scale_x_continuous(breaks = seq(from = 0, to = 1, by = 0.05)) +
   theme(legend.position = c(0.5, 0.5)) +
   labs(x = "threshold", y = "performance metric", title = "Average Performance Metrics Vs. Threshold") +
   theme(
    plot.title = element_text(hjust = 0.5, size = 11),
+   axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)
   )
  data_frame_of_PPV_and_TPR <- data_frame_of_average_performance_metrics[, c("PPV", "TPR")]
  number_of_thresholds <- nrow(data_frame_of_PPV_and_TPR)
