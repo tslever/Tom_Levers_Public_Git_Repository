@@ -309,7 +309,7 @@ Our optimal LR classifier has formula $Indicator \sim normalize(Blue^2) + normal
 
 Average accuracy is nearly $1$ for about $95$ percent of thresholds. Average F1 measure is nearly $0.937$ for thresholds between about $0.1$ and about $0.4$. Average PPV increases logarithmically. Average TPR increases linearly from a threshold of about $0.95$ to $0$. A Precision-Recall curve has an AUC of $0.984$. An ROC curve has an AUC of $0.999$.
 
-```{r, eval = TRUE}
+```{r, eval = FALSE}
 # "glm.fit: fitted probabilities numerically 0 or 1" occurs due to predicted
 # probabilities of the Logistic Regression binary classifier being close to 0 and 1.
 # "collapsing to unique ’x’ values" is an artifact of MESS::auc.
@@ -321,11 +321,11 @@ summary_of_performance <- summarize_performance_of_cross_validated_models_using_
 )
 ```
 
-```{r, eval = TRUE, fig.cap = "Prediction Metrics Vs. Thresholds For Logistic Regression Model With Formula Indicator vs. Normalized Square Of Blue + Normalized Square Of Red + Normalized Square Root Of Blue"}
+```{r, eval = FALSE, fig.cap = "Prediction Metrics Vs. Thresholds For Logistic Regression Model With Formula Indicator vs. Normalized Square Of Blue + Normalized Square Of Red + Normalized Square Root Of Blue"}
 summary_of_performance$plot_of_performance_metrics_vs_threshold
 ```
 
-```{r, eval = TRUE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Logistic Regression Model With Formula Indicator vs. Normalized Square Of Blue + Normalized Square Of Red + Normalized Square Root Of Blue"}
+```{r, eval = FALSE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Logistic Regression Model With Formula Indicator vs. Normalized Square Of Blue + Normalized Square Of Red + Normalized Square Root Of Blue"}
 summary_of_performance$PR_curve
 summary_of_performance$ROC_curve
 t(summary_of_performance$data_frame_of_optimal_performance_metrics)
@@ -345,48 +345,63 @@ Our optimal Logistic Ridge Regression binary classifier has formula $Indicator \
 
 Average accuracy is nearly $1$ for about $90$ percent of thresholds but in general is not quite as good as for our optimal Logistic Regression binary classifier. Average F1 measure is nearly $0.934$ for maybe $6$ percent of thresholds; the maximum average F1 measure is lower than that for our optimal Logistic Regression binary classifier and about the maximum for fewer thresholds. Average PPV increases logarithmically from a threshold of about $0.1$ to $1$. From about the optimal threshold PPV is greater than that for our optimal Logistic Regression binary classifier. Average TPR increases in the manner of $y = sqrt(x)$ from a threshold of about $1$ to $0$. Average TPR is generally less than that for our optimal Logistic Regression binary classifier. We prioritize TPR over precision but under F1 measure. A Precision-Recall curve has an AUC of $0.981$. An ROC curve has an AUC of $0.999$. These AUC's are less than those for our optimal Logistic Regression binary classifier.
 
-```{r, eval = FALSE, fig.width = 3.5, fig.height = 2.5}
+```{r, eval = TRUE, fig.width = 3.5, fig.height = 2.5}
 formula <-
     Indicator ~ Normalized_Natural_Logarithm_Of_Blue + Normalized_Square_Root_Of_Red
 full_model_matrix <-
-    model.matrix(object = formula, data = data_frame_of_indicators_and_pixels)[, -1]
+    model.matrix(object = formula, data = training_data_frame_of_indicators_and_pixels)[, -1]
 sequence_of_lambda_values <- exp(seq(-9, -8, length = 100))
 the_cv.glmnet <- glmnet::cv.glmnet(
     x = full_model_matrix,
-    y = data_frame_of_indicators_and_pixels$Indicator,
+    y = training_data_frame_of_indicators_and_pixels$Indicator,
     family = "binomial",
     type.measure = "class",
     alpha = 0,
     lambda = sequence_of_lambda_values
 )
-plot(the_cv.glmnet)
-#Gedeck, Peter (tux3md) Thursday, July 6, 2023 6:54 PM
-#In class, the question was raised on how to create the lambda tuning graph for cv.glmnet using ggplot2. Here is code that works #with cvob being the result of the cv.glmnet function.
-#df = data.frame(
-#    lambda=cvob$lambda,
-#    cvm=cvob$cvm,
-#    cvup=cvob$cvup,
-#    cvlo=cvob$cvlo
-#)
-#ggplot(df, aes(x=lambda, y=cvm, ymin=cvlo, ymax=cvup)) +
-#    geom_point() +
-#    scale_x_log10() +
-#    geom_errorbar()
+data_frame <- data.frame(
+    lambda = the_cv.glmnet$lambda,
+    misclassification_error_rate = the_cv.glmnet$cvm,
+    maximum_misclassification_error_rate = the_cv.glmnet$cvup,
+    minimum_misclassification_error_rate = the_cv.glmnet$cvlo
+)
+library(ggplot2)
+the_ggplot <- ggplot(
+    data = data_frame,
+    mapping = aes(
+        x = lambda,
+        y = misclassification_error_rate,
+        ymin = minimum_misclassification_error_rate,
+        ymax = maximum_misclassification_error_rate
+    )
+) +
+    geom_point() +
+    scale_x_log10() +
+    geom_errorbar() +
+   labs(
+    x = "lambda",
+    y = "Misclassification Error Rate",
+    title = "Misclassification Error Rate Vs. lambda"
+   ) +
+   theme(
+    plot.title = element_text(hjust = 0.5, size = 11),
+   )
+print(the_ggplot)
 optimal_lambda <- the_cv.glmnet$lambda.min
 optimal_lambda
 summary_of_performance <- summarize_performance_of_cross_validated_models_using_dplyr(
     type_of_model = "Logistic Ridge Regression",
     formula = formula,
-    data_frame = data_frame_of_indicators_and_pixels,
+    data_frame = training_data_frame_of_indicators_and_pixels,
     optimal_lambda = optimal_lambda
 )
 ```
 
-```{r, eval = FALSE, fig.cap = "Prediction Metrics Vs. Thresholds For Logistic Ridge Regression Model With Formula Indicator Vs. Normalized Natural Logarithm Of Blue + Normalized Square Root Of Red", eval = TRUE}
+```{r, eval = TRUE, fig.cap = "Prediction Metrics Vs. Thresholds For Logistic Ridge Regression Model With Formula Indicator Vs. Normalized Natural Logarithm Of Blue + Normalized Square Root Of Red", eval = TRUE}
 summary_of_performance$plot_of_performance_metrics_vs_threshold
 ```
 
-```{r, eval = FALSE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Logistic Ridge Regression Model With Formula Indicator Vs. Normalized Natural Logarithm Of Blue + Normalized Square Root Of Red", eval = TRUE}
+```{r, eval = TRUE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Logistic Ridge Regression Model With Formula Indicator Vs. Normalized Natural Logarithm Of Blue + Normalized Square Root Of Red", eval = TRUE}
 summary_of_performance$PR_curve
 summary_of_performance$ROC_curve
 t(summary_of_performance$data_frame_of_optimal_performance_metrics)
