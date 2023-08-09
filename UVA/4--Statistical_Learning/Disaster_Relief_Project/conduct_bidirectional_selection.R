@@ -70,11 +70,100 @@ training_data_frame_of_indicators_and_pixels$Indicator <- factor(training_data_f
 holdout_data_frame_of_indicators_and_pixels <- read.csv("C:/Users/Tom/Documents/Tom_Levers_Public_Git_Repository/UVA/4--Statistical_Learning/Disaster_Relief_Project/Holdout_Data_Frame_Of_Indicators_And_Pixels.csv", header = TRUE)
 holdout_data_frame_of_indicators_and_pixels$Indicator <- factor(holdout_data_frame_of_indicators_and_pixels$Indicator)
 }
-set.seed(1)
-summary_of_performance <- TomLeversRPackage::summarize_performance_of_cross_validated_models_using_dplyr(
-type_of_model = "Logistic Regression",
-formula = Indicator ~ Normalized_Square_Of_Red + Normalized_Square_Root_Of_Blue,
-data_frame = training_data_frame_of_indicators_and_pixels
-)
-print(summary_of_performance$plot_of_performance_metrics_vs_threshold)
-print(t(summary_of_performance$data_frame_of_optimal_performance_metrics))
+
+get_optimal_F1_measure_for_formula <- function(formula) {
+ vector_of_names_of_variables <- all.vars(formula)
+ vector_of_names_of_predictors <- vector_of_names_of_variables[-1]
+ number_of_predictors <- length(vector_of_names_of_predictors)
+ full_model_matrix <-
+  model.matrix(object = formula, data = training_data_frame_of_indicators_and_pixels)[, -1]
+ sequence_of_lambda_values <- exp(seq(-9, -8, length = 100))
+ set.seed(1)
+ if (number_of_predictors == 1) {
+  full_model_matrix <- cbind(0, full_model_matrix)
+ }
+ the_cv.glmnet <- glmnet::cv.glmnet(
+  x = full_model_matrix,
+  y = training_data_frame_of_indicators_and_pixels$Indicator,
+  family = "binomial",
+  type.measure = "class",
+  alpha = 0,
+  lambda = sequence_of_lambda_values
+ )
+ data_frame <- data.frame(
+  lambda = the_cv.glmnet$lambda,
+  misclassification_error_rate = the_cv.glmnet$cvm,
+  maximum_misclassification_error_rate = the_cv.glmnet$cvup,
+  minimum_misclassification_error_rate = the_cv.glmnet$cvlo
+ )
+ library(ggplot2)
+ the_ggplot <- ggplot(
+  data = data_frame,
+  mapping = aes(
+   x = lambda,
+   y = misclassification_error_rate,
+   ymin = minimum_misclassification_error_rate,
+   ymax = maximum_misclassification_error_rate
+  )
+ ) +
+  geom_point() +
+  scale_x_log10() +
+  geom_errorbar() +
+  labs(
+   x = "lambda",
+   y = "Misclassification Error Rate",
+   title = "Misclassification Error Rate Vs. lambda"
+  ) +
+  theme(
+   plot.title = element_text(hjust = 0.5, size = 11),
+  )
+ print(the_ggplot)
+ optimal_lambda <- the_cv.glmnet$lambda.min
+ print(optimal_lambda)
+ summary_of_performance <- TomLeversRPackage::summarize_performance_of_cross_validated_models_using_dplyr(
+  type_of_model = "Logistic Ridge Regression",
+  formula = formula,
+  data_frame = training_data_frame_of_indicators_and_pixels,
+  optimal_lambda = optimal_lambda
+ )
+ optimal_F1_measure_for_present_formula <-
+  summary_of_performance$data_frame_of_optimal_performance_metrics$optimal_F1_measure
+ return(optimal_F1_measure_for_present_formula)
+}
+optimal_formula_string <- NULL
+optimal_F1_measure <- -1
+optimal_vector_of_predictors <- NULL
+vector_of_names_of_predictors <- names(training_data_frame_of_indicators_and_pixels)[-1]
+for (name_1 in vector_of_names_of_predictors) {
+ for (name_2 in vector_of_names_of_predictors) {
+  if (name_2 == name_1) {
+   print("name_1 and name_2 were the same; continuing")
+   next
+  }
+  formula_string <- paste("Indicator ~ ", name_1, " + ", name_2, sep = "")
+  formula <- as.formula(formula_string)
+  optimal_F1_measure_for_present_formula <- get_optimal_F1_measure_for_formula(formula)
+  print(optimal_F1_measure_for_present_formula)
+  if (optimal_F1_measure_for_present_formula > optimal_F1_measure) {
+   optimal_F1_measure <- optimal_F1_measure_for_present_formula
+   optimal_formula_string <- formula_string
+   optimal_vector_of_predictors <- c(name_1, name_2)
+  }
+ }
+}
+optimal_formula_string <- "Indicator ~ Normalized_Natural_Logarithm_Of_Blue + Normalized_Square_Root_Of_Red"
+optimal_formula <- as.formula(optimal_formula_string)
+optimal_F1_measure <- get_optimal_F1_measure_for_formula(optimal_formula)
+print(optimal_formula_string)
+print(optimal_F1_measure)
+print("-----")
+vector_of_names_of_predictors <- names(training_data_frame_of_indicators_and_pixels)[-1]
+for (name in vector_of_names_of_predictors) {
+ formula_string <- paste(optimal_formula_string, " + ", name, sep = "")
+ print(formula_string)
+ formula <- as.formula(formula_string)
+ optimal_F1_measure_for_present_formula <- get_optimal_F1_measure_for_formula(formula)
+ print(formula_string)
+ print(optimal_F1_measure_for_present_formula)
+ print("-----")
+}

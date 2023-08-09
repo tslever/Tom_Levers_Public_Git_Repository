@@ -33,6 +33,9 @@ provide_performance_metrics <- function(vector_of_actual_indicators, vector_of_p
    number_of_false_negatives <- sum(vector_of_predicted_indicators == 0 & vector_of_actual_indicators == 1)
    rate_of_true_positives <- number_of_true_positives / (number_of_true_positives + number_of_false_negatives)
    F1_measure <- 2 / (1/precision + 1/rate_of_true_positives)
+   if (is.nan(F1_measure)) {
+    F1_measure <- 0
+   }
    vector_of_values_of_performance_metric[i] <- F1_measure
   } else if (performance_metric == "FPR") {
    number_of_false_positives <- sum(vector_of_predicted_indicators == 1 & vector_of_actual_indicators == 0)

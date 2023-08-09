@@ -31,6 +31,9 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   if (is.null(optimal_lambda)) {
    matrix_of_predictors <- as.matrix(data_frame[, vector_of_names_of_predictors])
    vector_of_response_values <- as.numeric(data_frame[, name_of_response])
+   if (number_of_predictors == 1) {
+    matrix_of_predictors <- cbind(0, matrix_of_predictors)
+   }
    the_glmnet <- glmnet::glmnet(x = matrix_of_predictors, y = vector_of_response_values, family = "binomial", alpha = 0)
    sequence_of_lambda_values <- the_glmnet$lambda
    print(paste("sequence of lambda values = {", sequence_of_lambda_values[1], ", ", sequence_of_lambda_values[2], ", ..., ", sequence_of_lambda_values[length(sequence_of_lambda_values)], "}", sep = ""))
@@ -262,8 +265,14 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
    } else if (type_of_model == "Logistic Ridge Regression") {
     training_model_matrix <- model.matrix(object = formula, data = training_data)[, -1]
     training_vector_of_indicators <- training_data$Indicator
+    if (number_of_predictors == 1) {
+     training_model_matrix <- cbind(0, training_model_matrix)
+    }
     logistic_regression_with_lasso_model <- glmnet::glmnet(x = training_model_matrix, y = training_vector_of_indicators, alpha = 0, family = "binomial", lambda = optimal_lambda)
     testing_model_matrix <- model.matrix(object = formula, data = testing_data)[, -1]
+    if (number_of_predictors == 1) {
+     testing_model_matrix <- cbind(0, testing_model_matrix)
+    }
     vector_of_predicted_probabilities <- predict(object = logistic_regression_with_lasso_model, newx = testing_model_matrix, type = "response")
    } else if (type_of_model == "LDA" | type_of_model == "QDA") {
     if (type_of_model == "LDA") {
