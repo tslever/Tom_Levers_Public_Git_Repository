@@ -154,7 +154,7 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
    return(matrix_of_predicted_probabilities)
   }
   the_trainControl <- caret::trainControl(method = "cv", summaryFunction = calculate_F1_measure, allowParallel = TRUE)
-  range_of_costs <- 10^seq(from = 1, to = 3, by = 1)
+  range_of_costs <- 10^seq(from = -3, to = 3, by = 0.25)
   the_tuneGrid = expand.grid(.cost = range_of_costs)
   list_of_training_information <- caret::train(
    form = formula,
@@ -189,8 +189,8 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
    return(matrix_of_predicted_probabilities)
   }
   the_trainControl <- caret::trainControl(method = "cv", summaryFunction = calculate_F1_measure, allowParallel = TRUE)
-  range_of_costs <- 10^seq(from = 1, to = 3, by = 1)
-  range_of_degrees <- c(1, 2, 3)
+  range_of_costs <- 10^seq(from = -3, to = 3, by = 0.25)
+  range_of_degrees <- c(1, 2, 3, 4, 5, 6)
   the_tuneGrid = expand.grid(.cost = range_of_costs, .degree = range_of_degrees)
   list_of_training_information <- caret::train(
    form = formula,
@@ -227,8 +227,8 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
    return(matrix_of_predicted_probabilities)
   }
   the_trainControl <- caret::trainControl(method = "cv", summaryFunction = calculate_F1_measure, allowParallel = TRUE)
-  range_of_costs <- 10^seq(from = 1, to = 3, by = 1)
-  range_of_values_of_gamma <- 10^seq(-1, 1, by = 1)
+  range_of_costs <- 10^seq(from = -3, to = 3, by = 0.25)
+  range_of_values_of_gamma <- 10^seq(-1, 1, by = 0.5)
   the_tuneGrid = expand.grid(.cost = range_of_costs, .gamma = range_of_values_of_gamma)
   list_of_training_information <- caret::train(
    form = formula,
