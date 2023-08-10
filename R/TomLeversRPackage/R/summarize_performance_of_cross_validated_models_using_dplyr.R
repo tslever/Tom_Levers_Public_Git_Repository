@@ -495,6 +495,9 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
 # model = method_specified_in_train
 calculate_F1_measure <- function(data_frame_containing_actual_and_predicted_labels, lev = NULL, model = NULL) {
  F1_measure <- MLmetrics::F1_Score(y_true = data_frame_containing_actual_and_predicted_labels$obs, y_pred = data_frame_containing_actual_and_predicted_labels$pred, positive = lev[1])
+ if (is.na(F1_measure)) {
+  F1_measure <- 0
+ }
  vector_with_F1_measure <- c(F1_measure = F1_measure)
  return(vector_with_F1_measure)
 }

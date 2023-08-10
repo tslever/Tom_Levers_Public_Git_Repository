@@ -71,99 +71,106 @@ holdout_data_frame_of_indicators_and_pixels <- read.csv("C:/Users/Tom/Documents/
 holdout_data_frame_of_indicators_and_pixels$Indicator <- factor(holdout_data_frame_of_indicators_and_pixels$Indicator)
 }
 
-get_optimal_F1_measure_for_formula <- function(formula) {
- vector_of_names_of_variables <- all.vars(formula)
- vector_of_names_of_predictors <- vector_of_names_of_variables[-1]
- number_of_predictors <- length(vector_of_names_of_predictors)
- full_model_matrix <-
-  model.matrix(object = formula, data = training_data_frame_of_indicators_and_pixels)[, -1]
- sequence_of_lambda_values <- exp(seq(-9, -8, length = 100))
- set.seed(1)
- if (number_of_predictors == 1) {
-  full_model_matrix <- cbind(0, full_model_matrix)
- }
- the_cv.glmnet <- glmnet::cv.glmnet(
-  x = full_model_matrix,
-  y = training_data_frame_of_indicators_and_pixels$Indicator,
-  family = "binomial",
-  type.measure = "class",
-  alpha = 0,
-  lambda = sequence_of_lambda_values
+get_optimal_F1_measure_for_formula <- function(type_of_model, formula) {
+ out <- tryCatch(
+  {
+   summary_of_performance <- TomLeversRPackage::summarize_performance_of_cross_validated_models_using_dplyr(
+    type_of_model = type_of_model,
+    formula = formula,
+    data_frame = training_data_frame_of_indicators_and_pixels
+   )
+   optimal_F1_measure_for_present_formula <-
+    summary_of_performance$data_frame_of_optimal_performance_metrics$optimal_F1_measure
+   return(optimal_F1_measure_for_present_formula)
+  },
+  error = function(cond) {
+   message("Here's the original error message:")
+   print(cond)
+   cat(" \n")
+   return("result indicating error")
+  }
  )
- data_frame <- data.frame(
-  lambda = the_cv.glmnet$lambda,
-  misclassification_error_rate = the_cv.glmnet$cvm,
-  maximum_misclassification_error_rate = the_cv.glmnet$cvup,
-  minimum_misclassification_error_rate = the_cv.glmnet$cvlo
- )
- library(ggplot2)
- the_ggplot <- ggplot(
-  data = data_frame,
-  mapping = aes(
-   x = lambda,
-   y = misclassification_error_rate,
-   ymin = minimum_misclassification_error_rate,
-   ymax = maximum_misclassification_error_rate
-  )
- ) +
-  geom_point() +
-  scale_x_log10() +
-  geom_errorbar() +
-  labs(
-   x = "lambda",
-   y = "Misclassification Error Rate",
-   title = "Misclassification Error Rate Vs. lambda"
-  ) +
-  theme(
-   plot.title = element_text(hjust = 0.5, size = 11),
-  )
- print(the_ggplot)
- optimal_lambda <- the_cv.glmnet$lambda.min
- print(optimal_lambda)
- summary_of_performance <- TomLeversRPackage::summarize_performance_of_cross_validated_models_using_dplyr(
-  type_of_model = "Logistic Ridge Regression",
-  formula = formula,
-  data_frame = training_data_frame_of_indicators_and_pixels,
-  optimal_lambda = optimal_lambda
- )
- optimal_F1_measure_for_present_formula <-
-  summary_of_performance$data_frame_of_optimal_performance_metrics$optimal_F1_measure
- return(optimal_F1_measure_for_present_formula)
 }
-optimal_formula_string <- NULL
+#optimal_vector_of_names_of_predictors <- character(0)
+optimal_vector_of_names_of_predictors <- c("Normalized_Square_Root_Of_Red", "Normalized_Interaction_Of_Green_And_Blue", "Normalized_Green")
 optimal_F1_measure <- -1
-optimal_vector_of_predictors <- NULL
-vector_of_names_of_predictors <- names(training_data_frame_of_indicators_and_pixels)[-1]
-for (name_1 in vector_of_names_of_predictors) {
- for (name_2 in vector_of_names_of_predictors) {
-  if (name_2 == name_1) {
-   print("name_1 and name_2 were the same; continuing")
-   next
-  }
-  formula_string <- paste("Indicator ~ ", name_1, " + ", name_2, sep = "")
-  formula <- as.formula(formula_string)
-  optimal_F1_measure_for_present_formula <- get_optimal_F1_measure_for_formula(formula)
-  print(optimal_F1_measure_for_present_formula)
-  if (optimal_F1_measure_for_present_formula > optimal_F1_measure) {
-   optimal_F1_measure <- optimal_F1_measure_for_present_formula
-   optimal_formula_string <- formula_string
-   optimal_vector_of_predictors <- c(name_1, name_2)
-  }
- }
+vector_of_names_of_all_variables <- names(training_data_frame_of_indicators_and_pixels)
+vector_of_names_of_all_predictors <- vector_of_names_of_all_variables[-1]
+optimal_F1_measure_was_adjusted <- TRUE
+type_of_model <- "Random Forest"
+iteration <- 2
+every_optimal_F1_measure_is_result_indicating_error <- TRUE
+while (optimal_F1_measure_was_adjusted) {
+    print(paste("Iteration: ", iteration, sep = ""))
+    optimal_F1_measure_was_adjusted <- FALSE
+    list_of_potential_optimal_vectors_of_names_of_predictors = list()
+    vector_of_potential_optimal_F1_measures <- numeric(0)
+    for (name in vector_of_names_of_all_predictors) {
+        potential_optimal_vector_of_names_of_predictors <- c(optimal_vector_of_names_of_predictors, name)
+        predictor_string <- paste(potential_optimal_vector_of_names_of_predictors, collapse = " + ")
+        formula_string <- paste("Indicator ~ ", predictor_string, sep = "")
+        print(formula_string)
+        formula <- as.formula(formula_string)
+        optimal_F1_measure_for_present_predictor <- get_optimal_F1_measure_for_formula(type_of_model, formula)
+        if (optimal_F1_measure_for_present_predictor != "result indicating error") {
+            every_optimal_F1_measure_is_result_indicating_error <- FALSE
+            print(optimal_F1_measure_for_present_predictor)
+            if (optimal_F1_measure_for_present_predictor > optimal_F1_measure) {
+                vector_of_potential_optimal_F1_measures <- append(vector_of_potential_optimal_F1_measures, optimal_F1_measure_for_present_predictor)
+                list_of_potential_optimal_vectors_of_names_of_predictors <- append(list_of_potential_optimal_vectors_of_names_of_predictors, potential_optimal_vector_of_names_of_predictors)
+            }
+        }
+    }
+    if (length(vector_of_potential_optimal_F1_measures) > 0) {
+        index_of_maximum_potential_optimal_F1_measure <- which.max(vector_of_potential_optimal_F1_measures)
+        maximum_potential_optimal_F1_measure <- vector_of_potential_optimal_F1_measures[index_of_maximum_potential_optimal_F1_measure]
+        optimal_F1_measure <- maximum_potential_optimal_F1_measure
+        potential_optimal_vector_of_names_of_predictors_correpsonding_to_maximum_potential_optimal_F1_measure <- list_of_potential_optimal_vectors_of_names_of_predictors[[index_of_maximum_potential_optimal_F1_measure]]
+        optimal_vector_of_names_of_predictors <- potential_optimal_vector_of_names_of_predictors_correpsonding_to_maximum_potential_optimal_F1_measure
+    }
+    if (iteration == 1 & every_optimal_F1_measure_is_result_indicating_error) {
+        for (name_1 in vector_of_names_of_all_predictors) {
+         for (name_2 in vector_of_names_of_all_predictors) {
+          potential_optimal_vector_of_names_of_predictors <- c(name_1, name_2)
+         
+          predictor_string <- paste(potential_optimal_vector_of_names_of_predictors, collapse = " + ")
+          formula_string <- paste("Indicator ~ ", predictor_string, sep = "")
+          print(formula_string)
+          formula <- as.formula(formula_string)
+          optimal_F1_measure_for_present_predictor <- get_optimal_F1_measure_for_formula(type_of_model, formula)
+          if (optimal_F1_measure_for_present_predictor != "result indicating error") {
+           every_optimal_F1_measure_is_result_indicating_error <- FALSE
+           print(optimal_F1_measure_for_present_predictor)
+           if (optimal_F1_measure_for_present_predictor > optimal_F1_measure) {
+            optimal_F1_measure <- optimal_F1_measure_for_present_predictor
+            optimal_F1_measure_was_adjusted <- TRUE
+            optimal_vector_of_names_of_predictors <- potential_optimal_vector_of_names_of_predictors
+           }
+          }
+         }
+        }
+    }
+    if (length(optimal_vector_of_names_of_predictors) > 2) {
+        for (i in 1:(length(optimal_vector_of_names_of_predictors) - 2)) {
+            potential_optimal_vector_of_names_of_predictors <- setdiff(optimal_vector_of_names_of_predictors, optimal_vector_of_names_of_predictors[i])
+          
+            predictor_string <- paste(potential_optimal_vector_of_names_of_predictors, collapse = " + ")
+            formula_string <- paste("Indicator ~ ", predictor_string, sep = "")
+            print(formula_string)
+            formula <- as.formula(formula_string)
+            optimal_F1_measure_for_present_predictor <- get_optimal_F1_measure_for_formula(type_of_model, formula)
+            if (optimal_F1_measure_for_present_predictor == "result indicating error") {
+                next
+            }
+            print(optimal_F1_measure_for_present_predictor)
+            if (optimal_F1_measure_for_present_predictor > optimal_F1_measure) {
+                optimal_F1_measure <- optimal_F1_measure_for_present_predictor
+                optimal_F1_measure_was_adjusted <- TRUE
+                optimal_vector_of_names_of_predictors <- potential_optimal_vector_of_names_of_predictors
+            }
+        }
+    }
+    iteration <- iteration + 1
 }
-optimal_formula_string <- "Indicator ~ Normalized_Natural_Logarithm_Of_Blue + Normalized_Square_Root_Of_Red"
-optimal_formula <- as.formula(optimal_formula_string)
-optimal_F1_measure <- get_optimal_F1_measure_for_formula(optimal_formula)
-print(optimal_formula_string)
+print(optimal_vector_of_names_of_predictors)
 print(optimal_F1_measure)
-print("-----")
-vector_of_names_of_predictors <- names(training_data_frame_of_indicators_and_pixels)[-1]
-for (name in vector_of_names_of_predictors) {
- formula_string <- paste(optimal_formula_string, " + ", name, sep = "")
- print(formula_string)
- formula <- as.formula(formula_string)
- optimal_F1_measure_for_present_formula <- get_optimal_F1_measure_for_formula(formula)
- print(formula_string)
- print(optimal_F1_measure_for_present_formula)
- print("-----")
-}
