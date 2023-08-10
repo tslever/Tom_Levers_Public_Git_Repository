@@ -1,0 +1,3 @@
+From https://github.com/fieldtrip/fieldtrip/tree/master/realtime/src/external/pthreads-win32/lib,
+lipthreadGC2.a
+pthreadVC2.lib
