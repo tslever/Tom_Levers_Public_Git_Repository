@@ -351,7 +351,7 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
     }
     factor_of_predictions_and_predicted_probabilities <- predict(SVM, newdata = testing_data, probability = TRUE)
     matrix_of_predicted_probabilities <- attr(x = factor_of_predictions_and_predicted_probabilities, which = "probabilities")
-    vector_predicted_probabilities <- matrix_of_predicted_probabilities[, 2]
+    vector_of_predicted_probabilities <- matrix_of_predicted_probabilities[, 2]
    } else {
     error_message <- paste("The performance of models of type ", type_of_model, " cannot be yet summarized.", sep = "")
     stop(error_message)
