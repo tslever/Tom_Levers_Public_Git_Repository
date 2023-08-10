@@ -91,21 +91,21 @@ get_optimal_F1_measure_for_formula <- function(type_of_model, formula) {
   }
  )
 }
-#optimal_vector_of_names_of_predictors <- character(0)
-optimal_vector_of_names_of_predictors <- c("Normalized_Square_Root_Of_Red", "Normalized_Interaction_Of_Green_And_Blue", "Normalized_Green")
+optimal_vector_of_names_of_predictors <- character(0)
 optimal_F1_measure <- -1
 vector_of_names_of_all_variables <- names(training_data_frame_of_indicators_and_pixels)
 vector_of_names_of_all_predictors <- vector_of_names_of_all_variables[-1]
 optimal_F1_measure_was_adjusted <- TRUE
-type_of_model <- "Random Forest"
-iteration <- 2
+type_of_model <- "Support-Vector Machine With Linear Kernel"
+iteration <- 1
 every_optimal_F1_measure_is_result_indicating_error <- TRUE
 while (optimal_F1_measure_was_adjusted) {
     print(paste("Iteration: ", iteration, sep = ""))
     optimal_F1_measure_was_adjusted <- FALSE
     list_of_potential_optimal_vectors_of_names_of_predictors = list()
     vector_of_potential_optimal_F1_measures <- numeric(0)
-    for (name in vector_of_names_of_all_predictors) {
+    #for (name in vector_of_names_of_all_predictors) {
+    for (name in c("Normalized_Red")) {
         potential_optimal_vector_of_names_of_predictors <- c(optimal_vector_of_names_of_predictors, name)
         predictor_string <- paste(potential_optimal_vector_of_names_of_predictors, collapse = " + ")
         formula_string <- paste("Indicator ~ ", predictor_string, sep = "")
@@ -131,6 +131,9 @@ while (optimal_F1_measure_was_adjusted) {
     if (iteration == 1 & every_optimal_F1_measure_is_result_indicating_error) {
         for (name_1 in vector_of_names_of_all_predictors) {
          for (name_2 in vector_of_names_of_all_predictors) {
+          if (name_2 == name_1) {
+           next
+          }
           potential_optimal_vector_of_names_of_predictors <- c(name_1, name_2)
          
           predictor_string <- paste(potential_optimal_vector_of_names_of_predictors, collapse = " + ")
