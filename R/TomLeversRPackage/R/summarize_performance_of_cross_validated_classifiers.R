@@ -1,17 +1,17 @@
-#' @title summarize_performance_of_cross_validated_models_using_dplyr
-#' @description Summarizes performance of cross validated models using dplyr
-#' @param type_of_model The type of model for which to summarize performance of cross validated models using dplyr
-#' @param formula The formula of the model for which to summarize performance of cross validated models using dplyr
-#' @param data_frame The data frame for which to summarize performance of trained and cross validated models using dplyr
+#' @title summarize_performance_of_cross_validated_classifiers
+#' @description Summarizes performance of cross validated classifiers
+#' @param type_of_model The type of classifier for which to summarize performance of cross validated classifiers
+#' @param formula The formula of the classifier for which to summarize performance of cross validated classifiers
+#' @param data_frame The data frame for which to summarize performance of trained and cross validated classifiers
 #' @param optimal_lambda The optimal value of lambda for which to summarize performance of trained and cross validated logistic ridge regression models
-#' @return summary_of_performance_of_cross_validated_models_using_dplyr The summary of performance of cross-validated models using dplyr
-#' @examples summary_of_performance_of_cross_validated_models_using_dplyr <- summarize_performance_of_cross_validated_models_using_dplyr("Logistic Regression", Indicator ~ Red + Green + Blue, data_frame = data_frame_of_indicators_and_pixels, optimal_lambda = 0.001)
+#' @return summary_of_performance The summary of performance of cross-validated classifiers
+#' @examples summary_of_performance <- summarize_performance_of_cross_validated_classifiers("Logistic Regression", Indicator ~ Red + Green + Blue, data_frame = data_frame_of_indicators_and_pixels, optimal_lambda = 0.001)
 #' @import dplyr
 #' @import ggplot2
 #' @import rsample
 
 #' @export
-summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_model, formula, data_frame, optimal_lambda = NULL) {
+summarize_performance_of_cross_validated_classifiers <- function(type_of_model, formula, data_frame, optimal_lambda = NULL) {
  print(paste("Summary for model of type ", type_of_model, sep = ""))
  names_of_variables <- all.vars(formula)
  name_of_response <- names_of_variables[1]
@@ -374,16 +374,16 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   tidyr::unnest(predicted_probability) %>%
   group_by(id) %>%
   reframe(
-   accuracy = provide_performance_metrics(actual_indicator, predicted_probability, "accuracy"),
-   decimal_of_true_positives = provide_performance_metrics(actual_indicator, predicted_probability, "decimal of true positives"),
-   F1_measure = provide_performance_metrics(actual_indicator, predicted_probability, "F1 measure"),
-   FPR = provide_performance_metrics(actual_indicator, predicted_probability, "FPR"),
-   number_of_negatives = provide_performance_metrics(actual_indicator, predicted_probability, "number of negatives"),
+   accuracy = provide_vector_of_values_of_performance_metric(actual_indicator, predicted_probability, "accuracy"),
+   decimal_of_true_positives = provide_vector_of_values_of_performance_metric(actual_indicator, predicted_probability, "decimal of true positives"),
+   F1_measure = provide_vector_of_values_of_performance_metric(actual_indicator, predicted_probability, "F1 measure"),
+   FPR = provide_vector_of_values_of_performance_metric(actual_indicator, predicted_probability, "FPR"),
+   number_of_negatives = provide_vector_of_values_of_performance_metric(actual_indicator, predicted_probability, "number of negatives"),
    number_of_observations = 1:length(accuracy),
-   number_of_positives = provide_performance_metrics(actual_indicator, predicted_probability, "number of positives"),
-   PPV = provide_performance_metrics(actual_indicator, predicted_probability, "PPV"),
-   threshold = provide_performance_metrics(actual_indicator, predicted_probability, "threshold"),
-   TPR = provide_performance_metrics(actual_indicator, predicted_probability, "TPR"),
+   number_of_positives = provide_vector_of_values_of_performance_metric(actual_indicator, predicted_probability, "number of positives"),
+   PPV = provide_vector_of_values_of_performance_metric(actual_indicator, predicted_probability, "PPV"),
+   threshold = provide_vector_of_values_of_performance_metric(actual_indicator, predicted_probability, "threshold"),
+   TPR = provide_vector_of_values_of_performance_metric(actual_indicator, predicted_probability, "TPR"),
   )
  data_frame_of_fold_ids_and_maximum_F1_measures <- data_frame_of_performance_metrics[complete.cases(data_frame_of_performance_metrics), ] %>% group_by(id) %>% summarise(maximum_F1_measure = max(F1_measure))
  data_frame_of_average_performance_metrics <-
@@ -481,14 +481,14 @@ summarize_performance_of_cross_validated_models_using_dplyr <- function(type_of_
   corresponding_PPV = data_frame_corresponding_to_maximum_average_F1_measure$corresponding_PPV,
   optimal_F1_measure = optimal_F1_measure
  )
- summary_of_performance_of_cross_validated_models <- list(
+ summary_of_performance_of_cross_validated_classifiers <- list(
   plot_of_performance_metrics_vs_threshold = plot_of_performance_metrics_vs_threshold,
   PR_curve = PR_curve,
   ROC_curve = ROC_curve,
   data_frame_of_optimal_performance_metrics = data_frame_of_optimal_performance_metrics,
   data_frame_of_fold_ids_and_maximum_F1_measures = data_frame_of_fold_ids_and_maximum_F1_measures
  )
- return(summary_of_performance_of_cross_validated_models)
+ return(summary_of_performance_of_cross_validated_classifiers)
 }
 
 # lev = vector_of_factor_levels_that_correspond_to_results

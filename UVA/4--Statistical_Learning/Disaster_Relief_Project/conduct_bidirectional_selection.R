@@ -74,7 +74,7 @@ holdout_data_frame_of_indicators_and_pixels$Indicator <- factor(holdout_data_fra
 get_optimal_F1_measure_for_formula <- function(type_of_model, formula) {
  out <- tryCatch(
   {
-   summary_of_performance <- TomLeversRPackage::summarize_performance_of_cross_validated_models_using_dplyr(
+   summary_of_performance <- TomLeversRPackage::summarize_performance_of_cross_validated_classifiers(
     type_of_model = type_of_model,
     formula = formula,
     data_frame = training_data_frame_of_indicators_and_pixels

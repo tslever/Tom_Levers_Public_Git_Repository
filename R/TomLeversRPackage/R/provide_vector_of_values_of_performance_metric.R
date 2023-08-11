@@ -1,14 +1,14 @@
-#' @title provide_performance_metrics
-#' @description Provides performance metrics
+#' @title provide_vector_of_values_of_performance_metric
+#' @description Provides vector of values of performance metric
 #' @param vector_of_actual_indicators The vector of actual indicators in the set {0, 1}
 #' @param vector_of_predicted_probabilities The vector of predicted probabilities in the range [0, 1]
-#' @return data_frame_of_performance_metrics
-#' @examples data_frame_of_performance_metrics <- provide_performance_metrics(vector_of_actual_indicators, vector_of_predicted_probabilities)
+#' @return vector_of_values_of_performance_metric
+#' @examples vector_of_values_of_performance_metric <- provide_vector_of_values_of_performance_metric(vector_of_actual_indicators, vector_of_predicted_probabilities)
 #' @import dplyr
 #' @import rsample
 
 #' @export
-provide_performance_metrics <- function(vector_of_actual_indicators, vector_of_predicted_probabilities, performance_metric) {
+provide_vector_of_values_of_performance_metric <- function(vector_of_actual_indicators, vector_of_predicted_probabilities, performance_metric) {
  sequence <- seq(from = 0, to = 1, by = 0.01)
  vector_of_values_of_performance_metric <- rep(0, length(sequence))
  for (i in 1:length(sequence)) {
@@ -25,6 +25,14 @@ provide_performance_metrics <- function(vector_of_actual_indicators, vector_of_p
    number_of_observations <- length(vector_of_actual_indicators)
    decimal_of_true_positives <- number_of_true_positives / number_of_observations
    vector_of_values_of_performance_metric[i] <- decimal_of_true_positives
+  } else if (performance_metric == "error rate") {
+   number_of_true_negatives <- sum(vector_of_predicted_indicators == 0 & vector_of_actual_indicators == 0)
+   number_of_true_positives <- sum(vector_of_predicted_indicators == 1 & vector_of_actual_indicators == 1)
+   number_of_true_predictions <- number_of_true_negatives + number_of_true_positives
+   number_of_observations <- length(vector_of_actual_indicators)
+   accuracy <- number_of_true_predictions / number_of_observations
+   error_rate <- 1 - accuracy
+   vector_of_values_of_performance_metric[i] <- error_rate
   } else if (performance_metric == "F1 measure") {
    number_of_false_positives <- sum(vector_of_predicted_indicators == 1 & vector_of_actual_indicators == 0)
    number_of_true_positives <- sum(vector_of_predicted_indicators == 1 & vector_of_actual_indicators == 1)
