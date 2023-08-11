@@ -140,31 +140,44 @@ summarize_performance_of_cross_validated_classifiers <- function(type_of_model, 
   message <- paste("Number of trees corresponding to minimum test error rate: ", optimal_number_of_trees, sep = "")
   print(message)
  } else if (startsWith(type_of_model, "Support-Vector Machine")) {
-  range_of_costs = 10^seq(from = -2, to = 2, by = 0.5)
   if (type_of_model == "Support-Vector Machine With Linear Kernel") {
-   optimal_cost <- -1
-   optimal_maximum_F1_measure <- -1
-   for (cost in range_of_costs) {
-    SVM_with_linear_kernel <- e1071::svm(
-     formula,
-     data = sample_of_data_frame,
-     cost = cost,
-     kernel = "linear",
-     probability = TRUE
-    )
-    factor_of_predictions_and_predicted_probabilities <- predict(SVM_with_linear_kernel, newdata = sample_of_data_frame, probability = TRUE)
-    matrix_of_predicted_probabilities <- attr(x = factor_of_predictions_and_predicted_probabilities, which = "probabilities")
-    vector_of_predicted_probabilities <- matrix_of_predicted_probabilities[, 2]
-    maximum_F1_measure_for_present_cost <- max(provide_vector_of_values_of_performance_metric(sample_of_data_frame$Indicator, vector_of_predicted_probabilities, "F1 measure"))
-    print(paste("159: Trained SVM with linear kernel with formula ", format(formula), " on sample_of_data_frame with cost ", cost, sep = ""))
-    print(paste("160: Predicted on sample_of_data_frame with maximum F1 measure ", maximum_F1_measure_for_present_cost, sep = ""))
-    if (maximum_F1_measure_for_present_cost > optimal_maximum_F1_measure) {
-     optimal_maximum_F1_measure <- maximum_F1_measure_for_present_cost
-     optimal_cost <- cost
-    }
+   SVM_with_linear_kernel <- list(
+    type = "Classification",
+    library = "e1071"
+   )
+   SVM_with_linear_kernel$parameters <- data.frame(
+    parameter = c("cost")
+   )
+   SVM_with_linear_kernel$grid <- function() {}
+   SVM_with_linear_kernel$fit <- function(x, y, parameters, classProbs, last, lev, wts) {
+    e1071::svm(x, y, cost = parameters$cost, kernel = "linear", probability = TRUE)
+    print(paste("154: Trained SVM with linear kernel with formula ", format(formula), " on sample_of_data_frame with cost ", parameters$cost, sep = ""))
    }
-   print(paste("166: Trained SVM with linear kernel with formula ", format(formula), " on sample_of_data_frame with optimal cost ", optimal_cost, sep = ""))
-   print(paste("167: Predicted on sample_of_data_frame with optimal F1 measure ", optimal_maximum_F1_measure, sep = ""))
+   SVM_with_linear_kernel$predict <- function(modelFit, newdata, submodels = NULL) {
+    vector_of_predicted_values <- predict(modelFit, newdata)
+    print("158: Based on sample_of_data_frame, calculated vector of predicted values")
+    return(vector_of_predicted_values)
+   }
+   SVM_with_linear_kernel$prob <- function(modelFit, newdata) {
+    factor_of_predictions_and_predicted_probabilities <- predict(modelFit, newdata, probability = TRUE)
+    matrix_of_predicted_probabilities <- attr(x = factor_of_predictions_and_predicted_probabilities, which = "probabilities")
+    print("164: Based on sample_of_data_frame, calculated matrix of predicted probabilities")
+    return(matrix_of_predicted_probabilities)
+   }
+   the_trainControl <- caret::trainControl(method = "cv", summaryFunction = calculate_F1_measure, allowParallel = TRUE)
+   range_of_costs = 10^seq(from = -1, to = 1, by = 1)
+   the_tuneGrid = expand.grid(.cost = range_of_costs)
+   list_of_training_information <- caret::train(
+    form = formula,
+    data = sample_of_data_frame,
+    method = SVM_with_linear_kernel,
+    metric = "F1_measure",
+    trControl = the_trainControl,
+    tuneGrid = the_tuneGrid
+   )
+   print(plot(list_of_training_information))
+   optimal_cost = list_of_training_information$bestTune$cost
+   print(paste("180: Trained SVM with linear kernel with formula ", format(formula), " on sample_of_data_frame with optimal cost ", optimal_cost, sep = ""))
   } else if (type_of_model == "Support-Vector Machine With Polynomial Kernel") {
    range_of_degrees <- c(1, 2, 3, 4, 5, 6)
    SVM_with_polynomial_kernel <- e1071::svm(
