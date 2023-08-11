@@ -96,7 +96,7 @@ optimal_F1_measure <- -1
 vector_of_names_of_all_variables <- names(training_data_frame_of_indicators_and_pixels)
 vector_of_names_of_all_predictors <- vector_of_names_of_all_variables[-1]
 optimal_F1_measure_was_adjusted <- TRUE
-type_of_model <- "Support-Vector Machine With Linear Kernel"
+type_of_model <- "Support-Vector Machine With Radial Kernel"
 iteration <- 1
 every_optimal_F1_measure_is_result_indicating_error <- TRUE
 while (optimal_F1_measure_was_adjusted) {
@@ -104,8 +104,7 @@ while (optimal_F1_measure_was_adjusted) {
     optimal_F1_measure_was_adjusted <- FALSE
     list_of_potential_optimal_vectors_of_names_of_predictors = list()
     vector_of_potential_optimal_F1_measures <- numeric(0)
-    #for (name in vector_of_names_of_all_predictors) {
-    for (name in c("Normalized_Red")) {
+    for (name in vector_of_names_of_all_predictors) {
         potential_optimal_vector_of_names_of_predictors <- c(optimal_vector_of_names_of_predictors, name)
         predictor_string <- paste(potential_optimal_vector_of_names_of_predictors, collapse = " + ")
         formula_string <- paste("Indicator ~ ", predictor_string, sep = "")
@@ -117,7 +116,7 @@ while (optimal_F1_measure_was_adjusted) {
             print(paste("Optimal F1 measure for present predictor: ", optimal_F1_measure_for_present_predictor, sep = ""))
             if (optimal_F1_measure_for_present_predictor > optimal_F1_measure) {
                 vector_of_potential_optimal_F1_measures <- append(vector_of_potential_optimal_F1_measures, optimal_F1_measure_for_present_predictor)
-                list_of_potential_optimal_vectors_of_names_of_predictors <- append(list_of_potential_optimal_vectors_of_names_of_predictors, potential_optimal_vector_of_names_of_predictors)
+                list_of_potential_optimal_vectors_of_names_of_predictors <- c(list_of_potential_optimal_vectors_of_names_of_predictors, list(potential_optimal_vector_of_names_of_predictors))
             }
         }
     }
@@ -125,8 +124,8 @@ while (optimal_F1_measure_was_adjusted) {
         index_of_maximum_potential_optimal_F1_measure <- which.max(vector_of_potential_optimal_F1_measures)
         maximum_potential_optimal_F1_measure <- vector_of_potential_optimal_F1_measures[index_of_maximum_potential_optimal_F1_measure]
         optimal_F1_measure <- maximum_potential_optimal_F1_measure
-        potential_optimal_vector_of_names_of_predictors_correpsonding_to_maximum_potential_optimal_F1_measure <- list_of_potential_optimal_vectors_of_names_of_predictors[[index_of_maximum_potential_optimal_F1_measure]]
-        optimal_vector_of_names_of_predictors <- potential_optimal_vector_of_names_of_predictors_correpsonding_to_maximum_potential_optimal_F1_measure
+        potential_optimal_vector_of_names_of_predictors_corresponding_to_maximum_potential_optimal_F1_measure <- list_of_potential_optimal_vectors_of_names_of_predictors[[index_of_maximum_potential_optimal_F1_measure]]
+        optimal_vector_of_names_of_predictors <- potential_optimal_vector_of_names_of_predictors_corresponding_to_maximum_potential_optimal_F1_measure
     }
     if (iteration == 1 & every_optimal_F1_measure_is_result_indicating_error) {
         for (name_1 in vector_of_names_of_all_predictors) {
@@ -135,7 +134,7 @@ while (optimal_F1_measure_was_adjusted) {
            next
           }
           potential_optimal_vector_of_names_of_predictors <- c(name_1, name_2)
-         
+
           predictor_string <- paste(potential_optimal_vector_of_names_of_predictors, collapse = " + ")
           formula_string <- paste("Indicator ~ ", predictor_string, sep = "")
           print(formula_string)
@@ -156,7 +155,7 @@ while (optimal_F1_measure_was_adjusted) {
     if (length(optimal_vector_of_names_of_predictors) > 2) {
         for (i in 1:(length(optimal_vector_of_names_of_predictors) - 2)) {
             potential_optimal_vector_of_names_of_predictors <- setdiff(optimal_vector_of_names_of_predictors, optimal_vector_of_names_of_predictors[i])
-          
+
             predictor_string <- paste(potential_optimal_vector_of_names_of_predictors, collapse = " + ")
             formula_string <- paste("Indicator ~ ", predictor_string, sep = "")
             print(formula_string)

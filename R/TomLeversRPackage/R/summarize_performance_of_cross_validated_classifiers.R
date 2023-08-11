@@ -141,70 +141,54 @@ summarize_performance_of_cross_validated_classifiers <- function(type_of_model, 
   print(message)
  } else if (startsWith(type_of_model, "Support-Vector Machine")) {
   if (type_of_model == "Support-Vector Machine With Linear Kernel") {
-   SVM_with_linear_kernel <- list(
-    type = "Classification",
-    library = "e1071"
-   )
-   SVM_with_linear_kernel$parameters <- data.frame(
-    parameter = c("cost")
-   )
-   SVM_with_linear_kernel$grid <- function() {}
-   SVM_with_linear_kernel$fit <- function(x, y, parameters, classProbs, last, lev, wts) {
-    e1071::svm(x, y, cost = parameters$cost, kernel = "linear", probability = TRUE)
-    print(paste("154: Trained SVM with linear kernel with formula ", format(formula), " on sample_of_data_frame with cost ", parameters$cost, sep = ""))
-   }
-   SVM_with_linear_kernel$predict <- function(modelFit, newdata, submodels = NULL) {
-    vector_of_predicted_values <- predict(modelFit, newdata)
-    print("158: Based on sample_of_data_frame, calculated vector of predicted values")
-    return(vector_of_predicted_values)
-   }
-   SVM_with_linear_kernel$prob <- function(modelFit, newdata) {
-    factor_of_predictions_and_predicted_probabilities <- predict(modelFit, newdata, probability = TRUE)
-    matrix_of_predicted_probabilities <- attr(x = factor_of_predictions_and_predicted_probabilities, which = "probabilities")
-    print("164: Based on sample_of_data_frame, calculated matrix of predicted probabilities")
-    return(matrix_of_predicted_probabilities)
-   }
    the_trainControl <- caret::trainControl(method = "cv", summaryFunction = calculate_F1_measure, allowParallel = TRUE)
    range_of_costs = 10^seq(from = -1, to = 1, by = 1)
-   the_tuneGrid = expand.grid(.cost = range_of_costs)
+   the_tuneGrid = expand.grid(C = range_of_costs)
    list_of_training_information <- caret::train(
     form = formula,
     data = sample_of_data_frame,
-    method = SVM_with_linear_kernel,
+    method = "svmLinear",
     metric = "F1_measure",
     trControl = the_trainControl,
     tuneGrid = the_tuneGrid
    )
    print(plot(list_of_training_information))
-   optimal_cost = list_of_training_information$bestTune$cost
-   print(paste("180: Trained SVM with linear kernel with formula ", format(formula), " on sample_of_data_frame with optimal cost ", optimal_cost, sep = ""))
+   optimal_cost = list_of_training_information$bestTune$C
+   print(paste("Trained SVM with linear kernel with formula ", format(formula), " on sample_of_data_frame with optimal cost ", optimal_cost, sep = ""))
   } else if (type_of_model == "Support-Vector Machine With Polynomial Kernel") {
-   range_of_degrees <- c(1, 2, 3, 4, 5, 6)
-   SVM_with_polynomial_kernel <- e1071::svm(
-    slice_of_sample_of_data_frame_corresponding_to_predictors,
-    slice_of_sample_of_data_frame_corresponding_to_response,
-    cost = 1,
-    degree = 1,
-    kernel = "polynomial",
-    probability = TRUE
+   the_trainControl <- caret::trainControl(method = "cv", summaryFunction = calculate_F1_measure, allowParallel = TRUE)
+   range_of_costs = 10^seq(from = -1, to = 1, by = 1)
+   range_of_degrees = c(1, 2, 3)
+   the_tuneGrid = expand.grid(C = range_of_costs, degree = range_of_degrees, scale = 1)
+   list_of_training_information <- caret::train(
+    form = formula,
+    data = sample_of_data_frame,
+    method = "svmPoly",
+    metric = "F1_measure",
+    trControl = the_trainControl,
+    tuneGrid = the_tuneGrid
    )
-   optimal_cost <- 1
-   optimal_degree <- 1
-   print(paste("optimal cost = ", optimal_cost, sep = ""))
-   print(paste("optimal degree = ", optimal_degree, sep = ""))
+   print(plot(list_of_training_information))
+   optimal_cost <- list_of_training_information$bestTune$C
+   optimal_degree <- list_of_training_information$bestTune$degree
+   print(paste("Trained SVM with polynomial kernel with formula ", format(formula), " on sample_of_data_frame with optimal cost ", optimal_cost, " and optimal degree ", optimal_degree, sep = ""))
   } else if (type_of_model == "Support-Vector Machine With Radial Kernel") {
+   the_trainControl <- caret::trainControl(method = "cv", summaryFunction = calculate_F1_measure, allowParallel = TRUE)
+   range_of_costs = 10^seq(from = -1, to = 1, by = 1)
    range_of_values_of_gamma <- 10^seq(-1, 1, by = 0.5)
-   SVM_with_radial_kernel <- e1071::svm(
-    slice_of_sample_of_data_frame_corresponding_to_predictors,
-    slice_of_sample_of_data_frame_corresponding_to_response,
-    cost = 1,
-    kernel = "radial",
-    probability = TRUE
+   the_tuneGrid = expand.grid(C = range_of_costs, sigma = range_of_values_of_gamma)
+   list_of_training_information <- caret::train(
+    form = formula,
+    data = sample_of_data_frame,
+    method = "svmRadial",
+    metric = "F1_measure",
+    trControl = the_trainControl,
+    tuneGrid = the_tuneGrid
    )
-   optimal_cost <- 1
-   optimal_gamma <- 1
-   print(paste("optimal cost = ", optimal_cost, sep = ""))
-   print(paste("optimal gamma = ", optimal_gamma, sep = ""))
+   print(plot(list_of_training_information))
+   optimal_cost <- list_of_training_information$bestTune$C
+   optimal_gamma <- list_of_training_information$bestTune$sigma
+   print(paste("Trained SVM with radial kernel with formula ", format(formula), " on sample_of_data_frame with optimal cost ", optimal_cost, " and optimal value of gamma ", optimal_gamma, sep = ""))
   }
  }
  generate_data_frame_of_actual_indicators_and_predicted_probabilities <-
@@ -285,7 +269,7 @@ summarize_performance_of_cross_validated_classifiers <- function(type_of_model, 
     if (type_of_model == "Support-Vector Machine With Linear Kernel") {
      SVM <- e1071::svm(
       formula,
-      data = sample_of_data_frame,
+      data = training_data,
       kernel = "linear",
       cost = optimal_cost,
       probability = TRUE
@@ -294,7 +278,7 @@ summarize_performance_of_cross_validated_classifiers <- function(type_of_model, 
     } else if (type_of_model == "Support-Vector Machine With Polynomial Kernel") {
      SVM <- e1071::svm(
       formula,
-      data = sample_of_data_frame,
+      data = training_data,
       kernel = "polynomial",
       cost = optimal_cost,
       degree = optimal_degree,
@@ -303,7 +287,7 @@ summarize_performance_of_cross_validated_classifiers <- function(type_of_model, 
     } else if (type_of_model == "Support-Vector Machine With Radial Kernel") {
      SVM <- e1071::svm(
       formula,
-      data = sample_of_data_frame,
+      data = training_data,
       kernel = "radial",
       cost = optimal_cost,
       gamma = optimal_gamma,
@@ -316,7 +300,7 @@ summarize_performance_of_cross_validated_classifiers <- function(type_of_model, 
     factor_of_predictions_and_predicted_probabilities <- predict(SVM, newdata = testing_data, probability = TRUE)
     matrix_of_predicted_probabilities <- attr(x = factor_of_predictions_and_predicted_probabilities, which = "probabilities")
     vector_of_predicted_probabilities <- matrix_of_predicted_probabilities[, 2]
-    print(paste("306: Predicted on testing_data", sep = ""))
+    print(paste("Predicted on testing_data", sep = ""))
    } else {
     error_message <- paste("The performance of models of type ", type_of_model, " cannot be yet summarized.", sep = "")
     stop(error_message)
@@ -460,9 +444,6 @@ summarize_performance_of_cross_validated_classifiers <- function(type_of_model, 
 # model = method_specified_in_train
 calculate_F1_measure <- function(data_frame_containing_actual_and_predicted_labels, lev = NULL, model = NULL) {
  F1_measure <- MLmetrics::F1_Score(y_true = data_frame_containing_actual_and_predicted_labels$obs, y_pred = data_frame_containing_actual_and_predicted_labels$pred, positive = lev[1])
- if (is.na(F1_measure)) {
-  F1_measure <- 0
- }
  vector_with_F1_measure <- c(F1_measure = F1_measure)
  return(vector_with_F1_measure)
 }
