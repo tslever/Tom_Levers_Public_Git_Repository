@@ -74,11 +74,14 @@ holdout_data_frame_of_indicators_and_pixels$Indicator <- factor(holdout_data_fra
 get_optimal_F1_measure_for_formula <- function(type_of_model, formula) {
  out <- tryCatch(
   {
+   start_time <- Sys.time()
    summary_of_performance <- TomLeversRPackage::summarize_performance_of_cross_validated_classifiers(
     type_of_model = type_of_model,
     formula = formula,
     data_frame = training_data_frame_of_indicators_and_pixels
    )
+   end_time <- Sys.time()
+   print(end_time - start_time)
    optimal_F1_measure_for_present_formula <-
     summary_of_performance$data_frame_of_optimal_performance_metrics$optimal_F1_measure
    return(optimal_F1_measure_for_present_formula)
@@ -96,7 +99,7 @@ optimal_F1_measure <- -1
 vector_of_names_of_all_variables <- names(training_data_frame_of_indicators_and_pixels)
 vector_of_names_of_all_predictors <- vector_of_names_of_all_variables[-1]
 optimal_F1_measure_was_adjusted <- TRUE
-type_of_model <- "Support-Vector Machine With Linear Kernel"
+type_of_model <- "Support-Vector Machine With Radial Kernel"
 iteration <- 1
 every_optimal_F1_measure_is_result_indicating_error <- TRUE
 while (optimal_F1_measure_was_adjusted) {
