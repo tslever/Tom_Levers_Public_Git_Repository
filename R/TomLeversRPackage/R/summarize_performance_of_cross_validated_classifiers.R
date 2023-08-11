@@ -78,7 +78,7 @@ summarize_performance_of_cross_validated_classifiers <- function(type_of_model, 
   data_frame_of_training_response_values <- training_data[, index_of_column_Indicator]
   data_frame_of_testing_predictors <- testing_data[, -index_of_column_Indicator]
   data_frame_of_testing_response_values <- testing_data[, index_of_column_Indicator]
-  maximum_number_of_trees = 1000
+  maximum_number_of_trees = 500
   maximum_test_error_rate <- -1
   minimum_test_error_rate <- 2
   optimal_number_of_trees <- 0
@@ -86,16 +86,17 @@ summarize_performance_of_cross_validated_classifiers <- function(type_of_model, 
   vector_of_numbers_of_trees <- numeric(0)
   vector_of_test_error_rates <- numeric(0)
   vector_of_values_of_mtry <- factor()
+  the_trainControl <- caret::trainControl(method  = "cv", summaryFunction = calculate_F1_measure, allowParallel = TRUE)
   for (mtry in 1:number_of_predictors) {
-   the_randomForest <- randomForest::randomForest(
-    x = data_frame_of_training_predictors,
-    y = data_frame_of_training_response_values,
-    xtest = data_frame_of_testing_predictors,
-    ytest = data_frame_of_testing_response_values,
-    mtry = mtry,
-    ntree = maximum_number_of_trees
+   the_randomForest <- caret::train(
+    formula,
+    data = sample_of_data_frame,
+    method = "rf",
+    ntree = maximum_number_of_trees,
+    tuneGrid = expand.grid(mtry = mtry),
+    trControl = the_trainControl
    )
-   data_frame_of_error_rates <- the_randomForest$test$err.rate
+   data_frame_of_error_rates <- the_randomForest$finalModel$err.rate
    vector_of_test_error_rates_for_present_mtry <- data_frame_of_error_rates[, 1]
    vector_of_test_error_rates <- c(vector_of_test_error_rates, vector_of_test_error_rates_for_present_mtry)
    vector_of_values_of_mtry <- c(vector_of_values_of_mtry, factor(rep(x = mtry, times = maximum_number_of_trees)))
