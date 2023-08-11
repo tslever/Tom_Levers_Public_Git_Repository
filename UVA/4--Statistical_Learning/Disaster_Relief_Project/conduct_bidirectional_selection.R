@@ -74,17 +74,14 @@ holdout_data_frame_of_indicators_and_pixels$Indicator <- factor(holdout_data_fra
 get_optimal_F1_measure_for_formula <- function(type_of_model, formula) {
  out <- tryCatch(
   {
-   start_time <- Sys.time()
    summary_of_performance <- TomLeversRPackage::summarize_performance_of_cross_validated_classifiers(
     type_of_model = type_of_model,
     formula = formula,
     data_frame = training_data_frame_of_indicators_and_pixels
    )
-   end_time <- Sys.time()
-   print(end_time - start_time)
-   optimal_F1_measure_for_present_formula <-
+   optimal_F1_measure <-
     summary_of_performance$data_frame_of_optimal_performance_metrics$optimal_F1_measure
-   return(optimal_F1_measure_for_present_formula)
+   return(optimal_F1_measure)
   },
   error = function(cond) {
    message("Here's the original error message:")
@@ -99,7 +96,7 @@ optimal_F1_measure <- -1
 vector_of_names_of_all_variables <- names(training_data_frame_of_indicators_and_pixels)
 vector_of_names_of_all_predictors <- vector_of_names_of_all_variables[-1]
 optimal_F1_measure_was_adjusted <- TRUE
-type_of_model <- "Support-Vector Machine With Radial Kernel"
+type_of_model <- "Support-Vector Machine With Linear Kernel"
 iteration <- 1
 every_optimal_F1_measure_is_result_indicating_error <- TRUE
 while (optimal_F1_measure_was_adjusted) {
@@ -117,7 +114,7 @@ while (optimal_F1_measure_was_adjusted) {
         optimal_F1_measure_for_present_predictor <- get_optimal_F1_measure_for_formula(type_of_model, formula)
         if (optimal_F1_measure_for_present_predictor != "result indicating error") {
             every_optimal_F1_measure_is_result_indicating_error <- FALSE
-            print(optimal_F1_measure_for_present_predictor)
+            print(paste("Optimal F1 measure for present predictor: ", optimal_F1_measure_for_present_predictor, sep = ""))
             if (optimal_F1_measure_for_present_predictor > optimal_F1_measure) {
                 vector_of_potential_optimal_F1_measures <- append(vector_of_potential_optimal_F1_measures, optimal_F1_measure_for_present_predictor)
                 list_of_potential_optimal_vectors_of_names_of_predictors <- append(list_of_potential_optimal_vectors_of_names_of_predictors, potential_optimal_vector_of_names_of_predictors)
@@ -146,7 +143,7 @@ while (optimal_F1_measure_was_adjusted) {
           optimal_F1_measure_for_present_predictor <- get_optimal_F1_measure_for_formula(type_of_model, formula)
           if (optimal_F1_measure_for_present_predictor != "result indicating error") {
            every_optimal_F1_measure_is_result_indicating_error <- FALSE
-           print(optimal_F1_measure_for_present_predictor)
+           print(paste("Optimal F1 measure for present predictor: ", optimal_F1_measure_for_present_predictor, sep = ""))
            if (optimal_F1_measure_for_present_predictor > optimal_F1_measure) {
             optimal_F1_measure <- optimal_F1_measure_for_present_predictor
             optimal_F1_measure_was_adjusted <- TRUE
@@ -168,7 +165,7 @@ while (optimal_F1_measure_was_adjusted) {
             if (optimal_F1_measure_for_present_predictor == "result indicating error") {
                 next
             }
-            print(optimal_F1_measure_for_present_predictor)
+            print(paste("Optimal F1 measure for present predictor: ", optimal_F1_measure_for_present_predictor, sep = ""))
             if (optimal_F1_measure_for_present_predictor > optimal_F1_measure) {
                 optimal_F1_measure <- optimal_F1_measure_for_present_predictor
                 optimal_F1_measure_was_adjusted <- TRUE
@@ -178,5 +175,6 @@ while (optimal_F1_measure_was_adjusted) {
     }
     iteration <- iteration + 1
 }
+print("Optimal vector of names of predictors:")
 print(optimal_vector_of_names_of_predictors)
-print(optimal_F1_measure)
+print(paste("Optimal F1 measure: ", optimal_F1_measure, sep = ""))

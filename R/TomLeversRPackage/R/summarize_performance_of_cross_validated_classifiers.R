@@ -140,20 +140,33 @@ summarize_performance_of_cross_validated_classifiers <- function(type_of_model, 
   message <- paste("Number of trees corresponding to minimum test error rate: ", optimal_number_of_trees, sep = "")
   print(message)
  } else if (startsWith(type_of_model, "Support-Vector Machine")) {
-  index_of_column_of_response <- get_index_of_column_of_data_frame(sample_of_data_frame, name_of_response)
-  slice_of_sample_of_data_frame_corresponding_to_predictors <- sample_of_data_frame[, -index_of_column_of_response]
-  slice_of_sample_of_data_frame_corresponding_to_response <- sample_of_data_frame[, index_of_column_of_response]
+  range_of_costs = 10^seq(from = -2, to = 2, by = 0.5)
   if (type_of_model == "Support-Vector Machine With Linear Kernel") {
-   SVM_with_linear_kernel <- e1071::svm(
-    slice_of_sample_of_data_frame_corresponding_to_predictors,
-    slice_of_sample_of_data_frame_corresponding_to_response,
-    cost = 1,
-    kernel = "linear",
-    probability = TRUE
-   )
-   optimal_cost <- 1
-   print(paste("optimal cost = ", optimal_cost, sep = ""))
+   optimal_cost <- -1
+   optimal_maximum_F1_measure <- -1
+   for (cost in range_of_costs) {
+    SVM_with_linear_kernel <- e1071::svm(
+     formula,
+     data = sample_of_data_frame,
+     cost = cost,
+     kernel = "linear",
+     probability = TRUE
+    )
+    factor_of_predictions_and_predicted_probabilities <- predict(SVM_with_linear_kernel, newdata = sample_of_data_frame, probability = TRUE)
+    matrix_of_predicted_probabilities <- attr(x = factor_of_predictions_and_predicted_probabilities, which = "probabilities")
+    vector_of_predicted_probabilities <- matrix_of_predicted_probabilities[, 2]
+    maximum_F1_measure_for_present_cost <- max(provide_vector_of_values_of_performance_metric(sample_of_data_frame$Indicator, vector_of_predicted_probabilities, "F1 measure"))
+    print(paste("159: Trained SVM with linear kernel with formula ", format(formula), " on sample_of_data_frame with cost ", cost, sep = ""))
+    print(paste("160: Predicted on sample_of_data_frame with maximum F1 measure ", maximum_F1_measure_for_present_cost, sep = ""))
+    if (maximum_F1_measure_for_present_cost > optimal_maximum_F1_measure) {
+     optimal_maximum_F1_measure <- maximum_F1_measure_for_present_cost
+     optimal_cost <- cost
+    }
+   }
+   print(paste("166: Trained SVM with linear kernel with formula ", format(formula), " on sample_of_data_frame with optimal cost ", optimal_cost, sep = ""))
+   print(paste("167: Predicted on sample_of_data_frame with optimal F1 measure ", optimal_maximum_F1_measure, sep = ""))
   } else if (type_of_model == "Support-Vector Machine With Polynomial Kernel") {
+   range_of_degrees <- c(1, 2, 3, 4, 5, 6)
    SVM_with_polynomial_kernel <- e1071::svm(
     slice_of_sample_of_data_frame_corresponding_to_predictors,
     slice_of_sample_of_data_frame_corresponding_to_response,
@@ -167,6 +180,7 @@ summarize_performance_of_cross_validated_classifiers <- function(type_of_model, 
    print(paste("optimal cost = ", optimal_cost, sep = ""))
    print(paste("optimal degree = ", optimal_degree, sep = ""))
   } else if (type_of_model == "Support-Vector Machine With Radial Kernel") {
+   range_of_values_of_gamma <- 10^seq(-1, 1, by = 0.5)
    SVM_with_radial_kernel <- e1071::svm(
     slice_of_sample_of_data_frame_corresponding_to_predictors,
     slice_of_sample_of_data_frame_corresponding_to_response,
@@ -254,7 +268,7 @@ summarize_performance_of_cross_validated_classifiers <- function(type_of_model, 
     matrix_of_predicted_probabilities <- predict(the_randomForest, newdata = testing_data, type = "prob")
     vector_of_predicted_probabilities <- matrix_of_predicted_probabilities[, 2]
    } else if (startsWith(type_of_model, "Support-Vector Machine")) {
-    SVM = NULL
+    SVM <- NULL
     if (type_of_model == "Support-Vector Machine With Linear Kernel") {
      SVM <- e1071::svm(
       formula,
@@ -263,6 +277,7 @@ summarize_performance_of_cross_validated_classifiers <- function(type_of_model, 
       cost = optimal_cost,
       probability = TRUE
      )
+     print(paste("280: Trained SVM with linear kernel with formula ", format(formula), " on sample_of_data_frame with optimal cost ", optimal_cost, sep = ""))
     } else if (type_of_model == "Support-Vector Machine With Polynomial Kernel") {
      SVM <- e1071::svm(
       formula,
@@ -288,6 +303,7 @@ summarize_performance_of_cross_validated_classifiers <- function(type_of_model, 
     factor_of_predictions_and_predicted_probabilities <- predict(SVM, newdata = testing_data, probability = TRUE)
     matrix_of_predicted_probabilities <- attr(x = factor_of_predictions_and_predicted_probabilities, which = "probabilities")
     vector_of_predicted_probabilities <- matrix_of_predicted_probabilities[, 2]
+    print(paste("306: Predicted on testing_data", sep = ""))
    } else {
     error_message <- paste("The performance of models of type ", type_of_model, " cannot be yet summarized.", sep = "")
     stop(error_message)
