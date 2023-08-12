@@ -91,27 +91,20 @@ get_optimal_F1_measure_for_formula <- function(type_of_model, formula) {
   }
  )
 }
-optimal_vector_of_names_of_predictors <- c("Normalized_Interaction_Of_Red_And_Blue", "Normalized_Red", "Normalized_Square_Of_Green")
-#optimal_vector_of_names_of_predictors <- character(0)
+optimal_vector_of_names_of_predictors <- character(0)
 optimal_F1_measure <- -1
 vector_of_names_of_all_variables <- names(training_data_frame_of_indicators_and_pixels)
 vector_of_names_of_all_predictors <- vector_of_names_of_all_variables[-1]
 optimal_F1_measure_was_adjusted <- TRUE
-type_of_model <- "Support-Vector Machine With Linear Kernel"
-iteration <- 4
+type_of_model <- "Support-Vector Machine With Polynomial Kernel"
+iteration <- 1
 every_optimal_F1_measure_is_result_indicating_error <- TRUE
 while (optimal_F1_measure_was_adjusted) {
     print(paste("Iteration: ", iteration, sep = ""))
     optimal_F1_measure_was_adjusted <- FALSE
     list_of_potential_optimal_vectors_of_names_of_predictors = list()
     vector_of_potential_optimal_F1_measures <- numeric(0)
-    v <- NULL
-    if (iteration == 4) {
-     v <- "Normalized_Blue"
-    } else {
-     v <- vector_of_names_of_all_predictors
-    }
-    for (name in v) {
+    for (name in vector_of_names_of_all_predictors) {
     #for (name in vector_of_names_of_all_predictors) {
         if (name %in% optimal_vector_of_names_of_predictors) {
             next
