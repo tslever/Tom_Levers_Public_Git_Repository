@@ -108,23 +108,23 @@ vector_of_random_indices <- sample(
     x = 1:number_of_holdout_observations,
     size = number_of_training_observations
 )
-slice_to_plot <- holdout_data_frame_of_classes_and_pixels[vector_of_random_indices, ]
-plot_distribution(slice_to_plot, "Red", "red")
+slice_of_holdout_data_frame <- holdout_data_frame_of_classes_and_pixels[vector_of_random_indices, ]
+plot_distribution(slice_of_holdout_data_frame, "Red", "red")
 ```
 
 ```{r, eval = TRUE, fig.width = 2.625, fig.height = 1.875}
-plot_distribution(slice_to_plot, "Green", "green")
+plot_distribution(slice_of_holdout_data_frame, "Green", "green")
 ```
 
 ```{r, eval = TRUE, fig.width = 2.625, fig.height = 1.875}
-plot_distribution(slice_to_plot, "Blue", "blue")
+plot_distribution(slice_of_holdout_data_frame, "Blue", "blue")
 ```
 
 We examine the distribution of classes (such as $Blue \ Tarp$) in our holdout data frame in a space defined by intensities of color $Red$, $Green$, and $Blue$. The intensity space for pixels representing blue tarps is distinct from the intensity sapce for pixels representing objects that are not blue tarps.
 
 ```{r, eval = TRUE, fig.cap = "Distribution Of Classes In Intensity Space", echo = FALSE}
 distribution_of_classes_in_intensity_space <- plotly::plot_ly(
-    data = slice_to_plot,
+    data = slice_of_holdout_data_frame,
     x = ~Red,
     y = ~Green,
     z = ~Blue,
@@ -141,6 +141,29 @@ webshot2::webshot(
     url = "distribution_of_classes_in_intensity_space.html",
     file = "distribution_of_classes_in_intensity_space.png"
 )
+```
+
+The proportion of training observations that correspond to blue tarps is about $25$ times the proportion of holdout observations that correspond to blue tarps.
+
+```{r}
+number_of_training_observations_corresponding_to_blue_tarps <- log(nrow(
+    training_data_frame_of_classes_and_pixels[
+        training_data_frame_of_classes_and_pixels$Class == "Blue Tarp",
+    ]
+))
+number_of_holdout_observations_corresponding_to_blue_tarps <- log(nrow(
+    holdout_data_frame_of_classes_and_pixels[
+        holdout_data_frame_of_classes_and_pixels$Class == "Blue Tarp",
+    ]
+))
+proportion_of_training_observations_that_correspond_to_blue_tarps <- 
+    number_of_training_observations_corresponding_to_blue_tarps /
+    number_of_training_observations
+proportion_of_holdout_observations_that_correspond_to_blue_tarps <-
+    number_of_holdout_observations_corresponding_to_blue_tarps /
+    number_of_holdout_observations
+proportion_of_training_observations_that_correspond_to_blue_tarps /
+    proportion_of_holdout_observations_that_correspond_to_blue_tarps
 ```
 
 # Methods
