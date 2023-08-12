@@ -99,6 +99,13 @@ head(x = holdout_data_frame_of_classes_and_pixels, n = 2)
 tail(x = holdout_data_frame_of_classes_and_pixels, n = 2)
 ```
 
+We assume that columns $B1$, $B2$, and $B3$ in the above source files correspond to intensities of colors $Red$, $Green$, and $Blue$, respectively. Values in these columns vary from $255$ down to $27$, $28$, and $25$, respectively. Partial reconstructions of images of Regions 57, 67, 69, and 78 based on columns $B1$, $B2$, $B3$, $X$, and $Y$ from these source files look realistic.
+
+![Reconstruction Of Image Of Region 57](./Holdout_Data/Region_57.png){#id .class height=25%}
+![Reconstruction Of Image Of Region 67](./Holdout_Data/Region_67.png){#id .class height=25%}
+![Reconstruction Of Image Of Region 69](./Holdout_Data/Region_69.png){#id .class height=25%}
+![Reconstruction Of Image Of Region 78](./Holdout_Data/Region_78.png){#id .class height=25%}
+
 We conduct exploratory data analysis by considering the distributions of intensities of color $Red$, $Green$, and $Blue$ in our holdout data frame of classes and pixels. The distributions of intensity of colors $Red$, $Green$ and $Blue$ are roughly normal and broad except for long right tails and relatively high proportions of high intensities.
 
 ```{r, eval = TRUE, fig.width = 2.625, fig.height = 1.875}
@@ -493,23 +500,23 @@ summary_of_performance$ROC_curve
 t(summary_of_performance$data_frame_of_optimal_performance_metrics)
 ```
 
-To search for an optimal QDA binary classifier, we perform manual bidirectional selection as above. Our optimal QDA binary classifier has formula $Indicator \sim normalize\left(Blue^2\right) + normalize\left(Red^2\right) + normalize\left(Red\right)$. The maximum average F1 measure is $0.939$; the corresponding threshold is $0.960$.
+To search for an optimal QDA classifier, we perform manual bidirectional selection as above. Our optimal QDA classifier has formula $Indicator \sim normalize\left(Blue\right) + normalize\left(Red^2\right) + normalize\left(Red:Blue\right)$. The maximum average F1 measure is $0.914$; the corresponding threshold is $0.19$.
 
-Average accuracy is nearly $1$ for about $95$ percent of thresholds but in general is not quite as good as that for our optimal Logistic Regression binary classifier or that for our optimal Logistic Ridge Regression binary classifier. In generally average accuracy is better than for our LDA binary classifier. Average F1 measure is nearly $0.939$ for few thresholds; the maximum average F1 measure is lower than that for our optimal Logistic Regression binary classifier and that for our optimal Logistic Ridge Regression binary classifier but higher than that for our LDA binary classifier. Average PPV increases in the manner of $y = tan(x)$ from a threshold of about $0$ to $1$. In general PPV is less than that for one of the preceding models. Average TPR is nearly $1$ for thresholds less than $0.75$. We prioritize TPR over precision but under F1 measure. A Precision-Recall curve has an AUC of $0.966$. An ROC curve has an AUC of $0.998$. These AUC's are less than those for our optimal Logistic Regression and Logistic Ridge Regression binary classifiers but greater than that for our LDA binary classifier.
+Average accuracy is nearly $1$ for about $90$ percent of thresholds but in general is not quite as good as that for our optimal LR classifiers. Average accuracy is better than that for our optimal LRR and LDA classifiers. Average F1 measure is nearly $0.914$ for 58 percent of thresholds; the maximum average F1 measure is lower than that for our optimal LR and LRR classifiers but higher than that for our optimal LDA classifiers. Average PPV increases logarithmically. In general PPV is greater than that for our optimal LR classifiers. PPV is greater than that for our optimal LRR classifiers for thresholds less than $0.38$ and less than that for our optimal LRR classifiers for thresholds greater than $0.38. PPV is greater than that for our optimal LDA classifiers for thresholds less than $0.69$ and less than that for our optimal LDA classifiers for thresholds greater than $0.69$. Average TPR decreases in the manner of $y = -tan(x)$. In general TPR is less than that for our LR classifiers and greater than that for our LRR and LDA classifiers. We prioritize TPR over precision but under F1 measure. A Precision-Recall curve has an AUC of $0.959$. An ROC curve has an AUC of $0.984$. These AUC's are less than those for our optimal LR and LRR classifiers but greater than that for our optimal LDA classifiers.
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 summary_of_performance <- summarize_performance_of_cross_validated_classifiers(
     type_of_model = "QDA",
-    formula = Indicator ~ Normalized_Square_Of_Blue + Normalized_Square_Of_Red + Normalized_Red + Normalized_Natural_Logarithm_Of_Blue,
-    data_frame = data_frame_of_indicators_and_pixels
+    formula = Indicator ~ Normalized_Blue + Normalized_Square_Of_Red + Normalized_Interaction_Of_Red_And_Blue,
+    data_frame = training_data_frame_of_indicators_and_pixels
 )
 ```
 
-```{r, eval = FALSE, fig.cap = "Prediction Metrics Vs. Thresholds For Quadratic Discriminant Analysis Model With Formula Indicator Vs. Normalized Square Of Blue + Normalized Square Of Red + Normalized Red + Normalized Natural Logarithm Of Blue", eval = TRUE}
+```{r, eval = TRUE, fig.cap = "Prediction Metrics Vs. Thresholds For Quadratic Discriminant Analysis Model With Formula Indicator Vs. Normalized Blue + Normalized Square Of Red + Normalized Interaction Of Red And Blue"}
 summary_of_performance$plot_of_performance_metrics_vs_threshold
 ```
 
-```{r, eval = FALSE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Quadratic Discriminant Analysis Model With Formula Indicator Vs. Normalized Square Of Blue + Normalized Square Of Red + Normalized Red + Normalized Natural Logarithm Of Blue", eval = TRUE}
+```{r, eval = TRUE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Quadratic Discriminant Analysis Model With Formula Indicator Vs. Normalized Blue + Normalized Square Of Red + Normalized Interaction Of Red And Blue"}
 summary_of_performance$PR_curve
 summary_of_performance$ROC_curve
 t(summary_of_performance$data_frame_of_optimal_performance_metrics)
