@@ -275,7 +275,6 @@ summarize_performance_of_cross_validated_classifiers <- function(type_of_model, 
       cost = optimal_cost,
       probability = TRUE
      )
-     print(paste("280: Trained SVM with linear kernel with formula ", format(formula), " on sample_of_data_frame with optimal cost ", optimal_cost, sep = ""))
     } else if (type_of_model == "Support-Vector Machine With Polynomial Kernel") {
      SVM <- e1071::svm(
       formula,
@@ -301,7 +300,6 @@ summarize_performance_of_cross_validated_classifiers <- function(type_of_model, 
     factor_of_predictions_and_predicted_probabilities <- predict(SVM, newdata = testing_data, probability = TRUE)
     matrix_of_predicted_probabilities <- attr(x = factor_of_predictions_and_predicted_probabilities, which = "probabilities")
     vector_of_predicted_probabilities <- matrix_of_predicted_probabilities[, 2]
-    print(paste("Predicted on testing_data", sep = ""))
    } else {
     error_message <- paste("The performance of models of type ", type_of_model, " cannot be yet summarized.", sep = "")
     stop(error_message)
