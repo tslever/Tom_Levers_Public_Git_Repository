@@ -91,20 +91,28 @@ get_optimal_F1_measure_for_formula <- function(type_of_model, formula) {
   }
  )
 }
-optimal_vector_of_names_of_predictors <- character(0)
+optimal_vector_of_names_of_predictors <- c("Normalized_Interaction_Of_Red_And_Blue", "Normalized_Square_Of_Red", "Normalized_Interaction_Of_Red_And_Green")
+#optimal_vector_of_names_of_predictors <- character(0)
 optimal_F1_measure <- -1
 vector_of_names_of_all_variables <- names(training_data_frame_of_indicators_and_pixels)
 vector_of_names_of_all_predictors <- vector_of_names_of_all_variables[-1]
 optimal_F1_measure_was_adjusted <- TRUE
 type_of_model <- "Random Forest"
-iteration <- 1
+iteration <- 4
 every_optimal_F1_measure_is_result_indicating_error <- TRUE
 while (optimal_F1_measure_was_adjusted) {
     print(paste("Iteration: ", iteration, sep = ""))
     optimal_F1_measure_was_adjusted <- FALSE
     list_of_potential_optimal_vectors_of_names_of_predictors = list()
     vector_of_potential_optimal_F1_measures <- numeric(0)
-    for (name in vector_of_names_of_all_predictors) {
+    v <- NULL
+    if (iteration == 4) {
+     v <- "Normalized_Interaction_Of_Green_And_Blue"
+    } else {
+     v <- vector_of_names_of_all_predictors
+    }
+    for (name in v) {
+    #for (name in vector_of_names_of_all_predictors) {
         potential_optimal_vector_of_names_of_predictors <- c(optimal_vector_of_names_of_predictors, name)
         predictor_string <- paste(potential_optimal_vector_of_names_of_predictors, collapse = " + ")
         formula_string <- paste("Indicator ~ ", predictor_string, sep = "")
@@ -124,6 +132,7 @@ while (optimal_F1_measure_was_adjusted) {
         index_of_maximum_potential_optimal_F1_measure <- which.max(vector_of_potential_optimal_F1_measures)
         maximum_potential_optimal_F1_measure <- vector_of_potential_optimal_F1_measures[index_of_maximum_potential_optimal_F1_measure]
         optimal_F1_measure <- maximum_potential_optimal_F1_measure
+        optimal_F1_measure_was_adjusted <- TRUE
         potential_optimal_vector_of_names_of_predictors_corresponding_to_maximum_potential_optimal_F1_measure <- list_of_potential_optimal_vectors_of_names_of_predictors[[index_of_maximum_potential_optimal_F1_measure]]
         optimal_vector_of_names_of_predictors <- potential_optimal_vector_of_names_of_predictors_corresponding_to_maximum_potential_optimal_F1_measure
     }
@@ -153,25 +162,35 @@ while (optimal_F1_measure_was_adjusted) {
         }
     }
     if (length(optimal_vector_of_names_of_predictors) > 2) {
+        list_of_potential_optimal_vectors_of_names_of_predictors = list()
+        vector_of_potential_optimal_F1_measures <- numeric(0)
         for (i in 1:(length(optimal_vector_of_names_of_predictors) - 2)) {
             potential_optimal_vector_of_names_of_predictors <- setdiff(optimal_vector_of_names_of_predictors, optimal_vector_of_names_of_predictors[i])
-
             predictor_string <- paste(potential_optimal_vector_of_names_of_predictors, collapse = " + ")
             formula_string <- paste("Indicator ~ ", predictor_string, sep = "")
             print(formula_string)
             formula <- as.formula(formula_string)
-            optimal_F1_measure_for_present_predictor <- get_optimal_F1_measure_for_formula(type_of_model, formula)
-            if (optimal_F1_measure_for_present_predictor == "result indicating error") {
-                next
-            }
-            print(paste("Optimal F1 measure for present predictor: ", optimal_F1_measure_for_present_predictor, sep = ""))
-            if (optimal_F1_measure_for_present_predictor > optimal_F1_measure) {
-                optimal_F1_measure <- optimal_F1_measure_for_present_predictor
-                optimal_F1_measure_was_adjusted <- TRUE
-                optimal_vector_of_names_of_predictors <- potential_optimal_vector_of_names_of_predictors
+            optimal_F1_measure_for_present_formula <- get_optimal_F1_measure_for_formula(type_of_model, formula)
+            if (optimal_F1_measure_for_present_formula != "result indicating error") {
+                print(paste("Optimal F1 measure for present formula: ", optimal_F1_measure_for_present_formula, sep = ""))
+                if (optimal_F1_measure_for_present_formula > optimal_F1_measure) {
+                    vector_of_potential_optimal_F1_measures <- append(vector_of_potential_optimal_F1_measures, optimal_F1_measure_for_present_formula)
+                    list_of_potential_optimal_vectors_of_names_of_predictors <- c(list_of_potential_optimal_vectors_of_names_of_predictors, list(potential_optimal_vector_of_names_of_predictors))
+                }
             }
         }
+        if (length(vector_of_potential_optimal_F1_measures) > 0) {
+         index_of_maximum_potential_optimal_F1_measure <- which.max(vector_of_potential_optimal_F1_measures)
+         maximum_potential_optimal_F1_measure <- vector_of_potential_optimal_F1_measures[index_of_maximum_potential_optimal_F1_measure]
+         optimal_F1_measure <- maximum_potential_optimal_F1_measure
+         optimal_F1_measure_was_adjusted <- TRUE
+         potential_optimal_vector_of_names_of_predictors_corresponding_to_maximum_potential_optimal_F1_measure <- list_of_potential_optimal_vectors_of_names_of_predictors[[index_of_maximum_potential_optimal_F1_measure]]
+         optimal_vector_of_names_of_predictors <- potential_optimal_vector_of_names_of_predictors_corresponding_to_maximum_potential_optimal_F1_measure
+        }
     }
+    print(paste("Optimal vector of names of predictors after iteration ", iteration, ": ", sep = ""))
+    print(optimal_vector_of_names_of_predictors)
+    print(paste("Optimal F1 measure after iteration ", iteration, ": ", optimal_F1_measure, sep = ""))
     iteration <- iteration + 1
 }
 print("Optimal vector of names of predictors:")
