@@ -200,7 +200,7 @@ Regarding the weight of PPV and the weight of TPR, we prioritize TPR at least as
 
 In order to build binary classifiers, we create a composite data frame of our training data frame and our holdout data frame; substitute a column of classes for a column of indicators of whether of not a pixel depicts a blue tarp; add columns corresponding to normalized intensities and intensities normalized after transforming by the natural logarithm, the square root, the square, and interactions; and divide the composite data frame into training and holdout data frames again. We normalize as opposed to standardize intensities given that distributions of intensity are not normal. We shuffle the rows in our training and holdout data frames.
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 training_data_frame_of_indicators_and_pixels <- NULL
 should_generate_training_and_holdout_data_frames_of_indicators_and_pixels <- FALSE
 if (should_generate_training_and_holdout_data_frames_of_indicators_and_pixels) {
@@ -368,7 +368,7 @@ Our optimal LR classifier has formula $Indicator \sim normalize(Blue^2) + normal
 
 Average accuracy is nearly $1$ for about $95$ percent of thresholds. Average F1 measure is nearly $0.937$ for thresholds between about $0.1$ and about $0.4$. Average PPV increases logarithmically. Average TPR increases linearly from a threshold of about $0.95$ to $0$. A Precision-Recall curve has an AUC of $0.984$. An ROC curve has an AUC of $0.99920$.
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 # "glm.fit: fitted probabilities numerically 0 or 1" occurs due to predicted
 # probabilities of the Logistic Regression binary classifier being close to 0 and 1.
 # "collapsing to unique ’x’ values" is an artifact of MESS::auc.
@@ -380,11 +380,11 @@ summary_of_performance <- summarize_performance_of_cross_validated_classifiers(
 )
 ```
 
-```{r, eval = FALSE, fig.cap = "Prediction Metrics Vs. Thresholds For Logistic Regression Model With Formula Indicator vs. Normalized Square Of Blue + Normalized Square Of Red + Normalized Square Root Of Blue"}
+```{r, eval = TRUE, fig.cap = "Prediction Metrics Vs. Thresholds For Logistic Regression Model With Formula Indicator vs. Normalized Square Of Blue + Normalized Square Of Red + Normalized Square Root Of Blue"}
 summary_of_performance$plot_of_performance_metrics_vs_threshold
 ```
 
-```{r, eval = FALSE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Logistic Regression Model With Formula Indicator vs. Normalized Square Of Blue + Normalized Square Of Red + Normalized Square Root Of Blue"}
+```{r, eval = TRUE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Logistic Regression Model With Formula Indicator vs. Normalized Square Of Blue + Normalized Square Of Red + Normalized Square Root Of Blue"}
 summary_of_performance$PR_curve
 summary_of_performance$ROC_curve
 t(summary_of_performance$data_frame_of_optimal_performance_metrics)
@@ -392,7 +392,7 @@ data_frame_of_fold_ids_and_maximum_F1_measures_for_Logistic_Regression <-
     summary_of_performance$data_frame_of_fold_ids_and_maximum_F1_measures
 ```
 
-To search for an optimal LRR classifier, we perform manual bidirectional selection as above. Unfortunately, bidirectional selection from predictor $normalize(Blue^2)$ results ultimately classifiers with formula $Indicator ~ normalize(Blue^2) + normalize(Green:Blue) + normalize(\ln(Blue))$ and maximum average F1 measure $0.447$. We conduct an exhaustive search for optimal classifiers with a formula with two predictors; the optimal classifiers have formula $Indicator ~ normalize(\ln(Blue)) + normalize(\sqrt(Red))$. We perform manual bidirectional selection using this formula as a baseline.
+To search for an optimal LRR classifier, we perform manual bidirectional selection as above. Unfortunately, bidirectional selection from predictor $normalize(Blue^2)$ results ultimately classifiers with formula $Indicator ~ normalize(Blue^2) + normalize(Green:Blue) + normalize(\ln(Blue))$ and maximum average F1 measure $0.447$. We conduct an exhaustive search for optimal classifiers with a formula with two predictors; the optimal classifiers have formula $Indicator ~ normalize(\ln(Blue)) + normalize(\sqrt(Red)) + normalize(\ln(Green)) + normalize(\ln(Red))$. We perform manual bidirectional selection using this formula as a baseline.
 
 For a given formula, before cross validation, we search for one value of hyperparameter $\lambda$. We use `caret::train` to choose $\lambda = 0.000123$ for all of our LRR classifiers. According to the [documentation for `caret::train`](https://www.rdocumentation.org/packages/caret/versions/4.47/topics/train), `caret::train` "sets up a grid of tuning parameters for a number of classification and regression routines, fits each model, and calculates a resampling based performance measure". Our inputs include our formula specifying response and predictive terms, our full data frame of indicators and pixels, the method "glmnet", the metric "F1_measure", a `trainControl` object, and a data frame containing one row for each combination of $\alpha = 0$ and value of $\lambda$ to be evaluated. We construct the `trainControl` object with method "cv" denoting resampling method Cross Validation and summary function `calculate_F1_measure` to compute F1 measures across resamples. $\alpha = 0$ indicates a combination of ridge regression and lasso regression that is effectively ridge regression.
 
@@ -404,7 +404,7 @@ Our optimal LRR classifier has formula $Indicator \sim normalize(\ln(Blue)) + no
 
 Average accuracy is nearly $1$ for about $87.5$ percent of thresholds but in general is not quite as good as for our optimal LR classifier. Average F1 measure is nearly $0.938$ for maybe $11$ percent of thresholds; the maximum average F1 measure is slightly higher than that for our optimal LR classifier but about the maximum for far fewer thresholds. Average PPV increases logarithmically. From about a threshold of $0.14$ PPV is greater than that for our optimal LR classifier. Average TPR increases in the manner of $y = sqrt(x)$ from a threshold of about $1$ to $0$. Average TPR is generally less than that for our optimal LR classifier. We prioritize TPR over precision but under F1 measure. A Precision-Recall curve has an AUC of $0.982$. An ROC curve has an AUC of $0.99923$. The PR AUC is less than that for our optimal LR classifier; the ROC AUC is greater than that for our optimal LR classifier.
 
-```{r, eval = FALSE, fig.width = 3.5, fig.height = 2.5}
+```{r, eval = TRUE, fig.width = 3.5, fig.height = 2.5}
 formula <-
     Indicator ~
         Normalized_Natural_Logarithm_Of_Blue +
@@ -461,33 +461,33 @@ summary_of_performance <- summarize_performance_of_cross_validated_classifiers(
 )
 ```
 
-```{r, eval = FALSE, fig.cap = "Prediction Metrics Vs. Thresholds For Logistic Ridge Regression Model With Formula Indicator Vs. Normalized Natural Logarithm Of Blue + Normalized Square Root Of Red", eval = TRUE}
+```{r, eval = TRUE, fig.cap = "Prediction Metrics Vs. Thresholds For Logistic Ridge Regression Model With Formula Indicator Vs. Normalized Natural Logarithm Of Blue + Normalized Square Root Of Red + Normalized Natural Logarithm Of Green + Normalized Natural Logarithm Of Red", eval = TRUE}
 summary_of_performance$plot_of_performance_metrics_vs_threshold
 ```
 
-```{r, eval = FALSE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Logistic Ridge Regression Model With Formula Indicator Vs. Normalized Natural Logarithm Of Blue + Normalized Square Root Of Red", eval = TRUE}
+```{r, eval = TRUE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Logistic Ridge Regression Model With Formula Indicator Vs. Normalized Natural Logarithm Of Blue + Normalized Square Root Of Red + Normalized Natural Logarithm Of Green + Normalized Natural Logarithm Of Red", eval = TRUE}
 summary_of_performance$PR_curve
 summary_of_performance$ROC_curve
 t(summary_of_performance$data_frame_of_optimal_performance_metrics)
 ```
 
-To search for an optimal LDA binary classifier, we perform manual bidirectional selection as above. Our optimal LDA binary classifier has formula $Indicator \sim normalize(Blue) + normalize(Red^2) + normalize\left(Green^2\right)$. The maximum average F1 measure is $0.891$; the corresponding threshold is $0.69$.
+To search for an optimal LDA classifier, we perform manual bidirectional selection as above. Our optimal LDA classifier has formula $Indicator \sim normalize(Blue) + normalize(Red^2) + normalize\left(Green^2\right)$. The maximum average F1 measure is $0.891$; the corresponding threshold is $0.69$.
 
-Average accuracy is nearly $1$ for about $95$ percent of thresholds but in general is not quite as good as that for our optimal Logistic Regression binary classifier or that for our optimal Logistic Ridge Regression binary classifier. Average F1 measure is nearly $0.891$ for maybe $6$ percent of thresholds; the maximum average F1 measure is lower than that for our optimal Logistic Regression binary classifier and that for our optimal Logistic Ridge Regression binary classifier. The maximum average F1 measure is about $0.891$ for about the same percent of thresholds as for our optimal Logistic Ridge Regression binary classifier. Average PPV increases logarithmically from a threshold of about $0$ to our optimal threshold of $0.69$, at which point average PPV jumps up to $1$. From about a threshold of $0.69$ PPV is greater than that for our optimal Logistic Regression binary classifier and equal to that for our optimal Logistic Ridge Regression binary classifier. For thresholds lower than our optimal threshold of $0.69$ PPV is less than those for our optimal Logistic Regression and Logistic Ridge Regression binary classifiers. Average TPR generally has a similar trend and is less than that for our optimal Logistic Regression binary classifier. Average TPR is generally less than that for our optimal Logistic Ridge Regression binary classifier for thresholds less than $0.38$ and greater than that for our optimal Logistic Ridge Regression binary classifier for thresholds greater than $0.38$. We prioritize TPR over precision but under F1 measure. A Precision-Recall curve has an AUC of $0.903$. An ROC curve has an AUC of $0.949$. These AUC's are less than those for our optimal Logistic Regression and Logistic Ridge Regression binary classifiers.
+Average accuracy is nearly $1$ for about $25$ percent of thresholds and in general is not quite as good as that for our LR classifier or that for our optimal LRR classifier. Average F1 measure is nearly $0.891$ for maybe $6$ percent of thresholds; the maximum average F1 measure is lower than those for our optimal LR and LRR classifiers. The maximum average F1 measure is about $0.891$ for a smaller proportion of thresholds than the similar proportions of thresholds for our optimal LR and LRR classifiers. Average PPV increases logarithmically from a threshold of about $0$ to our optimal threshold of $0.69$, at which point average PPV jumps up to $1$. From about a threshold of $0.69$ PPV is greater than that for our optimal LR classifier and equal to that for our optimal LRR classifier. For thresholds lower than our optimal threshold of $0.69$ PPV is less than those for our optimal LR and LRR classifiers. Average TPR generally has a similar trend and is less than that for our optimal LR classifier. Average TPR is generally less than that for our optimal LRR classifier for thresholds less than $0.43$ and greater than that for our optimal LRR classifier for thresholds greater than $0.43$. We prioritize TPR over precision but under F1 measure. A Precision-Recall curve has an AUC of $0.904$. An ROC curve has an AUC of $0.949$. These AUC's are less than those for our optimal LR and LRR classifiers.
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 summary_of_performance <- summarize_performance_of_cross_validated_classifiers(
     type_of_model = "LDA",
     formula = Indicator ~ Normalized_Blue + Normalized_Square_Of_Red + Normalized_Square_Of_Green,
-    data_frame = data_frame_of_indicators_and_pixels
+    data_frame = training_data_frame_of_indicators_and_pixels
 )
 ```
 
-```{r, eval = FALSE, fig.cap = "Prediction Metrics Vs. Thresholds For Linear Discriminant Analysis Model With Formula Indicator Vs. Normalized Blue + Normalized Square Of Red + Normalized Square Of Green", eval = TRUE}
+```{r, eval = TRUE, fig.cap = "Prediction Metrics Vs. Thresholds For Linear Discriminant Analysis Model With Formula Indicator Vs. Normalized Blue + Normalized Square Of Red + Normalized Square Of Green", eval = TRUE}
 summary_of_performance$plot_of_performance_metrics_vs_threshold
 ```
 
-```{r, eval = FALSE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Linear Discriminant Analysis Model With Formula Indicator Vs. Normalized Blue + Normalized Square Of Red + Normalized Square Of Green", eval = TRUE}
+```{r, eval = TRUE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Linear Discriminant Analysis Model With Formula Indicator Vs. Normalized Blue + Normalized Square Of Red + Normalized Square Of Green", eval = TRUE}
 summary_of_performance$PR_curve
 summary_of_performance$ROC_curve
 t(summary_of_performance$data_frame_of_optimal_performance_metrics)
