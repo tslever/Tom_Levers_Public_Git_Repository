@@ -15,7 +15,7 @@ header-includes:
 ```{r global_options, include = FALSE}
 # This chunk is called global_options. Due to `include = FALSE`, when the document is rendered, the chunk will be executed, but the results and code will not be included in the rendered document
 knitr::opts_chunk$set(
-    error = FALSE, # Keep compiling upon error
+    error = TRUE, # Keep compiling upon error
     collapse = FALSE, # code and corresponding output appear in knit file in separate blocks
     echo = TRUE, # echo code by default
     comment = "#", # change comment character
@@ -408,13 +408,21 @@ Unfortunately, `glmnet` chooses a sequence of values of $lambda$ with a minimum 
 
 #### $K$ Nearest Neighbors Classifiers
 
-During bidirectional selection of KNN classifiers, for each formula, we search for one value of hyperparameter $K$ to be used in training a KNN classifier on $k - 1$ cross-validation folds. For our optimal formula, we use `caret::train` to choose $K = 1$ for all of our KNN classifiers. Our inputs include our formula specifying response and predictive terms, our training data frame of indicators and pixels, the method "knn", the metric "F1_measure", a `trainControl` object, and a data frame containing one row for each value of $K$ to be evaluated. Dr. Gedeck recommended evaluating $K \in [1, 25]$. We construct the `trainControl` object with method "cv" denoting resampling method cross validation and summary function `calculate_F1_measure` to compute F1 measures across resamples. $K$ is a constant that determines the number of neighboring training observations used to determine the probability that a testing observation corresponds to a blue tarp.
+During bidirectional selection of KNN classifiers, for each formula, we search for one value of hyperparameter $K$ to be used in training a KNN classifier on $k - 1$ cross-validation folds. For our optimal formula, we use `caret::train` to choose $K = 1$ for all of our KNN classifiers. Our inputs include our formula specifying response and predictive terms, our training data frame of indicators and pixels, the method "knn", the metric "F1_measure", a `trainControl` object, and a data frame containing one row for each value of $K$ to be evaluated. Dr. Gedeck recommended evaluating $K \in [1, 25]$.
 
-See below graph, for our optimal formula, of average F1 measure vs. $K$ for $10$ cross-validated KNN classifiers. `caret::train` chose the value of $K$ corresponding to the maximum average F1 measure to be used in training a KNN classifier on $k - 1$ cross-validation folds.
+See below graph, for our optimal formula, of average F1 measure vs. $K$ for $10$ cross-validated KNN classifiers. `caret::train` chose the value of $K$ corresponding to the maximum average F1 measure. This value of $K$ will be used in training a KNN classifier on $k - 1$ cross-validation folds.
 
 #### Random Forest Classifiers
 
-During bidirectional selection of Random Forest classifiers, for each formula, we search for one value of hyperparameter $mtry$ and one value of hyperparameter $ntree$ to be used in training an RF classifier on $k - 1$ cross-validation folds. We create plots of average test error rate vs. number of trees for different values of $mtry$. Values of $mtry$ vary from $1$ to the number of predictors in the formula. Number of trees varies from $1$ to $500$. We choose the values of $mtry$ and $ntree$ corresponding to the minimum test error rate.
+During bidirectional selection of RF classifiers, for each formula, we search for one value of hyperparameter $mtry$ and one value of hyperparameter $ntree$ to be used in training an RF classifier on $k - 1$ cross-validation folds. We create plots of average test error rate vs. number of trees for different values of $mtry$. Values of $mtry$ vary from $1$ to the number of predictors in the formula. Number of trees varies from $1$ to $500$. We choose the values of $mtry$ and $ntree$ corresponding to the minimum test error rate.
+
+#### Support-Vector Machines With Linear Kernels
+
+During bidirectional selection of Support-Vector Machines With Linear Kernels, for each formula, we search for one value of hyperparameter $cost$ to be used in training a SVMWLK on $k - 1$ cross-validation folds. For our optimal formula, we use `caret::train` to choose $cost = 10$ for all of our SVMWLK classifiers.
+
+During bidirectional selection of SVMWLK classifiers, for each formula, we search for one value of hyperparameter $cost$ to be used in training a SVMWLK classifier on $k - 1$ cross-validation folds. For our optimal formula, we use `caret::train` to choose $cost = 10$ for all of our SVMWLK classifiers. Our inputs include our formula specifying response and predictive terms, our training data frame of indicators and pixels, the method "svmLinear", the metric "F1_measure", a `trainControl` object, and a data frame containing one row for each value of $K$ to be evaluated. Dr. Gedeck recommended evaluating $cost \in \left\{10^{-3}, 10^{-2.75}, \cdots, 10^{2.75}, 10^3\right\}$. Given time, we choose $cost \in \left\{10^{-1}, 10^0, 10^1\right\}$.
+
+See below graph, for our optimal formula, of average F1 measure vs. $cost$ for $10$ cross-validated SVMWLK classifiers. `caret::train` chose the value of $cost$ corresponding to the maximum average F1 measure. This value of $cost$ will be used in training an SVMWLK classifier on $k - 1$ cross-validation folds.
 
 ### Evaluating and Comparing Cross-Validated Classifiers
 
@@ -444,7 +452,7 @@ summary_of_performance$plot_of_performance_metrics_vs_threshold
 summary_of_performance$PR_curve
 summary_of_performance$ROC_curve
 t(summary_of_performance$data_frame_of_optimal_performance_metrics)
-data_frame_of_fold_ids_and_maximum_F1_measures_for_Logistic_Regression <- 
+data_frame_of_fold_ids_and_maximum_F1_measures_for_LR <- 
     summary_of_performance$data_frame_of_fold_ids_and_maximum_F1_measures
 ```
 
@@ -517,6 +525,8 @@ summary_of_performance$plot_of_performance_metrics_vs_threshold
 summary_of_performance$PR_curve
 summary_of_performance$ROC_curve
 t(summary_of_performance$data_frame_of_optimal_performance_metrics)
+data_frame_of_fold_ids_and_maximum_F1_measures_for_LRR <- 
+    summary_of_performance$data_frame_of_fold_ids_and_maximum_F1_measures
 ```
 
 Our optimal LDA classifier has formula $Indicator \sim normalize(Blue) + normalize(Red^2) + normalize\left(Green^2\right)$. The maximum average F1 measure is $0.891$; the corresponding threshold is $0.69$.
@@ -539,6 +549,8 @@ summary_of_performance$plot_of_performance_metrics_vs_threshold
 summary_of_performance$PR_curve
 summary_of_performance$ROC_curve
 t(summary_of_performance$data_frame_of_optimal_performance_metrics)
+data_frame_of_fold_ids_and_maximum_F1_measures_for_LDA <- 
+    summary_of_performance$data_frame_of_fold_ids_and_maximum_F1_measures
 ```
 
 Our optimal QDA classifier has formula $Indicator \sim normalize\left(Blue\right) + normalize\left(Red^2\right) + normalize\left(Red:Blue\right)$. The maximum average F1 measure is $0.914$; the corresponding threshold is $0.19$.
@@ -561,6 +573,8 @@ summary_of_performance$plot_of_performance_metrics_vs_threshold
 summary_of_performance$PR_curve
 summary_of_performance$ROC_curve
 t(summary_of_performance$data_frame_of_optimal_performance_metrics)
+data_frame_of_fold_ids_and_maximum_F1_measures_for_QDA <- 
+    summary_of_performance$data_frame_of_fold_ids_and_maximum_F1_measures
 ```
 
 Our optimal $KNN$ binary classifier has formula $Indicator \sim normalize(Red:Blue) + normalize(Red) + normalize\left(\ln(Green)\right)$. The maximum average F1 measure is $0.946$; the corresponding threshold is $0.5$.
@@ -585,6 +599,8 @@ summary_of_performance$ROC_curve
 t(summary_of_performance$data_frame_of_optimal_performance_metrics)
 data_frame_of_fold_ids_and_maximum_F1_measures_for_KNN <- 
     summary_of_performance$data_frame_of_fold_ids_and_maximum_F1_measures
+data_frame_of_fold_ids_and_maximum_F1_measures_for_KNN <- 
+    summary_of_performance$data_frame_of_fold_ids_and_maximum_F1_measures
 ```
 
 Our optimal $RF$ classifier has formula $Indicator \sim normalize(Red^2) + normalize(Red:Green) + normalize\left(Green:Blue\right) + normalize(Green)$. The maximum average F1 measure is $0.954$; the corresponding threshold is $0.38$.
@@ -599,15 +615,42 @@ summary_of_performance <- summarize_performance_of_cross_validated_classifiers(
 )
 ```
 
-```{r, eval = TRUE, fig.cap = "Prediction Metrics Vs. Thresholds For KNN Model With Formula Indicator Vs. Normalized Interaction Of Red And Blue + Normalized Interaction Of Green And Blue + Normalized Square Root Of Blue"}
+```{r, eval = TRUE, fig.cap = "Prediction Metrics Vs. Thresholds For RF"}
 summary_of_performance$plot_of_performance_metrics_vs_threshold
 ```
 
-```{r, eval = TRUE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For KNN Model With Formula Indicator Vs. Normalized Interaction Of Red And Blue + Normalized Interaction Of Green And Blue + Normalized Square Root Of Blue"}
+```{r, eval = TRUE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For RF"}
 summary_of_performance$PR_curve
 summary_of_performance$ROC_curve
 t(summary_of_performance$data_frame_of_optimal_performance_metrics)
-data_frame_of_fold_ids_and_maximum_F1_measures_for_KNN <- 
+data_frame_of_fold_ids_and_maximum_F1_measures_for_RF <- 
+    summary_of_performance$data_frame_of_fold_ids_and_maximum_F1_measures
+```
+
+Our optimal Support-Vector Machine with linear kernel has formula $Indicator \sim normalize(Red) + normalize(Green^2) + normalize\left(Blue\right) + normalize(Blue^2) + normalize(\sqrt{Red}) + normalize(\sqrt{Blue})$. The maximum average F1 measure is $0.946$; the corresponding threshold is $0.15$.
+
+Average accuracy is nearly $1$ for $95$ percent of thresholds and is better than those for our optimal LRR, LDA, and QDA classifiers, worse than those for our optimal KNN and RF classifiers, and about the same for that for our optimal LR classifiers. Average F1 measure is nearly $0.946$ for $20$ percent of thresholds; the maximum average F1 measure is higher than those for our optimal LR, LRR, LDA, QDA classifiers and lower than those for our optimal KNN and RF classifiers. Average F1 measure is bow shaped. PPV increases logarithmically. TPR decreases linearly. A Precision-Recall curve has an AUC of $0.984$. An ROC curve has an AUC of $0.998$. The PR AUC is greater than those for our optimal LR, LRR, LDA, QDA, and KNN classifiers and less than that for our optimal RF classifiers. The ROC AUC is greater than those for our LDA, QDA, KNN, and RF classifiers but less than those for our LR and LRR classifiers.
+
+PPV is generally higher than that for our optimal LR and LDA classifiers but lower than that for our optimal LRR, QDA, and KNN classifiers. TPR is generally higher than that for our optimal LR, LRR, LDA, QDA, and KNN classifiers.
+
+```{r, eval = TRUE}
+set.seed(1)
+summary_of_performance <- summarize_performance_of_cross_validated_classifiers(
+    type_of_model = "Support-Vector Machine With Linear Kernel",
+    formula = Indicator ~ Normalized_Red + Normalized_Square_Of_Green + Normalized_Blue + Normalized_Square_Of_Blue + Normalized_Square_Root_Of_Red + Normalized_Square_Root_Of_Blue,
+    data_frame = training_data_frame_of_indicators_and_pixels
+)
+```
+
+```{r, eval = TRUE, fig.cap = "Prediction Metrics Vs. Thresholds For Support-Vector Machine With Linear Kernel With Formula Indicator Vs. Normalized Red And Normalized Square Of Green And Normalized Blue And Normalized Square Of Blue And Normalized Square Root Of Red And Normalized Square Root Of Blue"}
+summary_of_performance$plot_of_performance_metrics_vs_threshold
+```
+
+```{r, eval = TRUE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold", fig.cap = "PR And ROC Curves For Support-Vector Machine With Linear Kernel With Formula Indicator Vs. Normalized Red And Normalized Square Of Green And Normalized Blue And Normalized Square Of Blue And Normalized Square Root Of Red And Normalized Square Root Of Blue"}
+summary_of_performance$PR_curve
+summary_of_performance$ROC_curve
+t(summary_of_performance$data_frame_of_optimal_performance_metrics)
+data_frame_of_fold_ids_and_maximum_F1_measures_for_SVMWLK <- 
     summary_of_performance$data_frame_of_fold_ids_and_maximum_F1_measures
 ```
 
