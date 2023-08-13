@@ -67,7 +67,7 @@ summarize_performance_of_cross_validated_classifiers <- function(type_of_model, 
    tuneGrid = expand.grid(k = seq(from = 1, to = 25, by = 1))
   )
   print(plot(list_of_training_information))
-  optimal_K = list_of_training_information$bestTune
+  optimal_K = list_of_training_information$bestTune$K
   print(paste("optimal value of K = ", optimal_K, sep = ""))
  } else if (type_of_model == "Random Forest") {
   training_and_testing_data <- split_data_set_into_training_and_testing_data(data_frame = training_data_frame_of_indicators_and_pixels[, names_of_variables], proportion_of_training_data = 0.9)
@@ -410,12 +410,6 @@ summarize_performance_of_cross_validated_classifiers <- function(type_of_model, 
   rename(corresponding_threshold = threshold, corresponding_accuracy = accuracy, corresponding_TPR = TPR, corresponding_FPR = FPR, corresponding_PPV = PPV, optimal_F1_measure = F1_measure)
  data_frame_corresponding_to_maximum_average_F1_measure <- data_frame_corresponding_to_maximum_average_F1_measure[1, ]
  optimal_F1_measure <- data_frame_corresponding_to_maximum_average_F1_measure$optimal_F1_measure
- #number_of_thresholds <- nrow(data_frame_of_average_performance_metrics)
- #significance_level <- 0.05
- #critical_value_tc <- qt(p = significance_level / 2, df = number_of_thresholds - 1, lower.tail = FALSE)
- #standard_error_of_optimal_F1_measure <- sqrt(optimal_F1_measure * (1 - optimal_F1_measure) / number_of_thresholds)
- #lower_bound_of_CI_for_optimal_F1_measure <- optimal_F1_measure - critical_value_tc * standard_error_of_optimal_F1_measure
- #upper_bound_of_CI_for_optimal_F1_measure <- optimal_F1_measure + critical_value_tc * standard_error_of_optimal_F1_measure
  data_frame_of_optimal_performance_metrics <- data.frame(
   corresponding_threshold = data_frame_corresponding_to_maximum_average_F1_measure$corresponding_threshold,
   alpha = ifelse(test = type_of_model == "Logistic Ridge Regression", yes = 0, no = NA),

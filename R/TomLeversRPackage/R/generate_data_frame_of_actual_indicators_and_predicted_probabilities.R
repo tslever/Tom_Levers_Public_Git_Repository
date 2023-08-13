@@ -1,14 +1,14 @@
 #' @export
-generate_data_frame_of_actual_indicators_and_predicted_probabilities <- function(formula, testing_data, training_data, type_of_model) {
+generate_data_frame_of_actual_indicators_and_predicted_probabilities <- function(formula, testing_data, training_data, type_of_model, list_of_hyperparameters) {
  if (type_of_model == "Logistic Regression") {
   logistic_regression_classifier <- glm(
    formula = formula,
    data = training_data,
    family = binomial
   )
-  if (!file.exists("logistic_regression_classifier.rds")) {
-   saveRDS(logistic_regression_classifier, "logistic_regression_classifier.rds")
-  }
+  #if (!file.exists("logistic_regression_classifier.rds")) {
+  # saveRDS(logistic_regression_classifier, "logistic_regression_classifier.rds")
+  #}
   vector_of_predicted_probabilities <- predict(
    object = logistic_regression_classifier,
    newdata = testing_data,
@@ -20,7 +20,8 @@ generate_data_frame_of_actual_indicators_and_predicted_probabilities <- function
   if (number_of_predictors == 1) {
    training_model_matrix <- cbind(0, training_model_matrix)
   }
-  logistic_regression_with_lasso_model <- glmnet::glmnet(x = training_model_matrix, y = training_vector_of_indicators, alpha = 0, family = "binomial", lambda = optimal_lambda)
+  lambda <- list_of_hyperparameters[["lambda"]]
+  logistic_regression_with_lasso_model <- glmnet::glmnet(x = training_model_matrix, y = training_vector_of_indicators, alpha = 0, family = "binomial", lambda = lambda)
   testing_model_matrix <- model.matrix(object = formula, data = testing_data)[, -1]
   if (number_of_predictors == 1) {
    testing_model_matrix <- cbind(0, testing_model_matrix)
