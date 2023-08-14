@@ -17,6 +17,7 @@ generate_data_frame_of_actual_indicators_and_predicted_probabilities <- function
  } else if (type_of_model == "Logistic Ridge Regression") {
   training_model_matrix <- model.matrix(object = formula, data = training_data)[, -1]
   training_vector_of_indicators <- training_data$Indicator
+  number_of_predictors <- get_number_of_predictors(formula)
   if (number_of_predictors == 1) {
    training_model_matrix <- cbind(0, training_model_matrix)
   }
@@ -44,13 +45,17 @@ generate_data_frame_of_actual_indicators_and_predicted_probabilities <- function
   index_of_column_1 <- get_index_of_column_of_data_frame(data_frame_of_predicted_probabilities, 1)
   vector_of_predicted_probabilities <- data_frame_of_predicted_probabilities[, index_of_column_1]
  } else if (type_of_model == "KNN") {
+  names_of_variables <- all.vars(formula)
+  vector_of_names_of_predictors <- names_of_variables[-1]
   matrix_of_values_of_predictors_for_training <- as.matrix(x = training_data[, vector_of_names_of_predictors])
   matrix_of_values_of_predictors_for_testing <- as.matrix(x = testing_data[, vector_of_names_of_predictors])
+  name_of_response <- names_of_variables[1]
   vector_of_response_values_for_training <- training_data[, name_of_response]
+  K <- list_of_hyperparameters[["K"]]
   the_knn3 <- caret::knn3(
    matrix_of_values_of_predictors_for_training,
    vector_of_response_values_for_training,
-   k = optimal_K
+   k = K
   )
   data_frame_of_predicted_probabilities <- predict(
    object = the_knn3,
@@ -62,40 +67,45 @@ generate_data_frame_of_actual_indicators_and_predicted_probabilities <- function
   index_of_column_Indicator <- get_index_of_column_of_data_frame(training_data, "Indicator")
   data_frame_of_training_predictors <- training_data[, -index_of_column_Indicator]
   data_frame_of_training_response_values <- training_data[, index_of_column_Indicator]
+  mtry <- list_of_hyperparameters[["mtry"]]
+  ntree <- list_of_hyperparameters[["ntree"]]
   the_randomForest <- randomForest::randomForest(
    formula,
    training_data,
-   mtry = optimal_mtry,
-   ntree = optimal_number_of_trees
+   mtry = mtry,
+   ntree = ntree
   )
   matrix_of_predicted_probabilities <- predict(the_randomForest, newdata = testing_data, type = "prob")
   vector_of_predicted_probabilities <- matrix_of_predicted_probabilities[, 2]
  } else if (startsWith(type_of_model, "Support-Vector Machine")) {
   SVM <- NULL
+  cost <- list_of_hyperparameters[["cost"]]
   if (type_of_model == "Support-Vector Machine With Linear Kernel") {
    SVM <- e1071::svm(
     formula,
     data = training_data,
     kernel = "linear",
-    cost = optimal_cost,
+    cost = cost,
     probability = TRUE
    )
   } else if (type_of_model == "Support-Vector Machine With Polynomial Kernel") {
+   degree <- list_of_hyperparameters[["degree"]]
    SVM <- e1071::svm(
     formula,
     data = training_data,
     kernel = "polynomial",
-    cost = optimal_cost,
-    degree = optimal_degree,
+    cost = cost,
+    degree = degree,
     probability = TRUE
    )
   } else if (type_of_model == "Support-Vector Machine With Radial Kernel") {
+   gamma <- list_of_hyperparameters[["gamma"]]
    SVM <- e1071::svm(
     formula,
     data = training_data,
     kernel = "radial",
-    cost = optimal_cost,
-    gamma = optimal_gamma,
+    cost = cost,
+    gamma = gamma,
     probability = TRUE
    )
   } else {

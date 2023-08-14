@@ -77,9 +77,9 @@ number_of_holdout_observations <- nrow(holdout_data_frame_of_indicators_and_pixe
 vector_of_random_indices <- sample(x = 1:number_of_holdout_observations, size = number_of_training_observations)
 slice_of_holdout_data_frame <- holdout_data_frame_of_indicators_and_pixels[vector_of_random_indices, ]
 
-formula = Indicator ~ Normalized_Square_Of_Blue + Normalized_Square_Of_Red + Normalized_Square_Root_Of_Blue
-type_of_model <- "Logistic Regression"
-list_of_visualizations_of_performance_metrics <- TomLeversRPackage::visualize_performance_metrics(formula, slice_of_holdout_data_frame, training_data_frame_of_indicators_and_pixels, "Logistic Regression", list_of_hyperparameters = NULL)
+formula <- Indicator ~ Normalized_Red + Normalized_Square_Of_Green + Normalized_Blue + Normalized_Square_Of_Blue + Normalized_Square_Root_Of_Red + Normalized_Square_Root_Of_Blue
+type_of_model <- "Support-Vector Machine With Linear Kernel"
+list_of_visualizations_of_performance_metrics <- TomLeversRPackage::visualize_performance_metrics(formula, holdout_data_frame_of_indicators_and_pixels, training_data_frame_of_indicators_and_pixels, type_of_model, list_of_hyperparameters = list(cost = 10))
 print(list_of_visualizations_of_performance_metrics$PR_curve)
 print(list_of_visualizations_of_performance_metrics$ROC_curve)
 print(list_of_visualizations_of_performance_metrics$plot_of_performance_metrics_vs_threshold)

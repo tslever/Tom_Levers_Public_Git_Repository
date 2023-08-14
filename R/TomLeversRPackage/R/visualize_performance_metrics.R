@@ -17,15 +17,15 @@ visualize_performance_metrics <- function(formula, testing_data, training_data, 
   data = data_frame_of_performance_metrics,
   mapping = aes(x = threshold)
  ) +
-  geom_line(mapping = aes(y = accuracy, color = "Average Accuracy")) +
-  geom_line(mapping = aes(y = decimal_of_true_positives, color = "Average Decimal Of True Predictions")) +
-  geom_line(mapping = aes(y = F1_measure, color = "Average F1 measure")) +
-  geom_line(mapping = aes(y = PPV, color = "Average PPV")) +
-  geom_line(mapping = aes(y = TPR, color = "Average TPR")) +
+  geom_line(mapping = aes(y = accuracy, color = "Accuracy")) +
+  geom_line(mapping = aes(y = decimal_of_true_positives, color = "Decimal Of True Predictions")) +
+  geom_line(mapping = aes(y = F1_measure, color = "F1 measure")) +
+  geom_line(mapping = aes(y = PPV, color = "PPV")) +
+  geom_line(mapping = aes(y = TPR, color = "TPR")) +
   scale_colour_manual(values = c("red", "orange", "yellow", "green", "blue")) +
   scale_x_continuous(breaks = seq(from = 0, to = 1, by = 0.05)) +
   theme(legend.position = c(0.5, 0.5)) +
-  labs(x = "threshold", y = "performance metric", title = "Average Performance Metrics Vs. Threshold") +
+  labs(x = "threshold", y = "performance metric", title = "Performance Metrics Vs. Threshold") +
   theme(
    plot.title = element_text(hjust = 0.5, size = 11),
    axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)
@@ -44,7 +44,7 @@ visualize_performance_metrics <- function(formula, testing_data, training_data, 
   mapping = aes(x = TPR)
  ) +
   geom_line(mapping = aes(y = PPV)) +
-  labs(x = "TPR", y = "PPV", title = "PPV-TPR Curve") +
+  labs(x = "TPR", y = "PPV", title = "PR Curve And PPV Vs. TPR") +
   theme(
    plot.title = element_text(hjust = 0.5, size = 11),
   )
