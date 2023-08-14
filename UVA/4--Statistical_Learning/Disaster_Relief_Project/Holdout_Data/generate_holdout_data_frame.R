@@ -7,7 +7,7 @@ vector_of_paths_to_data_files <- c(
  "C:/Users/Tom/Documents/Tom_Levers_Public_Git_Repository/UVA/4--Statistical_Learning/Disaster_Relief_Project/Holdout_Data/orthovnir078_ROI_Blue_Tarps.txt",
  "C:/Users/Tom/Documents/Tom_Levers_Public_Git_Repository/UVA/4--Statistical_Learning/Disaster_Relief_Project/Holdout_Data/orthovnir078_ROI_NON_Blue_Tarps.txt"
 )
-source("C:/Users/Tom/Documents/Tom_Levers_Public_Git_Repository/UVA/4--Statistical_Learning/Disaster_Relief_Project/generate_data_set.R")
+source("C:/Users/Tom/Documents/Tom_Levers_Public_Git_Repository/UVA/4--Statistical_Learning/Disaster_Relief_Project/Holdout_Data/generate_data_set.R")
 holdout_data_set <- generate_data_set(vector_of_paths_to_data_files)
 print(head(holdout_data_set$data_frame))
 print(nrow(holdout_data_set$data_frame))
