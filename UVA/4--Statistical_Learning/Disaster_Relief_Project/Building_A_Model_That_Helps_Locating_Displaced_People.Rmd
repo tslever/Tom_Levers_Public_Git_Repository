@@ -182,7 +182,7 @@ proportion_of_training_observations_that_correspond_to_blue_tarps /
     proportion_of_holdout_observations_that_correspond_to_blue_tarps
 ```
 
-We expect that, due to bias, a binary classifier trained on our training data frame of indicators and pixels below and cross validated on our holdout data frame of indicators and pixels below will have a maximum average F1 measure that is comparable to but less than that of a binary classifier cross validated on our training data frame. We recommend training on our composite data frame of indicators and pixels below.
+We expect that, due to bias, a binary classifier trained on our training data frame of indicators and pixels below and cross validated on our holdout data frame of indicators and pixels below will have a maximum average F1 measure that is less than that of a binary classifier cross validated on our training data frame. We recommend training on our composite data frame of indicators and pixels below.
 
 # Methods
 
@@ -654,13 +654,19 @@ data_frame_of_fold_ids_and_maximum_F1_measures_for_SVMWLK <-
     summary_of_performance$data_frame_of_fold_ids_and_maximum_F1_measures
 ```
 
-### Performance Table
+### Cross-Validation Performance Table
 
-Per our [Performance Table](https://github.com/tslever/Tom_Levers_Public_Git_Repository/tree/main/UVA/4--Statistical_Learning/Disaster_Relief_Project), our KNN binary classifier with $K = 1$ and threshold $t = 0.080$ has the best optimal F1 measure and corresponding accuracy. Our KNN binary classifier has the second-best corresponding TPR, FPR, and PPV. However, our KNN binary classifier has the second-worst Area Under The Precision-Recall Curve and Area Under The ROC Curve. Our Logistic Regression binary classifier has the best Area Under The Precision-Recall Curve, Area Under The ROC Curve, and corresponding TPR. Our Logistic Regression binary classifier has the second-best corresponding optimal measure and corresponding accuracy. However, our Logistic Regression binary classifier has the worst corresponding FPR and PPV. Beautifully, our QDA binary classifier is completely middle of the road. Our Logistic Ridge Regression binary classifier is second-best in Area Under The Precision-Recall Curve and Area Under The ROC curve and second-worst in everything else. Our LDA binary classifier has the best corresponding FPR and PPV and is worst in everything else.
+Per our [Cross-Validation Performance Table](https://github.com/tslever/Tom_Levers_Public_Git_Repository/tree/main/UVA/4--Statistical_Learning/Disaster_Relief_Project), our KNN binary classifier with $K = 1$ and threshold $t = 0.080$ has the best optimal F1 measure and corresponding accuracy. Our KNN binary classifier has the second-best corresponding TPR, FPR, and PPV. However, our KNN binary classifier has the second-worst Area Under The Precision-Recall Curve and Area Under The ROC Curve. Our Logistic Regression binary classifier has the best Area Under The Precision-Recall Curve, Area Under The ROC Curve, and corresponding TPR. Our Logistic Regression binary classifier has the second-best corresponding optimal measure and corresponding accuracy. However, our Logistic Regression binary classifier has the worst corresponding FPR and PPV. Beautifully, our QDA binary classifier is completely middle of the road. Our Logistic Ridge Regression binary classifier is second-best in Area Under The Precision-Recall Curve and Area Under The ROC curve and second-worst in everything else. Our LDA binary classifier has the best corresponding FPR and PPV and is worst in everything else.
 
 We calculate binary-classifier scores for each type of binary classifier. Each binary-classifier score is a weighted sum of the first $7$ colored performance metrics above it in the Performance Table.
 
-![Performance Table](Performance_Table.png)
+![Cross-Validation Performance Table](Cross-Validation_Performance_Table.png)
+
+## Validation
+
+An optimal classifier for a given type of classifier is a classifier with optimal formula, primary hyperparameter where applicable, and secondary hyperparameter where applicable. To validate our optimal classifiers, we train each optimal classifier on our training data and visualize performance metrics on our holdout data.
+
+
 
 # Conclusions
 
