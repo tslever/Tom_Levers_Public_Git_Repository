@@ -445,11 +445,15 @@ $\lambda$ is a constant that determines the importance of squares of coefficient
 
 Unfortunately, `glmnet` chooses a sequence of values of $\lambda$ with a minimum of $0.0035$. For our optimal formula, `caret::train` considers the optimal value of $\lambda$ to be this minimum. We assume that the true optimal value of $\lambda$ is less than $0.0035$. We use `glmnet::cv.glmnet` to graph Misclassification Error Vs. $\ln(\lambda)$ for $-9 < \ln(\lambda) < -8$. Misclassification error is an approximation of F1 measure. Our software fails to provide graphs of Performance Metrics Vs. Threshold and PR and ROC curves for some values of $\ln(\lambda)$ less than $-9$. We assume that the optimal value of $\lambda$ is less than $\exp(-9) = 0.000123$.
 
+![Misclassification Error Rate Vs. $\lambda$](Misclassification_Error_Rate_Vs_lambda.png){#id .class height=25%}
+
 #### $K$ Nearest Neighbors Classifiers
 
 During bidirectional selection of KNN classifiers, for each formula, we search for one value of hyperparameter $K$ to be used in training a KNN classifier on $9$ cross-validation folds. For our optimal formula, we use `caret::train` to choose $K = 1$ for all of our KNN classifiers. Our inputs include our formula, our training data, the method "knn", the metric "F1_measure", a `trainControl` object, and a data frame containing one row for each value of $K$ to be evaluated. Dr. Gedeck recommended evaluating $K \in [1, 25]$.
 
 See below graph, for our optimal formula, of average F1 measure vs. $K$ for $10$ cross-validated KNN classifiers. `caret::train` chose the value of $K$ corresponding to the maximum average F1 measure. This value of $K$ will be used in training a KNN classifier on $9$ cross-validation folds.
+
+![F1 Measure Vs Number Of Neighbors](F1_Measure_Vs_Number_Of_Neighbors.png)
 
 #### Random Forest Classifiers
 
@@ -731,8 +735,6 @@ Bigger picture:
 - PR AUC decreases across LR CV, LRR CV, LRR HT, LR HT, LDA CV, LDA HT.
 - ROC AUC decreases across LRR HT, LRR CV, LR CV, LR HT, LDA HT, LDA CV.
 
-![Misclassification Error Rate Vs. $\lambda$](Misclassification_Error_Rate_Vs_lambda.png)
-
 ![Average Performance Metrics Vs. Threshold: Cross Validation: LDA](Average_Performance_Metrics_Vs_Threshold--Cross_Validation--LDA.png){#id .class height=25%}
 
 ![PR And ROC Curves: Cross Validation: LDA](PR_And_ROC_Curves--Cross_Validation--LDA.png){#id .class height=19%}
@@ -865,54 +867,54 @@ t(list_of_visualizations_of_performance_metrics$data_frame_of_optimal_performanc
 
 #### $K$ Nearest Neighbors Classifiers
 
-Per QDA cross validation:
+Per KNN cross validation:
 
-- Our optimal QDA classifier has formula $Indicator \sim normalize(Blue) + normalize\left(Red^2\right) + normalize\left(Red : Blue\right)$.
-- The maximum average F1 measure is $0.914$.
-- The corresponding threshold is $0.19$.
-- Average accuracy is $L$-shaped and nearly $1$ for about $90$ percent of thresholds.
-- Average F1 measure is $U$-shaped and nearly $0.914$ for maybe $58$ percent of thresholds.
-- Average PPV increases logarithmically.
-- Average TPR decreases in the manner of $y = -tan(x)$.
-- A Precision-Recall curve has an AUC of $0.959$.
-- An ROC curve has an AUC of $0.985$.
+- Our optimal KNN classifier has formula $Indicator \sim normalize(Red : Blue) + normalize(Red) + normalize[\ln(Green)]$.
+- The maximum average F1 measure is $0.954$.
+- The corresponding threshold is $0.34$.
+- Average accuracy increases by $1$ small step and is nearly $1$ for $92$ percent of thresholds.
+- Average F1 measure increases by $1$ step and is nearly $0.954$ for $92$ percent of thresholds.
+- Average PPV increases by $3$ steps.
+- Average TPR decreases by $3$ steps.
+- A Precision-Recall curve has an AUC of $0.980$.
+- An ROC curve has an AUC of $0.996$.
 
-Per QDA holdout testing:
+Per KNN holdout testing:
 
-- Our optimal QDA classifier has a maximum F1 measure of $0.567$.
-- The corresponding threshold is $0.77$.
-- Accuracy is $L$-shaped and nearly $1$ for about $80$ percent of thresholds.
-- F1 measure is $U$-shaped.
-- PPV increases in the manner of $y = tan(x)$.
-- TPR decreases in the manner of $y = -tan(x)$.
-- A Precision-Recall curve has an AUC of $0.504$.
-- An ROC curve has an AUC of $0.786$.
+- Our optimal KNN classifier has a maximum F1 measure of $0.610$.
+- The corresponding threshold is $0.5$.
+- Accuracy increases by $1$ small step and is nearly $1$ for $92$ percent of thresholds.
+- F1 measure increases by $1$ step and is nearly $0.610$ for $92$ percent of thresholds.
+- PPV increases by $1$ step and is nearly $0.491$ for $92$ percent of thresholds.
+- TPR decreases by $1$ small step and is nearly $0.804$ for $92$ percent of thresholds.
+- A Precision-Recall curve has an AUC of $0.628$.
+- An ROC curve has an AUC of $0.901$.
 
 Bigger picture:
 
-- Accuracy decreases across LR CV, QDA CV, LR HT, LRR CV, QDA HT, LRR HT, LDA CV, LDA HT.
-- F1 measure decreases across LR CV, QDA CV, LRR CV, LDA CV, LRR HT, LR HT, LDA HT, QDA HT.
-- PPV decreases across LRR CV, QDA CV, LR CV, LRR HT, LR HT, LDA CV, LDA HT, QDA HT.
-- TPR decreases across LR HT, LRR HT, LR CV, QDA CV, LDA CV, LRR CV, LDA HT, QDA HT.
-- PR AUC decreases across LR CV, LRR CV, LRR HT, QDA CV, LR HT, LDA CV, LDA HT, QDA HT.
-- ROC AUC decreases across LRR HT, LRR CV, LR CV, LR HT, QDA CV, LDA HT, LDA CV, QDA HT.
+- Accuracy decreases across KNN CV, KNN HT, LR CV, QDA CV, LR HT, LRR CV, QDA HT, LRR HT, LDA CV, LDA HT.
+- F1 measure decreases across KNN CV, LR CV, QDA CV, LRR CV, LDA CV, LRR HT, LR HT, KNN HT, LDA HT, QDA HT.
+- PPV decreases across LRR CV, QDA CV, KNN CV, LR CV, LRR HT, LR HT, LDA CV, LDA HT, QDA HT, KNN HT.
+- TPR decreases across LR HT, LRR HT, KNN CV, LR CV, QDA CV, LDA CV, LRR CV, KNN HT, LDA HT, QDA HT.
+- PR AUC decreases across LR CV, LRR CV, KNN CV, LRR HT, QDA CV, LR HT, LDA CV, LDA HT, KNN HT, QDA HT.
+- ROC AUC decreases across LRR HT, LRR CV, LR CV, LR HT, KNN CV, QDA CV, LDA HT, LDA CV, KNN HT, QDA HT.
 
-<!--![Average Performance Metrics Vs. Threshold: Cross Validation: QDA](Average_Performance_Metrics_Vs_Threshold--Cross_Validation--QDA.png){#id .class height=25%}
+![Average Performance Metrics Vs. Threshold: Cross Validation: KNN](Average_Performance_Metrics_Vs_Threshold--Cross_Validation--KNN.png){#id .class height=25%}
 
-![PR And ROC Curves: Cross Validation: QDA](PR_And_ROC_Curves--Cross_Validation--QDA.png){#id .class height=19%}
+![PR And ROC Curves: Cross Validation: KNN](PR_And_ROC_Curves--Cross_Validation--KNN.png){#id .class height=19%}
 
-![Optimal Performance Metrics: Cross Validation: QDA](Optimal_Performance_Metrics--Cross_Validation--QDA.png){#id .class height=25%}
+![Optimal Performance Metrics: Cross Validation: KNN](Optimal_Performance_Metrics--Cross_Validation--KNN.png){#id .class height=25%}
 
-![Performance Metrics Vs. Threshold: Holdout Testing: QDA](Performance_Metrics_Vs_Threshold--Holdout_Testing--QDA.png){#id .class height=25%}
+![Performance Metrics Vs. Threshold: Holdout Testing: KNN](Performance_Metrics_Vs_Threshold--Holdout_Testing--KNN.png){#id .class height=25%}
 
-![PR And ROC Curves: Holdout Testing: QDA](PR_And_ROC_Curves--Holdout_Testing--QDA.png){#id .class height=19%}
+![PR And ROC Curves: Holdout Testing: KNN](PR_And_ROC_Curves--Holdout_Testing--KNN.png){#id .class height=19%}
 
-![Optimal Performance Metrics: Holdout Testing: QDA](Optimal_Performance_Metrics--Holdout_Testing--QDA.png){#id .class height=12%}-->
+![Optimal Performance Metrics: Holdout Testing: KNN](Optimal_Performance_Metrics--Holdout_Testing--KNN.png){#id .class height=12%}
 
-```{r, eval = TRUE}
+```{r, eval = FALSE}
 library(TomLeversRPackage)
 type_of_model <- "KNN"
-formula <- Indicator ~ Normalized_Interaction_Of_Red_And_Blue + Normalized_Interaction_Of_Green_And_Blue + Normalized_Square_Root_Of_Blue
+formula <- Indicator ~ Normalized_Interaction_Of_Red_And_Blue + Normalized_Red + Normalized_Natural_Logarithm_Of_Green
 summary_of_performance <- summarize_performance_of_cross_validated_classifiers(
     type_of_model = type_of_model,
     formula = formula,
@@ -921,13 +923,13 @@ summary_of_performance <- summarize_performance_of_cross_validated_classifiers(
 summary_of_performance$plot_of_performance_metrics_vs_threshold
 ```
 
-```{r, eval = TRUE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold"}
+```{r, eval = FALSE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold"}
 summary_of_performance$PR_curve
 summary_of_performance$ROC_curve
 t(summary_of_performance$data_frame_of_optimal_performance_metrics)
 ```
 
-```{r, eval = TRUE}
+```{r, eval = FALSE}
 list_of_visualizations_of_performance_metrics <- visualize_performance_metrics(
     formula = formula,
     testing_data = holdout_data_frame_of_indicators_and_pixels,
@@ -938,7 +940,7 @@ list_of_visualizations_of_performance_metrics <- visualize_performance_metrics(
 list_of_visualizations_of_performance_metrics$plot_of_performance_metrics_vs_threshold
 ```
 
-```{r, eval = TRUE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold"}
+```{r, eval = FALSE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold"}
 list_of_visualizations_of_performance_metrics$PR_curve
 list_of_visualizations_of_performance_metrics$ROC_curve
 t(list_of_visualizations_of_performance_metrics$data_frame_of_optimal_performance_metrics)
