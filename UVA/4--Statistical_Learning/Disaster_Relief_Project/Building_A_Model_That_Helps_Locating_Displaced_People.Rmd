@@ -599,8 +599,8 @@ Bigger picture:
 - F1 measure decreases across LR CV, LRR CV, LRR HT, LR HT.
 - PPV decreases across LRR CV, LR CV, LRR HT, LR HT.
 - TPR decreases across LR HT, LRR HT, LR CV, LRR CV.
-- PR AUC decreases from LR CV, LRR CV, LRR HT, LR HT.
-- ROC AUC decreases from LRR HT, LRR CV, LR CV, LR HT.
+- PR AUC decreases across LR CV, LRR CV, LRR HT, LR HT.
+- ROC AUC decreases across LRR HT, LRR CV, LR CV, LR HT.
 
 ![Average Performance Metrics Vs. Threshold: Cross Validation: LRR](Average_Performance_Metrics_Vs_Threshold--Cross_Validation--LRR.png)
 
@@ -665,6 +665,88 @@ the_ggplot <- ggplot(
 print(the_ggplot)
 optimal_lambda <- the_cv.glmnet$lambda.min
 optimal_lambda
+summary_of_performance <- summarize_performance_of_cross_validated_classifiers(
+    type_of_model = type_of_model,
+    formula = formula,
+    data_frame = training_data_frame_of_indicators_and_pixels,
+    optimal_lambda = optimal_lambda
+)
+summary_of_performance$plot_of_performance_metrics_vs_threshold
+```
+
+```{r, eval = FALSE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold"}
+summary_of_performance$PR_curve
+summary_of_performance$ROC_curve
+t(summary_of_performance$data_frame_of_optimal_performance_metrics)
+```
+
+```{r, eval = FALSE}
+list_of_visualizations_of_performance_metrics <- visualize_performance_metrics(
+    formula = formula,
+    testing_data = holdout_data_frame_of_indicators_and_pixels,
+    training_data = training_data_frame_of_indicators_and_pixels,
+    type_of_model = type_of_model,
+    list_of_hyperparameters = list(lambda = 0.00012340980408668)
+)
+list_of_visualizations_of_performance_metrics$plot_of_performance_metrics_vs_threshold
+```
+
+```{r, eval = FALSE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold"}
+list_of_visualizations_of_performance_metrics$PR_curve
+list_of_visualizations_of_performance_metrics$ROC_curve
+t(list_of_visualizations_of_performance_metrics$data_frame_of_optimal_performance_metrics)
+```
+
+#### Linear Discriminant Analysis
+
+Per LDA cross validation:
+
+- Our optimal LRR classifier has formula $Indicator \sim normalize(Blue) + normalize\left(Red^2\right) + normalize\left(Green^2\right)$.
+- The maximum average F1 measure is $0.892$.
+- The corresponding threshold is $0.69$.
+- Average accuracy is $L$-shaped and nearly $1$ for about $32.5$ percent of thresholds.
+- Average F1 measure is $U$-shaped and nearly $0.892$ for maybe $6$ percent of thresholds.
+- Average PPV increases logarithmically and jumps to $1$ for a threshold of $0.69$.
+- Average TPR decreases in the manner of $y = -tan(x)$.
+- A Precision-Recall curve has an AUC of $0.905$.
+- An ROC curve has an AUC of $0.950$.
+
+Per LDA holdout testing:
+
+- Our optimal LR classifier has a maximum F1 measure of $0.742$.
+- The corresponding threshold is $0.68$.
+- Accuracy is $L$-shaped and nearly $1$ for about $32.5$ percent of thresholds.
+- F1 measure increases stepwise.
+- PPV increases stepwise.
+- TPR decreases in the manner of $y = -tan(x)$.
+- A Precision-Recall curve has an AUC of $0.739$.
+- An ROC curve has an AUC of $0.953$.
+
+Bigger picture:
+
+- Accuracy decreases across LR CV, LR HT, LRR CV, LRR HT, LDA CV, LDA HT.
+- F1 measure decreases across LR CV, LRR CV, LDA CV, LRR HT, LR HT, LDA HT.
+- PPV decreases across LRR CV, LR CV, LRR HT, LR HT, LDA CV, LDA HT.
+- TPR decreases across LR HT, LRR HT, LR CV, LDA CV, LRR CV, LDA HT.
+- PR AUC decreases across LR CV, LRR CV, LRR HT, LR HT, LDA CV, LDA HT.
+- ROC AUC decreases across LRR HT, LRR CV, LR CV, LR HT, LDA HT, LDA CV.
+
+![Average Performance Metrics Vs. Threshold: Cross Validation: LDA](Average_Performance_Metrics_Vs_Threshold--Cross_Validation--LDA.png)
+
+![PR And ROC Curves: Cross Validation: LDA](PR_And_ROC_Curves--Cross_Validation--LDA.png)
+
+![Optimal Performance Metrics: Cross Validation: LDA](Optimal_Performance_Metrics--Cross_Validation--LDA.png)
+
+![Performance Metrics Vs. Threshold: Holdout Testing: LDA](Performance_Metrics_Vs_Threshold--Holdout_Testing--LDA.png)
+
+![PR And ROC Curves: Holdout Testing: LDA](PR_And_ROC_Curves--Holdout_Testing--LDA.png)
+
+![Optimal Performance Metrics: Holdout Testing: LDA](Optimal_Performance_Metrics--Holdout_Testing--LDA.png)
+
+```{r, eval = FALSE}
+library(TomLeversRPackage)
+type_of_model <- "LDA"
+formula <- Indicator ~ Normalized_Blue + Normalized_Square_Of_Red + Normalized_Square_Of_Green
 summary_of_performance <- summarize_performance_of_cross_validated_classifiers(
     type_of_model = type_of_model,
     formula = formula,
