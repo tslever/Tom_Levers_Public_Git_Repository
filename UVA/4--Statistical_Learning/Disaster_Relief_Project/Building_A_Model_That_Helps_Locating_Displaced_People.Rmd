@@ -513,17 +513,17 @@ Bigger picture:
 - PR AUC for LR cross validation is greater than PR AUC for LR holdout testing.
 - ROC AUC for LR cross validation is greater than ROC AUC for LR holdout testing.
 
-![Average Performance Metrics Vs. Threshold: Cross Validation: LR](Average_Performance_Metrics_Vs_Threshold--Cross_Validation--LR.png){#id .class height=50%}
+![Average Performance Metrics Vs. Threshold: Cross Validation: LR](Average_Performance_Metrics_Vs_Threshold--Cross_Validation--LR.png){#id .class height=25%}
 
 ![PR And ROC Curves: Cross Validation: LR](PR_And_ROC_Curves--Cross_Validation--LR.png)
 
-![Optimal Performance Metrics: Cross Validation: LR](Optimal_Performance_Metrics--Cross_Validation--LR.png)
+![Optimal Performance Metrics: Cross Validation: LR](Optimal_Performance_Metrics--Cross_Validation--LR.png){#id .class height=25%}
 
-![Performance Metrics Vs. Threshold: Holdout Testing: LR](Performance_Metrics_Vs_Threshold--Holdout_Testing--LR.png){#id .class height=50%}
+![Performance Metrics Vs. Threshold: Holdout Testing: LR](Performance_Metrics_Vs_Threshold--Holdout_Testing--LR.png){#id .class height=25%}
 
 ![PR And ROC Curves: Holdout Testing: LR](PR_And_ROC_Curves--Holdout_Testing--LR.png)
 
-![Optimal Performance Metrics: Holdout Testing: LR](Optimal_Performance_Metrics--Holdout_Testing--LR.png)
+![Optimal Performance Metrics: Holdout Testing: LR](Optimal_Performance_Metrics--Holdout_Testing--LR.png){#id .class height=12%}
 
 ```{r, eval = FALSE}
 library(TomLeversRPackage)
@@ -584,7 +584,7 @@ Per LRR cross validation:
 
 Per LRR holdout testing:
 
-- Our optimal LR classifier has a maximum F1 measure of $0.917$.
+- Our optimal LRR classifier has a maximum F1 measure of $0.917$.
 - The corresponding threshold is $0.18$.
 - Accuracy is $L$-shaped and nearly $1$ for about $80$ percent of thresholds.
 - F1 measure is a mirror image of F1 measure per cross validation.
@@ -602,17 +602,17 @@ Bigger picture:
 - PR AUC decreases across LR CV, LRR CV, LRR HT, LR HT.
 - ROC AUC decreases across LRR HT, LRR CV, LR CV, LR HT.
 
-![Average Performance Metrics Vs. Threshold: Cross Validation: LRR](Average_Performance_Metrics_Vs_Threshold--Cross_Validation--LRR.png)
+![Average Performance Metrics Vs. Threshold: Cross Validation: LRR](Average_Performance_Metrics_Vs_Threshold--Cross_Validation--LRR.png){#id .class height=25%}
 
 ![PR And ROC Curves: Cross Validation: LRR](PR_And_ROC_Curves--Cross_Validation--LRR.png)
 
-![Optimal Performance Metrics: Cross Validation: LRR](Optimal_Performance_Metrics--Cross_Validation--LRR.png)
+![Optimal Performance Metrics: Cross Validation: LRR](Optimal_Performance_Metrics--Cross_Validation--LRR.png){#id .class height=25%}
 
-![Performance Metrics Vs. Threshold: Holdout Testing: LRR](Performance_Metrics_Vs_Threshold--Holdout_Testing--LRR.png)
+![Performance Metrics Vs. Threshold: Holdout Testing: LRR](Performance_Metrics_Vs_Threshold--Holdout_Testing--LRR.png){#id .class height=25%}
 
 ![PR And ROC Curves: Holdout Testing: LRR](PR_And_ROC_Curves--Holdout_Testing--LRR.png)
 
-![Optimal Performance Metrics: Holdout Testing: LRR](Optimal_Performance_Metrics--Holdout_Testing--LRR.png)
+![Optimal Performance Metrics: Holdout Testing: LRR](Optimal_Performance_Metrics--Holdout_Testing--LRR.png){#id .class height=12%}
 
 ```{r, eval = FALSE}
 library(TomLeversRPackage)
@@ -701,7 +701,7 @@ t(list_of_visualizations_of_performance_metrics$data_frame_of_optimal_performanc
 
 Per LDA cross validation:
 
-- Our optimal LRR classifier has formula $Indicator \sim normalize(Blue) + normalize\left(Red^2\right) + normalize\left(Green^2\right)$.
+- Our optimal LDA classifier has formula $Indicator \sim normalize(Blue) + normalize\left(Red^2\right) + normalize\left(Green^2\right)$.
 - The maximum average F1 measure is $0.892$.
 - The corresponding threshold is $0.69$.
 - Average accuracy is $L$-shaped and nearly $1$ for about $32.5$ percent of thresholds.
@@ -713,7 +713,7 @@ Per LDA cross validation:
 
 Per LDA holdout testing:
 
-- Our optimal LR classifier has a maximum F1 measure of $0.742$.
+- Our optimal LDA classifier has a maximum F1 measure of $0.742$.
 - The corresponding threshold is $0.68$.
 - Accuracy is $L$-shaped and nearly $1$ for about $32.5$ percent of thresholds.
 - F1 measure increases stepwise.
@@ -731,22 +731,104 @@ Bigger picture:
 - PR AUC decreases across LR CV, LRR CV, LRR HT, LR HT, LDA CV, LDA HT.
 - ROC AUC decreases across LRR HT, LRR CV, LR CV, LR HT, LDA HT, LDA CV.
 
-![Average Performance Metrics Vs. Threshold: Cross Validation: LDA](Average_Performance_Metrics_Vs_Threshold--Cross_Validation--LDA.png)
+![Average Performance Metrics Vs. Threshold: Cross Validation: LDA](Average_Performance_Metrics_Vs_Threshold--Cross_Validation--LDA.png){#id .class height=25%}
 
-![PR And ROC Curves: Cross Validation: LDA](PR_And_ROC_Curves--Cross_Validation--LDA.png)
+![PR And ROC Curves: Cross Validation: LDA](PR_And_ROC_Curves--Cross_Validation--LDA.png){#id .class height=19%}
 
-![Optimal Performance Metrics: Cross Validation: LDA](Optimal_Performance_Metrics--Cross_Validation--LDA.png)
+![Optimal Performance Metrics: Cross Validation: LDA](Optimal_Performance_Metrics--Cross_Validation--LDA.png){#id .class height=25%}
 
-![Performance Metrics Vs. Threshold: Holdout Testing: LDA](Performance_Metrics_Vs_Threshold--Holdout_Testing--LDA.png)
+![Performance Metrics Vs. Threshold: Holdout Testing: LDA](Performance_Metrics_Vs_Threshold--Holdout_Testing--LDA.png){#id .class height=25%}
 
-![PR And ROC Curves: Holdout Testing: LDA](PR_And_ROC_Curves--Holdout_Testing--LDA.png)
+![PR And ROC Curves: Holdout Testing: LDA](PR_And_ROC_Curves--Holdout_Testing--LDA.png){#id .class height=19%}
 
-![Optimal Performance Metrics: Holdout Testing: LDA](Optimal_Performance_Metrics--Holdout_Testing--LDA.png)
+![Optimal Performance Metrics: Holdout Testing: LDA](Optimal_Performance_Metrics--Holdout_Testing--LDA.png){#id .class height=12%}
 
 ```{r, eval = FALSE}
 library(TomLeversRPackage)
 type_of_model <- "LDA"
 formula <- Indicator ~ Normalized_Blue + Normalized_Square_Of_Red + Normalized_Square_Of_Green
+summary_of_performance <- summarize_performance_of_cross_validated_classifiers(
+    type_of_model = type_of_model,
+    formula = formula,
+    data_frame = training_data_frame_of_indicators_and_pixels,
+    optimal_lambda = optimal_lambda
+)
+summary_of_performance$plot_of_performance_metrics_vs_threshold
+```
+
+```{r, eval = FALSE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold"}
+summary_of_performance$PR_curve
+summary_of_performance$ROC_curve
+t(summary_of_performance$data_frame_of_optimal_performance_metrics)
+```
+
+```{r, eval = FALSE}
+list_of_visualizations_of_performance_metrics <- visualize_performance_metrics(
+    formula = formula,
+    testing_data = holdout_data_frame_of_indicators_and_pixels,
+    training_data = training_data_frame_of_indicators_and_pixels,
+    type_of_model = type_of_model,
+    list_of_hyperparameters = list(lambda = 0.00012340980408668)
+)
+list_of_visualizations_of_performance_metrics$plot_of_performance_metrics_vs_threshold
+```
+
+```{r, eval = FALSE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold"}
+list_of_visualizations_of_performance_metrics$PR_curve
+list_of_visualizations_of_performance_metrics$ROC_curve
+t(list_of_visualizations_of_performance_metrics$data_frame_of_optimal_performance_metrics)
+```
+
+#### Quadratic Discriminant Analysis
+
+Per QDA cross validation:
+
+- Our optimal QDA classifier has formula $Indicator \sim normalize(Blue) + normalize\left(Red^2\right) + normalize\left(Red : Blue\right)$.
+- The maximum average F1 measure is $0.914$.
+- The corresponding threshold is $0.19$.
+- Average accuracy is $L$-shaped and nearly $1$ for about $90$ percent of thresholds.
+- Average F1 measure is $U$-shaped and nearly $0.914$ for maybe $58$ percent of thresholds.
+- Average PPV increases logarithmically.
+- Average TPR decreases in the manner of $y = -tan(x)$.
+- A Precision-Recall curve has an AUC of $0.959$.
+- An ROC curve has an AUC of $0.985$.
+
+Per QDA holdout testing:
+
+- Our optimal QDA classifier has a maximum F1 measure of $0.567$.
+- The corresponding threshold is $0.77$.
+- Accuracy is $L$-shaped and nearly $1$ for about $80$ percent of thresholds.
+- F1 measure is $U$-shaped.
+- PPV increases in the manner of $y = tan(x)$.
+- TPR decreases in the manner of $y = -tan(x)$.
+- A Precision-Recall curve has an AUC of $0.504$.
+- An ROC curve has an AUC of $0.786$.
+
+Bigger picture:
+
+- Accuracy decreases across LR CV, QDA CV, LR HT, LRR CV, QDA HT, LRR HT, LDA CV, LDA HT.
+- F1 measure decreases across LR CV, QDA CV, LRR CV, LDA CV, LRR HT, LR HT, LDA HT, QDA HT.
+- PPV decreases across LRR CV, QDA CV, LR CV, LRR HT, LR HT, LDA CV, LDA HT, QDA HT.
+- TPR decreases across LR HT, LRR HT, LR CV, QDA CV, LDA CV, LRR CV, LDA HT, QDA HT.
+- PR AUC decreases across LR CV, LRR CV, LRR HT, QDA CV, LR HT, LDA CV, LDA HT, QDA HT.
+- ROC AUC decreases across LRR HT, LRR CV, LR CV, LR HT, QDA CV, LDA HT, LDA CV, QDA HT.
+
+![Average Performance Metrics Vs. Threshold: Cross Validation: QDA](Average_Performance_Metrics_Vs_Threshold--Cross_Validation--QDA.png){#id .class height=25%}
+
+![PR And ROC Curves: Cross Validation: QDA](PR_And_ROC_Curves--Cross_Validation--QDA.png){#id .class height=19%}
+
+![Optimal Performance Metrics: Cross Validation: QDA](Optimal_Performance_Metrics--Cross_Validation--QDA.png){#id .class height=25%}
+
+![Performance Metrics Vs. Threshold: Holdout Testing: QDA](Performance_Metrics_Vs_Threshold--Holdout_Testing--QDA.png){#id .class height=25%}
+
+![PR And ROC Curves: Holdout Testing: QDA](PR_And_ROC_Curves--Holdout_Testing--QDA.png){#id .class height=19%}
+
+![Optimal Performance Metrics: Holdout Testing: QDA](Optimal_Performance_Metrics--Holdout_Testing--QDA.png){#id .class height=12%}
+
+```{r, eval = FALSE}
+library(TomLeversRPackage)
+type_of_model <- "QDA"
+formula <- Indicator ~ Normalized_Blue + Normalized_Square_Of_Red + Normalized_Interaction_Of_Red_And_Blue
 summary_of_performance <- summarize_performance_of_cross_validated_classifiers(
     type_of_model = type_of_model,
     formula = formula,
