@@ -67,7 +67,7 @@ summarize_performance_of_cross_validated_classifiers <- function(type_of_model, 
    tuneGrid = expand.grid(k = seq(from = 1, to = 25, by = 1))
   )
   print(plot(list_of_training_information))
-  optimal_K = list_of_training_information$bestTune$K
+  optimal_K = list_of_training_information$bestTune$k
   print(paste("optimal value of K = ", optimal_K, sep = ""))
  } else if (type_of_model == "Random Forest") {
   training_and_testing_data <- split_data_set_into_training_and_testing_data(data_frame = training_data_frame_of_indicators_and_pixels[, names_of_variables], proportion_of_training_data = 0.9)
