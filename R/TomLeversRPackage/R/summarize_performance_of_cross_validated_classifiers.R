@@ -382,7 +382,7 @@ summarize_performance_of_cross_validated_classifiers <- function(type_of_model, 
   mapping = aes(x = TPR)
  ) +
   geom_line(mapping = aes(y = PPV)) +
-  labs(x = "TPR", y = "PPV", title = "PPV-TPR Curve") +
+  labs(x = "TPR", y = "PPV", title = "PR Curve And PPV Vs. TPR") +
   theme(
    plot.title = element_text(hjust = 0.5, size = 11),
   )
@@ -415,6 +415,11 @@ summarize_performance_of_cross_validated_classifiers <- function(type_of_model, 
   alpha = ifelse(test = type_of_model == "Logistic Ridge Regression", yes = 0, no = NA),
   optimal_lambda = ifelse(test = type_of_model == "Logistic Ridge Regression", yes = optimal_lambda, no = NA),
   optimal_K = ifelse(test = type_of_model == "KNN", yes = optimal_K, no = NA),
+  optimal_mtry = ifelse(test = type_of_model == "Random Forest", yes = optimal_mtry, no = NA),
+  optimal_ntree = ifelse(test = type_of_model == "Random Forest", yes = optimal_number_of_trees, no = NA),
+  optimal_C = ifelse(test = startsWith(type_of_model, "Support-Vector Machine"), yes = optimal_cost, no = NA),
+  optimal_d = ifelse(test = type_of_model == "Support-Vector Machine With Polynomial Kernel", yes = optimal_degree, no = NA),
+  optimal_gamma = ifelse(test = type_of_model == "Support-Vector Machine With Radial Kernel", yes = optimal_gamma, no = NA),
   optimal_PR_AUC = MESS::auc(data_frame_of_PPV_and_TPR$TPR, data_frame_of_PPV_and_TPR$PPV),
   optimal_ROC_AUC = MESS::auc(data_frame_of_TPR_and_FPR$FPR, data_frame_of_TPR_and_FPR$TPR),
   corresponding_accuracy = data_frame_corresponding_to_maximum_average_F1_measure$corresponding_accuracy,
