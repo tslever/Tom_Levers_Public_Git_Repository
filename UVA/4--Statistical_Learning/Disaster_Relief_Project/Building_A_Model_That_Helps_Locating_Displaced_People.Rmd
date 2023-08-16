@@ -471,9 +471,10 @@ See below graph, for our optimal formula, of average F1 measure vs. $C$ for $10$
 
 During bidirectional selection of SVMWPK's, for each formula, we search for one value of hyperparameter $C$ and one value of hyperparameter $d$ to be used in training a SVMWPK on $9$ cross-validation folds. For our optimal formula, we use `caret::train` to choose $C = 10$ and $d = 3$ for all of our SVMWPK's. Our inputs include our formula, our training data, the method "svmPoly", the metric "F1_measure", a `trainControl` object, and a data frame containing one row for each value of $C$ and each value of $d$ to be evaluated. Dr. Gedeck recommended evaluating $C \in \left\{10^{-3}, 10^{-2.75}, \cdots, 10^{2.75}, 10^3\right\}$ and $d \in \{1, 2, 3, 4, 5, 6\}$. Given time limits, we choose $C \in \left\{10^{-1}, 10^0, 10^1\right\}$ and $d \in \{1, 2, 3\}$.
 
-See below graph, for our optimal formula, of average F1 measure vs. $d$ for different values of $C$ for $10$ cross-validated SVMWPK's. `caret::train` chose the values of $C$ and $d$ corresponding to the maximum average F1 measure. These values of $C$ and $d$ will be used in training an SVMWLK on $9$ cross-validation folds.
+See below graph, for our optimal form bnula, of average F1 measure vs. $d$ for different values of $C$ for $10$ cross-validated SVMWPK's. `caret::train` chose the values of $C$ and $d$ corresponding to the maximum average F1 measure. These values of $C$ and $d$ will be used in training an SVMWLK on $9$ cross-validation folds.
 
-![F1 Measure Vs. $C$ For Different Values Of $d$](F1_Measure_Vs_C_For_Different_Values_Of_d.png){#id .class height=25%}
+![F1 Measure Vs. $d$ For Different Values Of $C$](F1_Measure_Vs_d_For_Different_Values_Of_C.png){#id .class height=25%}
+![F1 Measure Vs. $\gamma$ For Different Values Of $C$](F1_Measure_Vs_gamma_For_Different_Values_Of_C.png){#id .class height=25%}
 
 #### Support-Vector Machines With Radial Kernels
 
@@ -495,12 +496,12 @@ For each type of model and optimal formula, primary hyperparameter, and secondar
 
 Big picture:
 
-- Accuracy decreases across KNN CV, SVMWPK HT, SVMWPK CV, SVMWLK CV, RF CV, KNN HT, LR CV, QDA CV, RF HT, LR HT, SVMWLK HT, LRR CV, QDA HT, LRR HT, LDA CV, LDA HT.
-- F1 measure decreases across KNN CV, SVMWPK CV, SVMWLK CV, RF CV, LR CV, QDA CV, LRR CV, LDA CV, LRR HT, LR HT, SVMWLK HT, SVMWPK HT, KNN HT, RF HT, LDA HT, QDA HT.
-- PPV decreases across LRR CV, QDA CV, RF CV, SVMWPK CV, SVMWLK CV, KNN CV, LR CV, LRR HT, RF HT, LR HT, LDA CV, LDA HT, QDA HT, SVMWLK HT, SVMWPK HT, KNN HT.
-- TPR decreases across SVMWLK HT, SVMWPK LT, LR HT, LRR HT, SVMWLK CV, SVMWPK CV, RF CV, KNN CV, LR CV, QDA CV, LDA CV, LRR CV, KNN HT, LDA HT, RF HT, QDA HT.
-- PR AUC decreases across LR CV (0.984), SVMWLK CV (0.984), RF CV (0.984), LRR CV (0.982), SVMWPK CV (0.980), KNN CV (0.979), LRR HT (0.963), QDA CV (0.959), LR HT (0.918), SVMWLK HT (0.917), LDA CV (0.905), SVMWPK HT (0.879), LDA HT (0.739), RF HT (0.710), KNN HT (0.669), QDA HT (0.504).
-- ROC AUC decreases across LRR HT (0.9996), SVMWLK CV (0.9994), LRR CV (0.9992), LR CV (0.9992), SVMWLK HT (0.9991), LR HT (0.9991), SVMWLK CV (0.998), SVMWPK HT (0.998), KNN CV (0.994), RF CV (0.9939), QDA CV (0.985), RF HT (0.979), LDA HT (0.953), LDA CV (0.950), KNN HT (0.933), QDA HT (0.786).
+- Accuracy decreases across KNN CV, SVMWRK HT, SVMWPK CV, SVMWPK HT, SVMWPK CV, SVMWLK CV, RF CV, KNN HT, LR CV, QDA CV, RF HT, LR HT, SVMWLK HT, LRR CV, QDA HT, LRR HT, LDA CV, LDA HT.
+- F1 measure decreases across KNN CV, SVMWRK CV, SVMWPK CV, SVMWLK CV, RF CV, LR CV, QDA CV, LRR CV, LDA CV, LRR HT, LR HT, SVMWLK HT, SVMWPK HT, KNN HT, RF HT, LDA HT, QDA HT, SVMWRK HT.
+- PPV decreases across LRR CV, SVMWRK CV, QDA CV, RF CV, SVMWPK CV, SVMWLK CV, KNN CV, LR CV, LRR HT, RF HT, LR HT, LDA CV, LDA HT, QDA HT, SVMWLK HT, SVMWPK HT, KNN HT, SVMWRK HT.
+- TPR decreases across SVMWLK HT, SVMWPK LT, LR HT, LRR HT, SVMWRK CV, SVMWLK CV, SVMWPK CV, RF CV, KNN CV, LR CV, QDA CV, LDA CV, LRR CV, KNN HT, LDA HT, RF HT, QDA HT, SVMWRK HT.
+- PR AUC decreases across LR CV (0.984), SVMWLK CV (0.984), RF CV (0.984), SVMWRK CV (0.983), LRR CV (0.982), SVMWPK CV (0.980), KNN CV (0.979), LRR HT (0.963), QDA CV (0.959), LR HT (0.918), SVMWLK HT (0.917), LDA CV (0.905), SVMWPK HT (0.879), LDA HT (0.739), RF HT (0.710), KNN HT (0.669), QDA HT (0.504), SVWRK HT (0.294).
+- ROC AUC decreases across LRR HT (0.9996), SVMWLK CV (0.9994), LRR CV (0.9992), LR CV (0.9992), SVMWLK HT (0.9991), LR HT (0.9991), SVMWLK CV (0.998), SVMWPK HT (0.998), KNN CV (0.994), RF CV (0.9939), SVMWRK CV (0.990), QDA CV (0.985), RF HT (0.979), LDA HT (0.953), LDA CV (0.950), KNN HT (0.933), SVMWRK HT (0.793), QDA HT (0.786).
 
 #### Logistic Regression Classifiers
 
@@ -1120,6 +1121,79 @@ list_of_visualizations_of_performance_metrics <- visualize_performance_metrics(
     training_data = training_data_frame_of_indicators_and_pixels,
     type_of_model = type_of_model,
     list_of_hyperparameters = list(cost = 10, degree = 3)
+)
+list_of_visualizations_of_performance_metrics$plot_of_performance_metrics_vs_threshold
+```
+
+```{r, eval = FALSE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold"}
+list_of_visualizations_of_performance_metrics$PR_curve
+list_of_visualizations_of_performance_metrics$ROC_curve
+t(list_of_visualizations_of_performance_metrics$data_frame_of_optimal_performance_metrics)
+```
+
+#### Support-Vector Machines With Radial Kernels
+
+Per SVMWRK cross validation:
+
+- Our optimal SVMRK has formula $Indicator \sim normalize(Blue) + normalize[\ln(Red)] + normalize\left(\sqrt{Green}\right) + normalize[\ln(Blue)]$.
+- Our optimal value for $C$ is $10$.
+- Our optimal value of gamma is $10$.
+- The maximum average F1 measure is $0.960$.
+- The corresponding threshold is $0.06$.
+- Average accuracy is $L$-shaped and is nearly $1$ for $92$ percent of thresholds.
+- Average F1 measure is $U$-shaped and is nearly $0.960$ for $85$ percent of thresholds.
+- Average PPV is $L$-shaped and is about $0.97$ on average.
+- Average TPR decreases in the manner of $y = tan(x)$.
+- A Precision-Recall curve has an AUC of $0.983$.
+- An ROC curve has an AUC of $0.990$.
+
+Per SVMWRK holdout testing:
+
+- Our optimal SVMWRK has a maximum F1 measure of $0.414$.
+- The corresponding threshold is $0.01$.
+- Accuracy is $L$-shaped and is nearly $98$ for 98 percent of thresholds.
+- F1 measure decreases in the manner of $y = tan(x)$.
+- PPV is $U$-shaped and nearly $0.34$ for $75$ percent of thresholds.
+- TPR decreases in the manner of $y = tan(x)$.
+- A Precision-Recall curve has an AUC of $0.294$.
+- An ROC curve has an AUC of $0.793$.
+
+![Average Performance Metrics Vs. Threshold: Cross Validation: SVMWRK](Average_Performance_Metrics_Vs_Threshold--Cross_Validation--SVMWRK.png){#id .class height=25%}
+![Optimal Performance Metrics: Cross Validation: SVMWRK](Optimal_Performance_Metrics--Cross_Validation--SVMWRK.png){#id .class height=25%}
+
+![PR And ROC Curves: Cross Validation: SVMWRK](PR_And_ROC_Curves--Cross_Validation--SVMWRK.png){#id .class height=19%}
+
+![Performance Metrics Vs. Threshold: Holdout Testing: SVMWPK](Performance_Metrics_Vs_Threshold--Holdout_Testing--SVMWRK.png){#id .class height=25%}
+![Optimal Performance Metrics: Holdout Testing: SVMWPK](Optimal_Performance_Metrics--Holdout_Testing--SVMWRK.png){#id .class height=12%}
+
+![PR And ROC Curves: Holdout Testing: SVMWPK](PR_And_ROC_Curves--Holdout_Testing--SVMWRK.png){#id .class height=19%}
+
+```{r, eval = FALSE}
+library(TomLeversRPackage)
+type_of_model <- "Support-Vector Machine With Radial Kernel"
+formula <- Indicator ~ Normalized_Blue + Normalized_Natural_Logarithm_Of_Red + Normalized_Square_Root_Of_Green + Normalized_Natural_Logarithm_Of_Blue
+set.seed(1)
+summary_of_performance <- summarize_performance_of_cross_validated_classifiers(
+    type_of_model = type_of_model,
+    formula = formula,
+    data_frame = training_data_frame_of_indicators_and_pixels
+)
+summary_of_performance$plot_of_performance_metrics_vs_threshold
+```
+
+```{r, eval = FALSE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold"}
+summary_of_performance$PR_curve
+summary_of_performance$ROC_curve
+t(summary_of_performance$data_frame_of_optimal_performance_metrics)
+```
+
+```{r, eval = FALSE}
+list_of_visualizations_of_performance_metrics <- visualize_performance_metrics(
+    formula = formula,
+    testing_data = holdout_data_frame_of_indicators_and_pixels,
+    training_data = training_data_frame_of_indicators_and_pixels,
+    type_of_model = type_of_model,
+    list_of_hyperparameters = list(cost = 10, gamma = 10)
 )
 list_of_visualizations_of_performance_metrics$plot_of_performance_metrics_vs_threshold
 ```
