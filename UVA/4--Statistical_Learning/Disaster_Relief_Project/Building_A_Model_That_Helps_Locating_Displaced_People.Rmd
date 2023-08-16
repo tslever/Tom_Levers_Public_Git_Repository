@@ -453,11 +453,13 @@ During bidirectional selection of KNN classifiers, for each formula, we search f
 
 See below graph, for our optimal formula, of average F1 measure vs. $K$ for $10$ cross-validated KNN classifiers. `caret::train` chose the value of $K$ corresponding to the maximum average F1 measure. This value of $K$ will be used in training a KNN classifier on $9$ cross-validation folds.
 
-![F1 Measure Vs Number Of Neighbors](F1_Measure_Vs_Number_Of_Neighbors.png)
+![F1 Measure Vs Number Of Neighbors](F1_Measure_Vs_Number_Of_Neighbors.png){#id .class height=25%}
 
 #### Random Forest Classifiers
 
 During bidirectional selection of RF classifiers, for each formula, we search for one value of hyperparameter $mtry$ and one value of hyperparameter $ntree$ to be used in training an RF classifier on $9$ cross-validation folds. We create plots of average test error rate vs. $ntree$ for different values of $mtry$. Values of $mtry$ vary from $1$ to the number of predictors in the formula. Values of $ntree$ vary from $1$ to $500$. We choose the values of $mtry$ and $ntree$ corresponding to the minimum test error rate.
+
+![Test Error Rate Vs ntree For Different Values Of mtry](Test_Error_Rate_Vs_ntree_For_Different_Values_Of_mtry.png){#id .class height=25%}
 
 #### Support-Vector Machines With Linear Kernels
 
@@ -518,16 +520,14 @@ Bigger picture:
 - ROC AUC for LR cross validation is greater than ROC AUC for LR holdout testing.
 
 ![Average Performance Metrics Vs. Threshold: Cross Validation: LR](Average_Performance_Metrics_Vs_Threshold--Cross_Validation--LR.png){#id .class height=25%}
+![Optimal Performance Metrics: Cross Validation: LR](Optimal_Performance_Metrics--Cross_Validation--LR.png){#id .class height=25%}
 
 ![PR And ROC Curves: Cross Validation: LR](PR_And_ROC_Curves--Cross_Validation--LR.png)
 
-![Optimal Performance Metrics: Cross Validation: LR](Optimal_Performance_Metrics--Cross_Validation--LR.png){#id .class height=25%}
-
 ![Performance Metrics Vs. Threshold: Holdout Testing: LR](Performance_Metrics_Vs_Threshold--Holdout_Testing--LR.png){#id .class height=25%}
+![Optimal Performance Metrics: Holdout Testing: LR](Optimal_Performance_Metrics--Holdout_Testing--LR.png){#id .class height=12%}
 
 ![PR And ROC Curves: Holdout Testing: LR](PR_And_ROC_Curves--Holdout_Testing--LR.png)
-
-![Optimal Performance Metrics: Holdout Testing: LR](Optimal_Performance_Metrics--Holdout_Testing--LR.png){#id .class height=12%}
 
 ```{r, eval = FALSE}
 library(TomLeversRPackage)
@@ -607,16 +607,14 @@ Bigger picture:
 - ROC AUC decreases across LRR HT, LRR CV, LR CV, LR HT.
 
 ![Average Performance Metrics Vs. Threshold: Cross Validation: LRR](Average_Performance_Metrics_Vs_Threshold--Cross_Validation--LRR.png){#id .class height=25%}
+![Optimal Performance Metrics: Cross Validation: LRR](Optimal_Performance_Metrics--Cross_Validation--LRR.png){#id .class height=25%}
 
 ![PR And ROC Curves: Cross Validation: LRR](PR_And_ROC_Curves--Cross_Validation--LRR.png)
 
-![Optimal Performance Metrics: Cross Validation: LRR](Optimal_Performance_Metrics--Cross_Validation--LRR.png){#id .class height=25%}
-
 ![Performance Metrics Vs. Threshold: Holdout Testing: LRR](Performance_Metrics_Vs_Threshold--Holdout_Testing--LRR.png){#id .class height=25%}
+![Optimal Performance Metrics: Holdout Testing: LRR](Optimal_Performance_Metrics--Holdout_Testing--LRR.png){#id .class height=12%}
 
 ![PR And ROC Curves: Holdout Testing: LRR](PR_And_ROC_Curves--Holdout_Testing--LRR.png)
-
-![Optimal Performance Metrics: Holdout Testing: LRR](Optimal_Performance_Metrics--Holdout_Testing--LRR.png){#id .class height=12%}
 
 ```{r, eval = FALSE}
 library(TomLeversRPackage)
@@ -736,16 +734,14 @@ Bigger picture:
 - ROC AUC decreases across LRR HT, LRR CV, LR CV, LR HT, LDA HT, LDA CV.
 
 ![Average Performance Metrics Vs. Threshold: Cross Validation: LDA](Average_Performance_Metrics_Vs_Threshold--Cross_Validation--LDA.png){#id .class height=25%}
+![Optimal Performance Metrics: Cross Validation: LDA](Optimal_Performance_Metrics--Cross_Validation--LDA.png){#id .class height=25%}
 
 ![PR And ROC Curves: Cross Validation: LDA](PR_And_ROC_Curves--Cross_Validation--LDA.png){#id .class height=19%}
 
-![Optimal Performance Metrics: Cross Validation: LDA](Optimal_Performance_Metrics--Cross_Validation--LDA.png){#id .class height=25%}
-
 ![Performance Metrics Vs. Threshold: Holdout Testing: LDA](Performance_Metrics_Vs_Threshold--Holdout_Testing--LDA.png){#id .class height=25%}
+![Optimal Performance Metrics: Holdout Testing: LDA](Optimal_Performance_Metrics--Holdout_Testing--LDA.png){#id .class height=12%}
 
 ![PR And ROC Curves: Holdout Testing: LDA](PR_And_ROC_Curves--Holdout_Testing--LDA.png){#id .class height=19%}
-
-![Optimal Performance Metrics: Holdout Testing: LDA](Optimal_Performance_Metrics--Holdout_Testing--LDA.png){#id .class height=12%}
 
 ```{r, eval = FALSE}
 library(TomLeversRPackage)
@@ -818,16 +814,14 @@ Bigger picture:
 - ROC AUC decreases across LRR HT, LRR CV, LR CV, LR HT, QDA CV, LDA HT, LDA CV, QDA HT.
 
 ![Average Performance Metrics Vs. Threshold: Cross Validation: QDA](Average_Performance_Metrics_Vs_Threshold--Cross_Validation--QDA.png){#id .class height=25%}
+![Optimal Performance Metrics: Cross Validation: QDA](Optimal_Performance_Metrics--Cross_Validation--QDA.png){#id .class height=25%}
 
 ![PR And ROC Curves: Cross Validation: QDA](PR_And_ROC_Curves--Cross_Validation--QDA.png){#id .class height=19%}
 
-![Optimal Performance Metrics: Cross Validation: QDA](Optimal_Performance_Metrics--Cross_Validation--QDA.png){#id .class height=25%}
-
 ![Performance Metrics Vs. Threshold: Holdout Testing: QDA](Performance_Metrics_Vs_Threshold--Holdout_Testing--QDA.png){#id .class height=25%}
+![Optimal Performance Metrics: Holdout Testing: QDA](Optimal_Performance_Metrics--Holdout_Testing--QDA.png){#id .class height=12%}
 
 ![PR And ROC Curves: Holdout Testing: QDA](PR_And_ROC_Curves--Holdout_Testing--QDA.png){#id .class height=19%}
-
-![Optimal Performance Metrics: Holdout Testing: QDA](Optimal_Performance_Metrics--Holdout_Testing--QDA.png){#id .class height=12%}
 
 ```{r, eval = FALSE}
 library(TomLeversRPackage)
@@ -900,16 +894,14 @@ Bigger picture:
 - ROC AUC decreases across LRR HT, LRR CV, LR CV, LR HT, KNN CV, QDA CV, LDA HT, LDA CV, KNN HT, QDA HT.
 
 ![Average Performance Metrics Vs. Threshold: Cross Validation: KNN](Average_Performance_Metrics_Vs_Threshold--Cross_Validation--KNN.png){#id .class height=25%}
+![Optimal Performance Metrics: Cross Validation: KNN](Optimal_Performance_Metrics--Cross_Validation--KNN.png){#id .class height=25%}
 
 ![PR And ROC Curves: Cross Validation: KNN](PR_And_ROC_Curves--Cross_Validation--KNN.png){#id .class height=19%}
 
-![Optimal Performance Metrics: Cross Validation: KNN](Optimal_Performance_Metrics--Cross_Validation--KNN.png){#id .class height=25%}
-
 ![Performance Metrics Vs. Threshold: Holdout Testing: KNN](Performance_Metrics_Vs_Threshold--Holdout_Testing--KNN.png){#id .class height=25%}
+![Optimal Performance Metrics: Holdout Testing: KNN](Optimal_Performance_Metrics--Holdout_Testing--KNN.png){#id .class height=12%}
 
 ![PR And ROC Curves: Holdout Testing: KNN](PR_And_ROC_Curves--Holdout_Testing--KNN.png){#id .class height=19%}
-
-![Optimal Performance Metrics: Holdout Testing: KNN](Optimal_Performance_Metrics--Holdout_Testing--KNN.png){#id .class height=12%}
 
 ```{r, eval = FALSE}
 library(TomLeversRPackage)
@@ -936,6 +928,86 @@ list_of_visualizations_of_performance_metrics <- visualize_performance_metrics(
     training_data = training_data_frame_of_indicators_and_pixels,
     type_of_model = type_of_model,
     list_of_hyperparameters = list(K = 1)
+)
+list_of_visualizations_of_performance_metrics$plot_of_performance_metrics_vs_threshold
+```
+
+```{r, eval = FALSE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold"}
+list_of_visualizations_of_performance_metrics$PR_curve
+list_of_visualizations_of_performance_metrics$ROC_curve
+t(list_of_visualizations_of_performance_metrics$data_frame_of_optimal_performance_metrics)
+```
+
+#### Random Forests
+
+Per RF cross validation:
+
+- Our optimal KNN classifier has formula $Indicator \sim normalize(Red : Blue) + normalize(Red) + normalize[\ln(Green)]$.
+- The maximum average F1 measure is $0.954$.
+- The corresponding threshold is $0.34$.
+- Average accuracy increases by $1$ small step and is nearly $1$ for $92$ percent of thresholds.
+- Average F1 measure increases by $1$ step and is nearly $0.954$ for $92$ percent of thresholds.
+- Average PPV increases by $3$ steps.
+- Average TPR decreases by $3$ steps.
+- A Precision-Recall curve has an AUC of $0.980$.
+- An ROC curve has an AUC of $0.996$.
+
+Per RF holdout testing:
+
+- Our optimal KNN classifier has a maximum F1 measure of $0.610$.
+- The corresponding threshold is $0.5$.
+- Accuracy increases by $1$ small step and is nearly $1$ for $92$ percent of thresholds.
+- F1 measure increases by $1$ step and is nearly $0.610$ for $92$ percent of thresholds.
+- PPV increases by $1$ step and is nearly $0.491$ for $92$ percent of thresholds.
+- TPR decreases by $1$ small step and is nearly $0.804$ for $92$ percent of thresholds.
+- A Precision-Recall curve has an AUC of $0.628$.
+- An ROC curve has an AUC of $0.901$.
+
+Bigger picture:
+
+- Accuracy decreases across KNN CV, KNN HT, LR CV, QDA CV, LR HT, LRR CV, QDA HT, LRR HT, LDA CV, LDA HT.
+- F1 measure decreases across KNN CV, LR CV, QDA CV, LRR CV, LDA CV, LRR HT, LR HT, KNN HT, LDA HT, QDA HT.
+- PPV decreases across LRR CV, QDA CV, KNN CV, LR CV, LRR HT, LR HT, LDA CV, LDA HT, QDA HT, KNN HT.
+- TPR decreases across LR HT, LRR HT, KNN CV, LR CV, QDA CV, LDA CV, LRR CV, KNN HT, LDA HT, QDA HT.
+- PR AUC decreases across LR CV, LRR CV, KNN CV, LRR HT, QDA CV, LR HT, LDA CV, LDA HT, KNN HT, QDA HT.
+- ROC AUC decreases across LRR HT, LRR CV, LR CV, LR HT, KNN CV, QDA CV, LDA HT, LDA CV, KNN HT, QDA HT.
+
+![Average Performance Metrics Vs. Threshold: Cross Validation: RF](Average_Performance_Metrics_Vs_Threshold--Cross_Validation--RF.png){#id .class height=25%}
+![Optimal Performance Metrics: Cross Validation: RF](Optimal_Performance_Metrics--Cross_Validation--RF.png){#id .class height=25%}
+
+![PR And ROC Curves: Cross Validation: RF](PR_And_ROC_Curves--Cross_Validation--RF.png){#id .class height=19%}
+
+![Performance Metrics Vs. Threshold: Holdout Testing: RF](Performance_Metrics_Vs_Threshold--Holdout_Testing--RF.png){#id .class height=25%}
+![Optimal Performance Metrics: Holdout Testing: RF](Optimal_Performance_Metrics--Holdout_Testing--RF.png){#id .class height=12%}
+
+![PR And ROC Curves: Holdout Testing: RF](PR_And_ROC_Curves--Holdout_Testing--RF.png){#id .class height=19%}
+
+```{r, eval = FALSE}
+library(TomLeversRPackage)
+type_of_model <- "Random Forest"
+formula <- Indicator ~ Normalized_Square_Of_Red + Normalized_Interaction_Of_Red_And_Green + Normalized_Interaction_Of_Green_And_Blue + Normalized_Green
+set.seed(1)
+summary_of_performance <- summarize_performance_of_cross_validated_classifiers(
+    type_of_model = type_of_model,
+    formula = formula,
+    data_frame = training_data_frame_of_indicators_and_pixels
+)
+summary_of_performance$plot_of_performance_metrics_vs_threshold
+```
+
+```{r, eval = FALSE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold"}
+summary_of_performance$PR_curve
+summary_of_performance$ROC_curve
+t(summary_of_performance$data_frame_of_optimal_performance_metrics)
+```
+
+```{r, eval = FALSE}
+list_of_visualizations_of_performance_metrics <- visualize_performance_metrics(
+    formula = formula,
+    testing_data = holdout_data_frame_of_indicators_and_pixels,
+    training_data = training_data_frame_of_indicators_and_pixels,
+    type_of_model = type_of_model,
+    list_of_hyperparameters = list(mtry = 1, ntree = 52)
 )
 list_of_visualizations_of_performance_metrics$plot_of_performance_metrics_vs_threshold
 ```
