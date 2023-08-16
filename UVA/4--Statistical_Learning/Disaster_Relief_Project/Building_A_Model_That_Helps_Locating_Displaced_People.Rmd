@@ -369,7 +369,7 @@ The second dimension of our grid is set of predictive terms. We consider classif
 
 The third dimension of our grid is value of primary hyperparameter. For LRR classifiers, the primary hyperparameter is $\lambda$. LRR classifiers are penalized for inclusion of predictive terms proportionally to $\lambda$; setting $\lambda$ to be greater than $0$ may decrease the variance and increase the performance of LRR classifiers.
 
-For KNN classifiers, the primary hyperparameter is $K$. The class of a test observation depends on determining the classes of the $K$ nearest neighboring observations in the training data. A KNN classifier with $K = 1$ is relatively flexible with low bias and high variance; such a model may overfit the training data and identify patterns with performance that is less than ideal. A KNN classifier with $K = n$, the number of training observations, predicts that all observations have one class and has high bias and low variance. A KNN classifier with $1 < K < n$ may perform best.
+For KNN classifiers, the primary hyperparameter is $K$. The class of a test observation depends on determining the classes of the $K$ nearest neighboring observations in the training data. A KNN classifier with $K = 3$ is relatively flexible with low bias and high variance; such a model may overfit the training data and identify patterns with performance that is less than ideal. A KNN classifier with $K = n$, the number of training observations, predicts that all observations have one class and has high bias and low variance. A KNN classifier with $1 < K < n$ may perform best.
 
 For RF's, the primary hyperparameter is $mtry$, the number of variables randomly sampled as candidates at each split / fraction of features available at each split. According to Dr. Bill Basener, "by selecting only some of the features for each split, we make our trees to be different from each other. We're creating more variety among our trees and are decorrelating the trees... [mtry] is probably the most important parameter... for a random forest. And the way this works: A lower fraction creates more decorrelation among the trees. So the trees are more different. But it also creates lower accuracy in the individual trees because they don't have as many parameters to select from for their classification. And so there's a bit of a tradeoff there."
 
@@ -449,7 +449,7 @@ Unfortunately, `glmnet` chooses a sequence of values of $\lambda$ with a minimum
 
 #### $K$ Nearest Neighbors Classifiers
 
-During bidirectional selection of KNN classifiers, for each formula, we search for one value of hyperparameter $K$ to be used in training a KNN classifier on $9$ cross-validation folds. For our optimal formula, we use `caret::train` to choose $K = 1$ for all of our KNN classifiers. Our inputs include our formula, our training data, the method "knn", the metric "F1_measure", a `trainControl` object, and a data frame containing one row for each value of $K$ to be evaluated. Dr. Gedeck recommended evaluating $K \in [1, 25]$.
+During bidirectional selection of KNN classifiers, for each formula, we search for one value of hyperparameter $K$ to be used in training a KNN classifier on $9$ cross-validation folds. For our optimal formula, we use `caret::train` to choose $K = 3$ for all of our KNN classifiers. Our inputs include our formula, our training data, the method "knn", the metric "F1_measure", a `trainControl` object, and a data frame containing one row for each value of $K$ to be evaluated. Dr. Gedeck recommended evaluating $K \in [1, 25]$.
 
 See below graph, for our optimal formula, of average F1 measure vs. $K$ for $10$ cross-validated KNN classifiers. `caret::train` chose the value of $K$ corresponding to the maximum average F1 measure. This value of $K$ will be used in training a KNN classifier on $9$ cross-validation folds.
 
@@ -467,11 +467,19 @@ During bidirectional selection of SVMWLK's, for each formula, we search for one 
 
 See below graph, for our optimal formula, of average F1 measure vs. $C$ for $10$ cross-validated SVMWLK's. `caret::train` chose the value of $C$ corresponding to the maximum average F1 measure. This value of $C$ will be used in training an SVMWLK on $9$ cross-validation folds.
 
+![F1 Measure Vs. C](F1_Measure_Vs_C.png){#id .class height=25%}
+
 #### Support-Vector Machines With Polynomial Kernels
 
 During bidirectional selection of SVMWPK's, for each formula, we search for one value of hyperparameter $C$ and one value of hyperparameter $d$ to be used in training a SVMWPK on $9$ cross-validation folds. For our optimal formula, we use `caret::train` to choose $C = 10$ and $d = 3$ for all of our SVMWPK's. Our inputs include our formula, our training data, the method "svmPoly", the metric "F1_measure", a `trainControl` object, and a data frame containing one row for each value of $C$ and each value of $d$ to be evaluated. Dr. Gedeck recommended evaluating $C \in \left\{10^{-3}, 10^{-2.75}, \cdots, 10^{2.75}, 10^3\right\}$ and $d \in \{1, 2, 3, 4, 5, 6\}$. Given time limits, we choose $C \in \left\{10^{-1}, 10^0, 10^1\right\}$ and $d \in \{1, 2, 3\}$.
 
-See below graph, for our optimal formula, of average F1 measure vs. $d$ for different values of $C$ for $10$ cross-validated SVMWLK's. `caret::train` chose the values of $C$ and $d$ corresponding to the maximum average F1 measure. These values of $C$ and $d$ will be used in training an SVMWLK on $9$ cross-validation folds.
+See below graph, for our optimal formula, of average F1 measure vs. $d$ for different values of $C$ for $10$ cross-validated SVMWPK's. `caret::train` chose the values of $C$ and $d$ corresponding to the maximum average F1 measure. These values of $C$ and $d$ will be used in training an SVMWLK on $9$ cross-validation folds.
+
+#### Support-Vector Machines With Radial Kernels
+
+During bidirectional selection of SVMWRK's, for each formula, we search for one value of hyperparameter $C$ and one value of hyperparameter $\gamma$ to be used in training a SVMWRK on $9$ cross-validation folds. For our optimal formula, we use `caret::train` to choose $C = 10$ and $\gamma = 1$ for all of our SVMWPK's. Our inputs include our formula, our training data, the method "svmPoly", the metric "F1_measure", a `trainControl` object, and a data frame containing one row for each value of $C$ and each value of $d$ to be evaluated. Dr. Gedeck recommended evaluating $C \in \left\{10^{-3}, 10^{-2.75}, \cdots, 10^{2.75}, 10^3\right\}$ and $\gamma \in \{10^{-1}, 10^{-0.5}, 10^0, 10^{0.5}, 10^1\}$. Given time limits, we choose $C \in \left\{10^{-1}, 10^0, 10^1\right\}$ and $\gamma \in \{10^{-1}, 10^0, 10^1\}$.
+
+See below graph, for our optimal formula, of average F1 measure vs. $\gamma$ for different values of $C$ for $10$ cross-validated SVMWRK's. `caret::train` chose the values of $C$ and $\gamma$ corresponding to the maximum average F1 measure. These values of $C$ and $\gamma$ will be used in training an SVMWRK on $9$ cross-validation folds.
 
 ### Validation / Holdout Test
 
@@ -484,6 +492,15 @@ To validate our optimal classifiers, we train each optimal classifier on our tra
 ### Evaluating And Comparing Classifiers
 
 For each type of model and optimal formula, primary hyperparameter, and secondary hyperparameter per cross validation, we provide a plot of Average Performance Metrics Vs. Threshold, a Precision-Recall Curve, an ROC curve, and a data frame of optimal performance metrics per cross validation. We also provide a plot of Performance Metrics vs. Threshold, a Precision-Recall Curve, an ROC curve, and a data frame of optimal performance metrics per validation / holdout testing.
+
+Big picture:
+
+- Accuracy decreases across KNN CV, SVMWLK CV, RF CV, KNN HT, LR CV, QDA CV, RF HT, LR HT, SVMWLK HT, LRR CV, QDA HT, LRR HT, LDA CV, LDA HT.
+- F1 measure decreases across KNN CV, SVMWLK CV, RF CV, LR CV, QDA CV, LRR CV, LDA CV, LRR HT, LR HT, SVMWLK HT, KNN HT, RF HT, LDA HT, QDA HT.
+- PPV decreases across LRR CV, QDA CV, RF CV, SVMWLK CV, KNN CV, LR CV, LRR HT, RF HT, LR HT, LDA CV, LDA HT, QDA HT, SVMWLK HT, KNN HT.
+- TPR decreases across SVMWLK HT, LR HT, LRR HT, SVMWLK CV, RF CV, KNN CV, LR CV, QDA CV, LDA CV, LRR CV, KNN HT, LDA HT, RF HT, QDA HT.
+- PR AUC decreases across LR CV (0.984), SVMWLK CV (0.984), RF CV (0.984), LRR CV (0.982), KNN CV (0.979), LRR HT (0.963), QDA CV (0.959), LR HT (0.918), SVMWLK HT (0.917), LDA CV (0.905), LDA HT (0.739), RF HT (0.710), KNN HT (0.669), QDA HT (0.504).
+- ROC AUC decreases across LRR HT (0.9996), LRR CV (0.9992), LR CV (0.9992), SVMWLK HT (0.9991), LR HT (0.9991), SVMWLK CV (0.998), KNN CV (0.994), RF CV (0.9939), QDA CV (0.985), RF HT (0.979), LDA HT (0.953), LDA CV (0.950), KNN HT (0.933), QDA HT (0.786).
 
 #### Logistic Regression Classifiers
 
@@ -509,15 +526,6 @@ Per LR holdout testing:
 - TPR is $L$-shaped.
 - A Precision-Recall curve has an AUC of $0.918$.
 - An ROC curve has an AUC of $0.99909$.
-
-Bigger picture:
-
-- Accuracy per LR cross validation is greater than accuracy per LR holdout testing.
-- F1 measure per LR cross validation is greater than F1 measure per LR holdout testing.
-- PPV per LR cross validation is greater than PPV per LR holdout testing.
-- TPR per LR holdout testing is greater than TPR per LR cross validation.
-- PR AUC for LR cross validation is greater than PR AUC for LR holdout testing.
-- ROC AUC for LR cross validation is greater than ROC AUC for LR holdout testing.
 
 ![Average Performance Metrics Vs. Threshold: Cross Validation: LR](Average_Performance_Metrics_Vs_Threshold--Cross_Validation--LR.png){#id .class height=25%}
 ![Optimal Performance Metrics: Cross Validation: LR](Optimal_Performance_Metrics--Cross_Validation--LR.png){#id .class height=25%}
@@ -596,15 +604,6 @@ Per LRR holdout testing:
 - TPR is $L$-shaped.
 - A Precision-Recall curve has an AUC of $0.963$.
 - An ROC curve has an AUC of $0.9996$.
-
-Bigger picture:
-
-- Accuracy decreases across LR CV, LR HT, LRR CV, LRR HT.
-- F1 measure decreases across LR CV, LRR CV, LRR HT, LR HT.
-- PPV decreases across LRR CV, LR CV, LRR HT, LR HT.
-- TPR decreases across LR HT, LRR HT, LR CV, LRR CV.
-- PR AUC decreases across LR CV, LRR CV, LRR HT, LR HT.
-- ROC AUC decreases across LRR HT, LRR CV, LR CV, LR HT.
 
 ![Average Performance Metrics Vs. Threshold: Cross Validation: LRR](Average_Performance_Metrics_Vs_Threshold--Cross_Validation--LRR.png){#id .class height=25%}
 ![Optimal Performance Metrics: Cross Validation: LRR](Optimal_Performance_Metrics--Cross_Validation--LRR.png){#id .class height=25%}
@@ -724,15 +723,6 @@ Per LDA holdout testing:
 - A Precision-Recall curve has an AUC of $0.739$.
 - An ROC curve has an AUC of $0.953$.
 
-Bigger picture:
-
-- Accuracy decreases across LR CV, LR HT, LRR CV, LRR HT, LDA CV, LDA HT.
-- F1 measure decreases across LR CV, LRR CV, LDA CV, LRR HT, LR HT, LDA HT.
-- PPV decreases across LRR CV, LR CV, LRR HT, LR HT, LDA CV, LDA HT.
-- TPR decreases across LR HT, LRR HT, LR CV, LDA CV, LRR CV, LDA HT.
-- PR AUC decreases across LR CV, LRR CV, LRR HT, LR HT, LDA CV, LDA HT.
-- ROC AUC decreases across LRR HT, LRR CV, LR CV, LR HT, LDA HT, LDA CV.
-
 ![Average Performance Metrics Vs. Threshold: Cross Validation: LDA](Average_Performance_Metrics_Vs_Threshold--Cross_Validation--LDA.png){#id .class height=25%}
 ![Optimal Performance Metrics: Cross Validation: LDA](Optimal_Performance_Metrics--Cross_Validation--LDA.png){#id .class height=25%}
 
@@ -804,15 +794,6 @@ Per QDA holdout testing:
 - A Precision-Recall curve has an AUC of $0.504$.
 - An ROC curve has an AUC of $0.786$.
 
-Bigger picture:
-
-- Accuracy decreases across LR CV, QDA CV, LR HT, LRR CV, QDA HT, LRR HT, LDA CV, LDA HT.
-- F1 measure decreases across LR CV, QDA CV, LRR CV, LDA CV, LRR HT, LR HT, LDA HT, QDA HT.
-- PPV decreases across LRR CV, QDA CV, LR CV, LRR HT, LR HT, LDA CV, LDA HT, QDA HT.
-- TPR decreases across LR HT, LRR HT, LR CV, QDA CV, LDA CV, LRR CV, LDA HT, QDA HT.
-- PR AUC decreases across LR CV, LRR CV, LRR HT, QDA CV, LR HT, LDA CV, LDA HT, QDA HT.
-- ROC AUC decreases across LRR HT, LRR CV, LR CV, LR HT, QDA CV, LDA HT, LDA CV, QDA HT.
-
 ![Average Performance Metrics Vs. Threshold: Cross Validation: QDA](Average_Performance_Metrics_Vs_Threshold--Cross_Validation--QDA.png){#id .class height=25%}
 ![Optimal Performance Metrics: Cross Validation: QDA](Optimal_Performance_Metrics--Cross_Validation--QDA.png){#id .class height=25%}
 
@@ -864,6 +845,7 @@ t(list_of_visualizations_of_performance_metrics$data_frame_of_optimal_performanc
 Per KNN cross validation:
 
 - Our optimal KNN classifier has formula $Indicator \sim normalize(Red : Blue) + normalize(Red) + normalize[\ln(Green)]$.
+- Our optimal value for $K$ is $3$.
 - The maximum average F1 measure is $0.954$.
 - The corresponding threshold is $0.34$.
 - Average accuracy increases by $1$ small step and is nearly $1$ for $92$ percent of thresholds.
@@ -884,15 +866,6 @@ Per KNN holdout testing:
 - A Precision-Recall curve has an AUC of $0.628$.
 - An ROC curve has an AUC of $0.901$.
 
-Bigger picture:
-
-- Accuracy decreases across KNN CV, KNN HT, LR CV, QDA CV, LR HT, LRR CV, QDA HT, LRR HT, LDA CV, LDA HT.
-- F1 measure decreases across KNN CV, LR CV, QDA CV, LRR CV, LDA CV, LRR HT, LR HT, KNN HT, LDA HT, QDA HT.
-- PPV decreases across LRR CV, QDA CV, KNN CV, LR CV, LRR HT, LR HT, LDA CV, LDA HT, QDA HT, KNN HT.
-- TPR decreases across LR HT, LRR HT, KNN CV, LR CV, QDA CV, LDA CV, LRR CV, KNN HT, LDA HT, QDA HT.
-- PR AUC decreases across LR CV, LRR CV, KNN CV, LRR HT, QDA CV, LR HT, LDA CV, LDA HT, KNN HT, QDA HT.
-- ROC AUC decreases across LRR HT, LRR CV, LR CV, LR HT, KNN CV, QDA CV, LDA HT, LDA CV, KNN HT, QDA HT.
-
 ![Average Performance Metrics Vs. Threshold: Cross Validation: KNN](Average_Performance_Metrics_Vs_Threshold--Cross_Validation--KNN.png){#id .class height=25%}
 ![Optimal Performance Metrics: Cross Validation: KNN](Optimal_Performance_Metrics--Cross_Validation--KNN.png){#id .class height=25%}
 
@@ -907,6 +880,7 @@ Bigger picture:
 library(TomLeversRPackage)
 type_of_model <- "KNN"
 formula <- Indicator ~ Normalized_Interaction_Of_Red_And_Blue + Normalized_Red + Normalized_Natural_Logarithm_Of_Green
+set.seed(1)
 summary_of_performance <- summarize_performance_of_cross_validated_classifiers(
     type_of_model = type_of_model,
     formula = formula,
@@ -927,7 +901,7 @@ list_of_visualizations_of_performance_metrics <- visualize_performance_metrics(
     testing_data = holdout_data_frame_of_indicators_and_pixels,
     training_data = training_data_frame_of_indicators_and_pixels,
     type_of_model = type_of_model,
-    list_of_hyperparameters = list(K = 1)
+    list_of_hyperparameters = list(K = 3)
 )
 list_of_visualizations_of_performance_metrics$plot_of_performance_metrics_vs_threshold
 ```
@@ -943,6 +917,8 @@ t(list_of_visualizations_of_performance_metrics$data_frame_of_optimal_performanc
 Per RF cross validation:
 
 - Our optimal RF has formula $Indicator \sim normalize\left(Red^2\right) + normalize(Red:Green) + normalize(Green : Blue) + normalize(Green)$.
+- Our optimal value for $mtry$ is $1$.
+- Our optimal value for $ntree$ is $52$.
 - The maximum average F1 measure is $0.953$.
 - The corresponding threshold is $0.39$.
 - Average accuracy is $U$-shaped and is nearly $1$ for $82$ percent of thresholds.
@@ -962,15 +938,6 @@ Per RF holdout testing:
 - TPR decreases by $3$ or $4$ steps.
 - A Precision-Recall curve has an AUC of $0.710$.
 - An ROC curve has an AUC of $0.979$.
-
-Bigger picture:
-
-- Accuracy decreases across KNN CV, RF CV, KNN HT, LR CV, QDA CV, RF HT, LR HT, LRR CV, QDA HT, LRR HT, LDA CV, LDA HT.
-- F1 measure decreases across KNN CV, RF CV, LR CV, QDA CV, LRR CV, LDA CV, LRR HT, LR HT, KNN HT, RF HT, LDA HT, QDA HT.
-- PPV decreases across LRR CV, QDA CV, RF CV, KNN CV, LR CV, LRR HT, RF HT, LR HT, LDA CV, LDA HT, QDA HT, KNN HT.
-- TPR decreases across LR HT, LRR HT, RF CV, KNN CV, LR CV, QDA CV, LDA CV, LRR CV, KNN HT, LDA HT, RF HT, QDA HT.
-- PR AUC decreases across LR CV, RF CV, LRR CV, KNN CV, LRR HT, QDA CV, LR HT, LDA CV, LDA HT, RF HT, KNN HT, QDA HT.
-- ROC AUC decreases across LRR HT, RF CV, LRR CV, LR CV, LR HT, KNN CV, QDA CV, RF HT, LDA HT, LDA CV, KNN HT, QDA HT.
 
 ![Average Performance Metrics Vs. Threshold: Cross Validation: RF](Average_Performance_Metrics_Vs_Threshold--Cross_Validation--RF.png){#id .class height=25%}
 ![Optimal Performance Metrics: Cross Validation: RF](Optimal_Performance_Metrics--Cross_Validation--RF.png){#id .class height=25%}
@@ -1008,6 +975,78 @@ list_of_visualizations_of_performance_metrics <- visualize_performance_metrics(
     training_data = training_data_frame_of_indicators_and_pixels,
     type_of_model = type_of_model,
     list_of_hyperparameters = list(mtry = 1, ntree = 52)
+)
+list_of_visualizations_of_performance_metrics$plot_of_performance_metrics_vs_threshold
+```
+
+```{r, eval = FALSE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold"}
+list_of_visualizations_of_performance_metrics$PR_curve
+list_of_visualizations_of_performance_metrics$ROC_curve
+t(list_of_visualizations_of_performance_metrics$data_frame_of_optimal_performance_metrics)
+```
+
+#### Support-Vector Machines With Linear Kernels
+
+Per SVMWLK cross validation:
+
+- Our optimal RF has formula $Indicator \sim normalize\left(Red^2\right) + normalize(Red:Green) + normalize(Green : Blue) + normalize(Green)$.
+- Our optimal value for $C$ is $10$.
+- The maximum average F1 measure is $0.953$.
+- The corresponding threshold is $0.39$.
+- Average accuracy is $U$-shaped and is nearly $1$ for $82$ percent of thresholds.
+- Average F1 measure is $U$-shaped and is nearly $0.953$ for $35$ percent of thresholds.
+- Average PPV increases logarithmically.
+- Average TPR decreases logarithmically.
+- A Precision-Recall curve has an AUC of $0.984$.
+- An ROC curve has an AUC of $0.994$.
+
+Per SVMWLK holdout testing:
+
+- Our optimal RF has a maximum F1 measure of $0.692$.
+- The corresponding threshold is $0.49$.
+- Accuracy increases as a cantilever and is nearly $1$ for $75$ percent of thresholds.
+- F1 measure is $U$-shaped and is nearly $0.692$ for less than $35$ percent of thresholds.
+- PPV increases linearly with a few terraces.
+- TPR decreases by $3$ or $4$ steps.
+- A Precision-Recall curve has an AUC of $0.710$.
+- An ROC curve has an AUC of $0.979$.
+
+![Average Performance Metrics Vs. Threshold: Cross Validation: SVMWLK](Average_Performance_Metrics_Vs_Threshold--Cross_Validation--SVMWLK.png){#id .class height=25%}
+![Optimal Performance Metrics: Cross Validation: SVMWLK](Optimal_Performance_Metrics--Cross_Validation--SVMWLK.png){#id .class height=25%}
+
+![PR And ROC Curves: Cross Validation: SVMWLK](PR_And_ROC_Curves--Cross_Validation--SVMWLK.png){#id .class height=19%}
+
+![Performance Metrics Vs. Threshold: Holdout Testing: SVMWLK](Performance_Metrics_Vs_Threshold--Holdout_Testing--SVMWLK.png){#id .class height=25%}
+![Optimal Performance Metrics: Holdout Testing: SVMWLK](Optimal_Performance_Metrics--Holdout_Testing--SVMWLK.png){#id .class height=12%}
+
+![PR And ROC Curves: Holdout Testing: SVMWLK](PR_And_ROC_Curves--Holdout_Testing--SVMWLK.png){#id .class height=19%}
+
+```{r, eval = FALSE}
+library(TomLeversRPackage)
+type_of_model <- "Support-Vector Machine With Linear Kernel"
+formula <- Indicator ~ Normalized_Red + Normalized_Square_Of_Green + Normalized_Blue + Normalized_Square_Of_Blue + Normalized_Square_Root_Of_Red + Normalized_Square_Root_Of_Blue
+set.seed(1)
+summary_of_performance <- summarize_performance_of_cross_validated_classifiers(
+    type_of_model = type_of_model,
+    formula = formula,
+    data_frame = training_data_frame_of_indicators_and_pixels
+)
+summary_of_performance$plot_of_performance_metrics_vs_threshold
+```
+
+```{r, eval = FALSE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold"}
+summary_of_performance$PR_curve
+summary_of_performance$ROC_curve
+t(summary_of_performance$data_frame_of_optimal_performance_metrics)
+```
+
+```{r, eval = FALSE}
+list_of_visualizations_of_performance_metrics <- visualize_performance_metrics(
+    formula = formula,
+    testing_data = holdout_data_frame_of_indicators_and_pixels,
+    training_data = training_data_frame_of_indicators_and_pixels,
+    type_of_model = type_of_model,
+    list_of_hyperparameters = list(cost = 10)
 )
 list_of_visualizations_of_performance_metrics$plot_of_performance_metrics_vs_threshold
 ```
