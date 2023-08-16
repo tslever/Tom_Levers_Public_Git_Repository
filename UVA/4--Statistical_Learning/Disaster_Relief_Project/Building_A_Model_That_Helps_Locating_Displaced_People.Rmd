@@ -993,7 +993,7 @@ Per SVMWLK cross validation:
 - Our optimal RF has formula $Indicator \sim normalize\left(Red^2\right) + normalize(Red:Green) + normalize(Green : Blue) + normalize(Green)$.
 - Our optimal value for $C$ is $10$.
 - The maximum average F1 measure is $0.953$.
-- The corresponding threshold is $0.39$.
+- The corresponding threshold is $0.15$.
 - Average accuracy is $U$-shaped and is nearly $1$ for $82$ percent of thresholds.
 - Average F1 measure is $U$-shaped and is nearly $0.953$ for $35$ percent of thresholds.
 - Average PPV increases logarithmically.
