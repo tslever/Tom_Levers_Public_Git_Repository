@@ -942,35 +942,35 @@ t(list_of_visualizations_of_performance_metrics$data_frame_of_optimal_performanc
 
 Per RF cross validation:
 
-- Our optimal KNN classifier has formula $Indicator \sim normalize(Red : Blue) + normalize(Red) + normalize[\ln(Green)]$.
-- The maximum average F1 measure is $0.954$.
-- The corresponding threshold is $0.34$.
-- Average accuracy increases by $1$ small step and is nearly $1$ for $92$ percent of thresholds.
-- Average F1 measure increases by $1$ step and is nearly $0.954$ for $92$ percent of thresholds.
-- Average PPV increases by $3$ steps.
-- Average TPR decreases by $3$ steps.
-- A Precision-Recall curve has an AUC of $0.980$.
-- An ROC curve has an AUC of $0.996$.
+- Our optimal RF has formula $Indicator \sim normalize\left(Red^2\right) + normalize(Red:Green) + normalize(Green : Blue) + normalize(Green)$.
+- The maximum average F1 measure is $0.953$.
+- The corresponding threshold is $0.39$.
+- Average accuracy is $U$-shaped and is nearly $1$ for $82$ percent of thresholds.
+- Average F1 measure is $U$-shaped and is nearly $0.953$ for $35$ percent of thresholds.
+- Average PPV increases logarithmically.
+- Average TPR decreases logarithmically.
+- A Precision-Recall curve has an AUC of $0.984$.
+- An ROC curve has an AUC of $0.994$.
 
 Per RF holdout testing:
 
-- Our optimal KNN classifier has a maximum F1 measure of $0.610$.
-- The corresponding threshold is $0.5$.
-- Accuracy increases by $1$ small step and is nearly $1$ for $92$ percent of thresholds.
-- F1 measure increases by $1$ step and is nearly $0.610$ for $92$ percent of thresholds.
-- PPV increases by $1$ step and is nearly $0.491$ for $92$ percent of thresholds.
-- TPR decreases by $1$ small step and is nearly $0.804$ for $92$ percent of thresholds.
-- A Precision-Recall curve has an AUC of $0.628$.
-- An ROC curve has an AUC of $0.901$.
+- Our optimal RF has a maximum F1 measure of $0.692$.
+- The corresponding threshold is $0.49$.
+- Accuracy increases as a cantilever and is nearly $1$ for $75$ percent of thresholds.
+- F1 measure is $U$-shaped and is nearly $0.692$ for less than $35$ percent of thresholds.
+- PPV increases linearly with a few terraces.
+- TPR decreases by $3$ or $4$ steps.
+- A Precision-Recall curve has an AUC of $0.710$.
+- An ROC curve has an AUC of $0.979$.
 
 Bigger picture:
 
-- Accuracy decreases across KNN CV, KNN HT, LR CV, QDA CV, LR HT, LRR CV, QDA HT, LRR HT, LDA CV, LDA HT.
-- F1 measure decreases across KNN CV, LR CV, QDA CV, LRR CV, LDA CV, LRR HT, LR HT, KNN HT, LDA HT, QDA HT.
-- PPV decreases across LRR CV, QDA CV, KNN CV, LR CV, LRR HT, LR HT, LDA CV, LDA HT, QDA HT, KNN HT.
-- TPR decreases across LR HT, LRR HT, KNN CV, LR CV, QDA CV, LDA CV, LRR CV, KNN HT, LDA HT, QDA HT.
-- PR AUC decreases across LR CV, LRR CV, KNN CV, LRR HT, QDA CV, LR HT, LDA CV, LDA HT, KNN HT, QDA HT.
-- ROC AUC decreases across LRR HT, LRR CV, LR CV, LR HT, KNN CV, QDA CV, LDA HT, LDA CV, KNN HT, QDA HT.
+- Accuracy decreases across KNN CV, RF CV, KNN HT, LR CV, QDA CV, RF HT, LR HT, LRR CV, QDA HT, LRR HT, LDA CV, LDA HT.
+- F1 measure decreases across KNN CV, RF CV, LR CV, QDA CV, LRR CV, LDA CV, LRR HT, LR HT, KNN HT, RF HT, LDA HT, QDA HT.
+- PPV decreases across LRR CV, QDA CV, RF CV, KNN CV, LR CV, LRR HT, RF HT, LR HT, LDA CV, LDA HT, QDA HT, KNN HT.
+- TPR decreases across LR HT, LRR HT, RF CV, KNN CV, LR CV, QDA CV, LDA CV, LRR CV, KNN HT, LDA HT, RF HT, QDA HT.
+- PR AUC decreases across LR CV, RF CV, LRR CV, KNN CV, LRR HT, QDA CV, LR HT, LDA CV, LDA HT, RF HT, KNN HT, QDA HT.
+- ROC AUC decreases across LRR HT, RF CV, LRR CV, LR CV, LR HT, KNN CV, QDA CV, RF HT, LDA HT, LDA CV, KNN HT, QDA HT.
 
 ![Average Performance Metrics Vs. Threshold: Cross Validation: RF](Average_Performance_Metrics_Vs_Threshold--Cross_Validation--RF.png){#id .class height=25%}
 ![Optimal Performance Metrics: Cross Validation: RF](Optimal_Performance_Metrics--Cross_Validation--RF.png){#id .class height=25%}
