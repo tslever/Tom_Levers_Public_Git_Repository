@@ -23,7 +23,7 @@ calculate_probability_for_randomization_test <- function(
   average_maximum_F1_measure_for_Logistic_Regression -
   average_maximum_F1_measure_for_KNN
  count <- 0
- number_of_iterations <- 100
+ number_of_iterations <- 200
  number_of_folds <- nrow(data_frame_of_fold_ids_and_maximum_F1_measures)
  for (i in 1:number_of_iterations) {
   data_frame_with_swapped_maximum_F1_measures <-

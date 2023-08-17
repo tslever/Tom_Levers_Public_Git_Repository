@@ -1,7 +1,7 @@
 ---
-title: "Building A Model That Helps Locating Displaced People"
+title: "Building A Binary Classifier That Helps Locating Displaced People"
 author: "Tom Lever"
-date: 08/14/2023
+date: 08/16/2023
 output:
   pdf_document: default
   html_document: default
@@ -29,7 +29,7 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-In this project, we build a model that would help us locate people displaced by the earthquake in Haiti in $2010$. More specifically, we build in a timely manner an accurate model that classifies pixels in geo-referenced aerial images of Haiti in $2010$ as depicting blue tarps or depicting objects that are not blue tarps. People whose homes were destroyed by the earthquake often created temporary shelters using blue tarps. Blue tarps were good indicators of where displaced people lived.
+In this project, we build a binary classifier that would help us locate people displaced by the earthquake in Haiti in $2010$. More specifically, we build in a timely manner an accurate model that classifies pixels in geo-referenced aerial images of Haiti in $2010$ as depicting blue tarps or depicting objects that are not blue tarps. People whose homes were destroyed by the earthquake often created temporary shelters using blue tarps. Blue tarps were good indicators of where displaced people lived.
 
 # Data
 
@@ -37,11 +37,7 @@ Our training and holdout data were collected likely by applying a Region Of Inte
 
 ![Orthorectified Image Of Haiti In 2010](Screenshot_Of_Orthorectified_Image_Of_Haiti_In_2010.png){#id .class height=25%}
 
-According to [What is orthorectified imagery?](https://www.esri.com/about/newsroom/insider/what-is-orthorectified-imagery/), an orthorectified image is an accurately georeferenced image that has been processed so that all pixels are in an accurate $(x, y)$ position on the ground. Orthorectified images have been processed to apply corrections for optical distortions from the sensor system, and apparent changes in the position of ground objects caused by the perspective of the sensor view angle and ground terrain.
-
-Our training data is sourced from a CSV file like `HaitiPixels.csv` at [Pixel Values from Images over Haiti](https://www.kaggle.com/datasets/billbasener/pixel-values-from-images-over-haiti?datasetId=1899167). Our training data consists of $63,241$ observations. Each training observation consists of a class in the set $\{Vegetation, \ Soil, \ Rooftop, \ Various \ Non-Tarp, \ Blue \ Tarp\}$ and a pixel. A pixel is a colored dot. A pixel is represented by a tuple of intensities of color $Red$, $Green$, and $Blue$ in the range $0$ to $255$. See below first and last two rows of our training data.
-
-![Training Data](Training_Data.png)
+Our training data is sourced from a CSV file like `HaitiPixels.csv` at [Pixel Values from Images over Haiti](https://www.kaggle.com/datasets/billbasener/pixel-values-from-images-over-haiti?datasetId=1899167). Our training data consists of $63,241$ observations. Each training observation consists of a class in the set $\{Vegetation, \ Soil, \ Rooftop, \ Various \ Non-Tarp, \ Blue \ Tarp\}$ and a pixel. A pixel is a colored dot. A pixel is represented by a tuple of intensities of color $Red$, $Green$, and $Blue$ in the range $0$ to $255$.
 
 ```{r, eval = FALSE}
 training_data_frame_of_classes_and_pixels <- read.csv(
@@ -53,7 +49,7 @@ rbind(
 )
 ```
 
-We conduct exploratory data analysis by considering the distributions of intensities of color $Red$, $Green$, and $Blue$ in our training data. The distribution of intensity of color $Red$ is normal except for a relatively high proportion of high intensities. The distributions of intensity of colors $Green$ and $Blue$ each have two hills and are not normal.
+We conduct exploratory data analysis by considering the distributions of intensities of color $Red$, $Green$, and $Blue$ in our training data. The distribution of intensity of color $Red$ has a hill, some foothills, and a relatively high proportion of high intensities. The distributions of intensity of colors $Green$ and $Blue$ each have two hills and are not normal.
 
 Please explore [TomLeversRPackage](https://github.com/tslever/Tom_Levers_Public_Git_Repository/tree/main/R/TomLeversRPackage).
 
@@ -115,9 +111,7 @@ at [Pixel Values from Images over Haiti](https://www.kaggle.com/datasets/billbas
 
 - `orthovnir078_ROI_Blue_Tarps.txt`
 
-`orthovnir067_ROI_Blue_Tarps_data.txt` from Dr. Gedeck is a duplicate of `orthovnir067_ROI_Blue_Tarps.txt`. Each holdout observation consists of a class in the set $\{Not \ Blue \ Tarp, \ Blue \ Tarp\}$ and a pixel. The class of an observation is determined according to the name of the source of that observation. See below first and last two rows of our holdout data.
-
-![Holdout Data](Holdout_Data.png)
+`orthovnir067_ROI_Blue_Tarps_data.txt` from Dr. Gedeck is a duplicate of `orthovnir067_ROI_Blue_Tarps.txt`. Each holdout observation consists of a class in the set $\{Not \ Blue \ Tarp, \ Blue \ Tarp\}$ and a pixel. The class of an observation is determined according to the name of the source of that observation.
 
 ```{r, eval = FALSE}
 holdout_data_frame_of_classes_and_pixels <- read.csv(
@@ -191,7 +185,7 @@ webshot2::webshot(
 )
 ```
 
-The proportion of training observations that correspond to blue tarps is about $4.4$ times the proportion of holdout observations that correspond to blue tarps.
+The proportion of training observations that correspond to blue tarps (0.032) is about $4.4$ times the proportion of holdout observations that correspond to blue tarps (0.007).
 
 ```{r, eval = FALSE}
 number_of_training_observations_corresponding_to_blue_tarps <- nrow(
@@ -207,14 +201,16 @@ number_of_holdout_observations_corresponding_to_blue_tarps <- nrow(
 proportion_of_training_observations_that_correspond_to_blue_tarps <- 
     number_of_training_observations_corresponding_to_blue_tarps /
     number_of_training_observations
+proportion_of_training_observations_that_correspond_to_blue_tarps
 proportion_of_holdout_observations_that_correspond_to_blue_tarps <-
     number_of_holdout_observations_corresponding_to_blue_tarps /
     number_of_holdout_observations
+proportion_of_holdout_observations_that_correspond_to_blue_tarps
 proportion_of_training_observations_that_correspond_to_blue_tarps /
     proportion_of_holdout_observations_that_correspond_to_blue_tarps
 ```
 
-We expect that, due to differences in our training and holdout distributions, a binary classifier trained on our training data and validated on our holdout data will have a maximum F1 measure that is less than that of a classifier cross validated on our training data. We recommend training on our composite data or training on $90$ percent of our composite data and validating on the other $10$ percent. By training on our composite data our classifiers will become more realistic and robust and our validation results will align with our cross-validation results.
+We expect that, due to differences in our training and holdout distributions, a binary classifier trained on our training data and holdout tested on our holdout data will have a maximum F1 measure that is less than that of a classifier cross validated on our training data. We recommend cross validating on our composite data or cross validating on $90$ percent of our composite data and holdout testing on the other $10$ percent. By training on our composite data our classifiers will become more realistic and robust and our holdout testing results will align with our cross-validation results.
 
 # Methods
 
@@ -224,9 +220,11 @@ Since the intensity space for pixels representing blue tarps is distinct from th
 
 ## Choosing A Performance Metric
 
-A threshold is a probability. A model classifies a pixel as representing a blue tarp if the probability that the pixel represents a blue tarp that the model predicts is greater than the threshold. False Positive Rate (FPR) is the ratio of false positives to actual negatives. Precision / Positive Predictive Value (PPV) is the ratio of true positives to predicted positives. Recall / True Positive Rate (TPR) is the ratio of true positives to actual positives. An F1 measure is the harmonic mean of PPV and TPR. A decimal of true positives is the ratio of number of true positives to total number of predictions. All of these quantities lie between $0$ and $1$.
+A threshold is a probability. A model classifies a pixel as representing a blue tarp if the probability that the pixel represents a blue tarp that the model predicts is greater than the threshold. Recall / True Positive Rate (TPR) is the ratio of true positives to actual positives. False Positive Rate (FPR) is the ratio of false positives to actual negatives. Precision / Positive Predictive Value (PPV) is the ratio of true positives to predicted positives. An F1 measure is the harmonic mean of PPV and TPR. A decimal of true positives is the ratio of number of true positives to total number of predictions. All of these quantities lie between $0$ and $1$.
 
-Receiver Operator Characteristic (ROC) graphs are graphs of TPR Vs. FPR for different thresholds. According to [ROC and AUC, Clearly Explained!](https://www.youtube.com/watch?v=4jRBRDbJemM), the Area Under The Curve (AUC) of an ROC graph "makes it easy to compare one ROC curve to another" and to compare one binary classifier to another. If the AUC for one ROC curve is greater than the AUC for another ROC curve, the classifier with the former ROC curve is better than the classifier with the latter ROC curve. A given classifier's threshold may be tuned so that its FPR is close to $0$ and its TPR is close to $1$. We may consider maximizing ROC AUC among classifiers and tuning a classifier's threshold to minimize the distance between the corresponding point (FPR, TPR) and (0, 1).
+According to [Mr. Allwright](https://stephenallwright.com/f1-score-vs-accuracy/), "Accuracy is a simple and widely understood error metric whose score ranges from $0$% to $100$%, where $100$% is a perfect score and $0$% is the worst. It is calculated as the number of correct predictions" divided by the number of total predictions. "This simplicity creates problems when the classes are imbalanced as a model which only predicts for the majority class will seem to be performing well according to its accuracy score... Accuracy does not perform well on imbalanced datasets which often leads to misleading results... Accuracy should be used when the dataset is balanced or when communicating the results to end users is important."
+
+Receiver Operator Characteristic (ROC) graphs are graphs of TPR Vs. FPR for different thresholds. According to [ROC and AUC, Clearly Explained!](https://www.youtube.com/watch?v=4jRBRDbJemM), the Area Under The Curve (AUC) of an ROC graph "makes it easy to compare one ROC curve to another" and to compare one binary classifier to another. If the AUC for one ROC curve is greater than the AUC for another ROC curve, the classifier with the former ROC curve is better than the classifier with the latter ROC curve. A given classifier's threshold may be tuned so that its FPR is close to $0$ and its TPR is close to $1$. We may consider maximizing ROC AUC among classifiers and tuning a classifier's threshold to minimize the distance between the corresponding point (FPR, TPR) and (0, 1). According to [Data Scientist Stephen Allwright](https://stephenallwright.com/f1-score-vs-auc/), ROC "[AUC] does not perform well on imbalanced datasets which often leads to misleading results... AUC shoud be used when you have a balanced dataset."
 
 "People often replace the False Positive Rate with Precision... If there were lots of samples that were not [Blue Tarps] relative to the number of [Blue Tarp] samples, then Precision might be more useful than the False Positive Rate. This is because Precision does not include the number of True Negatives in its calculation, and is not effected by the imbalance. In practice, this sort of imbalance occurs when studying a rare [occurrence]. In this case, the study will contain many more [pixels not corresponding to blue tarps than corresponding to blue tarps]. We may consider maximizing PR AUC among classifiers and tuning a classifier's threshold to minimize the distance between the corresponding point (TPR, PR) and (1, 1).
 
@@ -242,7 +240,7 @@ $$F1 = \frac{2}{\frac{1}{P} + \frac{1}{R}}$$
 
 If recall has more weight than precision, then a weighted harmonic mean is needed. This weighted harmonic mean is
 $$F_{w_P, \ w_R} = \frac{w_P + w_R}{\frac{w_P}{P} + \frac{w_R}{R}}$$
-When searching for our optimal binary classifier, we choose as our optimal binary classifier the binary classifier with the highest F1 measure and $F_{w_P = 1, \ w_R = 1}$.
+When searching for an optimal binary classifier of a given type, we choose as our optimal binary classifier of that type the binary classifier with the highest F1 measure and $F_{w_P = 1, \ w_R = 1}$.
 
 Regarding the weight of PPV and the weight of TPR, we prioritize TPR at least as much as PPV. We prioritize identifying as many pixels corresponding to blue tarps correctly as possible at least as much as having predictions that pixels correspond to blue tarps be correct. As we move toward providing resources for refugees, we may wish to prioritize identifying as many pixels corresponding to blue tarps as possible more than having predictions that pixels correspond to blue tarps be correct.
 
@@ -250,9 +248,17 @@ Regarding the weight of PPV and the weight of TPR, we prioritize TPR at least as
 
 In order to build binary classifiers, we create a composite data frame of our training data and our holdout data; substitute a column of classes for a column of indicators of whether of not a pixel depicts a blue tarp; add columns corresponding to normalized intensities and intensities normalized after transforming by the natural logarithm, the square root, the square, and interactions; and divide the composite data frame into training and holdout data frames again. We normalize as opposed to standardize intensities given that distributions of intensity are not normal. We shuffle our training and holdout data. See below the first observation in our training data frame of indicators and pixels.
 
+## Grid Search
+
+### Dimensions
+
+#### First Dimension: Type Of Classifier
+
+We conduct a grid search for an optimal binary classifier. The first dimension of our grid is type of classifier. We compare Logistic Regression (LR) classifiers, Logistic Ridge Regression (LRR) classifiers, Linear Discriminant Analyses (LDA's), Quadratic Discriminant Analyses (QDA's), K Nearest Neighbors (KNN) classifiers, Random Forests (RF's), Support-Vector Machines With Linear Kernel (SVMWLK's), Support-Vector Machines With Polynomial Kernel (SVMWPK's), and Support-Vector Machines With Radial Kernel (SVMWRK's). Generally speaking, LR classifiers, LRR classifiers, LDA's, and QDA's are relatively inflexible with high bias and low variance; KNN classifiers, RF's, and SVMWLK's are relatively flexible with low bias and high variance. KNN classifiers may be flexible when $K$ is approximately $1$ or inflexible as $K$ approaches the number of observations in our training data.
+
 ![First Observation In Training Data Frame Of Indicators And Pixels](First_Observation_In_Training_Data_Frame_Of_Indicators_And_Pixels.png)
 
-```{r, eval = TRUE}
+```{r, eval = FALSE}
 training_data_frame_of_indicators_and_pixels <- NULL
 holdout_data_frame_of_indicators_and_pixels <- NULL
 should_generate_training_and_holdout_data_frames_of_indicators_and_pixels <- FALSE
@@ -353,14 +359,6 @@ if (should_generate_training_and_holdout_data_frames_of_indicators_and_pixels) {
 t(training_data_frame_of_indicators_and_pixels[1, ])
 ```
 
-## Grid Search
-
-### Dimensions
-
-#### First Dimension: Type Of Classifier
-
-We conduct a grid search for an optimal binary classifier according to the F1 measure. The first dimension of our grid is type of classifier. We compare Logistic Regression (LR) classifiers, Logistic Ridge Regression (LRR) classifiers, Linear Discriminant Analyses (LDA), Quadratic Discriminant Analyses (QDA), K Nearest Neighbors (KNN) classifiers, Random Forests (RF), Support-Vector Machines With Linear Kernel (SVMWLK), Support-Vector Machines With Polynomial Kernel (SVMWPK), and Support-Vector Machines With Radial Kernel (SVMWRK). Generally speaking, LR classifiers, LRR classifiers, LDA's, and QDA's are relatively inflexible with high bias and low variance; KNN classifiers, RF's, and SVMWLK's are relatively flexible with low bias and high variance. KNN classifiers may be flexible when $K$ is approximately $1$ or inflexible as $K$ approaches the number of observations in our training data.
-
 #### Second Dimension: Set Of Predictive Terms
 
 The second dimension of our grid is set of predictive terms. We consider classifiers with the terms in the above output other than $Indicator$. Per University Of Virginia courses Linear Models For Data Science and Statistical Learning, these predictive terms involve common transformations of predictors.
@@ -373,7 +371,7 @@ For KNN classifiers, the primary hyperparameter is $K$. The class of a test obse
 
 For RF's, the primary hyperparameter is $mtry$, the number of variables randomly sampled as candidates at each split / fraction of features available at each split. According to Dr. Bill Basener, "by selecting only some of the features for each split, we make our trees to be different from each other. We're creating more variety among our trees and are decorrelating the trees... [mtry] is probably the most important parameter... for a random forest. And the way this works: A lower fraction creates more decorrelation among the trees. So the trees are more different. But it also creates lower accuracy in the individual trees because they don't have as many parameters to select from for their classification. And so there's a bit of a tradeoff there."
 
-For SVM's, the primary hyperparameter is cost $C$. According to *An Introduction to Statistical Learning (Second Edition)* (James et al. 2023), "Cost $C$ is a nonnegative tuning parameter... $C$ determines the number and severity of the violations to the margin (and to the hyperplane) that we will tolerate. We can think of $C$ as a budget for the amount that the margin can be violated by the $n$ observations. If $C = 0$ then there is no budget for violations to the margin... For $C > 0$ no more than $C$ observations can be on the wrong side of the hyperplane... As the budget $C$ increases, we become more tolerant of violations to the margin, and so the margin will widen. Conversely, as $C$ decreases, we become less tolerant of violations to the margin and so the margin narrows...
+For SVM's, the primary hyperparameter is cost $C$. According to *An Introduction to Statistical Learning* (Second Edition) (James et al. 2023), "Cost $C$ is a nonnegative tuning parameter... $C$ determines the number and severity of the violations to the margin (and to the hyperplane) that we will tolerate. We can think of $C$ as a budget for the amount that the margin can be violated by the $n$ observations. If $C = 0$ then there is no budget for violations to the margin... For $C > 0$ no more than $C$ observations can be on the wrong side of the hyperplane... As the budget $C$ increases, we become more tolerant of violations to the margin, and so the margin will widen. Conversely, as $C$ decreases, we become less tolerant of violations to the margin and so the margin narrows...
 
 $C$ controls the bias-variance trade-off of a support-vector [machine]. When $C$ is small, we seek narrow margins that are rarely violated; this amounts to a classifier that is highly fit to the data, which may have low bias but high variance. On the other hand, when $C$ is larger, the margin is wide and we allow more violations to it; this amounts to fitting the data less hard and obtaining a classifier that is potentially more biased but may have lower variance...
 
@@ -435,6 +433,8 @@ Our optimal SVMWLK has formula $Indicator \sim normalize(Red) + normalize\left(G
 
 Our optimal SVMWPK has formula $Indicator \sim normalize\left(Blue^2\right) + normalize\left(Red^2\right) + normalize(Green : Blue)$.
 
+Our optimal SVMWRK has formula $Indicator \sim normalize(Blue) + normalize[\ln(Red)] + normalize\left(\sqrt{Green}\right) + normalize[\ln(Blue)]$.
+
 ### Tuning Hyperparameters
 
 #### Logistic Ridge Regression Classifiers
@@ -452,11 +452,11 @@ Unfortunately, `glmnet` chooses a sequence of values of $\lambda$ with a minimum
 
 During bidirectional selection of KNN classifiers, for each formula, we search for one value of hyperparameter $K$ to be used in training a KNN classifier on $9$ cross-validation folds. For our optimal formula, we use `caret::train` to choose $K = 3$ for all of our KNN classifiers. Our inputs include our formula, our training data, the method "knn", the metric "F1_measure", a `trainControl` object, and a data frame containing one row for each value of $K$ to be evaluated. Dr. Gedeck recommended evaluating $K \in [1, 25]$.
 
-See below graph, for our optimal formula, of average F1 measure vs. $K$ for $10$ cross-validated KNN classifiers. `caret::train` chose the value of $K$ corresponding to the maximum average F1 measure. This value of $K$ will be used in training a KNN classifier on $9$ cross-validation folds.
+See above graph, for our optimal formula, of average F1 measure vs. $K$ for $10$ cross-validated KNN classifiers. `caret::train` chose the value of $K$ corresponding to the maximum average F1 measure. This value of $K$ will be used in training a KNN classifier on $9$ cross-validation folds.
 
 #### Random Forest Classifiers
 
-During bidirectional selection of RF classifiers, for each formula, we search for one value of hyperparameter $mtry$ and one value of hyperparameter $ntree$ to be used in training an RF classifier on $9$ cross-validation folds. We create plots of average test error rate vs. $ntree$ for different values of $mtry$. Values of $mtry$ vary from $1$ to the number of predictors in the formula. Values of $ntree$ vary from $1$ to $500$. We choose the values of $mtry$ and $ntree$ corresponding to the minimum test error rate.
+During bidirectional selection of RF classifiers, for each formula, we search for one value of hyperparameter $mtry$ and one value of hyperparameter $ntree$ to be used in training an RF classifier on $9$ cross-validation folds. We create plots of average test error rate vs. $ntree$ for different values of $mtry$. Values of $mtry$ vary from $1$ to the number of predictors in the formula. Values of $ntree$ vary from $1$ to $500$. We choose values $mtry = 1$ and $ntree = 52$ corresponding to the minimum test error rate.
 
 ![Test Error Rate Vs. ntree For Different Values Of mtry](Test_Error_Rate_Vs_ntree_For_Different_Values_Of_mtry.png){#id .class height=25%}
 ![F1 Measure Vs. C](F1_Measure_Vs_C.png){#id .class height=25%}
@@ -465,34 +465,34 @@ During bidirectional selection of RF classifiers, for each formula, we search fo
 
 During bidirectional selection of SVMWLK's, for each formula, we search for one value of hyperparameter $C$ to be used in training a SVMWLK on $9$ cross-validation folds. For our optimal formula, we use `caret::train` to choose $C = 10$ for all of our SVMWLK's. Our inputs include our formula, our training data, the method "svmLinear", the metric "F1_measure", a `trainControl` object, and a data frame containing one row for each value of $C$ to be evaluated. Dr. Gedeck recommended evaluating $C \in \left\{10^{-3}, 10^{-2.75}, \cdots, 10^{2.75}, 10^3\right\}$. Given time limits, we choose $C \in \left\{10^{-1}, 10^0, 10^1\right\}$.
 
-See below graph, for our optimal formula, of average F1 measure vs. $C$ for $10$ cross-validated SVMWLK's. `caret::train` chose the value of $C$ corresponding to the maximum average F1 measure. This value of $C$ will be used in training an SVMWLK on $9$ cross-validation folds.
+See above graph, for our optimal formula, of average F1 measure vs. $C$ for $10$ cross-validated SVMWLK's. `caret::train` chose the value of $C$ corresponding to the maximum average F1 measure. This value of $C$ will be used in training an SVMWLK on $9$ cross-validation folds.
 
 #### Support-Vector Machines With Polynomial Kernels
 
 During bidirectional selection of SVMWPK's, for each formula, we search for one value of hyperparameter $C$ and one value of hyperparameter $d$ to be used in training a SVMWPK on $9$ cross-validation folds. For our optimal formula, we use `caret::train` to choose $C = 10$ and $d = 3$ for all of our SVMWPK's. Our inputs include our formula, our training data, the method "svmPoly", the metric "F1_measure", a `trainControl` object, and a data frame containing one row for each value of $C$ and each value of $d$ to be evaluated. Dr. Gedeck recommended evaluating $C \in \left\{10^{-3}, 10^{-2.75}, \cdots, 10^{2.75}, 10^3\right\}$ and $d \in \{1, 2, 3, 4, 5, 6\}$. Given time limits, we choose $C \in \left\{10^{-1}, 10^0, 10^1\right\}$ and $d \in \{1, 2, 3\}$.
 
-See below graph, for our optimal form bnula, of average F1 measure vs. $d$ for different values of $C$ for $10$ cross-validated SVMWPK's. `caret::train` chose the values of $C$ and $d$ corresponding to the maximum average F1 measure. These values of $C$ and $d$ will be used in training an SVMWLK on $9$ cross-validation folds.
+See below graph, for our optimal formula, of average F1 measure vs. $d$ for different values of $C$ for $10$ cross-validated SVMWPK's. `caret::train` chose the values of $C$ and $d$ corresponding to the maximum average F1 measure. These values of $C$ and $d$ will be used in training an SVMWLK on $9$ cross-validation folds.
 
 ![F1 Measure Vs. $d$ For Different Values Of $C$](F1_Measure_Vs_d_For_Different_Values_Of_C.png){#id .class height=25%}
 ![F1 Measure Vs. $\gamma$ For Different Values Of $C$](F1_Measure_Vs_gamma_For_Different_Values_Of_C.png){#id .class height=25%}
 
 #### Support-Vector Machines With Radial Kernels
 
-During bidirectional selection of SVMWRK's, for each formula, we search for one value of hyperparameter $C$ and one value of hyperparameter $\gamma$ to be used in training a SVMWRK on $9$ cross-validation folds. For our optimal formula, we use `caret::train` to choose $C = 10$ and $\gamma = 1$ for all of our SVMWPK's. Our inputs include our formula, our training data, the method "svmPoly", the metric "F1_measure", a `trainControl` object, and a data frame containing one row for each value of $C$ and each value of $d$ to be evaluated. Dr. Gedeck recommended evaluating $C \in \left\{10^{-3}, 10^{-2.75}, \cdots, 10^{2.75}, 10^3\right\}$ and $\gamma \in \{10^{-1}, 10^{-0.5}, 10^0, 10^{0.5}, 10^1\}$. Given time limits, we choose $C \in \left\{10^{-1}, 10^0, 10^1\right\}$ and $\gamma \in \{10^{-1}, 10^0, 10^1\}$.
+During bidirectional selection of SVMWRK's, for each formula, we search for one value of hyperparameter $C$ and one value of hyperparameter $\gamma$ to be used in training a SVMWRK on $9$ cross-validation folds. For our optimal formula, we use `caret::train` to choose $C = 10$ and $\gamma = 10$ for all of our SVMWPK's. Our inputs include our formula, our training data, the method "svmPoly", the metric "F1_measure", a `trainControl` object, and a data frame containing one row for each value of $C$ and each value of $d$ to be evaluated. Dr. Gedeck recommended evaluating $C \in \left\{10^{-3}, 10^{-2.75}, \cdots, 10^{2.75}, 10^3\right\}$ and $\gamma \in \{10^{-1}, 10^{-0.5}, 10^0, 10^{0.5}, 10^1\}$. Given time limits, we choose $C \in \left\{10^{-1}, 10^0, 10^1\right\}$ and $\gamma \in \{10^{-1}, 10^0, 10^1\}$.
 
-See below graph, for our optimal formula, of average F1 measure vs. $\gamma$ for different values of $C$ for $10$ cross-validated SVMWRK's. `caret::train` chose the values of $C$ and $\gamma$ corresponding to the maximum average F1 measure. These values of $C$ and $\gamma$ will be used in training an SVMWRK on $9$ cross-validation folds.
+See above graph, for our optimal formula, of average F1 measure vs. $\gamma$ for different values of $C$ for $10$ cross-validated SVMWRK's. `caret::train` chose the values of $C$ and $\gamma$ corresponding to the maximum average F1 measure. These values of $C$ and $\gamma$ will be used in training an SVMWRK on $9$ cross-validation folds.
 
 ### Validation / Holdout Test
 
-An optimal classifier of a given type is a classifier that yields a high F1 measure relative to other classifiers of that type. An optimal classifier has certain formula, primary hyperparameter, and secondary hyperparameter. We have determined optimal LR, LRR, LDA, QDA, KNN, RF, and SVM classifiers per cross validation each with maximum average F1 measure greater than $0.89$.
+An optimal classifier of a given type is a classifier that yields a high F1 measure relative to other classifiers of that type. An optimal classifier has certain type, formula, primary hyperparameter, and secondary hyperparameter. We determine optimal LR and LRR classifiers, LDA's, QDA's, KNN classifiers, RF's, SVMWLK's, SVMWPK's, and SVMWRK's per cross validation each with good maximum average F1 measure greater than $0.89$.
 
-That being said, the number of observations in our training data frame, $63,241$, is $3.2$ percent of the number of observations in our holdout data frame, $2,004,177$. Our holdout distributions of intensity of colors $Red$, $Green$ and $Blue$ are normal and broad relative to our training distributions. The proportion of training observations that correspond to blue tarps is $4.4$ times the proportion of holdout observations that correspond to blue tarps. We expect that, due to differences in our training and holdout distributions, a binary classifier trained on our training data and validated on our holdout data will have a maximum F1 measure that is less than that of a classifier cross validated on our training data. While we recommend training on our composite data or training on $90$ percent of our composite data and validating on the other $10$ percent, we have trained on our training data and will validate our optimal classifiers on our holdout data. In this case, validation will provide us performance metrics for data frame that is larger and perhaps more realistic than our training data frame. Validation will provide us ideas of the robustness of our optimal classifiers across data frames.
+That being said, the number of observations in our training data frame, $63,241$, is $3.2$ percent of the number of observations in our holdout data frame, $2,004,177$. Our holdout distributions of intensity of colors $Red$, $Green$ and $Blue$ are normal and broad relative to our training distributions. The proportion of training observations that correspond to blue tarps is $4.4$ times the proportion of holdout observations that correspond to blue tarps. We expect that, due to differences in our training and holdout distributions, a binary classifier trained on our training data and holdout tested on our holdout data will have a maximum F1 measure that is less than that of a classifier cross validated on our training data. While we recommend cross validating on our composite data or cross validating on $90$ percent of our composite data and holdout testing on the other $10$ percent, we train on our training data and holdout test our optimal classifiers on our holdout data. In this case, holdout testing will provide us performance metrics for a data frame that is larger and perhaps more realistic than our training data frame. Holdout testing will provide us ideas of the robustness of our optimal classifiers across data frames. We may factor holdout testing results into our recommendation of an optimal binary classifier.
 
-To validate our optimal classifiers, we train each optimal classifier on our training data and visualize performance metrics on our holdout data.
+To holdout test our optimal classifiers, we train each optimal classifier on our training data and visualize performance metrics on our holdout data.
 
 ### Evaluating And Comparing Classifiers
 
-For each type of model and optimal formula, primary hyperparameter, and secondary hyperparameter per cross validation, we provide a plot of Average Performance Metrics Vs. Threshold, a Precision-Recall Curve, an ROC curve, and a data frame of optimal performance metrics per cross validation. We also provide a plot of Performance Metrics vs. Threshold, a Precision-Recall Curve, an ROC curve, and a data frame of optimal performance metrics per validation / holdout testing.
+For each type of model and optimal formula, primary hyperparameter, and secondary hyperparameter per cross validation, we provide plot of Average Performance Metrics Vs. Threshold, Precision-Recall Curve, ROC curve, and data frame of optimal performance metrics per cross validation. We also provide plot of Performance Metrics vs. Threshold, Precision-Recall Curve, ROC curve, and data frame of optimal performance metrics per holdout testing.
 
 Big picture:
 
@@ -673,10 +673,12 @@ summary_of_performance <- summarize_performance_of_cross_validated_classifiers(
     data_frame = training_data_frame_of_indicators_and_pixels,
     optimal_lambda = optimal_lambda
 )
-summary_of_performance$plot_of_performance_metrics_vs_threshold
+data_frame_of_fold_IDs_and_maximum_F1_measures_for_LRR <-
+    summary_of_performance$data_frame_of_fold_ids_and_maximum_F1_measures
 ```
 
 ```{r, eval = FALSE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold"}
+summary_of_performance$plot_of_performance_metrics_vs_threshold
 summary_of_performance$PR_curve
 summary_of_performance$ROC_curve
 t(summary_of_performance$data_frame_of_optimal_performance_metrics)
@@ -960,10 +962,12 @@ summary_of_performance <- summarize_performance_of_cross_validated_classifiers(
     formula = formula,
     data_frame = training_data_frame_of_indicators_and_pixels
 )
-summary_of_performance$plot_of_performance_metrics_vs_threshold
+data_frame_of_fold_IDs_and_maximum_F1_measures_for_RF <-
+    summary_of_performance$data_frame_of_fold_ids_and_maximum_F1_measures
 ```
 
 ```{r, eval = FALSE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold"}
+summary_of_performance$plot_of_performance_metrics_vs_threshold
 summary_of_performance$PR_curve
 summary_of_performance$ROC_curve
 t(summary_of_performance$data_frame_of_optimal_performance_metrics)
@@ -1032,10 +1036,12 @@ summary_of_performance <- summarize_performance_of_cross_validated_classifiers(
     formula = formula,
     data_frame = training_data_frame_of_indicators_and_pixels
 )
-summary_of_performance$plot_of_performance_metrics_vs_threshold
+data_frame_of_fold_IDs_and_maximum_F1_measures_for_SVMWLK <-
+    summary_of_performance$data_frame_of_fold_ids_and_maximum_F1_measures
 ```
 
 ```{r, eval = FALSE, fig.width = 2.625, fig.height = 1.875, fig.show = "hold"}
+summary_of_performance$plot_of_performance_metrics_vs_threshold
 summary_of_performance$PR_curve
 summary_of_performance$ROC_curve
 t(summary_of_performance$data_frame_of_optimal_performance_metrics)
@@ -1064,7 +1070,7 @@ Per SVMWPK cross validation:
 
 - Our optimal SVMPK has formula $Indicator \sim normalize\left(Blue^2\right) + normalize\left(Red^2\right) + normalize(Green : Blue)$.
 - Our optimal value for $C$ is $10$.
-- Our optimal degree is $3$.
+- Our optimal degree and value for $d$ is $3$.
 - The maximum average F1 measure is $0.945$.
 - The corresponding threshold is $0.17$.
 - Average accuracy is $L$-shaped and is nearly $1$ for $97$ percent of thresholds.
@@ -1076,7 +1082,7 @@ Per SVMWPK cross validation:
 
 Per SVMWPK holdout testing:
 
-- Our optimal sVMWPK has a maximum F1 measure of $0.858$.
+- Our optimal SVMWPK has a maximum F1 measure of $0.858$.
 - The corresponding threshold is $0.99$.
 - Accuracy is $L$-shaped and is nearly $1$ for $90$ percent of thresholds.
 - F1 measure increases in the manner of $y = tan(x)$.
@@ -1137,7 +1143,7 @@ Per SVMWRK cross validation:
 
 - Our optimal SVMRK has formula $Indicator \sim normalize(Blue) + normalize[\ln(Red)] + normalize\left(\sqrt{Green}\right) + normalize[\ln(Blue)]$.
 - Our optimal value for $C$ is $10$.
-- Our optimal value of gamma is $10$.
+- Our optimal value of $\gamma$ is $10$.
 - The maximum average F1 measure is $0.960$.
 - The corresponding threshold is $0.06$.
 - Average accuracy is $L$-shaped and is nearly $1$ for $92$ percent of thresholds.
@@ -1203,3 +1209,66 @@ list_of_visualizations_of_performance_metrics$PR_curve
 list_of_visualizations_of_performance_metrics$ROC_curve
 t(list_of_visualizations_of_performance_metrics$data_frame_of_optimal_performance_metrics)
 ```
+
+# Cross-Validation And Holdout Performance Tables
+
+Please see [Cross-Validation And Holdout Performance Tables](https://github.com/tslever/Tom_Levers_Public_Git_Repository/tree/main/UVA/4--Statistical_Learning/Disaster_Relief_Project).
+
+We calculate binary-classifier scores for each type of binary classifier for cross validation and holdout testing. Each binary-classifier score is a weighted sum of the $5$ colored performance metrics above it in the appropriate table; namely, PR AUC, TPR, FPR, PPV, and F1 measure. We do not include ROC AUC or accuracy as they may be biased by our imbalanced data.
+
+We calculate total binary-classifier scores for each type of binary classifier. Each total binary-classifier score is the sum of the cross-validation binary classifier score and the holdout binary classifier score for that type of classifier.
+
+Our optimal SVMWLK with formula $Indicator \sim normalize(Red) + normalize\left(Green^2\right) + normalize(Blue) + normalize\left(Blue^2\right) + normalize\left(\sqrt{Red}\right) + normalize\left(\sqrt{Blue}\right)$, $C = 10$, and $t = 0.15$ has highest total binary-classifier score. Our optimal SVMWLK has for cross validation highest PR AUC, second-highest TPR, fourth highest F1 measure, and worst FPR and PPV. Our optimal SVMWLK has for holdout highest TPR, second highest F1 measure, and third-highest PR AUC, FPR, and PPV. Our SVMWLK has an average cross-validation binary-classifier score and the second-highest holdout binary-classifier score. If we were to recommend a classifier based on total binary-classifier score, we would recommend our optimal SVMWLK classifier.
+
+Our optimal LRR classifier with formula $Indicator \sim normalize[\ln(Blue)] + normalize(\sqrt{Red}) + normalize\left[\ln(Green)\right] + normalize[\ln(Red)]$, $\lambda = 0.000123$, and $t = 0.18$ has highest holdout binary-classifier score. Our optimal SVMWLK has second-highest holdout binary-classifier score. Our optimal LRR classifier has for holdout highest PR AUC, FPR, PPV, and F1 measure and third-highest TPR. If we were to recommend a classifier based on holdout binary-classifier score, or holdout F1 measure, we would recommend our optimal LRR classifier.
+
+Our SVMWRK has highest cross-validation binary classifier score by $2$ but by far the worst holdout binary-classifier score, suggesting overfitting, and the second-worst holdout binary-classifier score. Our optimal RF with formula $Indicator \sim normalize(Red^2) + normalize(Red:Green) + normalize\left(Green:Blue\right) + normalize(Green)$, $mtry = 1$, $ntree = 52$, and $t = 0.39$ has the second-highest cross-validation binary-classifier score. If we were to recommend a classifier without knowledge of our holdout data based on cross-validation binary-classifier score, or cross-validation F1 measure, we would recommend our SVMWRK. If we were to recommend a classifier with knowledge of our holdout data based on cross-validation binary-classifier score, or cross-validation F1 measure, we would recommend our RF.
+
+![Cross-Validation And Holdout Performance Tables](Cross-Validation_And_Holdout_Performance_Tables.png)
+
+# Conclusions
+
+As above, our best performing algorithm in the cross-validation data is our optimal SVMWRK, though it seems to overfit. Our best performing algorithm in the cross-validation data informed by holdout performance is our optimal RF. Our best performing algorithm in the holdout data is our optimal LRR classifier. Our best performing algorithm overall is our optimal SVMWLK.
+
+Our findings are reconcilable given differences in our training and holdout distributions. A binary classifier trained on our training data and holdout tested on our holdout data will have a maximum F1 measure that is less than that of a classifier cross validated on our training data. Our optimal classifiers make assumptions about what constitutes a blue tarp based on our training data. We recommend cross validating on our composite data or cross validating on $90$ percent of our composite data and holdout testing on the other $10$ percent to determine one best binary classifier. By training on our composite data our classifiers will become more realistic and robust and our holdout testing results will align with our cross-validation results. In that case, our classifiers' assumptions will be based on both our training and holdout data and more based in the real world.
+
+For now, we recommend in order our optimal SVMWLK with highest overall binary-classification score, our optimal RF with second-highest cross-validation binary-classifier score and far better performance on our holdout data than our SVMWRK, and our optimal LRR classifier with highest holdout binary-classification score.
+
+TPR, the ratio of true positives to actual positives, is relevant to our application; we want TPR to be $1$; we want the number of false negatives to be $0$; we don't want to predict that a pixel corresponding to a blue tarp does not belong to a blue tarp; we want to identify all blue tarps. FPR, the ratio of false positives to actual negatives, is relevant to our application; we want FPR to be $0$; we don't want to predict that a pixel corresponds to a blue tarp when the pixel does not correspond to a blue tarp; we want to visit locations as efficiently as possible. ROC AUC is not relevant to our application; according to [Mr. Allwright](https://stephenallwright.com/f1-score-vs-auc/), ROC "[AUC] does not perform well on imbalanced datasets." PPV, the ratio of true positives to predicted positives, is relevant to our application; we want PPV to be $1$; we don't want there to be any false positives; we want all predicted positives to be true positives. PR AUC is relevant to our application; PR AUC is a good overall measure of the performance of our classifier and its PPV and TPR. Accuracy is not relevant to our application; according to [Mr. Allwright](https://stephenallwright.com/f1-score-vs-accuracy/), "Accuracy does not perform well on imbalanced datasets which often leads to misleading results." F1 measure is relevant to our application; according to [Optimal Thresholding of Classifiers to Maximize F1 Measure](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4442797/), "the F1 measure is widely used to evaluate the success of a binary classifier when one class is rare."
+
+According to [Mr. Allwright](https://stephenallwright.com/good-f1-score/), "A good F1 score is dependent on the data you are working with and the use case. For example, a model predicting the occurrence of a disease would have a very different expectation than a customer churn model. However, there is a general rule of thumb when it comes to F1 scores, which is as follows:"
+- An F1 score greater than $0.9$ is very good.
+- An F1 score of $0.8$ to $0.9$ is good.
+- An F1 score of $0.5$ to $0.8$ is okay.
+- An F1 score less than $0.5$ is not good.
+
+Per cross-validation, all of our binary classifiers are adequately performing per cross-validation. Per holdout testing, all of our binary classifiers perform okay except for our SVMWRK.
+
+Our optimal SVMWLK and LRR classifier and our SVMWLK and RF have statistically significant differences in average maximum F1 measures per cross validation. Our optimal LRR classifier and RF have a statistically insignificant difference. Following [Text-Mining Evaluation: Statistical Tests](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://enable.unc.edu/wp-content/uploads/2018/06/7.TextMining.Evaluation.pdf), we cross validate our SVMWLK, LRR classifier, and RF. We use the same folds for each cross validation. We calculate maximum F1 measures for each held-out fold. We construct a data frame of fold ID's and maximum F1 measure for each binary classifier and fold. We calculate the average maximum F1 measures across held-out folds. We consider differences between the average maximum F1 measures to be test statistics. We consider an alternate hypothesis to be that our SVMWLK, for example, has a higher average maximum F1 measure than our LRR classifier, for example, for all possible test sets. We consider a null hypothesis to be that our SVMWLK has an equal average maximum F1 measure to that of our LRR classifier. We consider a $p$ value to be the probability of observing that the difference in average maximum F1 measures for a random sample / test set is greater than the relevant test statistic. We consider our confidence level to be $CL = 0.95$ and our significance level to be $\alpha = 1 - CL = 0.05$. If the $p$ value is greater than or equal to the significance level $\alpha$, we fail to reject the null hypothesis that our SVMWLK has an average maximum F1 measure equal to that of our LRR classifier. If the $p$ value is less than or equal to the significance level $\alpha$, we reject the null hypothesis and have sufficient evidence to support the alternate hypothesis that our SVMWLK has an average maximum F1 measure greater than that of our LRR classifier.
+
+To calculate our $p$ value, we conduct Fisher's Randomization Test. We calculate our $p$ value as the ratio of a count $C$ and a number of iterations $I$. Our count $C$ is the number of iterations $i \leq I$ for which a modified difference between an average maximum F1 measure for our SVMWLK and an average maximum F1 for our LRR classifier is greater than our test statistic. For each iteration, an average maximum F1 measure for our SVMWLK is computed effectively by tossing a fair coin for each row in our data frame of fold ID's and maximum F1 measures, if heads swapping the maximum F1 measures for the present fold, and calculating the mean of the maximum F1 measures in the column corresponding to our SVMWLK. An average maximum F1 measure for our LRR classifier is computed similarly. A modified difference between the average maximum F1 measure for our SVMWLK and the average maximum F1 measure for our LRR classifier is compared to our test statistic. If the modified difference is greater than our test statistic, count $C$ is incremented. Our $p$ value is the ratio of count $C$ and number of iterations $I$.
+
+```{r, eval = FALSE}
+calculate_probability_for_randomization_test(
+    data_frame_of_fold_IDs_and_maximum_F1_measures_for_SVMWLK,
+    data_frame_of_fold_IDs_and_maximum_F1_measures_for_LRR
+)
+calculate_probability_for_randomization_test(
+    data_frame_of_fold_IDs_and_maximum_F1_measures_for_LRR,
+    data_frame_of_fold_IDs_and_maximum_F1_measures_for_RF
+)
+calculate_probability_for_randomization_test(
+    data_frame_of_fold_IDs_and_maximum_F1_measures_for_RF,
+    data_frame_of_fold_IDs_and_maximum_F1_measures_for_SVMWLK
+)
+```
+
+The $p$ value for our SVMWLK and LRR classifier is $0.045$. The probability of observing a random test statistic greater than our test statistic is $0.045$. Because our $p$ value is greater than our significance level, we cannot confidently say that our test statistic is not due to random chance. Our difference between the average maximum F1 measures of our SVMWLK and LRR classifier is statistically significant. The $p$ value for our SVMWLK and LRR classifier is approximately $0$. Our difference between the average maximum F1 measures of our SVMWLK and LRR classifier is statistically significant. The $p$ value for our LRR classifier and RF is approximately $0.99$. Our difference between the average maximum F1 measures of our LRR classifier and RF is statistically insignificant.
+
+Given statistically significant differences between our optimal SVMWLK and either our optimal LRR classifier or our optimal RF, we select our optimal SVMWLK.
+
+We are able to use predictive modeling tools as our data set of classes and pixels may be represented as a complete data frame of natural numbers. We are able to use classifiers as the data in column $Class$ is nominal. We are able to use binary classifiers as pixels representing blue tarps exist in a distinct subspace defined by intensities of color $Red$, $Green$, and $Blue$. We are able to normalize intensities of color $Red$, $Green$, and $Blue$.
+
+Our data set seems particularly well-suited to the class of prediction methods Binary Classifier as our data set is complete, observations may be represented as natural numbers, class of pixel is nominal, and pixels representing blue tarps exist in a distinct subspace defined by intensities of color $Red$, $Green$, and $Blue$.
+
+Given that according to Mr. Allwright the maximum average F1 measures of our binary classifiers are good per cross validation, our research may be effective in terms of locating people displaced by the earthquake in Haiti in $2010$ and helping to save human life.
