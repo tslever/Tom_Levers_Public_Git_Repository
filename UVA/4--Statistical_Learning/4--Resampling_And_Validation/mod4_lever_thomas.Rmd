@@ -119,27 +119,21 @@ knitr::opts_chunk$set(
                  type = "response"
              )
              vector_of_predicted_default_statuses <- rep(
-                 x = "no default",
+                 x = "No",
                  times = number_of_validation_observations
              )
              condition <- vector_of_predicted_probabilities > 0.5
-             vector_of_predicted_default_statuses[condition] = "default"
+             vector_of_predicted_default_statuses[condition] = "Yes"
              vector_of_predicted_default_statuses[1:3]
              ```
 
         iv. Compute the validation set error, which is the fraction of the observations in the validation set that are misclassified.
         
             ```{r}
-            summary_of_performance <- summarize_performance(
-                type_of_model = "Logistic Regression",
-                formula = default ~ income + balance,
-                training_data = training_data,
-                test_data = validation_data
-            )
-            summary_of_performance$error_rate
+            mean(vector_of_predicted_default_statuses != training_data$default)
             ```
             
-            The validation error rate is $2.5$ percent.
+            The validation error rate is $4.8$ percent.
 
     (c) Repeat the process in (b) three times, using three different splits of the observations into a training set and a validation set. Comment on the results obtained.
     
