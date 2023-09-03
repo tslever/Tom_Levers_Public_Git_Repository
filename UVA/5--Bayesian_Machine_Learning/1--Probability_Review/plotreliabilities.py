@@ -11,8 +11,10 @@ For thresholds and probabilities of a core working in the range [67, 100], the n
 import matplotlib.pyplot as plt
 import numpy as np
 import random
-number_of_thresholds = 100
-range_of_thresholds = range(1, number_of_thresholds + 1)
+
+maximum_threshold = 100
+range_of_thresholds = range(1, maximum_threshold + 1)
+number_of_thresholds = len(range_of_thresholds)
 frequencies_that_duo_core_processor_works = np.zeros(number_of_thresholds)
 number_of_iterations = 100000
 for i in range_of_thresholds:
@@ -43,11 +45,20 @@ for i in range_of_thresholds:
 print(frequencies_that_duo_core_processor_works)
 print(frequencies_that_quad_core_processor_works)
 
+from matplotlib import ticker
 fig, ax = plt.subplots()
 plt.title("Frequencies That Duo Core And Quad Core Processors Work")
 plt.xlabel("Threshold")
 plt.ylabel("Frequency That Processor Works")
 plt.legend(["duo", "quad"])
-ax.bar(x = range_of_thresholds, height = frequencies_that_duo_core_processor_works)
-ax.bar(x = range_of_thresholds, height = frequencies_that_quad_core_processor_works)
+ax.plot(range_of_thresholds, frequencies_that_duo_core_processor_works)
+ax.plot(range_of_thresholds, frequencies_that_quad_core_processor_works)
+ax.set_xlim(0, maximum_threshold)
+ax.set_ylim(0, number_of_iterations)
+ax.grid(which = "major")
+ax.grid(which = "minor", alpha = 0.2)
+ax.xaxis.set_major_locator(ticker.LinearLocator(11))
+ax.xaxis.set_minor_locator(ticker.AutoMinorLocator(10))
+ax.yaxis.set_major_locator(ticker.LinearLocator(11))
+ax.yaxis.set_minor_locator(ticker.AutoMinorLocator(10))
 plt.show()
