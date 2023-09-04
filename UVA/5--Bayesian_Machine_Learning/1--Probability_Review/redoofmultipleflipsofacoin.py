@@ -1,7 +1,7 @@
 message = '''
 Redo of \"Example 6 From Basener and Brown 2022: Bayesian Machine Learning: Probabilistic Reasoning and Programming for Machine Learning with Applications in Python\" with number of coin flips N = 1000 and number of heads x = 680 and calculation of 95 percent credible interval
 
-You find a coin and believe that it is either fair (Type A with p = 0.5) or unfair (Type B with p = 0.75) and that out of every 1000 coins one is Type B and the rest are Type A. You flip the coin N = 1000 times and get x = 680 heads and 32 tails. What is the probability that the coin is Type A and the probability that the coin is Type B?
+You find a coin and believe that it is either fair (Type A with p = 0.5) or unfair (Type B with p = 0.75) and that out of every 1000 coins one is Type B and the rest are Type A. You flip the coin N = 1000 times and get x = 680 heads and 320 tails. What is the probability that the coin is Type A and the probability that the coin is Type B?
 
 We want to use Bayes's Theorem to compute the probability that the coin is Type A. The data is the number of heads x = 680 in N = 1000 flips of the coin, which we model using a binomial distribution.
 
@@ -47,7 +47,6 @@ print(f'Total probability that x = 680 given that N = 1000 is {total_probability
 message = '''
 By Bayes's Theorem, the posterior probability that the probability of heads when flipping the coin p = 0.5 given that the total number of flips N = 1000 and the number of heads is x = 680 P(p = 0.5 | N = 1000, x = 680) = P(x = 680 | N = 1000, p = 0.5) P(p = 0.5) / p(x = 680 | N = 1000).
 The posterior probability that the probability of heads when flipping the coin p = 0.75 given that the total number of flips N = 1000 and the number of heads is x = 680 P(p = 0.75 | N = 1000, x = 680) = P(x = 680 | N = 1000, p = 0.75) P(p = 0.75) / p(x = 680 | N = 1000).
-
 '''
 print(message)
 posterior_probability_that_p_is_one_half_given_that_N_is_1000_and_x_is_680 = likelihood_that_x_is_680_given_that_N_is_1000_and_p_is_one_half * prior_probability_that_p_is_one_half / total_probability_that_x_is_680_given_that_N_is_1000
@@ -67,10 +66,10 @@ number_of_values_of_p = 1001
 array_of_values_of_p = np.linspace(0, 1, number_of_values_of_p)
 distance_dp_between_two_adjacent_values_of_p = array_of_values_of_p[1] - array_of_values_of_p[0]
 # We compute terms used with Bayes's Theorem.
-from scipy.stats import uniform
-#from scipy.stats import norm
-array_of_prior_probabilities_that_p_is_value = uniform.pdf(x = array_of_values_of_p, scale = 1 / 0.999)
-#array_of_prior_probabilities_that_p_is_value = norm.pdf(array_of_values_of_p, loc = 0.5, scale = 0.01)
+#from scipy.stats import uniform
+from scipy.stats import norm
+#array_of_prior_probabilities_that_p_is_value = uniform.pdf(x = array_of_values_of_p, scale = 1 / 0.999)
+array_of_prior_probabilities_that_p_is_value = norm.pdf(array_of_values_of_p, loc = 0.5, scale = 0.01)
 array_of_likelihoods_that_x_is_680_given_that_N_is_1000_and_p_is_value = binom.pmf(x, N, array_of_values_of_p)
 total_probability = np.sum(array_of_prior_probabilities_that_p_is_value * array_of_likelihoods_that_x_is_680_given_that_N_is_1000_and_p_is_value * distance_dp_between_two_adjacent_values_of_p)
 # We create an array of posterior probabilities.
