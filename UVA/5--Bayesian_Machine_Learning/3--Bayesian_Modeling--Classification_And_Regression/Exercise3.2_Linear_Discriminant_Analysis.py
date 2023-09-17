@@ -134,3 +134,29 @@ uninformative_priors = {
 }
 model_lda.compute_probabilities(Iris_setosa_observation, uninformative_priors)
 print(model_lda)
+
+print("Predicted Classes And Posterior Probabilities For Carl's Observations, LDA, And Uninformative Priors")
+
+print("Carl's First Observation:")
+Carls_first_observation = [5.5, 2.4, 3.8, 1.1]
+model_lda.compute_probabilities(Carls_first_observation, uninformative_priors)
+
+print("Carl's Second Observation:")
+Carls_second_observation = [5.5, 3.1, 5, 1.5]
+model_lda.compute_probabilities(Carls_second_observation, uninformative_priors)
+
+informative_priors = {
+    "Iris-setosa": 0.1,
+    "Iris-versicolor": 0.2,
+    "Iris-virginica": 0.7
+}
+
+print("Predicted Classes And Posterior Probabilities For Carl's Observations, LDA, And Informative Priors")
+
+print("Carl's First Observation:")
+Carls_first_observation = [5.5, 2.4, 3.8, 1.1]
+model_lda.compute_probabilities(Carls_first_observation, informative_priors)
+
+print("Carl's Second Observation:")
+Carls_second_observation = [5.5, 3.1, 5, 1.5]
+model_lda.compute_probabilities(Carls_second_observation, informative_priors)
