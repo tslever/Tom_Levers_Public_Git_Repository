@@ -103,11 +103,24 @@ class QDA:
         return likelihoods
 
     def compute_probabilities(self, x, priors):
-        # compute and output the probability of each class and the maximum probability class
-        return -1
+        likelihoods = self.compute_likelihoods(x)
+        number_of_classes = len(priors)
+        array_of_prior_probabilities = np.zeros(number_of_classes)
+        index = 0
+        for class_name in self.class_names:
+            array_of_prior_probabilities[index] = priors[class_name]
+            index += 1
+        joint_probabilities = np.multiply(likelihoods, array_of_prior_probabilities)
+        total_and_marginal_probability = np.sum(joint_probabilities)
+        posterior_probabilities = joint_probabilities / total_and_marginal_probability
+        indices_that_sort_posterior_probabilities = np.argsort(posterior_probabilities)[::-1]
+        print('QDA Predicted Class:' + self.class_names[indices_that_sort_posterior_probabilities[0]])
+        print('QDA Class Posterior Probabilities:')
+        for index in range(0, len(indices_that_sort_posterior_probabilities)):
+            print(self.class_names[indices_that_sort_posterior_probabilities[index]] + ': ' + str(posterior_probabilities[indices_that_sort_posterior_probabilities[index]]))
+        return posterior_probabilities
 
-
-model_qda = QDA('iris_data.csv')
+model_qda = QDA('Exercise3.2_iris_data.csv')
 
 Iris_setosa_observation = [5.1, 3.5, 1.4, 0.2]
 model_qda.compute_likelihoods(Iris_setosa_observation)
