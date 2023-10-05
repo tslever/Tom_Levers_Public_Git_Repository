@@ -1,0 +1,46 @@
+Notes From Meetings With Ryan Weil Regarding Predicting Docking Score Based On SMILES And Looked-Up Data
+
+Created: 09/29/2023 by Tom Lever
+Updated: 10/04/2023 by Tom Lever
+
+
+Meeting From Wednesday, 10/04/2023 at 1 PM Eastern Time
+
+How would I deepen the descriptions of the following Python files and folder?
+
+One of the Python files of ECP-Candle Benchmarks that implement deep learning architectures relevant to problems in cancer: https://github.com/ECP-CANDLE/Benchmarks/blob/develop/Pilot1/ST1/srt_baseline_keras2.py
+
+One of the Python files of ECP-Candle Benchmarks that implement deep learning architectures relevant to problems in cancer: https://github.com/ECP-CANDLE/Benchmarks/blob/develop/examples/ADRP/reg_go2.py
+
+A directory of the ATOM Modeling PipeLine (AMPL) for Drug Discovery for building and sharing models of drugs: https://github.com/ATOMScience-org/AMPL/tree/master/atomsci/ddm/test/integrative/multitask_split
+
+SP_7JXQ_A_no-H2O_1cons_Mol-FnC_cleaned_arm_hb_16rota_b.csv.gz is full data.
+
+What are residues?
+What are descriptors?
+What do you think of using an inputted SMILES to lookup a data row, which will be fed into predicting software that predicts docking score?
+Can we join tables with docking scores onto raw data?
+Why do different data sets have different numbers of columns?
+What is the "interest" of each data set?
+
+Can we put together a full data dictionary for the raw data?
+
+Glide Methodology.pdf explains what "glide" is.
+Data dictionary for glide-related columns of raw data: Glide Docking Output Properties.pdf
+
+
+Meeting From Friday, 09/29/2023 at 1 PM Eastern Time
+
+Develop a Bayesian model (network?) (Directed Graphical Model?) that predicts continuous docking score given SMILES (and other data built into Bayesian model?)
+Could the Bayesian model be
+- Bayesian Physics-Informed Neural Network?
+- Natural-Language Neural Network?
+- Generative Adversarial Neural Network?
+- Graphical Neural Network?
+- Cognitive Neural Network?
+Do I want to spend a lot of time coming up with priors for R groups?
+What information extracted from SMILES directly?
+How do I decompose a SMILE into a sub-SMILE or a sub-structure?
+How do I encode substructures?
+DeepChem’s graph convolution networks outperform all other feature types for neural network
+models.
