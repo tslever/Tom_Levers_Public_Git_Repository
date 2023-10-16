@@ -57,8 +57,10 @@ class A_CSV_File_Organizer:
                     raise An_Invalid_Line_Indices_Exception("A CSV-file reader found the end of a file.")
                 
                 the_list_of_values = the_present_line.strip("\n").split(",")
-                if len(the_list_of_values) != len(the_list_of_fields):
+                if len(the_list_of_values) < len(the_list_of_fields):
                     raise A_Fields_Values_Mismatch_Exception("The number of values in a list does not match the number of fields in a list.")
+                elif len(the_list_of_values) > len(the_list_of_fields):
+                    the_list_of_values = the_list_of_values[0:len(the_list_of_fields)]
 
                 the_dataframe_representing_the_lists_of_fields_and_values = pandas.DataFrame([the_list_of_values], columns = the_list_of_fields)
                 if the_list_of_columns is not None:
