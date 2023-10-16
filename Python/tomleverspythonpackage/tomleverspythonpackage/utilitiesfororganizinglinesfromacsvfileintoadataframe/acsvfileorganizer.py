@@ -43,6 +43,7 @@ class A_CSV_File_Organizer:
                 the_growing_dataframe = pandas.DataFrame(columns = the_list_of_fields)
             else:
                 the_growing_dataframe = pandas.DataFrame(columns = the_list_of_columns)
+                the_growing_dataframe.to_csv('Data_Frame.csv', mode = 'w', index = False, header = True)
             the_CSV_file.seek(0)
 
             for i in range(0, the_index_of_the_first_line):
@@ -68,7 +69,4 @@ class A_CSV_File_Organizer:
                 the_dataframe_representing_the_lists_of_fields_and_values = pandas.DataFrame([the_list_of_values], columns = the_list_of_fields)
                 if the_list_of_columns is not None:
                     the_dataframe_representing_the_lists_of_fields_and_values = the_dataframe_representing_the_lists_of_fields_and_values[the_list_of_columns]
-
-                the_growing_dataframe = pandas.concat([the_growing_dataframe, the_dataframe_representing_the_lists_of_fields_and_values], ignore_index = True)
-
-        return the_growing_dataframe
+                the_dataframe_representing_the_lists_of_fields_and_values.to_csv('Data_Frame.csv', mode = 'a', index = False, header = False)
