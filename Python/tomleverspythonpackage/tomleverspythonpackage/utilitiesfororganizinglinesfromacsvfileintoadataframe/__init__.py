@@ -11,6 +11,6 @@ __version__ = "0.1.0"
 __author__ = "Tom Lever"
 __credits__ = "Tom Lever"
 
-from tomleverspythonpackage.utilitiesfororganizinglinesfromacsvfileintoadataframe.organizelinesfromacsvfileintoadataframe import *
-from tomleverspythonpackage.utilitiesfororganizinglinesfromacsvfileintoadataframe.acsvfileorganizer import *
-from tomleverspythonpackage.utilitiesfororganizinglinesfromacsvfileintoadataframe.aninputmanager import *
+from organizelinesfromacsvfileintoadataframe import *
+from acsvfileorganizer import *
+from aninputmanager import *

@@ -11,10 +11,10 @@ __version__ = "0.1.0"
 __author__ = "Tom Lever"
 __credits__ = "Tom Lever"
 
-from tomleverspythonpackage.convertarrayofnumberstostring import *
-from tomleverspythonpackage.csvfilereader import *
-from tomleverspythonpackage.exporttopdf import *
-from tomleverspythonpackage.getlistofanchortagswithhyperlinkreferences import *
-from tomleverspythonpackage.listabsolutepathsoffileindirectorytree import *
-from tomleverspythonpackage.upgradeallpippackages import *
-from tomleverspythonpackage.utilitiesfororganizinglinesfromacsvfileintoadataframe import *
+from .convertarrayofnumberstostring import *
+from .csvfilereader import *
+from .exporttopdf import *
+from .getlistofanchortagswithhyperlinkreferences import *
+from .listabsolutepathsoffileindirectorytree import *
+from .upgradeallpippackages import *
+from .utilitiesfororganizinglinesfromacsvfileintoadataframe import *

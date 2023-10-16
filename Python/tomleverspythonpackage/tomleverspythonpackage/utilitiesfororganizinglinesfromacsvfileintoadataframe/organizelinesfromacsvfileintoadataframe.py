@@ -15,12 +15,12 @@
 ############################################################################################################################################################
 
 import sys
-from tomleverspythonpackage.utilitiesfororganizinglinesfromacsvfileintoadataframe.acsvfileorganizer import *
-from tomleverspythonpackage.utilitiesfororganizinglinesfromacsvfileintoadataframe.aninputmanager import *
-from tomleverspythonpackage.utilitiesfororganizinglinesfromacsvfileintoadataframe.exceptions.acheckcommandlineargumentsexception import *
-from tomleverspythonpackage.utilitiesfororganizinglinesfromacsvfileintoadataframe.exceptions.afieldvaluesmismatchexception import *
-from tomleverspythonpackage.utilitiesfororganizinglinesfromacsvfileintoadataframe.exceptions.aninvalidpathexception import *
-from tomleverspythonpackage.utilitiesfororganizinglinesfromacsvfileintoadataframe.exceptions.aninvalidlineindicesexception import *
+from acsvfileorganizer import *
+from aninputmanager import *
+from exceptions.acheckcommandlineargumentsexception import *
+from exceptions.afieldvaluesmismatchexception import *
+from exceptions.aninvalidpathexception import *
+from exceptions.aninvalidlineindicesexception import *
 
 
 # main represents the primary function of the "Organize lines from a CSV file into a dataframe" program, which organizes lines in a CSV file between a first

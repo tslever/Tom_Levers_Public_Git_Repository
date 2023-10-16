@@ -1,6 +1,6 @@
-from tomleverspythonpackage.utilitiesfororganizinglinesfromacsvfileintoadataframe.exceptions.afieldvaluesmismatchexception import *
-from tomleverspythonpackage.utilitiesfororganizinglinesfromacsvfileintoadataframe.exceptions.aninvalidpathexception import *
-from tomleverspythonpackage.utilitiesfororganizinglinesfromacsvfileintoadataframe.exceptions.aninvalidlineindicesexception import *
+from exceptions.afieldvaluesmismatchexception import *
+from exceptions.aninvalidpathexception import *
+from exceptions.aninvalidlineindicesexception import *
 import pandas
 from pathlib import Path
 
@@ -59,6 +59,6 @@ class A_CSV_File_Organizer:
 
                 the_series = pandas.Series(the_list_of_values, index = the_list_of_fields)
 
-                the_dataframe = the_dataframe.append(the_series, ignore_index = True)
+                the_dataframe = pandas.concat([the_dataframe, pandas.DataFrame(the_series)], ignore_index = True)
 
         return the_dataframe

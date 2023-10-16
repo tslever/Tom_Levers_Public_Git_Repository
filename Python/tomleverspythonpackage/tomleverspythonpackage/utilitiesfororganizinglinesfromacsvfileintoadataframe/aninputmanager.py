@@ -1,6 +1,6 @@
 import sys
-from tomleverspythonpackage.utilitiesfororganizinglinesfromacsvfileintoadataframe.exceptions.acheckcommandlineargumentsexception import *
-from tomleverspythonpackage.utilitiesfororganizinglinesfromacsvfileintoadataframe.exceptions.aninvalidlineindicesexception import *
+from exceptions.acheckcommandlineargumentsexception import *
+from exceptions.aninvalidlineindicesexception import *
 
 
 #################################################################################################################################################################################################################
