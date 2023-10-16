@@ -4,7 +4,7 @@
 #
 #Usage: At command line, enter on one line
 #python organizelinesfromacsvfileintoadataframe.py
-#<the path to the CSV file> <the index of the first line to read> <the index of the last line to read>
+#<the path to the CSV file> <the index of the first line to read> <the index of the last line to read> <the list of columns or None>
 #
 #Example Usage: At command line, enter on one line
 #python organizelinesfromacsvfileintoadataframe.py ../the_sibling_folder/the_CSV_file.csv 1000 1002
@@ -44,7 +44,13 @@ def main():
         exit()
 
     try:
-        print(the_CSV_file_reader.provides_a_dataframe_representing_the_lines_of_the_CSV_file_inclusively_between(int(sys.argv[2]), int(sys.argv[3])))
+        list_of_columns_as_string = sys.argv[4]
+        if list_of_columns_as_string == 'None':
+            list_of_columns = None
+        else:
+            list_of_columns = list_of_columns_as_string.strip("[").strip("]").split(", ")
+            print(type(list_of_columns))
+        print(the_CSV_file_reader.provides_a_dataframe_representing_the_lines_of_the_CSV_file(int(sys.argv[2]), int(sys.argv[3]), list_of_columns))
     except An_Invalid_Line_Indices_Exception as the_invalid_line_indices_exception:
         print(the_invalid_line_indices_exception)
         exit()

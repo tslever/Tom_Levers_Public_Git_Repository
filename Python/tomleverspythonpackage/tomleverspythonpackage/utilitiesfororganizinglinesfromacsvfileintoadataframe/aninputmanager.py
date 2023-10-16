@@ -23,7 +23,7 @@ class An_Input_Manager:
         if (not isinstance(the_vector_of_command_line_arguments, list)) or (not all(isinstance(the_argument, str) for the_argument in the_vector_of_command_line_arguments)):
             raise A_Check_Command_Line_Arguments_Exception("An input manager did not receive a vector of strings.")
 
-        THE_NUMBER_OF_COMMAND_LINE_ARGUMENTS = 4
+        THE_NUMBER_OF_COMMAND_LINE_ARGUMENTS = 5
 
         if len(sys.argv) != THE_NUMBER_OF_COMMAND_LINE_ARGUMENTS:
             raise A_Check_Command_Line_Arguments_Exception( \
