@@ -51,6 +51,9 @@ class A_CSV_File_Organizer:
                     raise An_Invalid_Line_Indices_Exception("A CSV-file reader found the end of a file.")
 
             for i in range(the_index_of_the_first_line, the_index_of_the_second_line + 1):
+
+                if i % 1000 == 0:
+                    print(i)
                 
                 the_present_line = the_CSV_file.readline()
                 if (the_present_line == ""):

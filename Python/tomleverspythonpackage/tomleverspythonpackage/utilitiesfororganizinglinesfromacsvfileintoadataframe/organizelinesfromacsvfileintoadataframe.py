@@ -49,8 +49,8 @@ def main():
             list_of_columns = None
         else:
             list_of_columns = list_of_columns_as_string.strip("[").strip("]").split(", ")
-            print(type(list_of_columns))
-        print(the_CSV_file_reader.provides_a_dataframe_representing_the_lines_of_the_CSV_file(int(sys.argv[2]), int(sys.argv[3]), list_of_columns))
+        the_dataframe = the_CSV_file_reader.provides_a_dataframe_representing_the_lines_of_the_CSV_file(int(sys.argv[2]), int(sys.argv[3]), list_of_columns)
+        the_dataframe.to_csv(path_or_buf = 'Data_Frame.csv')
     except An_Invalid_Line_Indices_Exception as the_invalid_line_indices_exception:
         print(the_invalid_line_indices_exception)
         exit()
