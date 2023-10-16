@@ -59,6 +59,6 @@ class A_CSV_File_Organizer:
 
                 the_series = pandas.Series(the_list_of_values, index = the_list_of_fields)
 
-                the_dataframe = pandas.concat([the_dataframe, pandas.DataFrame(the_series)], ignore_index = True)
+                the_dataframe = pandas.concat([the_dataframe, pandas.DataFrame(the_series).T], ignore_index = True)
 
         return the_dataframe
