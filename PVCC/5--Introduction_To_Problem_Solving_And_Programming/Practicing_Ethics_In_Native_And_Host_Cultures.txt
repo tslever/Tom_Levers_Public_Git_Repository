@@ -1,0 +1,79 @@
+Students of Computer Science 221: Introduction To Problem Solving And Programming at Piedmont Virginia Community College have considered the following Social Issue from Computer Science: An Overview (13th Edition) by Brookshear and Brylow (2019).
+
+Suppose your job requires that you reside in another culture. Should you continue to practice the ethics of your native culture or adopt the ethics of your host culture? Does your answer depend on whether the issue involves dress code or human rights? Which ethical standards should prevail if you continue to reside in your native culture but conduct business with a foreign culture on the Internet?
+
+This Social Issue is explored extensively in Star Trek: The Original Series, in which the crew of the Enterprise has the five-year mission "to seek out new life and new civilizations" and abide by the Prime Directive. According to second-season episode "Bread and Circuses", the Prime Directive is "No identification of self or mission. No interference with the social development of said planet. No references to space, or the fact that there are other worlds, or more advanced civilizations".
+
+The Prime Directive of Star Fleet encourages members of Star Fleet to adopt the ethics of the members' host cultures. The Prime Directive is both a law and an ideal and is both enforced punitively and violated heroically. In Star Trek: Strange New Worlds episode "Ad Astra per Aspera", Neera Ketoul defends Una Chin-Riley. Una Chin-Riley had "been formally charged with  violating Starfleet regulation 614-617, prohibiting permanent DNA modification, as well as submitting false information to Starfleet, and two counts of sedition." Ketould invalidates Robert April's testimony and causes April's testimony to be stricken from the record. April's testimony is that April would not have sponsored Una-Chin Riley's application to Starfleet Academy due to Starfleet Regulation 17, Article 12, which "explicitly prohibits genetically modified people, such as Illyrians, from serving". Ketoul characterizes the Prime Directive as "flimsy and subjective at best". At the end of the episode, Ketoul commends April for the same decisions that she cited to invalidate April's testimony and states that "A law is an ideal". A person should continue to practice the ethics of the person's native culture / adopt the ethics of the person's host culture if the person were in a state of Presence and the person would practice the ethics of the person's native culture / adopt the ethics of the person's host culture.
+
+Please consider the scene in which Neera Ketoul invalidates Robert April's testimony and causes April's testimony to be stricken from the record.
+
+Marie Batel: If you had known Una Chin-Riley was genetically modified, would you have sponsored her application to Starfleet Academy? You're under oath, sir.
+Robert April: No, I would not.
+Batel: Thank you, Admiral. It takes a big man to admit his mistakes. I admire that, Admiral. Just for the record, could you tell the court why you would not have sponsored Commander Chin-Riley's Starfleet application, specifically?
+April: Starfleet Regulation 17, Article 12 explicitly prohibits genetically modified people, such as Illyrians, from serving.
+Neera Ketoul: Of course. You are an honorable, decorated admiral. YOu wouldn't want to break protocol for any one individual applicant.
+April: Let me stress this is not personal.
+Ketoul: Right.
+April: It's the law.
+Ketoul: Admiral April, can you tell me what General Order One is?
+?: Objection. Relevance?
+?: I'm curious myself. Tread carefully, Counselor.
+Ketoul: I will, Your Honor. Admiral, what is General Order One?
+April: No starship may interfere with the normal development of any alien life or society.
+Ketoul: Yes. A very important law. So much so that you now refer to it as the Prime Directive, do you not?
+April: Yes, that is correct.
+Ketoul: In 2246, while in command of the Enterprise, you chose to warn the Perricans, a pre-warp civilization, about a possibly apocalyptic meteor shower about to hit their planet.
+April: That was different.
+Ketoul: 2248. You sent your science officer to the industrial-age planet Na'rel to solve the imminent threat of an extinction-level drought by sharing Federation technology. Were you in compliance then?
+Batel: Objection. Relevance again.
+April: An entire planet would have died.
+Ketoul: And when you landed on the hostile planet Man-us 2 without your security officer, you chose to reveal your starship to the pre-warp civilization Ohawk.
+?: Objection!
+Ketoul: Did you comply then, Admiral?
+Javas: Counselor, I will remind you the witness is not on trial here.
+Ketoul: Admiral, it would seem that the rules of Starfleet only apply when a captain deems that they do.
+April: Is there a question, Counselor?
+Ketoul: Yes. You have shown that you have been repeatedly willing to break the very first order of Starfleet and you are hailed as a hero. You can break the law if you so choose. So, hiding behind order and protocol to explain why you would not have admitted Una Chin-Riley to Starfleet is a sanctimonious falsehood, is it not?
+?: Ovjection!
+Javas: Counselor! You will cease this line of questioning at once.
+Ketoul: My client did not ask to be genetically modified. It is an Illyrian cultural practice done to childen before they are even born. It is done for survival, and yet she has been arrested because of a violation of a law. But the admiral has just shown us that Starfleet regulations are flimsy and subjective at best.
+April: Starfleet captains make judgment calls every day. Calls that save lives. Una Chin-Riley's services to Starfleet have been commendable, yes. But the law that she broke is there to save lives and prevent genocide. So, if you ask me, Counselor, if I would have denied Commander Chin-Riley's access to Starfleet Academy had I known she was genetically modified, my answer is still yes, I would have.
+Ketoul: So you admit that the reason for your decision is not law, but fear and racial prejudice.
+Batel: Objection!
+?: Sustained. Counselor Ketoul, this is a court martial for Una Chin-Riley, not Admiral April. That you are unable to defend your client does not permit you to attack the Federation or our officers. All of the admiral's testimony will be stricken from the court record.
+
+Please consider the scene in which Neera Ketoul commends Robert April for the same decisions that she cited to invalidate April's testimony and states that "A law is an ideal".
+
+Ketoul: Captain Batel, are you familiar with the Starfleet Code 8514?
+Batel: I am.
+Ketoul: Would you mind reading that code for the court?
+Batel: In extraordinary and extreme circumstances, if the following conditions are met: 1) any person fleeing persecution... or fearing for their life due to political or religious beliefs, cultural engagements, or biological truths may, 2) seek safety within Starfleet... and 3) upon revealing themselves to authorities and making a request, may be granted asylum. Starfleet captains may exercise discretion in judgment when offering asylum. Status is confirmed by a Starfleet tribunal or designated authority."
+Ketoul: Fearing for their life. One may seek safety within Starfleet and request asylum. Starfleet has a long tradition of performing rescue missions. How many distressed peoples has Starfleet aided? How many lives saved? Una Chin-Riley knew this. She believed in the best of Starfleet, and that through it she could find salvation from the hardships and danger of her everyday life. Danger she faced just for being born an Illyrian. Dangers born of prejudice, spurred on by laws against people like her. But through her hardships, Una saw the stars. She joined Starfleet because she believed it was the only thing that could save her life. She fled persecution, and within Starfleet she sought safety. And then, by turning herself in, Una fulfilled the third and final requirement for asylum. She asked for it and Captain Pike granted it. Like all good Starfleet captains, including Admiral April on Perrican, Na'rel, and Man-us 2, he exercised his judgment and gave her asylum. All this tribunal needs to do now... is confirm that status to absolve them both. Do you know why I love the law? Because a law is not a mirror to society. A law is an ideal. A beacon to remind us how to be our better selves. And you have the opportunity today to do just that. Mr. Pasalk has made this case about the law, and I agree it is. By his own argument, we cannot ignore that Code 8514 is also law. All I am asking you to do today is to be your better selves and enforce the law that favors my client with the same dispassion as the laws that would exclude her. Years ago... the ideals of Starfleet called a young girl from the far side of the galaxy to service. Find those ideals inside yourself. Grant Una Chin-Riley the asylum she was so clearly seeking.
+
+The following episodes of Star Trek: The Original Series presents various opinions on whether a person should continue to practice the ethics of the person's native culture or adopt the ethics of the person's host culture.
+
+The Return of the Archons depicts a society in which a computer and lawgivers cause citizens to exhibit either "contented mindlessness" (https://memory-alpha.fandom.com/wiki/The_Return_of_the_Archons_(episode)) or "debauchery and lawlessness". James Kirk decides that the Prime Directive "applies to living, growing cultures". Kirk and Spock convince the computer to destroy itself.
+
+A Taste Of Armageddon depicts a society in which computer systems on two planets simulate fighting a war but take casualties. Kirk destroys the master computer on one planet and convinces a representative of that planet to negotiate peace with representatives of the other planet.
+
+This Side Of Paradise
+Mirror, Mirror
+The Apple
+I, Mudd
+Friday's Child
+The Gamesters of Triskelion
+A Piece of the Action
+A Private Little War
+Patterns of Force
+The Omega Glory
+Spock's Brain
+Let That Be Your Last Battlefield
+The Mark of Gideon
+The Cloud Minders
+
+Private and public organizations that are well suited to influence public policies that can impact discourse on whether a person should continue to practice the ethics of the person's native culture or adopt the ethics of the person's host culture include
+
+Writers Guild of America West (https://www.wga.org/)
+Writers Guild of America East (https://www.wgaeast.org/)
+Screen Actors Guild and the American Federation of Television and Radio Artists (https://www.sagaftra.org/)
