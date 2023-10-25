@@ -1,0 +1,301 @@
+---
+title: "Module 2"
+
+output:
+  html_document: 
+    toc: yes
+    toc_depth: 4
+    toc_float: yes
+---
+
+# The _Marketing Plan_
+1. What is the expected sales if our client spends 150K on TV, 20K on Radio, and 30K on Newspaper? 
+2. The client is planning to spend $100K in total advertising for a single market. How do you recommend they allocate that budget over the three media? What is the expected sales using your optimal strategy? 
+3. How would you communicate to the client the uncertainty in the sales that will result from this experiment? 
+4. If the actual sales were 8000 units, how do you think the client would respond? How would you address the response from the client? 
+
+
+```{r setup, message=FALSE}
+#-- Packages
+library(broom)      # for tidy model output
+library(knitr)      # kable() for nicer table output
+library(GGally)     # pairs plot ggpairs()
+library(tidyverse)  # dplyr, ggplot2, etc
+```
+
+## Exploratory data analysis
+### Load and preprocess data
+The data file contains the rownames as the first column. `read_csv` makes it a new column named `...1`. 
+```{r}
+#-- Load Data
+url <- 'https://www.statlearning.com/s/Advertising.csv'
+advert <- read_csv(url) %>%
+  column_to_rownames('...1')
+```
+
+### Summary
+```{r}
+#-- Show data
+head(advert)
+```
+```{r}
+library(GGally)
+ggpairs(advert, progress=FALSE)
+```
+Convert the data from *wide* to *long* format for facetted graphs.
+```{r}
+advert_long <- pivot_longer(advert, cols=-sales, 
+                            names_to='predictor',
+                            values_to='budget')
+head(advert_long)
+```
+Use `geom_smooth` to identify trends
+```{r}
+ggplot(advert_long, aes(x=budget, y=sales)) + 
+  geom_smooth() + 
+  geom_point() + 
+  facet_wrap(~predictor, scales="free_x")
+```
+
+## Regression Models
+### Three predictor model
+Consider the advertising sales model that uses all three predictors
+$$
+\text{sales} =  \beta_0 + \beta_1 \times \text{(TV)} + \beta_2 \times \text{(radio)} +
+\beta_3 \times \text{(newspaper)}  + \text{error}
+$$
+
+In R, the formula would be `Sales ~ TV + Radio + Newspaper` (the order of the predictor variables does not matter).
+```{r}
+#- fit full (main effects) model
+lm.all = lm(sales ~ TV + radio + newspaper,
+            data=advert)
+
+#- model summary
+summary(lm.all)
+
+#- tidy output (coefficients)
+lm.all %>% 
+  broom::tidy(conf.int=TRUE) %>% 
+  knitr::kable(digits=3)
+
+#- tidy model summary
+lm.all %>% 
+  broom::glance() %>% 
+  knitr::kable(digits=3)
+```
+```{r}
+pred_data = tibble(TV=150, radio=20, newspaper=30)
+predict(lm.all,
+        newdata=pred_data, 
+        interval="prediction") # or "confidence"
+```
+We would expect an increase in sales of 13.5 units.
+
+### Simpler Model
+Note that `newspaper` is not statistically significant. We can therefore create a reduced model.
+```{r}
+#-- Only TV + Radio
+lm.TVRadio = lm(sales ~ TV + radio, 
+                data=advert)
+summary(lm.TVRadio)
+```
+
+## Interaction Effects
+
+
+We have found that the best model so far is the one that uses `TV` and `Radio` to predict the value of `Sales`. 
+
+Specifically, the least squares model is:
+
+$$\widehat{\text{sales}} = `r round(coef(lm.TVRadio)[1],3)` + `r round(coef(lm.TVRadio)[2],3)` \times \text{(TV)} + `r round(coef(lm.TVRadio)[3],3)` \times \text{(radio)}$$
+
+- So a one unit increase in `TV` would suggest a `r round(coef(lm.TVRadio)[2],3)` unit increase in `Sales`, no matter the budget allocated to `Radio`
+- But what if spending money on `Radio` advertising actually increases the effectiveness of the `TV` advertising?
+    - So `TV` effects should increase as `Radio` increases
+    - E.g., spending 1/2 of a \$100,000 budget on `TV` and `Radio` may increase `Sales` more than allocating the entire amount to only `TV` or only `Radio`
+    - In marketing, this is the *synergy* effect. In statistics, this is known as an *interaction* effect.
+
+
+### Modeling Interactions
+
+Consider the linear regression model with two variables and an interaction effect
+
+$$Y  = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_1 X_2 + \epsilon$$
+
+This model relaxes the additive structure, while maintaining the linear structure. Consider the equation re-written
+
+\begin{align*}
+Y  &= \beta_0 + (\beta_1 + \beta_3 X_2)X_1 + \beta_2 X_2 + \epsilon \\
+   &= \beta_0 + \tilde{\beta}_1 X_1 + \beta_2 X_2 + \epsilon
+\end{align*}
+where $\tilde{\beta}_1 = (\beta_1 + \beta_3 X_2)$.
+
+- Since $\tilde{\beta}_1$ changes with $X_2$, the effect of $X_1$ on $Y$ is no longer constant.
+    - Adjusting $X_2$ will change the impact of $X_1$ on $Y$
+
+In R, use the notation `X_1:X_2` to include an interaction effect:
+```{r}
+lm.synergy = lm(sales ~ TV + radio + TV:radio,
+                data=advert)
+summary(lm.synergy)
+```
+```{r}
+coef(lm.TVRadio)
+coef(lm.synergy)
+```
+
+## Prediction
+
+In R, the `predict()` function will return the predicted values from a fitted regression model. Besides the model, the function needs the $X$ values (the `newdata` argument) for making predictions.   
+- Type `?predict.lm` to read the help pages  
+- The `object` argument is the `lm` model  
+- The `newdata` must be a `data.frame`/`tibble`
+
+```{r}
+#-- predict the Sales for a budget with TV = 50
+#   ($50,000) and Radio = 20 ($20,000)
+pred_data = tibble(TV=50, radio=20, newspaper=0)
+predict(lm.TVRadio,
+        newdata=pred_data, 
+        interval="prediction") # or "confidence"
+predict(lm.synergy,
+        newdata=pred_data, 
+        interval="prediction") # or "confidence"
+```
+
+Multiple values (grid of predictor values)
+```{r}
+pred_grid = 
+  expand_grid(TV=seq(0, 50, by=25), 
+              radio=seq(0, 60, by=20), 
+              newspaper=0)
+bind_cols(
+  pred_grid,
+  predict(lm.TVRadio,
+        newdata=pred_grid, 
+        interval="prediction") %>% 
+    as_tibble()
+)
+```
+Allocating $100K budget
+```{r}
+lm.TV <- lm(sales ~ TV, data=advert)
+lm.radio <- lm(sales ~ radio, data=advert)
+```
+```{r}
+budgetTV <- seq(0, 100, by=5)
+budget = tibble(TV=budgetTV, radio=100-budgetTV)
+
+result <- bind_cols(
+  budget,
+  tibble(TVmodel=predict(lm.TV, newdata=budget)),
+  tibble(radioModel=predict(lm.radio, newdata=budget)),
+  tibble(TVRadio=predict(lm.TVRadio, newdata=budget)),
+  tibble(Synergy=predict(lm.synergy, newdata=budget)),
+)
+result
+```
+```{r}
+ggplot(result, aes(x=TV)) +
+  geom_line(aes(y=radioModel, color='Radio model')) +
+  geom_line(aes(y=TVmodel, color='TV model'), linetype='dashed') +
+  geom_line(aes(y=TVRadio, color='TV + Radio model')) +
+  geom_line(aes(y=Synergy, color='TV * Radio model')) +
+  ylim(0, 30) +
+  scale_x_continuous("TV budget", sec.axis = sec_axis(~ 100 - ., name = 'Radio budget'))
+```
+
+
+# Building linear regression models
+## base-R
+Formula interface
+```
+model <- lm(formula, data=df)
+
+lm.radio <- lm(sales ~ radio, data=advert)
+```
+Design matrix (predictors) and outcome
+```
+model <- lm(pedictors, outcome)
+```
+
+
+## Caret
+The package `caret` has a general `train` function that provides a consistent interface to over 200 different methods (see https://topepo.github.io/caret/available-models.html). Like the `lm` command, the `train` function can be called with predictors `x` and outcome `y` or with a formula `formula` and `data`.
+```
+caret::train(x, y, method='lm')
+caret::train(form, data, method='lm')
+```
+This however will do a cross-validation by default. To just train a model with the full dataset, use `trainControl`
+```{r}
+model <- caret::train(sales ~ TV + radio + TV:radio,
+                      data=advert,
+                      method='lm',
+                      trControl=caret::trainControl(method='none'))
+model
+```
+You can still get the summary of the model information
+```{r}
+summary(model)
+```
+
+Using `model$finalModel` gives you access to the actual model and therefore many of the above functionality.
+```{r}
+coef(model$finalModel)
+```
+
+```{r}
+model$finalModel %>% 
+  broom::glance() %>% 
+  knitr::kable(digits=3)
+```
+
+Diagnostic plots
+```{r}
+par(mfrow=c(2, 2))
+plot(model$finalModel)
+```
+
+And you can predict new data as follows:
+```{r}
+predict(model, pred_grid)
+```
+
+## And for the adventurous - tidymodels
+Why? `tidymodels` is actively developed by RStudio and `caret` is not
+
+Load the package
+```{r}
+library(tidymodels)
+```
+First define the model  
+```{r}
+model <- linear_reg() %>%  # we want to do build a linear regression model
+  set_engine('lm') # using the base-R lm model
+```
+and next fit the model to the data
+```{r}
+fit_mod <- model %>% 
+  fit(sales ~ TV + radio + TV:radio, data=advert)
+fit_mod
+```
+get details about the model
+```{r}
+tidy(fit_mod)
+```
+
+```{r, fig.height=2, fit.width=4}
+library(dotwhisker)
+tidy(fit_mod) %>% dwplot()
+```
+
+Predict new data
+```{r}
+predict(fit_mod, pred_grid)
+```
+
+and access the underlying model:
+```{r}
+coef(fit_mod$fit)
+```

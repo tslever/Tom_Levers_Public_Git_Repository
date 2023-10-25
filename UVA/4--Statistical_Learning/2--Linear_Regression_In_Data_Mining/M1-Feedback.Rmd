@@ -1,0 +1,386 @@
+---
+title: "DS-6030 Homework Module 1"
+author: "**Feedback**"
+output:
+  # pdf_document:
+  #   toc: yes
+  html_document:
+    toc: yes
+---
+
+<!--- Below are global settings for knitr. You can override any of them by adding the changes to individual chunks --->
+
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(error=TRUE,        # Keep compiling upon error
+                      collapse=FALSE,    # collapse by default
+                      echo=TRUE,         # echo code by default
+                      comment = "#>",    # change comment character
+                      fig.width = 5.5,     # set figure width
+                      fig.align = "center",# set figure position
+                      out.width = "49%", # set width of displayed images
+                      warning=TRUE,     # do not show R warnings
+                      message=TRUE)     # do not show R messages
+```
+
+<!--- Change font size for headers --->
+<style>
+h1.title { font-size: 28px; }
+h1 { font-size: 22px; }
+h2 { font-size: 18px; }
+h3 { font-size: 14px; }
+</style>
+
+
+
+**DS 6030 | Spring 2023 | University of Virginia **
+
+Feedback to the homework problems in [Introduction to Statistical Learning (ISLR)](https://web.stanford.edu/~hastie/ISLR2/ISLRv2_website.pdf).
+
+*******************************************
+
+Load a variety of packages. Note: if you don't have a package installed on your machine
+you will need to install it. RStudio will prompt you and you can just confirm installation.
+You can also use *Tools->Install Packages...* in the GUI or run `install.packages`
+inside R, e.g. `install.packages("tidyverse")`
+```{r, message=FALSE}
+library(tidyverse) # ggplot2, dplyr
+library(GGally)    # ggpairs()
+```
+
+
+# General comments
+- Submit a PDF
+  - not just Rmd and/or HTML
+- Check the document before submission
+  - Check that your submitted file is readable: blacked out text
+  - Single page
+  - I don't need to see a 40 page listing of the dataset!
+- Don't use landscape
+  - Grading becomes more difficult
+- Check your submission if the code executed during knitting; 
+  - Restart your R environment from time to time and execute your document in sequence
+  - Execution errors will lead to point deduction
+- Always include the question number and explicitly mention answer
+  - Use provided templates
+- Ensure that the answer is clearly readable
+  - Don't print your data frame
+  - Separate your code from the normal text. 
+  - Don't add answers as code comments
+```
+# Chapter 6
+# Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
+# tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
+# quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo 
+# ...
+```
+- Make sure that all your code is shown and not extending to the right outside the page
+- In most cases, code is not enough. Discuss your observations. 
+  If you create a graph and it shows something remarkable (e.g. correlation, non-linear relationship, outlier), make a comment even if it's not requested in the assignment. Critical analysis is a valuable skill to develop. E.g. did you spot the 120% graduation rate?
+
+```{r}
+plot(ISLR2::College$Grad.Rate, ylab="Graduation rate")
+abline(h=100)
+```
+
+or the 103% PhD rate in the `College` dataset?
+
+```{r}
+plot(ISLR2::College$PhD, ylab="PhD rate")
+abline(h=100)
+```
+
+
+Or the strange behavior for records 357 to 488 (identical values for zn, indus, rad, tax, and ptratio) in the `Boston` dataset? What should we do with these data points?
+```{r, fig.width=15, fig.height=10, out.width='100%', message=FALSE}
+library(reshape2)
+boston <- ISLR2::Boston
+boston['index'] <- 1:nrow(boston)
+long <- melt(boston, id.vars = 'index')
+long['constant'] <- ifelse(357 <= long['index'] & long['index'] <= 488, TRUE, FALSE)
+ggplot(long, aes(x=index, y=value, color=constant)) +
+  geom_rect(aes(xmin=357, xmax=488, ymin=0, ymax=Inf), fill='lightgrey', color='lightgrey', alpha=0.1) +
+  geom_point() +
+  facet_wrap(facets='variable', ncol=4, scales = 'free_y')
+```
+
+- Guide the reader and tell them what to look for
+
+![Example solution with narrative](example-narrative.png)
+
+- Aim to create presentation quality graphs (e.g. use axis labels and legends)
+- Don't print the whole data frame; use `head` or `tail` to show parts of the data frame
+  
+
+# Load the data
+Here we download the data from the book's website. 
+```{r, message=FALSE}
+data.dir = 'https://www.statlearning.com/s' # data directory
+college = read_csv(file.path(data.dir, "College.csv"))
+```
+This uses the tidyverse method `read_csv`. Alternatively, the datasets for the homework are also part of the `ISLR2` package:
+```
+college <- ISLR2::College
+```
+Using the namespace `ISLR2::`, we can access the data without loading the full package. 
+
+
+# What to do when something goes wrong?
+## Always look at your knitted document
+There were several submissions with errors in the PDF!
+
+## Don't suppress warnings or messages
+Always keep the default values for `warning` and `message`.
+```
+warning=TRUE, message=TRUE
+```
+
+
+## Always read warning and error messages
+```{r, out.width='10%'}
+hist(college$Grad.Rate, bins=10)
+```
+
+Check the help text (`?hist`), the keyword argument is called `breaks` in `hist`. `bins` is for example used in Python's `matplotlib` function `hist`.
+
+```
+#> Error in file(file, "rt"): cannot open the connection
+```
+The file could not be found.
+
+```
+View(college)
+```
+```
+#> Error in check_for_XQuartz(): X11 library is missing: install XQuartz from xquartz.macosforge.org
+
+#> Error in .External2(C_dataview, x, title): unable to start data viewer
+```
+In this case, the error messages are caused by the `View` command trying to open a window which fails. This is one of the cases where the message could be ignored because we won't include the `View` command in the future.
+
+## Avoid inconsistencies in R versions
+```
+## Warning: package 'ISLR2' was built under R version 4.1.2
+```
+Update your R environment to the latest version.
+
+## Beware of overwritten methods
+```
+x dplyr::filter() masks stats::filter()
+
+Registered S3 method overwritten by 'GGally':
+  method from   
+  +.gg   ggplot2
+```
+This happens frequently. If this causes a problem, use the full namespace name to be specific, e.g. `stats::filter`. Another commonly seen issue is the `select` function (`dplyr::select` and `MASS::select`)
+
+## Move all data imports to the start of your document
+This avoids out-of-order access to functions or data.
+
+... and did I mention that you must always check your knitted document
+
+# Data preprocessing using `dplyr`
+The `dplyr` (https://dplyr.tidyverse.org/) package is useful for data proprocessing. A summary of methods can be found in this cheatsheet: https://github.com/rstudio/cheatsheets/blob/main/data-transformation.pdf
+
+- Rename columns
+Always check that your data are what you expect
+```{r}
+data.dir <- 'https://www.statlearning.com/s' # data directory
+college <- read_csv(file.path(data.dir, "College.csv"))
+colnames(college)
+```
+
+```{r}
+college <- college %>% 
+  rename(
+    college="...1",
+    Applications=Apps,
+  )
+colnames(college)
+```
+
+- Select subset of columns by name
+```{r}
+df <- college %>% 
+  select(c(Private, Enroll:Outstate))
+colnames(df)
+```
+
+- Select rows matching a condition
+```{r}
+college %>%
+  filter(Outstate == max(Outstate)) %>%
+  select(college, Outstate)
+```
+
+- Create new columns or modify existing columns
+```{r}
+df <- college %>%
+  mutate(
+    Elite = ifelse(Top10perc > 50, "Yes", "No"),
+  )
+select(df, "Top10perc", "Elite") %>%
+  head() %>% 
+  t()
+```
+```{r}
+df <- college %>%
+  mutate(
+    Accept.Rate = Accept / Applications
+  )
+df %>%
+  select(Accept.Rate, Accept, Applications) %>%
+  head()
+```
+
+- Summarize data
+```{r}
+college %>% 
+  select(Applications:Grad.Rate) %>%
+  summarise_all(mean)
+```
+```{r}
+college %>%
+  select(Applications:Grad.Rate) %>%
+  colMeans(na.rm=TRUE)
+```
+Note the difference between the two approaches. The `colMeans` command is part of base-R and we therefore end up with a classicial data frame.
+
+# Precision of numerical results
+```{r}
+cor(college[3:16])
+```
+
+Is this precision justified? It will make the analysis of the table harder. Show fewer digits.
+
+```{r}
+round(cor(college[3:16]), 2)
+```
+
+
+# Visualization
+## Combine multiple plots using base-R
+
+Learn how to combine multiple plots in one e.g. https://bookdown.org/ndphillips/YaRrr/arranging-plots-with-parmfrow-and-layout.html
+```{r}
+auto = ISLR2::Auto
+par(mfrow = c(1, 2))
+hist(auto$mpg)
+hist(auto$origin)
+```
+
+## Pairs plots
+Instead of using the base-R `pairs` plot, try the ``ggpairs` function from the `GGally` package:
+```{r, fig.width=4, fig.height=4, out.width="80%"}
+library(GGally)
+college %>% 
+  select(Private:Enroll) %>%
+  ggpairs(
+    axisLabels="none", 
+    upper = list(
+      continuous = wrap("cor", size=4) # change font size
+    ),
+    lower = list(
+      combo = wrap("facethist", bins=20) # set the number of bins in histogram
+    ),
+    progress=FALSE
+  )
+```
+
+## Control the size of your graphs
+```{r}
+pairs(college[,3:12])
+```
+
+Use `{r, fig.width=10, fig.height=10, out.width="60%"}` to control size of graphs
+
+```{r, fig.width=10, fig.height=10, out.width="60%"}
+pairs(college[,3:12])
+```
+
+This may not be optimal, but it's a lot clearer.
+
+## Correlation matrix
+Use the `ggcorr` function from the `GGally` package to get a color coded 
+form of the correlation matrix
+
+```{r, out.width="80%", fig.width=7, fig.height=7}
+ISLR2::Boston %>% 
+  ggcorr(label=TRUE)
+```
+
+Alternative using the `corrplot` package:
+```{r, out.width="80%", fig.width=7, fig.height=7}
+library(corrplot)
+par(xpd = TRUE) # allow plotting in the margins
+ISLR2::Boston %>% 
+  cor() %>%
+  corrplot(method='number', 
+           type='upper', 
+           number.cex=0.75,
+           mar=c(1, 1, 2, 1))
+```
+
+There are a lot more options:
+```{r}
+par(mfrow=c(2, 2))
+corrplot(cor(ISLR2::Boston))
+corrplot(cor(ISLR2::Boston), method='ellipse')
+corrplot(cor(ISLR2::Boston), method='shade', type='upper')
+corrplot(cor(ISLR2::Boston), method='pie', type='lower')
+```
+
+## Use alpha value for many data points
+```{r, out.width="80%"}
+g <- ggplot(ISLR2::Boston, aes(x=nox, y=dis)) +
+  geom_point(alpha=0.25) +
+  geom_smooth(method='loess', formula=y~x) +
+  geom_smooth(method='lm', formula=y~x, color='darkgreen')
+g
+```
+
+## Add trend lines
+```{r, out.width="80%"}
+g <- ggplot(ISLR2::Boston, aes(x=nox, y=dis)) +
+  geom_point(alpha=0.25) +
+  geom_smooth(method='lm', formula=y~x, color='darkgreen') +
+  geom_smooth(method='lm', formula=y~poly(x, 2), color='darkred') +
+  geom_smooth(method='loess', formula=y~x)
+g
+```
+
+## Use `facet_grid` or `facet_wrap`
+```{r, fig.width=6, fig.height=3, out.width="80%"}
+df <- college %>%
+  mutate(
+    Accept.Rate = Accept / Applications
+  )
+
+ggplot(df, aes(Outstate, Accept.Rate)) +
+  geom_jitter(alpha=0.5) +
+  facet_wrap(~Private) +
+  labs(x="Out of State Tuition", y="Acceptance Rate")
+```
+
+# R-Markdown
+Here is a cheatsheet: https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf
+
+## Control figure size
+Use the options `fig.width`, `fig.height` and `out.width` to control figure size
+```
+{r, fig.width=6, fig.height=3, out.width="80%"}
+```
+`fig.width=6, fig.height=6, out.width='20%'`
+```{r, fig.width=6, fig.height=6, out.width='20%', echo=FALSE}
+last_plot()
+```
+
+`fig.width=6, fig.height=2, out.width='40%'`
+```{r, fig.width=6, fig.height=2, out.width='40%', echo=FALSE}
+last_plot()
+```
+
+`fig.width=6, fig.height=3, out.width='60%'`
+```{r, fig.width=6, fig.height=3, out.width='60%', echo=FALSE}
+last_plot()
+```
