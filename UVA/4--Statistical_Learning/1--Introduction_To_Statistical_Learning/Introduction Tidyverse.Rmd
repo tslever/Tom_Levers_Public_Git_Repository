@@ -1,0 +1,222 @@
+---
+title: "Introduction to R"
+output:
+  # pdf_document:
+  #   number_sections: true
+  #   toc: yes
+  html_document: 
+    number_sections: true
+    toc: yes
+    toc_depth: 2
+    toc_float: yes
+---
+# Getting Help
+- A good source of basic data analysis using R is found in the free book R for Data Science.
+- Web search, especially stackoverflow.com and stats.stackexchange.com
+- Troubleshooting/Debugging.
+  - Check one line of code at a time.
+  - Google your error message
+  - Use scripts
+
+# RStudio
+- Install R and RStudio
+- Make use of Projects in RStudio
+
+# Using R Packages
+It takes two steps to use the functions and data in an R package
+
+1. Install the package
+    - i.e., download the package to your computer
+    - this only needs to be done one time
+    - `install.packages()`
+    - RStudio will also prompt you if package is missing
+2. Load the package
+    - i.e., tell R to look for the package functions and/or data
+    - this needs to be done every time R is started (and you want to use the package)
+    - `library()`
+
+## Note on tidyverse package
+- The tidyverse package https://www.tidyverse.org/packages/ is really just a wrapper to load several related R packages
+  - `ggplot2` for graphics
+  - `dplyr` for data manipulation
+  - `tidyr` for getting data into tidy form
+  - `readr` for loading in data
+  - `tibble` for improved data frames
+  - `purrr` for functional programming
+  - `stringr` for string manipulation
+  - `forcats` for categorical/factor data
+- This provides a nice shortcut to load all of these packages with `library(tidyverse)` instead of each separately:
+```
+#- the hard way
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(readr)
+library(tibble)
+library(purrr)
+library(stringr)
+library(forcats)
+```
+```{r, message=FALSE}
+#- the easy way
+library(tidyverse)
+```
+
+# RMarkdown
+- Homework will be submitted in Rmd and (html) format
+- When you knit a Rmd, it:
+  - starts a new instance of R (clean environment)
+  - in the current directory
+- Any data or code must first be put into the Rmd file
+  - The Rmd won’t know about anything in another script or in your R environment
+  - Any `source()` or data paths are relative to the current directory of the Rmd
+
+# Graphics with the `ggplot2` package
+The [`ggplot2`](https://ggplot2.tidyverse.org/) package is an approach to creating graphics for data analysis.
+
+- See https://ggplot2.tidyverse.org/
+- Keep the [ggplot2 cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) handy
+
+# Data Transformation with the dplyr package
+- See https://dplyr.tidyverse.org/
+- Keep the dplyr cheatsheet handy
+
+## single table verbs
+1. `filter()`: find/keep certain rows
+    - alternative to base::subset()
+    - `slice()` to keep by row number
+    - helper functions: `between()`: numeric values in a range
+2. `arrange()`: reorder rows
+    - alternative to `base::order()`
+    - helper functions: `desc()` to use descending order
+3. `select()`: find/keep certain columns
+    - helper functions: `starts_with()`, `ends_with()`, `matches()`, `contains()`, `?select`
+4. `mutate()`: add/create new variables
+    - alternative to `base::transform()`
+    - `transmute()`: only return new variables
+5. `summarize()`: produce summary statistics
+    - don’t confuse with `summary()`
+    - most useful when data is grouped
+
+## Chaining/Pipes
+Multiple operations can be chained together with the pipe operator, `%>%`, (pronounced as then). Technically, it performs `x %>% f(y) -> f(x, y)`. This lets you focus on the verbs, or actions you are performing.
+```{r}
+x = c(1:5, NA)  
+x %>% mean(na.rm=TRUE)
+```
+
+```{r}
+mean(x, na.rm=TRUE)  
+```
+
+## Example:
+1. Load the `nycflights13` package, which contains airline on-time data for all flights departing NYC in 2013. Also includes useful ‘metadata’ on airlines, airports, weather, and planes.
+2. Load the tidyverse package
+3. Using the flights data,
+    - find all flights that were less than 1000 miles (distance)
+    - Keep only the columns: `dep_delay`, `arr_delay`, `origin`, `dest`, `air_time`, and `distance`
+    - Add the Z-score for departure delays
+    - Convert the departure and arrival delays into hours
+    - Calculate the average flight speed (in mph)
+    - order by average flight speed (fastest to slowest)
+    - return the first 12 rows
+```{r}
+library(tidyverse)    # or library(dplyr) is all we need
+library(nycflights13) # load flight data
+
+flights %>% 
+  filter(distance < 1000) %>% 
+  select(ends_with("delay"), origin:distance) %>% 
+  mutate(Z_dep_delay = (dep_delay - mean(dep_delay, na.rm=TRUE)) /
+           sd(dep_delay, na.rm=TRUE), 
+         dep_delay = dep_delay/60, arr_delay=arr_delay/60,
+         speed = distance/(air_time/60)) %>%
+  arrange(-speed) %>% 
+  print(n=12)
+```
+
+
+## Other useful dplyr functions
+- `distinct()`: retain unique/distinct rows
+- `slice_sample()`: select random rows
+- `sample_min/sample_max()`: select rows with smallest/highest values
+- `mutate()/add_column()` add new column in particular position
+- `add_row()` adds new row(s) to the table
+- `na_if(x, y)` converts the y valued elements in x to NA
+```{r}
+x = c(1, 2, -99, 5, 5, -99)
+na_if(x, -99)            # replace -99 with NA
+```
+- `coalesce(x, y)` replaces the NA in x with y
+```{r}
+x = c(1, 2, NA, 5, 5, NA)
+coalesce(x, 0)         # replace NA with 0
+```
+
+# Groupwise operations
+## Split - Apply - Combine
+The dplyr operations are more powerful when they can be used with grouping variables. Split - Apply - Combine.
+
+## `group_by()`
+First use the `group_by()` function to group the data (determines how to split), then apply function(s) to each group using the `summarise()` function. Note: grouping should to be applied on discrete variables (categorical, factor, or maybe integer valued columns).
+```{r}
+flights %>% 
+  group_by(origin, dest) %>%   # group by both origin and dest
+  summarize(max.delay = max(arr_delay, na.rm=TRUE),
+            avg.delay = mean(arr_delay, na.rm=TRUE),
+            min.delay = min(arr_delay, na.rm=TRUE),
+            count = n() )        # n() gives the group count
+```
+
+- `count(...)` is a shortcut for `group_by(...) %>% summarize(n=n())`
+- `ungroup()` removes the grouping
+
+## Grouped Mutate and Filter
+When data is grouped, `mutate()` and `filter()` operate on each group independently
+```{r}
+#- proportion of carrier at each dest
+flights %>% 
+  count(dest, carrier) %>%             
+  group_by(dest) %>%                   # group by dest
+  mutate(total=sum(n), p=n/sum(n)) %>% # grouped mutate sum(n) is by group
+  arrange(desc(total), -p)             # arrange by most freq dest and prop
+```
+
+# Relational Data and Joins
+Joins are used to combine or merge two datasets. This is a major aspect of SQL.
+
+## Mutating Joins
+See [13.4](https://r4ds.had.co.nz/relational-data.html#mutating-joins) of R4DS
+
+- `inner_join(x, y)` only includes observations that having matching x and y key values. Rows of x can be dropped/filtered.
+- `left_join(x, y)` includes all observations in x, regardless of whether they match or not. This is the most commonly used join because it ensures that you don’t lose observations from your primary table.
+- `right_join(x, y)` includes all observations in y. It’s equivalent to left_join(y, x), but the columns will be ordered differently.
+- `full_join() includes all observations from x and y.
+- The left, right and full joins are collectively know as outer joins. When a row doesn't match in an outer join, the new variables are filled in with missing values.
+  - *outer joins* will fill any missing values with `NA`
+- If there are duplicate keys, all combinations are returned.
+- Missing values are given `NA`.
+
+# Data Importing
+## readr package
+- See https://readr.tidyverse.org/
+- Keep the [data import cheatsheet](https://rawgit.com/rstudio/cheatsheets/master/data-import.pdf) handy.
+
+## readxl package
+- See https://readxl.tidyverse.org/ for importing excel files
+
+## Tidy Data with the tidyr package
+- https://tidyr.tidyverse.org/
+- Keep the [data import cheatsheet](https://rawgit.com/rstudio/cheatsheets/master/data-import.pdf) handy. Page two describes the tidyr functionality
+
+## Why Tidy Data?
+- Tidy data (in form of a data frame) is usually the best form for analysis
+  - some exceptions are for modeling (e.g., matrix manipulations and algorithms)
+- For presentation of data (e.g., in tables), non-tidy form can often do better
+- the functions in `tidyr` usually allow us to covert from non-tidy to tidy for analysis and also from tidy to non-tidy for presentation
+
+## Main tidyr functions
+- `pivot_wider()/spread()`:	Spreads a pair of key:value columns into a set of tidy columns
+- `pivot_longer()/gather()`: Gather takes multiple columns and collapses into key-value pairs, duplicating all other columns as needed. You use `pivot_longer()/gather()` when you notice that you have columns that are not variables
+- `separate()` turns a single character column into multiple columns
+- `unite()`	paste together multiple columns into one (reverse of `separate()`)
