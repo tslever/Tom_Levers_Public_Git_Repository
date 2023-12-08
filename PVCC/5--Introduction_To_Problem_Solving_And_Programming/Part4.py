@@ -3,9 +3,10 @@
 # Introduction to Problem Solving and Programming
 # Part4.py allows a user to encode plaintext or decode cyphertext
 
-# Test trying to decode cyphertext in a nonexistent file.
-# Test decoding.
-# Test encoding.
+# To test, test
+# - Decoding cyphertext loaded from a nonexisting file
+# - Decoding cyphertext loaded from an existing file
+# - Encoding plaintext into cyphertext
 
 plaintext_or_cyphertext = input('Do you wish to enter plaintext to convert to cyphertext or decode existing cyphertext (plaintext / cyphertext)? ')
 if plaintext_or_cyphertext == 'cyphertext':
