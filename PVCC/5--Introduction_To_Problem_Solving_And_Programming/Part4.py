@@ -8,24 +8,32 @@
 # - Decoding cyphertext loaded from an existing file
 # - Encoding plaintext into cyphertext
 
+import os
+
 plaintext_or_cyphertext = input('Do you wish to enter plaintext to convert to cyphertext or decode existing cyphertext (plaintext / cyphertext)? ')
 if plaintext_or_cyphertext == 'cyphertext':
-    # If file cypher.txt exists,
-    #     Ask for integer distance
-    #     Decode
-    #     Show plaintext
-    pass
+    if os.path.exists('cypher.txt'):
+        with open('cypher.txt', 'r') as file:
+            cyphertext = file.read()
+            print(f'I read cyphertext {cyphertext}.')
+            distance = input('Enter integer distance: ')
+            print(f'You entered distance {distance}.')
+            # TODO: Decode cyphertext into plaintext
+            plaintext = 'placeholder plaintext'
+            print(f'Your cyphertext is decoded into plaintext "{plaintext}".')
+    else:
+        raise FileExistsError('cypher.txt does not exist: Use this program to convert plaintext into cyphertext.')
 elif plaintext_or_cyphertext == 'plaintext':
-    # Ask user to enter integer distance
-    # Let user know what distance user entered
-    # Ask user for any printable character plaintext
-    # Let user know what plaintext user entered
-    # Convert plaintext to cyphertext
-    # Let user know that plaintext is converted to cyphertext
-    print('Your plaintext is encoded.')
-    # Save cyphertext in file cypher.txt
-    # Let user know that cyphertext is written to cypher.txt
-    print("Your cyphertext is written to cypher.txt.")
+    plaintext = input('Enter any printable character plaintext: ')
+    print(f'You entered plaintext "{plaintext}".')
+    distance = input('Enter integer distance: ')
+    print(f'You entered distance {distance}.')
+    # TODO: Encode plaintext into cyphertext
+    cyphertext = 'placeholder cyphertext'
+    print(f'Your plaintext is encoded into cyphertext "{cyphertext}".')
+    with open('cypher.txt', 'w') as file:
+        file.write(cyphertext)
+    print('Your cyphertext is written to cypher.txt.')
 else:
     print('Your entry is not supported.')
 input()
