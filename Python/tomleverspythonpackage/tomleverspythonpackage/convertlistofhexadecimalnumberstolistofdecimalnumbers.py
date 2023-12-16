@@ -1,5 +1,9 @@
 # Converts a list of hexademical numbers to a list of decimal numbers
-# Usage: At command line, enter python convertlistofhexadecimalnumberstolistofdecimalnumbers.py <array of numbers surrounded by double quotes>
+# Usage:
+# At command line, enter python convertlistofhexadecimalnumberstolistofdecimalnumbers.py <array of numbers surrounded by double quotes>
+# import tomleverspythonpackage; tomleverspythonpackage.convertlistofhexadecimalnumberstolistofdecimalnumbers.translate(['10', '11'])
+# import tomleverspythonpackage.convertlistofhexadecimalnumberstolistofdecimalnumbers; tomleverspythonpackage.convertlistofhexadecimalnumberstolistofdecimalnumbers.translate(['10', '11'])
+# from tomleverspythonpackage import convertlistofhexadecimalnumberstolistofdecimalnumbers; convertlistofhexadecimalnumberstolistofdecimalnumbers.translate(['10', '11'])
 
 import argparse
 
