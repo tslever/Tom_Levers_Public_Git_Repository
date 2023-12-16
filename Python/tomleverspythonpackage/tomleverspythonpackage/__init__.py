@@ -17,5 +17,5 @@ from .exporttopdf import *
 from .getlistofanchortagswithhyperlinkreferences import *
 from .joindatasets import *
 from .listabsolutepathsoffileindirectorytree import *
-from .upgradeallpippackages import *
+from .upgradepippackages import *
 from .utilitiesfororganizinglinesfromacsvfileintoadataframe import *
