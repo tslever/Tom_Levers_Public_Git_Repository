@@ -1,7 +1,7 @@
 # Usage:
 # from tomleverspythonpackage.csvfilereader import CsvFileReader
 # csv_file_reader = CsvFileReader()
-# csv_file_reader.reads_into_a_dictionary('dictionary.csv', str, int)
+# csv_file_reader.reads_into_a_dictionary('Dictionary.csv', str, int)
 
 class CsvFileReader:
     
