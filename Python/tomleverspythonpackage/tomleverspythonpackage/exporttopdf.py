@@ -1,6 +1,6 @@
 # Removes components of Jupyter-Notebook cells based on cell tags.
 # Based on https://nbconvert.readthedocs.io/en/latest/removing_cells.html.
-# Example: python Tom_Levers_Git_Repository/Python/tomleverspythonpackage/tomleverspythonpackage/exporttopdf.py Tom_Levers_Git_Repository/UVA/3--Practice_And_Application_Of_Data_Science/12--Interactive_Data_Visualization_And_Dashboards/labassignment12.ipynb
+# Example: python Tom_Levers_Public_Git_Repository/Python/tomleverspythonpackage/tomleverspythonpackage/exporttopdf.py Tom_Levers_Public_Git_Repository/UVA/3--Practice_And_Application_Of_Data_Science/12--Interactive_Data_Visualization_And_Dashboards/labassignment12.ipynb
 
 from traitlets.config import Config
 import nbformat as nbf
