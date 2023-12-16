@@ -1,6 +1,6 @@
 import sys
-from exceptions.acheckcommandlineargumentsexception import *
-from exceptions.aninvalidlineindicesexception import *
+from .exceptions.acheckcommandlineargumentsexception import *
+from .exceptions.aninvalidlineindicesexception import *
 
 
 #################################################################################################################################################################################################################

@@ -1,6 +1,6 @@
-from exceptions.afieldvaluesmismatchexception import *
-from exceptions.aninvalidpathexception import *
-from exceptions.aninvalidlineindicesexception import *
+from .exceptions.afieldvaluesmismatchexception import *
+from .exceptions.aninvalidpathexception import *
+from .exceptions.aninvalidlineindicesexception import *
 import pandas
 from pathlib import Path
 
