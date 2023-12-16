@@ -2,7 +2,7 @@ import argparse
 import pandas as pd
     
 def join_datasets(
-    list_of_join_keys,
+    list_of_join_keys_as_string,
     name_of_sheet_with_dataset_1,
     name_of_sheet_with_dataset_2,
     number_of_rows_to_skip_in_dataset_1,
@@ -18,6 +18,7 @@ def join_datasets(
         print(data_frame_1)
         print('data_frame_2:')
         print(data_frame_2)
+        list_of_join_keys = list_of_join_keys_as_string.strip('[]').split(',')
         column_of_concatenated_elements_of_columns_corresponding_to_join_keys_of_data_frame_1 = data_frame_1[list_of_join_keys[0]]
         for i in range(1, len(list_of_join_keys)):
             column_of_concatenated_elements_of_columns_corresponding_to_join_keys_of_data_frame_1 = column_of_concatenated_elements_of_columns_corresponding_to_join_keys_of_data_frame_1 + '|' + data_frame_1[list_of_join_keys[i]]
@@ -62,7 +63,7 @@ def join_datasets(
 def parse_arguments():
     dictionary_of_arguments = {}
     parser = argparse.ArgumentParser(prog = 'Join Datasets', description = 'This program joins datasets.')
-    parser.add_argument('string_of_join_keys_separated_by_pipes', help = 'string of join keys separated by pipes')
+    parser.add_argument('list_of_join_keys_as_string', help = 'string of join keys separated by pipes')
     parser.add_argument('name_of_sheet_with_dataset_1', help = 'name of sheet with dataset 1')
     parser.add_argument('name_of_sheet_with_dataset_2', help = 'name of sheet with dataset 2')
     parser.add_argument('number_of_rows_to_skip_in_dataset_1', help = 'number of rows to skip in dataset 1')
@@ -71,8 +72,7 @@ def parse_arguments():
     parser.add_argument('path_to_dataset_2', help = 'path to dataset 2')
     parser.add_argument('type_of_join', help = 'type of join')
     args = parser.parse_args()
-    string_of_join_keys_separated_by_pipes = args.string_of_join_keys_separated_by_pipes
-    list_of_join_keys = string_of_join_keys_separated_by_pipes.split('|')
+    list_of_join_keys_as_string = args.list_of_join_keys_as_string
     name_of_sheet_with_dataset_1 = args.name_of_sheet_with_dataset_1
     name_of_sheet_with_dataset_2 = args.name_of_sheet_with_dataset_2
     number_of_rows_to_skip_in_dataset_1 = int(args.number_of_rows_to_skip_in_dataset_1)
@@ -80,7 +80,7 @@ def parse_arguments():
     path_to_dataset_1 = args.path_to_dataset_1
     path_to_dataset_2 = args.path_to_dataset_2
     type_of_join = args.type_of_join
-    print(f'list of join keys: {list_of_join_keys}')
+    print(f'list of join keys as string: {list_of_join_keys_as_string}')
     print(f'name of sheet with dataset 1: {name_of_sheet_with_dataset_1}')
     print(f'name of sheet with dataset 2: {name_of_sheet_with_dataset_2}')
     print(f'number of rows to skip in dataset 1: {number_of_rows_to_skip_in_dataset_1}')
@@ -88,7 +88,7 @@ def parse_arguments():
     print(f'path to dataset 1: {path_to_dataset_1}')
     print(f'path to dataset 2: {path_to_dataset_1}')
     print(f'type of join: {type_of_join}')
-    dictionary_of_arguments['list_of_join_keys'] = list_of_join_keys
+    dictionary_of_arguments['list_of_join_keys_as_string'] = list_of_join_keys_as_string
     dictionary_of_arguments['name_of_sheet_with_dataset_1'] = name_of_sheet_with_dataset_1
     dictionary_of_arguments['name_of_sheet_with_dataset_2'] = name_of_sheet_with_dataset_2
     dictionary_of_arguments['number_of_rows_to_skip_in_dataset_1'] = number_of_rows_to_skip_in_dataset_1
@@ -101,7 +101,7 @@ def parse_arguments():
 if __name__ == '__main__':
     dictionary_of_arguments = parse_arguments()
     join_datasets(
-        list_of_join_keys = dictionary_of_arguments['list_of_join_keys'],
+        list_of_join_keys_as_string = dictionary_of_arguments['list_of_join_keys_as_string'],
         name_of_sheet_with_dataset_1 = dictionary_of_arguments['name_of_sheet_with_dataset_1'],
         name_of_sheet_with_dataset_2 = dictionary_of_arguments['name_of_sheet_with_dataset_2'],
         number_of_rows_to_skip_in_dataset_1 = dictionary_of_arguments['number_of_rows_to_skip_in_dataset_1'],
