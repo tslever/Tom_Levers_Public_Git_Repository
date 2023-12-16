@@ -1,17 +1,18 @@
 # Removes components of Jupyter-Notebook cells based on cell tags.
 # Based on https://nbconvert.readthedocs.io/en/latest/removing_cells.html.
-# Example: python Tom_Levers_Public_Git_Repository/Python/tomleverspythonpackage/tomleverspythonpackage/exporttopdf.py Tom_Levers_Public_Git_Repository/UVA/3--Practice_And_Application_Of_Data_Science/12--Interactive_Data_Visualization_And_Dashboards/labassignment12.ipynb
+# Usage:
+# python exporttopdf.py JuPyteR_Notebook.ipynb
+# from tomleverspythonpackage.exporttopdf import export_to_pdf; export_to_pdf('JuPyteR_Notebook.ipynb')
 
+import argparse
 from traitlets.config import Config
-import nbformat as nbf
+from pathlib import Path
 from nbconvert.exporters import PDFExporter
 from nbconvert.preprocessors import TagRemovePreprocessor
-from pathlib import Path
-import sys
 
-def export_to_pdf():
+def export_to_pdf(path_of_jupyter_notebook_as_string):
 
-    path_of_jupyter_notebook_as_string = sys.argv[1]
+    path_of_jupyter_notebook_as_string
     path_of_jupyter_notebook = Path(path_of_jupyter_notebook_as_string)
     path_of_parent_directory = path_of_jupyter_notebook.parent
     absolute_path_of_parent_directory = path_of_parent_directory.resolve()
@@ -42,5 +43,16 @@ def export_to_pdf():
     with open(str(absolute_path_of_parent_directory) + "/" + name_of_jupyter_notebook + ".pdf",  "wb") as f:
         f.write(output[0])
 
+def parse_arguments():
+    dictionary_of_arguments = {}
+    parser = argparse.ArgumentParser(prog = 'Export JuPyteR Notebook To PDF', description = 'This program exports a JuPyteR notebook to a PDF.')
+    parser.add_argument('path_of_jupyter_notebook_as_string', help = 'path of JuPyteR notebook as string')
+    args = parser.parse_args()
+    path_of_jupyter_notebook_as_string = args.path_of_jupyter_notebook_as_string
+    print(f'path of JuPyteR notebook as string: {path_of_jupyter_notebook_as_string}')
+    dictionary_of_arguments['path_of_jupyter_notebook_as_string'] = path_of_jupyter_notebook_as_string
+    return dictionary_of_arguments
+
 if __name__ == "__main__":
-    export_to_pdf()
+    dictionary_of_arguments = parse_arguments()
+    export_to_pdf(dictionary_of_arguments['path_of_jupyter_notebook_as_string'])
