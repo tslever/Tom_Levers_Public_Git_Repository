@@ -1,3 +1,8 @@
+# Upgrades pip packages
+# Usage:
+# python upgradepippackages.py
+# from tomleverspythonpackage.upgradepippackages import upgrade_pip_packages; upgrade_pip_packages()
+
 import subprocess
 
 def upgrade_pip_packages():
@@ -7,3 +12,6 @@ def upgrade_pip_packages():
             line = line.split('==')
             line = line[0]
             subprocess.run(f'pip install --upgrade {line}', shell = True)
+
+if __name__ == '__main__':
+    upgrade_pip_packages()
