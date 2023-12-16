@@ -11,7 +11,7 @@ __version__ = "0.1.0"
 __author__ = "Tom Lever"
 __credits__ = "Tom Lever"
 
-from .convertarrayofnumberstostring import *
+from .convertlistofhexadecimalnumberstolistofdecimalnumbers import *
 from .csvfilereader import *
 from .exporttopdf import *
 from .getlistofanchortagswithhyperlinkreferences import *
