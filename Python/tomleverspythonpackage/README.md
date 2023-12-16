@@ -2,9 +2,9 @@
 
 A Python package offering Tom Lever's Python solutions
 
-Created: 01/19/23 by Tom Lever
+Created: 01/19/2023 by Tom Lever
 
-Updated: 01/19/23 by Tom Lever
+Updated: 12/16/2023 by Tom Lever
 
 ## Metadata
 
@@ -14,7 +14,7 @@ Project name: Tom Lever's Python Package
 
 ## Synopsis
 
-### Creating montecarlosimulator
+### Creating tomleverspythonpackage
 
 Regarding creating this package: https://betterscientificsoftware.github.io/python-for-hpc/tutorials/python-pypi-packaging/
 

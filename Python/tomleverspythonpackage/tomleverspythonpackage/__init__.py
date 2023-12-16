@@ -15,6 +15,7 @@ from .convertarrayofnumberstostring import *
 from .csvfilereader import *
 from .exporttopdf import *
 from .getlistofanchortagswithhyperlinkreferences import *
+from .joindatasets import *
 from .listabsolutepathsoffileindirectorytree import *
 from .upgradeallpippackages import *
 from .utilitiesfororganizinglinesfromacsvfileintoadataframe import *
