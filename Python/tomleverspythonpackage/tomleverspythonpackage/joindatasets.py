@@ -1,3 +1,20 @@
+'''
+joindatasets.py
+
+Joins two datasets given:`
+- a list of join keys as a string
+- the name of an Excel worksheet with the first dataset
+- the name of an Excel worksheet with the second dataset
+- the number of rows to skip in the first dataset
+- the number of rows to skip in the second dataset
+- the path to the Excel workbook with the first dataset
+- the path to the Excel workbook with the second dataset
+- the type of join
+
+Example usage:
+python joindatasets.py '[EPA ID,Site Name]' Sites_Data Remedy_Data 13 0 Sites_Data.xlsx Remedy_Data.xlsx outer
+'''
+
 import argparse
 import pandas as pd
     
