@@ -87,7 +87,7 @@ public class a_player
 		
 		// Rule 103.7a: In a two-player game, the player who plays first skips the draw step (see rule 504, "Draw Step") of their first turn.
 		if ((this.Was_Starting_Player) && (this.Index_Of_The_Present_Turn == 0)) {
-			System.out.println("    Because " + this.Name + " is the starting player and this is the first turn, the draw step is skipped.");
+			System.out.println("Because " + this.Name + " is the starting player and this is the first turn, the draw step is skipped.");
 		}
 		else {
 			this.completes_her_draw_step();
@@ -160,7 +160,7 @@ public class a_player
 	}
 	
 	
-	public void completes_her_precombat_main_phase() {
+	public void completes_her_precombat_main_phase() throws Exception {
 		
 		System.out.println(this.Name + " is completing their precombat main phase.");
 		
@@ -187,18 +187,20 @@ public class a_player
 				The_List_Of_Nonland_Cards_That_May_Be_Used_To_Cast_A_Spell.add(The_Card);
 			}
 		}
-		System.out.println("List of cards that may be used to cast a spell: " + The_List_Of_Nonland_Cards_That_May_Be_Used_To_Cast_A_Spell);
+		System.out.println(this.Name + " may play cast a spell using a card in the following list. " + The_List_Of_Nonland_Cards_That_May_Be_Used_To_Cast_A_Spell);
 		
-		a_nonland_card The_Nonland_Card_To_Use_To_Cast_A_Spell = this.chooses_a_card_to_use_to_cast_a_spell_from(The_List_Of_Nonland_Cards_That_May_Be_Used_To_Cast_A_Spell);
-		if (The_Nonland_Card_To_Use_To_Cast_A_Spell != null) {
-			/*a_mana_pool The_Mana_Pool_To_Use_To_Cast_A_Spell = */this.acquires_mana_for(The_Nonland_Card_To_Use_To_Cast_A_Spell);
+		if (The_List_Of_Nonland_Cards_That_May_Be_Used_To_Cast_A_Spell.size() > 0) {
+			a_nonland_card The_Nonland_Card_To_Use_To_Cast_A_Spell = this.chooses_a_card_to_use_to_cast_a_spell_from(The_List_Of_Nonland_Cards_That_May_Be_Used_To_Cast_A_Spell);
+			//a_mana_pool The_Mana_Pool_To_Use_To_Cast_A_Spell =
+			this.acquires_mana_for(The_Nonland_Card_To_Use_To_Cast_A_Spell);
 			//this.Mana_Pool.increases_by(The_Mana_Pool_To_Use_To_Cast_A_Spell);
 			//this.Mana_Pool.decreases_by(The_Mana_Pool_To_Use_To_Cast_A_Spell);
+			The_Nonland_Card_To_Use_To_Cast_A_Spell = this.Hand.plays(The_Nonland_Card_To_Use_To_Cast_A_Spell);
+			System.out.println("After playing a nonland card, the hand of " + this.Name + " has " + this.Hand.provides_its_number_of_cards() + " cards and contains the following. " + this.Hand);
 			a_spell The_Spell = new a_spell(The_Nonland_Card_To_Use_To_Cast_A_Spell.provides_its_name(), The_Nonland_Card_To_Use_To_Cast_A_Spell.provides_its_type());
 			this.Stack.receives(The_Spell);
+			System.out.println("The stack contains the following spells. " + this.Stack);
 		}
-		
-		System.out.println("The stack contains the following spells.\n" + this.Stack);
 		
 		while (this.Stack.contains_spells()) {
 			a_spell The_Spell = this.Stack.provides_its_top_spell();
@@ -269,7 +271,7 @@ public class a_player
 	
 	public void completes_her_untap_step() {
 		
-		System.out.println("    " + this.Name + " is completing their untap step.");
+		System.out.println(this.Name + " is completing their untap step.");
 		
 		// Rule 500.5: When a phase or step begins, any effects scheduled to last "until" that phase or step expire.
 		// Rule 500.6: When a phase or step begins, any abilities that trigger "at the beginning of" that phase or step trigger. They are put on the stack the next time a player would receive priority. (See rule 117, "Timing and Priority.")
@@ -291,7 +293,7 @@ public class a_player
 	// TODO: Allow for processing the stack.
 	public void completes_her_upkeep_step() {
 		
-		System.out.println("    " + this.Name + " is completing their upkeep step.");
+		System.out.println(this.Name + " is completing their upkeep step.");
 		
 		// Rule 500.5: When a phase or step begins, any effects scheduled to last "until" that phase or step expire.
 		// Rule 500.6: When a phase or step begins, any abilities that trigger "at the beginning of" that phase or step trigger. They are put on the stack the next time a player would receive priority. (See rule 117, "Timing and Priority.")
@@ -311,7 +313,7 @@ public class a_player
 	// TODO: Use discretion in determining permanents to untap.
 	public void determines_her_permanents_to_untap() {
 		
-		System.out.println("        " + this.Name + " is determining their permanents to untap.");
+		System.out.println(this.Name + " is determining their permanents to untap.");
 		
 		this.List_Of_Permanents_That_Should_Be_Untapped.clear();
 		
@@ -347,12 +349,10 @@ public class a_player
 		this.Hand.receives(this.Deck.provides_a_card());
 		
 		System.out.println(
-			"After drawing, the deck of " + this.Name + " has " + this.Deck.provides_its_number_of_cards() + " cards and contains the following.\n" +
-			this.Deck + "\n"
+			"After drawing, the deck of " + this.Name + " has " + this.Deck.provides_its_number_of_cards() + " cards and contains the following. " + this.Deck
 		);
 		System.out.println(
-			"After drawing, the hand of " + this.Name + " has " + this.Hand.provides_its_number_of_cards() + " cards and contains the following.\n" +
-			this.Hand + "\n"
+			"After drawing, the hand of " + this.Name + " has " + this.Hand.provides_its_number_of_cards() + " cards and contains the following. " + this.Hand
 		);
 	}
 	
@@ -384,17 +384,18 @@ public class a_player
 	
 	public void plays_a_land() {
 		
-		if (this.Hand.provides_its_number_of_land_cards() > 0) {
-			System.out.println("    " + this.Name + " is playing a land.");
-			int The_Index_Of_The_Land_Card_To_Play = this.Random_Data_Generator.nextInt(0, this.Hand.provides_its_number_of_land_cards() - 1);
-			a_land_card The_Land_Card_To_Play = this.Hand.provides_the_land_card_at_index(The_Index_Of_The_Land_Card_To_Play);
+		int The_Number_Of_Land_Cards = this.Hand.provides_its_number_of_land_cards();
+		if (The_Number_Of_Land_Cards > 0) {
+			System.out.println(this.Name + " is playing a land.");
+			int The_Index_Of_The_Land_Card_To_Play = this.Random_Data_Generator.nextInt(0, The_Number_Of_Land_Cards - 1);
+			a_land_card The_Land_Card_To_Play = this.Hand.provides_the_land_card_in_the_list_of_land_cards_at_index(The_Index_Of_The_Land_Card_To_Play);
 			if (The_Land_Card_To_Play.provides_its_name().equals("Plains")) {
 				this.Part_Of_The_Battlefield.receives_land(new a_Plains(false));
 			} else if (The_Land_Card_To_Play.provides_its_name().equals("Forest")) {
 				this.Part_Of_The_Battlefield.receives_land(new a_Forest(false));
 			}
-			System.out.println("After playing a land card, the hand of " + this.Name + " has " + this.Hand.provides_its_number_of_cards() + " cards and contains the following.\n" + this.Hand);
-			System.out.println("After playing a land card, the part of the battlefield of " + this.Name + " has " + this.Part_Of_The_Battlefield.provides_its_number_of_permanents() + " cards and contains the following.\n" + this.Part_Of_The_Battlefield);
+			System.out.println("After playing a land card, the hand of " + this.Name + " has " + this.Hand.provides_its_number_of_cards() + " cards and contains the following. " + this.Hand);
+			System.out.println("After playing a land card, the part of the battlefield of " + this.Name + " has " + this.Part_Of_The_Battlefield.provides_its_number_of_permanents() + " cards and contains the following. " + this.Part_Of_The_Battlefield);
 		}
 	}
 	
@@ -427,13 +428,12 @@ public class a_player
 	public void shuffles_her_deck() {
 		this.Deck.shuffles();
 		System.out.println(
-			"The deck of " + this.Name + " after shuffling has " + this.Deck.provides_its_number_of_cards() + " cards and is the following.\n" +
-			this.Deck + "\n"
+			"The deck of " + this.Name + " after shuffling has " + this.Deck.provides_its_number_of_cards() + " cards and is the following. " + this.Deck
 		);
 	}
 	
 	
-	public void takes_her_turn() {
+	public void takes_her_turn() throws Exception {
 
 		System.out.println(this.Name + " is taking their turn.");
 		
@@ -449,7 +449,7 @@ public class a_player
 	
 	public void untaps_her_permanents() {
 		
-		System.out.println("        " + this.Name + " is untapping their permanents.");
+		System.out.println(this.Name + " is untapping their permanents.");
 		
 		for (a_permanent The_Permanent : this.List_Of_Permanents_That_Should_Be_Untapped) {
 			The_Permanent.untaps();

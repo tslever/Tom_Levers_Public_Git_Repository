@@ -31,7 +31,7 @@ public class a_pair_of_players {
 			this.Second_Player.becomes_the_starting_player();
 			this.Active_Player = this.Second_Player;
 		}
-		System.out.println(this.Active_Player.provides_her_name() + " is the starting player.\n");
+		System.out.println(this.Active_Player.provides_her_name() + " is the starting player.");
 		
 	}
 	
@@ -46,7 +46,7 @@ public class a_pair_of_players {
 	 * The starting player takes their first turn.
 	 */
 	
-	public void play() {
+	public void play() throws Exception {
 		this.decide_the_starting_player();
 		this.shuffle_their_decks();
 		this.draw_hands();

@@ -31,10 +31,12 @@ public class a_stack {
 	
 	@Override
 	public String toString() {
-		StringBuilder The_String_Builder = new StringBuilder("The Stack");
-		for (a_spell The_Spell : this.List_Of_Spells) {
-			The_String_Builder.append("\n");
-			The_String_Builder.append(The_Spell);
+		StringBuilder The_String_Builder = new StringBuilder("Stack: ");
+		for (int i = 0; i < this.List_Of_Spells.size() - 1; i++) {
+			The_String_Builder.append(this.List_Of_Spells.get(i) + "; ");
+		}
+		if (this.List_Of_Spells.size() > 0) {
+			The_String_Builder.append(this.List_Of_Spells.get(this.List_Of_Spells.size() - 1));
 		}
 		return The_String_Builder.toString();
 	}

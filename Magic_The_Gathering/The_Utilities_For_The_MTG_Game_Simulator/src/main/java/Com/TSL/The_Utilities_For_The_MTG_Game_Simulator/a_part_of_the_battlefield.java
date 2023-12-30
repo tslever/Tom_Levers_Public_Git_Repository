@@ -94,27 +94,58 @@ public class a_part_of_the_battlefield {
 	@Override
 	public String toString() {
 		
-		StringBuilder The_String_Builder = new StringBuilder("Part of the Battlefield");
+		StringBuilder The_String_Builder = new StringBuilder("Part of the Battlefield: ");
 		
-		for (an_artifact The_Artifact : this.List_Of_Artifacts) {
-			The_String_Builder.append("\n");
-			The_String_Builder.append(The_Artifact);
+		for (int i = 0; i < this.List_Of_Artifacts.size() - 1; i++) {
+			The_String_Builder.append(this.List_Of_Artifacts.get(i));
+			The_String_Builder.append("; ");
 		}
-		for (a_creature The_Creature : this.List_Of_Creatures) {
-			The_String_Builder.append("\n");
-			The_String_Builder.append(The_Creature);
+		if (this.List_Of_Artifacts.size() > 0) {
+			The_String_Builder.append(this.List_Of_Artifacts.get(this.List_Of_Artifacts.size() - 1));
 		}
-		for (an_enchantment The_Enchantment : this.List_Of_Enchantments) {
-			The_String_Builder.append("\n");
-			The_String_Builder.append(The_Enchantment);
+		
+		if (this.List_Of_Artifacts.size() > 0 && this.List_Of_Creatures.size() > 0) {
+			The_String_Builder.append("; ");
 		}
-		for (a_land The_Land : this.List_Of_Lands) {
-			The_String_Builder.append("\n");
-			The_String_Builder.append(The_Land);
+		for (int i = 0; i < this.List_Of_Creatures.size() - 1; i++) {
+			The_String_Builder.append(this.List_Of_Creatures.get(i));
+			The_String_Builder.append("; ");
 		}
-		for (a_planeswalker The_Planeswalker : this.List_Of_Planeswalkers) {
-			The_String_Builder.append("\n");
-			The_String_Builder.append(The_Planeswalker);
+		if (this.List_Of_Creatures.size() > 0) {
+			The_String_Builder.append(this.List_Of_Creatures.get(this.List_Of_Creatures.size() - 1));
+		}
+		
+		if ((this.List_Of_Artifacts.size() > 0 || this.List_Of_Creatures.size() > 0) && this.List_Of_Enchantments.size() > 0) {
+			The_String_Builder.append("; ");
+		}
+		for (int i = 0; i < this.List_Of_Enchantments.size() - 1; i++) {
+			The_String_Builder.append(this.List_Of_Enchantments.get(i));
+			The_String_Builder.append("; ");
+		}
+		if (this.List_Of_Enchantments.size() > 0) {
+			The_String_Builder.append(this.List_Of_Enchantments.get(this.List_Of_Enchantments.size() - 1));
+		}
+		
+		if ((this.List_Of_Artifacts.size() > 0 || this.List_Of_Creatures.size() > 0 || this.List_Of_Enchantments.size() > 0) && this.List_Of_Lands.size() > 0) {
+			The_String_Builder.append("; ");
+		}
+		for (int i = 0; i < this.List_Of_Lands.size() - 1; i++) {
+			The_String_Builder.append(this.List_Of_Lands.get(i));
+			The_String_Builder.append("; ");
+		}
+		if (this.List_Of_Lands.size() > 0) {
+			The_String_Builder.append(this.List_Of_Lands.get(this.List_Of_Lands.size() - 1));
+		}
+		
+		if ((this.List_Of_Artifacts.size() > 0 || this.List_Of_Creatures.size() > 0 || this.List_Of_Enchantments.size() > 0 || this.List_Of_Lands.size() > 0) && this.List_Of_Planeswalkers.size() > 0) {
+			The_String_Builder.append("; ");
+		}
+		for (int i = 0; i < this.List_Of_Planeswalkers.size() - 1; i++) {
+			The_String_Builder.append(this.List_Of_Planeswalkers.get(i));
+			The_String_Builder.append("; ");
+		}
+		if (this.List_Of_Planeswalkers.size() > 0) {
+			The_String_Builder.append(this.List_Of_Planeswalkers.get(this.List_Of_Planeswalkers.size() - 1));
 		}
 
 		return The_String_Builder.toString();

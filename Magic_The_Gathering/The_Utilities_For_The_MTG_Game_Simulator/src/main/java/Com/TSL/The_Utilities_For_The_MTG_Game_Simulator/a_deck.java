@@ -42,11 +42,12 @@ public class a_deck
 	@Override
 	public String toString() {
 		
-		StringBuilder The_String_Builder = new StringBuilder(this.Name);
-		for (int i = 0; i < this.List_Of_Cards.size(); i++) {
-			The_String_Builder.append("\n");
+		StringBuilder The_String_Builder = new StringBuilder(this.Name + ": ");
+		for (int i = 0; i < this.List_Of_Cards.size() - 1; i++) {
 			The_String_Builder.append(this.List_Of_Cards.get(i));
+			The_String_Builder.append("; ");
 		}
+		The_String_Builder.append(this.List_Of_Cards.get(this.List_Of_Cards.size() - 1));
 		return The_String_Builder.toString();
 	}
 }
