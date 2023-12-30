@@ -227,30 +227,30 @@ public class a_player
 	public void determines_playability_and_a_list_of_sufficient_combinations_of_configurations_of_a_permanent_to_contribute_mana_for(a_nonland_card The_Nonland_Card) {
 		The_Nonland_Card.becomes_not_playable();
 		ArrayList<a_permanent> The_List_Of_Permanents = this.Part_Of_The_Battlefield.provides_its_list_of_permanents();
-		ArrayList<a_configuration_of_a_permanent_to_contribute_mana> The_List_Of_Configurations_Of_A_Permanent_To_Contribute_Mana = new ArrayList<>();
+		ArrayList<a_configuration_of_a_permanent_to_contribute_mana> The_List_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana = new ArrayList<>();
 		for (a_permanent The_Permanent : The_List_Of_Permanents) {
-			for (int i = 0; i < The_Permanent.provides_its_number_of_options_for_contributing_mana(); i++) {
-				a_configuration_of_a_permanent_to_contribute_mana The_Configuration_Of_A_Permanent_To_Contribute_Mana = new a_configuration_of_a_permanent_to_contribute_mana(The_Permanent, i);
-				The_List_Of_Configurations_Of_A_Permanent_To_Contribute_Mana.add(The_Configuration_Of_A_Permanent_To_Contribute_Mana);
+			for (int i : The_Permanent.provides_an_array_of_indices_of_available_options_for_contributing_mana()) {
+				a_configuration_of_a_permanent_to_contribute_mana The_Available_Configuration_Of_A_Permanent_To_Contribute_Mana = new a_configuration_of_a_permanent_to_contribute_mana(The_Permanent, i);
+				The_List_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana.add(The_Available_Configuration_Of_A_Permanent_To_Contribute_Mana);
 			}
 		}
-		ArrayList<ArrayList<a_configuration_of_a_permanent_to_contribute_mana>> The_List_Of_Combinations_Of_Configurations_Of_A_Permanent_To_Contribute_Mana = this.generates_a_list_of_combinations_of_elements_in(The_List_Of_Configurations_Of_A_Permanent_To_Contribute_Mana);
-		ArrayList<ArrayList<a_configuration_of_a_permanent_to_contribute_mana>> The_List_Of_Sufficient_Combinations_Of_Configurations_Of_A_Permanent_To_Contribute_Mana = new ArrayList<>();
-		for (int i = 0; i < The_List_Of_Combinations_Of_Configurations_Of_A_Permanent_To_Contribute_Mana.size(); i++) {
-			ArrayList<a_configuration_of_a_permanent_to_contribute_mana> The_Combination_Of_Configurations_Of_A_Permanent_To_Contribute_Mana = The_List_Of_Combinations_Of_Configurations_Of_A_Permanent_To_Contribute_Mana.get(i);
+		ArrayList<ArrayList<a_configuration_of_a_permanent_to_contribute_mana>> The_List_Of_Combinations_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana = this.generates_a_list_of_combinations_of_elements_in(The_List_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana);
+		ArrayList<ArrayList<a_configuration_of_a_permanent_to_contribute_mana>> The_List_Of_Sufficient_Combinations_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana = new ArrayList<>();
+		for (int i = 0; i < The_List_Of_Combinations_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana.size(); i++) {
+			ArrayList<a_configuration_of_a_permanent_to_contribute_mana> The_Combination_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana = The_List_Of_Combinations_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana.get(i);
 			a_mana_pool The_Mana_Pool = new a_mana_pool(0, 0, 0, 0, 0, 0);
-			for (a_configuration_of_a_permanent_to_contribute_mana The_Configuration_Of_A_Permanent_To_Contribute_Mana : The_Combination_Of_Configurations_Of_A_Permanent_To_Contribute_Mana) {
-				a_permanent The_Permanent = The_Configuration_Of_A_Permanent_To_Contribute_Mana.provides_its_permanent();
-				int the_option_for_contributing_mana = The_Configuration_Of_A_Permanent_To_Contribute_Mana.provides_its_option_for_contributing_mana();
-				The_Mana_Pool.increases_by(The_Permanent.indicates_mana_pool_it_would_contribute_for(the_option_for_contributing_mana));
+			for (a_configuration_of_a_permanent_to_contribute_mana The_Available_Configuration_Of_A_Permanent_To_Contribute_Mana : The_Combination_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana) {
+				a_permanent The_Permanent = The_Available_Configuration_Of_A_Permanent_To_Contribute_Mana.provides_its_permanent();
+				int the_available_option_for_contributing_mana = The_Available_Configuration_Of_A_Permanent_To_Contribute_Mana.provides_its_option_for_contributing_mana();
+				The_Mana_Pool.increases_by(The_Permanent.indicates_mana_pool_it_would_contribute_for(the_available_option_for_contributing_mana));
 			}
 			if (The_Mana_Pool.is_sufficient_for(The_Nonland_Card.provides_its_mana_cost())) {
-				The_List_Of_Sufficient_Combinations_Of_Configurations_Of_A_Permanent_To_Contribute_Mana.add(The_Combination_Of_Configurations_Of_A_Permanent_To_Contribute_Mana);
+				The_List_Of_Sufficient_Combinations_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana.add(The_Combination_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana);
 			}
 		}
-		if (The_List_Of_Sufficient_Combinations_Of_Configurations_Of_A_Permanent_To_Contribute_Mana.size() > 0) {
+		if (The_List_Of_Sufficient_Combinations_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana.size() > 0) {
 			The_Nonland_Card.becomes_playable();
-			The_Nonland_Card.receives(The_List_Of_Sufficient_Combinations_Of_Configurations_Of_A_Permanent_To_Contribute_Mana);
+			The_Nonland_Card.receives(The_List_Of_Sufficient_Combinations_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana);
 		}
 	}	
 	

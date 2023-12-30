@@ -5,7 +5,6 @@ public abstract class a_permanent {
 
 	private String Name;
 	private boolean Tapped_Status;
-	private int Number_Of_Options_For_Contributing_Mana = 0;
 	
 	public a_permanent(String The_Name_To_Use, boolean The_Tapped_Status_To_Use) {
 		this.Name = The_Name_To_Use;
@@ -28,8 +27,15 @@ public abstract class a_permanent {
 		return this.Name;
 	}
 	
-	public int provides_its_number_of_options_for_contributing_mana() {
-		return this.Number_Of_Options_For_Contributing_Mana;
+	public int[] provides_an_array_of_indices_of_available_options_for_contributing_mana() {
+		if (!this.Tapped_Status) {
+			int[] array_of_indices_of_available_options_for_contributing_mana = new int[1];
+			array_of_indices_of_available_options_for_contributing_mana[0] = 0;
+			return array_of_indices_of_available_options_for_contributing_mana;
+		} else {
+			int[] array_of_indices_of_available_options_for_contributing_mana = new int[0];
+			return array_of_indices_of_available_options_for_contributing_mana;
+		}
 	}
 	
 	public void taps() {
