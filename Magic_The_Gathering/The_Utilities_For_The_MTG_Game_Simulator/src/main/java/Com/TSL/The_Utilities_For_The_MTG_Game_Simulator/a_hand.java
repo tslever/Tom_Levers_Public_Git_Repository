@@ -47,9 +47,6 @@ public class a_hand {
 		for (an_instant_card The_Instant_Card : this.List_Of_Instant_Cards) {
 			The_List_Of_Cards.add(The_Instant_Card);
 		}
-		for (a_land_card The_Land_Card : this.List_Of_Land_Cards) {
-			The_List_Of_Cards.add(The_Land_Card);
-		}
 		for (a_planeswalker_card The_Planeswalker_Card : this.List_Of_Planeswalker_Cards) {
 			The_List_Of_Cards.add(The_Planeswalker_Card);
 		}
@@ -76,30 +73,30 @@ public class a_hand {
 		return this.List_Of_Land_Cards;
 	}
 
-	public ArrayList<a_card> provides_its_list_of_nonland_cards() {
+	public ArrayList<a_nonland_card> provides_its_list_of_nonland_cards() {
 		
-		ArrayList<a_card> The_List_Of_Cards = new ArrayList<a_card>();
+		ArrayList<a_nonland_card> The_List_Of_Nonland_Cards = new ArrayList<a_nonland_card>();
 		
 		for (an_artifact_card The_Artifact_Card : this.List_Of_Artifact_Cards) {
-			The_List_Of_Cards.add(The_Artifact_Card);
+			The_List_Of_Nonland_Cards.add(The_Artifact_Card);
 		}
 		for (a_creature_card The_Creature_Card : this.List_Of_Creature_Cards) {
-			The_List_Of_Cards.add(The_Creature_Card);
+			The_List_Of_Nonland_Cards.add(The_Creature_Card);
 		}
 		for (an_enchantment_card The_Enchantment_Card : this.List_Of_Enchantment_Cards) {
-			The_List_Of_Cards.add(The_Enchantment_Card);
+			The_List_Of_Nonland_Cards.add(The_Enchantment_Card);
 		}
 		for (an_instant_card The_Instant_Card : this.List_Of_Instant_Cards) {
-			The_List_Of_Cards.add(The_Instant_Card);
+			The_List_Of_Nonland_Cards.add(The_Instant_Card);
 		}
 		for (a_planeswalker_card The_Planeswalker_Card : this.List_Of_Planeswalker_Cards) {
-			The_List_Of_Cards.add(The_Planeswalker_Card);
+			The_List_Of_Nonland_Cards.add(The_Planeswalker_Card);
 		}
 		for (a_sorcery_card The_Sorcery_Card : this.List_Of_Sorcery_Cards) {
-			The_List_Of_Cards.add(The_Sorcery_Card);
+			The_List_Of_Nonland_Cards.add(The_Sorcery_Card);
 		}
 		
-		return The_List_Of_Cards;
+		return The_List_Of_Nonland_Cards;
 	}
 	
 	public ArrayList<a_planeswalker_card> provides_its_list_of_planeswalker_cards() {
