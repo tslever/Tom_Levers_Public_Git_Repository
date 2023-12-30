@@ -5,7 +5,7 @@ public class a_land_card extends a_card {
 	
 	private String Subtype;
 	
-	public a_land_card(String The_Expansion_To_Use, a_mana_cost The_Mana_Cost_To_Use, String The_Name_To_Use, String The_Subtype_To_Use, String The_Type_To_Use)
+	public a_land_card(String The_Expansion_To_Use, a_mana_pool The_Mana_Cost_To_Use, String The_Name_To_Use, String The_Subtype_To_Use, String The_Type_To_Use)
 	{
 		super(The_Expansion_To_Use, The_Mana_Cost_To_Use, The_Name_To_Use, The_Type_To_Use);
 		

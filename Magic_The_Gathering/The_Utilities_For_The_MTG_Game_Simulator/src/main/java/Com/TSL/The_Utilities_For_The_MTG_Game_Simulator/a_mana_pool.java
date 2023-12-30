@@ -25,7 +25,7 @@ public class a_mana_pool {
 		this.Number_Of_Red_Mana = The_Number_Of_Red_Mana_To_Use;
 		this.Number_Of_White_Mana = The_Number_Of_White_Mana_To_Use;
 	}
-	
+
 	public a_mana_pool clones_itself() {
 		return
 			new a_mana_pool(
@@ -38,7 +38,7 @@ public class a_mana_pool {
 			);
 	}
 	
-	public void decreases_by(a_mana_cost The_Mana_Cost) {
+	public void decreases_by(a_mana_pool The_Mana_Cost) {
 		this.Number_Of_Black_Mana -= The_Mana_Cost.provides_its_number_of_black_mana();
 		this.Number_Of_Blue_Mana -= The_Mana_Cost.provides_its_number_of_blue_mana();
 		this.Number_Of_Colorless_Mana -= The_Mana_Cost.provides_its_number_of_colorless_mana();
@@ -47,7 +47,7 @@ public class a_mana_pool {
 		this.Number_Of_White_Mana -= The_Mana_Cost.provides_its_number_of_white_mana();
 	}
 	
-	public void increases_by(a_mana_contribution The_Mana_Contribution) {
+	public void increases_by(a_mana_pool The_Mana_Contribution) {
 		this.Number_Of_Black_Mana += The_Mana_Contribution.provides_its_number_of_black_mana();
 		this.Number_Of_Blue_Mana += The_Mana_Contribution.provides_its_number_of_blue_mana();
 		this.Number_Of_Colorless_Mana += The_Mana_Contribution.provides_its_number_of_colorless_mana();
@@ -56,7 +56,7 @@ public class a_mana_pool {
 		this.Number_Of_White_Mana += The_Mana_Contribution.provides_its_number_of_white_mana();
 	}
 	
-	public boolean is_sufficient_for(a_mana_cost The_Mana_Cost) {
+	public boolean is_sufficient_for(a_mana_pool The_Mana_Cost) {
 		
 		a_mana_pool The_Clone = this.clones_itself();
 		The_Clone.decreases_by(The_Mana_Cost);
@@ -105,5 +105,18 @@ public class a_mana_pool {
 	
 	public int provides_its_number_of_white_mana() {
 		return this.Number_Of_White_Mana;
+	}
+	
+	@Override
+	public String toString() {
+		return
+			"{" +
+				"\"Number_Of_Black_Mana\": " + this.Number_Of_Black_Mana +
+				", \"Number_Of_Blue_Mana\": " + this.Number_Of_Blue_Mana +
+				", \"Number_Of_Colorless_Mana\": " + this.Number_Of_Colorless_Mana +
+				", \"Number_Of_Green_Mana\": " + this.Number_Of_Green_Mana +
+				", \"Number_Of_Red_Mana\": " + this.Number_Of_Red_Mana +
+				", \"Number_Of_White_Mana\": " + this.Number_Of_White_Mana +
+			"}";
 	}
 }

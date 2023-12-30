@@ -12,7 +12,7 @@ public class a_creature_card extends a_card
 	
 	public a_creature_card(
 		String The_Expansion_To_Use,
-		a_mana_cost The_Mana_Cost_To_Use,
+		a_mana_pool The_Mana_Cost_To_Use,
 		String The_Name_To_Use,
 		int The_Power_To_Use,
 		String The_Rarity_To_Use,

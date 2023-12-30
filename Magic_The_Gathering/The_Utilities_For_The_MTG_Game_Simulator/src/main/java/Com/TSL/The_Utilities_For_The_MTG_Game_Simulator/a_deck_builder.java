@@ -14,7 +14,7 @@ public class a_deck_builder {
     		The_List_Of_Cards_For_Keep_The_Peace.add(
     			new a_land_card(
     				"Arena Base Set",
-    				new a_mana_cost(0, 0, 0, 0, 0, 0),
+    				new a_mana_pool(0, 0, 0, 0, 0, 0),
     				"Plains",
     				"Plains",
     				"Basic Land"
@@ -27,7 +27,7 @@ public class a_deck_builder {
     		The_List_Of_Cards_For_Keep_The_Peace.add(
     			new a_creature_card(
     				"Arena Base Set",
-    				new a_mana_cost(0, 0, 0, 0, 0, 1),
+    				new a_mana_pool(0, 0, 0, 0, 0, 1),
     				"Charmed Stray",
     				1,
     				"Common",
@@ -47,7 +47,7 @@ public class a_deck_builder {
     		The_List_Of_Cards_For_Keep_The_Peace.add(
     			new an_instant_card(
     				"Arena Base Set",
-    				new a_mana_cost(0, 0, 0, 0, 0, 1),
+    				new a_mana_pool(0, 0, 0, 0, 0, 1),
     				"Tactical Advantage",
     				"Common",
     				new String[] {
@@ -63,7 +63,7 @@ public class a_deck_builder {
     		The_List_Of_Cards_For_Keep_The_Peace.add(
     			new a_creature_card(
     				"Arena Base Set",
-    				new a_mana_cost(0, 0, 1, 0, 0, 1),
+    				new a_mana_pool(0, 0, 1, 0, 0, 1),
     				"Fencing Ace",
     				1,
     				"Common",
@@ -82,7 +82,7 @@ public class a_deck_builder {
     		The_List_Of_Cards_For_Keep_The_Peace.add(
     			new a_creature_card(
     				"Arena Base Set",
-    				new a_mana_cost(0, 0, 1, 0, 0, 1),
+    				new a_mana_pool(0, 0, 1, 0, 0, 1),
     				"Hallowed Priest",
     				1,
     				"Uncommon",
@@ -101,7 +101,7 @@ public class a_deck_builder {
     		The_List_Of_Cards_For_Keep_The_Peace.add(
     			new a_creature_card(
     				"Arena Base Set",
-    				new a_mana_cost(0, 0, 1, 0, 0, 1),
+    				new a_mana_pool(0, 0, 1, 0, 0, 1),
     				"Impassioned Orator",
     				2,
     				"Common",
@@ -120,7 +120,7 @@ public class a_deck_builder {
     		The_List_Of_Cards_For_Keep_The_Peace.add(
     			new a_creature_card(
     				"Arena Base Set",
-    				new a_mana_cost(0, 0, 1, 0, 0, 1),
+    				new a_mana_pool(0, 0, 1, 0, 0, 1),
     				"Moorland Inquisitor",
     				2,
     				"Common",
@@ -139,7 +139,7 @@ public class a_deck_builder {
     		The_List_Of_Cards_For_Keep_The_Peace.add(
     			new an_aura_card(
     				"Arena Base Set",
-    				new a_mana_cost(0, 0, 1, 0, 0, 1),
+    				new a_mana_pool(0, 0, 1, 0, 0, 1),
     				"Pacifism",
     				"Common",
     				"Aura",
@@ -157,7 +157,7 @@ public class a_deck_builder {
     		The_List_Of_Cards_For_Keep_The_Peace.add(
     			new a_creature_card(
     				"Arena Base Set",
-    				new a_mana_cost(0, 0, 2, 0, 0, 1),
+    				new a_mana_pool(0, 0, 2, 0, 0, 1),
     				"Angel of Vitality",
     				2,
     				"Uncommon",
@@ -178,7 +178,7 @@ public class a_deck_builder {
     		The_List_Of_Cards_For_Keep_The_Peace.add(
     			new a_creature_card(
     				"Arena Base Set",
-    				new a_mana_cost(0, 0, 2, 0, 0, 2),
+    				new a_mana_pool(0, 0, 2, 0, 0, 2),
     				"Leonin Warleader",
     				4,
     				"Rare",
@@ -196,7 +196,7 @@ public class a_deck_builder {
     	The_List_Of_Cards_For_Keep_The_Peace.add(
 			new an_aura_card(
 				"Arena Base Set",
-				new a_mana_cost(0, 0, 3, 0, 0, 2),
+				new a_mana_pool(0, 0, 3, 0, 0, 2),
 				"Angelic Reward",
 				"Uncommon",
 				"Aura",
@@ -212,7 +212,7 @@ public class a_deck_builder {
     	The_List_Of_Cards_For_Keep_The_Peace.add(
 			new a_sorcery_card(
 				"Arena Base Set",
-				new a_mana_cost(0, 0, 4, 0, 0, 1),
+				new a_mana_pool(0, 0, 4, 0, 0, 1),
 				"Bond of Discipline",
 				"Uncommon",
 				new String[] {
@@ -226,7 +226,7 @@ public class a_deck_builder {
     	The_List_Of_Cards_For_Keep_The_Peace.add(
 			new an_instant_card(
 				"Arena Base Set",
-				new a_mana_cost(0, 0, 4, 0, 0, 1),
+				new a_mana_pool(0, 0, 4, 0, 0, 1),
 				"Confront the Assault",
 				"Uncommon",
 				new String[] {
@@ -241,7 +241,7 @@ public class a_deck_builder {
     	The_List_Of_Cards_For_Keep_The_Peace.add(
 			new a_creature_card(
 				"Arena Base Set",
-				new a_mana_cost(0, 0, 3, 0, 0, 2),
+				new a_mana_pool(0, 0, 3, 0, 0, 2),
 				"Serra Angel",
 				4,
 				"Uncommon",
@@ -258,7 +258,7 @@ public class a_deck_builder {
     	The_List_Of_Cards_For_Keep_The_Peace.add(
 			new a_creature_card(
 				"Arena Base Set",
-				new a_mana_cost(0, 0, 3, 0, 0, 2),
+				new a_mana_pool(0, 0, 3, 0, 0, 2),
 				"Spiritual Guardian",
 				3,
 				"Common",
@@ -275,7 +275,7 @@ public class a_deck_builder {
     	The_List_Of_Cards_For_Keep_The_Peace.add(
 			new a_creature_card(
 				"Arena Base Set",
-				new a_mana_cost(0, 0, 4, 0, 0, 2),
+				new a_mana_pool(0, 0, 4, 0, 0, 2),
 				"Angelic Guardian",
 				5,
 				"Rare",
@@ -294,7 +294,7 @@ public class a_deck_builder {
     		The_List_Of_Cards_For_Keep_The_Peace.add(
     			new a_creature_card(
     				"Arena Base Set",
-    				new a_mana_cost(0, 0, 4, 0, 0, 2),
+    				new a_mana_pool(0, 0, 4, 0, 0, 2),
     				"Inspiring Commander",
     				1,
     				"Rare",
@@ -312,7 +312,7 @@ public class a_deck_builder {
     	The_List_Of_Cards_For_Keep_The_Peace.add(
 			new a_creature_card(
 				"Arena Base Set",
-				new a_mana_cost(0, 0, 5, 0, 0, 2),
+				new a_mana_pool(0, 0, 5, 0, 0, 2),
 				"Goring Ceratops",
 				3,
 				"Rare",
@@ -339,7 +339,7 @@ public class a_deck_builder {
     		The_List_Of_Cards_For_Large_And_In_Charge.add(
     			new a_land_card(
     				"Arena Base Set",
-    				new a_mana_cost(0, 0, 0, 0, 0, 0),
+    				new a_mana_pool(0, 0, 0, 0, 0, 0),
     				"Forest",
     				"Forest",
     				"Basic Land"
@@ -352,7 +352,7 @@ public class a_deck_builder {
     		The_List_Of_Cards_For_Large_And_In_Charge.add(
     			new a_creature_card(
     				"Arena Base Set",
-    				new a_mana_cost(0, 0, 0, 1, 0, 0),
+    				new a_mana_pool(0, 0, 0, 1, 0, 0),
     				"Jungle Delver",
     				1,
     				"Common",
@@ -371,7 +371,7 @@ public class a_deck_builder {
     		The_List_Of_Cards_For_Large_And_In_Charge.add(
     			new an_instant_card(
     				"Arena Base Set",
-    				new a_mana_cost(0, 0, 0, 1, 0, 0),
+    				new a_mana_pool(0, 0, 0, 1, 0, 0),
     				"Stony Strength",
     				"Common",
     				new String[] {
@@ -387,7 +387,7 @@ public class a_deck_builder {
     		The_List_Of_Cards_For_Large_And_In_Charge.add(
     			new a_creature_card(
     				"Arena Base Set",
-    				new a_mana_cost(0, 0, 1, 1, 0, 0),
+    				new a_mana_pool(0, 0, 1, 1, 0, 0),
     				"Ilysian Caryatid",
     				1,
     				"Common",
@@ -406,7 +406,7 @@ public class a_deck_builder {
 			The_List_Of_Cards_For_Large_And_In_Charge.add(
 				new a_sorcery_card(
 					"Arena Base Set",
-					new a_mana_cost(0, 0, 1, 1, 0, 0),
+					new a_mana_pool(0, 0, 1, 1, 0, 0),
 					"Rabid Bite",
 					"Common",
 					new String[] {
@@ -422,7 +422,7 @@ public class a_deck_builder {
 			The_List_Of_Cards_For_Large_And_In_Charge.add(
 				new a_creature_card(
 					"Arena Base Set",
-					new a_mana_cost(0, 0, 1, 1, 0, 0),
+					new a_mana_pool(0, 0, 1, 1, 0, 0),
 					"Woodland Mystic",
 					1,
 					"Common",
@@ -441,7 +441,7 @@ public class a_deck_builder {
     		The_List_Of_Cards_For_Large_And_In_Charge.add(
     			new an_enchantment_card(
     				"Arena Base Set",
-    				new a_mana_cost(0, 0, 2, 1, 0, 0),
+    				new a_mana_pool(0, 0, 2, 1, 0, 0),
     				"Colossal Majesty",
     				"Uncommon",
     				new String[] {
@@ -457,7 +457,7 @@ public class a_deck_builder {
 			The_List_Of_Cards_For_Large_And_In_Charge.add(
 				new a_creature_card(
 					"Arena Base Set",
-					new a_mana_cost(0, 0, 2, 1, 0, 0),
+					new a_mana_pool(0, 0, 2, 1, 0, 0),
 					"Wildwood Patrol",
 					4,
 					"Common",
@@ -476,7 +476,7 @@ public class a_deck_builder {
 			The_List_Of_Cards_For_Large_And_In_Charge.add(
 				new a_creature_card(
 					"Arena Base Set",
-					new a_mana_cost(0, 0, 3, 1, 0, 0),
+					new a_mana_pool(0, 0, 3, 1, 0, 0),
 					"Baloth Packhunter",
 					3,
 					"Common",
@@ -495,7 +495,7 @@ public class a_deck_builder {
 		The_List_Of_Cards_For_Large_And_In_Charge.add(
 			new a_creature_card(
 				"Arena Base Set",
-				new a_mana_cost(0, 0, 3, 1, 0, 0),
+				new a_mana_pool(0, 0, 3, 1, 0, 0),
 				"Prized Unicorn",
 				2,
 				"Uncommon",
@@ -513,7 +513,7 @@ public class a_deck_builder {
 			The_List_Of_Cards_For_Large_And_In_Charge.add(
 				new a_creature_card(
 					"Arena Base Set",
-					new a_mana_cost(0, 0, 2, 2, 0, 0),
+					new a_mana_pool(0, 0, 2, 2, 0, 0),
 					"Rumbling Baloth",
 					4,
 					"Common",
@@ -529,7 +529,7 @@ public class a_deck_builder {
 		The_List_Of_Cards_For_Large_And_In_Charge.add(
 			new a_creature_card(
 				"Arena Base Set",
-				new a_mana_cost(0, 0, 3, 1, 0, 0),
+				new a_mana_pool(0, 0, 3, 1, 0, 0),
 				"World Shaper",
 				3,
 				"Rare",
@@ -548,7 +548,7 @@ public class a_deck_builder {
 			The_List_Of_Cards_For_Large_And_In_Charge.add(
 				new a_creature_card(
 					"Arena Base Set",
-					new a_mana_cost(0, 0, 0, 5, 0, 0),
+					new a_mana_pool(0, 0, 0, 5, 0, 0),
 					"Gigantosaurus",
 					10,
 					"Rare",
@@ -565,7 +565,7 @@ public class a_deck_builder {
 			The_List_Of_Cards_For_Large_And_In_Charge.add(
 				new a_creature_card(
 					"Arena Base Set",
-					new a_mana_cost(0, 0, 3, 2, 0, 0),
+					new a_mana_pool(0, 0, 3, 2, 0, 0),
 					"Sentinel Spider",
 					4,
 					"Uncommon",
@@ -582,7 +582,7 @@ public class a_deck_builder {
 			The_List_Of_Cards_For_Large_And_In_Charge.add(
 				new a_creature_card(
 					"Arena Base Set",
-					new a_mana_cost(0, 0, 5, 1, 0, 0),
+					new a_mana_pool(0, 0, 5, 1, 0, 0),
 					"Affectionate Indrik",
 					4,
 					"Uncommon",
@@ -598,7 +598,7 @@ public class a_deck_builder {
 		The_List_Of_Cards_For_Large_And_In_Charge.add(
 			new an_aura_card(
 				"Arena Base Set",
-				new a_mana_cost(0, 0, 4, 2, 0, 0),
+				new a_mana_pool(0, 0, 4, 2, 0, 0),
 				"Epic Proportions",
 				"Rare",
 				"Aura",
@@ -616,7 +616,7 @@ public class a_deck_builder {
 			The_List_Of_Cards_For_Large_And_In_Charge.add(
 				new a_creature_card(
 					"Arena Base Set",
-					new a_mana_cost(0, 0, 5, 2, 0, 0),
+					new a_mana_pool(0, 0, 5, 2, 0, 0),
 					"Rampaging Brontodon",
 					7,
 					"Rare",
