@@ -12,8 +12,12 @@ public abstract class a_permanent {
 		this.Tapped_Status = The_Tapped_Status_To_Use;
 	}
 	
-	public a_mana_pool contributes_mana(int The_Option_For_Contributing_Mana_To_Use) {
-		return null;
+	public a_mana_pool provides_a_mana_pool_for(int The_Option_For_Contributing_Mana_To_Use) {
+		return new a_mana_pool(0, 0, 0, 0, 0, 0);
+	}
+	
+	public a_mana_pool indicates_mana_pool_it_would_contribute_for(int The_Option_For_Contributing_Mana_To_Use) {
+		return new a_mana_pool(0, 0, 0, 0, 0, 0);
 	}
 	
 	public boolean indicates_whether_it_is_tapped() {
@@ -28,7 +32,13 @@ public abstract class a_permanent {
 		return this.Number_Of_Options_For_Contributing_Mana;
 	}
 	
+	public void taps() {
+		System.out.println(this.Name + " has tapped.");
+		this.Tapped_Status = true;
+	}
+	
 	public void untaps() {
+		System.out.println(this.Name + " has untapped.");
 		this.Tapped_Status = false;
 	}
 	

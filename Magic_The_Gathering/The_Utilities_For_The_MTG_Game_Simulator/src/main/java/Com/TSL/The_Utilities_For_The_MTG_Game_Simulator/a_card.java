@@ -36,6 +36,10 @@ public abstract class a_card
 		this.List_Of_Sufficient_Combinations_Of_Configurations_Of_A_Permanent_To_Contribute_Mana = null;
 	}
 	
+	public ArrayList<ArrayList<a_configuration_of_a_permanent_to_contribute_mana>> provides_its_list_of_sufficient_combinations_of_configurations_of_a_permanent_to_contribute_mana() {
+		return this.List_Of_Sufficient_Combinations_Of_Configurations_Of_A_Permanent_To_Contribute_Mana;
+	}
+	
 	public a_mana_pool provides_its_mana_cost() {
 		return this.Mana_Cost;
 	}

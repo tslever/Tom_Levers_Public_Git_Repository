@@ -25,6 +25,7 @@ public class a_player
 	private a_mana_pool Mana_Pool;
 	private String Name;
 	private a_part_of_the_battlefield Part_Of_The_Battlefield;
+	private a_player Other_Player;
 	private RandomDataGenerator Random_Data_Generator;
 	private a_stack Stack;
 	private boolean Was_Starting_Player;
@@ -59,16 +60,16 @@ public class a_player
 	
 	
 	public a_card chooses_a_card_to_use_to_cast_a_spell_from(ArrayList<a_card> The_List_Of_Cards_That_May_Be_Used_To_Cast_Spells) {
-		
-		int The_Index_Of_The_Card_To_Use = this.Random_Data_Generator.nextInt(0, The_List_Of_Cards_That_May_Be_Used_To_Cast_Spells.size());
-		if (The_Index_Of_The_Card_To_Use != The_List_Of_Cards_That_May_Be_Used_To_Cast_Spells.size()) {
-			a_card The_Card_To_Use = The_List_Of_Cards_That_May_Be_Used_To_Cast_Spells.remove(The_Index_Of_The_Card_To_Use);
-			return The_Card_To_Use;
-		}
-		else {
-			return null;
-		}
-		
+		int The_Index_Of_The_Card_To_Use = this.Random_Data_Generator.nextInt(0, The_List_Of_Cards_That_May_Be_Used_To_Cast_Spells.size() - 1);
+		a_card The_Card_To_Use = The_List_Of_Cards_That_May_Be_Used_To_Cast_Spells.remove(The_Index_Of_The_Card_To_Use);
+		return The_Card_To_Use;
+	}
+	
+	
+	public ArrayList<a_configuration_of_a_permanent_to_contribute_mana> chooses_a_sufficient_combination_of_configurations_of_a_permanent_to_contribute_mana_from(ArrayList<ArrayList<a_configuration_of_a_permanent_to_contribute_mana>> The_List_Of_Sufficient_Combinations_To_Use) {
+		int The_Index_Of_The_Sufficient_Combination = this.Random_Data_Generator.nextInt(0, The_List_Of_Sufficient_Combinations_To_Use.size() - 1);
+		ArrayList<a_configuration_of_a_permanent_to_contribute_mana> The_Sufficient_Combination = The_List_Of_Sufficient_Combinations_To_Use.get(The_Index_Of_The_Sufficient_Combination);
+		return The_Sufficient_Combination;
 	}
 	
 	
@@ -146,6 +147,19 @@ public class a_player
 	}
 	
 	
+	public a_mana_pool acquires_mana_for(a_card The_Card_For_Which_To_Acquire_Mana) {
+		a_mana_pool The_Mana_Pool = new a_mana_pool(0, 0, 0, 0, 0, 0);
+		ArrayList<ArrayList<a_configuration_of_a_permanent_to_contribute_mana>> The_List_Of_Sufficient_Combinations_Of_Configurations_Of_A_Permanent_To_Contribute_Mana = The_Card_For_Which_To_Acquire_Mana.provides_its_list_of_sufficient_combinations_of_configurations_of_a_permanent_to_contribute_mana();
+		ArrayList<a_configuration_of_a_permanent_to_contribute_mana> The_Sufficient_Combination_Of_Configurations_Of_A_Permanent_To_Contribute_Mana = this.chooses_a_sufficient_combination_of_configurations_of_a_permanent_to_contribute_mana_from(The_List_Of_Sufficient_Combinations_Of_Configurations_Of_A_Permanent_To_Contribute_Mana);
+		for (a_configuration_of_a_permanent_to_contribute_mana The_Configuration_Of_A_Permanent_To_Contribute_Mana : The_Sufficient_Combination_Of_Configurations_Of_A_Permanent_To_Contribute_Mana) {
+			a_permanent The_Permanent = The_Configuration_Of_A_Permanent_To_Contribute_Mana.provides_its_permanent();
+			int The_Option_For_Contributing_Mana = The_Configuration_Of_A_Permanent_To_Contribute_Mana.provides_its_option_for_contributing_mana();
+			The_Mana_Pool.increases_by(The_Permanent.provides_a_mana_pool_for(The_Option_For_Contributing_Mana));
+		}
+		return The_Mana_Pool;
+	}
+	
+	
 	public void completes_her_precombat_main_phase() {
 		
 		System.out.println(this.Name + " is completing their precombat main phase.");
@@ -165,7 +179,7 @@ public class a_player
 		// Rule 601.2: To cast a spell is to [use a card to create a spell], put [the spell] on the stack, and pay its mana costs, so that [the spell] will eventually resolve and have its effect. Casting a spell includes proposal of the spell (rules 601.2a-d) and determination and payment of costs (rules 601.2f-h). To cast a spell, a player follows the steps listed below, in order. A player must be legally allowed to cast the spell to begin this process (see rule 601.3). If a player is unable to comply with the requirements of a step listed below while performing that step, the casting of the spell is illegal; the game returns to the moment before the casting of that spell was proposed (see rule 723, "Handling Illegal Actions").
 		// Rule 601.2a: To propose the casting of a spell, a player first [uses a card to create a spell and puts the spell on] the stack. [The spell] becomes the topmost object on the stack. [The spell] has all the characteristics of the card... associated with it, and [the casting] player becomes its controller. The spell remains on the stack until it's countered, it resolves, or an effect moves it elsewhere.
 		// Rule 601.2e: The game checks to see if the proposed spell can legally be cast. If the proposed spell is illegal, the game returns to the moment before the casting of that spell was proposed (see rule 723, "Handling Illegal Actions").
-		this.determines_playability_mana_subpools_and_lists_of_mana_contributing_permanents_for_her_hand_cards();
+		this.determines_playability_and_a_list_of_sufficient_combinations_of_configurations_of_a_permanent_to_contribute_mana_for_her_hand_cards();
 		
 		ArrayList<a_card> The_List_Of_Cards_That_May_Be_Used_To_Cast_A_Spell = new ArrayList<a_card>();
 		for (a_card The_Card : this.Hand.provides_its_list_of_cards()) {
@@ -177,8 +191,11 @@ public class a_player
 		
 		a_card The_Card_To_Use_To_Cast_A_Spell = this.chooses_a_card_to_use_to_cast_a_spell_from(The_List_Of_Cards_That_May_Be_Used_To_Cast_A_Spell);
 		if (The_Card_To_Use_To_Cast_A_Spell != null) {
-			// Provide mana equal to the mana cost of the card.
-			// Cast the card.
+			/*a_mana_pool The_Mana_Pool_To_Use_To_Cast_A_Spell = */this.acquires_mana_for(The_Card_To_Use_To_Cast_A_Spell);
+			//this.Mana_Pool.increases_by(The_Mana_Pool_To_Use_To_Cast_A_Spell);
+			//this.Mana_Pool.decreases_by(The_Mana_Pool_To_Use_To_Cast_A_Spell);
+			a_spell The_Spell = new a_spell(The_Card_To_Use_To_Cast_A_Spell.provides_its_name(), The_Card_To_Use_To_Cast_A_Spell.provides_its_type());
+			this.Stack.receives(The_Spell);
 		}
 		
 		System.out.println("The stack contains the following spells.\n" + this.Stack);
@@ -199,15 +216,20 @@ public class a_player
 		this.Has_Priority = false;
 	}
 	
-	public void determines_playability_mana_subpools_and_lists_of_mana_contributing_permanents_for_her_hand_cards() {
+	
+	public void determines_playability_and_a_list_of_sufficient_combinations_of_configurations_of_a_permanent_to_contribute_mana_for_her_hand_cards() {
 		for (a_card The_Card : this.Hand.provides_its_list_of_cards()) {
 			this.determines_playability_and_a_list_of_sufficient_combinations_of_configurations_of_a_permanent_to_contribute_mana_for(The_Card);
 		}
 	}
 	
+	
 	public void determines_playability_and_a_list_of_sufficient_combinations_of_configurations_of_a_permanent_to_contribute_mana_for(a_card The_Card) {
 		The_Card.becomes_not_playable();
 		The_Card.nullifies_its_list_of_sufficient_combinations_of_configurations_of_a_permanent_to_contribute_mana();
+		if (The_Card instanceof a_land_card) {
+			return;
+		}
 		ArrayList<a_permanent> The_List_Of_Permanents = this.Part_Of_The_Battlefield.provides_its_list_of_permanents();
 		ArrayList<a_configuration_of_a_permanent_to_contribute_mana> The_List_Of_Configurations_Of_A_Permanent_To_Contribute_Mana = new ArrayList<>();
 		for (a_permanent The_Permanent : The_List_Of_Permanents) {
@@ -224,7 +246,7 @@ public class a_player
 			for (a_configuration_of_a_permanent_to_contribute_mana The_Configuration_Of_A_Permanent_To_Contribute_Mana : The_Combination_Of_Configurations_Of_A_Permanent_To_Contribute_Mana) {
 				a_permanent The_Permanent = The_Configuration_Of_A_Permanent_To_Contribute_Mana.provides_its_permanent();
 				int the_option_for_contributing_mana = The_Configuration_Of_A_Permanent_To_Contribute_Mana.provides_its_option_for_contributing_mana();
-				The_Mana_Pool.increases_by(The_Permanent.contributes_mana(the_option_for_contributing_mana));
+				The_Mana_Pool.increases_by(The_Permanent.indicates_mana_pool_it_would_contribute_for(the_option_for_contributing_mana));
 			}
 			if (The_Mana_Pool.is_sufficient_for(The_Card.provides_its_mana_cost())) {
 				The_List_Of_Sufficient_Combinations_Of_Configurations_Of_A_Permanent_To_Contribute_Mana.add(The_Combination_Of_Configurations_Of_A_Permanent_To_Contribute_Mana);
@@ -402,6 +424,9 @@ public class a_player
 		return this.Name;
 	}
 	
+	public void receives(a_player The_Other_Player_To_Use) {
+		this.Other_Player = The_Other_Player_To_Use;
+	}
 	
 	public void shuffles_her_deck() {
 		this.Deck.shuffles();
