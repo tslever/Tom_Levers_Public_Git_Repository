@@ -6,16 +6,15 @@ public abstract class a_card
 {
 	private String Expansion;
 	private boolean Is_Playable;
-	private ArrayList<a_permanent> List_Of_Mana_Contributing_Permanents;
-	private a_mana_pool Mana_Subpool;
+	private ArrayList<ArrayList<a_configuration_of_a_permanent_to_contribute_mana>> List_Of_Sufficient_Combinations_Of_Configurations_Of_A_Permanent_To_Contribute_Mana;
 	private String Name;
 	private String Type;
-	private a_mana_cost Mana_Cost;
+	private a_mana_pool Mana_Cost;
 	
-	protected a_card(String The_Expansion_To_Use, a_mana_cost The_Mana_Cost_To_Use, String The_Name_To_Use, String The_Type_To_Use) {
+	protected a_card(String The_Expansion_To_Use, a_mana_pool The_Mana_Cost_To_Use, String The_Name_To_Use, String The_Type_To_Use) {
 		this.Expansion = The_Expansion_To_Use;
 		this.Is_Playable = false;
-		this.List_Of_Mana_Contributing_Permanents = null;
+		this.List_Of_Sufficient_Combinations_Of_Configurations_Of_A_Permanent_To_Contribute_Mana = null;
 		this.Mana_Cost = The_Mana_Cost_To_Use;
 		this.Name = The_Name_To_Use;
 		this.Type = The_Type_To_Use;
@@ -33,15 +32,11 @@ public abstract class a_card
 		return this.Is_Playable;
 	}
 	
-	public void nullifies_its_mana_subpool() {
-		this.Mana_Subpool = null;
+	public void nullifies_its_list_of_sufficient_combinations_of_configurations_of_a_permanent_to_contribute_mana() {
+		this.List_Of_Sufficient_Combinations_Of_Configurations_Of_A_Permanent_To_Contribute_Mana = null;
 	}
 	
-	public void nullifies_its_list_of_mana_contributing_permanents() {
-		this.List_Of_Mana_Contributing_Permanents = null;
-	}
-	
-	public a_mana_cost provides_its_mana_cost() {
+	public a_mana_pool provides_its_mana_cost() {
 		return this.Mana_Cost;
 	}
 	
@@ -54,12 +49,8 @@ public abstract class a_card
 		return this.Type;
 	}
 	
-	public void receives(ArrayList<a_permanent> The_List_Of_Mana_Contributing_Permanents_To_Use) {
-		this.List_Of_Mana_Contributing_Permanents = The_List_Of_Mana_Contributing_Permanents_To_Use;
-	}
-	
-	public void receives(a_mana_pool The_Mana_Subpool_To_Use) {
-		this.Mana_Subpool = The_Mana_Subpool_To_Use;
+	public void receives(ArrayList<ArrayList<a_configuration_of_a_permanent_to_contribute_mana>> The_List_Of_Sufficient_Combinations_Of_Configurations_Of_A_Permanent_To_Contribute_Mana_To_Use) {
+		this.List_Of_Sufficient_Combinations_Of_Configurations_Of_A_Permanent_To_Contribute_Mana = The_List_Of_Sufficient_Combinations_Of_Configurations_Of_A_Permanent_To_Contribute_Mana_To_Use;
 	}
 	
 	@Override
