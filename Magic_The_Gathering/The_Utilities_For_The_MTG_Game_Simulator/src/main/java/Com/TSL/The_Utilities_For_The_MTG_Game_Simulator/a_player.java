@@ -159,7 +159,6 @@ public class a_player
 		return The_Mana_Pool;
 	}
 	
-	
 	public void completes_her_precombat_main_phase() throws Exception {
 		
 		System.out.println(this.Name + " is completing their precombat main phase.");
@@ -187,7 +186,7 @@ public class a_player
 				The_List_Of_Nonland_Cards_That_May_Be_Used_To_Cast_A_Spell.add(The_Card);
 			}
 		}
-		System.out.println(this.Name + " may play cast a spell using a card in the following list. " + The_List_Of_Nonland_Cards_That_May_Be_Used_To_Cast_A_Spell);
+		System.out.println(this.Name + " may cast a spell using a card in the following list. " + The_List_Of_Nonland_Cards_That_May_Be_Used_To_Cast_A_Spell);
 		
 		if (The_List_Of_Nonland_Cards_That_May_Be_Used_To_Cast_A_Spell.size() > 0) {
 			a_nonland_card The_Nonland_Card_To_Use_To_Cast_A_Spell = this.chooses_a_card_to_use_to_cast_a_spell_from(The_List_Of_Nonland_Cards_That_May_Be_Used_To_Cast_A_Spell);
@@ -200,6 +199,7 @@ public class a_player
 			a_spell The_Spell = new a_spell(The_Nonland_Card_To_Use_To_Cast_A_Spell.provides_its_name(), The_Nonland_Card_To_Use_To_Cast_A_Spell.provides_its_type());
 			this.Stack.receives(The_Spell);
 			System.out.println("The stack contains the following spells. " + this.Stack);
+			this.Other_Player.reacts();
 		}
 		
 		while (this.Stack.contains_spells()) {
@@ -210,6 +210,7 @@ public class a_player
 		}
 		System.out.println(this.Part_Of_The_Battlefield);
 		
+		// Rule 405.5: ... If the stack is empty when all players pass, the current step or phase ends and the next begins.
 		// Rule 500.2: A phase or step in which players receive priority ends when the stack is empty and all players pass in succession.
 		// Rule 505.2: The main phase has no steps, so a main phase ends when all players pass in succession while the stack is empty.
 		// Rule 500.4: When a step or phase ends, any unused mana left in a player's mana pool empties. This turn-based action doesn't use the stack.
@@ -218,6 +219,15 @@ public class a_player
 		this.Has_Priority = false;
 	}
 	
+	/**
+	 * reacts
+	 * 
+	 * When all players pass in succession, the top (last-added) spell or ability on the stack resolves...
+	 */
+	public void reacts() {
+		System.out.println(this.Name + " is reacting.");
+		return; // Returning is passing.
+	}
 	
 	public void determines_playability_and_a_list_of_sufficient_combinations_of_configurations_of_a_permanent_to_contribute_mana_for_her_hand_cards() {
 		for (a_nonland_card The_Nonland_Card : this.Hand.provides_its_list_of_nonland_cards()) {
