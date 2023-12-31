@@ -1,6 +1,10 @@
 package Com.TSL.The_Utilities_For_The_MTG_Game_Simulator;
 
 
+/**
+ * Rule 405.4: Each spell has all the characteristics of the card associated with it... The controller of a spell is the person who cast it.
+ *
+ */
 public class a_spell {
 
 	private String Name;

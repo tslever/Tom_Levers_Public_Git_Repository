@@ -17,6 +17,7 @@ public class a_deck_builder {
     				new a_mana_pool(0, 0, 0, 0, 0, 0),
     				"Plains",
     				"Plains",
+    				new ArrayList<String>(),
     				"Basic Land"
     			)
     		);
@@ -24,6 +25,9 @@ public class a_deck_builder {
     	// 25 cards
     	
     	for (int i = 0; i < 4; i++) {
+    		ArrayList<String> The_Text = new ArrayList<>();
+    		The_Text.add("Lifelink");
+    		The_Text.add("When Charmed Stray enters the battlefield, put a +1/+1 counter on each other creature you control named Charmed Stray.");
     		The_List_Of_Cards_For_Keep_The_Peace.add(
     			new a_creature_card(
     				"Arena Base Set",
@@ -32,10 +36,7 @@ public class a_deck_builder {
     				1,
     				"Common",
     				"Cat",
-    				new String[] {
-    					"Lifelink",
-    					"When Charmed Stray enters the battlefield, put a +1/+1 counter on each other creature you control named Charmed Stray."
-    				},
+    				The_Text,
     				1,
     				"Creature"
     			)
@@ -44,15 +45,15 @@ public class a_deck_builder {
     	// 29 cards
     	
     	for (int i = 0; i < 4; i++) {
+    		ArrayList<String> The_Text = new ArrayList<>();
+    		The_Text.add("Target blocking or blocked creature you control gets +2/+2 until end of turn.");
     		The_List_Of_Cards_For_Keep_The_Peace.add(
     			new an_instant_card(
     				"Arena Base Set",
     				new a_mana_pool(0, 0, 0, 0, 0, 1),
     				"Tactical Advantage",
     				"Common",
-    				new String[] {
-    					"Target blocking or blocked creature you control gets +2/+2 until end of turn."
-    				},
+    				The_Text,
     				"Instant"
     			)
     		);
@@ -60,6 +61,8 @@ public class a_deck_builder {
     	// 33 cards
     	
     	for (int i = 0; i < 2; i++) {
+    		ArrayList<String> The_Text = new ArrayList<>();
+    		The_Text.add("Double strike");
     		The_List_Of_Cards_For_Keep_The_Peace.add(
     			new a_creature_card(
     				"Arena Base Set",
@@ -68,9 +71,7 @@ public class a_deck_builder {
     				1,
     				"Common",
     				"Human Soldier",
-    				new String[] {
-    					"Double strike"
-    				},
+    				The_Text,
     				1,
     				"Creature"
     			)
@@ -79,6 +80,8 @@ public class a_deck_builder {
     	// 35 cards
     	
     	for (int i = 0; i < 4; i++) {
+    		ArrayList<String> The_Text = new ArrayList<>();
+    		The_Text.add("Whenever you gain life, put a +1/+1 counter on Hallowed Priest.");
     		The_List_Of_Cards_For_Keep_The_Peace.add(
     			new a_creature_card(
     				"Arena Base Set",
@@ -87,9 +90,7 @@ public class a_deck_builder {
     				1,
     				"Uncommon",
     				"Human Cleric",
-    				new String[] {
-    					"Whenever you gain life, put a +1/+1 counter on Hallowed Priest."
-    				},
+    				The_Text,
     				1,
     				"Creature"
     			)
@@ -98,6 +99,8 @@ public class a_deck_builder {
     	// 39 cards
     	
     	for (int i = 0; i < 3; i++) {
+    		ArrayList<String> The_Text = new ArrayList<>();
+    		The_Text.add("Whenever another creature enters the battlefield under your control, you gain 1 life.");
     		The_List_Of_Cards_For_Keep_The_Peace.add(
     			new a_creature_card(
     				"Arena Base Set",
@@ -106,9 +109,7 @@ public class a_deck_builder {
     				2,
     				"Common",
     				"Human Cleric",
-    				new String[] {
-    					"Whenever another creature enters the battlefield under your control, you gain 1 life."
-    				},
+    				The_Text,
     				2,
     				"Creature"
     			)
@@ -117,6 +118,8 @@ public class a_deck_builder {
     	// 42 cards
     	
     	for (int i = 0; i < 2; i++) {
+    		ArrayList<String> The_Text = new ArrayList<>();
+    		The_Text.add("[2W]: Moorland Inquisitor gains first strike until end of turn.");
     		The_List_Of_Cards_For_Keep_The_Peace.add(
     			new a_creature_card(
     				"Arena Base Set",
@@ -125,9 +128,7 @@ public class a_deck_builder {
     				2,
     				"Common",
     				"Human Soldier",
-    				new String[] {
-    					"[2W]: Moorland Inquisitor gains first strike until end of turn."
-    				},
+    				The_Text,
     				2,
     				"Creature"
     			)
@@ -136,6 +137,9 @@ public class a_deck_builder {
     	// 44 cards
     	
     	for (int i = 0; i < 3; i++) {
+    		ArrayList<String> The_Text = new ArrayList<>();
+    		The_Text.add("Enchant creature");
+    		The_Text.add("Enchanted creature can't attack or block.");
     		The_List_Of_Cards_For_Keep_The_Peace.add(
     			new an_aura_card(
     				"Arena Base Set",
@@ -143,10 +147,7 @@ public class a_deck_builder {
     				"Pacifism",
     				"Common",
     				"Aura",
-    				new String[] {
-    					"Enchant creature",
-    					"Enchanted creature can't attack or block."
-    				},
+    				The_Text,
     				"Enchantment"
     			)
     		);
@@ -154,6 +155,10 @@ public class a_deck_builder {
     	// 47 cards
     	
     	for (int i = 0; i < 2; i++) {
+    		ArrayList<String> The_Text = new ArrayList<>();
+    		The_Text.add("Flying");
+    		The_Text.add("If you would gain life, you gain that much life plus 1 instead.");
+    		The_Text.add("Angel of Vitality gets +2/+2 as long as you have 25 or more life.");
     		The_List_Of_Cards_For_Keep_The_Peace.add(
     			new a_creature_card(
     				"Arena Base Set",
@@ -162,11 +167,7 @@ public class a_deck_builder {
     				2,
     				"Uncommon",
     				"Angel",
-    				new String[] {
-    					"Flying",
-    					"If you would gain life, you gain that much life plus 1 instead.",
-    					"Angel of Vitality gets +2/+2 as long as you have 25 or more life."
-    				},
+    				The_Text,
     				2,
     				"Creature"
     			)
@@ -175,6 +176,8 @@ public class a_deck_builder {
     	// 49 cards
     	
     	for (int i = 0; i < 2; i++) {
+    		ArrayList<String> The_Text = new ArrayList<>();
+    		The_Text.add("Whenever Leonin Warleader attacks, create two 1/1 white Cat creature tokens with lifelink that are tapped and attacking.");
     		The_List_Of_Cards_For_Keep_The_Peace.add(
     			new a_creature_card(
     				"Arena Base Set",
@@ -183,9 +186,7 @@ public class a_deck_builder {
     				4,
     				"Rare",
     				"Cat Soldier",
-    				new String[] {
-    					"Whenever Leonin Warleader attacks, create two 1/1 white Cat creature tokens with lifelink that are tapped and attacking."
-    				},
+    				The_Text,
     				4,
     				"Creature"
     			)
@@ -193,6 +194,9 @@ public class a_deck_builder {
     	}
     	// 51 cards
     	
+		ArrayList<String> The_Text = new ArrayList<>();
+		The_Text.add("Enchant creature");
+		The_Text.add("Enchanted creature get +3/+3 and has flying.");
     	The_List_Of_Cards_For_Keep_The_Peace.add(
 			new an_aura_card(
 				"Arena Base Set",
@@ -200,44 +204,43 @@ public class a_deck_builder {
 				"Angelic Reward",
 				"Uncommon",
 				"Aura",
-				new String[] {
-					"Enchant creature",
-					"Enchanted creature get +3/+3 and has flying."
-				},
+				The_Text,
 				"Enchantment"
 			)
 		);
 		// 52 cards
 		
+    	The_Text = new ArrayList<String>();
+    	The_Text.add("Tap all creatures your opponents control. Creatures you control gain lifelink until end of turn.");
     	The_List_Of_Cards_For_Keep_The_Peace.add(
 			new a_sorcery_card(
 				"Arena Base Set",
 				new a_mana_pool(0, 0, 4, 0, 0, 1),
 				"Bond of Discipline",
 				"Uncommon",
-				new String[] {
-					"Tap all creatures your opponents control. Creatures you control gain lifelink until end of turn."
-				},
+				The_Text,
 				"Sorcery"
 			)
 		);
 		// 53 cards
 		
+    	The_Text = new ArrayList<>();
+    	The_Text.add("Cast this spell only if a creature is attacking you.");
+    	The_Text.add("Create three 1/1 white Spirit creature tokens with flying.");
     	The_List_Of_Cards_For_Keep_The_Peace.add(
 			new an_instant_card(
 				"Arena Base Set",
 				new a_mana_pool(0, 0, 4, 0, 0, 1),
 				"Confront the Assault",
 				"Uncommon",
-				new String[] {
-					"Cast this spell only if a creature is attacking you.",
-					"Create three 1/1 white Spirit creature tokens with flying."
-				},
+				The_Text,
 				"Instant"
 			)
 		);
 		// 54 cards
 		
+    	The_Text = new ArrayList<>();
+    	The_Text.add("Flying, Vigilance");
     	The_List_Of_Cards_For_Keep_The_Peace.add(
 			new a_creature_card(
 				"Arena Base Set",
@@ -246,15 +249,15 @@ public class a_deck_builder {
 				4,
 				"Uncommon",
 				"Angel",
-				new String[] {
-					"Flying, Vigilance"
-				},
+				The_Text,
 				4,
 				"Creature"
 			)
 		);
 		// 55 cards
 		
+    	The_Text = new ArrayList<>();
+    	The_Text.add("When Spiritual Guardian enters the battlefield, you gain 4 life.");
     	The_List_Of_Cards_For_Keep_The_Peace.add(
 			new a_creature_card(
 				"Arena Base Set",
@@ -263,15 +266,16 @@ public class a_deck_builder {
 				3,
 				"Common",
 				"Spirit",
-				new String[] {
-					"When Spiritual Guardian enters the battlefield, you gain 4 life."
-				},
+				The_Text,
 				4,
 				"Creature"
 			)
 		);
 		// 56 cards
 		
+    	The_Text = new ArrayList<>();
+    	The_Text.add("Flying");
+    	The_Text.add("Whenever one or more creatures you control attack, they gain indestructible until end of turn.");
     	The_List_Of_Cards_For_Keep_The_Peace.add(
 			new a_creature_card(
 				"Arena Base Set",
@@ -280,16 +284,15 @@ public class a_deck_builder {
 				5,
 				"Rare",
 				"Angel",
-				new String[] {
-					"Flying",
-					"Whenever one or more creatures you control attack, they gain indestructible until end of turn."
-				},
+				The_Text,
 				5,
 				"Creature"
 			)
 		);
 		// 57 cards
 		
+    	The_Text = new ArrayList<>();
+    	The_Text.add("Whenever another creature with power 2 or less enters the battlefield under your control, you gain 1 life and draw a card.");
     	for (int i = 0; i < 2; i++) {
     		The_List_Of_Cards_For_Keep_The_Peace.add(
     			new a_creature_card(
@@ -299,9 +302,7 @@ public class a_deck_builder {
     				1,
     				"Rare",
     				"Human Soldier",
-    				new String[] {
-    					"Whenever another creature with power 2 or less enters the battlefield under your control, you gain 1 life and draw a card."
-    				},
+    				The_Text,
     				4,
     				"Creature"
     			)
@@ -309,6 +310,9 @@ public class a_deck_builder {
     	}
     	// 59 cards
     	
+    	The_Text = new ArrayList<>();
+    	The_Text.add("Double strike");
+    	The_Text.add("Whenever Goring Ceratops attacks, other creatures you control gain double strike until end of turn.");
     	The_List_Of_Cards_For_Keep_The_Peace.add(
 			new a_creature_card(
 				"Arena Base Set",
@@ -317,10 +321,7 @@ public class a_deck_builder {
 				3,
 				"Rare",
 				"Dinosaur",
-				new String[] {
-					"Double strike",
-					"Whenever Goring Ceratops attacks, other creatures you control gain double strike until end of turn."
-				},
+				The_Text,
 				3,
 				"Creature"
 			)
@@ -335,13 +336,16 @@ public class a_deck_builder {
 		
     	ArrayList<a_card> The_List_Of_Cards_For_Large_And_In_Charge = new ArrayList<a_card>();
     	
+    	ArrayList<String> The_Text;
     	for (int i = 0; i < 25; i++) {
+        	The_Text = new ArrayList<>();
     		The_List_Of_Cards_For_Large_And_In_Charge.add(
     			new a_land_card(
     				"Arena Base Set",
     				new a_mana_pool(0, 0, 0, 0, 0, 0),
     				"Forest",
     				"Forest",
+    				The_Text,
     				"Basic Land"
     			)
     		);
@@ -349,6 +353,8 @@ public class a_deck_builder {
     	// 25 cards
     	
     	for (int i = 0; i < 3; i++) {
+    		The_Text = new ArrayList<>();
+    		The_Text.add("[3G]: Put a +1/+1 counter on Jungle Delver.");
     		The_List_Of_Cards_For_Large_And_In_Charge.add(
     			new a_creature_card(
     				"Arena Base Set",
@@ -357,9 +363,7 @@ public class a_deck_builder {
     				1,
     				"Common",
     				"Merfolk Warrior",
-    				new String[] {
-    					"[3G]: Put a +1/+1 counter on Jungle Delver."
-    				},
+    				The_Text,
     				1,
     				"Creature"
     			)
@@ -368,15 +372,15 @@ public class a_deck_builder {
     	// 28 cards
     	
     	for (int i = 0; i < 2; i++) {
+    		The_Text = new ArrayList<>();
+    		The_Text.add("Put a +1/+1 counter on target creature you control. Untap that creature.");
     		The_List_Of_Cards_For_Large_And_In_Charge.add(
     			new an_instant_card(
     				"Arena Base Set",
     				new a_mana_pool(0, 0, 0, 1, 0, 0),
     				"Stony Strength",
     				"Common",
-    				new String[] {
-    					"Put a +1/+1 counter on target creature you control. Untap that creature."
-    				},
+    				The_Text,
     				"Instant"
     			)
     		);
@@ -384,6 +388,8 @@ public class a_deck_builder {
     	// 30 cards
     	
     	for (int i = 0; i < 4; i++) {
+    		The_Text = new ArrayList<>();
+    		The_Text.add("[T]: Add one mana of any color. If you control a creature with power 4 or greater, add two mana of any one color instead.");
     		The_List_Of_Cards_For_Large_And_In_Charge.add(
     			new a_creature_card(
     				"Arena Base Set",
@@ -392,9 +398,7 @@ public class a_deck_builder {
     				1,
     				"Common",
     				"Plant",
-    				new String[] {
-    					"[T]: Add one mana of any color. If you control a creature with power 4 or greater, add two mana of any one color instead."
-    				},
+    				The_Text,
     				1,
     				"Creature"
     			)
@@ -403,15 +407,15 @@ public class a_deck_builder {
     	// 34 cards
 		
     	for (int i = 0; i < 3; i++) {
+    		The_Text = new ArrayList<>();
+    		The_Text.add("Target creature you control deals damage equal to its power to target creature you don't control.");
 			The_List_Of_Cards_For_Large_And_In_Charge.add(
 				new a_sorcery_card(
 					"Arena Base Set",
 					new a_mana_pool(0, 0, 1, 1, 0, 0),
 					"Rabid Bite",
 					"Common",
-					new String[] {
-						"Target creature you control deals damage equal to its power to target creature you don't control."
-					},
+					The_Text,
 					"Sorcery"
 				)
 			);
@@ -419,6 +423,8 @@ public class a_deck_builder {
 		// 37 cards
 		
     	for (int i = 0; i < 2; i++) {
+    		The_Text = new ArrayList<>();
+    		The_Text.add("[T]: Add [F].");
 			The_List_Of_Cards_For_Large_And_In_Charge.add(
 				new a_creature_card(
 					"Arena Base Set",
@@ -427,9 +433,7 @@ public class a_deck_builder {
 					1,
 					"Common",
 					"Elf Druid",
-					new String[] {
-						"[T]: Add [F]."
-					},
+					The_Text,
 					1,
 					"Creature"
 				)
@@ -437,6 +441,8 @@ public class a_deck_builder {
     	}
 		// 39 cards
     	
+		The_Text = new ArrayList<>();
+		The_Text.add("At the beginning of your upkeep, if you control a creature with power 4 or greater, draw a card.");
     	for (int i = 0; i < 2; i++) {
     		The_List_Of_Cards_For_Large_And_In_Charge.add(
     			new an_enchantment_card(
@@ -444,9 +450,7 @@ public class a_deck_builder {
     				new a_mana_pool(0, 0, 2, 1, 0, 0),
     				"Colossal Majesty",
     				"Uncommon",
-    				new String[] {
-    					"At the beginning of your upkeep, if you control a creature with power 4 or greater, draw a card."
-    				},
+    				The_Text,
     				"Enchantment"
     			)
     		);
@@ -454,6 +458,8 @@ public class a_deck_builder {
     	// 41 cards
     	
     	for (int i = 0; i < 2; i++) {
+    		The_Text = new ArrayList<>();
+    		The_Text.add("Trample");
 			The_List_Of_Cards_For_Large_And_In_Charge.add(
 				new a_creature_card(
 					"Arena Base Set",
@@ -462,9 +468,7 @@ public class a_deck_builder {
 					4,
 					"Common",
 					"Centaur Scout",
-					new String[] {
-						"Trample"
-					},
+					The_Text,
 					2,
 					"Creature"
 				)
@@ -473,6 +477,9 @@ public class a_deck_builder {
 		// 43 cards
     	
     	for (int i = 0; i < 4; i++) {
+    		The_Text = new ArrayList<>();
+    		The_Text.add("Trample");
+    		The_Text.add("When Baloth Packhunter enters the battlefield, put two +1/+1 counters on each other creature you control named Baloth Packhunter.");
 			The_List_Of_Cards_For_Large_And_In_Charge.add(
 				new a_creature_card(
 					"Arena Base Set",
@@ -481,10 +488,7 @@ public class a_deck_builder {
 					3,
 					"Common",
 					"Beast",
-					new String[] {
-						"Trample",
-						"When Baloth Packhunter enters the battlefield, put two +1/+1 counters on each other creature you control named Baloth Packhunter."
-					},
+					The_Text,
 					3,
 					"Creature"
 				)
@@ -492,6 +496,8 @@ public class a_deck_builder {
     	}
 		// 47 cards
     	
+		The_Text = new ArrayList<>();
+		The_Text.add("All creatures able to block Prized Unicorn do so.");
 		The_List_Of_Cards_For_Large_And_In_Charge.add(
 			new a_creature_card(
 				"Arena Base Set",
@@ -500,15 +506,14 @@ public class a_deck_builder {
 				2,
 				"Uncommon",
 				"Unicorn",
-				new String[] {
-					"All creatures able to block Prized Unicorn do so."
-				},
+				The_Text,
 				2,
 				"Creature"
 			)
 		);
 		// 48 cards
 		
+		The_Text = new ArrayList<>();
 		for (int i = 0; i < 2; i++) {
 			The_List_Of_Cards_For_Large_And_In_Charge.add(
 				new a_creature_card(
@@ -518,7 +523,7 @@ public class a_deck_builder {
 					4,
 					"Common",
 					"Beast",
-					new String[] {},
+					The_Text,
 					4,
 					"Creature"
 				)
@@ -526,6 +531,9 @@ public class a_deck_builder {
 		}
 		// 50 cards
 		
+		The_Text = new ArrayList<>();
+		The_Text.add("Whenever World Shaper attacks, you may mill three cards.");
+		The_Text.add("When World Shaper dies, return all land cards from your graveyard to the battlefield tapped.");
 		The_List_Of_Cards_For_Large_And_In_Charge.add(
 			new a_creature_card(
 				"Arena Base Set",
@@ -534,16 +542,14 @@ public class a_deck_builder {
 				3,
 				"Rare",
 				"Merfolk Shaman",
-				new String[] {
-					"Whenever World Shaper attacks, you may mill three cards.",
-					"When World Shaper dies, return all land cards from your graveyard to the battlefield tapped."
-				},
+				The_Text,
 				3,
 				"Creature"
 			)
 		);
 		// 51 cards
 		
+		The_Text = new ArrayList<>();
 		for (int i = 0; i < 2; i++) {
 			The_List_Of_Cards_For_Large_And_In_Charge.add(
 				new a_creature_card(
@@ -553,7 +559,7 @@ public class a_deck_builder {
 					10,
 					"Rare",
 					"Dinosaur",
-					new String[] {},
+					The_Text,
 					10,
 					"Creature"
 				)
@@ -561,6 +567,8 @@ public class a_deck_builder {
 		}
 		// 53 cards
 		
+		The_Text = new ArrayList<>();
+		The_Text.add("Vigilance, Reach");
 		for (int i = 0; i < 2; i++) {
 			The_List_Of_Cards_For_Large_And_In_Charge.add(
 				new a_creature_card(
@@ -570,7 +578,7 @@ public class a_deck_builder {
 					4,
 					"Uncommon",
 					"Spider",
-					new String[] {"Vigilance, Reach"},
+					The_Text,
 					4,
 					"Creature"
 				)
@@ -578,6 +586,8 @@ public class a_deck_builder {
 		}
 		// 55 cards
 		
+		The_Text = new ArrayList<>();
+		The_Text.add("When Affectionate Indrik enters the battlefield, you may have it fight target creature you don't control.");
 		for (int i = 0; i < 2; i++) {
 			The_List_Of_Cards_For_Large_And_In_Charge.add(
 				new a_creature_card(
@@ -587,7 +597,7 @@ public class a_deck_builder {
 					4,
 					"Uncommon",
 					"Beast",
-					new String[] {"When Affectionate Indrik enters the battlefield, you may have it fight target creature you don't control."},
+					The_Text,
 					4,
 					"Creature"
 				)
@@ -595,6 +605,10 @@ public class a_deck_builder {
 		}
 		// 57 cards
     	
+		The_Text = new ArrayList<>();
+		The_Text.add("Flash");
+		The_Text.add("Enchant creature");
+		The_Text.add("Enchanted creature gets +5/+5 and has trample.");
 		The_List_Of_Cards_For_Large_And_In_Charge.add(
 			new an_aura_card(
 				"Arena Base Set",
@@ -602,16 +616,15 @@ public class a_deck_builder {
 				"Epic Proportions",
 				"Rare",
 				"Aura",
-				new String[] {
-					"Flash",
-					"Enchant creature",
-					"Enchanted creature gets +5/+5 and has trample."
-				},
+				The_Text,
 				"Enchantment"
 			)
 		);
 		// 58 cards
 		
+		The_Text = new ArrayList<>();
+		The_Text.add("Trample");
+		The_Text.add("Whenever Rampaging Brontodon attacks, it gets +1/+1 until end of turn for each land you control.");
 		for (int i = 0; i < 2; i++) {
 			The_List_Of_Cards_For_Large_And_In_Charge.add(
 				new a_creature_card(
@@ -621,9 +634,7 @@ public class a_deck_builder {
 					7,
 					"Rare",
 					"Dinosaur",
-					new String[] {
-						"Trample",
-						"Whenever Rampaging Brontodon attacks, it gets +1/+1 until end of turn for each land you control."},
+					The_Text,
 					7,
 					"Creature"
 				)

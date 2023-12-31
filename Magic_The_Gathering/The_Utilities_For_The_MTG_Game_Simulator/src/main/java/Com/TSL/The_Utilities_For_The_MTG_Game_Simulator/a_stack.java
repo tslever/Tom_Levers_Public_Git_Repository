@@ -3,7 +3,11 @@ package Com.TSL.The_Utilities_For_The_MTG_Game_Simulator;
 
 import java.util.ArrayList;
 
-
+/**
+ * a_stack
+ * 
+ * Rule 405.2: The stack keeps track of the order that spells and/or abilities were added to [the stack]. Each time an object in put on the stack, the object is put on top of all objects already there.
+ */
 public class a_stack {
 
 	private ArrayList<a_spell> List_Of_Spells;
