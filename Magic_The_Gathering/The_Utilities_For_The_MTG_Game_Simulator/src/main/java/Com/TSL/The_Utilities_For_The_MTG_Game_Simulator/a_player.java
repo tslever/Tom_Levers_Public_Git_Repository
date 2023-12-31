@@ -25,6 +25,7 @@ public class a_player
 	private a_mana_pool Mana_Pool;
 	private String Name;
 	private a_part_of_the_battlefield Part_Of_The_Battlefield;
+	private String Step;
 	private a_player Other_Player;
 	private RandomDataGenerator Random_Data_Generator;
 	private a_stack Stack;
@@ -163,6 +164,8 @@ public class a_player
 		
 		System.out.println(this.Name + " is completing their precombat main phase.");
 		
+		this.Step = "Precombat Main Phase";
+		
 		// Rule 500.5: When a phase or step begins, any effects scheduled to last "until" that phase or step expire.
 		// Rule 500.6: When a phase or step begins, any abilities that trigger "at the beginning of" that phase or step trigger. They are put on the stack the next time a player would receive priority. (See rule 117, "Timing and Priority.")
 		
@@ -235,9 +238,37 @@ public class a_player
 		}
 	}
 	
+	public boolean judges_playable(a_nonland_card The_Nonland_Card) {
+		if (The_Nonland_Card.provides_its_type().equals("Instant")) {
+			ArrayList<String> The_Text = The_Nonland_Card.provides_its_text();
+			// Tactical Advantage
+			if (The_Text.contains("Target blocking or blocked creature you control gets +2/+2 until end of turn.")) {
+				ArrayList<a_creature> The_List_Of_Creatures = this.Part_Of_The_Battlefield.provides_its_list_of_creatures();
+				if (this.Step.equals("Declare Blockers Step") && The_List_Of_Creatures.size() > 0) {
+					for (a_creature The_Creature : The_List_Of_Creatures) {
+						if (The_Creature.provides_its_indicator_of_whether_this_creature_is_blocked()) {
+							return true;
+						} else if (The_Creature.provides_its_indicator_of_whether_this_creature_is_blocking()) {
+							return true;
+						}
+					}
+					return false;
+				} else {
+					return false;
+				}
+			} else {
+				return true;
+			}
+		} else {
+		    return true;
+		}
+	}
 	
 	public void determines_playability_and_a_list_of_sufficient_combinations_of_configurations_of_a_permanent_to_contribute_mana_for(a_nonland_card The_Nonland_Card) {
 		The_Nonland_Card.becomes_not_playable();
+		if (!judges_playable(The_Nonland_Card)) {
+			return;
+		}
 		ArrayList<a_permanent> The_List_Of_Permanents = this.Part_Of_The_Battlefield.provides_its_list_of_permanents();
 		ArrayList<a_configuration_of_a_permanent_to_contribute_mana> The_List_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana = new ArrayList<>();
 		for (a_permanent The_Permanent : The_List_Of_Permanents) {

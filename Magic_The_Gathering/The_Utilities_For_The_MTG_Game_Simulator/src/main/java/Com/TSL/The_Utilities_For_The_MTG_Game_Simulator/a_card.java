@@ -40,6 +40,10 @@ public abstract class a_card
 		return this.Name;
 	}
 	
+	public ArrayList<String> provides_its_text() {
+		return this.Text;
+	}
+	
 	public String provides_its_type() {
 		return this.Type;
 	}
