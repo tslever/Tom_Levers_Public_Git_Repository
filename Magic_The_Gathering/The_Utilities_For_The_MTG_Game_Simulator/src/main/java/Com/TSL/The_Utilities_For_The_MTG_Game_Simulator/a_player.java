@@ -191,24 +191,7 @@ public class a_player {
 		
 	}
 	
-	public void completes_her_precombat_main_phase() throws Exception {
-		System.out.println(this.Name + " is completing their precombat main phase.");
-		this.Step = "Precombat Main Phase";
-		
-		// Rule 500.5: When a phase or step begins, any effects scheduled to last "until" that phase or step expire.
-		// Rule 500.6: When a phase or step begins, any abilities that trigger "at the beginning of" that phase or step trigger. They are put on the stack the next time a player would receive priority. (See rule 117, "Timing and Priority.")
-		
-		// Rule 505.4: Second, if the active player controls one or more Saga enchantments and it's the active player's precombat main phase, the active player puts a lore counter on each Saga they control. (See rule 714, "Saga Cards.") This turn-based action doesn't use the stack.
-
-		// Rule 505.5: Third, the active player gets priority. (See rule 117, "Timing and Priority.")
-		this.Has_Priority = true;
-		
-		// Rule 505.5b: During either main phase, the active player may play one land card from their hand if the stack is empty, if the player has priority, and if they haven't played a land this turn (unless an effect states the player may play additional lands). This action doesn't use the stack. Neither the land nor the action of playing the land is a spell or ability, so it can't be countered, and players can't respond to it with instants or activated abilities. (See rule 305, "Lands.")
-		if (!this.Has_Played_A_Land_This_Turn) {
-		    this.plays_a_land();
-		}
-		
-		// Rule 505.5a: [A] main phase is the only phase in which a player can normally cast artifact, creature, enchantment, planeswalker, and sorcery spells. The active player may cast these spells.
+	public void casts_a_spell() throws Exception {
 		// Rule 601.2: To cast a spell is to [use a card to create a spell], put [the spell] on the stack, and pay its mana costs, so that [the spell] will eventually resolve and have its effect. Casting a spell includes proposal of the spell (rules 601.2a-d) and determination and payment of costs (rules 601.2f-h). To cast a spell, a player follows the steps listed below, in order. A player must be legally allowed to cast the spell to begin this process (see rule 601.3). If a player is unable to comply with the requirements of a step listed below while performing that step, the casting of the spell is illegal; the game returns to the moment before the casting of that spell was proposed (see rule 723, "Handling Illegal Actions").
 		// Rule 601.2e: The game checks to see if the proposed spell can legally be cast. If the proposed spell is illegal, the game returns to the moment before the casting of that spell was proposed (see rule 723, "Handling Illegal Actions").
 		this.assigns_a_list_of_sufficient_combinations_of_configurations_of_a_permanent_to_contribute_mana_to_the_players_nonland_hand_cards();
@@ -230,7 +213,29 @@ public class a_player {
 			System.out.println("The stack contains the following spells. " + this.Stack);
 			this.Other_Player.reacts();
 		}
+	}
+	
+	public void completes_her_precombat_main_phase() throws Exception {
+		System.out.println(this.Name + " is completing their precombat main phase.");
+		this.Step = "Precombat Main Phase";
 		
+		// Rule 500.5: When a phase or step begins, any effects scheduled to last "until" that phase or step expire.
+		// Rule 500.6: When a phase or step begins, any abilities that trigger "at the beginning of" that phase or step trigger. They are put on the stack the next time a player would receive priority. (See rule 117, "Timing and Priority.")
+		
+		// Rule 505.4: Second, if the active player controls one or more Saga enchantments and it's the active player's precombat main phase, the active player puts a lore counter on each Saga they control. (See rule 714, "Saga Cards.") This turn-based action doesn't use the stack.
+
+		// Rule 505.5: Third, the active player gets priority. (See rule 117, "Timing and Priority.")
+		this.Has_Priority = true;
+		
+		// Rule 505.5b: During either main phase, the active player may play one land card from their hand if the stack is empty, if the player has priority, and if they haven't played a land this turn (unless an effect states the player may play additional lands). This action doesn't use the stack. Neither the land nor the action of playing the land is a spell or ability, so it can't be countered, and players can't respond to it with instants or activated abilities. (See rule 305, "Lands.")
+		if (!this.Has_Played_A_Land_This_Turn) {
+		    this.plays_a_land();
+		}
+		
+		// Rule 505.5a: [A] main phase is the only phase in which a player can normally cast artifact, creature, enchantment, planeswalker, and sorcery spells. The active player may cast these spells.
+		this.casts_a_spell();
+		
+		// Rule 608.1: Each time all players pass in succession, the spell or ability on top of the stack resolves.
 		while (this.Stack.contains_spells()) {
 			a_spell The_Spell = this.Stack.provides_its_top_spell();
 			if (The_Spell.provides_its_type().equals("Creature")) {
