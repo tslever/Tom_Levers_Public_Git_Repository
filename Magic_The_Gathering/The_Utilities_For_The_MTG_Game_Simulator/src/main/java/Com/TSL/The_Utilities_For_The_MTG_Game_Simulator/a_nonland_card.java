@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 public class a_nonland_card extends a_card {
 
-	private ArrayList<ArrayList<a_configuration_of_a_permanent_to_contribute_mana>> List_Of_Sufficient_Combinations_Of_Configurations_Of_A_Permanent_To_Contribute_Mana;
+	private ArrayList<ArrayList<a_mana_ability>> List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities;
 	private a_mana_pool Mana_Cost;
 	
 	protected a_nonland_card(String The_Expansion_To_Use, a_mana_pool The_Mana_Cost_To_Use, String The_Name_To_Use, ArrayList<String> The_Text_To_Use, String The_Type_To_Use) {
 		super(The_Expansion_To_Use, The_Name_To_Use, The_Text_To_Use, The_Type_To_Use);
-		this.List_Of_Sufficient_Combinations_Of_Configurations_Of_A_Permanent_To_Contribute_Mana = new ArrayList<ArrayList<a_configuration_of_a_permanent_to_contribute_mana>>();
+		this.List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities = new ArrayList<ArrayList<a_mana_ability>>();
 		this.Mana_Cost = The_Mana_Cost_To_Use;
 	}
 	
@@ -17,12 +17,12 @@ public class a_nonland_card extends a_card {
 		return this.Mana_Cost;
 	}
 	
-	public ArrayList<ArrayList<a_configuration_of_a_permanent_to_contribute_mana>> provides_its_list_of_sufficient_combinations_of_configurations_of_a_permanent_to_contribute_mana() {
-		return this.List_Of_Sufficient_Combinations_Of_Configurations_Of_A_Permanent_To_Contribute_Mana;
+	public ArrayList<ArrayList<a_mana_ability>> provides_its_list_of_sufficient_combinations_of_available_mana_abilities() {
+		return this.List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities;
 	}
 	
-	public void receives(ArrayList<ArrayList<a_configuration_of_a_permanent_to_contribute_mana>> The_List_Of_Sufficient_Combinations_Of_Configurations_Of_A_Permanent_To_Contribute_Mana_To_Use) {
-		this.List_Of_Sufficient_Combinations_Of_Configurations_Of_A_Permanent_To_Contribute_Mana = The_List_Of_Sufficient_Combinations_Of_Configurations_Of_A_Permanent_To_Contribute_Mana_To_Use;
+	public void receives(ArrayList<ArrayList<a_mana_ability>> The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities_To_Use) {
+		this.List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities = The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities_To_Use;
 	}
 	
 }

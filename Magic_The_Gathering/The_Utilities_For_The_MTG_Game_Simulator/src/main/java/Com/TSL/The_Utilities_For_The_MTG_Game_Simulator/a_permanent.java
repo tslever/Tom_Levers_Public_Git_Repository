@@ -1,22 +1,17 @@
 package Com.TSL.The_Utilities_For_The_MTG_Game_Simulator;
 
+import java.util.ArrayList;
 
 public abstract class a_permanent {
 
 	private String Name;
+	private ArrayList<a_mana_ability> List_Of_Mana_Abilities;
 	private boolean Tapped_Status;
 	
 	public a_permanent(String The_Name_To_Use, boolean The_Tapped_Status_To_Use) {
 		this.Name = The_Name_To_Use;
 		this.Tapped_Status = The_Tapped_Status_To_Use;
-	}
-	
-	public a_mana_pool provides_a_mana_pool_for(int The_Option_For_Contributing_Mana_To_Use) {
-		return new a_mana_pool(0, 0, 0, 0, 0, 0);
-	}
-	
-	public a_mana_pool indicates_mana_pool_it_would_contribute_for(int The_Option_For_Contributing_Mana_To_Use) {
-		return new a_mana_pool(0, 0, 0, 0, 0, 0);
+		this.List_Of_Mana_Abilities = new ArrayList<a_mana_ability>();
 	}
 	
 	public boolean indicates_whether_it_is_tapped() {
@@ -27,15 +22,18 @@ public abstract class a_permanent {
 		return this.Name;
 	}
 	
-	public int[] provides_an_array_of_indices_of_available_options_for_contributing_mana() {
-		if (!this.Tapped_Status) {
-			int[] array_of_indices_of_available_options_for_contributing_mana = new int[1];
-			array_of_indices_of_available_options_for_contributing_mana[0] = 0;
-			return array_of_indices_of_available_options_for_contributing_mana;
-		} else {
-			int[] array_of_indices_of_available_options_for_contributing_mana = new int[0];
-			return array_of_indices_of_available_options_for_contributing_mana;
+	public ArrayList<a_mana_ability> provides_a_list_of_available_mana_abilities() {
+		ArrayList<a_mana_ability> The_List_Of_Available_Mana_Abilities = new ArrayList<>();
+		for (a_mana_ability The_Mana_Ability : this.List_Of_Mana_Abilities) {
+			if (!The_Mana_Ability.requires_tapping() || !this.Tapped_Status) {
+				The_List_Of_Available_Mana_Abilities.add(The_Mana_Ability);
+			}
 		}
+		return The_List_Of_Available_Mana_Abilities;
+	}
+	
+	public void receives(a_mana_ability The_Mana_Ability_To_Use) {
+		this.List_Of_Mana_Abilities.add(The_Mana_Ability_To_Use);
 	}
 	
 	public void taps() {
