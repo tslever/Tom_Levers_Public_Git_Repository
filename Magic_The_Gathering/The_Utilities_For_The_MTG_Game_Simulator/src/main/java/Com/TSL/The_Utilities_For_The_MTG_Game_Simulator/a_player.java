@@ -63,8 +63,16 @@ public class a_player {
 		return The_Mana_Pool;
 	}
 	
-	
-	public void assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to(a_nonland_card The_Nonland_Card) {
+	public void assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to(Object The_Object) throws Exception {
+		a_nonland_card The_Nonland_Card = null;
+		a_nonmana_activated_ability The_Nonmana_Activated_Ability = null;
+		if (The_Object instanceof a_nonland_card) {
+			The_Nonland_Card = (a_nonland_card) The_Object;
+		} else if (The_Object instanceof a_nonmana_activated_ability) {
+			The_Nonmana_Activated_Ability = (a_nonmana_activated_ability) The_Object;
+		} else {
+			throw new Exception("assigns_a_list_of_sufficient_combinations_of_available_mana_to takes a nonland card or a nonmana activated ability.");
+		}
 		ArrayList<a_permanent> The_List_Of_Permanents = this.Part_Of_The_Battlefield.provides_its_list_of_permanents();
 		ArrayList<a_mana_ability> The_List_Of_Available_Mana_Abilities_For_The_Player = new ArrayList<>();
 		for (a_permanent The_Permanent : The_List_Of_Permanents) {
@@ -78,16 +86,42 @@ public class a_player {
 			for (a_mana_ability The_Mana_Ability : The_Combination_Of_Available_Mana_Abilities) {
 				The_Mana_Pool.increases_by(The_Mana_Ability.indicates_the_mana_pool_it_would_contribute());
 			}
-			if (The_Mana_Pool.is_sufficient_for(The_Nonland_Card.provides_its_mana_cost())) {
-				The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities.add(The_Combination_Of_Available_Mana_Abilities);
+			a_mana_pool The_Mana_Cost = null;
+			if (The_Nonland_Card != null) {
+				The_Mana_Cost = The_Nonland_Card.provides_its_mana_cost();
+			} else if (The_Nonmana_Activated_Ability != null) {
+				The_Mana_Cost = The_Nonmana_Activated_Ability.provides_its_mana_cost();
+			} else {
+				throw new Exception("A nonland card and a nonmana activated ability were null.");
+			}
+			if (The_Mana_Cost != null) {
+				if (The_Mana_Pool.is_sufficient_for(The_Mana_Cost)) {
+					The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities.add(The_Combination_Of_Available_Mana_Abilities);
+				}
+			} else {
+				throw new Exception("A mana cost was null");
 			}
 		}
-		The_Nonland_Card.receives(The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities);
+		if (The_Nonland_Card != null) {
+			The_Nonland_Card.receives(The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities);
+		} else if (The_Nonmana_Activated_Ability != null) {
+			The_Nonmana_Activated_Ability.receives(The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities);
+		} else {
+			throw new Exception("A nonland card and a nonmana activated ability were null.");
+		}
 	}
 	
-	public void assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_the_players_nonland_hand_cards() {
+	public void assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_her_nonland_hand_cards() throws Exception {
 		for (a_nonland_card The_Nonland_Card : this.Hand.provides_its_list_of_nonland_cards()) {
 			this.assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to(The_Nonland_Card);
+		}
+	}
+	
+	public void assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_her_permanents_nonmana_activated_abilities() throws Exception {
+		for (a_permanent The_Permanent : this.Part_Of_The_Battlefield.provides_its_list_of_permanents()) {
+			for (a_nonmana_activated_ability The_Nonmana_Activated_Ability : The_Permanent.provides_its_list_of_nonmana_activated_abilities()) {
+				this.assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to(The_Nonmana_Activated_Ability);
+			}
 		}
 	}
 	
@@ -203,8 +237,11 @@ public class a_player {
 		// Rule 505.5a: [A] main phase is the only phase in which a player can normally cast artifact, creature, enchantment, planeswalker, and sorcery spells. The active player may cast these spells.
 		// Rule 601.2: To cast a spell is to [use a card to create a spell], put [the spell] on the stack, and pay its mana costs, so that [the spell] will eventually resolve and have its effect. Casting a spell includes proposal of the spell (rules 601.2a-d) and determination and payment of costs (rules 601.2f-h). To cast a spell, a player follows the steps listed below, in order. A player must be legally allowed to cast the spell to begin this process (see rule 601.3). If a player is unable to comply with the requirements of a step listed below while performing that step, the casting of the spell is illegal; the game returns to the moment before the casting of that spell was proposed (see rule 723, "Handling Illegal Actions").
 		// Rule 601.2e: The game checks to see if the proposed spell can legally be cast. If the proposed spell is illegal, the game returns to the moment before the casting of that spell was proposed (see rule 723, "Handling Illegal Actions").
-		this.assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_the_players_nonland_hand_cards();
-		this.determines_whether_the_players_nonland_hand_cards_are_playable();
+		this.assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_her_nonland_hand_cards();
+		this.assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_her_permanents_nonmana_activated_abilities();
+		this.determines_whether_her_nonland_hand_cards_are_playable();
+		this.determines_whether_her_permanents_nonmana_activated_abilities_are_activatable();
+		
 		ArrayList<a_nonland_card> The_List_Of_Playable_Nonland_Hand_Cards = this.generates_a_list_of_playable_nonland_hand_cards();
 		System.out.println(this.Name + " may cast a spell using a card in the following list. " + The_List_Of_Playable_Nonland_Hand_Cards);
 		
@@ -331,12 +368,37 @@ public class a_player {
 	}
 	
 	
-	public void determines_whether_the_players_nonland_hand_cards_are_playable() {
+	public void determines_whether_her_nonland_hand_cards_are_playable() {
 		for (a_nonland_card The_Nonland_Card : this.Hand.provides_its_list_of_nonland_cards()) {
 			if (this.indicates_whether_a_nonland_card_is_playable(The_Nonland_Card)) {
 				The_Nonland_Card.becomes_playable();
 			} else {
 				The_Nonland_Card.becomes_not_playable();
+			}
+		}
+	}
+	
+	
+	public void determines_whether_her_permanents_nonmana_activated_abilities_are_activatable() throws Exception {
+		for (a_permanent The_Permanent : this.Part_Of_The_Battlefield.provides_its_list_of_permanents()) {
+			for (a_nonmana_activated_ability The_Nonmana_Activated_Ability : The_Permanent.provides_its_list_of_nonmana_activated_abilities()) {
+				if (The_Nonmana_Activated_Ability.requires_tapping()) {
+					if (The_Permanent.indicates_whether_it_is_tapped()) {
+						The_Nonmana_Activated_Ability.becomes_nonactivatable();
+					} else {
+						if (The_Nonmana_Activated_Ability.provides_its_list_of_sufficient_combinations_of_available_mana_abilities().size() > 0) {
+							The_Nonmana_Activated_Ability.becomes_activatable();
+						} else {
+							The_Nonmana_Activated_Ability.becomes_nonactivatable();
+						}
+					}
+				} else {
+					if (The_Nonmana_Activated_Ability.provides_its_list_of_sufficient_combinations_of_available_mana_abilities().size() > 0) {
+						The_Nonmana_Activated_Ability.becomes_activatable();
+					} else {
+						The_Nonmana_Activated_Ability.becomes_nonactivatable();
+					}
+				}
 			}
 		}
 	}

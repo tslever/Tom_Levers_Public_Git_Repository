@@ -6,12 +6,15 @@ public abstract class a_permanent {
 
 	private String Name;
 	private ArrayList<a_mana_ability> List_Of_Mana_Abilities;
+	private ArrayList<a_nonmana_activated_ability> List_Of_Nonmana_Activated_Abilities;
+	
 	private boolean Tapped_Status;
 	
 	public a_permanent(String The_Name_To_Use, boolean The_Tapped_Status_To_Use) {
 		this.Name = The_Name_To_Use;
 		this.Tapped_Status = The_Tapped_Status_To_Use;
 		this.List_Of_Mana_Abilities = new ArrayList<a_mana_ability>();
+		this.List_Of_Nonmana_Activated_Abilities = new ArrayList<a_nonmana_activated_ability>();
 	}
 	
 	public boolean indicates_whether_it_is_tapped() {
@@ -30,6 +33,10 @@ public abstract class a_permanent {
 			}
 		}
 		return The_List_Of_Available_Mana_Abilities;
+	}
+	
+	public ArrayList<a_nonmana_activated_ability> provides_its_list_of_nonmana_activated_abilities() {
+		return this.List_Of_Nonmana_Activated_Abilities;
 	}
 	
 	public void receives(a_mana_ability The_Mana_Ability_To_Use) {
