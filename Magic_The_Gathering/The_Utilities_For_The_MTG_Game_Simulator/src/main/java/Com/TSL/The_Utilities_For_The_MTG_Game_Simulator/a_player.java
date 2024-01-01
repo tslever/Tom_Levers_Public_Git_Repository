@@ -503,9 +503,9 @@ public class a_player {
 			int The_Index_Of_The_Land_Card_To_Play = this.Random_Data_Generator.nextInt(0, The_Number_Of_Land_Cards - 1);
 			a_land_card The_Land_Card_To_Play = The_List_Of_Land_Cards.get(The_Index_Of_The_Land_Card_To_Play);
 			if (The_Land_Card_To_Play.provides_its_name().equals("Plains")) {
-				this.Part_Of_The_Battlefield.receives_land(new a_Plains(false));
+				this.Part_Of_The_Battlefield.receives_land(new a_Plains());
 			} else if (The_Land_Card_To_Play.provides_its_name().equals("Forest")) {
-				this.Part_Of_The_Battlefield.receives_land(new a_Forest(false));
+				this.Part_Of_The_Battlefield.receives_land(new a_Forest());
 			}
 			this.Has_Played_A_Land_This_Turn = true;
 			System.out.println("After playing a land card, the hand of " + this.Name + " has " + this.Hand.provides_its_number_of_cards() + " cards and contains the following. " + this.Hand);

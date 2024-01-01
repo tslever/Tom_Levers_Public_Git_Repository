@@ -11,6 +11,13 @@ public class an_activated_ability {
 		this.Cost = The_Cost_To_Use;
 		this.Effect = The_Effect_To_Use;
 		this.Permanent = The_Permanent_To_Use;
+		if (this.Cost.equals("T")) {
+			if (this.Permanent.indicates_whether_it_is_tapped()) {
+				this.Indicator_Of_Whether_It_Is_Activatable = false;
+			} else {
+				this.Indicator_Of_Whether_It_Is_Activatable = true;
+			}
+		}
 	}
 	
 	public void becomes_activatable() {
