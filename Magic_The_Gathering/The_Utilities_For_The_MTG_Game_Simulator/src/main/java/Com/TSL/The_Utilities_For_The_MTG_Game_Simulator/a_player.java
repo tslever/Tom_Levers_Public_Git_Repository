@@ -495,18 +495,27 @@ public class a_player {
 	}
 	
 	
-	public void plays_a_land() {
+	public void plays_a_land() throws Exception {
 		ArrayList<a_land_card> The_List_Of_Land_Cards = this.Hand.provides_its_list_of_land_cards();
 		int The_Number_Of_Land_Cards = The_List_Of_Land_Cards.size();
 		if (The_Number_Of_Land_Cards > 0) {
 			System.out.println(this.Name + " is playing a land.");
 			int The_Index_Of_The_Land_Card_To_Play = this.Random_Data_Generator.nextInt(0, The_Number_Of_Land_Cards - 1);
 			a_land_card The_Land_Card_To_Play = The_List_Of_Land_Cards.get(The_Index_Of_The_Land_Card_To_Play);
-			if (The_Land_Card_To_Play.provides_its_name().equals("Plains")) {
-				this.Part_Of_The_Battlefield.receives_land(new a_Plains());
-			} else if (The_Land_Card_To_Play.provides_its_name().equals("Forest")) {
-				this.Part_Of_The_Battlefield.receives_land(new a_Forest());
+			String The_Name_Of_The_Land_Card = The_Land_Card_To_Play.provides_its_name();
+			a_land The_Land = null;
+			if (The_Name_Of_The_Land_Card.equals("Plains")) {
+				The_Land = new a_land("Plains");
+				a_mana_ability The_Mana_Ability = new a_mana_ability("T", "Add [W].", The_Land);
+				The_Land.receives(The_Mana_Ability);
+			} else if (The_Name_Of_The_Land_Card.equals("Forest")) {
+				The_Land = new a_land("Forest");
+				a_mana_ability The_Mana_Ability = new a_mana_ability("T", "Add [G].", The_Land);
+				The_Land.receives(The_Mana_Ability);
+			} else {
+				throw new Exception("The MTG Game Simulator does not know how to play the land with name " + The_Name_Of_The_Land_Card);
 			}
+			this.Part_Of_The_Battlefield.receives_land(The_Land);
 			this.Has_Played_A_Land_This_Turn = true;
 			System.out.println("After playing a land card, the hand of " + this.Name + " has " + this.Hand.provides_its_number_of_cards() + " cards and contains the following. " + this.Hand);
 			System.out.println("After playing a land card, the part of the battlefield of " + this.Name + " has " + this.Part_Of_The_Battlefield.provides_its_number_of_permanents() + " cards and contains the following. " + this.Part_Of_The_Battlefield);
