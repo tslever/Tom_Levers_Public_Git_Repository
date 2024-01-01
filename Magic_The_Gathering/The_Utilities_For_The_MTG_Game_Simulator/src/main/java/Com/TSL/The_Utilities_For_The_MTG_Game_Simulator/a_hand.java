@@ -12,6 +12,17 @@ public class a_hand {
 		this.List_Of_Nonland_Cards = new ArrayList<a_nonland_card>();
 	}
 	
+	public ArrayList<a_card> provides_its_list_of_cards() {
+		ArrayList<a_card> The_List_Of_Cards = new ArrayList<>();
+		The_List_Of_Cards.addAll(this.List_Of_Land_Cards);
+		The_List_Of_Cards.addAll(this.List_Of_Nonland_Cards);
+		return The_List_Of_Cards;
+	}
+	
+	public ArrayList<a_land_card> provides_its_list_of_land_cards() {
+		return this.List_Of_Land_Cards;
+	}
+	
 	public ArrayList<a_nonland_card> provides_its_list_of_nonland_cards() {
 		return this.List_Of_Nonland_Cards;
 	}
@@ -26,10 +37,6 @@ public class a_hand {
 	
 	public int provides_its_number_of_nonland_cards() {
 		return this.List_Of_Nonland_Cards.size();
-	}
-	
-	public a_land_card provides_the_land_card_in_the_list_of_land_cards_at_index(int The_Index_Of_The_Land_Card_In_The_List_Of_Land_Cards_To_Use) {
-		return this.List_Of_Land_Cards.remove(The_Index_Of_The_Land_Card_In_The_List_Of_Land_Cards_To_Use);
 	}
 	
 	public void receives(a_card The_Card_To_Receive) {

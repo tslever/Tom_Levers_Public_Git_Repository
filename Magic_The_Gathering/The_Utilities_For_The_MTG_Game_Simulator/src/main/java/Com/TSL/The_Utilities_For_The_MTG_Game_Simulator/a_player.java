@@ -5,19 +5,17 @@ import java.util.ArrayList;
 import org.apache.commons.math3.random.RandomDataGenerator;
 
 
-public class a_player
-{
+public class a_player {
 	
-	/** Rule 103.4:
-	 * Each player draws a number of cards equal to their starting hand size, which is normally seven.
-	 */
 	
+	/** Rule 103.4: Each player draws a number of cards equal to their starting hand size, which is normally seven. */
 	private static int STARTING_HAND_SIZE = 7;
 	
 	private a_deck Deck;
 	private an_exile Exile;
 	private a_graveyard Graveyard;
 	private a_hand Hand;
+	private boolean Has_Played_A_Land_This_Turn;
 	private boolean Has_Priority;
 	private int Index_Of_The_Present_Turn;
 	private int Life;
@@ -32,10 +30,11 @@ public class a_player
 	private boolean Was_Starting_Player;
 	
 	
-	/** Rule 103.3:
-	 * Each player begins the game with a starting life total of 20.
+	/**
+	 * a_player
+	 * 
+	 * Rule 103.3: Each player begins the game with a starting life total of 20.
 	 */
-	
 	public a_player(a_deck The_Deck_To_Use, String The_Name_To_Use, a_stack The_Stack_To_Use)
 	{
 		this.Deck = The_Deck_To_Use;
@@ -53,7 +52,53 @@ public class a_player
 		this.Stack = The_Stack_To_Use;
 		this.Was_Starting_Player = false;
 	}
+
+
+	public a_mana_pool acquires_mana_for(a_nonland_card The_Nonland_Card_For_Which_To_Acquire_Mana) {
+		a_mana_pool The_Mana_Pool = new a_mana_pool(0, 0, 0, 0, 0, 0);
+		ArrayList<ArrayList<a_configuration_of_a_permanent_to_contribute_mana>> The_List_Of_Sufficient_Combinations_Of_Configurations_Of_A_Permanent_To_Contribute_Mana = The_Nonland_Card_For_Which_To_Acquire_Mana.provides_its_list_of_sufficient_combinations_of_configurations_of_a_permanent_to_contribute_mana();
+		ArrayList<a_configuration_of_a_permanent_to_contribute_mana> The_Sufficient_Combination_Of_Configurations_Of_A_Permanent_To_Contribute_Mana = this.chooses_a_sufficient_combination_of_configurations_of_a_permanent_to_contribute_mana_from(The_List_Of_Sufficient_Combinations_Of_Configurations_Of_A_Permanent_To_Contribute_Mana);
+		for (a_configuration_of_a_permanent_to_contribute_mana The_Configuration_Of_A_Permanent_To_Contribute_Mana : The_Sufficient_Combination_Of_Configurations_Of_A_Permanent_To_Contribute_Mana) {
+			a_permanent The_Permanent = The_Configuration_Of_A_Permanent_To_Contribute_Mana.provides_its_permanent();
+			int The_Option_For_Contributing_Mana = The_Configuration_Of_A_Permanent_To_Contribute_Mana.provides_its_option_for_contributing_mana();
+			The_Mana_Pool.increases_by(The_Permanent.provides_a_mana_pool_for(The_Option_For_Contributing_Mana));
+		}
+		return The_Mana_Pool;
+	}
 	
+	
+	public void assigns_a_list_of_sufficient_combinations_of_configurations_of_a_permanent_to_contribute_mana_to(a_nonland_card The_Nonland_Card) {
+		ArrayList<a_permanent> The_List_Of_Permanents = this.Part_Of_The_Battlefield.provides_its_list_of_permanents();
+		ArrayList<a_configuration_of_a_permanent_to_contribute_mana> The_List_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana = new ArrayList<>();
+		for (a_permanent The_Permanent : The_List_Of_Permanents) {
+			for (int i : The_Permanent.provides_an_array_of_indices_of_available_options_for_contributing_mana()) {
+				a_configuration_of_a_permanent_to_contribute_mana The_Available_Configuration_Of_A_Permanent_To_Contribute_Mana = new a_configuration_of_a_permanent_to_contribute_mana(The_Permanent, i);
+				The_List_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana.add(The_Available_Configuration_Of_A_Permanent_To_Contribute_Mana);
+			}
+		}
+		ArrayList<ArrayList<a_configuration_of_a_permanent_to_contribute_mana>> The_List_Of_Combinations_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana = this.generates_a_list_of_combinations_of_elements_in(The_List_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana);
+		ArrayList<ArrayList<a_configuration_of_a_permanent_to_contribute_mana>> The_List_Of_Sufficient_Combinations_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana = new ArrayList<>();
+		for (int i = 0; i < The_List_Of_Combinations_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana.size(); i++) {
+			ArrayList<a_configuration_of_a_permanent_to_contribute_mana> The_Combination_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana = The_List_Of_Combinations_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana.get(i);
+			a_mana_pool The_Mana_Pool = new a_mana_pool(0, 0, 0, 0, 0, 0);
+			for (a_configuration_of_a_permanent_to_contribute_mana The_Available_Configuration_Of_A_Permanent_To_Contribute_Mana : The_Combination_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana) {
+				a_permanent The_Permanent = The_Available_Configuration_Of_A_Permanent_To_Contribute_Mana.provides_its_permanent();
+				int the_available_option_for_contributing_mana = The_Available_Configuration_Of_A_Permanent_To_Contribute_Mana.provides_its_option_for_contributing_mana();
+				The_Mana_Pool.increases_by(The_Permanent.indicates_mana_pool_it_would_contribute_for(the_available_option_for_contributing_mana));
+			}
+			if (The_Mana_Pool.is_sufficient_for(The_Nonland_Card.provides_its_mana_cost())) {
+				The_List_Of_Sufficient_Combinations_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana.add(The_Combination_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana);
+			}
+		}
+		The_Nonland_Card.receives(The_List_Of_Sufficient_Combinations_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana);
+	}
+
+
+	public void assigns_a_list_of_sufficient_combinations_of_configurations_of_a_permanent_to_contribute_mana_to_the_players_nonland_hand_cards() {
+		for (a_nonland_card The_Nonland_Card : this.Hand.provides_its_list_of_nonland_cards()) {
+			this.assigns_a_list_of_sufficient_combinations_of_configurations_of_a_permanent_to_contribute_mana_to(The_Nonland_Card);
+		}
+	}
 	
 	public void becomes_the_starting_player() {
 		this.Was_Starting_Player = true;
@@ -72,7 +117,6 @@ public class a_player
 		ArrayList<a_configuration_of_a_permanent_to_contribute_mana> The_Sufficient_Combination = The_List_Of_Sufficient_Combinations_To_Use.get(The_Index_Of_The_Sufficient_Combination);
 		return The_Sufficient_Combination;
 	}
-	
 	
 	public void completes_her_beginning_phase() {
 		
@@ -147,23 +191,8 @@ public class a_player
 		
 	}
 	
-	
-	public a_mana_pool acquires_mana_for(a_nonland_card The_Nonland_Card_For_Which_To_Acquire_Mana) {
-		a_mana_pool The_Mana_Pool = new a_mana_pool(0, 0, 0, 0, 0, 0);
-		ArrayList<ArrayList<a_configuration_of_a_permanent_to_contribute_mana>> The_List_Of_Sufficient_Combinations_Of_Configurations_Of_A_Permanent_To_Contribute_Mana = The_Nonland_Card_For_Which_To_Acquire_Mana.provides_its_list_of_sufficient_combinations_of_configurations_of_a_permanent_to_contribute_mana();
-		ArrayList<a_configuration_of_a_permanent_to_contribute_mana> The_Sufficient_Combination_Of_Configurations_Of_A_Permanent_To_Contribute_Mana = this.chooses_a_sufficient_combination_of_configurations_of_a_permanent_to_contribute_mana_from(The_List_Of_Sufficient_Combinations_Of_Configurations_Of_A_Permanent_To_Contribute_Mana);
-		for (a_configuration_of_a_permanent_to_contribute_mana The_Configuration_Of_A_Permanent_To_Contribute_Mana : The_Sufficient_Combination_Of_Configurations_Of_A_Permanent_To_Contribute_Mana) {
-			a_permanent The_Permanent = The_Configuration_Of_A_Permanent_To_Contribute_Mana.provides_its_permanent();
-			int The_Option_For_Contributing_Mana = The_Configuration_Of_A_Permanent_To_Contribute_Mana.provides_its_option_for_contributing_mana();
-			The_Mana_Pool.increases_by(The_Permanent.provides_a_mana_pool_for(The_Option_For_Contributing_Mana));
-		}
-		return The_Mana_Pool;
-	}
-	
 	public void completes_her_precombat_main_phase() throws Exception {
-		
 		System.out.println(this.Name + " is completing their precombat main phase.");
-		
 		this.Step = "Precombat Main Phase";
 		
 		// Rule 500.5: When a phase or step begins, any effects scheduled to last "until" that phase or step expire.
@@ -175,24 +204,21 @@ public class a_player
 		this.Has_Priority = true;
 		
 		// Rule 505.5b: During either main phase, the active player may play one land card from their hand if the stack is empty, if the player has priority, and if they haven't played a land this turn (unless an effect states the player may play additional lands). This action doesn't use the stack. Neither the land nor the action of playing the land is a spell or ability, so it can't be countered, and players can't respond to it with instants or activated abilities. (See rule 305, "Lands.")
-		this.plays_a_land();
+		if (!this.Has_Played_A_Land_This_Turn) {
+		    this.plays_a_land();
+		}
 		
 		// Rule 505.5a: [A] main phase is the only phase in which a player can normally cast artifact, creature, enchantment, planeswalker, and sorcery spells. The active player may cast these spells.
 		// Rule 601.2: To cast a spell is to [use a card to create a spell], put [the spell] on the stack, and pay its mana costs, so that [the spell] will eventually resolve and have its effect. Casting a spell includes proposal of the spell (rules 601.2a-d) and determination and payment of costs (rules 601.2f-h). To cast a spell, a player follows the steps listed below, in order. A player must be legally allowed to cast the spell to begin this process (see rule 601.3). If a player is unable to comply with the requirements of a step listed below while performing that step, the casting of the spell is illegal; the game returns to the moment before the casting of that spell was proposed (see rule 723, "Handling Illegal Actions").
-		// Rule 601.2a: To propose the casting of a spell, a player first [uses a card to create a spell and puts the spell on] the stack. [The spell] becomes the topmost object on the stack. [The spell] has all the characteristics of the card... associated with it, and [the casting] player becomes its controller. The spell remains on the stack until it's countered, it resolves, or an effect moves it elsewhere.
 		// Rule 601.2e: The game checks to see if the proposed spell can legally be cast. If the proposed spell is illegal, the game returns to the moment before the casting of that spell was proposed (see rule 723, "Handling Illegal Actions").
-		this.determines_playability_and_a_list_of_sufficient_combinations_of_configurations_of_a_permanent_to_contribute_mana_for_her_hand_cards();
+		this.assigns_a_list_of_sufficient_combinations_of_configurations_of_a_permanent_to_contribute_mana_to_the_players_nonland_hand_cards();
+		this.determines_whether_the_players_nonland_hand_cards_are_playable();
+		ArrayList<a_nonland_card> The_List_Of_Playable_Nonland_Hand_Cards = this.generates_a_list_of_playable_nonland_hand_cards();
+		System.out.println(this.Name + " may cast a spell using a card in the following list. " + The_List_Of_Playable_Nonland_Hand_Cards);
 		
-		ArrayList<a_nonland_card> The_List_Of_Nonland_Cards_That_May_Be_Used_To_Cast_A_Spell = new ArrayList<a_nonland_card>();
-		for (a_nonland_card The_Card : this.Hand.provides_its_list_of_nonland_cards()) {
-			if (The_Card.is_playable()) {
-				The_List_Of_Nonland_Cards_That_May_Be_Used_To_Cast_A_Spell.add(The_Card);
-			}
-		}
-		System.out.println(this.Name + " may cast a spell using a card in the following list. " + The_List_Of_Nonland_Cards_That_May_Be_Used_To_Cast_A_Spell);
-		
-		if (The_List_Of_Nonland_Cards_That_May_Be_Used_To_Cast_A_Spell.size() > 0) {
-			a_nonland_card The_Nonland_Card_To_Use_To_Cast_A_Spell = this.chooses_a_card_to_use_to_cast_a_spell_from(The_List_Of_Nonland_Cards_That_May_Be_Used_To_Cast_A_Spell);
+		// Rule 601.2a: To propose the casting of a spell, a player first [uses a card to create a spell and puts the spell on] the stack. [The spell] becomes the topmost object on the stack. [The spell] has all the characteristics of the card... associated with it, and [the casting] player becomes its controller. The spell remains on the stack until it's countered, it resolves, or an effect moves it elsewhere.
+		if (The_List_Of_Playable_Nonland_Hand_Cards.size() > 0) {
+			a_nonland_card The_Nonland_Card_To_Use_To_Cast_A_Spell = this.chooses_a_card_to_use_to_cast_a_spell_from(The_List_Of_Playable_Nonland_Hand_Cards);
 			//a_mana_pool The_Mana_Pool_To_Use_To_Cast_A_Spell =
 			this.acquires_mana_for(The_Nonland_Card_To_Use_To_Cast_A_Spell);
 			//this.Mana_Pool.increases_by(The_Mana_Pool_To_Use_To_Cast_A_Spell);
@@ -222,83 +248,8 @@ public class a_player
 		this.Has_Priority = false;
 	}
 	
-	/**
-	 * reacts
-	 * 
-	 * When all players pass in succession, the top (last-added) spell or ability on the stack resolves...
-	 */
-	public void reacts() {
-		System.out.println(this.Name + " is reacting.");
-		return; // Returning is passing.
-	}
-	
-	public void determines_playability_and_a_list_of_sufficient_combinations_of_configurations_of_a_permanent_to_contribute_mana_for_her_hand_cards() {
-		for (a_nonland_card The_Nonland_Card : this.Hand.provides_its_list_of_nonland_cards()) {
-			this.determines_playability_and_a_list_of_sufficient_combinations_of_configurations_of_a_permanent_to_contribute_mana_for(The_Nonland_Card);
-		}
-	}
-	
-	public boolean judges_playable(a_nonland_card The_Nonland_Card) {
-		if (The_Nonland_Card.provides_its_type().equals("Instant")) {
-			ArrayList<String> The_Text = The_Nonland_Card.provides_its_text();
-			// Tactical Advantage
-			if (The_Text.contains("Target blocking or blocked creature you control gets +2/+2 until end of turn.")) {
-				ArrayList<a_creature> The_List_Of_Creatures = this.Part_Of_The_Battlefield.provides_its_list_of_creatures();
-				if (this.Step.equals("Declare Blockers Step") && The_List_Of_Creatures.size() > 0) {
-					for (a_creature The_Creature : The_List_Of_Creatures) {
-						if (The_Creature.provides_its_indicator_of_whether_this_creature_is_blocked()) {
-							return true;
-						} else if (The_Creature.provides_its_indicator_of_whether_this_creature_is_blocking()) {
-							return true;
-						}
-					}
-					return false;
-				} else {
-					return false;
-				}
-			} else {
-				return true;
-			}
-		} else {
-		    return true;
-		}
-	}
-	
-	public void determines_playability_and_a_list_of_sufficient_combinations_of_configurations_of_a_permanent_to_contribute_mana_for(a_nonland_card The_Nonland_Card) {
-		The_Nonland_Card.becomes_not_playable();
-		if (!judges_playable(The_Nonland_Card)) {
-			return;
-		}
-		ArrayList<a_permanent> The_List_Of_Permanents = this.Part_Of_The_Battlefield.provides_its_list_of_permanents();
-		ArrayList<a_configuration_of_a_permanent_to_contribute_mana> The_List_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana = new ArrayList<>();
-		for (a_permanent The_Permanent : The_List_Of_Permanents) {
-			for (int i : The_Permanent.provides_an_array_of_indices_of_available_options_for_contributing_mana()) {
-				a_configuration_of_a_permanent_to_contribute_mana The_Available_Configuration_Of_A_Permanent_To_Contribute_Mana = new a_configuration_of_a_permanent_to_contribute_mana(The_Permanent, i);
-				The_List_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana.add(The_Available_Configuration_Of_A_Permanent_To_Contribute_Mana);
-			}
-		}
-		ArrayList<ArrayList<a_configuration_of_a_permanent_to_contribute_mana>> The_List_Of_Combinations_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana = this.generates_a_list_of_combinations_of_elements_in(The_List_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana);
-		ArrayList<ArrayList<a_configuration_of_a_permanent_to_contribute_mana>> The_List_Of_Sufficient_Combinations_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana = new ArrayList<>();
-		for (int i = 0; i < The_List_Of_Combinations_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana.size(); i++) {
-			ArrayList<a_configuration_of_a_permanent_to_contribute_mana> The_Combination_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana = The_List_Of_Combinations_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana.get(i);
-			a_mana_pool The_Mana_Pool = new a_mana_pool(0, 0, 0, 0, 0, 0);
-			for (a_configuration_of_a_permanent_to_contribute_mana The_Available_Configuration_Of_A_Permanent_To_Contribute_Mana : The_Combination_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana) {
-				a_permanent The_Permanent = The_Available_Configuration_Of_A_Permanent_To_Contribute_Mana.provides_its_permanent();
-				int the_available_option_for_contributing_mana = The_Available_Configuration_Of_A_Permanent_To_Contribute_Mana.provides_its_option_for_contributing_mana();
-				The_Mana_Pool.increases_by(The_Permanent.indicates_mana_pool_it_would_contribute_for(the_available_option_for_contributing_mana));
-			}
-			if (The_Mana_Pool.is_sufficient_for(The_Nonland_Card.provides_its_mana_cost())) {
-				The_List_Of_Sufficient_Combinations_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana.add(The_Combination_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana);
-			}
-		}
-		if (The_List_Of_Sufficient_Combinations_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana.size() > 0) {
-			The_Nonland_Card.becomes_playable();
-			The_Nonland_Card.receives(The_List_Of_Sufficient_Combinations_Of_Available_Configurations_Of_A_Permanent_To_Contribute_Mana);
-		}
-	}	
-	
 	public void completes_her_postcombat_main_phase() {
-	
+		
 		System.out.println(this.Name + " is completing their postcombat main phase.");
 		
 		// Rule 500.5: When a phase or step begins, any effects scheduled to last "until" that phase or step expire.
@@ -351,6 +302,7 @@ public class a_player
 		this.Has_Priority = false;
 	}
 	
+	
 	// TODO: Use discretion in determining permanents to untap.
 	public void determines_her_permanents_to_untap() {
 		
@@ -386,6 +338,17 @@ public class a_player
 	}
 	
 	
+	public void determines_whether_the_players_nonland_hand_cards_are_playable() {
+		for (a_nonland_card The_Nonland_Card : this.Hand.provides_its_list_of_nonland_cards()) {
+			if (this.indicates_whether_a_nonland_card_is_playable(The_Nonland_Card)) {
+				The_Nonland_Card.becomes_playable();
+			} else {
+				The_Nonland_Card.becomes_not_playable();
+			}
+		}
+	}
+	
+	
 	public void draws() {
 		this.Hand.receives(this.Deck.provides_a_card());
 		
@@ -398,22 +361,36 @@ public class a_player
 	}
 	
 	
-	/** Rule 103.4:
-	 * Each player draws a number of cards equal to their starting hand size, which is normally seven.
+	/**
+	 * draws_a_hand
+	 * 
+	 * Rule 103.4: Each player draws a number of cards equal to their starting hand size, which is normally seven.
 	 */
-	
 	public void draws_a_hand() {
 		for (int i = 0; i < STARTING_HAND_SIZE; i++) {
 			this.draws();
 		}
 	}
+    
 	
     private <T> ArrayList<ArrayList<T>> generates_a_list_of_combinations_of_elements_in(ArrayList<T> list_of_elements) {
         ArrayList<ArrayList<T>> list_of_combinations = new ArrayList<>();
         this.helps_generate_a_list_of_combinations(list_of_elements, 0, new ArrayList<T>(), list_of_combinations);
         return list_of_combinations;
     }
-
+    
+    
+    private ArrayList<a_nonland_card> generates_a_list_of_playable_nonland_hand_cards() {
+		ArrayList<a_nonland_card> The_List_Of_Playable_Nonland_Hand_Cards = new ArrayList<a_nonland_card>();
+		for (a_nonland_card The_Nonland_Card : this.Hand.provides_its_list_of_nonland_cards()) {
+			if (The_Nonland_Card.is_playable()) {
+				The_List_Of_Playable_Nonland_Hand_Cards.add(The_Nonland_Card);
+			}
+		}
+		return The_List_Of_Playable_Nonland_Hand_Cards;
+    }
+    
+    
     private <T> void helps_generate_a_list_of_combinations(ArrayList<T> list_of_elements, int starting_index_in_list_of_elements, ArrayList<T> combination, ArrayList<ArrayList<T>> list_of_combinations) {
         list_of_combinations.add(new ArrayList<>(combination));
         for (int i = starting_index_in_list_of_elements; i < list_of_elements.size(); i++) {
@@ -422,39 +399,63 @@ public class a_player
             combination.remove(combination.size() - 1);
         }
     }
+    
+	
+	public boolean indicates_whether_a_nonland_card_is_playable(a_nonland_card The_Nonland_Card) {
+		if (
+			this.indicates_whether_a_card_is_playable_according_to_the_text_of(The_Nonland_Card) &&
+			!The_Nonland_Card.provides_its_list_of_sufficient_combinations_of_configurations_of_a_permanent_to_contribute_mana().isEmpty()
+		) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	
+	public boolean indicates_whether_a_card_is_playable_according_to_the_text_of(a_card The_Card) {
+		if (The_Card.provides_its_type().equals("Instant")) {
+			ArrayList<String> The_Text = The_Card.provides_its_text();
+			// Tactical Advantage
+			if (The_Text.contains("Target blocking or blocked creature you control gets +2/+2 until end of turn.")) {
+				ArrayList<a_creature> The_List_Of_Creatures = this.Part_Of_The_Battlefield.provides_its_list_of_creatures();
+				if (this.Step.equals("Declare Blockers Step") && The_List_Of_Creatures.size() > 0) {
+					for (a_creature The_Creature : The_List_Of_Creatures) {
+						if (The_Creature.provides_its_indicator_of_whether_this_creature_is_blocked()) {
+							return true;
+						} else if (The_Creature.provides_its_indicator_of_whether_this_creature_is_blocking()) {
+							return true;
+						}
+					}
+					return false;
+				} else {
+					return false;
+				}
+			} else {
+				return true;
+			}
+		} else {
+		    return true;
+		}
+	}
+	
 	
 	public void plays_a_land() {
-		
-		int The_Number_Of_Land_Cards = this.Hand.provides_its_number_of_land_cards();
+		ArrayList<a_land_card> The_List_Of_Land_Cards = this.Hand.provides_its_list_of_land_cards();
+		int The_Number_Of_Land_Cards = The_List_Of_Land_Cards.size();
 		if (The_Number_Of_Land_Cards > 0) {
 			System.out.println(this.Name + " is playing a land.");
 			int The_Index_Of_The_Land_Card_To_Play = this.Random_Data_Generator.nextInt(0, The_Number_Of_Land_Cards - 1);
-			a_land_card The_Land_Card_To_Play = this.Hand.provides_the_land_card_in_the_list_of_land_cards_at_index(The_Index_Of_The_Land_Card_To_Play);
+			a_land_card The_Land_Card_To_Play = The_List_Of_Land_Cards.get(The_Index_Of_The_Land_Card_To_Play);
 			if (The_Land_Card_To_Play.provides_its_name().equals("Plains")) {
 				this.Part_Of_The_Battlefield.receives_land(new a_Plains(false));
 			} else if (The_Land_Card_To_Play.provides_its_name().equals("Forest")) {
 				this.Part_Of_The_Battlefield.receives_land(new a_Forest(false));
 			}
+			this.Has_Played_A_Land_This_Turn = true;
 			System.out.println("After playing a land card, the hand of " + this.Name + " has " + this.Hand.provides_its_number_of_cards() + " cards and contains the following. " + this.Hand);
 			System.out.println("After playing a land card, the part of the battlefield of " + this.Name + " has " + this.Part_Of_The_Battlefield.provides_its_number_of_permanents() + " cards and contains the following. " + this.Part_Of_The_Battlefield);
 		}
-	}
-	
-	public ArrayList<a_card> provides_a_list_of_cards_that_are_playable_given(ArrayList<a_mana_pool> The_List_Of_Possible_Mana_Pools) {
-		
-		ArrayList<a_card> The_List_Of_Cards_That_May_Be_Used_To_Cast_Spells = new ArrayList<a_card>();
-		for (a_nonland_card The_Nonland_Card : this.Hand.provides_its_list_of_nonland_cards()) {
-			for (a_mana_pool The_Possible_Mana_Pool : The_List_Of_Possible_Mana_Pools) {
-				if (The_Possible_Mana_Pool.is_sufficient_for(The_Nonland_Card.provides_its_mana_cost())) {
-					The_List_Of_Cards_That_May_Be_Used_To_Cast_Spells.add(The_Nonland_Card);
-					//System.out.println("The mana pool of\n" + The_Possible_Mana_Pool + "\nis sufficient for the mana cost of " + The_Card.provides_its_name() + ",\n" + The_Card.provides_its_mana_cost());
-					break;
-				}
-			}
-		}
-		
-		return The_List_Of_Cards_That_May_Be_Used_To_Cast_Spells;
-		
 	}
 	
 	
@@ -462,9 +463,22 @@ public class a_player
 		return this.Name;
 	}
 	
+	
+	/**
+	 * reacts
+	 * 
+	 * When all players pass in succession, the top (last-added) spell or ability on the stack resolves...
+	 */
+	public void reacts() {
+		System.out.println(this.Name + " is reacting.");
+		return; // Returning is passing.
+	}
+	
+	
 	public void receives(a_player The_Other_Player_To_Use) {
 		this.Other_Player = The_Other_Player_To_Use;
 	}
+	
 	
 	public void shuffles_her_deck() {
 		this.Deck.shuffles();
@@ -497,4 +511,5 @@ public class a_player
 		}
 	}
 
+	
 }
