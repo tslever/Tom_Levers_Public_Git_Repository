@@ -274,10 +274,13 @@ public class a_player {
 				System.out.println("After playing a nonland card, the hand of " + this.Name + " has " + this.Hand.provides_its_number_of_cards() + " cards and contains the following. " + this.Hand);
 				a_spell The_Spell = new a_spell(The_Playable_Nonland_Hand_Card.provides_its_name(), The_Playable_Nonland_Hand_Card.provides_its_type());
 				this.Stack.receives(The_Spell);
-				System.out.println("The stack contains the following spells. " + this.Stack);
+				System.out.println("The stack contains the following spells and nonmana activated abilities. " + this.Stack);
 				this.Other_Player.reacts();
 			} else if (The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability instanceof a_nonmana_activated_ability) {
 				a_nonmana_activated_ability The_Nonmana_Activated_Ability = (a_nonmana_activated_ability) The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability;
+				this.Stack.receives(The_Nonmana_Activated_Ability);
+				System.out.println("The stack contains the following spells and nonmana activated abilities. " + this.Stack);
+				this.Other_Player.reacts();
 			}
 		}
 	}

@@ -10,6 +10,10 @@ public class a_nonmana_activated_ability extends an_activated_ability {
 		super(The_Cost_To_Use, The_Effect_To_Use, The_Permanent_With_This_Nonmana_Activated_Ability);
 	}
 	
+	public void activates() {
+		this.provides_its_permanent().taps();
+	}
+	
 	public a_mana_pool provides_its_mana_cost() {
 		if (this.provides_its_cost().equals("T")) {
 			return new a_mana_pool(0, 0, 0, 0, 0, 0);
