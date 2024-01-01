@@ -10,11 +10,11 @@ public class a_creature extends a_permanent {
 		super(The_Name);
 	}
 	
-	public boolean provides_its_indicator_of_whether_this_creature_is_blocked() {
+	public boolean is_blocked() {
 		return this.Indicator_Of_Whether_This_Creature_Is_Blocked;
 	}	
 	
-	public boolean provides_its_indicator_of_whether_this_creature_is_blocking() {
+	public boolean is_blocking() {
 		return this.Indicator_Of_Whether_This_Creature_Is_Blocking;
 	}
 }

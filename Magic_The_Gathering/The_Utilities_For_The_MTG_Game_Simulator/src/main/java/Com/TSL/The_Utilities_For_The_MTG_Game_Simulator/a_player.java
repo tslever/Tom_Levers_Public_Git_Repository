@@ -531,24 +531,35 @@ public class a_player {
 	public boolean indicates_whether_a_card_is_playable_according_to_the_text_of(a_card The_Card) {
 		if (The_Card.provides_its_type().equals("Instant")) {
 			ArrayList<String> The_Text = The_Card.provides_its_text();
-			// Tactical Advantage
-			if (The_Text.contains("Target blocking or blocked creature you control gets +2/+2 until end of turn.")) {
-				ArrayList<a_creature> The_List_Of_Creatures = this.Part_Of_The_Battlefield.provides_its_list_of_creatures();
-				if ((this.Step.equals("This Player's Declare Blockers Step") || this.Step.equals("Other Player's Declare Blockers Step")) && The_List_Of_Creatures.size() > 0) {
+			ArrayList<a_creature> The_List_Of_Creatures = this.Part_Of_The_Battlefield.provides_its_list_of_creatures();
+			
+			for (String The_Line : The_Text) {
+				if (The_Line.contains("creature you control") && The_List_Of_Creatures.isEmpty()) {
+					return false;
+				}
+			}
+			
+			// Tactical Advantage: "Target blocking or blocked creature you control gets +2/+2 until end of turn."
+			if (The_Text.contains("Target blocking or blocked creature you control")) {
+				if (!this.Step.equals("This Player's Declare Blockers Step") && !this.Step.equals("Other Player's Declare Blockers Step")) {
+					return false;
+				} else {
 					for (a_creature The_Creature : The_List_Of_Creatures) {
-						if (The_Creature.provides_its_indicator_of_whether_this_creature_is_blocked()) {
+						if (The_Creature.is_blocked()) {
 							return true;
-						} else if (The_Creature.provides_its_indicator_of_whether_this_creature_is_blocking()) {
+						} else if (The_Creature.is_blocking()) {
 							return true;
 						}
 					}
 					return false;
-				} else {
-					return false;
 				}
-			} else {
+			}
+			
+			else {
+				// Stony Strength: "Put a +1/+1 counter on target creature you control. Untap that creature."
 				return true;
 			}
+			
 		} else {
 		    return true;
 		}
