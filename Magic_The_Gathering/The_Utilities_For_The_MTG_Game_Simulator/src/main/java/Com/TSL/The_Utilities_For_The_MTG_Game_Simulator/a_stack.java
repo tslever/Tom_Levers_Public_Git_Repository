@@ -10,14 +10,14 @@ import java.util.ArrayList;
  */
 public class a_stack {
 
-	private ArrayList<a_spell> List_Of_Spells;
+	private ArrayList<Object> List_Of_Spells_Or_Nonmana_Activated_Abilities;
 	
 	public a_stack() {
-		this.List_Of_Spells = new ArrayList<a_spell>();
+		this.List_Of_Spells_Or_Nonmana_Activated_Abilities = new ArrayList<Object>();
 	}
 	
-	public boolean contains_spells() {
-		if (this.List_Of_Spells.size() > 0) {
+	public boolean contains_objects() {
+		if (this.List_Of_Spells_Or_Nonmana_Activated_Abilities.size() > 0) {
 			return true;
 		}
 		else {
@@ -25,22 +25,24 @@ public class a_stack {
 		}
 	}
 	
-	public a_spell provides_its_top_spell() {
-		return this.List_Of_Spells.remove(this.List_Of_Spells.size() - 1);
+	public Object provides_its_top_object() {
+		return this.List_Of_Spells_Or_Nonmana_Activated_Abilities.remove(this.List_Of_Spells_Or_Nonmana_Activated_Abilities.size() - 1);
 	}
 	
-	public void receives(a_spell The_Spell) {
-		this.List_Of_Spells.add(The_Spell);
+	public void receives(Object The_Object) {
+		if ((The_Object instanceof a_spell) || (The_Object instanceof a_nonmana_activated_ability)) {
+			this.List_Of_Spells_Or_Nonmana_Activated_Abilities.add(The_Object);
+		}
 	}
 	
 	@Override
 	public String toString() {
 		StringBuilder The_String_Builder = new StringBuilder("Stack: ");
-		for (int i = 0; i < this.List_Of_Spells.size() - 1; i++) {
-			The_String_Builder.append(this.List_Of_Spells.get(i) + "; ");
+		for (int i = 0; i < this.List_Of_Spells_Or_Nonmana_Activated_Abilities.size() - 1; i++) {
+			The_String_Builder.append(this.List_Of_Spells_Or_Nonmana_Activated_Abilities.get(i) + "; ");
 		}
-		if (this.List_Of_Spells.size() > 0) {
-			The_String_Builder.append(this.List_Of_Spells.get(this.List_Of_Spells.size() - 1));
+		if (this.List_Of_Spells_Or_Nonmana_Activated_Abilities.size() > 0) {
+			The_String_Builder.append(this.List_Of_Spells_Or_Nonmana_Activated_Abilities.get(this.List_Of_Spells_Or_Nonmana_Activated_Abilities.size() - 1));
 		}
 		return The_String_Builder.toString();
 	}

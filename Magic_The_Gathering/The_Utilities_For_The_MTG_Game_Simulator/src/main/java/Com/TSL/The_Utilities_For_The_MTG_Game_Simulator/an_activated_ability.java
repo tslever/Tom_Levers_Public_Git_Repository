@@ -48,4 +48,8 @@ public class an_activated_ability {
 		return true;
 	}
 	
+	@Override
+	public String toString() {
+		return this.Permanent.provides_its_name() + ": " + this.Cost + ": " + this.Effect;
+	}
 }

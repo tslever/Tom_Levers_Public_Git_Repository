@@ -53,9 +53,25 @@ public class a_player {
 		this.Was_Starting_Player = false;
 	}
 
-	public a_mana_pool acquires_mana_for(a_nonland_card The_Nonland_Card_For_Which_To_Acquire_Mana) {
+	public a_mana_pool acquires_mana_for(Object The_Object) throws Exception {
+		a_nonland_card The_Nonland_Card = null;
+		a_nonmana_activated_ability The_Nonmana_Activated_Ability = null;
+		if (The_Object instanceof a_nonland_card) {
+			The_Nonland_Card = (a_nonland_card) The_Object;
+		} else if (The_Object instanceof a_nonmana_activated_ability) {
+			The_Nonmana_Activated_Ability = (a_nonmana_activated_ability) The_Object;
+		} else {
+			throw new Exception("assigns_a_list_of_sufficient_combinations_of_available_mana_to takes a nonland card or a nonmana activated ability.");
+		}
 		a_mana_pool The_Mana_Pool = new a_mana_pool(0, 0, 0, 0, 0, 0);
-		ArrayList<ArrayList<a_mana_ability>> The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities = The_Nonland_Card_For_Which_To_Acquire_Mana.provides_its_list_of_sufficient_combinations_of_available_mana_abilities();
+		ArrayList<ArrayList<a_mana_ability>> The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities;
+		if (The_Nonland_Card != null) {
+			The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities = The_Nonland_Card.provides_its_list_of_sufficient_combinations_of_available_mana_abilities();
+		} else if (The_Nonmana_Activated_Ability != null) {
+			The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities = The_Nonmana_Activated_Ability.provides_its_list_of_sufficient_combinations_of_available_mana_abilities();			
+		} else {
+			throw new Exception("A nonland card and a nonmana activated ability were null.");
+		}
 		ArrayList<a_mana_ability> The_Sufficient_Combination_Of_Available_Mana_Abilities = this.chooses_a_sufficient_combination_of_available_mana_abilities_from(The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities);
 		for (a_mana_ability The_Available_Mana_Ability : The_Sufficient_Combination_Of_Available_Mana_Abilities) {
 			The_Mana_Pool.increases_by(The_Available_Mana_Ability.activates_and_contributes_a_mana_pool());
@@ -130,10 +146,10 @@ public class a_player {
 	}
 	
 	
-	public a_nonland_card chooses_a_card_to_use_to_cast_a_spell_from(ArrayList<a_nonland_card> The_List_Of_Nonland_Cards_That_May_Be_Used_To_Cast_Spells) {
-		int The_Index_Of_The_Nonland_Card_To_Use = this.Random_Data_Generator.nextInt(0, The_List_Of_Nonland_Cards_That_May_Be_Used_To_Cast_Spells.size() - 1);
-		a_nonland_card The_Nonland_Card_To_Use = The_List_Of_Nonland_Cards_That_May_Be_Used_To_Cast_Spells.remove(The_Index_Of_The_Nonland_Card_To_Use);
-		return The_Nonland_Card_To_Use;
+	public Object chooses_a_playable_nonland_card_or_an_activatable_nonmana_activated_ability_from(ArrayList<Object> The_List_Of_Playable_Nonland_Cards_And_Activatable_Nonmana_Activated_Abilities) {
+		int The_Random_Index_Of_A_Playable_Nonland_Card_Or_An_Activatable_Nonmana_Activated_Ability_In_The_List = this.Random_Data_Generator.nextInt(0, The_List_Of_Playable_Nonland_Cards_And_Activatable_Nonmana_Activated_Abilities.size() - 1);
+		Object The_Random_Playable_Nonland_Card_Or_Activatable_Nonmana_Activated_Ability = The_List_Of_Playable_Nonland_Cards_And_Activatable_Nonmana_Activated_Abilities.remove(The_Random_Index_Of_A_Playable_Nonland_Card_Or_An_Activatable_Nonmana_Activated_Ability_In_The_List);
+		return The_Random_Playable_Nonland_Card_Or_Activatable_Nonmana_Activated_Ability;
 	}
 	
 	
@@ -235,36 +251,51 @@ public class a_player {
 		}
 		
 		// Rule 505.5a: [A] main phase is the only phase in which a player can normally cast artifact, creature, enchantment, planeswalker, and sorcery spells. The active player may cast these spells.
+		
 		// Rule 601.2: To cast a spell is to [use a card to create a spell], put [the spell] on the stack, and pay its mana costs, so that [the spell] will eventually resolve and have its effect. Casting a spell includes proposal of the spell (rules 601.2a-d) and determination and payment of costs (rules 601.2f-h). To cast a spell, a player follows the steps listed below, in order. A player must be legally allowed to cast the spell to begin this process (see rule 601.3). If a player is unable to comply with the requirements of a step listed below while performing that step, the casting of the spell is illegal; the game returns to the moment before the casting of that spell was proposed (see rule 723, "Handling Illegal Actions").
 		// Rule 601.2e: The game checks to see if the proposed spell can legally be cast. If the proposed spell is illegal, the game returns to the moment before the casting of that spell was proposed (see rule 723, "Handling Illegal Actions").
 		this.assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_her_nonland_hand_cards();
 		this.assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_her_permanents_nonmana_activated_abilities();
 		this.determines_whether_her_nonland_hand_cards_are_playable();
 		this.determines_whether_her_permanents_nonmana_activated_abilities_are_activatable();
-		
 		ArrayList<a_nonland_card> The_List_Of_Playable_Nonland_Hand_Cards = this.generates_a_list_of_playable_nonland_hand_cards();
 		System.out.println(this.Name + " may cast a spell using a card in the following list. " + The_List_Of_Playable_Nonland_Hand_Cards);
+		ArrayList<a_nonmana_activated_ability> The_List_Of_Activatable_Nonmana_Activated_Abilities = this.generates_a_list_of_activatable_nonmana_activated_abilities();
+		System.out.println(this.Name + " may activate an ability in the following list. " + The_List_Of_Activatable_Nonmana_Activated_Abilities);
+		ArrayList<Object> The_List_Of_Playable_Nonland_Hand_Cards_And_Activatable_Nonmana_Activated_Abilities = new ArrayList<>();
+		The_List_Of_Playable_Nonland_Hand_Cards_And_Activatable_Nonmana_Activated_Abilities.addAll(The_List_Of_Playable_Nonland_Hand_Cards);
+		The_List_Of_Playable_Nonland_Hand_Cards_And_Activatable_Nonmana_Activated_Abilities.addAll(The_List_Of_Activatable_Nonmana_Activated_Abilities);
 		
 		// Rule 601.2a: To propose the casting of a spell, a player first [uses a card to create a spell and puts the spell on] the stack. [The spell] becomes the topmost object on the stack. [The spell] has all the characteristics of the card... associated with it, and [the casting] player becomes its controller. The spell remains on the stack until it's countered, it resolves, or an effect moves it elsewhere.
-		if (The_List_Of_Playable_Nonland_Hand_Cards.size() > 0) {
-			a_nonland_card The_Nonland_Card_To_Use_To_Cast_A_Spell = this.chooses_a_card_to_use_to_cast_a_spell_from(The_List_Of_Playable_Nonland_Hand_Cards);
+		if (The_List_Of_Playable_Nonland_Hand_Cards_And_Activatable_Nonmana_Activated_Abilities.size() > 0) {
+			Object The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability = this.chooses_a_playable_nonland_card_or_an_activatable_nonmana_activated_ability_from(The_List_Of_Playable_Nonland_Hand_Cards_And_Activatable_Nonmana_Activated_Abilities);
 			//a_mana_pool The_Mana_Pool_To_Use_To_Cast_A_Spell =
-			this.acquires_mana_for(The_Nonland_Card_To_Use_To_Cast_A_Spell);
+			this.acquires_mana_for(The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability);
 			//this.Mana_Pool.increases_by(The_Mana_Pool_To_Use_To_Cast_A_Spell);
 			//this.Mana_Pool.decreases_by(The_Mana_Pool_To_Use_To_Cast_A_Spell);
-			The_Nonland_Card_To_Use_To_Cast_A_Spell = this.Hand.plays(The_Nonland_Card_To_Use_To_Cast_A_Spell);
-			System.out.println("After playing a nonland card, the hand of " + this.Name + " has " + this.Hand.provides_its_number_of_cards() + " cards and contains the following. " + this.Hand);
-			a_spell The_Spell = new a_spell(The_Nonland_Card_To_Use_To_Cast_A_Spell.provides_its_name(), The_Nonland_Card_To_Use_To_Cast_A_Spell.provides_its_type());
-			this.Stack.receives(The_Spell);
-			System.out.println("The stack contains the following spells. " + this.Stack);
-			this.Other_Player.reacts();
+			if (The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability instanceof a_nonland_card) {
+				a_nonland_card The_Playable_Nonland_Hand_Card = (a_nonland_card) The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability;
+				The_Playable_Nonland_Hand_Card = this.Hand.plays(The_Playable_Nonland_Hand_Card);
+				System.out.println("After playing a nonland card, the hand of " + this.Name + " has " + this.Hand.provides_its_number_of_cards() + " cards and contains the following. " + this.Hand);
+				a_spell The_Spell = new a_spell(The_Playable_Nonland_Hand_Card.provides_its_name(), The_Playable_Nonland_Hand_Card.provides_its_type());
+				this.Stack.receives(The_Spell);
+				System.out.println("The stack contains the following spells. " + this.Stack);
+				this.Other_Player.reacts();
+			} else if (The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability instanceof a_nonmana_activated_ability) {
+				a_nonmana_activated_ability The_Nonmana_Activated_Ability = (a_nonmana_activated_ability) The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability;
+			}
 		}
 		
 		// Rule 608.1: Each time all players pass in succession, the spell or ability on top of the stack resolves.
-		while (this.Stack.contains_spells()) {
-			a_spell The_Spell = this.Stack.provides_its_top_spell();
-			if (The_Spell.provides_its_type().equals("Creature")) {
-				this.Part_Of_The_Battlefield.receives_creature(new a_creature(The_Spell.provides_its_name(), false));
+		while (this.Stack.contains_objects()) {
+			Object The_Object = this.Stack.provides_its_top_object();
+			if (The_Object instanceof a_spell) {
+				a_spell The_Spell = (a_spell) The_Object;
+				if (The_Spell.provides_its_type().equals("Creature")) {
+					this.Part_Of_The_Battlefield.receives_creature(new a_creature(The_Spell.provides_its_name(), false));
+				}
+			} else if (The_Object instanceof an_activated_ability) {
+				// TODO: Implement
 			}
 		}
 		System.out.println(this.Part_Of_The_Battlefield);
@@ -443,6 +474,19 @@ public class a_player {
 			}
 		}
 		return The_List_Of_Playable_Nonland_Hand_Cards;
+    }
+    
+    
+    private ArrayList<a_nonmana_activated_ability> generates_a_list_of_activatable_nonmana_activated_abilities() {
+    	ArrayList<a_nonmana_activated_ability> The_List_Of_Activatable_Nonmana_Activated_Abilities = new ArrayList<a_nonmana_activated_ability>();
+    	for (a_permanent The_Permanent : this.Part_Of_The_Battlefield.provides_its_list_of_permanents()) {
+    		for (a_nonmana_activated_ability The_Nonmana_Activated_Ability : The_Permanent.provides_its_list_of_nonmana_activated_abilities()) {
+    			if (The_Nonmana_Activated_Ability.is_activatable()) {
+    				The_List_Of_Activatable_Nonmana_Activated_Abilities.add(The_Nonmana_Activated_Ability);
+    			}
+    		}
+    	}
+    	return The_List_Of_Activatable_Nonmana_Activated_Abilities;
     }
     
     
