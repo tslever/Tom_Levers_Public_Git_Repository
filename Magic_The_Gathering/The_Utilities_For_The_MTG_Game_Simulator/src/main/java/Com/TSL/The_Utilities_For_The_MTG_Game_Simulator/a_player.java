@@ -79,7 +79,7 @@ public class a_player {
 		return The_Mana_Pool;
 	}
 	
-	public void assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to(Object The_Object) throws Exception {
+	public void assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_nonland_card_or_nonmana_activated_ability(Object The_Object) throws Exception {
 		a_nonland_card The_Nonland_Card = null;
 		a_nonmana_activated_ability The_Nonmana_Activated_Ability = null;
 		if (The_Object instanceof a_nonland_card) {
@@ -127,16 +127,16 @@ public class a_player {
 		}
 	}
 	
-	public void assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_her_nonland_hand_cards() throws Exception {
-		for (a_nonland_card The_Nonland_Card : this.Hand.provides_its_list_of_nonland_cards()) {
-			this.assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to(The_Nonland_Card);
+	public void assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_nonland_hand_cards_in(ArrayList<a_nonland_card> The_List_Of_Nonland_Hand_Cards) throws Exception {
+		for (a_nonland_card The_Nonland_Card : The_List_Of_Nonland_Hand_Cards) {
+			this.assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_nonland_card_or_nonmana_activated_ability(The_Nonland_Card);
 		}
 	}
 	
 	public void assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_her_permanents_nonmana_activated_abilities() throws Exception {
 		for (a_permanent The_Permanent : this.Part_Of_The_Battlefield.provides_its_list_of_permanents()) {
 			for (a_nonmana_activated_ability The_Nonmana_Activated_Ability : The_Permanent.provides_its_list_of_nonmana_activated_abilities()) {
-				this.assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to(The_Nonmana_Activated_Ability);
+				this.assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_nonland_card_or_nonmana_activated_ability(The_Nonmana_Activated_Ability);
 			}
 		}
 	}
@@ -233,14 +233,27 @@ public class a_player {
 		
 	}
 	
-	public void casts_a_spell_or_activates_a_nonmana_activated_ability() throws Exception {
+	public void casts_a_spell_or_activates_a_nonmana_activated_ability(boolean Indicator_Of_Whether_Player_Is_Reacting) throws Exception {
 		// Rule 601.2: To cast a spell is to [use a card to create a spell], put [the spell] on the stack, and pay its mana costs, so that [the spell] will eventually resolve and have its effect. Casting a spell includes proposal of the spell (rules 601.2a-d) and determination and payment of costs (rules 601.2f-h). To cast a spell, a player follows the steps listed below, in order. A player must be legally allowed to cast the spell to begin this process (see rule 601.3). If a player is unable to comply with the requirements of a step listed below while performing that step, the casting of the spell is illegal; the game returns to the moment before the casting of that spell was proposed (see rule 723, "Handling Illegal Actions").
 		// Rule 601.2e: The game checks to see if the proposed spell can legally be cast. If the proposed spell is illegal, the game returns to the moment before the casting of that spell was proposed (see rule 723, "Handling Illegal Actions").
-		this.assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_her_nonland_hand_cards();
+		
+		ArrayList<a_nonland_card> The_List_Of_All_Nonland_Hand_Cards = this.Hand.provides_its_list_of_nonland_cards();
+		ArrayList<a_nonland_card> The_List_Of_Nonland_Hand_Cards_Appropriate_For_The_Present_Step;
+		if (Indicator_Of_Whether_Player_Is_Reacting) {
+			The_List_Of_Nonland_Hand_Cards_Appropriate_For_The_Present_Step = new ArrayList<>();
+			for (a_nonland_card The_Nonland_Hand_Card : The_List_Of_All_Nonland_Hand_Cards) {
+				if (The_Nonland_Hand_Card.provides_its_type().equals("Instant") || The_Nonland_Hand_Card.provides_its_text().contains("Flash")) {
+					The_List_Of_Nonland_Hand_Cards_Appropriate_For_The_Present_Step.add(The_Nonland_Hand_Card);
+				}
+			}
+		} else {			
+			The_List_Of_Nonland_Hand_Cards_Appropriate_For_The_Present_Step = The_List_Of_All_Nonland_Hand_Cards;
+		}
+		this.assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_nonland_hand_cards_in(The_List_Of_Nonland_Hand_Cards_Appropriate_For_The_Present_Step);
 		this.assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_her_permanents_nonmana_activated_abilities();
-		this.determines_whether_her_nonland_hand_cards_are_playable();
+		this.determines_whether_are_playable_the_cards_in(The_List_Of_Nonland_Hand_Cards_Appropriate_For_The_Present_Step);
 		this.determines_whether_her_permanents_nonmana_activated_abilities_are_activatable();
-		ArrayList<a_nonland_card> The_List_Of_Playable_Nonland_Hand_Cards = this.generates_a_list_of_playable_nonland_hand_cards();
+		ArrayList<a_nonland_card> The_List_Of_Playable_Nonland_Hand_Cards = this.generates_a_list_of_playable_nonland_hand_cards_in(The_List_Of_Nonland_Hand_Cards_Appropriate_For_The_Present_Step);
 		System.out.println(this.Name + " may cast a spell using a card in the following list. " + The_List_Of_Playable_Nonland_Hand_Cards);
 		ArrayList<a_nonmana_activated_ability> The_List_Of_Activatable_Nonmana_Activated_Abilities = this.generates_a_list_of_activatable_nonmana_activated_abilities();
 		System.out.println(this.Name + " may activate an ability in the following list. " + The_List_Of_Activatable_Nonmana_Activated_Abilities);
@@ -271,7 +284,7 @@ public class a_player {
 	
 	public void completes_her_precombat_main_phase() throws Exception {
 		System.out.println(this.Name + " is completing their precombat main phase.");
-		this.Step = "Precombat Main Phase";
+		this.Step = "This Player's Precombat Main Phase";
 		
 		// Rule 500.5: When a phase or step begins, any effects scheduled to last "until" that phase or step expire.
 		// Rule 500.6: When a phase or step begins, any abilities that trigger "at the beginning of" that phase or step trigger. They are put on the stack the next time a player would receive priority. (See rule 117, "Timing and Priority.")
@@ -287,7 +300,7 @@ public class a_player {
 		}
 		
 		// Rule 505.5a: [A] main phase is the only phase in which a player can normally cast artifact, creature, enchantment, planeswalker, and sorcery spells. The active player may cast these spells.
-		this.casts_a_spell_or_activates_a_nonmana_activated_ability();
+		this.casts_a_spell_or_activates_a_nonmana_activated_ability(false);
 		
 		// Rule 608.1: Each time all players pass in succession, the spell or ability on top of the stack resolves.
 		while (this.Stack.contains_objects()) {
@@ -402,9 +415,9 @@ public class a_player {
 	}
 	
 	
-	public void determines_whether_her_nonland_hand_cards_are_playable() {
-		for (a_nonland_card The_Nonland_Card : this.Hand.provides_its_list_of_nonland_cards()) {
-			if (this.indicates_whether_a_nonland_card_is_playable(The_Nonland_Card)) {
+	public void determines_whether_are_playable_the_cards_in(ArrayList<a_nonland_card> The_List_Of_Nonland_Hand_Cards) {
+		for (a_nonland_card The_Nonland_Card : The_List_Of_Nonland_Hand_Cards) {
+			if (this.indicates_whether_is_playable(The_Nonland_Card)) {
 				The_Nonland_Card.becomes_playable();
 			} else {
 				The_Nonland_Card.becomes_not_playable();
@@ -469,9 +482,9 @@ public class a_player {
     }
     
     
-    private ArrayList<a_nonland_card> generates_a_list_of_playable_nonland_hand_cards() {
+    private ArrayList<a_nonland_card> generates_a_list_of_playable_nonland_hand_cards_in(ArrayList<a_nonland_card> The_List_Of_Nonland_Hand_Cards) {
 		ArrayList<a_nonland_card> The_List_Of_Playable_Nonland_Hand_Cards = new ArrayList<a_nonland_card>();
-		for (a_nonland_card The_Nonland_Card : this.Hand.provides_its_list_of_nonland_cards()) {
+		for (a_nonland_card The_Nonland_Card : The_List_Of_Nonland_Hand_Cards) {
 			if (The_Nonland_Card.is_playable()) {
 				The_List_Of_Playable_Nonland_Hand_Cards.add(The_Nonland_Card);
 			}
@@ -503,7 +516,7 @@ public class a_player {
     }
     
 	
-	public boolean indicates_whether_a_nonland_card_is_playable(a_nonland_card The_Nonland_Card) {
+	public boolean indicates_whether_is_playable(a_nonland_card The_Nonland_Card) {
 		if (
 			this.indicates_whether_a_card_is_playable_according_to_the_text_of(The_Nonland_Card) &&
 			!The_Nonland_Card.provides_its_list_of_sufficient_combinations_of_available_mana_abilities().isEmpty()
@@ -521,7 +534,7 @@ public class a_player {
 			// Tactical Advantage
 			if (The_Text.contains("Target blocking or blocked creature you control gets +2/+2 until end of turn.")) {
 				ArrayList<a_creature> The_List_Of_Creatures = this.Part_Of_The_Battlefield.provides_its_list_of_creatures();
-				if (this.Step.equals("Declare Blockers Step") && The_List_Of_Creatures.size() > 0) {
+				if ((this.Step.equals("This Player's Declare Blockers Step") || this.Step.equals("Other Player's Declare Blockers Step")) && The_List_Of_Creatures.size() > 0) {
 					for (a_creature The_Creature : The_List_Of_Creatures) {
 						if (The_Creature.provides_its_indicator_of_whether_this_creature_is_blocked()) {
 							return true;
@@ -580,10 +593,12 @@ public class a_player {
 	 * 
 	 * When all players pass in succession, the top (last-added) spell or ability on the stack resolves...
 	 */
-	public void reacts() {
+	public void reacts() throws Exception {
 		System.out.println(this.Name + " is reacting.");
-		
-		return; // Returning is passing.
+		this.Step = "Other Player's Precombat Main Phase";
+		this.casts_a_spell_or_activates_a_nonmana_activated_ability(true);
+		System.out.println(this.Name + " is passing.");
+		return;
 	}
 	
 	
