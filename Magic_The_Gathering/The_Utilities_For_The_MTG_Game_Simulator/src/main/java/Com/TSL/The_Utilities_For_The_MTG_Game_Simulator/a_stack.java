@@ -25,7 +25,7 @@ public class a_stack {
 		}
 	}
 	
-	public Object provides_its_top_object() {
+	public Object top_object() {
 		return this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.get(this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.size() - 1);
 	}
 	

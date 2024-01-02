@@ -15,6 +15,7 @@ public class a_player {
 	private an_exile Exile;
 	private a_graveyard Graveyard;
 	private a_hand Hand;
+	private boolean Has_Cast_A_Spell_Or_Activated_A_Nonmana_Activated_Ability;
 	private boolean Has_Played_A_Land_This_Turn;
 	private boolean Has_Priority;
 	private int Index_Of_The_Present_Turn;
@@ -268,6 +269,7 @@ public class a_player {
 			this.acquires_mana_for(The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability);
 			//this.Mana_Pool.increases_by(The_Mana_Pool_To_Use_To_Cast_A_Spell);
 			//this.Mana_Pool.decreases_by(The_Mana_Pool_To_Use_To_Cast_A_Spell);
+			// Rule 117.3c: If a player has priority when they cast a spell, activate an ability, or take a special action, that player receives priority afterward.
 			if (The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability instanceof a_nonland_card) {
 				a_nonland_card The_Playable_Nonland_Hand_Card = (a_nonland_card) The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability;
 				The_Playable_Nonland_Hand_Card = this.Hand.plays(The_Playable_Nonland_Hand_Card);
@@ -276,18 +278,31 @@ public class a_player {
 				if (The_Type_Of_The_Playable_Nonland_Hand_Card.equals("Instant") || The_Type_Of_The_Playable_Nonland_Hand_Card.equals("Sorcery")) {
 				    a_spell The_Spell = new a_spell(The_Playable_Nonland_Hand_Card.provides_its_name(), this, The_Type_Of_The_Playable_Nonland_Hand_Card);
 				    this.Stack.receives(The_Spell);
+				    System.out.println(this.Name + " has casted instant or sorcery spell " + The_Spell + ".");
 				} else {
 					a_permanent_spell The_Permanent_Spell = new a_permanent_spell(The_Playable_Nonland_Hand_Card.provides_its_name(), this, The_Type_Of_The_Playable_Nonland_Hand_Card);
 					this.Stack.receives(The_Permanent_Spell);
+				    System.out.println(this.Name + " has casted permanent spell " + The_Permanent_Spell + ".");
 				}
+				this.Has_Cast_A_Spell_Or_Activated_A_Nonmana_Activated_Ability = true;
 				System.out.println("The stack contains the following spells and nonmana activated abilities. " + this.Stack);
+				this.Has_Priority = false;
+				System.out.println("After " + this.Name + " cast spell, " + this.Other_Player.Name + " reacts.");
 				this.Other_Player.reacts();
+				this.Has_Priority = true;
 			} else if (The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability instanceof a_nonmana_activated_ability) {
 				a_nonmana_activated_ability The_Nonmana_Activated_Ability = (a_nonmana_activated_ability) The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability;
 				this.Stack.receives(The_Nonmana_Activated_Ability);
+				System.out.println(this.Name + " has activated nonmana activated ability " + The_Nonmana_Activated_Ability + ".");
+				this.Has_Cast_A_Spell_Or_Activated_A_Nonmana_Activated_Ability = true;
 				System.out.println("The stack contains the following spells and nonmana activated abilities. " + this.Stack);
+				this.Has_Priority = false;
+				System.out.println("After " + this.Name + " activated nonmana activated ability, " + this.Other_Player.Name + " reacts.");
 				this.Other_Player.reacts();
+				this.Has_Priority = true;
 			}
+		} else {
+			this.Has_Cast_A_Spell_Or_Activated_A_Nonmana_Activated_Ability = false;
 		}
 	}
 	
@@ -309,7 +324,10 @@ public class a_player {
 		}
 		
 		// Rule 505.5a: [A] main phase is the only phase in which a player can normally cast artifact, creature, enchantment, planeswalker, and sorcery spells. The active player may cast these spells.
-		this.casts_a_spell_or_activates_a_nonmana_activated_ability(false);
+		
+		do {
+			this.casts_a_spell_or_activates_a_nonmana_activated_ability(false);
+		} while (this.Has_Cast_A_Spell_Or_Activated_A_Nonmana_Activated_Ability);
 		
 		// Rule 608.1: Each time all players pass in succession, the spell or ability on top of the stack resolves.
 		// Rule 608.2: If the object that's resolving is an instant spell, a sorcery spell, or a[ nonmana activated ability or a triggered] ability, its resolution may involve several steps. The steps described in rules 608.2a and 608.2b are followed first. The steps described in rules 608.2c-k are then followed as appropriate, in no specific order. The steps described in rule 608.2m and 608.2n are followed last.
@@ -350,7 +368,8 @@ public class a_player {
 		// Rule 608.2i: If an effect refers to certain characteristics, it checks only for the value of the specified characteristics, regardless of any related ones an object may also have.
 		// Rule 608.2k: If an instant spell, sorcery spell, or ability that can legally resolve leaves the stack once it starts to resolve, it will continue to resolve fully.
 		while (this.Stack.contains_objects()) {
-			Object The_Object = this.Stack.provides_its_top_object();
+			this.Has_Priority = false;
+			Object The_Object = this.Stack.top_object();
 			if (The_Object instanceof a_spell) {
 				a_spell The_Spell = (a_spell) The_Object;
 				// Rule 608.3: If the object that's resolving is a permanent spell, [the object's] resolution may involve several steps. The instructions in rules 608.3a and b are always performed first. Then one of the steps in rules 608.3c-e is performed, if appropriate.
@@ -401,6 +420,9 @@ public class a_player {
 				}
 			}
 			this.Stack.removes(The_Object);
+			// Rule 117.3b: The active player receives priority after a spell or [nonmana activated ]ability (other than a mana ability) resolves.
+			this.reacts();
+			this.Other_Player.reacts();
 		}
 		
 		// Rule 405.5: ... If the stack is empty when all players pass, the current step or phase ends and the next begins.
@@ -693,9 +715,11 @@ public class a_player {
 	 */
 	public void reacts() throws Exception {
 		System.out.println(this.Name + " is reacting.");
+		this.Has_Priority = true;
 		this.Step = "Other Player's Precombat Main Phase";
 		this.casts_a_spell_or_activates_a_nonmana_activated_ability(true);
 		System.out.println(this.Name + " is passing.");
+		this.Has_Priority = false;
 		return;
 	}
 	
