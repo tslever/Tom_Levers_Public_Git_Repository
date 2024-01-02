@@ -26,13 +26,17 @@ public class a_stack {
 	}
 	
 	public Object provides_its_top_object() {
-		return this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.remove(this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.size() - 1);
+		return this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.get(this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.size() - 1);
 	}
 	
 	public void receives(Object The_Object) {
 		if ((The_Object instanceof a_spell) || (The_Object instanceof a_nonmana_activated_ability) || (The_Object instanceof a_triggered_ability)) {
 			this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.add(The_Object);
 		}
+	}
+	
+	public void removes(Object The_Object_To_Remove) {
+		this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.remove(The_Object_To_Remove);
 	}
 	
 	@Override

@@ -6,7 +6,7 @@ public class a_creature extends a_permanent {
 	private boolean Indicator_Of_Whether_This_Creature_Is_Blocked = false;
 	private boolean Indicator_Of_Whether_This_Creature_Is_Blocking = false;
 	
-	public a_creature(String The_Name, boolean The_Tapped_Status) {
+	public a_creature(String The_Name) {
 		super(The_Name);
 	}
 	

@@ -3,15 +3,13 @@ package Com.TSL.The_Utilities_For_The_MTG_Game_Simulator;
 public class an_activated_ability extends an_ability {
 
 	private String Cost;
-	private String Effect;
 	private boolean Indicator_Of_Whether_It_Is_Activatable;
-	private a_permanent Permanent;
 	
 	public an_activated_ability(String The_Cost_To_Use, String The_Effect_To_Use, a_permanent The_Permanent_To_Use) {
 		super(The_Effect_To_Use, The_Permanent_To_Use);
 		this.Cost = The_Cost_To_Use;
 		if (this.Cost.equals("T")) {
-			if (this.Permanent.indicates_whether_it_is_tapped()) {
+			if (this.provides_its_permanent().indicates_whether_it_is_tapped()) {
 				this.Indicator_Of_Whether_It_Is_Activatable = false;
 			} else {
 				this.Indicator_Of_Whether_It_Is_Activatable = true;
@@ -41,6 +39,6 @@ public class an_activated_ability extends an_ability {
 	
 	@Override
 	public String toString() {
-		return this.Permanent.provides_its_name() + ": " + this.Cost + ": " + this.Effect;
+		return this.provides_its_permanent().provides_its_name() + ": " + this.Cost + ": " + this.provides_its_effect();
 	}
 }
