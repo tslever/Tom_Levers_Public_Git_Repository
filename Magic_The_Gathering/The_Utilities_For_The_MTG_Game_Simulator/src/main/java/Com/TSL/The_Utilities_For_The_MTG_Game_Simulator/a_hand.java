@@ -80,4 +80,8 @@ public class a_hand {
 		}
 		return The_String_Builder.toString();
 	}
+	
+	public void removes(a_land_card The_Land_Card_To_Remove) {
+		this.List_Of_Land_Cards.remove(The_Land_Card_To_Remove);
+	}
 }

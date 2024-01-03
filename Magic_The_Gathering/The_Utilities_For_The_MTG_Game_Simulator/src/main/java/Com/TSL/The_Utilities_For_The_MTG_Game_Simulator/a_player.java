@@ -937,6 +937,7 @@ public class a_player {
 			} else {
 				throw new Exception("The MTG Game Simulator does not know how to play the land with name " + The_Name_Of_The_Land_Card);
 			}
+			this.Hand.removes(The_Land_Card_To_Play);
 			this.Part_Of_The_Battlefield.receives_land(The_Land);
 			this.Has_Played_A_Land_This_Turn = true;
 			System.out.println("After playing a land card, the hand of " + this.Name + " has " + this.Hand.provides_its_number_of_cards() + " cards and contains the following. " + this.Hand);
