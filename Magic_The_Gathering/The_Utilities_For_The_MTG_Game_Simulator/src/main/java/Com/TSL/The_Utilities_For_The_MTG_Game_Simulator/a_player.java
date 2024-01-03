@@ -487,6 +487,7 @@ public class a_player {
 		// Rule 601.2: To cast a spell is to [use a card to create a spell], put [the spell] on the stack, and pay its mana costs, so that [the spell] will eventually resolve and have its effect. Casting a spell includes proposal of the spell (rules 601.2a-d) and determination and payment of costs (rules 601.2f-h). To cast a spell, a player follows the steps listed below, in order. A player must be legally allowed to cast the spell to begin this process (see rule 601.3). If a player is unable to comply with the requirements of a step listed below while performing that step, the casting of the spell is illegal; the game returns to the moment before the casting of that spell was proposed (see rule 723, "Handling Illegal Actions").
 		// Rule 601.2e: The game checks to see if the proposed spell can legally be cast. If the proposed spell is illegal, the game returns to the moment before the casting of that spell was proposed (see rule 723, "Handling Illegal Actions").
 		
+		System.out.println(this + " is considering casting a spell or activating a nonmana activated ability.");
 		ArrayList<a_nonland_card> The_List_Of_All_Nonland_Hand_Cards = this.Hand.provides_its_list_of_nonland_cards();
 		ArrayList<a_nonland_card> The_List_Of_Nonland_Hand_Cards_Appropriate_For_The_Present_Step;
 		if (Indicator_Of_Whether_Player_Is_Reacting) {
@@ -514,6 +515,7 @@ public class a_player {
 		// Rule 601.2a: To propose the casting of a spell, a player first [uses a card to create a spell and puts the spell on] the stack. [The spell] becomes the topmost object on the stack. [The spell] has all the characteristics of the card... associated with it, and [the casting] player becomes its controller. The spell remains on the stack until it's countered, it resolves, or an effect moves it elsewhere.
 		if (The_List_Of_Playable_Nonland_Hand_Cards_And_Activatable_Nonmana_Activated_Abilities.size() > 0) {
 			Object The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability = this.chooses_a_playable_nonland_card_or_an_activatable_nonmana_activated_ability_from(The_List_Of_Playable_Nonland_Hand_Cards_And_Activatable_Nonmana_Activated_Abilities);
+			System.out.println(this + " will play the nonland hand card or activate the nonmana activated ability " + The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability + ".");
 			//a_mana_pool The_Mana_Pool_To_Use_To_Cast_A_Spell =
 			this.acquires_mana_for(The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability);
 			//this.Mana_Pool.increases_by(The_Mana_Pool_To_Use_To_Cast_A_Spell);
@@ -539,6 +541,7 @@ public class a_player {
 				System.out.println("After " + this.Name + " cast spell, " + this.Other_Player.Name + " reacts.");
 				this.Other_Player.reacts();
 				this.Has_Priority = true;
+				System.out.println("After " + this.Name + " cast spell and " + this.Other_Player + " reacted, " + this + " continues a main phase.");
 			} else if (The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability instanceof a_nonmana_activated_ability) {
 				a_nonmana_activated_ability The_Nonmana_Activated_Ability = (a_nonmana_activated_ability) The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability;
 				this.Stack.receives(The_Nonmana_Activated_Ability);
@@ -549,14 +552,16 @@ public class a_player {
 				System.out.println("After " + this.Name + " activated nonmana activated ability, " + this.Other_Player.Name + " reacts.");
 				this.Other_Player.reacts();
 				this.Has_Priority = true;
+				System.out.println("After " + this.Name + " cast spell and " + this.Other_Player + "reacted, " + this + " continues a main phase");
 			}
 		} else {
 			this.Has_Cast_A_Spell_Or_Activated_A_Nonmana_Activated_Ability = false;
+			System.out.println(this + " does not cast a spell and does not activate a nonmana activated ability.");
 		}
 	}
 	
 	public void completes_a_main_phase() throws Exception {
-		System.out.println(this.Name + " is completing their precombat main phase.");
+		System.out.println(this.Name + " is starting a main phase.");
 		this.Step = "This Player's Precombat Main Phase";
 		for (a_creature The_Creature : this.Part_Of_The_Battlefield.creatures()) {
 			The_Creature.sets_the_creatures_indicator_that_this_creature_has_been_controlled_by_the_active_player_continuously_since_the_turn_began(true);
@@ -622,6 +627,7 @@ public class a_player {
 		while (this.Stack.contains_objects()) {
 			this.Has_Priority = false;
 			Object The_Object = this.Stack.top_object();
+			System.out.println("The top stack spell or nonmana activated ability " + The_Object + " is resolving.");
 			if (The_Object instanceof a_spell) {
 				a_spell The_Spell = (a_spell) The_Object;
 				// Rule 608.3: If the object that's resolving is a permanent spell, [the object's] resolution may involve several steps. The instructions in rules 608.3a and b are always performed first. Then one of the steps in rules 608.3c-e is performed, if appropriate.
