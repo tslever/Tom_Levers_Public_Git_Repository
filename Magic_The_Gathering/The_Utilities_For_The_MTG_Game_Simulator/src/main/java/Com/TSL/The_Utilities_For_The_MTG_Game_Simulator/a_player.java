@@ -50,7 +50,9 @@ public class a_player {
 		this.Has_Priority = false;
 		this.Index_Of_The_Present_Turn = 0;
 		this.Life = 20;
+		this.List_of_Attackers = new ArrayList<a_creature>();
 		this.List_Of_Battles = new ArrayList<a_battle>();
+		this.List_Of_Blockers = new ArrayList<a_creature>();
 		this.List_Of_Permanents_That_Should_Be_Untapped = new ArrayList<a_permanent>();
 		this.Mana_Pool = new a_mana_pool(0, 0, 0, 0, 0, 0);
 		this.Name = The_Name_To_Use;
@@ -321,12 +323,84 @@ public class a_player {
 		
 	}
 	
-	public void completes_her_combat_damage_step() {
-		
+	public void has_her_attackers_assign_combat_damage() throws Exception {
+		this.Has_Priority = true;
+		for (a_creature The_Attacker : this.List_of_Attackers) {
+			if (The_Attacker.is_blocked()) {
+				ArrayList<a_creature> The_List_Of_Blockers = The_Attacker.list_of_blockers();
+				int combat_damage_to_be_dealt = The_Attacker.power();
+				for (a_creature The_Blocker : The_List_Of_Blockers) {
+					if (combat_damage_to_be_dealt <= The_Blocker.toughness()) {
+						The_Blocker.receives_combat_damage(combat_damage_to_be_dealt);
+					} else {
+						The_Blocker.receives_combat_damage(The_Blocker.toughness());
+						combat_damage_to_be_dealt -= The_Blocker.toughness();
+					}
+				}
+			} else {
+				Object The_Attackee = The_Attacker.attackee();
+				if (The_Attackee instanceof a_player) {
+					a_player The_Player = (a_player) The_Attackee;
+					The_Player.Life -= The_Attacker.power();
+				} else if (The_Attackee instanceof a_planeswalker) {
+					a_planeswalker The_Planeswalker = (a_planeswalker) The_Attackee;
+					The_Planeswalker.receives_combat_damage(The_Attacker.power());
+				} else if (The_Attackee instanceof a_battle) {
+					throw new Exception("Not implemented");
+				}
+			}
+		}
 	}
 	
+	private void puts_cards_corresponding_to_creatures_dealt_lethal_damage_in_graveyard() {
+		ArrayList<a_creature> The_List_Of_Creatures = new ArrayList<>();
+		for (a_creature The_Creature : this.Part_Of_The_Battlefield.creatures()) {
+			if (The_Creature.was_dealt_lethal_damage()) {
+				The_List_Of_Creatures.add(The_Creature);
+			}
+		}
+		this.Part_Of_The_Battlefield.creatures().removeAll(The_List_Of_Creatures);
+		for (a_creature The_Creature : The_List_Of_Creatures) {
+			this.Graveyard.receives(The_Creature.creature_card());	
+		}
+	}
+	
+	public void has_her_blockers_assign_combat_damage() {
+		this.Has_Priority = true;
+		for (a_creature The_Blocker : this.List_Of_Blockers) {
+			ArrayList<a_creature> The_List_Of_Blockees = The_Blocker.list_of_blockees();
+			int combat_damage_to_be_dealt = The_Blocker.power();
+			for (a_creature The_Blockee : The_List_Of_Blockees) {
+				if (combat_damage_to_be_dealt <= The_Blockee.toughness()) {
+					The_Blockee.receives_combat_damage(combat_damage_to_be_dealt);
+				} else {
+					The_Blockee.receives_combat_damage(The_Blockee.toughness());
+					combat_damage_to_be_dealt -= The_Blockee.toughness();
+				}
+			}
+		}
+		this.Has_Priority = false;
+	}
+	
+	/**
+	 * completes_her_combat_damage_step
+	 */
+	public void completes_her_combat_damage_step() throws Exception {
+		this.has_her_attackers_assign_combat_damage();
+		this.Has_Priority = false;
+		this.Other_Player.has_her_blockers_assign_combat_damage();
+		this.Has_Priority = true;
+		this.puts_cards_corresponding_to_creatures_dealt_lethal_damage_in_graveyard();
+		this.Has_Priority = false;
+		this.Other_Player.puts_cards_corresponding_to_creatures_dealt_lethal_damage_in_graveyard();
+		this.Has_Priority = true;
+	}
+	
+	/**
+	 * completes_her_end_of_combat_step
+	 */
 	public void completes_her_end_of_combat_step() {
-		
+		this.Has_Priority = true;
 	}
 	
 	/**
@@ -451,11 +525,11 @@ public class a_player {
 				System.out.println("After playing a nonland card, the hand of " + this.Name + " has " + this.Hand.provides_its_number_of_cards() + " cards and contains the following. " + this.Hand);
 				String The_Type_Of_The_Playable_Nonland_Hand_Card = The_Playable_Nonland_Hand_Card.provides_its_type();
 				if (The_Type_Of_The_Playable_Nonland_Hand_Card.equals("Instant") || The_Type_Of_The_Playable_Nonland_Hand_Card.equals("Sorcery")) {
-				    a_spell The_Spell = new a_spell(The_Playable_Nonland_Hand_Card.provides_its_name(), this, The_Type_Of_The_Playable_Nonland_Hand_Card);
+				    a_spell The_Spell = new a_spell(The_Playable_Nonland_Hand_Card.provides_its_name(), this, The_Type_Of_The_Playable_Nonland_Hand_Card, The_Playable_Nonland_Hand_Card);
 				    this.Stack.receives(The_Spell);
 				    System.out.println(this.Name + " has casted instant or sorcery spell " + The_Spell + ".");
 				} else {
-					a_permanent_spell The_Permanent_Spell = new a_permanent_spell(The_Playable_Nonland_Hand_Card.provides_its_name(), this, The_Type_Of_The_Playable_Nonland_Hand_Card);
+					a_permanent_spell The_Permanent_Spell = new a_permanent_spell(The_Playable_Nonland_Hand_Card.provides_its_name(), this, The_Type_Of_The_Playable_Nonland_Hand_Card, The_Playable_Nonland_Hand_Card);
 					this.Stack.receives(The_Permanent_Spell);
 				    System.out.println(this.Name + " has casted permanent spell " + The_Permanent_Spell + ".");
 				}
@@ -571,7 +645,9 @@ public class a_player {
 						String The_Type_Of_The_Permanent_Spell = The_Permanent_Spell.type();
 						System.out.println(The_Permanent_Spell.name() + " becomes a " + The_Type_Of_The_Permanent_Spell + " and enters the battlefield under the control of " + The_Permanent_Spell.provides_its_player() + ".");
 						if (The_Type_Of_The_Permanent_Spell.equals("Creature")) {
-						    The_Permanent_Spell.provides_its_player().Part_Of_The_Battlefield.receives_creature(new a_creature(The_Permanent_Spell.name(), new ArrayList<a_static_ability>()));
+							a_nonland_card The_Nonland_Card = The_Permanent_Spell.nonland_card();
+							a_creature_card The_Creature_Card = (a_creature_card) The_Nonland_Card;
+						    The_Permanent_Spell.provides_its_player().Part_Of_The_Battlefield.receives_creature(new a_creature(The_Permanent_Spell.name(), new ArrayList<a_static_ability>(), The_Creature_Card));
 						    System.out.println(The_Permanent_Spell.provides_its_player() + "'s part of the battlefield contains the following permanents. " + The_Permanent_Spell.provides_its_player().Part_Of_The_Battlefield);
 						}
 					}

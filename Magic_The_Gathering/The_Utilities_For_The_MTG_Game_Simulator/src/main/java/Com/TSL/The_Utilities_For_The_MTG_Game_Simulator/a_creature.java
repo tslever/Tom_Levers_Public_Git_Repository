@@ -12,15 +12,32 @@ public class a_creature extends a_permanent {
 	private ArrayList<a_creature> List_of_Blockees;
 	private Object Attackee;
 	private ArrayList<a_creature> List_Of_Blockers;
+	private int Power;
+	private int Toughness;
+	private int Combat_Damage;
+	private a_creature_card Creature_Card;
 	
-	public a_creature(String The_Name, ArrayList<a_static_ability> The_List_Of_Static_Abilities_To_Use) {
+	public a_creature(String The_Name, ArrayList<a_static_ability> The_List_Of_Static_Abilities_To_Use, a_creature_card The_Creature_Card) {
 		super(The_Name);
 		this.List_Of_Static_Abilities = The_List_Of_Static_Abilities_To_Use;
 		this.List_Of_Blockers = new ArrayList<>();
+		this.Creature_Card = The_Creature_Card;
 	}
 	
 	public boolean can_attack() {
 		return true;
+	}
+	
+	public int power() {
+		return this.Power;
+	}
+	
+	public void receives_combat_damage(int The_Combat_Damage) {
+		this.Combat_Damage = The_Combat_Damage;
+	}
+	
+	public int toughness() {
+		return this.Toughness;
 	}
 	
 	public boolean can_block(a_creature The_Attacker) {
@@ -80,6 +97,10 @@ public class a_creature extends a_permanent {
 		}
 	}
 	
+	public Object attackee() {
+		return this.Attackee;
+	}
+	
 	public void becomes_blocked_by(a_creature The_Blocker) {
 		this.Indicator_Of_Whether_This_Creature_Is_Blocked = true;
 		this.List_Of_Blockers.add(The_Blocker);
@@ -96,5 +117,17 @@ public class a_creature extends a_permanent {
 	
 	public ArrayList<a_creature> list_of_blockers() {
 		return this.List_Of_Blockers;
+	}
+	
+	public boolean was_dealt_lethal_damage() {
+		if (this.Combat_Damage >= this.Toughness) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public a_creature_card creature_card() {
+		return this.Creature_Card;
 	}
 }
