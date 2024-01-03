@@ -2,6 +2,8 @@ package Com.TSL.The_Utilities_For_The_MTG_Game_Simulator;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
+
 import org.apache.commons.math3.random.RandomDataGenerator;
 
 
@@ -20,6 +22,8 @@ public class a_player {
 	private boolean Has_Priority;
 	private int Index_Of_The_Present_Turn;
 	private int Life;
+	private ArrayList<a_creature> List_of_Attackers;
+	private ArrayList<a_creature> List_Of_Blockers;
 	private ArrayList<a_battle> List_Of_Battles;
 	private ArrayList<a_permanent> List_Of_Permanents_That_Should_Be_Untapped;
 	private a_mana_pool Mana_Pool;
@@ -221,29 +225,30 @@ public class a_player {
 		for (a_creature The_Creature : this.Part_Of_The_Battlefield.creatures()) {
 			if (!The_Creature.is_tapped() && !The_Creature.is_battle() && (The_Creature.has_haste() || The_Creature.has_been_controlled_by_the_active_player_continuously_since_the_turn_began()) && The_Creature.can_attack()) {
 				if (The_Creature.must_attack() || (an_enumeration_of_states_of_a_coin.provides_a_state() == an_enumeration_of_states_of_a_coin.HEADS)) {
-					The_Creature.sets_the_creatures_indicator_of_whether_this_creature_will_attack(true);
-					Object The_Target = null;
+					The_Creature.sets_the_creatures_indicator_of_whether_this_creature_will_attack_to(true);
+					Object The_Attackee = null;
 					if (!this.Part_Of_The_Battlefield.planeswalkers().isEmpty() || !this.List_Of_Battles.isEmpty()) {
-						ArrayList<Object> The_List_Of_Possible_Targets = new ArrayList<>();
-						The_List_Of_Possible_Targets.add(this);
+						ArrayList<Object> The_List_Of_Possible_Attackees = new ArrayList<>();
+						The_List_Of_Possible_Attackees.add(this);
 						for (a_planeswalker The_Planeswalker : this.Other_Player.Part_Of_The_Battlefield.planeswalkers()) {
-							The_List_Of_Possible_Targets.add(The_Planeswalker);
+							The_List_Of_Possible_Attackees.add(The_Planeswalker);
 						}
 						for (a_battle The_Battle : this.List_Of_Battles) {
-							The_List_Of_Possible_Targets.add(The_Battle);
+							The_List_Of_Possible_Attackees.add(The_Battle);
 						}
-						int The_Index_Of_The_Target = this.Random_Data_Generator.nextInt(0, The_List_Of_Possible_Targets.size() - 1);
-						The_Target = The_List_Of_Possible_Targets.get(The_Index_Of_The_Target);
+						int The_Index_Of_The_Attackee = this.Random_Data_Generator.nextInt(0, The_List_Of_Possible_Attackees.size() - 1);
+						The_Attackee = The_List_Of_Possible_Attackees.get(The_Index_Of_The_Attackee);
 					} else {
-						The_Target = this.Other_Player;
+						The_Attackee = this.Other_Player;
 					}
-					if (The_Target != null) {
-						The_Creature.targets(The_Target);
-						System.out.println("The creature " + The_Creature + " will attack " + The_Target + ".");
+					if (The_Attackee != null) {
+						The_Creature.attacks(The_Attackee);
+						System.out.println("The creature " + The_Creature + " attacks " + The_Attackee + ".");
 					} else {
 						throw new Exception("The target is null");
 					}
 					The_Creature.taps();
+					this.List_of_Attackers.add(The_Creature);
 				}
 			}
 		}
@@ -255,7 +260,64 @@ public class a_player {
 		this.Has_Priority = true;
 	}
 	
-	public void completes_her_declare_blockers_step() {
+	public void declares_blockers() throws Exception {
+		this.Has_Priority = true;
+		ArrayList<a_creature> The_List_Of_Blockers = new ArrayList<>();
+		for (a_creature The_Creature : this.Part_Of_The_Battlefield.creatures()) {
+			if (!The_Creature.is_tapped() && !The_Creature.is_battle()) {
+				if (The_Creature.must_block() || (an_enumeration_of_states_of_a_coin.provides_a_state() == an_enumeration_of_states_of_a_coin.HEADS)) {
+					The_List_Of_Blockers.add(The_Creature);
+				}
+			}
+		}
+		for (a_creature The_Blocker : The_List_Of_Blockers) {
+			ArrayList<a_creature> The_List_Of_Attackers_That_The_Blocker_Can_Block = new ArrayList<>();
+			for (a_creature The_Attacker : this.List_of_Attackers) {
+				if (The_Blocker.can_block(The_Attacker)) {
+					The_List_Of_Attackers_That_The_Blocker_Can_Block.add(The_Blocker);
+				}
+			}
+			int The_Index_Of_Attacker = this.Random_Data_Generator.nextInt(0, The_List_Of_Attackers_That_The_Blocker_Can_Block.size() - 1);
+			a_creature The_Attacker = The_List_Of_Attackers_That_The_Blocker_Can_Block.get(The_Index_Of_Attacker);
+			The_Blocker.blocks(The_Attacker);
+			The_Attacker.becomes_blocked_by(The_Blocker);
+		}
+		this.Has_Priority = false;
+	}
+	
+	public void chooses_damage_assignment_order_for_her_attackers() {
+		for (a_creature The_Attacker : this.List_of_Attackers) {
+			if (The_Attacker.is_blocked()) {
+				Collections.shuffle(The_Attacker.list_of_blockers());
+			}
+		}
+	}
+	
+	public void chooses_damage_assignment_order_for_her_blockers() {
+		this.Has_Priority = true;
+		for (a_creature The_Blocker : this.List_Of_Blockers) {
+			Collections.shuffle(The_Blocker.list_of_blockees());
+		}
+		this.Has_Priority = false;
+	}
+	
+	/**
+	 * completes_her_declare_blockers_step
+	 * 
+	 * Rule 509.1: First, the defending player declares blockers. This turn-based action doesn't use the stack. To declare blockers, the defending player follows the steps below, in order.
+	 * If at any point during the declaration of blockers, the defending player is unable to comply with any of the steps listed below, the declaration is illegal; the game returns to the moment before the declaration (see [R]ule 728, "Handling Illegal Actions").
+	 * Rule 509.1a: The defending player chooses which creatures they control, if any, will block.
+	 * The chosen creatures must be untapped and they can't also be battles.
+	 * For each of the chosen creatures, the defending player chooses one creature for [the chosen creature] to block that is attacking [the defending] player, a planeswalker [the defending player] control[s], or a battle [the defending player] protect[s].
+	 */
+	public void completes_her_declare_blockers_step() throws Exception {
+		this.Has_Priority = false;
+		this.Other_Player.declares_blockers();
+		this.Has_Priority = true;
+		this.chooses_damage_assignment_order_for_her_attackers();
+		this.Has_Priority = false;
+		this.Other_Player.chooses_damage_assignment_order_for_her_blockers();
+		this.Has_Priority = true;
 		
 	}
 	
@@ -276,8 +338,9 @@ public class a_player {
 	 * Rule 506.5: A creature attacks alone if it's the only creature declared as an attacker during the declare attackers step.
 	 * A creature blocks alone if it's the only creature declared as a blocker during the declare blockers step.
 	 * A creature is blocking alone if it's blocking but no other creatures are.
+	 * @throws Exception 
  	 */
-	public void completes_her_combat_phase() {
+	public void completes_her_combat_phase() throws Exception {
 		
 		System.out.println(this.Name + " is completing their combat phase.");
 		
