@@ -16,7 +16,7 @@ public abstract class a_permanent {
 		this.Tapped_Status = false;
 	}
 	
-	public boolean indicates_whether_it_is_tapped() {
+	public boolean is_tapped() {
 		return this.Tapped_Status;
 	}
 	

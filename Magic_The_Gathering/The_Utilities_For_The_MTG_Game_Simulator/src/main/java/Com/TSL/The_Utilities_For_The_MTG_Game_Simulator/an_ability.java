@@ -10,7 +10,7 @@ public class an_ability {
 		this.Permanent = The_Permanent_To_Use;
 	}
 
-	public String provides_its_effect() {
+	public String effect() {
 		return this.Effect;
 	}
 	

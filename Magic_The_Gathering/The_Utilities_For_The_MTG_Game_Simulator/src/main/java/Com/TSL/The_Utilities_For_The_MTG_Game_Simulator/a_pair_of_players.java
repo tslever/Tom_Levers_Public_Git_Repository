@@ -23,7 +23,7 @@ public class a_pair_of_players {
 	
 	public void decide_the_starting_player() {
 		
-		if (a_coin_flip.provides_a_random_value() == a_coin_flip.HEADS) {
+		if (an_enumeration_of_states_of_a_coin.provides_a_state() == an_enumeration_of_states_of_a_coin.HEADS) {
 			this.First_Player.becomes_the_starting_player();
 			this.Active_Player = this.First_Player;
 		}

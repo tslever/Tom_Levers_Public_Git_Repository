@@ -20,6 +20,7 @@ public class a_player {
 	private boolean Has_Priority;
 	private int Index_Of_The_Present_Turn;
 	private int Life;
+	private ArrayList<a_battle> List_Of_Battles;
 	private ArrayList<a_permanent> List_Of_Permanents_That_Should_Be_Untapped;
 	private a_mana_pool Mana_Pool;
 	private String Name;
@@ -45,6 +46,7 @@ public class a_player {
 		this.Has_Priority = false;
 		this.Index_Of_The_Present_Turn = 0;
 		this.Life = 20;
+		this.List_Of_Battles = new ArrayList<a_battle>();
 		this.List_Of_Permanents_That_Should_Be_Untapped = new ArrayList<a_permanent>();
 		this.Mana_Pool = new a_mana_pool(0, 0, 0, 0, 0, 0);
 		this.Name = The_Name_To_Use;
@@ -186,13 +188,123 @@ public class a_player {
 		// Rule 500.5: When a phase or step ends, any effects scheduled to last "until end of" that phase or step expire.
 	}
 	
+	/**
+	 * completes_her_beginning_of_combat_step
+	 * 
+	 * Rule 507.2: Second, the active player gets priority. (See [R]ule 117, "Timing and Priority.")
+	 */
+	public void completes_her_beginning_of_combat_step() {
+		this.Has_Priority = true;
+	}
 	
+	/**
+	 * completes_her_declare_attackers_step
+	 * 
+	 * Rule 508.1: First, the active player declares attackers. This turn-based action doesn't use the stack.
+	 * To declare attackers, the active player follows the steps below, in order.
+	 * If at any point during the declaration of attackers, the active player is unable to comply with any of steps listed below, the declaration is illegal; the game returns to the moment before the declaration (see [R]ule 728, "Handling Illegal Actions").
+	 * Rule 508.1a: The active player chooses which creatures that they control, if any, will attack.
+	 * The creatures must be untapped, they can't also be battles, and each one must either have haste or have been controlled by the active player continuously since the turn began.
+	 * Rule 508.1b: If the defending player controls any planeswalkers, is the protector of any battles, or the game allows the active player to attack multiple other players, the active player announces which player, planewalker, or battle each of the chosen creatures is attacking.
+	 * Rule 508.1c: The active player checks each creature they control to see whether [the creature is] affected by any restrictions (effects that say a creature can't attack, or that [the creature] can't attack unless some condition is met).
+	 * If any restrictions are being disobeyed, the declaration of attackers is illegal.
+	 * Rule 508.1c: The active player checks each creature they control to see whether [the creature is] affected by any requirements (effects that say attacks if able, or that it attacks if some condition is met).
+	 * If the number of requirements that are being obeyed is fewer than the maximum possible number of requirements that could be obeyed without disobeying any restrictions, the declaration of attackers is illegal.
+	 * If a creature can't attack unless a player pays a cost, that player is not required to pay that cost, even if attacking with that creature would increase the number of requirements being obeyed.
+	 * If a requirement that says a creature attacks if able during a certain turn refers to a turn with multiple combat phases, the creature attacks if able during each declare attackers step in that turn.
+	 * Rule 508.1e: If any of the chosen creatures have banding or a "bands with other" ability, the active player announces which creatures, if any, are banded with which. (See [R]ule 702.22, "Banding.")
+	 * Rule 508.1f: The active player taps the chosen creatures. Tapping a creature when [the creature is] declared as an attacker isn't a cost; attacking simply causes creatures to become tapped.
+	 * @throws Exception 
+	 */
+	public void completes_her_declare_attackers_step() throws Exception {
+		this.Has_Priority = true;
+		for (a_creature The_Creature : this.Part_Of_The_Battlefield.creatures()) {
+			if (!The_Creature.is_tapped() && !The_Creature.is_battle() && (The_Creature.has_haste() || The_Creature.has_been_controlled_by_the_active_player_continuously_since_the_turn_began()) && The_Creature.can_attack()) {
+				if (The_Creature.must_attack() || (an_enumeration_of_states_of_a_coin.provides_a_state() == an_enumeration_of_states_of_a_coin.HEADS)) {
+					The_Creature.sets_the_creatures_indicator_of_whether_this_creature_will_attack(true);
+					Object The_Target = null;
+					if (!this.Part_Of_The_Battlefield.planeswalkers().isEmpty() || !this.List_Of_Battles.isEmpty()) {
+						ArrayList<Object> The_List_Of_Possible_Targets = new ArrayList<>();
+						The_List_Of_Possible_Targets.add(this);
+						for (a_planeswalker The_Planeswalker : this.Other_Player.Part_Of_The_Battlefield.planeswalkers()) {
+							The_List_Of_Possible_Targets.add(The_Planeswalker);
+						}
+						for (a_battle The_Battle : this.List_Of_Battles) {
+							The_List_Of_Possible_Targets.add(The_Battle);
+						}
+						int The_Index_Of_The_Target = this.Random_Data_Generator.nextInt(0, The_List_Of_Possible_Targets.size() - 1);
+						The_Target = The_List_Of_Possible_Targets.get(The_Index_Of_The_Target);
+					} else {
+						The_Target = this.Other_Player;
+					}
+					if (The_Target != null) {
+						The_Creature.targets(The_Target);
+						System.out.println("The creature " + The_Creature + " will attack " + The_Target + ".");
+					} else {
+						throw new Exception("The target is null");
+					}
+					The_Creature.taps();
+				}
+			}
+		}
+		System.out.println("After " + this + " declares attackers, " + this + " reacts.");
+		this.reacts();
+		this.Has_Priority = false;
+		System.out.println("After " + this + " reacts to " + this + " declaring attackers, " + this.Other_Player + " reacts.");
+		this.Other_Player.reacts();
+		this.Has_Priority = true;
+	}
+	
+	public void completes_her_declare_blockers_step() {
+		
+	}
+	
+	public void completes_her_combat_damage_step() {
+		
+	}
+	
+	public void completes_her_end_of_combat_step() {
+		
+	}
+	
+	/**
+	 * completes_her_combat_phase
+	 * 
+	 * Rule 506.2: During the combat phase, the active player is the attacking player; creatures that player controls may attack.
+	 * During the combat phase of a two-player game, the nonactive player is the defending player; that player, planeswalkers they control, and battles they protect may be attacked.
+	 * Rule 506.3a: Only a creature can attack or block. Only a player, a planeswalker, or a battle can be attacked.
+	 * Rule 506.5: A creature attacks alone if it's the only creature declared as an attacker during the declare attackers step.
+	 * A creature blocks alone if it's the only creature declared as a blocker during the declare blockers step.
+	 * A creature is blocking alone if it's blocking but no other creatures are.
+ 	 */
 	public void completes_her_combat_phase() {
 		
 		System.out.println(this.Name + " is completing their combat phase.");
 		
 		// Rule 500.5: When a phase or step begins, any effects scheduled to last "until" that phase or step expire.
 		// Rule 500.6: When a phase or step begins, any abilities that trigger "at the beginning of" that phase or step trigger. They are put on the stack the next time a player would receive priority. (See rule 117, "Timing and Priority.")
+		
+		// Rule 506.1: The combat phase has five steps, which proceed in order: beginning of combat, declare attackers, declare blockers, combat damage, and end of combat.
+		// The declare blockers and combat damage steps are skipped if no creatures are declared as attackers or put onto the battlefield attacking (see rule 508.8).
+		// There are two combat damage steps if any attacking or blocking creature has first strike (see 702.7) or double strike (see 702.4).
+		ArrayList<a_creature> List_Of_Attackers = new ArrayList<>();
+		if (!List_Of_Attackers.isEmpty()) {
+			this.completes_her_declare_blockers_step();
+			this.completes_her_combat_damage_step();
+		}
+		
+		int number_of_combat_damage_steps = 1;
+		for (a_creature The_Creature : this.Part_Of_The_Battlefield.creatures()) {
+			ArrayList<a_static_ability> The_List_Of_Static_Abilities = The_Creature.list_of_static_abilities();
+			for (a_static_ability The_Static_Ability : The_List_Of_Static_Abilities) {
+				if (The_Static_Ability.effect().equals("first strike") || The_Static_Ability.effect().equals("double strike")) {
+					number_of_combat_damage_steps = 2;
+				}
+			}
+		}
+		for (int i = 0; i < number_of_combat_damage_steps; i++) {
+			this.completes_her_combat_damage_step();
+		}
 		
 		// Rule 500.2: A phase or step in which players receive priority ends when the stack is empty and all players pass in succession.
 		// Rule 500.4: When a step or phase ends, any unused mana left in a player's mana pool empties. This turn-based action doesn't use the stack.
@@ -306,9 +418,12 @@ public class a_player {
 		}
 	}
 	
-	public void completes_her_precombat_main_phase() throws Exception {
+	public void completes_a_main_phase() throws Exception {
 		System.out.println(this.Name + " is completing their precombat main phase.");
 		this.Step = "This Player's Precombat Main Phase";
+		for (a_creature The_Creature : this.Part_Of_The_Battlefield.creatures()) {
+			The_Creature.sets_the_creatures_indicator_that_this_creature_has_been_controlled_by_the_active_player_continuously_since_the_turn_began(true);
+		}
 		
 		// Rule 500.5: When a phase or step begins, any effects scheduled to last "until" that phase or step expire.
 		// Rule 500.6: When a phase or step begins, any abilities that trigger "at the beginning of" that phase or step trigger. They are put on the stack the next time a player would receive priority. (See rule 117, "Timing and Priority.")
@@ -391,9 +506,9 @@ public class a_player {
 						}
 					} else {
 						String The_Type_Of_The_Permanent_Spell = The_Permanent_Spell.type();
-						System.out.println(The_Permanent_Spell.provides_its_name() + " becomes a " + The_Type_Of_The_Permanent_Spell + " and enters the battlefield under the control of " + The_Permanent_Spell.provides_its_player() + ".");
+						System.out.println(The_Permanent_Spell.name() + " becomes a " + The_Type_Of_The_Permanent_Spell + " and enters the battlefield under the control of " + The_Permanent_Spell.provides_its_player() + ".");
 						if (The_Type_Of_The_Permanent_Spell.equals("Creature")) {
-						    The_Permanent_Spell.provides_its_player().Part_Of_The_Battlefield.receives_creature(new a_creature(The_Permanent_Spell.provides_its_name()));
+						    The_Permanent_Spell.provides_its_player().Part_Of_The_Battlefield.receives_creature(new a_creature(The_Permanent_Spell.name(), new ArrayList<a_static_ability>()));
 						    System.out.println(The_Permanent_Spell.provides_its_player() + "'s part of the battlefield contains the following permanents. " + The_Permanent_Spell.provides_its_player().Part_Of_The_Battlefield);
 						}
 					}
@@ -414,7 +529,7 @@ public class a_player {
 				} else if (The_Object instanceof a_triggered_ability) {
 					a_triggered_ability The_Triggered_Ability = (a_triggered_ability) The_Object;
 					// Rule 608.2a: If a triggered ability has an intervening "if" clause, [the resolution] checks whether the clause's condition is true. If [the condition] isn't, the ability is removed from the stack and does nothing. Otherwise, it continues to resolve.
-					if (The_Triggered_Ability.provides_its_effect().contains("If")) {
+					if (The_Triggered_Ability.effect().contains("If")) {
 						// TODO
 					}
 				}
@@ -432,18 +547,6 @@ public class a_player {
 		// Rule 500.5: When a phase or step ends, any effects scheduled to last "until end of" that phase or step expire... Effects that last "until end of combat" expire at the end of the combat phase.
 		
 		this.Has_Priority = false;
-	}
-	
-	public void completes_her_postcombat_main_phase() {
-		
-		System.out.println(this.Name + " is completing their postcombat main phase.");
-		
-		// Rule 500.5: When a phase or step begins, any effects scheduled to last "until" that phase or step expire.
-		// Rule 500.6: When a phase or step begins, any abilities that trigger "at the beginning of" that phase or step trigger. They are put on the stack the next time a player would receive priority. (See rule 117, "Timing and Priority.")
-		
-		// Rule 500.2: A phase or step in which players receive priority ends when the stack is empty and all players pass in succession.
-		// Rule 500.4: When a step or phase ends, any unused mana left in a player's mana pool empties. This turn-based action doesn't use the stack.
-		// Rule 500.5: When a phase or step ends, any effects scheduled to last "until end of" that phase or step expire... Effects that last "until end of combat" expire at the end of the combat phase.
 	}
 	
 	
@@ -497,27 +600,27 @@ public class a_player {
 		this.List_Of_Permanents_That_Should_Be_Untapped.clear();
 		
 		for (an_artifact The_Artifact : this.Part_Of_The_Battlefield.provides_its_list_of_artifacts()) {
-			if (The_Artifact.indicates_whether_it_is_tapped()) {
+			if (The_Artifact.is_tapped()) {
 				this.List_Of_Permanents_That_Should_Be_Untapped.add(The_Artifact);
 			}
 		}
-		for (a_creature The_Creature : this.Part_Of_The_Battlefield.provides_its_list_of_creatures()) {
-			if (The_Creature.indicates_whether_it_is_tapped()) {
+		for (a_creature The_Creature : this.Part_Of_The_Battlefield.creatures()) {
+			if (The_Creature.is_tapped()) {
 				this.List_Of_Permanents_That_Should_Be_Untapped.add(The_Creature);
 			}
 		}
 		for (an_enchantment The_Enchantment : this.Part_Of_The_Battlefield.provides_its_list_of_enchantments()) {
-			if (The_Enchantment.indicates_whether_it_is_tapped()) {
+			if (The_Enchantment.is_tapped()) {
 				this.List_Of_Permanents_That_Should_Be_Untapped.add(The_Enchantment);
 			}
 		}
 		for (a_land The_Land : this.Part_Of_The_Battlefield.provides_its_list_of_lands()) {
-			if (The_Land.indicates_whether_it_is_tapped()) {
+			if (The_Land.is_tapped()) {
 				this.List_Of_Permanents_That_Should_Be_Untapped.add(The_Land);
 			}
 		}
-		for (a_planeswalker The_Planeswalker : this.Part_Of_The_Battlefield.provides_its_list_of_planeswalkers()) {
-			if (The_Planeswalker.indicates_whether_it_is_tapped()) {
+		for (a_planeswalker The_Planeswalker : this.Part_Of_The_Battlefield.planeswalkers()) {
+			if (The_Planeswalker.is_tapped()) {
 				this.List_Of_Permanents_That_Should_Be_Untapped.add(The_Planeswalker);
 			}
 		}
@@ -539,7 +642,7 @@ public class a_player {
 		for (a_permanent The_Permanent : this.Part_Of_The_Battlefield.provides_its_list_of_permanents()) {
 			for (a_nonmana_activated_ability The_Nonmana_Activated_Ability : The_Permanent.provides_its_list_of_nonmana_activated_abilities()) {
 				if (The_Nonmana_Activated_Ability.requires_tapping()) {
-					if (The_Permanent.indicates_whether_it_is_tapped()) {
+					if (The_Permanent.is_tapped()) {
 						The_Nonmana_Activated_Ability.becomes_nonactivatable();
 					} else {
 						if (The_Nonmana_Activated_Ability.provides_its_list_of_sufficient_combinations_of_available_mana_abilities().size() > 0) {
@@ -640,7 +743,7 @@ public class a_player {
 	public boolean indicates_whether_a_card_is_playable_according_to_the_text_of(a_card The_Card) {
 		if (The_Card.provides_its_type().equals("Instant")) {
 			ArrayList<String> The_Text = The_Card.provides_its_text();
-			ArrayList<a_creature> The_List_Of_Creatures = this.Part_Of_The_Battlefield.provides_its_list_of_creatures();
+			ArrayList<a_creature> The_List_Of_Creatures = this.Part_Of_The_Battlefield.creatures();
 			
 			for (String The_Line : The_Text) {
 				if (The_Line.contains("creature you control") && The_List_Of_Creatures.isEmpty()) {
@@ -742,9 +845,9 @@ public class a_player {
 		System.out.println(this.Name + " is taking their turn.");
 		
 		this.completes_her_beginning_phase();
-		this.completes_her_precombat_main_phase();
+		this.completes_a_main_phase();
 		this.completes_her_combat_phase();
-		this.completes_her_postcombat_main_phase();
+		this.completes_a_main_phase();
 		this.completes_her_end_phase();
 		
 		// Rule 500.5: Effects that last "until end of turn" are subject to special rules; see rule 514.2.	

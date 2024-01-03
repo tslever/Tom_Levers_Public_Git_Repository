@@ -9,7 +9,7 @@ public class an_activated_ability extends an_ability {
 		super(The_Effect_To_Use, The_Permanent_To_Use);
 		this.Cost = The_Cost_To_Use;
 		if (this.Cost.equals("T")) {
-			if (this.provides_its_permanent().indicates_whether_it_is_tapped()) {
+			if (this.provides_its_permanent().is_tapped()) {
 				this.Indicator_Of_Whether_It_Is_Activatable = false;
 			} else {
 				this.Indicator_Of_Whether_It_Is_Activatable = true;
@@ -39,6 +39,6 @@ public class an_activated_ability extends an_ability {
 	
 	@Override
 	public String toString() {
-		return this.provides_its_permanent().provides_its_name() + ": " + this.Cost + ": " + this.provides_its_effect();
+		return this.provides_its_permanent().provides_its_name() + ": " + this.Cost + ": " + this.effect();
 	}
 }

@@ -7,12 +7,12 @@ public class a_mana_ability extends an_activated_ability {
 	}
 	
 	public a_mana_pool activates_and_contributes_a_mana_pool() {
-		if (this.provides_its_effect().equals("Add [G].")) {
+		if (this.effect().equals("Add [G].")) {
 			if (this.provides_its_cost().equals("T")) {
 				this.provides_its_permanent().taps();
 			}
 			return new a_mana_pool(0, 0, 0, 1, 0, 0);
-		} else if (this.provides_its_effect().equals("Add [W].")) {
+		} else if (this.effect().equals("Add [W].")) {
 			if (this.provides_its_cost().equals("T")) {
 				this.provides_its_permanent().taps();
 			}
@@ -23,9 +23,9 @@ public class a_mana_ability extends an_activated_ability {
 	}
 	
 	public a_mana_pool indicates_the_mana_pool_it_would_contribute() {
-		if (this.provides_its_effect().equals("Add [G].")) {
+		if (this.effect().equals("Add [G].")) {
 			return new a_mana_pool(0, 0, 0, 1, 0, 0);
-		} else if (this.provides_its_effect().equals("Add [W].")) {
+		} else if (this.effect().equals("Add [W].")) {
 			return new a_mana_pool(0, 0, 0, 0, 0, 1);
 		} else {
 			return new a_mana_pool(0, 0, 0, 0, 0, 0);

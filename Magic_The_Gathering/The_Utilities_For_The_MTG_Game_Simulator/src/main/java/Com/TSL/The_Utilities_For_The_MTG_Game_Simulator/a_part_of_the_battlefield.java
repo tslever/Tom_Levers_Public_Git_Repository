@@ -27,7 +27,7 @@ public class a_part_of_the_battlefield {
 	}
 	
 	
-	public ArrayList<a_creature> provides_its_list_of_creatures() {
+	public ArrayList<a_creature> creatures() {
 		return this.List_Of_Creatures;
 	}
 	
@@ -42,7 +42,7 @@ public class a_part_of_the_battlefield {
 	}
 	
 	
-	public ArrayList<a_planeswalker> provides_its_list_of_planeswalkers() {
+	public ArrayList<a_planeswalker> planeswalkers() {
 		return this.List_Of_Planeswalkers;
 	}
 	

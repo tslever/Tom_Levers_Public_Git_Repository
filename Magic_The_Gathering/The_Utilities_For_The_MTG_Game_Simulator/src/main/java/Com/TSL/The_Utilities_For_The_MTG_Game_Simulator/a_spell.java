@@ -26,7 +26,7 @@ public class a_spell {
 		return this.Player;
 	}
 	
-	public String provides_its_name() {
+	public String name() {
 		return this.Name;
 	}
 	
