@@ -97,55 +97,70 @@ public class a_part_of_the_battlefield {
 		StringBuilder The_String_Builder = new StringBuilder("Part of the Battlefield: ");
 		
 		for (int i = 0; i < this.List_Of_Artifacts.size() - 1; i++) {
-			The_String_Builder.append(this.List_Of_Artifacts.get(i));
-			The_String_Builder.append("; ");
+			an_artifact The_Artifact = this.List_Of_Artifacts.get(i);
+			String The_String_Representing_The_Indicator_Of_Whether_The_Artifact_Is_Tapped = (The_Artifact.is_tapped()) ? "(T)" : "(U)";
+			The_String_Builder.append(The_Artifact + " " + The_String_Representing_The_Indicator_Of_Whether_The_Artifact_Is_Tapped + "; ");
 		}
 		if (this.List_Of_Artifacts.size() > 0) {
-			The_String_Builder.append(this.List_Of_Artifacts.get(this.List_Of_Artifacts.size() - 1));
+			an_artifact The_Artifact = this.List_Of_Artifacts.get(this.List_Of_Artifacts.size() - 1);
+			String The_String_Representing_The_Indicator_Of_Whether_The_Artifact_Is_Tapped = (The_Artifact.is_tapped()) ? "(T)" : "(U)";
+			The_String_Builder.append(The_Artifact + " " + The_String_Representing_The_Indicator_Of_Whether_The_Artifact_Is_Tapped);
 		}
 		
 		if (this.List_Of_Artifacts.size() > 0 && this.List_Of_Creatures.size() > 0) {
 			The_String_Builder.append("; ");
 		}
 		for (int i = 0; i < this.List_Of_Creatures.size() - 1; i++) {
-			The_String_Builder.append(this.List_Of_Creatures.get(i));
-			The_String_Builder.append("; ");
+			a_creature The_Creature = this.List_Of_Creatures.get(i);
+			String The_String_Representing_The_Indicator_Of_Whether_The_Creature_Is_Tapped = (The_Creature.is_tapped()) ? "(T)" : "(U)";
+			The_String_Builder.append(The_Creature + " " + The_String_Representing_The_Indicator_Of_Whether_The_Creature_Is_Tapped + "; ");
 		}
 		if (this.List_Of_Creatures.size() > 0) {
-			The_String_Builder.append(this.List_Of_Creatures.get(this.List_Of_Creatures.size() - 1));
+			a_creature The_Creature = this.List_Of_Creatures.get(this.List_Of_Creatures.size() - 1);
+			String The_String_Representing_The_Indicator_Of_Whether_The_Creature_Is_Tapped = (The_Creature.is_tapped()) ? "(T)" : "(U)";
+			The_String_Builder.append(The_Creature + " " + The_String_Representing_The_Indicator_Of_Whether_The_Creature_Is_Tapped);
 		}
 		
 		if ((this.List_Of_Artifacts.size() > 0 || this.List_Of_Creatures.size() > 0) && this.List_Of_Enchantments.size() > 0) {
 			The_String_Builder.append("; ");
 		}
 		for (int i = 0; i < this.List_Of_Enchantments.size() - 1; i++) {
-			The_String_Builder.append(this.List_Of_Enchantments.get(i));
-			The_String_Builder.append("; ");
+			an_enchantment The_Enchantment = this.List_Of_Enchantments.get(i);
+			String The_String_Representing_The_Indicator_Of_Whether_The_Enchantment_Is_Tapped = (The_Enchantment.is_tapped()) ? "(T)" : "(U)";
+			The_String_Builder.append(The_Enchantment + " " + The_String_Representing_The_Indicator_Of_Whether_The_Enchantment_Is_Tapped + "; ");
 		}
 		if (this.List_Of_Enchantments.size() > 0) {
-			The_String_Builder.append(this.List_Of_Enchantments.get(this.List_Of_Enchantments.size() - 1));
+			an_enchantment The_Enchantment = this.List_Of_Enchantments.get(this.List_Of_Enchantments.size() - 1);
+			String The_String_Representing_The_Indicator_Of_Whether_The_Enchantment_Is_Tapped = (The_Enchantment.is_tapped()) ? "(T)" : "(U)";
+			The_String_Builder.append(The_Enchantment + " " + The_String_Representing_The_Indicator_Of_Whether_The_Enchantment_Is_Tapped);
 		}
 		
 		if ((this.List_Of_Artifacts.size() > 0 || this.List_Of_Creatures.size() > 0 || this.List_Of_Enchantments.size() > 0) && this.List_Of_Lands.size() > 0) {
 			The_String_Builder.append("; ");
 		}
 		for (int i = 0; i < this.List_Of_Lands.size() - 1; i++) {
-			The_String_Builder.append(this.List_Of_Lands.get(i));
-			The_String_Builder.append("; ");
+			a_land The_Land = this.List_Of_Lands.get(i);
+			String The_String_Representing_The_Indicator_Of_Whether_The_Land_Is_Tapped = (The_Land.is_tapped()) ? "(T)" : "(U)";
+			The_String_Builder.append(The_Land + " " + The_String_Representing_The_Indicator_Of_Whether_The_Land_Is_Tapped + "; ");
 		}
 		if (this.List_Of_Lands.size() > 0) {
-			The_String_Builder.append(this.List_Of_Lands.get(this.List_Of_Lands.size() - 1));
+			a_land The_Land = this.List_Of_Lands.get(this.List_Of_Lands.size() - 1);
+			String The_String_Representing_The_Indicator_Of_Whether_The_Land_Is_Tapped = (The_Land.is_tapped()) ? "(T)" : "(U)";
+			The_String_Builder.append(The_Land + " " + The_String_Representing_The_Indicator_Of_Whether_The_Land_Is_Tapped);
 		}
 		
 		if ((this.List_Of_Artifacts.size() > 0 || this.List_Of_Creatures.size() > 0 || this.List_Of_Enchantments.size() > 0 || this.List_Of_Lands.size() > 0) && this.List_Of_Planeswalkers.size() > 0) {
 			The_String_Builder.append("; ");
 		}
-		for (int i = 0; i < this.List_Of_Planeswalkers.size() - 1; i++) {
-			The_String_Builder.append(this.List_Of_Planeswalkers.get(i));
-			The_String_Builder.append("; ");
+		for (int i = 0; i < this.List_Of_Artifacts.size() - 1; i++) {
+			a_planeswalker The_Planeswalker = this.List_Of_Planeswalkers.get(i);
+			String The_String_Representing_The_Indicator_Of_Whether_The_Planeswalker_Is_Tapped = (The_Planeswalker.is_tapped()) ? "(T)" : "(U)";
+			The_String_Builder.append(The_Planeswalker + " " + The_String_Representing_The_Indicator_Of_Whether_The_Planeswalker_Is_Tapped + "; ");
 		}
 		if (this.List_Of_Planeswalkers.size() > 0) {
-			The_String_Builder.append(this.List_Of_Planeswalkers.get(this.List_Of_Planeswalkers.size() - 1));
+			a_planeswalker The_Planeswalker = this.List_Of_Planeswalkers.get(this.List_Of_Planeswalkers.size() - 1);
+			String The_String_Representing_The_Indicator_Of_Whether_The_Planeswalker_Is_Tapped = (The_Planeswalker.is_tapped()) ? "(T)" : "(U)";
+			The_String_Builder.append(The_Planeswalker + " " + The_String_Representing_The_Indicator_Of_Whether_The_Planeswalker_Is_Tapped);
 		}
 
 		return The_String_Builder.toString();

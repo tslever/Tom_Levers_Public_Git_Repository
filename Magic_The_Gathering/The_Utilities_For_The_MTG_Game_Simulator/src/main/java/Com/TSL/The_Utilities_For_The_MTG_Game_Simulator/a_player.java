@@ -527,11 +527,11 @@ public class a_player {
 				if (The_Type_Of_The_Playable_Nonland_Hand_Card.equals("Instant") || The_Type_Of_The_Playable_Nonland_Hand_Card.equals("Sorcery")) {
 				    a_spell The_Spell = new a_spell(The_Playable_Nonland_Hand_Card.provides_its_name(), this, The_Type_Of_The_Playable_Nonland_Hand_Card, The_Playable_Nonland_Hand_Card);
 				    this.Stack.receives(The_Spell);
-				    System.out.println(this.Name + " has casted instant or sorcery spell " + The_Spell + ".");
+				    System.out.println(this.Name + " has cast instant or sorcery spell " + The_Spell + ".");
 				} else {
 					a_permanent_spell The_Permanent_Spell = new a_permanent_spell(The_Playable_Nonland_Hand_Card.provides_its_name(), this, The_Type_Of_The_Playable_Nonland_Hand_Card, The_Playable_Nonland_Hand_Card);
 					this.Stack.receives(The_Permanent_Spell);
-				    System.out.println(this.Name + " has casted permanent spell " + The_Permanent_Spell + ".");
+				    System.out.println(this.Name + " has cast permanent spell " + The_Permanent_Spell + ".");
 				}
 				this.Has_Cast_A_Spell_Or_Activated_A_Nonmana_Activated_Ability = true;
 				System.out.println("The stack contains the following spells and nonmana activated abilities. " + this.Stack);
