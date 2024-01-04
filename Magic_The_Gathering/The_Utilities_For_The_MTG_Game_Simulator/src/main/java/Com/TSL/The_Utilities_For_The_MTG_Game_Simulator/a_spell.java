@@ -24,7 +24,7 @@ public class a_spell {
 		return this.Indicator_Of_Whether_This_Spell_Has_A_Target;
 	}
 	
-	public a_player provides_its_player() {
+	public a_player player() {
 		return this.Player;
 	}
 	

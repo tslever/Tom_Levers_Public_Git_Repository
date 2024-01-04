@@ -328,23 +328,23 @@ public class a_player {
 		for (a_creature The_Attacker : this.List_of_Attackers) {
 			if (The_Attacker.is_blocked()) {
 				ArrayList<a_creature> The_List_Of_Blockers = The_Attacker.list_of_blockers();
-				int combat_damage_to_be_dealt = The_Attacker.power();
+				int combat_damage_to_be_dealt = The_Attacker.effective_power();
 				for (a_creature The_Blocker : The_List_Of_Blockers) {
-					if (combat_damage_to_be_dealt <= The_Blocker.toughness()) {
+					if (combat_damage_to_be_dealt <= The_Blocker.effective_toughness()) {
 						The_Blocker.receives_combat_damage(combat_damage_to_be_dealt);
 					} else {
-						The_Blocker.receives_combat_damage(The_Blocker.toughness());
-						combat_damage_to_be_dealt -= The_Blocker.toughness();
+						The_Blocker.receives_combat_damage(The_Blocker.effective_toughness());
+						combat_damage_to_be_dealt -= The_Blocker.effective_toughness();
 					}
 				}
 			} else {
 				Object The_Attackee = The_Attacker.attackee();
 				if (The_Attackee instanceof a_player) {
 					a_player The_Player = (a_player) The_Attackee;
-					The_Player.Life -= The_Attacker.power();
+					The_Player.Life -= The_Attacker.effective_power();
 				} else if (The_Attackee instanceof a_planeswalker) {
 					a_planeswalker The_Planeswalker = (a_planeswalker) The_Attackee;
-					The_Planeswalker.receives_combat_damage(The_Attacker.power());
+					The_Planeswalker.receives_combat_damage(The_Attacker.effective_power());
 				} else if (The_Attackee instanceof a_battle) {
 					throw new Exception("Not implemented");
 				}
@@ -369,13 +369,13 @@ public class a_player {
 		this.Has_Priority = true;
 		for (a_creature The_Blocker : this.List_Of_Blockers) {
 			ArrayList<a_creature> The_List_Of_Blockees = The_Blocker.list_of_blockees();
-			int combat_damage_to_be_dealt = The_Blocker.power();
+			int combat_damage_to_be_dealt = The_Blocker.effective_power();
 			for (a_creature The_Blockee : The_List_Of_Blockees) {
-				if (combat_damage_to_be_dealt <= The_Blockee.toughness()) {
+				if (combat_damage_to_be_dealt <= The_Blockee.effective_toughness()) {
 					The_Blockee.receives_combat_damage(combat_damage_to_be_dealt);
 				} else {
-					The_Blockee.receives_combat_damage(The_Blockee.toughness());
-					combat_damage_to_be_dealt -= The_Blockee.toughness();
+					The_Blockee.receives_combat_damage(The_Blockee.effective_toughness());
+					combat_damage_to_be_dealt -= The_Blockee.effective_toughness();
 				}
 			}
 		}
@@ -649,12 +649,43 @@ public class a_player {
 						}
 					} else {
 						String The_Type_Of_The_Permanent_Spell = The_Permanent_Spell.type();
-						System.out.println(The_Permanent_Spell.name() + " becomes a " + The_Type_Of_The_Permanent_Spell + " and enters the battlefield under the control of " + The_Permanent_Spell.provides_its_player() + ".");
+						System.out.println(The_Permanent_Spell.name() + " becomes a " + The_Type_Of_The_Permanent_Spell + " and enters the battlefield under the control of " + The_Permanent_Spell.player() + ".");
 						if (The_Type_Of_The_Permanent_Spell.equals("Creature")) {
 							a_nonland_card The_Nonland_Card = The_Permanent_Spell.nonland_card();
 							a_creature_card The_Creature_Card = (a_creature_card) The_Nonland_Card;
-						    The_Permanent_Spell.provides_its_player().Part_Of_The_Battlefield.receives_creature(new a_creature(The_Permanent_Spell.name(), new ArrayList<a_static_ability>(), The_Creature_Card));
-						    System.out.println(The_Permanent_Spell.provides_its_player() + "'s part of the battlefield contains the following permanents. " + The_Permanent_Spell.provides_its_player().Part_Of_The_Battlefield);
+							a_creature The_Creature = new a_creature(The_Permanent_Spell.name(), new ArrayList<a_static_ability>(), The_Creature_Card, this);
+							ArrayList<a_triggered_ability> The_List_Of_Triggered_Abilities = new ArrayList<a_triggered_ability>();
+							for (String The_Line : The_Creature_Card.provides_its_text()) {
+								if (The_Line.startsWith("When ")) {
+									int The_Position_Of_The_First_Pause = The_Line.indexOf(", ");
+									a_triggered_ability The_Triggered_Ability = new a_triggered_ability(The_Line.substring(5, The_Position_Of_The_First_Pause), The_Line.substring(The_Position_Of_The_First_Pause + 2), The_Creature);
+									The_List_Of_Triggered_Abilities.add(The_Triggered_Ability);
+								}
+							}
+							The_Creature.sets_its_list_of_triggered_abilities_to(The_List_Of_Triggered_Abilities);
+							String The_Name_Of_The_Creature = The_Creature.provides_its_name();
+						    The_Permanent_Spell.player().Part_Of_The_Battlefield.receives_creature(The_Creature);
+						    System.out.println(The_Permanent_Spell.player() + "'s part of the battlefield contains the following permanents. " + The_Permanent_Spell.player().Part_Of_The_Battlefield);
+						    for (a_creature Another_Creature : this.Part_Of_The_Battlefield.creatures()) {
+							    for (a_triggered_ability The_Triggered_Ability : Another_Creature.list_of_triggered_abilities()) {
+							    	if (The_Triggered_Ability.event().equals(The_Name_Of_The_Creature + " enters the battlefield")) {
+							    		this.Stack.receives(The_Triggered_Ability);
+							    		System.out.println(The_Triggered_Ability + " has been added to the stack.");
+							    	}
+							    }	
+						    }
+						    for (a_creature Another_Creature : this.Other_Player.Part_Of_The_Battlefield.creatures()) {
+							    for (a_triggered_ability The_Triggered_Ability : Another_Creature.list_of_triggered_abilities()) {
+							    	if (The_Triggered_Ability.event().equals(The_Name_Of_The_Creature + " enters the battlefield")) {
+							    		this.Stack.receives(The_Triggered_Ability);
+							    		System.out.println(The_Triggered_Ability + " has been added to the stack.");
+							    	}
+							    }	
+						    }
+						    System.out.println("After triggered abilities are added to the stack, " + this + " reacts.");
+						    this.reacts();
+						    System.out.println("After triggered abilities are added to the stack and " + this + " reacts, " + this.Other_Player + " reacts.");
+						    this.Other_Player.reacts();
 						}
 					}
 				}
@@ -674,8 +705,17 @@ public class a_player {
 				} else if (The_Object instanceof a_triggered_ability) {
 					a_triggered_ability The_Triggered_Ability = (a_triggered_ability) The_Object;
 					// Rule 608.2a: If a triggered ability has an intervening "if" clause, [the resolution] checks whether the clause's condition is true. If [the condition] isn't, the ability is removed from the stack and does nothing. Otherwise, it continues to resolve.
-					if (The_Triggered_Ability.effect().contains("If")) {
+					if (The_Triggered_Ability.effect().contains("if")) {
 						// TODO
+					} else {
+						if (The_Triggered_Ability.effect().contains("put a +1/+1 counter on each other creature you control named Charmed Stray.")) {
+							for (a_creature The_Creature : this.Part_Of_The_Battlefield.creatures()) {
+								if (!The_Creature.equals(The_Triggered_Ability.provides_its_permanent()) && The_Creature.provides_its_name().equals("Charmed Stray")) {
+									The_Creature.receives_a_plus_one_plus_one_counter();
+								}
+							}
+						}
+						System.out.println("Resolved " + The_Triggered_Ability.effect());
 					}
 				}
 			}
@@ -933,11 +973,11 @@ public class a_player {
 			String The_Name_Of_The_Land_Card = The_Land_Card_To_Play.provides_its_name();
 			a_land The_Land = null;
 			if (The_Name_Of_The_Land_Card.equals("Plains")) {
-				The_Land = new a_land("Plains");
+				The_Land = new a_land("Plains", this);
 				a_mana_ability The_Mana_Ability = new a_mana_ability("T", "Add [W].", The_Land);
 				The_Land.receives(The_Mana_Ability);
 			} else if (The_Name_Of_The_Land_Card.equals("Forest")) {
-				The_Land = new a_land("Forest");
+				The_Land = new a_land("Forest", this);
 				a_mana_ability The_Mana_Ability = new a_mana_ability("T", "Add [G].", The_Land);
 				The_Land.receives(The_Mana_Ability);
 			} else {

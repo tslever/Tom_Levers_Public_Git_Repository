@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class a_land extends a_permanent {
 	
-	public a_land(String The_Name) {
-		super(The_Name);
+	public a_land(String The_Name, a_player The_Player) {
+		super(The_Name, The_Player);
 	}
 }

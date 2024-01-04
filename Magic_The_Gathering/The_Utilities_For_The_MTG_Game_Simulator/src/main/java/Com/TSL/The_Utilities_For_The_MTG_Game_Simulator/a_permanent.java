@@ -8,12 +8,14 @@ public abstract class a_permanent {
 	private ArrayList<a_mana_ability> List_Of_Mana_Abilities;
 	private ArrayList<a_nonmana_activated_ability> List_Of_Nonmana_Activated_Abilities;
 	private boolean Tapped_Status;
+	private a_player Player;
 	
-	public a_permanent(String The_Name_To_Use) {
+	public a_permanent(String The_Name_To_Use, a_player The_Player_To_Use) {
 		this.Name = The_Name_To_Use;
 		this.List_Of_Mana_Abilities = new ArrayList<a_mana_ability>();
 		this.List_Of_Nonmana_Activated_Abilities = new ArrayList<a_nonmana_activated_ability>();
 		this.Tapped_Status = false;
+		this.Player = The_Player_To_Use;
 	}
 	
 	public boolean is_tapped() {
@@ -55,5 +57,9 @@ public abstract class a_permanent {
 	@Override
 	public String toString() {
 		return this.Name;
+	}
+	
+	public a_player player() {
+		return this.Player;
 	}
 }

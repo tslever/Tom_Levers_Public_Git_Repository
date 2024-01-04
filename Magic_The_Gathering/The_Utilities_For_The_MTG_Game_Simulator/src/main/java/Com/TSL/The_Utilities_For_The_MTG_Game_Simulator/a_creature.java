@@ -9,6 +9,7 @@ public class a_creature extends a_permanent {
 	private boolean Indicator_Of_Whether_This_Creature_Is_Blocking = false;
 	private boolean Indicator_Of_Whether_This_Creature_Will_Attack = false;
 	private ArrayList<a_static_ability> List_Of_Static_Abilities;
+	private ArrayList<a_triggered_ability> List_Of_Triggered_Abilities;
 	private ArrayList<a_creature> List_of_Blockees;
 	private Object Attackee;
 	private ArrayList<a_creature> List_Of_Blockers;
@@ -16,9 +17,10 @@ public class a_creature extends a_permanent {
 	private int Toughness;
 	private int Combat_Damage;
 	private a_creature_card Creature_Card;
+	private int Number_Of_Plus_One_Plus_One_Counters;
 	
-	public a_creature(String The_Name, ArrayList<a_static_ability> The_List_Of_Static_Abilities_To_Use, a_creature_card The_Creature_Card) {
-		super(The_Name);
+	public a_creature(String The_Name, ArrayList<a_static_ability> The_List_Of_Static_Abilities_To_Use, a_creature_card The_Creature_Card, a_player The_Player) {
+		super(The_Name, The_Player);
 		this.List_Of_Static_Abilities = The_List_Of_Static_Abilities_To_Use;
 		this.List_Of_Blockers = new ArrayList<>();
 		this.Creature_Card = The_Creature_Card;
@@ -28,16 +30,16 @@ public class a_creature extends a_permanent {
 		return true;
 	}
 	
-	public int power() {
-		return this.Power;
+	public int effective_power() {
+		return this.Power + this.Number_Of_Plus_One_Plus_One_Counters;
 	}
 	
 	public void receives_combat_damage(int The_Combat_Damage) {
 		this.Combat_Damage = The_Combat_Damage;
 	}
 	
-	public int toughness() {
-		return this.Toughness;
+	public int effective_toughness() {
+		return this.Toughness + this.Number_Of_Plus_One_Plus_One_Counters;
 	}
 	
 	public boolean can_block(a_creature The_Attacker) {
@@ -129,5 +131,17 @@ public class a_creature extends a_permanent {
 	
 	public a_creature_card creature_card() {
 		return this.Creature_Card;
+	}
+	
+	public ArrayList<a_triggered_ability> list_of_triggered_abilities() {
+		return this.List_Of_Triggered_Abilities;
+	}
+	
+	public void sets_its_list_of_triggered_abilities_to(ArrayList<a_triggered_ability> The_List_Of_Triggered_Abilities_To_Use) {
+		this.List_Of_Triggered_Abilities = The_List_Of_Triggered_Abilities_To_Use;
+	}
+	
+	public void receives_a_plus_one_plus_one_counter() {
+		this.Number_Of_Plus_One_Plus_One_Counters += 1;
 	}
 }
