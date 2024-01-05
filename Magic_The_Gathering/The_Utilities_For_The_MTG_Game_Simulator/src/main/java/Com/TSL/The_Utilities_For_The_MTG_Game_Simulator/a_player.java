@@ -493,7 +493,7 @@ public class a_player {
 		if (Indicator_Of_Whether_Player_Is_Reacting) {
 			The_List_Of_Nonland_Hand_Cards_Appropriate_For_The_Present_Step = new ArrayList<>();
 			for (a_nonland_card The_Nonland_Hand_Card : The_List_Of_All_Nonland_Hand_Cards) {
-				if (The_Nonland_Hand_Card.provides_its_type().equals("Instant") || The_Nonland_Hand_Card.provides_its_text().contains("Flash")) {
+				if (The_Nonland_Hand_Card.type().equals("Instant") || The_Nonland_Hand_Card.text().contains("Flash")) {
 					The_List_Of_Nonland_Hand_Cards_Appropriate_For_The_Present_Step.add(The_Nonland_Hand_Card);
 				}
 			}
@@ -525,13 +525,13 @@ public class a_player {
 				a_nonland_card The_Playable_Nonland_Hand_Card = (a_nonland_card) The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability;
 				The_Playable_Nonland_Hand_Card = this.Hand.plays(The_Playable_Nonland_Hand_Card);
 				System.out.println("After playing a nonland card, the hand of " + this.Name + " has " + this.Hand.provides_its_number_of_cards() + " cards and contains the following. " + this.Hand);
-				String The_Type_Of_The_Playable_Nonland_Hand_Card = The_Playable_Nonland_Hand_Card.provides_its_type();
+				String The_Type_Of_The_Playable_Nonland_Hand_Card = The_Playable_Nonland_Hand_Card.type();
 				if (The_Type_Of_The_Playable_Nonland_Hand_Card.equals("Instant") || The_Type_Of_The_Playable_Nonland_Hand_Card.equals("Sorcery")) {
-				    a_spell The_Spell = new a_spell(The_Playable_Nonland_Hand_Card.provides_its_name(), this, The_Type_Of_The_Playable_Nonland_Hand_Card, The_Playable_Nonland_Hand_Card);
+				    a_spell The_Spell = new a_spell(The_Playable_Nonland_Hand_Card.name(), this, The_Type_Of_The_Playable_Nonland_Hand_Card, The_Playable_Nonland_Hand_Card);
 				    this.Stack.receives(The_Spell);
 				    System.out.println(this.Name + " has cast instant or sorcery spell " + The_Spell + ".");
 				} else {
-					a_permanent_spell The_Permanent_Spell = new a_permanent_spell(The_Playable_Nonland_Hand_Card.provides_its_name(), this, The_Type_Of_The_Playable_Nonland_Hand_Card, The_Playable_Nonland_Hand_Card);
+					a_permanent_spell The_Permanent_Spell = new a_permanent_spell(The_Playable_Nonland_Hand_Card.name(), this, The_Type_Of_The_Playable_Nonland_Hand_Card, The_Playable_Nonland_Hand_Card);
 					this.Stack.receives(The_Permanent_Spell);
 				    System.out.println(this.Name + " has cast permanent spell " + The_Permanent_Spell + ".");
 				}
@@ -655,7 +655,7 @@ public class a_player {
 							a_creature_card The_Creature_Card = (a_creature_card) The_Nonland_Card;
 							a_creature The_Creature = new a_creature(The_Permanent_Spell.name(), new ArrayList<a_static_ability>(), The_Creature_Card, this);
 							ArrayList<a_triggered_ability> The_List_Of_Triggered_Abilities = new ArrayList<a_triggered_ability>();
-							for (String The_Line : The_Creature_Card.provides_its_text()) {
+							for (String The_Line : The_Creature_Card.text()) {
 								if (The_Line.startsWith("When ")) {
 									int The_Position_Of_The_First_Pause = The_Line.indexOf(", ");
 									a_triggered_ability The_Triggered_Ability = new a_triggered_ability(The_Line.substring(5, The_Position_Of_The_First_Pause), The_Line.substring(The_Position_Of_The_First_Pause + 2), The_Creature);
@@ -926,8 +926,8 @@ public class a_player {
 	
 	
 	public boolean indicates_whether_a_card_is_playable_according_to_the_text_of(a_card The_Card) {
-		if (The_Card.provides_its_type().equals("Instant")) {
-			ArrayList<String> The_Text = The_Card.provides_its_text();
+		if (The_Card.type().equals("Instant")) {
+			ArrayList<String> The_Text = The_Card.text();
 			ArrayList<a_creature> The_List_Of_Creatures = this.Part_Of_The_Battlefield.creatures();
 			
 			for (String The_Line : The_Text) {
@@ -970,7 +970,7 @@ public class a_player {
 			System.out.println(this.Name + " is playing a land.");
 			int The_Index_Of_The_Land_Card_To_Play = this.Random_Data_Generator.nextInt(0, The_Number_Of_Land_Cards - 1);
 			a_land_card The_Land_Card_To_Play = The_List_Of_Land_Cards.get(The_Index_Of_The_Land_Card_To_Play);
-			String The_Name_Of_The_Land_Card = The_Land_Card_To_Play.provides_its_name();
+			String The_Name_Of_The_Land_Card = The_Land_Card_To_Play.name();
 			a_land The_Land = null;
 			if (The_Name_Of_The_Land_Card.equals("Plains")) {
 				The_Land = new a_land("Plains", this);
