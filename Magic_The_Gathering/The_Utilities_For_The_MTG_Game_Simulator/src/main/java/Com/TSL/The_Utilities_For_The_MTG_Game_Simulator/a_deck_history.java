@@ -14,6 +14,6 @@ public class a_deck_history {
 	
 	@Override
 	public String toString() {
-		return "The deck " + this.Deck.provides_its_name() + " has " + this.Number_Of_Losses + " losses and " + this.Number_Of_Wins + " wins.";
+		return "The deck " + this.Deck.name() + " has " + this.Number_Of_Losses + " losses and " + this.Number_Of_Wins + " wins.";
 	}
 }

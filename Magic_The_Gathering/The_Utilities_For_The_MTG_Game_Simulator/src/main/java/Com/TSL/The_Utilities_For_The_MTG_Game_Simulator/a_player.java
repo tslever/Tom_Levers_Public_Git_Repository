@@ -849,10 +849,10 @@ public class a_player {
 	
 	
 	public void draws() {
-		this.Hand.receives(this.Deck.provides_a_card());
+		this.Hand.receives(this.Deck.provides_its_top_card());
 		
 		System.out.println(
-			"After drawing, the deck of " + this.Name + " has " + this.Deck.provides_its_number_of_cards() + " cards and contains the following. " + this.Deck
+			"After drawing, the deck of " + this.Name + " has " + this.Deck.number_of_cards() + " cards and contains the following. " + this.Deck
 		);
 		System.out.println(
 			"After drawing, the hand of " + this.Name + " has " + this.Hand.provides_its_number_of_cards() + " cards and contains the following. " + this.Hand
@@ -1021,7 +1021,7 @@ public class a_player {
 	public void shuffles_her_deck() {
 		this.Deck.shuffles();
 		System.out.println(
-			"The deck of " + this.Name + " after shuffling has " + this.Deck.provides_its_number_of_cards() + " cards and is the following. " + this.Deck
+			"The deck of " + this.Name + " after shuffling has " + this.Deck.number_of_cards() + " cards and is the following. " + this.Deck
 		);
 	}
 	
