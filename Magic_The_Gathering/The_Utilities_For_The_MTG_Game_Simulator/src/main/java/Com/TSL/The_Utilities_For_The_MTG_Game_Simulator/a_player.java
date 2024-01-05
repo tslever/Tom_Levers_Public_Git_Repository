@@ -227,7 +227,7 @@ public class a_player {
 		for (a_creature The_Creature : this.Part_Of_The_Battlefield.creatures()) {
 			if (!The_Creature.is_tapped() && !The_Creature.is_battle() && (The_Creature.has_haste() || The_Creature.has_been_controlled_by_the_active_player_continuously_since_the_turn_began()) && The_Creature.can_attack()) {
 				if (The_Creature.must_attack() || (an_enumeration_of_states_of_a_coin.provides_a_state() == an_enumeration_of_states_of_a_coin.HEADS)) {
-					The_Creature.sets_the_creatures_indicator_of_whether_this_creature_will_attack_to(true);
+					The_Creature.sets_its_indicator_of_whether_it_is_attacking_to(true);
 					Object The_Attackee = null;
 					if (!this.Part_Of_The_Battlefield.planeswalkers().isEmpty() || !this.List_Of_Battles.isEmpty()) {
 						ArrayList<Object> The_List_Of_Possible_Attackees = new ArrayList<>();

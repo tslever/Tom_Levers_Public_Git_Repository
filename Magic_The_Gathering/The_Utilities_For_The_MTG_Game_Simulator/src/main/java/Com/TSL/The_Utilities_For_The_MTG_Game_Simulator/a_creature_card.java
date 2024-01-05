@@ -22,10 +22,17 @@ public class a_creature_card extends a_nonland_card
 	)
 	{
 		super(The_Expansion_To_Use, The_Mana_Cost_To_Use, The_Name_To_Use, The_Text_To_Use, The_Type_To_Use);
-		
 		this.Power = The_Power_To_Use;
 		this.Rarity = The_Rarity_To_Use;
 		this.Subtype = The_Subtype_To_Use;
 		this.Toughness = The_Toughness_To_Use;
+	}
+	
+	public int power() {
+		return this.Power;
+	}
+	
+	public int toughness() {
+		return this.Toughness;
 	}
 }
