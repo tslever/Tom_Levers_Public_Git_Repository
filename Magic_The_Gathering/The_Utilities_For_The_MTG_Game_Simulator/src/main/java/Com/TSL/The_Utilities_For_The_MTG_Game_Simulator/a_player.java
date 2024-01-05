@@ -111,7 +111,7 @@ public class a_player {
 			for (a_mana_ability The_Mana_Ability : The_Combination_Of_Available_Mana_Abilities) {
 				The_Mana_Pool.increases_by(The_Mana_Ability.indicates_the_mana_pool_it_would_contribute());
 			}
-			a_mana_pool The_Mana_Cost = null;
+			a_mana_cost The_Mana_Cost = null;
 			if (The_Nonland_Card != null) {
 				The_Mana_Cost = The_Nonland_Card.provides_its_mana_cost();
 			} else if (The_Nonmana_Activated_Ability != null) {
@@ -488,7 +488,7 @@ public class a_player {
 		// Rule 601.2e: The game checks to see if the proposed spell can legally be cast. If the proposed spell is illegal, the game returns to the moment before the casting of that spell was proposed (see rule 723, "Handling Illegal Actions").
 		
 		System.out.println(this + " is considering casting a spell or activating a nonmana activated ability.");
-		ArrayList<a_nonland_card> The_List_Of_All_Nonland_Hand_Cards = this.Hand.provides_its_list_of_nonland_cards();
+		ArrayList<a_nonland_card> The_List_Of_All_Nonland_Hand_Cards = this.Hand.list_of_nonland_cards();
 		ArrayList<a_nonland_card> The_List_Of_Nonland_Hand_Cards_Appropriate_For_The_Present_Step;
 		if (Indicator_Of_Whether_Player_Is_Reacting) {
 			The_List_Of_Nonland_Hand_Cards_Appropriate_For_The_Present_Step = new ArrayList<>();
@@ -523,8 +523,8 @@ public class a_player {
 			// Rule 117.3c: If a player has priority when they cast a spell, activate an ability, or take a special action, that player receives priority afterward.
 			if (The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability instanceof a_nonland_card) {
 				a_nonland_card The_Playable_Nonland_Hand_Card = (a_nonland_card) The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability;
-				The_Playable_Nonland_Hand_Card = this.Hand.plays(The_Playable_Nonland_Hand_Card);
-				System.out.println("After playing a nonland card, the hand of " + this.Name + " has " + this.Hand.provides_its_number_of_cards() + " cards and contains the following. " + this.Hand);
+				this.Hand.removes(The_Playable_Nonland_Hand_Card);
+				System.out.println("After playing a nonland card, the hand of " + this.Name + " has " + this.Hand.number_of_cards() + " cards and contains the following. " + this.Hand);
 				String The_Type_Of_The_Playable_Nonland_Hand_Card = The_Playable_Nonland_Hand_Card.type();
 				if (The_Type_Of_The_Playable_Nonland_Hand_Card.equals("Instant") || The_Type_Of_The_Playable_Nonland_Hand_Card.equals("Sorcery")) {
 				    a_spell The_Spell = new a_spell(The_Playable_Nonland_Hand_Card.name(), this, The_Type_Of_The_Playable_Nonland_Hand_Card, The_Playable_Nonland_Hand_Card);
@@ -564,7 +564,7 @@ public class a_player {
 		System.out.println(this.Name + " is starting a main phase.");
 		this.Step = "This Player's Precombat Main Phase";
 		for (a_creature The_Creature : this.Part_Of_The_Battlefield.creatures()) {
-			The_Creature.sets_the_creatures_indicator_that_this_creature_has_been_controlled_by_the_active_player_continuously_since_the_turn_began(true);
+			The_Creature.sets_its_indicator_of_whether_it_has_been_controlled_by_the_active_player_continuously_since_the_turn_began(true);
 		}
 		
 		// Rule 500.5: When a phase or step begins, any effects scheduled to last "until" that phase or step expire.
@@ -855,7 +855,7 @@ public class a_player {
 			"After drawing, the deck of " + this.Name + " has " + this.Deck.number_of_cards() + " cards and contains the following. " + this.Deck
 		);
 		System.out.println(
-			"After drawing, the hand of " + this.Name + " has " + this.Hand.provides_its_number_of_cards() + " cards and contains the following. " + this.Hand
+			"After drawing, the hand of " + this.Name + " has " + this.Hand.number_of_cards() + " cards and contains the following. " + this.Hand
 		);
 	}
 	
@@ -964,7 +964,7 @@ public class a_player {
 	
 	
 	public void plays_a_land() throws Exception {
-		ArrayList<a_land_card> The_List_Of_Land_Cards = this.Hand.provides_its_list_of_land_cards();
+		ArrayList<a_land_card> The_List_Of_Land_Cards = this.Hand.list_of_land_cards();
 		int The_Number_Of_Land_Cards = The_List_Of_Land_Cards.size();
 		if (The_Number_Of_Land_Cards > 0) {
 			System.out.println(this.Name + " is playing a land.");
@@ -986,7 +986,7 @@ public class a_player {
 			this.Hand.removes(The_Land_Card_To_Play);
 			this.Part_Of_The_Battlefield.receives_land(The_Land);
 			this.Has_Played_A_Land_This_Turn = true;
-			System.out.println("After playing a land card, the hand of " + this.Name + " has " + this.Hand.provides_its_number_of_cards() + " cards and contains the following. " + this.Hand);
+			System.out.println("After playing a land card, the hand of " + this.Name + " has " + this.Hand.number_of_cards() + " cards and contains the following. " + this.Hand);
 			System.out.println("After playing a land card, the part of the battlefield of " + this.Name + " has " + this.Part_Of_The_Battlefield.provides_its_number_of_permanents() + " cards and contains the following. " + this.Part_Of_The_Battlefield);
 		}
 	}

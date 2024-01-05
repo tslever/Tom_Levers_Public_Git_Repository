@@ -14,11 +14,11 @@ public class a_nonmana_activated_ability extends an_activated_ability {
 		this.provides_its_permanent().taps();
 	}
 	
-	public a_mana_pool provides_its_mana_cost() {
+	public a_mana_cost provides_its_mana_cost() {
 		if (this.provides_its_cost().equals("T")) {
-			return new a_mana_pool(0, 0, 0, 0, 0, 0);
+			return new a_mana_cost(0, 0, 0, 0, 0, 0);
 		} else {
-			return new a_mana_pool(0, 0, 0, 0, 0, 0);
+			return new a_mana_cost(0, 0, 0, 0, 0, 0);
 		}
 	}
 	
