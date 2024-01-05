@@ -75,7 +75,7 @@ public class a_player {
 		a_mana_pool The_Mana_Pool = new a_mana_pool(0, 0, 0, 0, 0, 0);
 		ArrayList<ArrayList<a_mana_ability>> The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities;
 		if (The_Nonland_Card != null) {
-			The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities = The_Nonland_Card.provides_its_list_of_sufficient_combinations_of_available_mana_abilities();
+			The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities = The_Nonland_Card.list_of_combinations_of_available_mana_abilities_sufficient_to_play_this();
 		} else if (The_Nonmana_Activated_Ability != null) {
 			The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities = The_Nonmana_Activated_Ability.provides_its_list_of_sufficient_combinations_of_available_mana_abilities();			
 		} else {
@@ -113,7 +113,7 @@ public class a_player {
 			}
 			a_mana_cost The_Mana_Cost = null;
 			if (The_Nonland_Card != null) {
-				The_Mana_Cost = The_Nonland_Card.provides_its_mana_cost();
+				The_Mana_Cost = The_Nonland_Card.mana_cost();
 			} else if (The_Nonmana_Activated_Ability != null) {
 				The_Mana_Cost = The_Nonmana_Activated_Ability.provides_its_mana_cost();
 			} else {
@@ -916,7 +916,7 @@ public class a_player {
 	public boolean indicates_whether_is_playable(a_nonland_card The_Nonland_Card) {
 		if (
 			this.indicates_whether_a_card_is_playable_according_to_the_text_of(The_Nonland_Card) &&
-			!The_Nonland_Card.provides_its_list_of_sufficient_combinations_of_available_mana_abilities().isEmpty()
+			!The_Nonland_Card.list_of_combinations_of_available_mana_abilities_sufficient_to_play_this().isEmpty()
 		) {
 			return true;
 		} else {
