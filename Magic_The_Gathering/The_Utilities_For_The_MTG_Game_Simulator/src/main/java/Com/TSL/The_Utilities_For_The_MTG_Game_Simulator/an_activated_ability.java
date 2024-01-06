@@ -25,12 +25,12 @@ public class an_activated_ability extends an_ability {
 		this.Indicator_Of_Whether_It_Is_Activatable = false;
 	}
 	
-	public boolean is_activatable() {
-		return this.Indicator_Of_Whether_It_Is_Activatable;
-	}
-	
 	public String cost() {
 		return this.Cost;
+	}
+	
+	public boolean is_activatable() {
+		return this.Indicator_Of_Whether_It_Is_Activatable;
 	}
 	
 	public boolean requires_tapping() {
@@ -39,6 +39,6 @@ public class an_activated_ability extends an_ability {
 	
 	@Override
 	public String toString() {
-		return this.permanent().name() + ": " + this.Cost + ": " + this.effect();
+		return this.permanent() + ": " + this.Cost + ": " + this.effect();
 	}
 }
