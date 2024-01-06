@@ -20,7 +20,7 @@ public class an_ability {
 	
 	@Override
 	public String toString() {
-		return this.Permanent.name() + ": " + this.Effect;
+		return this.Permanent + ": " + this.Effect;
 	}
 	
 }
