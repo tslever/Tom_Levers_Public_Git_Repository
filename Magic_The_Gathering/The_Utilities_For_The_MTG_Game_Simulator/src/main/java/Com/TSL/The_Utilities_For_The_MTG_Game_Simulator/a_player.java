@@ -992,7 +992,7 @@ public class a_player {
 	}
 	
 	
-	public String provides_her_name() {
+	public String name() {
 		return this.Name;
 	}
 	
