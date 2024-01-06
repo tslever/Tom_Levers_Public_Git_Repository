@@ -55,7 +55,7 @@ public class a_player {
 		this.Stack = The_Stack_To_Use;
 	}
 
-	public a_mana_pool acquires_mana_for(Object The_Object) throws Exception {
+	public a_mana_pool acquires_mana_for_nonland_card_or_nonmana_activated_ability(Object The_Object) throws Exception {
 		a_nonland_card The_Nonland_Card = null;
 		a_nonmana_activated_ability The_Nonmana_Activated_Ability = null;
 		if (The_Object instanceof a_nonland_card) {
@@ -510,7 +510,7 @@ public class a_player {
 			Object The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability = this.chooses_a_playable_nonland_card_or_an_activatable_nonmana_activated_ability_from(The_List_Of_Playable_Nonland_Hand_Cards_And_Activatable_Nonmana_Activated_Abilities);
 			System.out.println(this + " will play the nonland hand card or activate the nonmana activated ability " + The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability + ".");
 			//a_mana_pool The_Mana_Pool_To_Use_To_Cast_A_Spell =
-			this.acquires_mana_for(The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability);
+			this.acquires_mana_for_nonland_card_or_nonmana_activated_ability(The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability);
 			//this.Mana_Pool.increases_by(The_Mana_Pool_To_Use_To_Cast_A_Spell);
 			//this.Mana_Pool.decreases_by(The_Mana_Pool_To_Use_To_Cast_A_Spell);
 			// Rule 117.3c: If a player has priority when they cast a spell, activate an ability, or take a special action, that player receives priority afterward.
