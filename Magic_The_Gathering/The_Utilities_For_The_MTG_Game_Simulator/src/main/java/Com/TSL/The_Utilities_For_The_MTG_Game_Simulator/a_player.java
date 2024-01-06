@@ -527,11 +527,11 @@ public class a_player {
 				System.out.println("After playing a nonland card, the hand of " + this.Name + " has " + this.Hand.number_of_cards() + " cards and contains the following. " + this.Hand);
 				String The_Type_Of_The_Playable_Nonland_Hand_Card = The_Playable_Nonland_Hand_Card.type();
 				if (The_Type_Of_The_Playable_Nonland_Hand_Card.equals("Instant") || The_Type_Of_The_Playable_Nonland_Hand_Card.equals("Sorcery")) {
-				    a_spell The_Spell = new a_spell(The_Playable_Nonland_Hand_Card.name(), this, The_Type_Of_The_Playable_Nonland_Hand_Card, The_Playable_Nonland_Hand_Card);
+				    a_spell The_Spell = new a_spell(The_Playable_Nonland_Hand_Card.name(), The_Playable_Nonland_Hand_Card, this, The_Type_Of_The_Playable_Nonland_Hand_Card);
 				    this.Stack.receives(The_Spell);
 				    System.out.println(this.Name + " has cast instant or sorcery spell " + The_Spell + ".");
 				} else {
-					a_permanent_spell The_Permanent_Spell = new a_permanent_spell(The_Playable_Nonland_Hand_Card.name(), this, The_Type_Of_The_Playable_Nonland_Hand_Card, The_Playable_Nonland_Hand_Card);
+					a_permanent_spell The_Permanent_Spell = new a_permanent_spell(The_Playable_Nonland_Hand_Card.name(), The_Playable_Nonland_Hand_Card, this, The_Type_Of_The_Playable_Nonland_Hand_Card);
 					this.Stack.receives(The_Permanent_Spell);
 				    System.out.println(this.Name + " has cast permanent spell " + The_Permanent_Spell + ".");
 				}
