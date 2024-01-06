@@ -6,7 +6,6 @@ public class an_enchantment_card extends a_nonland_card {
 
 	private String Rarity;
 	
-	
 	public an_enchantment_card(
 		String The_Expansion_To_Use,
 		a_mana_cost The_Mana_Cost_To_Use,
@@ -19,6 +18,5 @@ public class an_enchantment_card extends a_nonland_card {
 		super(The_Expansion_To_Use, The_Mana_Cost_To_Use, The_Name_To_Use, The_Text_To_Use, The_Type_To_Use);
 		
 		this.Rarity = The_Rarity_To_Use;
-		
 	}
 }
