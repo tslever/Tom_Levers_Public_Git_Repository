@@ -98,7 +98,7 @@ public class a_player {
 		} else {
 			throw new Exception("assigns_a_list_of_sufficient_combinations_of_available_mana_to takes a nonland card or a nonmana activated ability.");
 		}
-		ArrayList<a_permanent> The_List_Of_Permanents = this.Part_Of_The_Battlefield.provides_its_list_of_permanents();
+		ArrayList<a_permanent> The_List_Of_Permanents = this.Part_Of_The_Battlefield.list_of_permanents();
 		ArrayList<a_mana_ability> The_List_Of_Available_Mana_Abilities_For_The_Player = new ArrayList<>();
 		for (a_permanent The_Permanent : The_List_Of_Permanents) {
 			ArrayList<a_mana_ability> The_List_Of_Available_Mana_Abilities_For_The_Permanent = The_Permanent.provides_a_list_of_available_mana_abilities();
@@ -143,7 +143,7 @@ public class a_player {
 	}
 	
 	public void assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_her_permanents_nonmana_activated_abilities() throws Exception {
-		for (a_permanent The_Permanent : this.Part_Of_The_Battlefield.provides_its_list_of_permanents()) {
+		for (a_permanent The_Permanent : this.Part_Of_The_Battlefield.list_of_permanents()) {
 			for (a_nonmana_activated_ability The_Nonmana_Activated_Ability : The_Permanent.provides_its_list_of_nonmana_activated_abilities()) {
 				this.assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_nonland_card_or_nonmana_activated_ability(The_Nonmana_Activated_Ability);
 			}
@@ -224,15 +224,15 @@ public class a_player {
 	 */
 	public void completes_her_declare_attackers_step() throws Exception {
 		this.Has_Priority = true;
-		for (a_creature The_Creature : this.Part_Of_The_Battlefield.creatures()) {
+		for (a_creature The_Creature : this.Part_Of_The_Battlefield.list_of_creatures()) {
 			if (!The_Creature.is_tapped() && !The_Creature.is_battle() && (The_Creature.has_haste() || The_Creature.has_been_controlled_by_the_active_player_continuously_since_the_turn_began()) && The_Creature.can_attack()) {
 				if (The_Creature.must_attack() || (an_enumeration_of_states_of_a_coin.provides_a_state() == an_enumeration_of_states_of_a_coin.HEADS)) {
 					The_Creature.sets_its_indicator_of_whether_it_is_attacking_to(true);
 					Object The_Attackee = null;
-					if (!this.Part_Of_The_Battlefield.planeswalkers().isEmpty() || !this.List_Of_Battles.isEmpty()) {
+					if (!this.Part_Of_The_Battlefield.list_of_planeswalkers().isEmpty() || !this.List_Of_Battles.isEmpty()) {
 						ArrayList<Object> The_List_Of_Possible_Attackees = new ArrayList<>();
 						The_List_Of_Possible_Attackees.add(this);
-						for (a_planeswalker The_Planeswalker : this.Other_Player.Part_Of_The_Battlefield.planeswalkers()) {
+						for (a_planeswalker The_Planeswalker : this.Other_Player.Part_Of_The_Battlefield.list_of_planeswalkers()) {
 							The_List_Of_Possible_Attackees.add(The_Planeswalker);
 						}
 						for (a_battle The_Battle : this.List_Of_Battles) {
@@ -265,7 +265,7 @@ public class a_player {
 	public void declares_blockers() throws Exception {
 		this.Has_Priority = true;
 		ArrayList<a_creature> The_List_Of_Blockers = new ArrayList<>();
-		for (a_creature The_Creature : this.Part_Of_The_Battlefield.creatures()) {
+		for (a_creature The_Creature : this.Part_Of_The_Battlefield.list_of_creatures()) {
 			if (!The_Creature.is_tapped() && !The_Creature.is_battle()) {
 				if (The_Creature.must_block() || (an_enumeration_of_states_of_a_coin.provides_a_state() == an_enumeration_of_states_of_a_coin.HEADS)) {
 					The_List_Of_Blockers.add(The_Creature);
@@ -354,12 +354,12 @@ public class a_player {
 	
 	private void puts_cards_corresponding_to_creatures_dealt_lethal_damage_in_graveyard() {
 		ArrayList<a_creature> The_List_Of_Creatures = new ArrayList<>();
-		for (a_creature The_Creature : this.Part_Of_The_Battlefield.creatures()) {
+		for (a_creature The_Creature : this.Part_Of_The_Battlefield.list_of_creatures()) {
 			if (The_Creature.was_dealt_lethal_damage()) {
 				The_List_Of_Creatures.add(The_Creature);
 			}
 		}
-		this.Part_Of_The_Battlefield.creatures().removeAll(The_List_Of_Creatures);
+		this.Part_Of_The_Battlefield.list_of_creatures().removeAll(The_List_Of_Creatures);
 		for (a_creature The_Creature : The_List_Of_Creatures) {
 			this.Graveyard.receives(The_Creature.creature_card());	
 		}
@@ -431,7 +431,7 @@ public class a_player {
 		}
 		
 		int number_of_combat_damage_steps = 1;
-		for (a_creature The_Creature : this.Part_Of_The_Battlefield.creatures()) {
+		for (a_creature The_Creature : this.Part_Of_The_Battlefield.list_of_creatures()) {
 			ArrayList<a_static_ability> The_List_Of_Static_Abilities = The_Creature.list_of_static_abilities();
 			for (a_static_ability The_Static_Ability : The_List_Of_Static_Abilities) {
 				if (The_Static_Ability.effect().equals("first strike") || The_Static_Ability.effect().equals("double strike")) {
@@ -563,7 +563,7 @@ public class a_player {
 	public void completes_a_main_phase() throws Exception {
 		System.out.println(this.Name + " is starting a main phase.");
 		this.Step = "This Player's Precombat Main Phase";
-		for (a_creature The_Creature : this.Part_Of_The_Battlefield.creatures()) {
+		for (a_creature The_Creature : this.Part_Of_The_Battlefield.list_of_creatures()) {
 			The_Creature.sets_its_indicator_of_whether_it_has_been_controlled_by_the_active_player_continuously_since_the_turn_began(true);
 		}
 		
@@ -664,9 +664,9 @@ public class a_player {
 							}
 							The_Creature.sets_its_list_of_triggered_abilities_to(The_List_Of_Triggered_Abilities);
 							String The_Name_Of_The_Creature = The_Creature.provides_its_name();
-						    The_Permanent_Spell.player().Part_Of_The_Battlefield.receives_creature(The_Creature);
+						    The_Permanent_Spell.player().Part_Of_The_Battlefield.receives(The_Creature);
 						    System.out.println(The_Permanent_Spell.player() + "'s part of the battlefield contains the following permanents. " + The_Permanent_Spell.player().Part_Of_The_Battlefield);
-						    for (a_creature Another_Creature : this.Part_Of_The_Battlefield.creatures()) {
+						    for (a_creature Another_Creature : this.Part_Of_The_Battlefield.list_of_creatures()) {
 							    for (a_triggered_ability The_Triggered_Ability : Another_Creature.list_of_triggered_abilities()) {
 							    	if (The_Triggered_Ability.event().equals(The_Name_Of_The_Creature + " enters the battlefield")) {
 							    		this.Stack.receives(The_Triggered_Ability);
@@ -674,7 +674,7 @@ public class a_player {
 							    	}
 							    }	
 						    }
-						    for (a_creature Another_Creature : this.Other_Player.Part_Of_The_Battlefield.creatures()) {
+						    for (a_creature Another_Creature : this.Other_Player.Part_Of_The_Battlefield.list_of_creatures()) {
 							    for (a_triggered_ability The_Triggered_Ability : Another_Creature.list_of_triggered_abilities()) {
 							    	if (The_Triggered_Ability.event().equals(The_Name_Of_The_Creature + " enters the battlefield")) {
 							    		this.Stack.receives(The_Triggered_Ability);
@@ -709,7 +709,7 @@ public class a_player {
 						// TODO
 					} else {
 						if (The_Triggered_Ability.effect().contains("put a +1/+1 counter on each other creature you control named Charmed Stray.")) {
-							for (a_creature The_Creature : this.Part_Of_The_Battlefield.creatures()) {
+							for (a_creature The_Creature : this.Part_Of_The_Battlefield.list_of_creatures()) {
 								if (!The_Creature.equals(The_Triggered_Ability.permanent()) && The_Creature.provides_its_name().equals("Charmed Stray")) {
 									The_Creature.receives_a_plus_one_plus_one_counter();
 								}
@@ -784,27 +784,27 @@ public class a_player {
 		
 		this.List_Of_Permanents_That_Should_Be_Untapped.clear();
 		
-		for (an_artifact The_Artifact : this.Part_Of_The_Battlefield.provides_its_list_of_artifacts()) {
+		for (an_artifact The_Artifact : this.Part_Of_The_Battlefield.list_of_artifacts()) {
 			if (The_Artifact.is_tapped()) {
 				this.List_Of_Permanents_That_Should_Be_Untapped.add(The_Artifact);
 			}
 		}
-		for (a_creature The_Creature : this.Part_Of_The_Battlefield.creatures()) {
+		for (a_creature The_Creature : this.Part_Of_The_Battlefield.list_of_creatures()) {
 			if (The_Creature.is_tapped()) {
 				this.List_Of_Permanents_That_Should_Be_Untapped.add(The_Creature);
 			}
 		}
-		for (an_enchantment The_Enchantment : this.Part_Of_The_Battlefield.provides_its_list_of_enchantments()) {
+		for (an_enchantment The_Enchantment : this.Part_Of_The_Battlefield.list_of_enchantments()) {
 			if (The_Enchantment.is_tapped()) {
 				this.List_Of_Permanents_That_Should_Be_Untapped.add(The_Enchantment);
 			}
 		}
-		for (a_land The_Land : this.Part_Of_The_Battlefield.provides_its_list_of_lands()) {
+		for (a_land The_Land : this.Part_Of_The_Battlefield.list_of_lands()) {
 			if (The_Land.is_tapped()) {
 				this.List_Of_Permanents_That_Should_Be_Untapped.add(The_Land);
 			}
 		}
-		for (a_planeswalker The_Planeswalker : this.Part_Of_The_Battlefield.planeswalkers()) {
+		for (a_planeswalker The_Planeswalker : this.Part_Of_The_Battlefield.list_of_planeswalkers()) {
 			if (The_Planeswalker.is_tapped()) {
 				this.List_Of_Permanents_That_Should_Be_Untapped.add(The_Planeswalker);
 			}
@@ -824,7 +824,7 @@ public class a_player {
 	
 	
 	public void determines_whether_her_permanents_nonmana_activated_abilities_are_activatable() throws Exception {
-		for (a_permanent The_Permanent : this.Part_Of_The_Battlefield.provides_its_list_of_permanents()) {
+		for (a_permanent The_Permanent : this.Part_Of_The_Battlefield.list_of_permanents()) {
 			for (a_nonmana_activated_ability The_Nonmana_Activated_Ability : The_Permanent.provides_its_list_of_nonmana_activated_abilities()) {
 				if (The_Nonmana_Activated_Ability.requires_tapping()) {
 					if (The_Permanent.is_tapped()) {
@@ -892,7 +892,7 @@ public class a_player {
     
     private ArrayList<a_nonmana_activated_ability> generates_a_list_of_activatable_nonmana_activated_abilities() {
     	ArrayList<a_nonmana_activated_ability> The_List_Of_Activatable_Nonmana_Activated_Abilities = new ArrayList<a_nonmana_activated_ability>();
-    	for (a_permanent The_Permanent : this.Part_Of_The_Battlefield.provides_its_list_of_permanents()) {
+    	for (a_permanent The_Permanent : this.Part_Of_The_Battlefield.list_of_permanents()) {
     		for (a_nonmana_activated_ability The_Nonmana_Activated_Ability : The_Permanent.provides_its_list_of_nonmana_activated_abilities()) {
     			if (The_Nonmana_Activated_Ability.is_activatable()) {
     				The_List_Of_Activatable_Nonmana_Activated_Abilities.add(The_Nonmana_Activated_Ability);
@@ -928,7 +928,7 @@ public class a_player {
 	public boolean indicates_whether_a_card_is_playable_according_to_the_text_of(a_card The_Card) {
 		if (The_Card.type().equals("Instant")) {
 			ArrayList<String> The_Text = The_Card.text();
-			ArrayList<a_creature> The_List_Of_Creatures = this.Part_Of_The_Battlefield.creatures();
+			ArrayList<a_creature> The_List_Of_Creatures = this.Part_Of_The_Battlefield.list_of_creatures();
 			
 			for (String The_Line : The_Text) {
 				if (The_Line.contains("creature you control") && The_List_Of_Creatures.isEmpty()) {
@@ -984,10 +984,10 @@ public class a_player {
 				throw new Exception("The MTG Game Simulator does not know how to play the land with name " + The_Name_Of_The_Land_Card);
 			}
 			this.Hand.removes(The_Land_Card_To_Play);
-			this.Part_Of_The_Battlefield.receives_land(The_Land);
+			this.Part_Of_The_Battlefield.receives(The_Land);
 			this.Has_Played_A_Land_This_Turn = true;
 			System.out.println("After playing a land card, the hand of " + this.Name + " has " + this.Hand.number_of_cards() + " cards and contains the following. " + this.Hand);
-			System.out.println("After playing a land card, the part of the battlefield of " + this.Name + " has " + this.Part_Of_The_Battlefield.provides_its_number_of_permanents() + " cards and contains the following. " + this.Part_Of_The_Battlefield);
+			System.out.println("After playing a land card, the part of the battlefield of " + this.Name + " has " + this.Part_Of_The_Battlefield.number_of_permanents() + " cards and contains the following. " + this.Part_Of_The_Battlefield);
 		}
 	}
 	
