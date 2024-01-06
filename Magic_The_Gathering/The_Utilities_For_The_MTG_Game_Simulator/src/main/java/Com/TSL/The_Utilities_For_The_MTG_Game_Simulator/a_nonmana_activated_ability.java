@@ -14,16 +14,16 @@ public class a_nonmana_activated_ability extends an_activated_ability {
 		this.permanent().taps();
 	}
 	
+	public ArrayList<ArrayList<a_mana_ability>> list_of_combinations_of_available_mana_abilities_sufficient_to_play_this() {
+		return this.List_Of_Combinations_Of_Available_Mana_Abilities_Sufficient_To_Play_This;
+	}
+	
 	public a_mana_cost mana_cost() {
 		if (this.cost().equals("T")) {
 			return new a_mana_cost(0, 0, 0, 0, 0, 0);
 		} else {
 			return new a_mana_cost(0, 0, 0, 0, 0, 0);
 		}
-	}
-	
-	public ArrayList<ArrayList<a_mana_ability>> list_of_combinations_of_available_mana_abilities_sufficient_to_play_this() {
-		return this.List_Of_Combinations_Of_Available_Mana_Abilities_Sufficient_To_Play_This;
 	}
 	
 	public void receives(ArrayList<ArrayList<a_mana_ability>> The_List_Of_Combinations_Of_Available_Mana_Abilities_Sufficient_To_Play_This_To_Use) {
