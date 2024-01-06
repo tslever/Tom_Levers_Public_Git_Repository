@@ -39,6 +39,6 @@ public class an_activated_ability extends an_ability {
 	
 	@Override
 	public String toString() {
-		return this.permanent().provides_its_name() + ": " + this.Cost + ": " + this.effect();
+		return this.permanent().name() + ": " + this.Cost + ": " + this.effect();
 	}
 }

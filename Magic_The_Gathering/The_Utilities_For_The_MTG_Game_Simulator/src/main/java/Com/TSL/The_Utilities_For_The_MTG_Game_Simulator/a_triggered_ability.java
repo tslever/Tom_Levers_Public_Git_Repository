@@ -15,6 +15,6 @@ public class a_triggered_ability extends an_ability {
 	
 	@Override
 	public String toString() {
-		return this.permanent().player() + ": " + this.permanent().provides_its_name() + ": When " + this.Event + ", " + this.effect();
+		return this.permanent().player() + ": " + this.permanent() + ": When " + this.Event + ", " + this.effect();
 	}
 }

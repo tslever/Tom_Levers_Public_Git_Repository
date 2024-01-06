@@ -663,7 +663,7 @@ public class a_player {
 								}
 							}
 							The_Creature.sets_its_list_of_triggered_abilities_to(The_List_Of_Triggered_Abilities);
-							String The_Name_Of_The_Creature = The_Creature.provides_its_name();
+							String The_Name_Of_The_Creature = The_Creature.name();
 						    The_Permanent_Spell.player().Part_Of_The_Battlefield.receives(The_Creature);
 						    System.out.println(The_Permanent_Spell.player() + "'s part of the battlefield contains the following permanents. " + The_Permanent_Spell.player().Part_Of_The_Battlefield);
 						    for (a_creature Another_Creature : this.Part_Of_The_Battlefield.list_of_creatures()) {
@@ -710,7 +710,7 @@ public class a_player {
 					} else {
 						if (The_Triggered_Ability.effect().contains("put a +1/+1 counter on each other creature you control named Charmed Stray.")) {
 							for (a_creature The_Creature : this.Part_Of_The_Battlefield.list_of_creatures()) {
-								if (!The_Creature.equals(The_Triggered_Ability.permanent()) && The_Creature.provides_its_name().equals("Charmed Stray")) {
+								if (!The_Creature.equals(The_Triggered_Ability.permanent()) && The_Creature.name().equals("Charmed Stray")) {
 									The_Creature.receives_a_plus_one_plus_one_counter();
 								}
 							}

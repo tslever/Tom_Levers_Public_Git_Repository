@@ -22,7 +22,7 @@ public abstract class a_permanent {
 		return this.Tapped_Status;
 	}
 	
-	public String provides_its_name() {
+	public String name() {
 		return this.Name;
 	}
 	
