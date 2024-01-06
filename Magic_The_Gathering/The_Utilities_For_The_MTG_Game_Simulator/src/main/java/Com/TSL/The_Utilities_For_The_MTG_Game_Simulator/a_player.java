@@ -63,19 +63,19 @@ public class a_player {
 		} else if (The_Object instanceof a_nonmana_activated_ability) {
 			The_Nonmana_Activated_Ability = (a_nonmana_activated_ability) The_Object;
 		} else {
-			throw new Exception("assigns_a_list_of_sufficient_combinations_of_available_mana_to takes a nonland card or a nonmana activated ability.");
+			throw new Exception("Mana is acquired only for a nonland card or a nonmana activated ability.");
 		}
 		a_mana_pool The_Mana_Pool = new a_mana_pool(0, 0, 0, 0, 0, 0);
-		ArrayList<ArrayList<a_mana_ability>> The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities;
+		ArrayList<ArrayList<a_mana_ability>> The_List_Of_Combinations_Of_Available_Mana_Abilities_Sufficient_To_Play_The_Object;
 		if (The_Nonland_Card != null) {
-			The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities = The_Nonland_Card.list_of_combinations_of_available_mana_abilities_sufficient_to_play_this();
+			The_List_Of_Combinations_Of_Available_Mana_Abilities_Sufficient_To_Play_The_Object = The_Nonland_Card.list_of_combinations_of_available_mana_abilities_sufficient_to_play_this();
 		} else if (The_Nonmana_Activated_Ability != null) {
-			The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities = The_Nonmana_Activated_Ability.list_of_combinations_of_available_mana_abilities_sufficient_to_play_this();			
+			The_List_Of_Combinations_Of_Available_Mana_Abilities_Sufficient_To_Play_The_Object = The_Nonmana_Activated_Ability.list_of_combinations_of_available_mana_abilities_sufficient_to_play_this();			
 		} else {
 			throw new Exception("A nonland card and a nonmana activated ability were null.");
 		}
-		ArrayList<a_mana_ability> The_Sufficient_Combination_Of_Available_Mana_Abilities = this.chooses_a_sufficient_combination_of_available_mana_abilities_from(The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities);
-		for (a_mana_ability The_Available_Mana_Ability : The_Sufficient_Combination_Of_Available_Mana_Abilities) {
+		ArrayList<a_mana_ability> The_Combination_Of_Available_Mana_Abilities_Sufficient_To_Play_The_Object = this.chooses_a_combination_of_available_mana_abilities_sufficient_to_play_an_object_from(The_List_Of_Combinations_Of_Available_Mana_Abilities_Sufficient_To_Play_The_Object);
+		for (a_mana_ability The_Available_Mana_Ability : The_Combination_Of_Available_Mana_Abilities_Sufficient_To_Play_The_Object) {
 			The_Mana_Pool.increases_by(The_Available_Mana_Ability.activates_and_contributes_a_mana_pool());
 		}
 		return The_Mana_Pool;
@@ -155,7 +155,7 @@ public class a_player {
 	}
 	
 	
-	public ArrayList<a_mana_ability> chooses_a_sufficient_combination_of_available_mana_abilities_from(ArrayList<ArrayList<a_mana_ability>> The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities) {
+	public ArrayList<a_mana_ability> chooses_a_combination_of_available_mana_abilities_sufficient_to_play_an_object_from(ArrayList<ArrayList<a_mana_ability>> The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities) {
 		int The_Index_Of_The_Sufficient_Combination = this.Random_Data_Generator.nextInt(0, The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities.size() - 1);
 		ArrayList<a_mana_ability> The_Sufficient_Combination = The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities.get(The_Index_Of_The_Sufficient_Combination);
 		return The_Sufficient_Combination;
