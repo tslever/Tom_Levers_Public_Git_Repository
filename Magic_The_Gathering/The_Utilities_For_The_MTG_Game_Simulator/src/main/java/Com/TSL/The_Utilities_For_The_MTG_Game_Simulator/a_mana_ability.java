@@ -8,13 +8,13 @@ public class a_mana_ability extends an_activated_ability {
 	
 	public a_mana_pool activates_and_contributes_a_mana_pool() {
 		if (this.effect().equals("Add [G].")) {
-			if (this.provides_its_cost().equals("T")) {
-				this.provides_its_permanent().taps();
+			if (this.cost().equals("T")) {
+				this.permanent().taps();
 			}
 			return new a_mana_pool(0, 0, 0, 1, 0, 0);
 		} else if (this.effect().equals("Add [W].")) {
-			if (this.provides_its_cost().equals("T")) {
-				this.provides_its_permanent().taps();
+			if (this.cost().equals("T")) {
+				this.permanent().taps();
 			}
 			return new a_mana_pool(0, 0, 0, 0, 0, 1);
 		} else {

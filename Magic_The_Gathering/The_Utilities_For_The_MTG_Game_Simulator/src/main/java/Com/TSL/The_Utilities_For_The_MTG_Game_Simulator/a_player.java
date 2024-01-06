@@ -77,7 +77,7 @@ public class a_player {
 		if (The_Nonland_Card != null) {
 			The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities = The_Nonland_Card.list_of_combinations_of_available_mana_abilities_sufficient_to_play_this();
 		} else if (The_Nonmana_Activated_Ability != null) {
-			The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities = The_Nonmana_Activated_Ability.provides_its_list_of_sufficient_combinations_of_available_mana_abilities();			
+			The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities = The_Nonmana_Activated_Ability.list_of_combinations_of_available_mana_abilities_sufficient_to_play_this();			
 		} else {
 			throw new Exception("A nonland card and a nonmana activated ability were null.");
 		}
@@ -115,7 +115,7 @@ public class a_player {
 			if (The_Nonland_Card != null) {
 				The_Mana_Cost = The_Nonland_Card.mana_cost();
 			} else if (The_Nonmana_Activated_Ability != null) {
-				The_Mana_Cost = The_Nonmana_Activated_Ability.provides_its_mana_cost();
+				The_Mana_Cost = The_Nonmana_Activated_Ability.mana_cost();
 			} else {
 				throw new Exception("A nonland card and a nonmana activated ability were null.");
 			}
@@ -710,7 +710,7 @@ public class a_player {
 					} else {
 						if (The_Triggered_Ability.effect().contains("put a +1/+1 counter on each other creature you control named Charmed Stray.")) {
 							for (a_creature The_Creature : this.Part_Of_The_Battlefield.creatures()) {
-								if (!The_Creature.equals(The_Triggered_Ability.provides_its_permanent()) && The_Creature.provides_its_name().equals("Charmed Stray")) {
+								if (!The_Creature.equals(The_Triggered_Ability.permanent()) && The_Creature.provides_its_name().equals("Charmed Stray")) {
 									The_Creature.receives_a_plus_one_plus_one_counter();
 								}
 							}
@@ -830,14 +830,14 @@ public class a_player {
 					if (The_Permanent.is_tapped()) {
 						The_Nonmana_Activated_Ability.becomes_nonactivatable();
 					} else {
-						if (The_Nonmana_Activated_Ability.provides_its_list_of_sufficient_combinations_of_available_mana_abilities().size() > 0) {
+						if (The_Nonmana_Activated_Ability.list_of_combinations_of_available_mana_abilities_sufficient_to_play_this().size() > 0) {
 							The_Nonmana_Activated_Ability.becomes_activatable();
 						} else {
 							The_Nonmana_Activated_Ability.becomes_nonactivatable();
 						}
 					}
 				} else {
-					if (The_Nonmana_Activated_Ability.provides_its_list_of_sufficient_combinations_of_available_mana_abilities().size() > 0) {
+					if (The_Nonmana_Activated_Ability.list_of_combinations_of_available_mana_abilities_sufficient_to_play_this().size() > 0) {
 						The_Nonmana_Activated_Ability.becomes_activatable();
 					} else {
 						The_Nonmana_Activated_Ability.becomes_nonactivatable();

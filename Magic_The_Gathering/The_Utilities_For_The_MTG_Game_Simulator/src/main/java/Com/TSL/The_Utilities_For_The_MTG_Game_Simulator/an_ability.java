@@ -14,7 +14,7 @@ public class an_ability {
 		return this.Effect;
 	}
 	
-	public a_permanent provides_its_permanent() {
+	public a_permanent permanent() {
 		return this.Permanent;
 	}
 	
