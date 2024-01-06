@@ -1,6 +1,5 @@
 package Com.TSL.The_Utilities_For_The_MTG_Game_Simulator;
 
-
 import java.util.ArrayList;
 
 /**
@@ -17,12 +16,7 @@ public class a_stack {
 	}
 	
 	public boolean contains_objects() {
-		if (this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.size() > 0) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		return !this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.isEmpty();
 	}
 	
 	public Object top_object() {
@@ -47,10 +41,9 @@ public class a_stack {
 		for (int i = 0; i < this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.size() - 1; i++) {
 			The_String_Builder.append(this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.get(i) + "; ");
 		}
-		if (this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.size() > 0) {
+		if (!this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.isEmpty()) {
 			The_String_Builder.append(this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.get(this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.size() - 1));
 		}
 		return The_String_Builder.toString();
 	}
-	
 }
