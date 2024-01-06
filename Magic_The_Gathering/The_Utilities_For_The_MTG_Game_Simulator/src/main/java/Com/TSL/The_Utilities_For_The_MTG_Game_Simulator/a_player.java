@@ -1,14 +1,11 @@
 package Com.TSL.The_Utilities_For_The_MTG_Game_Simulator;
 
-
 import java.util.ArrayList;
 import java.util.Collections;
 
 import org.apache.commons.math3.random.RandomDataGenerator;
 
-
 public class a_player {
-	
 	
 	/** Rule 103.4: Each player draws a number of cards equal to their starting hand size, which is normally seven. */
 	private static int STARTING_HAND_SIZE = 7;
@@ -23,8 +20,8 @@ public class a_player {
 	private int Index_Of_The_Present_Turn;
 	private int Life;
 	private ArrayList<a_creature> List_of_Attackers;
-	private ArrayList<a_creature> List_Of_Blockers;
 	private ArrayList<a_battle> List_Of_Battles;
+	private ArrayList<a_creature> List_Of_Blockers;
 	private ArrayList<a_permanent> List_Of_Permanents_That_Should_Be_Untapped;
 	private a_mana_pool Mana_Pool;
 	private String Name;
@@ -34,7 +31,6 @@ public class a_player {
 	private RandomDataGenerator Random_Data_Generator;
 	private a_stack Stack;
 	private boolean Was_Starting_Player;
-	
 	
 	/**
 	 * a_player
@@ -47,8 +43,6 @@ public class a_player {
 		this.Exile = new an_exile();
 		this.Graveyard = new a_graveyard();
 		this.Hand = new a_hand();
-		this.Has_Priority = false;
-		this.Index_Of_The_Present_Turn = 0;
 		this.Life = 20;
 		this.List_of_Attackers = new ArrayList<a_creature>();
 		this.List_Of_Battles = new ArrayList<a_battle>();
@@ -59,7 +53,6 @@ public class a_player {
 		this.Part_Of_The_Battlefield = new a_part_of_the_battlefield();
 		this.Random_Data_Generator = new RandomDataGenerator();
 		this.Stack = The_Stack_To_Use;
-		this.Was_Starting_Player = false;
 	}
 
 	public a_mana_pool acquires_mana_for(Object The_Object) throws Exception {
