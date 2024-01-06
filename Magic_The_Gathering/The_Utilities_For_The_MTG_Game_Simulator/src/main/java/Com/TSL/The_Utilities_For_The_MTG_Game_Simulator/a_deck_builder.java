@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class a_deck_builder {
 
-	public a_deck provides_Keep_The_Peace() {
+	public a_deck builds_Keep_The_Peace() {
 		
     	ArrayList<a_card> The_List_Of_Cards_For_Keep_The_Peace = new ArrayList<a_card>();
     	
@@ -329,7 +329,7 @@ public class a_deck_builder {
 	}
 	
 	
-	public a_deck provides_Large_And_In_Charge() {
+	public a_deck builds_Large_And_In_Charge() {
 		
     	ArrayList<a_card> The_List_Of_Cards_For_Large_And_In_Charge = new ArrayList<a_card>();
     	
