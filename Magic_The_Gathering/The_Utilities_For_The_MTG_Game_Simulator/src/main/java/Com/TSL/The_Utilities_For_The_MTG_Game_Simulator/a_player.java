@@ -89,12 +89,12 @@ public class a_player {
 		} else if (The_Object instanceof a_nonmana_activated_ability) {
 			The_Nonmana_Activated_Ability = (a_nonmana_activated_ability) The_Object;
 		} else {
-			throw new Exception("assigns_a_list_of_sufficient_combinations_of_available_mana_to takes a nonland card or a nonmana activated ability.");
+			throw new Exception("A list of sufficient combinations of available mana abilities is assigned only to a nonland card or nonmana activated ability.");
 		}
 		ArrayList<a_permanent> The_List_Of_Permanents = this.Part_Of_The_Battlefield.list_of_permanents();
 		ArrayList<a_mana_ability> The_List_Of_Available_Mana_Abilities_For_The_Player = new ArrayList<>();
 		for (a_permanent The_Permanent : The_List_Of_Permanents) {
-			ArrayList<a_mana_ability> The_List_Of_Available_Mana_Abilities_For_The_Permanent = The_Permanent.provides_a_list_of_available_mana_abilities();
+			ArrayList<a_mana_ability> The_List_Of_Available_Mana_Abilities_For_The_Permanent = The_Permanent.list_of_available_mana_abilities();
 			The_List_Of_Available_Mana_Abilities_For_The_Player.addAll(The_List_Of_Available_Mana_Abilities_For_The_Permanent);
 		}
 		ArrayList<ArrayList<a_mana_ability>> The_List_Of_Combinations_Of_Available_Mana_Abilities = this.generates_a_list_of_combinations_of_elements_in(The_List_Of_Available_Mana_Abilities_For_The_Player);
@@ -117,7 +117,7 @@ public class a_player {
 					The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities.add(The_Combination_Of_Available_Mana_Abilities);
 				}
 			} else {
-				throw new Exception("A mana cost was null");
+				throw new Exception("A mana cost was null.");
 			}
 		}
 		if (The_Nonland_Card != null) {
@@ -130,14 +130,14 @@ public class a_player {
 	}
 	
 	public void assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_nonland_hand_cards_in(ArrayList<a_nonland_card> The_List_Of_Nonland_Hand_Cards) throws Exception {
-		for (a_nonland_card The_Nonland_Card : The_List_Of_Nonland_Hand_Cards) {
-			this.assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_nonland_card_or_nonmana_activated_ability(The_Nonland_Card);
+		for (a_nonland_card The_Nonland_Hand_Card : The_List_Of_Nonland_Hand_Cards) {
+			this.assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_nonland_card_or_nonmana_activated_ability(The_Nonland_Hand_Card);
 		}
 	}
 	
 	public void assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_her_permanents_nonmana_activated_abilities() throws Exception {
 		for (a_permanent The_Permanent : this.Part_Of_The_Battlefield.list_of_permanents()) {
-			for (a_nonmana_activated_ability The_Nonmana_Activated_Ability : The_Permanent.provides_its_list_of_nonmana_activated_abilities()) {
+			for (a_nonmana_activated_ability The_Nonmana_Activated_Ability : The_Permanent.list_of_nonmana_activated_abilities()) {
 				this.assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_nonland_card_or_nonmana_activated_ability(The_Nonmana_Activated_Ability);
 			}
 		}
@@ -155,36 +155,28 @@ public class a_player {
 	}
 	
 	
-	public ArrayList<a_mana_ability> chooses_a_combination_of_available_mana_abilities_sufficient_to_play_an_object_from(ArrayList<ArrayList<a_mana_ability>> The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities) {
-		int The_Index_Of_The_Sufficient_Combination = this.Random_Data_Generator.nextInt(0, The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities.size() - 1);
-		ArrayList<a_mana_ability> The_Sufficient_Combination = The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities.get(The_Index_Of_The_Sufficient_Combination);
+	public ArrayList<a_mana_ability> chooses_a_combination_of_available_mana_abilities_sufficient_to_play_an_object_from(ArrayList<ArrayList<a_mana_ability>> The_List_Of_Combinations_Of_Available_Mana_Abilities_Sufficient_To_Play_An_Object) {
+		int The_Index_Of_The_Sufficient_Combination = this.Random_Data_Generator.nextInt(0, The_List_Of_Combinations_Of_Available_Mana_Abilities_Sufficient_To_Play_An_Object.size() - 1);
+		ArrayList<a_mana_ability> The_Sufficient_Combination = The_List_Of_Combinations_Of_Available_Mana_Abilities_Sufficient_To_Play_An_Object.get(The_Index_Of_The_Sufficient_Combination);
 		return The_Sufficient_Combination;
 	}
 	
-	
 	public void completes_her_beginning_phase() {
-		
 		System.out.println(this.Name + " is completing their beginning phase.");
-		
-		// Rule 500.5: When a phase or step begins, any effects scheduled to last "until" that phase or step expire.
-		// Rule 500.6: When a phase or step begins, any abilities that trigger "at the beginning of" that phase or step trigger. They are put on the stack the next time a player would receive priority. (See rule 117, "Timing and Priority.")
-		
-		// Rule 501.1: The beginning phase consists of three steps, in this order: untap, upkeep, and draw.
+		/* Rule 500.5: When a phase or step begins, any effects scheduled to last "until" that phase or step expire.
+		 * Rule 500.6: When a phase or step begins, any abilities that trigger "at the beginning of" that phase or step trigger. They are put on the stack the next time a player would receive priority. (See rule 117, "Timing and Priority.")
+		 * Rule 501.1: The beginning phase consists of three steps, in this order: untap, upkeep, and draw. */
 		this.completes_her_untap_step();
-		
 		this.completes_her_upkeep_step();
-		
-		// Rule 103.7a: In a two-player game, the player who plays first skips the draw step (see rule 504, "Draw Step") of their first turn.
-		if ((this.Was_Starting_Player) && (this.Index_Of_The_Present_Turn == 0)) {
-			System.out.println("Because " + this.Name + " is the starting player and this is the first turn, the draw step is skipped.");
-		}
-		else {
+		/* Rule 103.7a: In a two-player game, the player who plays first skips the draw step (see rule 504, "Draw Step") of their first turn. */
+		if (this.Was_Starting_Player && this.Index_Of_The_Present_Turn == 0) {
+			System.out.println("Because " + this + " is the starting player and this is the first turn, the draw step is skipped.");
+		} else {
 			this.completes_her_draw_step();
 		}
-
-		// Rule 500.2: A phase or step in which players receive priority ends when the stack is empty and all players pass in succession.
-		// Rule 500.4: When a step or phase ends, any unused mana left in a player's mana pool empties. This turn-based action doesn't use the stack.
-		// Rule 500.5: When a phase or step ends, any effects scheduled to last "until end of" that phase or step expire.
+		/* Rule 500.2: A phase or step in which players receive priority ends when the stack is empty and all players pass in succession.
+		 * Rule 500.4: When a step or phase ends, any unused mana left in a player's mana pool empties. This turn-based action doesn't use the stack.
+		 * Rule 500.5: When a phase or step ends, any effects scheduled to last "until end of" that phase or step expire. */
 	}
 	
 	/**
@@ -192,8 +184,8 @@ public class a_player {
 	 * 
 	 * Rule 507.2: Second, the active player gets priority. (See [R]ule 117, "Timing and Priority.")
 	 */
-	public void completes_her_beginning_of_combat_step() {
-		this.Has_Priority = true;
+	public void completes_her_beginning_of_combat_step() throws Exception {
+		this.receives_priority_and_acts("This Player's Beginning Of Combat Step", "after " + this + "'s Beginning Of Combat Step begins.");
 	}
 	
 	/**
@@ -247,12 +239,8 @@ public class a_player {
 				}
 			}
 		}
-		System.out.println("After " + this + " declares attackers, " + this + " reacts.");
-		this.reacts();
-		this.Has_Priority = false;
-		System.out.println("After " + this + " reacts to " + this + " declaring attackers, " + this.Other_Player + " reacts.");
-		this.Other_Player.reacts();
-		this.Has_Priority = true;
+		this.receives_priority_and_acts("This Player's Declare Attackers Step", "after " + this + " declares attackers.");
+		this.Other_Player.receives_priority_and_acts("The Other Player's Declare Attackers Step", "after " + this + " reacts to " + this + " declaring attackers.");
 	}
 	
 	public void declares_blockers() throws Exception {
@@ -417,6 +405,7 @@ public class a_player {
 		// Rule 506.1: The combat phase has five steps, which proceed in order: beginning of combat, declare attackers, declare blockers, combat damage, and end of combat.
 		// The declare blockers and combat damage steps are skipped if no creatures are declared as attackers or put onto the battlefield attacking (see rule 508.8).
 		// There are two combat damage steps if any attacking or blocking creature has first strike (see 702.7) or double strike (see 702.4).
+		this.completes_her_beginning_of_combat_step();
 		ArrayList<a_creature> List_Of_Attackers = new ArrayList<>();
 		if (!List_Of_Attackers.isEmpty()) {
 			this.completes_her_declare_blockers_step();
@@ -476,14 +465,14 @@ public class a_player {
 		
 	}
 	
-	public void casts_a_spell_or_activates_a_nonmana_activated_ability(boolean Indicator_Of_Whether_Player_Is_Reacting) throws Exception {
+	public void casts_a_spell_or_activates_a_nonmana_activated_ability(String The_Step_To_Use, boolean Indicator_Of_Whether_This_Player_May_Only_Play_Instants_Nonland_Hand_Cards_With_Flash_And_Nonmana_Activated_Abilities) throws Exception {
 		// Rule 601.2: To cast a spell is to [use a card to create a spell], put [the spell] on the stack, and pay its mana costs, so that [the spell] will eventually resolve and have its effect. Casting a spell includes proposal of the spell (rules 601.2a-d) and determination and payment of costs (rules 601.2f-h). To cast a spell, a player follows the steps listed below, in order. A player must be legally allowed to cast the spell to begin this process (see rule 601.3). If a player is unable to comply with the requirements of a step listed below while performing that step, the casting of the spell is illegal; the game returns to the moment before the casting of that spell was proposed (see rule 723, "Handling Illegal Actions").
 		// Rule 601.2e: The game checks to see if the proposed spell can legally be cast. If the proposed spell is illegal, the game returns to the moment before the casting of that spell was proposed (see rule 723, "Handling Illegal Actions").
 		
 		System.out.println(this + " is considering casting a spell or activating a nonmana activated ability.");
 		ArrayList<a_nonland_card> The_List_Of_All_Nonland_Hand_Cards = this.Hand.list_of_nonland_cards();
 		ArrayList<a_nonland_card> The_List_Of_Nonland_Hand_Cards_Appropriate_For_The_Present_Step;
-		if (Indicator_Of_Whether_Player_Is_Reacting) {
+		if (Indicator_Of_Whether_This_Player_May_Only_Play_Instants_Nonland_Hand_Cards_With_Flash_And_Nonmana_Activated_Abilities) {
 			The_List_Of_Nonland_Hand_Cards_Appropriate_For_The_Present_Step = new ArrayList<>();
 			for (a_nonland_card The_Nonland_Hand_Card : The_List_Of_All_Nonland_Hand_Cards) {
 				if (The_Nonland_Hand_Card.type().equals("Instant") || The_Nonland_Hand_Card.text().contains("Flash")) {
@@ -531,8 +520,7 @@ public class a_player {
 				this.Has_Cast_A_Spell_Or_Activated_A_Nonmana_Activated_Ability = true;
 				System.out.println("The stack contains the following spells and nonmana activated abilities. " + this.Stack);
 				this.Has_Priority = false;
-				System.out.println("After " + this.Name + " cast spell, " + this.Other_Player.Name + " reacts.");
-				this.Other_Player.reacts();
+				this.Other_Player.receives_priority_and_acts(The_Step_To_Use, "after " + this + " casts a spell.");
 				this.Has_Priority = true;
 				System.out.println("After " + this.Name + " cast spell and " + this.Other_Player + " reacted, " + this + " continues a main phase.");
 			} else if (The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability instanceof a_nonmana_activated_ability) {
@@ -542,8 +530,7 @@ public class a_player {
 				this.Has_Cast_A_Spell_Or_Activated_A_Nonmana_Activated_Ability = true;
 				System.out.println("The stack contains the following spells and nonmana activated abilities. " + this.Stack);
 				this.Has_Priority = false;
-				System.out.println("After " + this.Name + " activated nonmana activated ability, " + this.Other_Player.Name + " reacts.");
-				this.Other_Player.reacts();
+				this.Other_Player.receives_priority_and_acts(The_Step_To_Use, "after " + this + " activated nonmana activated ability.");
 				this.Has_Priority = true;
 				System.out.println("After " + this.Name + " cast spell and " + this.Other_Player + "reacted, " + this + " continues a main phase");
 			}
@@ -576,7 +563,7 @@ public class a_player {
 		// Rule 505.5a: [A] main phase is the only phase in which a player can normally cast artifact, creature, enchantment, planeswalker, and sorcery spells. The active player may cast these spells.
 		
 		do {
-			this.casts_a_spell_or_activates_a_nonmana_activated_ability(false);
+			this.casts_a_spell_or_activates_a_nonmana_activated_ability("This Player's Main Phase", false);
 		} while (this.Has_Cast_A_Spell_Or_Activated_A_Nonmana_Activated_Ability);
 		
 		// Rule 608.1: Each time all players pass in succession, the spell or ability on top of the stack resolves.
@@ -675,10 +662,8 @@ public class a_player {
 							    	}
 							    }	
 						    }
-						    System.out.println("After triggered abilities are added to the stack, " + this + " reacts.");
-						    this.reacts();
-						    System.out.println("After triggered abilities are added to the stack and " + this + " reacts, " + this.Other_Player + " reacts.");
-						    this.Other_Player.reacts();
+						    this.receives_priority_and_acts("This Player's Main Phase", "after triggered abilities are added to the stack.");
+						    this.Other_Player.receives_priority_and_acts("This Player's Main Phase", "after triggered abilities are added to the stack and " + this + " reacts.");
 						}
 					}
 				}
@@ -714,8 +699,8 @@ public class a_player {
 			}
 			this.Stack.removes(The_Object);
 			// Rule 117.3b: The active player receives priority after a spell or [nonmana activated ]ability (other than a mana ability) resolves.
-			this.reacts();
-			this.Other_Player.reacts();
+			this.receives_priority_and_acts("This Player's Main Phase", "after a spell resolves.");
+			this.Other_Player.receives_priority_and_acts("This Player's Main Phase", "after a spell resolves and " + this + " receives priority and acts.");
 		}
 		
 		// Rule 405.5: ... If the stack is empty when all players pass, the current step or phase ends and the next begins.
@@ -818,7 +803,7 @@ public class a_player {
 	
 	public void determines_whether_her_permanents_nonmana_activated_abilities_are_activatable() throws Exception {
 		for (a_permanent The_Permanent : this.Part_Of_The_Battlefield.list_of_permanents()) {
-			for (a_nonmana_activated_ability The_Nonmana_Activated_Ability : The_Permanent.provides_its_list_of_nonmana_activated_abilities()) {
+			for (a_nonmana_activated_ability The_Nonmana_Activated_Ability : The_Permanent.list_of_nonmana_activated_abilities()) {
 				if (The_Nonmana_Activated_Ability.requires_tapping()) {
 					if (The_Permanent.is_tapped()) {
 						The_Nonmana_Activated_Ability.becomes_nonactivatable();
@@ -886,7 +871,7 @@ public class a_player {
     private ArrayList<a_nonmana_activated_ability> generates_a_list_of_activatable_nonmana_activated_abilities() {
     	ArrayList<a_nonmana_activated_ability> The_List_Of_Activatable_Nonmana_Activated_Abilities = new ArrayList<a_nonmana_activated_ability>();
     	for (a_permanent The_Permanent : this.Part_Of_The_Battlefield.list_of_permanents()) {
-    		for (a_nonmana_activated_ability The_Nonmana_Activated_Ability : The_Permanent.provides_its_list_of_nonmana_activated_abilities()) {
+    		for (a_nonmana_activated_ability The_Nonmana_Activated_Ability : The_Permanent.list_of_nonmana_activated_abilities()) {
     			if (The_Nonmana_Activated_Ability.is_activatable()) {
     				The_List_Of_Activatable_Nonmana_Activated_Abilities.add(The_Nonmana_Activated_Ability);
     			}
@@ -991,16 +976,16 @@ public class a_player {
 	
 	
 	/**
-	 * reacts
+	 * receives_priority_and_acts
 	 * 
 	 * When all players pass in succession, the top (last-added) spell or ability on the stack resolves...
 	 */
-	public void reacts() throws Exception {
-		System.out.println(this.Name + " is reacting.");
+	public void receives_priority_and_acts(String The_Step_To_Use, String The_Event_After_Which_She_Is_Receiving_Priority_And_Acting) throws Exception {
+		this.Step = The_Step_To_Use;
 		this.Has_Priority = true;
-		this.Step = "Other Player's Precombat Main Phase";
-		this.casts_a_spell_or_activates_a_nonmana_activated_ability(true);
-		System.out.println(this.Name + " is passing.");
+		System.out.println(this + " receives priority and acts " + The_Event_After_Which_She_Is_Receiving_Priority_And_Acting);
+		this.casts_a_spell_or_activates_a_nonmana_activated_ability(The_Step_To_Use, true);
+		System.out.println(this + " passes.");
 		this.Has_Priority = false;
 		return;
 	}

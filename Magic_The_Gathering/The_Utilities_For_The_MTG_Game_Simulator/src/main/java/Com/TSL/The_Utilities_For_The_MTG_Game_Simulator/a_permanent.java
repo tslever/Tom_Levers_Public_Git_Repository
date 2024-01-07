@@ -26,7 +26,7 @@ public abstract class a_permanent {
 		return this.Name;
 	}
 	
-	public ArrayList<a_mana_ability> provides_a_list_of_available_mana_abilities() {
+	public ArrayList<a_mana_ability> list_of_available_mana_abilities() {
 		ArrayList<a_mana_ability> The_List_Of_Available_Mana_Abilities = new ArrayList<>();
 		for (a_mana_ability The_Mana_Ability : this.List_Of_Mana_Abilities) {
 			if (!The_Mana_Ability.requires_tapping() || !this.Tapped_Status) {
@@ -36,7 +36,7 @@ public abstract class a_permanent {
 		return The_List_Of_Available_Mana_Abilities;
 	}
 	
-	public ArrayList<a_nonmana_activated_ability> provides_its_list_of_nonmana_activated_abilities() {
+	public ArrayList<a_nonmana_activated_ability> list_of_nonmana_activated_abilities() {
 		return this.List_Of_Nonmana_Activated_Abilities;
 	}
 	
