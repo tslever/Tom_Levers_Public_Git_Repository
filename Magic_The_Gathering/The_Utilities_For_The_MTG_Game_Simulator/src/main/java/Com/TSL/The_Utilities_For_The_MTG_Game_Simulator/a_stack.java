@@ -19,8 +19,8 @@ public class a_stack {
 		return !this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.isEmpty();
 	}
 	
-	public Object top_object() {
-		return this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.get(this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.size() - 1);
+	public boolean isEmpty() {
+		return this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.isEmpty();
 	}
 	
 	public void receives(Object The_Object) throws Exception {
@@ -33,6 +33,10 @@ public class a_stack {
 	
 	public void removes(Object The_Object_To_Remove) {
 		this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.remove(The_Object_To_Remove);
+	}
+	
+	public Object top_object() {
+		return this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.get(this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.size() - 1);
 	}
 	
 	@Override

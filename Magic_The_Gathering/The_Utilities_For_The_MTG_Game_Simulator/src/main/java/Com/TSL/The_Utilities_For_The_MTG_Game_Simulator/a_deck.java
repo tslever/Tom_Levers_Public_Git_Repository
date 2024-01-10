@@ -14,7 +14,7 @@ public class a_deck {
 		this.Name = The_Name_To_Use;
 	}
 		
-	public a_card provides_its_top_card() {
+	public a_card removes_and_provides_its_top_card() {
 		return this.List_Of_Cards.remove(this.List_Of_Cards.size() - 1);
 	}
 	

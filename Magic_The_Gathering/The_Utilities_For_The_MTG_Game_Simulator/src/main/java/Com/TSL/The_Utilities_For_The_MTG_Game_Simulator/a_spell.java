@@ -14,11 +14,11 @@ public class a_spell {
 	private a_player Player;
 	private String Type;
 	
-	public a_spell(String The_Name_To_Use, a_nonland_card The_Nonland_Card, a_player The_Player_To_Use, String The_Type_To_Use) {
-		this.Name = The_Name_To_Use;
-		this.Nonland_Card = The_Nonland_Card;
+	public a_spell(a_nonland_card The_Nonland_Card_To_Use, a_player The_Player_To_Use) {
+		this.Name = The_Nonland_Card_To_Use.name();
+		this.Nonland_Card = The_Nonland_Card_To_Use;
 		this.Player = The_Player_To_Use;
-		this.Type = The_Type_To_Use;
+		this.Type = The_Nonland_Card_To_Use.type();
 	}
 	
 	public boolean has_a_target() {
