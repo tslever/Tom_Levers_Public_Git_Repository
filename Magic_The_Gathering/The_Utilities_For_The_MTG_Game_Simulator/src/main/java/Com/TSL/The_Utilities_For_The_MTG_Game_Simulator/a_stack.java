@@ -30,6 +30,10 @@ public class a_stack {
 		return this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.isEmpty();
 	}
 	
+	public ArrayList<a_triggered_ability> list_of_triggered_abilities_to_be_added_to_this() {
+		return this.List_Of_Triggered_Abilities_To_Be_Added_To_This;
+	}
+	
 	public void receives(Object The_Object) throws Exception {
 		if ((The_Object instanceof a_spell) || (The_Object instanceof a_nonmana_activated_ability) || (The_Object instanceof a_triggered_ability)) {
 			this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.add(The_Object);

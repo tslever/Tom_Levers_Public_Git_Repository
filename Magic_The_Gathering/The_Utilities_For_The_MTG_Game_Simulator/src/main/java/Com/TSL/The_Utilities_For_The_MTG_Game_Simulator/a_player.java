@@ -583,20 +583,24 @@ public class a_player {
 		do {
 			do {
 				/* Rule 117.5: Each time a player would get priority, the game first performs all applicable state-based actions as a single event (see rule 704, "State-Based Actions"), then repeats this process until no state-based actions are performed.
-				 * Then triggered abilities are put on th stack (see rule 603, "Handling Triggered Abilities").
+				 * Then triggered abilities are put on the stack (see rule 603, "Handling Triggered Abilities").
 				 * These steps repeat in order until no further state-based actions are performed and no abilities trigger.
 				 * Then the player who would have received priority does so. */
 				do {
-					this.performs_all_applicable_state_based_actions_as_a_single_event();
-				} while (this.Has_Performed_A_State_Based_Action);
-				this.Stack.adds_all_triggered_abilities_in_list_of_triggered_abilities_to_be_added_to_this_to_this();
+					do {
+						this.performs_all_applicable_state_based_actions_as_a_single_event();
+					} while (this.Has_Performed_A_State_Based_Action);
+					this.Stack.adds_all_triggered_abilities_in_list_of_triggered_abilities_to_be_added_to_this_to_this();
+				} while (this.Has_Performed_A_State_Based_Action || !this.Stack.list_of_triggered_abilities_to_be_added_to_this().isEmpty());
 				do {
 					this.casts_a_spell_activates_an_activated_ability_or_takes_a_special_action("This Player's " + The_Step_To_Use, this + " begins " + this + "'s " + The_Step_To_Use);
 				} while (!this.Has_Passed);
 				do {
-					this.performs_all_applicable_state_based_actions_as_a_single_event();
-				} while (this.Has_Performed_A_State_Based_Action);
-				this.Stack.adds_all_triggered_abilities_in_list_of_triggered_abilities_to_be_added_to_this_to_this();
+					do {
+						this.performs_all_applicable_state_based_actions_as_a_single_event();
+					} while (this.Has_Performed_A_State_Based_Action);
+					this.Stack.adds_all_triggered_abilities_in_list_of_triggered_abilities_to_be_added_to_this_to_this();
+				} while (this.Has_Performed_A_State_Based_Action || !this.Stack.list_of_triggered_abilities_to_be_added_to_this().isEmpty());
 				do {
 					this.Other_Player.casts_a_spell_activates_an_activated_ability_or_takes_a_special_action("The Other Player's " + The_Step_To_Use, this + " begins " + this + "'s " + The_Step_To_Use + " and acts");
 				} while (!this.Other_Player.Has_Passed);
