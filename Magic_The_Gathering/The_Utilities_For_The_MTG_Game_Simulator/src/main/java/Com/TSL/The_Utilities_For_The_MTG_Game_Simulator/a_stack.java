@@ -9,6 +9,7 @@ import java.util.ArrayList;
  */
 public class a_stack {
 
+	private boolean Has_Resolved;
 	private ArrayList<Object> List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities;
 	private ArrayList<a_triggered_ability> List_Of_Triggered_Abilities_To_Be_Added_To_This;
 	
@@ -24,6 +25,10 @@ public class a_stack {
 	
 	public boolean contains_objects() {
 		return !this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.isEmpty();
+	}
+	
+	public boolean has_resolved() {
+		return this.Has_Resolved;
 	}
 	
 	public boolean isEmpty() {
@@ -47,6 +52,7 @@ public class a_stack {
 	}
 	
 	public void resolves_top_object() throws Exception {
+		this.Has_Resolved = false;
 		if (this.contains_objects()) {
 			Object The_Object = this.top_object();
 			System.out.println("The top stack spell or ability " + The_Object + " is resolving.");
@@ -87,7 +93,7 @@ public class a_stack {
 							    	}
 							    }	
 						    }
-						    for (a_creature Another_Creature : The_Permanent_Spell.player().part_of_the_battlefield().list_of_creatures()) {
+						    for (a_creature Another_Creature : The_Permanent_Spell.player().other_player().part_of_the_battlefield().list_of_creatures()) {
 							    for (a_triggered_ability The_Triggered_Ability : Another_Creature.list_of_triggered_abilities()) {
 							    	if (The_Triggered_Ability.event().equals(The_Name_Of_The_Creature + " enters the battlefield")) {
 							    		this.List_Of_Triggered_Abilities_To_Be_Added_To_This.add(The_Triggered_Ability);
@@ -101,29 +107,33 @@ public class a_stack {
 						} else if (The_Spell.type().equals("Sorcery")) {
 							// TODO
 						}
-						else if (The_Object instanceof an_ability) {
-							if (The_Object instanceof a_nonmana_activated_ability) {
-								// TODO
-							} else if (The_Object instanceof a_triggered_ability) {
-								a_triggered_ability The_Triggered_Ability = (a_triggered_ability) The_Object;
-								if (The_Triggered_Ability.effect().contains("if")) {
-									// TODO
-								} else {
-									if (The_Triggered_Ability.effect().contains("put a +1/+1 counter on each other creature you control named Charmed Stray.")) {
-										for (a_creature The_Creature : The_Triggered_Ability.permanent().player().part_of_the_battlefield().list_of_creatures()) {
-											if (!The_Creature.equals(The_Triggered_Ability.permanent()) && The_Creature.name().equals("Charmed Stray")) {
-												The_Creature.receives_a_plus_one_plus_one_counter();
-											}
-										}
-									}
-									System.out.println("Resolved " + The_Triggered_Ability.effect());
+					}
+				}
+			}
+			else if (The_Object instanceof an_ability) {
+				if (The_Object instanceof a_nonmana_activated_ability) {
+					// TODO
+				} else if (The_Object instanceof a_triggered_ability) {
+					a_triggered_ability The_Triggered_Ability = (a_triggered_ability) The_Object;
+					if (The_Triggered_Ability.effect().contains("if")) {
+						// TODO
+					} else {
+						if (The_Triggered_Ability.effect().contains("put a +1/+1 counter on each other creature you control named Charmed Stray.")) {
+							boolean The_Triggered_Ability_Had_An_Effect = false;
+							for (a_creature The_Creature : The_Triggered_Ability.permanent().player().part_of_the_battlefield().list_of_creatures()) {
+								if (!The_Creature.equals(The_Triggered_Ability.permanent()) && The_Creature.name().equals("Charmed Stray")) {
+									The_Creature.receives_a_plus_one_plus_one_counter();
+									The_Triggered_Ability_Had_An_Effect = true;
 								}
 							}
+							String verb = (The_Triggered_Ability_Had_An_Effect) ? "had" : "did not have";
+							System.out.println("The following triggered ability " + verb + " an effect. " + The_Triggered_Ability);
 						}
 					}
 				}
 			}
 			this.removes(The_Object);
+			this.Has_Resolved = true;
 		}
 	}
 	

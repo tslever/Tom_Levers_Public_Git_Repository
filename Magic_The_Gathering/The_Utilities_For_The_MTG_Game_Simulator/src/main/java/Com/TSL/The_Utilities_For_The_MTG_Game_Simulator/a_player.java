@@ -599,7 +599,7 @@ public class a_player {
 				} while (!this.Other_Player.Has_Passed);
 			} while (this.Other_Player.Has_Taken_An_Action);
 			this.Stack.resolves_top_object();
-		} while (this.Stack.contains_objects());
+		} while (this.Stack.has_resolved());
 	}
 	
 	/* Rule 503.1: The upkeep step has no turn-based actions.
@@ -894,6 +894,10 @@ public class a_player {
 		for (a_permanent The_Permanent : The_List_Of_Permanents_That_Should_Be_Untapped) {
 			The_Permanent.untaps();
 		}
+	}
+	
+	public a_player other_player() {
+		return this.Other_Player;
 	}
 	
 	
