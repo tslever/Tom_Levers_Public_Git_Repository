@@ -187,17 +187,7 @@ public class a_player {
 	 * Rule 507.2: Second, the active player gets priority. (See [R]ule 117, "Timing and Priority.")
 	 */
 	public void completes_her_beginning_of_combat_step() throws Exception {
-		do {
-			do {
-				do {
-					this.casts_a_spell_activates_an_activated_ability_or_takes_a_special_action("This Player's Upkeep Step", this + " begins " + this + "'s Beginning Of Combat Step");
-				} while (!this.Has_Passed);
-				do {
-					this.Other_Player.casts_a_spell_activates_an_activated_ability_or_takes_a_special_action("The Other Player's Beginning Of Combat Step", this + " begins " + this + "'s Beginning Of Combat Step and acts");
-				} while (!this.Other_Player.Has_Passed);
-			} while (this.Other_Player.Has_Taken_An_Action);
-			this.Stack.resolves_top_object();
-		} while (this.Stack.contains_objects());
+		this.acts("Beginning Of Combat Step");
 	}
 	
 	/**
@@ -250,8 +240,7 @@ public class a_player {
 				}
 			}
 		}
-		this.casts_a_spell_activates_an_activated_ability_or_takes_a_special_action("This Player's Declare Attackers Step", "after " + this + " declares attackers.");
-		this.Other_Player.casts_a_spell_activates_an_activated_ability_or_takes_a_special_action("The Other Player's Declare Attackers Step", "after " + this + " reacts to " + this + " declaring attackers.");
+		this.acts("Declare Attackers Step");
 	}
 	
 	public void declares_blockers() throws Exception {
