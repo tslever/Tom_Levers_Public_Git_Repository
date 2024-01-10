@@ -18,6 +18,7 @@ public class a_player {
 	private boolean Has_Passed;
 	private boolean Has_Played_A_Land;
 	private boolean Has_Played_A_Land_This_Turn;
+	private boolean Has_Performed_A_State_Based_Action;
 	private boolean Has_Priority;
 	private boolean Has_Taken_An_Action;
 	private int Index_Of_The_Present_Turn;
@@ -440,17 +441,7 @@ public class a_player {
 		this.draws();
 		
 		// Rule 504.2: Second, the active player gets priority. (See rule 117, "Timing and Priority.")
-		do {
-			do {
-				do {
-					this.casts_a_spell_activates_an_activated_ability_or_takes_a_special_action("This Player's Draw Step", this + " begins " + this + "'s Draw Step");
-				} while (!this.Has_Passed);
-				do {
-					this.Other_Player.casts_a_spell_activates_an_activated_ability_or_takes_a_special_action("The Other Player's Draw Step", this + " begins " + this + "'s Draw Step and acts");
-				} while (!this.Other_Player.Has_Passed);
-			} while (this.Other_Player.Has_Taken_An_Action);
-			this.Stack.resolves_top_object();
-		} while (this.Stack.contains_objects());
+		this.acts("Draw Step");
 		
 		// Rule 500.2: A phase or step in which players receive priority ends when the stack is empty and all players pass in succession.
 		// Rule 500.4: When a step or phase ends, any unused mana left in a player's mana pool empties. This turn-based action doesn't use the stack.
@@ -555,17 +546,7 @@ public class a_player {
 		// Rule 505.4: Second, if the active player controls one or more Saga enchantments and it's the active player's precombat main phase, the active player puts a lore counter on each Saga they control. (See rule 714, "Saga Cards.") This turn-based action doesn't use the stack.
 
 		// Rule 505.5: Third, the active player gets priority. (See rule 117, "Timing and Priority.")
-		do {
-			do {
-				do {
-					this.casts_a_spell_activates_an_activated_ability_or_takes_a_special_action("This Player's Main Phase", this + " begins " + this + "'s Main Phase");
-				} while (!this.Has_Passed);
-				do {
-					this.Other_Player.casts_a_spell_activates_an_activated_ability_or_takes_a_special_action("The Other Player's Main Phase", this + " begins " + this + "'s Main Phase and acts");
-				} while (!this.Other_Player.Has_Passed);
-			} while (this.Other_Player.Has_Taken_An_Action);
-			this.Stack.resolves_top_object();
-		} while (this.Stack.contains_objects());
+		this.acts("Main Phase");
 	}
 	
 	
@@ -589,10 +570,11 @@ public class a_player {
 		// Rule 500.5: When a phase or step ends, any effects scheduled to last "until end of" that phase or step expire.
 	}
 	
-	/* Rule 503.1: The upkeep step has no turn-based actions.
-	 * Once it begins, the active player gets priority. (See rule 117, "Timing and Priority.") */
-	public void completes_her_upkeep_step() throws Exception {
-		System.out.println(this.Name + " is completing her upkeep step.");
+	public void performs_all_applicable_state_based_actions_as_a_single_event() {
+		// TODO
+	}
+	
+	public void acts(String The_Step_To_Use) throws Exception {
 		/* Rule 117.3c: If a player has priority when they cast a spell, activate an ability, or take a special action, that player receives priority afterward.
 		 * If a player has priority and chooses not to take any actions, that player passes.
 		 * If any mana is in that player's mana pool, they announce what mana is there.
@@ -600,15 +582,34 @@ public class a_player {
 		 * Rule 117.4: If all players pass in succession (that is, if all players pass without taking any actions in between passing), the spell or ability on top of the stack resolves or, if the stack is empty, the phase or step ends. */
 		do {
 			do {
+				/* Rule 117.5: Each time a player would get priority, the game first performs all applicable state-based actions as a single event (see rule 704, "State-Based Actions"), then repeats this process until no state-based actions are performed.
+				 * Then triggered abilities are put on th stack (see rule 603, "Handling Triggered Abilities").
+				 * These steps repeat in order until no further state-based actions are performed and no abilities trigger.
+				 * Then the player who would have received priority does so. */
 				do {
-					this.casts_a_spell_activates_an_activated_ability_or_takes_a_special_action("This Player's Upkeep Step", this + " begins " + this + "'s Upkeep Step");
+					this.performs_all_applicable_state_based_actions_as_a_single_event();
+				} while (this.Has_Performed_A_State_Based_Action);
+				this.Stack.adds_all_triggered_abilities_in_list_of_triggered_abilities_to_be_added_to_this_to_this();
+				do {
+					this.casts_a_spell_activates_an_activated_ability_or_takes_a_special_action("This Player's " + The_Step_To_Use, this + " begins " + this + "'s " + The_Step_To_Use);
 				} while (!this.Has_Passed);
 				do {
-					this.Other_Player.casts_a_spell_activates_an_activated_ability_or_takes_a_special_action("The Other Player's Upkeep Step", this + " begins " + this + "'s upkeep step and acts");
+					this.performs_all_applicable_state_based_actions_as_a_single_event();
+				} while (this.Has_Performed_A_State_Based_Action);
+				this.Stack.adds_all_triggered_abilities_in_list_of_triggered_abilities_to_be_added_to_this_to_this();
+				do {
+					this.Other_Player.casts_a_spell_activates_an_activated_ability_or_takes_a_special_action("The Other Player's " + The_Step_To_Use, this + " begins " + this + "'s " + The_Step_To_Use + " and acts");
 				} while (!this.Other_Player.Has_Passed);
 			} while (this.Other_Player.Has_Taken_An_Action);
 			this.Stack.resolves_top_object();
 		} while (this.Stack.contains_objects());
+	}
+	
+	/* Rule 503.1: The upkeep step has no turn-based actions.
+	 * Once it begins, the active player gets priority. (See rule 117, "Timing and Priority.") */
+	public void completes_her_upkeep_step() throws Exception {
+		System.out.println(this.Name + " is completing her upkeep step.");
+		this.acts("Upkeep Step");
 	}
 	
 	public a_part_of_the_battlefield part_of_the_battlefield() {

@@ -10,9 +10,16 @@ import java.util.ArrayList;
 public class a_stack {
 
 	private ArrayList<Object> List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities;
+	private ArrayList<a_triggered_ability> List_Of_Triggered_Abilities_To_Be_Added_To_This;
 	
 	public a_stack() {
 		this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities = new ArrayList<Object>();
+		this.List_Of_Triggered_Abilities_To_Be_Added_To_This = new ArrayList<a_triggered_ability>();
+	}
+	
+	public void adds_all_triggered_abilities_in_list_of_triggered_abilities_to_be_added_to_this_to_this() {
+		this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.addAll(this.List_Of_Triggered_Abilities_To_Be_Added_To_This);
+		this.List_Of_Triggered_Abilities_To_Be_Added_To_This.clear();
 	}
 	
 	public boolean contains_objects() {
@@ -71,16 +78,16 @@ public class a_stack {
 						    for (a_creature Another_Creature : The_Permanent_Spell.player().part_of_the_battlefield().list_of_creatures()) {
 							    for (a_triggered_ability The_Triggered_Ability : Another_Creature.list_of_triggered_abilities()) {
 							    	if (The_Triggered_Ability.event().equals(The_Name_Of_The_Creature + " enters the battlefield")) {
-							    		this.receives(The_Triggered_Ability);
-							    		System.out.println(The_Triggered_Ability + " has been added to the stack.");
+							    		this.List_Of_Triggered_Abilities_To_Be_Added_To_This.add(The_Triggered_Ability);
+							    		System.out.println(The_Triggered_Ability + " has been added to the list of triggered abilities to be added to this.");
 							    	}
 							    }	
 						    }
 						    for (a_creature Another_Creature : The_Permanent_Spell.player().part_of_the_battlefield().list_of_creatures()) {
 							    for (a_triggered_ability The_Triggered_Ability : Another_Creature.list_of_triggered_abilities()) {
 							    	if (The_Triggered_Ability.event().equals(The_Name_Of_The_Creature + " enters the battlefield")) {
-							    		this.receives(The_Triggered_Ability);
-							    		System.out.println(The_Triggered_Ability + " has been added to the stack.");
+							    		this.List_Of_Triggered_Abilities_To_Be_Added_To_This.add(The_Triggered_Ability);
+							    		System.out.println(The_Triggered_Ability + " has been added to the list of triggered abilities to be added to this.");
 							    	}
 							    }	
 						    }
