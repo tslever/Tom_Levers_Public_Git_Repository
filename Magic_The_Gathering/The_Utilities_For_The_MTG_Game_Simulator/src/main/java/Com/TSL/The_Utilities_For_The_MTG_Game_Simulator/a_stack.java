@@ -35,6 +35,87 @@ public class a_stack {
 		this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.remove(The_Object_To_Remove);
 	}
 	
+	public void resolves_top_object() throws Exception {
+		if (this.contains_objects()) {
+			Object The_Object = this.top_object();
+			System.out.println("The top stack spell or nonmana activated ability " + The_Object + " is resolving.");
+			if (The_Object instanceof a_spell) {
+				a_spell The_Spell = (a_spell) The_Object;
+				if (The_Spell instanceof a_permanent_spell) {
+					a_permanent_spell The_Permanent_Spell = (a_permanent_spell) The_Spell;
+					if (The_Permanent_Spell.has_a_target()) {
+						if (The_Permanent_Spell.type().equals("Aura")) {
+							// TODO
+						} else if (The_Permanent_Spell.type().equals("Mutating Creature")) {
+							// TODO
+						}
+					} else {
+						String The_Type_Of_The_Permanent_Spell = The_Permanent_Spell.type();
+						System.out.println(The_Permanent_Spell + " becomes a " + The_Type_Of_The_Permanent_Spell + " and enters the battlefield under the control of " + The_Permanent_Spell.player() + ".");
+						if (The_Type_Of_The_Permanent_Spell.equals("Creature")) {
+							a_nonland_card The_Nonland_Card = The_Permanent_Spell.nonland_card();
+							a_creature_card The_Creature_Card = (a_creature_card) The_Nonland_Card;
+							a_creature The_Creature = new a_creature(The_Permanent_Spell.name(), new ArrayList<a_static_ability>(), The_Creature_Card, The_Permanent_Spell.player());
+							ArrayList<a_triggered_ability> The_List_Of_Triggered_Abilities = new ArrayList<a_triggered_ability>();
+							for (String The_Line : The_Creature_Card.text()) {
+								if (The_Line.startsWith("When ")) {
+									int The_Position_Of_The_First_Pause = The_Line.indexOf(", ");
+									a_triggered_ability The_Triggered_Ability = new a_triggered_ability(The_Line.substring(5, The_Position_Of_The_First_Pause), The_Line.substring(The_Position_Of_The_First_Pause + 2), The_Creature);
+									The_List_Of_Triggered_Abilities.add(The_Triggered_Ability);
+								}
+							}
+							The_Creature.sets_its_list_of_triggered_abilities_to(The_List_Of_Triggered_Abilities);
+							String The_Name_Of_The_Creature = The_Creature.name();
+							The_Permanent_Spell.player().part_of_the_battlefield().receives(The_Creature);
+							System.out.println(The_Permanent_Spell.player() + "'s part of the battlefield contains the following permanents. " + The_Permanent_Spell.player().part_of_the_battlefield());
+						    for (a_creature Another_Creature : The_Permanent_Spell.player().part_of_the_battlefield().list_of_creatures()) {
+							    for (a_triggered_ability The_Triggered_Ability : Another_Creature.list_of_triggered_abilities()) {
+							    	if (The_Triggered_Ability.event().equals(The_Name_Of_The_Creature + " enters the battlefield")) {
+							    		this.receives(The_Triggered_Ability);
+							    		System.out.println(The_Triggered_Ability + " has been added to the stack.");
+							    	}
+							    }	
+						    }
+						    for (a_creature Another_Creature : The_Permanent_Spell.player().part_of_the_battlefield().list_of_creatures()) {
+							    for (a_triggered_ability The_Triggered_Ability : Another_Creature.list_of_triggered_abilities()) {
+							    	if (The_Triggered_Ability.event().equals(The_Name_Of_The_Creature + " enters the battlefield")) {
+							    		this.receives(The_Triggered_Ability);
+							    		System.out.println(The_Triggered_Ability + " has been added to the stack.");
+							    	}
+							    }	
+						    }
+						}
+						else if (The_Spell.type().equals("Instant") ) {
+							// TODO
+						} else if (The_Spell.type().equals("Sorcery")) {
+							// TODO
+						}
+						else if (The_Object instanceof an_ability) {
+							if (The_Object instanceof a_nonmana_activated_ability) {
+								// TODO
+							} else if (The_Object instanceof a_triggered_ability) {
+								a_triggered_ability The_Triggered_Ability = (a_triggered_ability) The_Object;
+								if (The_Triggered_Ability.effect().contains("if")) {
+									// TODO
+								} else {
+									if (The_Triggered_Ability.effect().contains("put a +1/+1 counter on each other creature you control named Charmed Stray.")) {
+										for (a_creature The_Creature : The_Triggered_Ability.permanent().player().part_of_the_battlefield().list_of_creatures()) {
+											if (!The_Creature.equals(The_Triggered_Ability.permanent()) && The_Creature.name().equals("Charmed Stray")) {
+												The_Creature.receives_a_plus_one_plus_one_counter();
+											}
+										}
+									}
+									System.out.println("Resolved " + The_Triggered_Ability.effect());
+								}
+							}
+						}
+					}
+				}
+			}
+			this.removes(The_Object);
+		}
+	}
+	
 	public Object top_object() {
 		return this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.get(this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.size() - 1);
 	}
