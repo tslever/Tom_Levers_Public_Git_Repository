@@ -49,7 +49,7 @@ public class a_stack {
 	public void resolves_top_object() throws Exception {
 		if (this.contains_objects()) {
 			Object The_Object = this.top_object();
-			System.out.println("The top stack spell or nonmana activated ability " + The_Object + " is resolving.");
+			System.out.println("The top stack spell or ability " + The_Object + " is resolving.");
 			if (The_Object instanceof a_spell) {
 				a_spell The_Spell = (a_spell) The_Object;
 				if (The_Spell instanceof a_permanent_spell) {
@@ -62,7 +62,7 @@ public class a_stack {
 						}
 					} else {
 						String The_Type_Of_The_Permanent_Spell = The_Permanent_Spell.type();
-						System.out.println(The_Permanent_Spell + " becomes a " + The_Type_Of_The_Permanent_Spell + " and enters the battlefield under the control of " + The_Permanent_Spell.player() + ".");
+						System.out.println(The_Permanent_Spell + " becomes a " + The_Type_Of_The_Permanent_Spell + " and enters the battlefield under " + The_Permanent_Spell.player() + "'s control.");
 						if (The_Type_Of_The_Permanent_Spell.equals("Creature")) {
 							a_nonland_card The_Nonland_Card = The_Permanent_Spell.nonland_card();
 							a_creature_card The_Creature_Card = (a_creature_card) The_Nonland_Card;
@@ -83,7 +83,7 @@ public class a_stack {
 							    for (a_triggered_ability The_Triggered_Ability : Another_Creature.list_of_triggered_abilities()) {
 							    	if (The_Triggered_Ability.event().equals(The_Name_Of_The_Creature + " enters the battlefield")) {
 							    		this.List_Of_Triggered_Abilities_To_Be_Added_To_This.add(The_Triggered_Ability);
-							    		System.out.println(The_Triggered_Ability + " has been added to the list of triggered abilities to be added to this.");
+							    		System.out.println("The following triggered ability has been added to the list of triggered abilities to be added to the stack. " + The_Triggered_Ability);
 							    	}
 							    }	
 						    }
@@ -91,7 +91,7 @@ public class a_stack {
 							    for (a_triggered_ability The_Triggered_Ability : Another_Creature.list_of_triggered_abilities()) {
 							    	if (The_Triggered_Ability.event().equals(The_Name_Of_The_Creature + " enters the battlefield")) {
 							    		this.List_Of_Triggered_Abilities_To_Be_Added_To_This.add(The_Triggered_Ability);
-							    		System.out.println(The_Triggered_Ability + " has been added to the list of triggered abilities to be added to this.");
+							    		System.out.println("The following triggered ability has been added to the list of triggered abilities to be added to the stack. " + The_Triggered_Ability);
 							    	}
 							    }	
 						    }

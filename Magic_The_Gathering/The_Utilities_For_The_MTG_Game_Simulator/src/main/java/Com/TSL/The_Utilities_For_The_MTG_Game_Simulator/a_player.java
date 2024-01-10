@@ -164,7 +164,7 @@ public class a_player {
 	
 	 /* Rule 501.1: The beginning phase consists of three steps, in this order: untap, upkeep, and draw. */
 	public void completes_her_beginning_phase() throws Exception {
-		System.out.println(this.Name + " is completing their beginning phase.");
+		System.out.println(this + " is completing " + this + "'s Beginning Phase.");
 		this.Has_Played_A_Land_This_Turn = false;
 		 /* No player receives priority during the untap step.
 		 * Rule 503.1a: Any abilities that triggered during the untap step and any abilities that triggered at the beginning of the upkeep [step] are put onto the stack before the active player gets priority; the order in which they triggered doesn't matter. (See rule 603, "Handling Triggered Abilities.") */
@@ -187,7 +187,7 @@ public class a_player {
 	 * Rule 507.2: Second, the active player gets priority. (See [R]ule 117, "Timing and Priority.")
 	 */
 	public void completes_her_beginning_of_combat_step() throws Exception {
-		this.acts("Beginning Of Combat Step");
+		this.performs_state_based_actions_adds_trigged_abilities_to_stack_and_has_this_and_other_player_cast_spells_activate_abiltiies_and_take_special_actions("Beginning Of Combat Step");
 	}
 	
 	/**
@@ -240,7 +240,7 @@ public class a_player {
 				}
 			}
 		}
-		this.acts("Declare Attackers Step");
+		this.performs_state_based_actions_adds_trigged_abilities_to_stack_and_has_this_and_other_player_cast_spells_activate_abiltiies_and_take_special_actions("Declare Attackers Step");
 	}
 	
 	public void declares_blockers() throws Exception {
@@ -430,7 +430,7 @@ public class a_player {
 		this.draws();
 		
 		// Rule 504.2: Second, the active player gets priority. (See rule 117, "Timing and Priority.")
-		this.acts("Draw Step");
+		this.performs_state_based_actions_adds_trigged_abilities_to_stack_and_has_this_and_other_player_cast_spells_activate_abiltiies_and_take_special_actions("Draw Step");
 		
 		// Rule 500.2: A phase or step in which players receive priority ends when the stack is empty and all players pass in succession.
 		// Rule 500.4: When a step or phase ends, any unused mana left in a player's mana pool empties. This turn-based action doesn't use the stack.
@@ -454,7 +454,7 @@ public class a_player {
 	public void casts_a_spell_or_activates_a_nonmana_activated_ability(String The_Step_To_Use, boolean Indicator_Of_Whether_This_Player_May_Only_Play_Instants_Nonland_Hand_Cards_With_Flash_And_Nonmana_Activated_Abilities) throws Exception {
 		// Rule 601.2: To cast a spell is to [use a card to create a spell], put [the spell] on the stack, and pay its mana costs, so that [the spell] will eventually resolve and have its effect. Casting a spell includes proposal of the spell (rules 601.2a-d) and determination and payment of costs (rules 601.2f-h). To cast a spell, a player follows the steps listed below, in order. A player must be legally allowed to cast the spell to begin this process (see rule 601.3). If a player is unable to comply with the requirements of a step listed below while performing that step, the casting of the spell is illegal; the game returns to the moment before the casting of that spell was proposed (see rule 723, "Handling Illegal Actions").
 		// Rule 601.2e: The game checks to see if the proposed spell can legally be cast. If the proposed spell is illegal, the game returns to the moment before the casting of that spell was proposed (see rule 723, "Handling Illegal Actions").
-		System.out.println(this + " is considering casting a spell or activating a nonmana activated ability.");
+		System.out.println(this + " is considering casting a spell or activating an ability.");
 		ArrayList<a_nonland_card> The_List_Of_All_Nonland_Hand_Cards = this.Hand.list_of_nonland_cards();
 		ArrayList<a_nonland_card> The_List_Of_Nonland_Hand_Cards_Appropriate_For_The_Present_Step;
 		if (Indicator_Of_Whether_This_Player_May_Only_Play_Instants_Nonland_Hand_Cards_With_Flash_And_Nonmana_Activated_Abilities) {
@@ -482,7 +482,6 @@ public class a_player {
 		// Rule 601.2a: To propose the casting of a spell, a player first [uses a card to create a spell and puts the spell on] the stack. [The spell] becomes the topmost object on the stack. [The spell] has all the characteristics of the card... associated with it, and [the casting] player becomes its controller. The spell remains on the stack until it's countered, it resolves, or an effect moves it elsewhere.
 		if (!The_List_Of_Playable_Nonland_Hand_Cards_And_Activatable_Nonmana_Activated_Abilities.isEmpty()) {
 			Object The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability = this.chooses_a_playable_nonland_card_or_an_activatable_nonmana_activated_ability_from(The_List_Of_Playable_Nonland_Hand_Cards_And_Activatable_Nonmana_Activated_Abilities);
-			System.out.println(this + " plays the nonland hand card or activates the nonmana activated ability " + The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability + ".");
 			/* Rule 117.1d: A player may activate a mana ability whenever they have priority, whenever they are casting a spell or activating an ability that requires a mana payment, or whenever a rule or effect acts for a mana payment (even in the middle of casting or resolving a spell or activating or resolving an ability). */
 			//a_mana_pool The_Mana_Pool_To_Use_To_Cast_A_Spell =
 			this.acquires_mana_for_nonland_card_or_nonmana_activated_ability(The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability);
@@ -491,36 +490,38 @@ public class a_player {
 			// Rule 117.3c: If a player has priority when they cast a spell, activate an ability, or take a special action, that player receives priority afterward.
 			if (The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability instanceof a_nonland_card) {
 				a_nonland_card The_Playable_Nonland_Hand_Card = (a_nonland_card) The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability;
+				System.out.println(this + " plays the nonland hand card " + The_Playable_Nonland_Hand_Card + ".");
 				this.Hand.removes(The_Playable_Nonland_Hand_Card);
-				System.out.println("After playing a nonland card, " + this.Name + "'s hand has " + this.Hand.number_of_cards() + " cards and contains the following. " + this.Hand);
+				System.out.println("After playing the nonland hand card " + The_Playable_Nonland_Hand_Card + ", " + this + "'s hand has " + this.Hand.number_of_cards() + " cards and contains the following. " + this.Hand);
 				String The_Type_Of_The_Playable_Nonland_Hand_Card = The_Playable_Nonland_Hand_Card.type();
 				if (The_Type_Of_The_Playable_Nonland_Hand_Card.equals("Instant") || The_Type_Of_The_Playable_Nonland_Hand_Card.equals("Sorcery")) {
 				    a_spell The_Spell = new a_spell(The_Playable_Nonland_Hand_Card, this);
 				    this.Stack.receives(The_Spell);
-				    System.out.println(this.Name + " has cast instant or sorcery spell " + The_Spell + ".");
+				    System.out.println(this + " has cast instant or sorcery spell " + The_Spell + ".");
 				} else {
 					a_permanent_spell The_Permanent_Spell = new a_permanent_spell(The_Playable_Nonland_Hand_Card, this);
 					this.Stack.receives(The_Permanent_Spell);
-				    System.out.println(this.Name + " has cast permanent spell " + The_Permanent_Spell + ".");
+				    System.out.println(this + " has cast permanent spell " + The_Permanent_Spell + ".");
 				}
 				this.Has_Passed = false;
 				this.Has_Taken_An_Action = true;
 				this.Has_Cast_A_Spell_Or_Activated_A_Nonmana_Activated_Ability = true;
-				System.out.println("The stack contains the following spells and nonmana activated abilities. " + this.Stack);
+				System.out.println("The stack contains the following spells and abilities. " + this.Stack);
 			} else if (The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability instanceof a_nonmana_activated_ability) {
 				a_nonmana_activated_ability The_Nonmana_Activated_Ability = (a_nonmana_activated_ability) The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability;
+				System.out.println(" activates the ability " + The_Nonmana_Activated_Ability);
 				this.Stack.receives(The_Nonmana_Activated_Ability);
-				System.out.println(this.Name + " has activated nonmana activated ability " + The_Nonmana_Activated_Ability + ".");
+				System.out.println(this.Name + " has activated ability " + The_Nonmana_Activated_Ability + ".");
 				this.Has_Passed = false;
 				this.Has_Taken_An_Action = true;
 				this.Has_Cast_A_Spell_Or_Activated_A_Nonmana_Activated_Ability = true;
-				System.out.println("The stack contains the following spells and nonmana activated abilities. " + this.Stack);
+				System.out.println("The stack contains the following spells and abilities. " + this.Stack);
 			}
 		} else {
 			this.Has_Passed = true;
 			this.Has_Taken_An_Action = false;
 			this.Has_Cast_A_Spell_Or_Activated_A_Nonmana_Activated_Ability = false;
-			System.out.println(this + " neither casts a spell nor activates a nonmana activated ability.");
+			System.out.println(this + " neither casts a spell nor activates an ability.");
 		}
 	}
 	
@@ -535,12 +536,12 @@ public class a_player {
 		// Rule 505.4: Second, if the active player controls one or more Saga enchantments and it's the active player's precombat main phase, the active player puts a lore counter on each Saga they control. (See rule 714, "Saga Cards.") This turn-based action doesn't use the stack.
 
 		// Rule 505.5: Third, the active player gets priority. (See rule 117, "Timing and Priority.")
-		this.acts("Main Phase");
+		this.performs_state_based_actions_adds_trigged_abilities_to_stack_and_has_this_and_other_player_cast_spells_activate_abiltiies_and_take_special_actions("Main Phase");
 	}
 	
 	
 	public void completes_her_untap_step() {
-		System.out.println(this.Name + " is completing their untap step.");
+		System.out.println(this + " is completing " + this + "'s Untap Step.");
 		// Rule 500.5: When a phase or step begins, any effects scheduled to last "until" that phase or step expire.
 		// Rule 500.6: When a phase or step begins, any abilities that trigger "at the beginning of" that phase or step trigger. They are put on the stack the next time a player would receive priority. (See rule 117, "Timing and Priority.")
 		// Rule 502.1: First, all phased-in permanents with phasing that the active player controls phase out, and all phased-out permanents that the active player controlled when they phased out phase in. This all happens simultaneously. This turn-based action doesn't use the stack. See rule 702.25, "Phasing."
@@ -563,7 +564,7 @@ public class a_player {
 		// TODO
 	}
 	
-	public void acts(String The_Step_To_Use) throws Exception {
+	public void performs_state_based_actions_adds_trigged_abilities_to_stack_and_has_this_and_other_player_cast_spells_activate_abiltiies_and_take_special_actions(String The_Step_To_Use) throws Exception {
 		/* Rule 117.3c: If a player has priority when they cast a spell, activate an ability, or take a special action, that player receives priority afterward.
 		 * If a player has priority and chooses not to take any actions, that player passes.
 		 * If any mana is in that player's mana pool, they announce what mana is there.
@@ -604,8 +605,8 @@ public class a_player {
 	/* Rule 503.1: The upkeep step has no turn-based actions.
 	 * Once it begins, the active player gets priority. (See rule 117, "Timing and Priority.") */
 	public void completes_her_upkeep_step() throws Exception {
-		System.out.println(this.Name + " is completing her upkeep step.");
-		this.acts("Upkeep Step");
+		System.out.println(this + " is completing " + this + "'s Upkeep Step.");
+		this.performs_state_based_actions_adds_trigged_abilities_to_stack_and_has_this_and_other_player_cast_spells_activate_abiltiies_and_take_special_actions("Upkeep Step");
 	}
 	
 	public a_part_of_the_battlefield part_of_the_battlefield() {
@@ -793,7 +794,7 @@ public class a_player {
 	public void plays_a_land() throws Exception {
 		ArrayList<a_land_card> The_List_Of_Land_Cards = this.Hand.list_of_land_cards();
 		int The_Number_Of_Land_Cards = The_List_Of_Land_Cards.size();
-		System.out.println(this.Name + " is playing a land.");
+		System.out.println(this.Name + " is taking the special action of playing a land.");
 		int The_Index_Of_The_Land_Card_To_Play = this.Random_Data_Generator.nextInt(0, The_Number_Of_Land_Cards - 1);
 		a_land_card The_Land_Card_To_Play = The_List_Of_Land_Cards.get(The_Index_Of_The_Land_Card_To_Play);
 		String The_Name_Of_The_Land_Card = The_Land_Card_To_Play.name();
@@ -814,8 +815,8 @@ public class a_player {
 		this.Has_Passed = false;
 		this.Has_Taken_An_Action = true;
 		this.Has_Played_A_Land_This_Turn = true;
-		System.out.println("After playing a land card, the hand of " + this.Name + " has " + this.Hand.number_of_cards() + " cards and contains the following. " + this.Hand);
-		System.out.println("After playing a land card, the part of the battlefield of " + this.Name + " has " + this.Part_Of_The_Battlefield.number_of_permanents() + " cards and contains the following. " + this.Part_Of_The_Battlefield);
+		System.out.println("After playing a land card, " + this + "'s hand has " + this.Hand.number_of_cards() + " cards and contains the following. " + this.Hand);
+		System.out.println("After playing a land card, " + this + "'s part of the battlefield has " + this.Part_Of_The_Battlefield.number_of_permanents() + " cards and contains the following. " + this.Part_Of_The_Battlefield);
 	}
 	
 	
@@ -830,7 +831,7 @@ public class a_player {
 	 * Rule 117.1: Unless a spell or ability is instructing a player to take an action, which player can take actions at any given time is determined by a system of priority...
 	 */
 	public void casts_a_spell_activates_an_activated_ability_or_takes_a_special_action(String The_Step_To_Use, String The_Event_After_Which_She_Is_Receiving_Priority_And_Acting) throws Exception {
-		System.out.println(this + " receives priority and acts after " + The_Event_After_Which_She_Is_Receiving_Priority_And_Acting + ".");
+		System.out.println(this + " is considering casting a spell, activating an ability, or taking a special action.");
 		if (this.Stack.isEmpty()) {
 			if (The_Step_To_Use.equals("This Player's Main Phase")) {
 				/* Rule 116.2a: Playing a land is a special action.
