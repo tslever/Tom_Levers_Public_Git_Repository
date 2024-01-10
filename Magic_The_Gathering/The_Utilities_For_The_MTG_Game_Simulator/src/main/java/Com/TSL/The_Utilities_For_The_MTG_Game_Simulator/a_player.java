@@ -15,6 +15,7 @@ public class a_player {
 	private a_graveyard Graveyard;
 	private a_hand Hand;
 	private boolean Has_Cast_A_Spell_Or_Activated_A_Nonmana_Activated_Ability;
+	private boolean Has_Played_A_Land;
 	private boolean Has_Played_A_Land_This_Turn;
 	private boolean Has_Priority;
 	private int Index_Of_The_Present_Turn;
@@ -160,6 +161,7 @@ public class a_player {
 	
 	public void completes_her_beginning_phase() throws Exception {
 		System.out.println(this.Name + " is completing their beginning phase.");
+		this.Has_Played_A_Land_This_Turn = false;
 		/* Rule 500.5: When a phase or step begins, any effects scheduled to last "until" that phase or step expire.
 		 * Rule 500.6: When a phase or step begins, any abilities that trigger "at the beginning of" that phase or step trigger. They are put on the stack the next time a player would receive priority. (See rule 117, "Timing and Priority.")
 		 * Rule 501.1: The beginning phase consists of three steps, in this order: untap, upkeep, and draw. */
@@ -673,7 +675,7 @@ public class a_player {
 		// Rule 505.5: Third, the active player gets priority. (See rule 117, "Timing and Priority.")
 		do {
 			this.receives_priority_and_acts("This Player's Main Phase", this + " begins " + this + "'s main phase");
-		} while (this.Has_Cast_A_Spell_Or_Activated_A_Nonmana_Activated_Ability);
+		} while (this.Has_Played_A_Land || this.Has_Cast_A_Spell_Or_Activated_A_Nonmana_Activated_Ability);
 		this.resolves_the_stack();
 	}
 	
@@ -897,29 +899,27 @@ public class a_player {
 	public void plays_a_land() throws Exception {
 		ArrayList<a_land_card> The_List_Of_Land_Cards = this.Hand.list_of_land_cards();
 		int The_Number_Of_Land_Cards = The_List_Of_Land_Cards.size();
-		if (The_Number_Of_Land_Cards > 0) {
-			System.out.println(this.Name + " is playing a land.");
-			int The_Index_Of_The_Land_Card_To_Play = this.Random_Data_Generator.nextInt(0, The_Number_Of_Land_Cards - 1);
-			a_land_card The_Land_Card_To_Play = The_List_Of_Land_Cards.get(The_Index_Of_The_Land_Card_To_Play);
-			String The_Name_Of_The_Land_Card = The_Land_Card_To_Play.name();
-			a_land The_Land = null;
-			if (The_Name_Of_The_Land_Card.equals("Plains")) {
-				The_Land = new a_land("Plains", this);
-				a_mana_ability The_Mana_Ability = new a_mana_ability("T", "Add [W].", The_Land);
-				The_Land.receives(The_Mana_Ability);
-			} else if (The_Name_Of_The_Land_Card.equals("Forest")) {
-				The_Land = new a_land("Forest", this);
-				a_mana_ability The_Mana_Ability = new a_mana_ability("T", "Add [G].", The_Land);
-				The_Land.receives(The_Mana_Ability);
-			} else {
-				throw new Exception("The MTG Game Simulator does not know how to play the land with name " + The_Name_Of_The_Land_Card);
-			}
-			this.Hand.removes(The_Land_Card_To_Play);
-			this.Part_Of_The_Battlefield.receives(The_Land);
-			this.Has_Played_A_Land_This_Turn = true;
-			System.out.println("After playing a land card, the hand of " + this.Name + " has " + this.Hand.number_of_cards() + " cards and contains the following. " + this.Hand);
-			System.out.println("After playing a land card, the part of the battlefield of " + this.Name + " has " + this.Part_Of_The_Battlefield.number_of_permanents() + " cards and contains the following. " + this.Part_Of_The_Battlefield);
+		System.out.println(this.Name + " is playing a land.");
+		int The_Index_Of_The_Land_Card_To_Play = this.Random_Data_Generator.nextInt(0, The_Number_Of_Land_Cards - 1);
+		a_land_card The_Land_Card_To_Play = The_List_Of_Land_Cards.get(The_Index_Of_The_Land_Card_To_Play);
+		String The_Name_Of_The_Land_Card = The_Land_Card_To_Play.name();
+		a_land The_Land = null;
+		if (The_Name_Of_The_Land_Card.equals("Plains")) {
+			The_Land = new a_land("Plains", this);
+			a_mana_ability The_Mana_Ability = new a_mana_ability("T", "Add [W].", The_Land);
+			The_Land.receives(The_Mana_Ability);
+		} else if (The_Name_Of_The_Land_Card.equals("Forest")) {
+			The_Land = new a_land("Forest", this);
+			a_mana_ability The_Mana_Ability = new a_mana_ability("T", "Add [G].", The_Land);
+			The_Land.receives(The_Mana_Ability);
+		} else {
+			throw new Exception("The MTG Game Simulator does not know how to play the land with name " + The_Name_Of_The_Land_Card);
 		}
+		this.Hand.removes(The_Land_Card_To_Play);
+		this.Part_Of_The_Battlefield.receives(The_Land);
+		this.Has_Played_A_Land_This_Turn = true;
+		System.out.println("After playing a land card, the hand of " + this.Name + " has " + this.Hand.number_of_cards() + " cards and contains the following. " + this.Hand);
+		System.out.println("After playing a land card, the part of the battlefield of " + this.Name + " has " + this.Part_Of_The_Battlefield.number_of_permanents() + " cards and contains the following. " + this.Part_Of_The_Battlefield);
 	}
 	
 	
@@ -937,11 +937,22 @@ public class a_player {
 		this.Has_Priority = true;
 		System.out.println(this + " receives priority and acts after " + The_Event_After_Which_She_Is_Receiving_Priority_And_Acting + ".");
 		if (The_Step_To_Use.equals("This Player's Main Phase") && this.Stack.isEmpty()) {
-			// Rule 505.5b: During either main phase, the active player may play one land card from their hand if the stack is empty, if the player has priority, and if they haven't played a land this turn (unless an effect states the player may play additional lands). This action doesn't use the stack. Neither the land nor the action of playing the land is a spell or ability, so it can't be countered, and players can't respond to it with instants or activated abilities. (See rule 305, "Lands.")
-			if (!this.Has_Played_A_Land_This_Turn) {
-			    this.plays_a_land();
+			/* Rule 116.2a: Playing a land is a special action.
+			 * To play a land, a player puts that land onto the battlefield from the zone it was in (usually that player's hand).
+			 * By default, a player can take this action only once during each of their turns.
+			 * A player can take this action any time they have priority and the stack is empty during a main phase of their turn. See [R]ule 305, "Lands."
+			 * Rule 505.5b: During either main phase, the active player may play one land card from their hand if the stack is empty, if the player has priority, and if they haven't played a land this turn (unless an effect states the player may play additional lands).
+			 * This action doesn't use the stack.
+			 * Neither the land nor the action of playing the land is a spell or ability, so it can't be countered, and players can't respond to it with instants or activated abilities.
+			 * (See rule 305, "Lands.")
+			 */
+			if (!this.Has_Played_A_Land_This_Turn && !this.Hand.list_of_land_cards().isEmpty() /*&& an_enumeration_of_states_of_a_coin.provides_a_state() == an_enumeration_of_states_of_a_coin.HEADS*/) {
+				this.plays_a_land();
+				this.Has_Played_A_Land = true;
+			} else {
+				this.Has_Played_A_Land = false;
+				this.casts_a_spell_or_activates_a_nonmana_activated_ability(The_Step_To_Use, false);
 			}
-			this.casts_a_spell_or_activates_a_nonmana_activated_ability(The_Step_To_Use, false);
 		} else {
 			this.casts_a_spell_or_activates_a_nonmana_activated_ability(The_Step_To_Use, true);
 		}
