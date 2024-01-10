@@ -187,6 +187,7 @@ public class a_player {
 	 * Rule 507.2: Second, the active player gets priority. (See [R]ule 117, "Timing and Priority.")
 	 */
 	public void completes_her_beginning_of_combat_step() throws Exception {
+		System.out.println(this + " is completing " + this + "'s Beginning Of Combat Step.");
 		this.performs_state_based_actions_adds_trigged_abilities_to_stack_and_has_this_and_other_player_cast_spells_activate_abiltiies_and_take_special_actions("Beginning Of Combat Step");
 	}
 	
@@ -210,6 +211,7 @@ public class a_player {
 	 * @throws Exception 
 	 */
 	public void completes_her_declare_attackers_step() throws Exception {
+		System.out.println(this + " is completing " + this + "'s Declare Attackers Step.");
 		for (a_creature The_Creature : this.Part_Of_The_Battlefield.list_of_creatures()) {
 			if (!The_Creature.is_tapped() && !The_Creature.is_battle() && (The_Creature.has_haste() || The_Creature.has_been_controlled_by_the_active_player_continuously_since_the_turn_began()) && The_Creature.can_attack()) {
 				if (The_Creature.must_attack() || (an_enumeration_of_states_of_a_coin.provides_a_state() == an_enumeration_of_states_of_a_coin.HEADS)) {
@@ -244,7 +246,7 @@ public class a_player {
 	}
 	
 	public void declares_blockers() throws Exception {
-		this.Has_Priority = true;
+		System.out.println(this + " is declaring blockers.");
 		ArrayList<a_creature> The_List_Of_Blockers = new ArrayList<>();
 		for (a_creature The_Creature : this.Part_Of_The_Battlefield.list_of_creatures()) {
 			if (!The_Creature.is_tapped() && !The_Creature.is_battle()) {
@@ -265,10 +267,10 @@ public class a_player {
 			The_Blocker.blocks(The_Attacker);
 			The_Attacker.becomes_blocked_by(The_Blocker);
 		}
-		this.Has_Priority = false;
 	}
 	
 	public void chooses_damage_assignment_order_for_her_attackers() {
+		System.out.println(this + " is choosing damage-assignment order for " + this + "'s attackers.");
 		for (a_creature The_Attacker : this.List_Of_Attackers) {
 			if (The_Attacker.is_blocked()) {
 				Collections.shuffle(The_Attacker.list_of_blockers());
@@ -277,11 +279,10 @@ public class a_player {
 	}
 	
 	public void chooses_damage_assignment_order_for_her_blockers() {
-		this.Has_Priority = true;
+		System.out.println(this + " is choosing damage-assignment order for her blockers.");
 		for (a_creature The_Blocker : this.List_Of_Blockers) {
 			Collections.shuffle(The_Blocker.list_of_blockees());
 		}
-		this.Has_Priority = false;
 	}
 	
 	/**
@@ -294,6 +295,7 @@ public class a_player {
 	 * For each of the chosen creatures, the defending player chooses one creature for [the chosen creature] to block that is attacking [the defending] player, a planeswalker [the defending player] control[s], or a battle [the defending player] protect[s].
 	 */
 	public void completes_her_declare_blockers_step() throws Exception {
+		System.out.println(this + " is completing " + this + "'s Declare Blockers Step.");
 		this.Other_Player.declares_blockers();
 		this.chooses_damage_assignment_order_for_her_attackers();
 		this.Other_Player.chooses_damage_assignment_order_for_her_blockers();
@@ -301,6 +303,7 @@ public class a_player {
 	}
 	
 	public void has_her_attackers_assign_combat_damage() throws Exception {
+		System.out.println(this + " is having " + this + "'s attackers assign combat damage.");
 		for (a_creature The_Attacker : this.List_Of_Attackers) {
 			if (The_Attacker.is_blocked()) {
 				ArrayList<a_creature> The_List_Of_Blockers = The_Attacker.list_of_blockers();
@@ -329,6 +332,7 @@ public class a_player {
 	}
 	
 	private void puts_cards_corresponding_to_creatures_dealt_lethal_damage_in_graveyard() {
+		System.out.println(this + " is putting cards corresponding to creatures dealt lethal damage in " + this + "'s graveyard.");
 		ArrayList<a_creature> The_List_Of_Creatures = new ArrayList<>();
 		for (a_creature The_Creature : this.Part_Of_The_Battlefield.list_of_creatures()) {
 			if (The_Creature.was_dealt_lethal_damage()) {
@@ -342,7 +346,7 @@ public class a_player {
 	}
 	
 	public void has_her_blockers_assign_combat_damage() {
-		this.Has_Priority = true;
+		System.out.println(this + " is having " + this + "'s blockers assign combat damage.");
 		for (a_creature The_Blocker : this.List_Of_Blockers) {
 			ArrayList<a_creature> The_List_Of_Blockees = The_Blocker.list_of_blockees();
 			int combat_damage_to_be_dealt = The_Blocker.effective_power();
@@ -355,13 +359,13 @@ public class a_player {
 				}
 			}
 		}
-		this.Has_Priority = false;
 	}
 	
 	/**
 	 * completes_her_combat_damage_step
 	 */
 	public void completes_her_combat_damage_step() throws Exception {
+		System.out.println(this + " is completing " + this + "'s Combat Damage Step.");
 		this.has_her_attackers_assign_combat_damage();
 		this.Other_Player.has_her_blockers_assign_combat_damage();
 		this.puts_cards_corresponding_to_creatures_dealt_lethal_damage_in_graveyard();
@@ -387,38 +391,29 @@ public class a_player {
 	 * @throws Exception 
  	 */
 	public void completes_her_combat_phase() throws Exception {
-		
 		System.out.println(this.Name + " is completing their combat phase.");
-		
-		// Rule 500.5: When a phase or step begins, any effects scheduled to last "until" that phase or step expire.
-		// Rule 500.6: When a phase or step begins, any abilities that trigger "at the beginning of" that phase or step trigger. They are put on the stack the next time a player would receive priority. (See rule 117, "Timing and Priority.")
-		
 		// Rule 506.1: The combat phase has five steps, which proceed in order: beginning of combat, declare attackers, declare blockers, combat damage, and end of combat.
 		// The declare blockers and combat damage steps are skipped if no creatures are declared as attackers or put onto the battlefield attacking (see rule 508.8).
 		// There are two combat damage steps if any attacking or blocking creature has first strike (see 702.7) or double strike (see 702.4).
 		this.completes_her_beginning_of_combat_step();
 		this.completes_her_declare_attackers_step();
-		if (!this.List_Of_Attackers.isEmpty()) {
+		if (this.List_Of_Attackers.isEmpty()) {
+			System.out.println(this + " has no attackers; " + this + " does not complete a Declare Blockers Step or a Combat Damage Step.");
+		} else {
 			this.completes_her_declare_blockers_step();
-			this.completes_her_combat_damage_step();
-		}
-		
-		int number_of_combat_damage_steps = 1;
-		for (a_creature The_Creature : this.Part_Of_The_Battlefield.list_of_creatures()) {
-			ArrayList<a_static_ability> The_List_Of_Static_Abilities = The_Creature.list_of_static_abilities();
-			for (a_static_ability The_Static_Ability : The_List_Of_Static_Abilities) {
-				if (The_Static_Ability.effect().equals("first strike") || The_Static_Ability.effect().equals("double strike")) {
-					number_of_combat_damage_steps = 2;
+			int number_of_combat_damage_steps = 1;
+			for (a_creature The_Creature : this.Part_Of_The_Battlefield.list_of_creatures()) {
+				ArrayList<a_static_ability> The_List_Of_Static_Abilities = The_Creature.list_of_static_abilities();
+				for (a_static_ability The_Static_Ability : The_List_Of_Static_Abilities) {
+					if (The_Static_Ability.effect().equals("first strike") || The_Static_Ability.effect().equals("double strike")) {
+						number_of_combat_damage_steps = 2;
+					}
 				}
 			}
+			for (int i = 0; i < number_of_combat_damage_steps; i++) {
+				this.completes_her_combat_damage_step();
+			}
 		}
-		for (int i = 0; i < number_of_combat_damage_steps; i++) {
-			this.completes_her_combat_damage_step();
-		}
-		
-		// Rule 500.2: A phase or step in which players receive priority ends when the stack is empty and all players pass in succession.
-		// Rule 500.4: When a step or phase ends, any unused mana left in a player's mana pool empties. This turn-based action doesn't use the stack.
-		// Rule 500.5: When a phase or step ends, any effects scheduled to last "until end of" that phase or step expire... Effects that last "until end of combat" expire at the end of the combat phase.
 	}
 	
 	
@@ -439,8 +434,7 @@ public class a_player {
 	
 	
 	public void completes_her_end_phase() {
-		
-		System.out.println(this.Name + " is completing their end phase.");
+		System.out.println(this.Name + " is completing " + this + "'s end phase.");
 		
 		// Rule 500.5: When a phase or step begins, any effects scheduled to last "until" that phase or step expire.
 		// Rule 500.6: When a phase or step begins, any abilities that trigger "at the beginning of" that phase or step trigger. They are put on the stack the next time a player would receive priority. (See rule 117, "Timing and Priority.")
@@ -526,7 +520,7 @@ public class a_player {
 	}
 	
 	public void completes_a_main_phase() throws Exception {
-		System.out.println(this.Name + " is starting a main phase.");
+		System.out.println(this.Name + " is completing a main phase.");
 		for (a_creature The_Creature : this.Part_Of_The_Battlefield.list_of_creatures()) {
 			The_Creature.sets_its_indicator_of_whether_it_has_been_controlled_by_the_active_player_continuously_since_the_turn_began_to(true);
 		}
