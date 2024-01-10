@@ -586,6 +586,9 @@ public class a_player {
 				 * Then triggered abilities are put on the stack (see rule 603, "Handling Triggered Abilities").
 				 * These steps repeat in order until no further state-based actions are performed and no abilities trigger.
 				 * Then the player who would have received priority does so. */
+				/* Rule 117.1: ... The player with priority may cast spells, activate abilities, and take special actions. */
+				/* Rule 117.1a: A player may cast an instant spell any time they have priority...
+				 * Rule 117.1b: A player may activate an activated ability any time they have priority. */
 				do {
 					do {
 						this.performs_all_applicable_state_based_actions_as_a_single_event();
@@ -838,28 +841,31 @@ public class a_player {
 	 * Rule 117.1: Unless a spell or ability is instructing a player to take an action, which player can take actions at any given time is determined by a system of priority...
 	 */
 	public void casts_a_spell_activates_an_activated_ability_or_takes_a_special_action(String The_Step_To_Use, String The_Event_After_Which_She_Is_Receiving_Priority_And_Acting) throws Exception {
-		/* Rule 117.1: ... The player with priority may cast spells, activate abilities, and take special actions. */
 		System.out.println(this + " receives priority and acts after " + The_Event_After_Which_She_Is_Receiving_Priority_And_Acting + ".");
-		if (The_Step_To_Use.equals("This Player's Main Phase") && this.Stack.isEmpty()) {
-			/* Rule 116.2a: Playing a land is a special action.
-			 * To play a land, a player puts that land onto the battlefield from the zone it was in (usually that player's hand).
-			 * By default, a player can take this action only once during each of their turns.
-			 * A player can take this action any time they have priority and the stack is empty during a main phase of their turn. See [R]ule 305, "Lands."
-			 * Rule 505.5b: During either main phase, the active player may play one land card from their hand if the stack is empty, if the player has priority, and if they haven't played a land this turn (unless an effect states the player may play additional lands).
-			 * This action doesn't use the stack.
-			 * Neither the land nor the action of playing the land is a spell or ability, so it can't be countered, and players can't respond to it with instants or activated abilities.
-			 * (See rule 305, "Lands.")
-			 */
-			if (!this.Has_Played_A_Land_This_Turn && !this.Hand.list_of_land_cards().isEmpty() /*&& an_enumeration_of_states_of_a_coin.provides_a_state() == an_enumeration_of_states_of_a_coin.HEADS*/) {
-				this.plays_a_land();
-			}
-			/* Rule 117.1a: ... A player may cast a non-instant spell during their main phase any time they have priority and the stack is empty. */
-			else {
-				this.casts_a_spell_or_activates_a_nonmana_activated_ability(The_Step_To_Use, false);
+		if (this.Stack.isEmpty()) {
+			if (The_Step_To_Use.equals("This Player's Main Phase")) {
+				/* Rule 116.2a: Playing a land is a special action.
+				 * To play a land, a player puts that land onto the battlefield from the zone it was in (usually that player's hand).
+				 * By default, a player can take this action only once during each of their turns.
+				 * A player can take this action any time they have priority and the stack is empty during a main phase of their turn. See [R]ule 305, "Lands."
+				 * Rule 505.5b: During either main phase, the active player may play one land card from their hand if the stack is empty, if the player has priority, and if they haven't played a land this turn (unless an effect states the player may play additional lands).
+				 * This action doesn't use the stack.
+				 * Neither the land nor the action of playing the land is a spell or ability, so it can't be countered, and players can't respond to it with instants or activated abilities.
+				 * (See rule 305, "Lands.")
+				 */
+				if (!this.Has_Played_A_Land_This_Turn && !this.Hand.list_of_land_cards().isEmpty() /*&& an_enumeration_of_states_of_a_coin.provides_a_state() == an_enumeration_of_states_of_a_coin.HEADS*/) {
+					this.plays_a_land();
+				}
+				/* Rule 117.1a: ... A player may cast a non-instant spell during their main phase any time they have priority and the stack is empty. */
+				else {
+					this.casts_a_spell_or_activates_a_nonmana_activated_ability(The_Step_To_Use, false);
+				}
+			/* Rule 117.7: If a player with priority casts a spell or activates an activated ability while another spell or ability is already on the stack, the new spell or ability has been cast or activated "in response to" the earlier spell or ability.
+			 * The new spell or ability will resolve first. See rule 608, "Resolving Spells and Abilities." */
+			} else {
+				this.casts_a_spell_or_activates_a_nonmana_activated_ability(The_Step_To_Use, true);
 			}
 		}
-		/* Rule 117.1a: A player may cast an instant spell any time they have priority...
-		 * Rule 117.1b: A player may activate an activated ability any time they have priority. */
 		else {
 			this.casts_a_spell_or_activates_a_nonmana_activated_ability(The_Step_To_Use, true);
 		}
