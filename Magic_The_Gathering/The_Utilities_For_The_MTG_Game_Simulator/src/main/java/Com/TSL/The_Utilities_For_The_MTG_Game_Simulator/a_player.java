@@ -485,9 +485,10 @@ public class a_player {
 		}
     }
     
-    public void discards() {
+    public void discards() throws Exception {
     	int The_Index_Of_A_Hand_Card = this.Random_Data_Generator.nextInt(0, this.Hand.number_of_cards() - 1);
-    	a_card The_Removed_Card = this.Hand.list_of_cards().remove(The_Index_Of_A_Hand_Card);
+    	a_card The_Removed_Card = this.Hand.list_of_cards().get(The_Index_Of_A_Hand_Card);
+    	this.Hand.removes(The_Removed_Card);
     	System.out.println(this + " discards " + The_Removed_Card);
     }
 	

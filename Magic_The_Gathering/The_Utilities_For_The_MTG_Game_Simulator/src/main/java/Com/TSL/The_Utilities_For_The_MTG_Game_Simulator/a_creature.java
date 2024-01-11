@@ -135,7 +135,7 @@ public class a_creature extends a_permanent {
 	
 	public void receives_combat_damage(int The_Combat_Damage_To_Use) {
 		this.Combat_Damage = The_Combat_Damage_To_Use;
-		System.out.println(this + " has effective toughness " + this.effective_toughness() + " and was dealt combat damage " + The_Combat_Damage_To_Use + ".");
+		System.out.println(this.player() + "'s creature " + this + " has effective toughness " + this.effective_toughness() + " and was dealt combat damage " + The_Combat_Damage_To_Use + ".");
 	}
 	
 	public void removes_all_combat_damage() {
