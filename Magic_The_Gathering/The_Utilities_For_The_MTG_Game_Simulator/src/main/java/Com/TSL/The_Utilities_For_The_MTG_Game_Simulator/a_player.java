@@ -256,15 +256,14 @@ public class a_player {
 	
 	public void declares_blockers() throws Exception {
 		System.out.println(this + " is declaring blockers.");
-		ArrayList<a_creature> The_List_Of_Blockers = new ArrayList<>();
 		for (a_creature The_Creature : this.Part_Of_The_Battlefield.list_of_creatures()) {
 			if (!The_Creature.is_tapped() && !The_Creature.is_battle()) {
 				//if (The_Creature.must_block() || (an_enumeration_of_states_of_a_coin.provides_a_state() == an_enumeration_of_states_of_a_coin.HEADS)) {
-					The_List_Of_Blockers.add(The_Creature);
+					this.List_Of_Blockers.add(The_Creature);
 				//}
 			}
 		}
-		for (a_creature The_Blocker : The_List_Of_Blockers) {
+		for (a_creature The_Blocker : this.List_Of_Blockers) {
 			ArrayList<a_creature> The_List_Of_Attackers_That_The_Blocker_Can_Block = new ArrayList<>();
 			for (a_creature The_Attacker : this.Other_Player.List_Of_Attackers) {
 				if (The_Blocker.can_block(The_Attacker)) {
