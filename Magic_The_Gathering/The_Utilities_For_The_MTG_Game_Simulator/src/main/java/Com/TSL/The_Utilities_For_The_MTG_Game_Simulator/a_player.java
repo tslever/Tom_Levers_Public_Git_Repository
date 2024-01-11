@@ -271,7 +271,10 @@ public class a_player {
 					The_List_Of_Attackers_That_The_Blocker_Can_Block.add(The_Blocker);
 				}
 			}
-			int The_Index_Of_Attacker = this.Random_Data_Generator.nextInt(0, The_List_Of_Attackers_That_The_Blocker_Can_Block.size() - 1);
+			int The_Index_Of_Attacker = 0;
+			if (The_List_Of_Attackers_That_The_Blocker_Can_Block.size() > 1) {
+				The_Index_Of_Attacker = this.Random_Data_Generator.nextInt(0, The_List_Of_Attackers_That_The_Blocker_Can_Block.size() - 1);
+			}
 			a_creature The_Attacker = The_List_Of_Attackers_That_The_Blocker_Can_Block.get(The_Index_Of_Attacker);
 			The_Blocker.blocks(The_Attacker);
 			System.out.println(this + "'s creature " + The_Blocker + " blocks " + this.Other_Player + "'s attacking creature " + The_Attacker);
