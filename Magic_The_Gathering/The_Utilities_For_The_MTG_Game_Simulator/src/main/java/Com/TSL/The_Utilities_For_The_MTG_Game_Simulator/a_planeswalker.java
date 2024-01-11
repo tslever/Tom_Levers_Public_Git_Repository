@@ -11,5 +11,6 @@ public class a_planeswalker extends a_permanent {
 	
 	public void receives_combat_damage(int The_Combat_Damage) {
 		this.Combat_Damage = The_Combat_Damage;
+		System.out.println(this + " receives combat damage " + The_Combat_Damage + " and has loyalty " + this.Loyalty);
 	}
 }

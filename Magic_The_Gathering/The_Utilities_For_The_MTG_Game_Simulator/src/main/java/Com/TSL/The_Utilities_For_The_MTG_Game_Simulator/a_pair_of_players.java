@@ -57,6 +57,7 @@ public class a_pair_of_players {
 			this.Active_Player = this.Active_Player.other_player();
 			System.out.print("Should continue (true / false)? ");
 			should_continue = The_Scanner.nextBoolean();
+			System.out.println();
 		}
 	}
 	

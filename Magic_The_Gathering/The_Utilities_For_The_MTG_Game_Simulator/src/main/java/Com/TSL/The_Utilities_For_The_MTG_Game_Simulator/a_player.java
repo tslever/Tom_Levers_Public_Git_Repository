@@ -209,9 +209,10 @@ public class a_player {
 	 */
 	public void completes_her_declare_attackers_step() throws Exception {
 		System.out.println(this + " is completing " + this + "'s Declare Attackers Step.");
+		this.List_Of_Attackers.clear();
 		for (a_creature The_Creature : this.Part_Of_The_Battlefield.list_of_creatures()) {
 			if (!The_Creature.is_tapped() && !The_Creature.is_battle() && (The_Creature.has_haste() || The_Creature.has_been_controlled_by_the_active_player_continuously_since_the_turn_began()) && The_Creature.can_attack()) {
-				if (The_Creature.must_attack() || (an_enumeration_of_states_of_a_coin.provides_a_state() == an_enumeration_of_states_of_a_coin.HEADS)) {
+				//if (The_Creature.must_attack() || (an_enumeration_of_states_of_a_coin.provides_a_state() == an_enumeration_of_states_of_a_coin.HEADS)) {
 					The_Creature.sets_its_indicator_of_whether_it_is_attacking_to(true);
 					Object The_Attackee = null;
 					if (!this.Part_Of_The_Battlefield.list_of_planeswalkers().isEmpty() || !this.List_Of_Battles.isEmpty()) {
@@ -230,14 +231,17 @@ public class a_player {
 					}
 					if (The_Attackee != null) {
 						The_Creature.attacks(The_Attackee);
-						System.out.println("The creature " + The_Creature + " attacks " + The_Attackee + ".");
+						System.out.println(this + "'s creature " + The_Creature + " attacks " + The_Attackee + ".");
 					} else {
 						throw new Exception("The target is null");
 					}
 					The_Creature.taps();
 					this.List_Of_Attackers.add(The_Creature);
-				}
+				//}
 			}
+		}
+		if (this.List_Of_Attackers.isEmpty()) {
+			System.out.println(this + " has no attackers.");
 		}
 		this.performs_state_based_actions_adds_trigged_abilities_to_stack_and_has_this_and_other_player_cast_spells_activate_abiltiies_and_take_special_actions("Declare Attackers Step");
 	}
@@ -247,9 +251,9 @@ public class a_player {
 		ArrayList<a_creature> The_List_Of_Blockers = new ArrayList<>();
 		for (a_creature The_Creature : this.Part_Of_The_Battlefield.list_of_creatures()) {
 			if (!The_Creature.is_tapped() && !The_Creature.is_battle()) {
-				if (The_Creature.must_block() || (an_enumeration_of_states_of_a_coin.provides_a_state() == an_enumeration_of_states_of_a_coin.HEADS)) {
+				//if (The_Creature.must_block() || (an_enumeration_of_states_of_a_coin.provides_a_state() == an_enumeration_of_states_of_a_coin.HEADS)) {
 					The_List_Of_Blockers.add(The_Creature);
-				}
+				//}
 			}
 		}
 		for (a_creature The_Blocker : The_List_Of_Blockers) {
@@ -262,6 +266,7 @@ public class a_player {
 			int The_Index_Of_Attacker = this.Random_Data_Generator.nextInt(0, The_List_Of_Attackers_That_The_Blocker_Can_Block.size() - 1);
 			a_creature The_Attacker = The_List_Of_Attackers_That_The_Blocker_Can_Block.get(The_Index_Of_Attacker);
 			The_Blocker.blocks(The_Attacker);
+			System.out.println(this + "'s creature " + The_Blocker + " blocks " + this.Other_Player + "'s attacking creature " + The_Attacker);
 			The_Attacker.becomes_blocked_by(The_Blocker);
 		}
 	}
@@ -272,6 +277,7 @@ public class a_player {
 			if (The_Attacker.is_blocked()) {
 				Collections.shuffle(The_Attacker.list_of_blockers());
 			}
+			System.out.println(this + "'s attacking creature " + The_Attacker + " will assign damage in order to " + this.Other_Player + "'s blocking creatures in the following list. " + The_Attacker.list_of_blockers());
 		}
 	}
 	
@@ -279,6 +285,7 @@ public class a_player {
 		System.out.println(this + " is choosing damage-assignment order for her blockers.");
 		for (a_creature The_Blocker : this.List_Of_Blockers) {
 			Collections.shuffle(The_Blocker.list_of_blockees());
+			System.out.println(this + "'s blocking creature " + The_Blocker + " will assign damage in order to " + this.Other_Player + "'s attacking creatures in the following list. " + The_Blocker.list_of_blockees());
 		}
 	}
 	
@@ -317,10 +324,13 @@ public class a_player {
 				Object The_Attackee = The_Attacker.attackee();
 				if (The_Attackee instanceof a_player) {
 					a_player The_Player = (a_player) The_Attackee;
-					The_Player.Life -= The_Attacker.effective_power();
+					int The_Effective_Power = The_Attacker.effective_power();
+					The_Player.Life -= The_Effective_Power;
+					System.out.println(The_Player + " was dealt damage " + The_Effective_Power + " and has life " + The_Player.Life);
 				} else if (The_Attackee instanceof a_planeswalker) {
 					a_planeswalker The_Planeswalker = (a_planeswalker) The_Attackee;
-					The_Planeswalker.receives_combat_damage(The_Attacker.effective_power());
+					int The_Effective_Power = The_Attacker.effective_power();
+					The_Planeswalker.receives_combat_damage(The_Effective_Power);
 				} else if (The_Attackee instanceof a_battle) {
 					throw new Exception("Not implemented");
 				}
@@ -338,7 +348,8 @@ public class a_player {
 		}
 		this.Part_Of_The_Battlefield.list_of_creatures().removeAll(The_List_Of_Creatures);
 		for (a_creature The_Creature : The_List_Of_Creatures) {
-			this.Graveyard.receives(The_Creature.creature_card());	
+			this.Graveyard.receives(The_Creature.creature_card());
+			System.out.println(this + "'s creature " + The_Creature + " was dealt lethal damage; " + this + " puts " + The_Creature + " into " + this + "'s graveyard.");
 		}
 	}
 	
@@ -420,6 +431,8 @@ public class a_player {
 		// Rule 500.6: When a phase or step begins, any abilities that trigger "at the beginning of" that phase or step trigger. They are put on the stack the next time a player would receive priority. (See rule 117, "Timing and Priority.")
 		// Rule 504.1: First, the active player draws a card. This turn-based action doesn't use the stack.
 		this.draws();
+		System.out.println("After drawing, " + this + "'s deck has " + this.Deck.number_of_cards() + " cards and contains the following. " + this.Deck);
+		System.out.println("After drawing, " + this + "'s hand has " + this.Hand.number_of_cards() + " cards and contains the following. " + this.Hand);
 		
 		// Rule 504.2: Second, the active player gets priority. (See rule 117, "Timing and Priority.")
 		this.performs_state_based_actions_adds_trigged_abilities_to_stack_and_has_this_and_other_player_cast_spells_activate_abiltiies_and_take_special_actions("Draw Step");
@@ -440,8 +453,10 @@ public class a_player {
     public void completes_her_cleanup_step() throws Exception {
 		System.out.println(this + " is completing " + this + "'s Cleanup Step.");
     	boolean this_player_has_discarded = false;
-		while (this.Hand.number_of_cards() > this.Maximum_Hand_Size) {
+    	int The_Number_Of_Hand_Cards = this.Hand.number_of_cards();
+		while (The_Number_Of_Hand_Cards > this.Maximum_Hand_Size) {
     		this.discards();
+    		The_Number_Of_Hand_Cards = this.Hand.number_of_cards();
     	}
 		if (!this_player_has_discarded) {
 			System.out.println(this + "'s hand has " + this.Hand.number_of_cards() + " cards, which is less than maximum number of cards in hand " + this.Maximum_Hand_Size + "; " + this + " does not discard.");
@@ -479,7 +494,7 @@ public class a_player {
 	public void casts_a_spell_or_activates_a_nonmana_activated_ability(String The_Step_To_Use, boolean Indicator_Of_Whether_This_Player_May_Only_Play_Instants_Nonland_Hand_Cards_With_Flash_And_Nonmana_Activated_Abilities) throws Exception {
 		// Rule 601.2: To cast a spell is to [use a card to create a spell], put [the spell] on the stack, and pay its mana costs, so that [the spell] will eventually resolve and have its effect. Casting a spell includes proposal of the spell (rules 601.2a-d) and determination and payment of costs (rules 601.2f-h). To cast a spell, a player follows the steps listed below, in order. A player must be legally allowed to cast the spell to begin this process (see rule 601.3). If a player is unable to comply with the requirements of a step listed below while performing that step, the casting of the spell is illegal; the game returns to the moment before the casting of that spell was proposed (see rule 723, "Handling Illegal Actions").
 		// Rule 601.2e: The game checks to see if the proposed spell can legally be cast. If the proposed spell is illegal, the game returns to the moment before the casting of that spell was proposed (see rule 723, "Handling Illegal Actions").
-		System.out.println(this + " is considering casting a spell or activating an ability.");
+		//System.out.println(this + " is considering casting a spell or activating an ability.");
 		ArrayList<a_nonland_card> The_List_Of_All_Nonland_Hand_Cards = this.Hand.list_of_nonland_cards();
 		ArrayList<a_nonland_card> The_List_Of_Nonland_Hand_Cards_Appropriate_For_The_Present_Step;
 		if (Indicator_Of_Whether_This_Player_May_Only_Play_Instants_Nonland_Hand_Cards_With_Flash_And_Nonmana_Activated_Abilities) {
@@ -497,9 +512,9 @@ public class a_player {
 		this.determines_whether_are_playable_the_cards_in(The_List_Of_Nonland_Hand_Cards_Appropriate_For_The_Present_Step, The_Step_To_Use);
 		this.determines_whether_her_permanents_nonmana_activated_abilities_are_activatable();
 		ArrayList<a_nonland_card> The_List_Of_Playable_Nonland_Hand_Cards = this.generates_a_list_of_playable_nonland_hand_cards_in(The_List_Of_Nonland_Hand_Cards_Appropriate_For_The_Present_Step);
-		System.out.println(this.Name + " may cast a spell using a card in the following list. " + The_List_Of_Playable_Nonland_Hand_Cards);
+		//System.out.println(this.Name + " may cast a spell using a card in the following list. " + The_List_Of_Playable_Nonland_Hand_Cards);
 		ArrayList<a_nonmana_activated_ability> The_List_Of_Activatable_Nonmana_Activated_Abilities = this.generates_a_list_of_activatable_nonmana_activated_abilities();
-		System.out.println(this.Name + " may activate an ability in the following list. " + The_List_Of_Activatable_Nonmana_Activated_Abilities);
+		//System.out.println(this.Name + " may activate an ability in the following list. " + The_List_Of_Activatable_Nonmana_Activated_Abilities);
 		ArrayList<Object> The_List_Of_Playable_Nonland_Hand_Cards_And_Activatable_Nonmana_Activated_Abilities = new ArrayList<>();
 		The_List_Of_Playable_Nonland_Hand_Cards_And_Activatable_Nonmana_Activated_Abilities.addAll(The_List_Of_Playable_Nonland_Hand_Cards);
 		The_List_Of_Playable_Nonland_Hand_Cards_And_Activatable_Nonmana_Activated_Abilities.addAll(The_List_Of_Activatable_Nonmana_Activated_Abilities);
@@ -666,7 +681,7 @@ public class a_player {
 				The_List_Of_Permanents_That_Should_Be_Untapped.add(The_Planeswalker);
 			}
 		}
-		System.out.println(this.Name + " determines the following list of permanents to untap. " + The_List_Of_Permanents_That_Should_Be_Untapped);
+		//System.out.println(this.Name + " determines the following list of permanents to untap. " + The_List_Of_Permanents_That_Should_Be_Untapped);
 		return The_List_Of_Permanents_That_Should_Be_Untapped;
 	}
 	
@@ -708,9 +723,7 @@ public class a_player {
 	
 	
 	public void draws() {
-		this.Hand.receives(this.Deck.removes_and_provides_its_top_card());		
-		System.out.println("After drawing, " + this + "'s deck has " + this.Deck.number_of_cards() + " cards and contains the following. " + this.Deck);
-		System.out.println("After drawing, " + this + "'s hand has " + this.Hand.number_of_cards() + " cards and contains the following. " + this.Hand);
+		this.Hand.receives(this.Deck.removes_and_provides_its_top_card());
 	}
 	
 	
@@ -723,6 +736,8 @@ public class a_player {
 		for (int i = 0; i < STARTING_HAND_SIZE; i++) {
 			this.draws();
 		}
+		System.out.println("After drawing, " + this + "'s deck has " + this.Deck.number_of_cards() + " cards and contains the following. " + this.Deck);
+		System.out.println("After drawing, " + this + "'s hand has " + this.Hand.number_of_cards() + " cards and contains the following. " + this.Hand);
 	}
     
 	
@@ -895,9 +910,6 @@ public class a_player {
 	
 	public void shuffles_her_deck() {
 		this.Deck.shuffles();
-		System.out.println(
-			"The deck of " + this.Name + " after shuffling has " + this.Deck.number_of_cards() + " cards and is the following. " + this.Deck
-		);
 	}
 	
 	public void takes_her_turn() throws Exception {

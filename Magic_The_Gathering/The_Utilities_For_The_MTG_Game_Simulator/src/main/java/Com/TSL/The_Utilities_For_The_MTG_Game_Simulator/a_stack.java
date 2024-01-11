@@ -55,7 +55,7 @@ public class a_stack {
 		this.Has_Resolved = false;
 		if (this.contains_objects()) {
 			Object The_Object = this.top_object();
-			System.out.println("The top stack spell or ability " + The_Object + " is resolving.");
+			System.out.println("The following top stack spell or ability is resolving. " + The_Object);
 			if (The_Object instanceof a_spell) {
 				a_spell The_Spell = (a_spell) The_Object;
 				if (The_Spell instanceof a_permanent_spell) {
