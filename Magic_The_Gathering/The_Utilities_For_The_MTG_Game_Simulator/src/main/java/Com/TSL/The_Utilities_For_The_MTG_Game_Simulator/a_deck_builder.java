@@ -8,7 +8,7 @@ public class a_deck_builder {
 		
     	ArrayList<a_card> The_List_Of_Cards_For_Keep_The_Peace = new ArrayList<a_card>();
     	
-    	for (int i = 0; i < 25; i++) {
+    	for (int i = 0; i < 100; i++) {
     		The_List_Of_Cards_For_Keep_The_Peace.add(
     			new a_land_card(
     				"Arena Base Set",
@@ -21,7 +21,7 @@ public class a_deck_builder {
     	}
     	// 25 cards
     	
-    	for (int i = 0; i < 4; i++) {
+    	for (int i = 0; i < 100; i++) {
     		ArrayList<String> The_Text = new ArrayList<>();
     		The_Text.add("Lifelink");
     		The_Text.add("When Charmed Stray enters the battlefield, put a +1/+1 counter on each other creature you control named Charmed Stray.");
@@ -334,7 +334,7 @@ public class a_deck_builder {
     	ArrayList<a_card> The_List_Of_Cards_For_Large_And_In_Charge = new ArrayList<a_card>();
     	
     	ArrayList<String> The_Text;
-    	for (int i = 0; i < 25; i++) {
+    	for (int i = 0; i < 100; i++) {
         	The_Text = new ArrayList<>();
     		The_List_Of_Cards_For_Large_And_In_Charge.add(
     			new a_land_card(
@@ -348,7 +348,7 @@ public class a_deck_builder {
     	}
     	// 25 cards
     	
-    	for (int i = 0; i < 3; i++) {
+    	for (int i = 0; i < 100; i++) {
     		The_Text = new ArrayList<>();
     		The_Text.add("[3G]: Put a +1/+1 counter on Jungle Delver.");
     		The_List_Of_Cards_For_Large_And_In_Charge.add(

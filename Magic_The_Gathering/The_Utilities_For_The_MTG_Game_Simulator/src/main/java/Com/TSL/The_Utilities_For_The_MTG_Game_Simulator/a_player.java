@@ -8,7 +8,7 @@ import org.apache.commons.math3.random.RandomDataGenerator;
 public class a_player {
 	
 	/** Rule 103.4: Each player draws a number of cards equal to their starting hand size, which is normally seven. */
-	private static int STARTING_HAND_SIZE = 7;
+	private int STARTING_HAND_SIZE = 7;
 	
 	private a_deck Deck;
 	private an_exile Exile;
@@ -27,6 +27,7 @@ public class a_player {
 	private ArrayList<a_battle> List_Of_Battles;
 	private ArrayList<a_creature> List_Of_Blockers;
 	private a_mana_pool Mana_Pool;
+	private int Maximum_Hand_Size;
 	private String Name;
 	private a_part_of_the_battlefield Part_Of_The_Battlefield;
 	private a_player Other_Player;
@@ -50,6 +51,7 @@ public class a_player {
 		this.List_Of_Battles = new ArrayList<a_battle>();
 		this.List_Of_Blockers = new ArrayList<a_creature>();
 		this.Mana_Pool = new a_mana_pool(0, 0, 0, 0, 0, 0);
+		this.Maximum_Hand_Size = this.STARTING_HAND_SIZE;
 		this.Name = The_Name_To_Use;
 		this.Part_Of_The_Battlefield = new a_part_of_the_battlefield();
 		this.Random_Data_Generator = new RandomDataGenerator();
@@ -431,18 +433,52 @@ public class a_player {
 		// Rule 500.4: When a step or phase ends, any unused mana left in a player's mana pool empties. This turn-based action doesn't use the stack.
 		// Rule 500.5: When a phase or step ends, any effects scheduled to last "until end of" that phase or step expire.
 	}
+    
+    /** completes_her_end_step
+     * 
+     * Rule 513.1: The end step has no turn-based actions. Once [the end step] begins, the active player gets priority. (See rule 117, "Timing and Priority.") */
+    public void completes_her_end_step() throws Exception {
+		System.out.println(this + " is completing " + this + "'s End Step.");
+    	this.performs_state_based_actions_adds_trigged_abilities_to_stack_and_has_this_and_other_player_cast_spells_activate_abiltiies_and_take_special_actions("End Step");
+    }
+    
+    public void completes_her_cleanup_step() throws Exception {
+		System.out.println(this + " is completing " + this + "'s Cleanup Step.");
+    	boolean this_player_has_discarded = false;
+		while (this.Hand.number_of_cards() > this.Maximum_Hand_Size) {
+    		this.discards();
+    	}
+		if (!this_player_has_discarded) {
+			System.out.println(this + "'s hand has " + this.Hand.number_of_cards() + " cards, which is less than maximum number of cards in hand " + this.Maximum_Hand_Size + "; " + this + " does not discard.");
+		}
+		boolean combat_damage_has_been_removed = false;
+    	for (a_creature The_Creature : this.Part_Of_The_Battlefield.list_of_creatures()) {
+    		The_Creature.removes_all_combat_damage();
+    		combat_damage_has_been_removed = true;
+    		System.out.println("All combat damage has been removed from " + The_Creature + ".");
+    	}
+    	if (!combat_damage_has_been_removed) {
+    		System.out.println(this + " has no creatures from which to remove combat damage.");
+    	}
+		if (this.would_perform_state_based_actions() || !this.Stack.list_of_triggered_abilities_to_be_added_to_this().isEmpty() ) {
+			this.performs_state_based_actions_adds_trigged_abilities_to_stack_and_has_this_and_other_player_cast_spells_activate_abiltiies_and_take_special_actions("Cleanup Step");
+		}
+    }
+    
+    public void discards() {
+    	int The_Index_Of_A_Hand_Card = this.Random_Data_Generator.nextInt(0, this.Hand.number_of_cards() - 1);
+    	a_card The_Removed_Card = this.Hand.list_of_cards().remove(The_Index_Of_A_Hand_Card);
+    	System.out.println(this + " discards " + The_Removed_Card);
+    }
 	
-	
-	public void completes_her_end_phase() {
-		System.out.println(this.Name + " is completing " + this + "'s end phase.");
-		
-		// Rule 500.5: When a phase or step begins, any effects scheduled to last "until" that phase or step expire.
-		// Rule 500.6: When a phase or step begins, any abilities that trigger "at the beginning of" that phase or step trigger. They are put on the stack the next time a player would receive priority. (See rule 117, "Timing and Priority.")
-		
-		// Rule 500.2: A phase or step in which players receive priority ends when the stack is empty and all players pass in succession.
-		// Rule 500.4: When a step or phase ends, any unused mana left in a player's mana pool empties. This turn-based action doesn't use the stack.
-		// Rule 500.5: When a phase or step ends, any effects scheduled to last "until end of" that phase or step expire... Effects that last "until end of combat" expire at the end of the combat phase.
-		
+    /** completes_her_ending_phase
+     * 
+     * The ending phase consists of two steps: end and cleanup.
+     */
+	public void completes_her_ending_phase() throws Exception {
+		System.out.println(this + " is completing " + this + "'s Ending Phase.");
+		this.completes_her_end_step();
+		this.completes_her_cleanup_step();
 	}
 	
 	public void casts_a_spell_or_activates_a_nonmana_activated_ability(String The_Step_To_Use, boolean Indicator_Of_Whether_This_Player_May_Only_Play_Instants_Nonland_Hand_Cards_With_Flash_And_Nonmana_Activated_Abilities) throws Exception {
@@ -556,6 +592,10 @@ public class a_player {
 	
 	public void performs_all_applicable_state_based_actions_as_a_single_event() {
 		// TODO
+	}
+	
+	public boolean would_perform_state_based_actions() {
+		return false;
 	}
 	
 	public void performs_state_based_actions_adds_trigged_abilities_to_stack_and_has_this_and_other_player_cast_spells_activate_abiltiies_and_take_special_actions(String The_Step_To_Use) throws Exception {
@@ -877,7 +917,7 @@ public class a_player {
 		this.completes_a_main_phase();
 		this.completes_her_combat_phase();
 		this.completes_a_main_phase();
-		this.completes_her_end_phase();
+		this.completes_her_ending_phase();
 		
 		// Rule 500.5: Effects that last "until end of turn" are subject to special rules; see rule 514.2.	
 	}

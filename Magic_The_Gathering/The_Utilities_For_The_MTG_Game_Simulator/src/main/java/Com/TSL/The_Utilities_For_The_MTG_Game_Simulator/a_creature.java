@@ -137,6 +137,10 @@ public class a_creature extends a_permanent {
 		this.Combat_Damage = The_Combat_Damage_To_Use;
 	}
 	
+	public void removes_all_combat_damage() {
+		this.Combat_Damage = 0;
+	}
+	
 	public void sets_its_indicator_of_whether_it_has_been_controlled_by_the_active_player_continuously_since_the_turn_began_to(boolean The_Indicator_To_Use) {
 		this.Indicator_Of_Whether_This_Creature_Has_Been_Controlled_By_The_Active_Player_Continuously_Since_The_Turn_Began = The_Indicator_To_Use;
 	}
