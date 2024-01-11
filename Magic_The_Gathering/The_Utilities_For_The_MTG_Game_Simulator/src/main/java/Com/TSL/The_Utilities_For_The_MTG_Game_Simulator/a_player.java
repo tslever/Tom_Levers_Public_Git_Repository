@@ -11,22 +11,17 @@ public class a_player {
 	private int STARTING_HAND_SIZE = 7;
 	
 	private a_deck Deck;
-	private an_exile Exile;
 	private a_graveyard Graveyard;
 	private a_hand Hand;
-	private boolean Has_Cast_A_Spell_Or_Activated_A_Nonmana_Activated_Ability;
 	private boolean Has_Passed;
-	private boolean Has_Played_A_Land;
 	private boolean Has_Played_A_Land_This_Turn;
 	private boolean Has_Performed_A_State_Based_Action;
-	private boolean Has_Priority;
 	private boolean Has_Taken_An_Action;
 	private int Index_Of_The_Present_Turn;
 	private int Life;
 	private ArrayList<a_creature> List_Of_Attackers;
 	private ArrayList<a_battle> List_Of_Battles;
 	private ArrayList<a_creature> List_Of_Blockers;
-	private a_mana_pool Mana_Pool;
 	private int Maximum_Hand_Size;
 	private String Name;
 	private a_part_of_the_battlefield Part_Of_The_Battlefield;
@@ -43,14 +38,12 @@ public class a_player {
 	public a_player(a_deck The_Deck_To_Use, String The_Name_To_Use, a_stack The_Stack_To_Use)
 	{
 		this.Deck = The_Deck_To_Use;
-		this.Exile = new an_exile();
 		this.Graveyard = new a_graveyard();
 		this.Hand = new a_hand();
 		this.Life = 20;
 		this.List_Of_Attackers = new ArrayList<a_creature>();
 		this.List_Of_Battles = new ArrayList<a_battle>();
 		this.List_Of_Blockers = new ArrayList<a_creature>();
-		this.Mana_Pool = new a_mana_pool(0, 0, 0, 0, 0, 0);
 		this.Maximum_Hand_Size = this.STARTING_HAND_SIZE;
 		this.Name = The_Name_To_Use;
 		this.Part_Of_The_Battlefield = new a_part_of_the_battlefield();
@@ -377,8 +370,8 @@ public class a_player {
 	/**
 	 * completes_her_end_of_combat_step
 	 */
-	public void completes_her_end_of_combat_step() {
-		this.Has_Priority = true;
+	public void completes_her_end_of_combat_step() throws Exception {
+		this.performs_state_based_actions_adds_trigged_abilities_to_stack_and_has_this_and_other_player_cast_spells_activate_abiltiies_and_take_special_actions("End Of Combat Step");
 	}
 	
 	/**
@@ -535,7 +528,6 @@ public class a_player {
 				}
 				this.Has_Passed = false;
 				this.Has_Taken_An_Action = true;
-				this.Has_Cast_A_Spell_Or_Activated_A_Nonmana_Activated_Ability = true;
 				System.out.println("The stack contains the following spells and abilities. " + this.Stack);
 			} else if (The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability instanceof a_nonmana_activated_ability) {
 				a_nonmana_activated_ability The_Nonmana_Activated_Ability = (a_nonmana_activated_ability) The_Playable_Nonland_Hand_Card_Or_Activatable_Nonmana_Activated_Ability;
@@ -544,13 +536,11 @@ public class a_player {
 				System.out.println(this.Name + " has activated ability " + The_Nonmana_Activated_Ability + ".");
 				this.Has_Passed = false;
 				this.Has_Taken_An_Action = true;
-				this.Has_Cast_A_Spell_Or_Activated_A_Nonmana_Activated_Ability = true;
 				System.out.println("The stack contains the following spells and abilities. " + this.Stack);
 			}
 		} else {
 			this.Has_Passed = true;
 			this.Has_Taken_An_Action = false;
-			this.Has_Cast_A_Spell_Or_Activated_A_Nonmana_Activated_Ability = false;
 			System.out.println(this + " neither casts a spell nor activates an ability.");
 		}
 	}
