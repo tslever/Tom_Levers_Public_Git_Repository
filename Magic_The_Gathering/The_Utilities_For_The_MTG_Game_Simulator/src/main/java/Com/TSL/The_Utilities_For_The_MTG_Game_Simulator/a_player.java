@@ -266,7 +266,7 @@ public class a_player {
 		}
 		for (a_creature The_Blocker : The_List_Of_Blockers) {
 			ArrayList<a_creature> The_List_Of_Attackers_That_The_Blocker_Can_Block = new ArrayList<>();
-			for (a_creature The_Attacker : this.List_Of_Attackers) {
+			for (a_creature The_Attacker : this.Other_Player.List_Of_Attackers) {
 				if (The_Blocker.can_block(The_Attacker)) {
 					The_List_Of_Attackers_That_The_Blocker_Can_Block.add(The_Blocker);
 				}
