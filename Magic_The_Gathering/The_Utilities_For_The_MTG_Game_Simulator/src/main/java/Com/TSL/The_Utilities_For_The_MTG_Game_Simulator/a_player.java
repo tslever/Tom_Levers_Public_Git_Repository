@@ -35,11 +35,14 @@ public class a_player {
 	 * 
 	 * Rule 103.3: Each player begins the game with a starting life total of 20.
 	 */
-	public a_player(a_deck The_Deck_To_Use, String The_Name_To_Use, a_stack The_Stack_To_Use)
-	{
+	public a_player(a_deck The_Deck_To_Use, String The_Name_To_Use, a_stack The_Stack_To_Use) {
 		this.Deck = The_Deck_To_Use;
 		this.Graveyard = new a_graveyard();
 		this.Hand = new a_hand();
+		this.Has_Passed = false;
+		this.Has_Played_A_Land_This_Turn = false;
+		this.Has_Performed_A_State_Based_Action = false;
+		this.Has_Taken_An_Action = false;
 		this.Index_Of_The_Present_Turn = -1;
 		this.Life = 20;
 		this.List_Of_Attackers = new ArrayList<a_creature>();
@@ -50,6 +53,7 @@ public class a_player {
 		this.Part_Of_The_Battlefield = new a_part_of_the_battlefield();
 		this.Random_Data_Generator = new RandomDataGenerator();
 		this.Stack = The_Stack_To_Use;
+		this.Was_Starting_Player = false;
 	}
 
 	public a_mana_pool acquires_mana_for_nonland_card_or_nonmana_activated_ability(Object The_Object) throws Exception {
@@ -161,8 +165,13 @@ public class a_player {
 	 /* Rule 501.1: The beginning phase consists of three steps, in this order: untap, upkeep, and draw. */
 	public void completes_her_beginning_phase() throws Exception {
 		System.out.println(this + " is completing " + this + "'s Beginning Phase.");
-		this.Index_Of_The_Present_Turn += 1;
+		this.Has_Passed = false;
 		this.Has_Played_A_Land_This_Turn = false;
+		this.Has_Performed_A_State_Based_Action = false;
+		this.Has_Taken_An_Action = false;
+		this.Index_Of_The_Present_Turn += 1;
+		this.List_Of_Attackers.clear();
+		this.List_Of_Blockers.clear();
 		 /* No player receives priority during the untap step.
 		 * Rule 503.1a: Any abilities that triggered during the untap step and any abilities that triggered at the beginning of the upkeep [step] are put onto the stack before the active player gets priority; the order in which they triggered doesn't matter. (See rule 603, "Handling Triggered Abilities.") */
 		this.completes_her_untap_step();
@@ -209,7 +218,6 @@ public class a_player {
 	 */
 	public void completes_her_declare_attackers_step() throws Exception {
 		System.out.println(this + " is completing " + this + "'s Declare Attackers Step.");
-		this.List_Of_Attackers.clear();
 		for (a_creature The_Creature : this.Part_Of_The_Battlefield.list_of_creatures()) {
 			if (!The_Creature.is_tapped() && !The_Creature.is_battle() && (The_Creature.has_haste() || The_Creature.has_been_controlled_by_the_active_player_continuously_since_the_turn_began()) && The_Creature.can_attack()) {
 				//if (The_Creature.must_attack() || (an_enumeration_of_states_of_a_coin.provides_a_state() == an_enumeration_of_states_of_a_coin.HEADS)) {
