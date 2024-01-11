@@ -1,5 +1,7 @@
 package Com.TSL.The_Utilities_For_The_MTG_Game_Simulator;
 
+import java.util.Scanner;
+
 public class a_pair_of_players {
 	
 	private a_player Active_Player;
@@ -48,7 +50,14 @@ public class a_pair_of_players {
 		this.draws_hands();
 		// TODO: Implement mulligan.
 		//this.mulligan();
-		this.Active_Player.takes_her_turn();
+		boolean should_continue = true;
+		Scanner The_Scanner = new Scanner(System.in);
+		while (should_continue) {
+			this.Active_Player.takes_her_turn();
+			this.Active_Player = this.Active_Player.other_player();
+			System.out.print("Should continue (true / false)? ");
+			should_continue = The_Scanner.nextBoolean();
+		}
 	}
 	
 	/** Rule 103.2:
