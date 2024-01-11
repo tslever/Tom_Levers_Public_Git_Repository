@@ -40,6 +40,7 @@ public class a_player {
 		this.Deck = The_Deck_To_Use;
 		this.Graveyard = new a_graveyard();
 		this.Hand = new a_hand();
+		this.Index_Of_The_Present_Turn = -1;
 		this.Life = 20;
 		this.List_Of_Attackers = new ArrayList<a_creature>();
 		this.List_Of_Battles = new ArrayList<a_battle>();
@@ -160,6 +161,7 @@ public class a_player {
 	 /* Rule 501.1: The beginning phase consists of three steps, in this order: untap, upkeep, and draw. */
 	public void completes_her_beginning_phase() throws Exception {
 		System.out.println(this + " is completing " + this + "'s Beginning Phase.");
+		this.Index_Of_The_Present_Turn += 1;
 		this.Has_Played_A_Land_This_Turn = false;
 		 /* No player receives priority during the untap step.
 		 * Rule 503.1a: Any abilities that triggered during the untap step and any abilities that triggered at the beginning of the upkeep [step] are put onto the stack before the active player gets priority; the order in which they triggered doesn't matter. (See rule 603, "Handling Triggered Abilities.") */
