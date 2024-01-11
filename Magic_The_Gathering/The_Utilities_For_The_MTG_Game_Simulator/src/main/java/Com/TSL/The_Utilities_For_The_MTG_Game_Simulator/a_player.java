@@ -883,7 +883,7 @@ public class a_player {
 	 * Rule 117.1: Unless a spell or ability is instructing a player to take an action, which player can take actions at any given time is determined by a system of priority...
 	 */
 	public void casts_a_spell_activates_an_activated_ability_or_takes_a_special_action(String The_Step_To_Use, String The_Event_After_Which_She_Is_Receiving_Priority_And_Acting) throws Exception {
-		System.out.println(this + " is considering casting a spell, activating an ability, or taking a special action.");
+		System.out.print(this + " is considering casting a spell, activating an ability, or taking a special action. ");
 		if (this.Stack.isEmpty()) {
 			if (The_Step_To_Use.equals("This Player's Main Phase")) {
 				/* Rule 116.2a: Playing a land is a special action.
