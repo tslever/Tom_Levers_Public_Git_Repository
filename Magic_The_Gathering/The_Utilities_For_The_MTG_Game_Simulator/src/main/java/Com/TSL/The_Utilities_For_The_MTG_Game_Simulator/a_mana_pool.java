@@ -25,18 +25,6 @@ public class a_mana_pool {
 		this.Number_Of_Red_Mana = The_Number_Of_Red_Mana_To_Use;
 		this.Number_Of_White_Mana = The_Number_Of_White_Mana_To_Use;
 	}
-
-	public a_mana_pool clones_itself() {
-		return
-			new a_mana_pool(
-				this.Number_Of_Black_Mana,
-				this.Number_Of_Blue_Mana,
-				this.Number_Of_Colorless_Mana,
-				this.Number_Of_Green_Mana,
-				this.Number_Of_Red_Mana,
-				this.Number_Of_White_Mana
-			);
-	}
 	
 	public void decreases_by(a_mana_cost The_Mana_Cost_To_Use) {
 		this.Number_Of_Black_Mana -= The_Mana_Cost_To_Use.number_of_black_mana();
@@ -57,30 +45,18 @@ public class a_mana_pool {
 	}
 	
 	public boolean is_sufficient_for(a_mana_cost The_Mana_Cost) {
-		
-		a_mana_pool The_Clone = this.clones_itself();
-		The_Clone.decreases_by(The_Mana_Cost);
-		
-		if ((The_Clone.number_of_black_mana() < 0) ||
-			(The_Clone.number_of_blue_mana() < 0) ||
-			(The_Clone.number_of_colorless_mana() < 0) ||
-			(The_Clone.number_of_green_mana() < 0) ||
-			(The_Clone.number_of_red_mana() < 0) ||
-			(The_Clone.number_of_white_mana() < 0)) {
+		if (
+			this.Number_Of_Black_Mana >= The_Mana_Cost.number_of_black_mana() &&
+			this.Number_Of_Blue_Mana >= The_Mana_Cost.number_of_blue_mana() &&
+			this.Number_Of_Green_Mana >= The_Mana_Cost.number_of_green_mana() &&
+			this.Number_Of_Red_Mana >= The_Mana_Cost.number_of_red_mana() &&
+			this.Number_Of_White_Mana >= The_Mana_Cost.number_of_white_mana() &&
+			this.number_of_mana() >= The_Mana_Cost.number_of_mana()
+		) {
+			return true;
+		} else {
 			return false;
 		}
-		
-		if ((The_Clone.number_of_colorless_mana() +
-			 The_Clone.number_of_black_mana() +
-			 The_Clone.number_of_blue_mana() +
-			 The_Clone.number_of_green_mana() +
-			 The_Clone.number_of_red_mana() +
-			 The_Clone.number_of_white_mana())
-			< 0) {
-			return false;
-		}
-		
-		return true;
 	}
 
 	public int number_of_black_mana() {
@@ -97,6 +73,16 @@ public class a_mana_pool {
 	
 	public int number_of_green_mana() {
 		return this.Number_Of_Green_Mana;
+	}
+	
+	public int number_of_mana() {
+		return
+			this.Number_Of_Black_Mana +
+			this.Number_Of_Blue_Mana +
+			this.Number_Of_Colorless_Mana +
+			this.Number_Of_Green_Mana +
+			this.Number_Of_Red_Mana +
+			this.Number_Of_White_Mana;
 	}
 	
 	public int number_of_red_mana() {

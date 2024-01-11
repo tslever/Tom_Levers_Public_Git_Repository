@@ -512,7 +512,7 @@ public class a_player {
 					The_List_Of_Nonland_Hand_Cards_Appropriate_For_The_Present_Step.add(The_Nonland_Hand_Card);
 				}
 			}
-		} else {			
+		} else {
 			The_List_Of_Nonland_Hand_Cards_Appropriate_For_The_Present_Step = The_List_Of_All_Nonland_Hand_Cards;
 		}
 		this.assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_nonland_hand_cards_in(The_List_Of_Nonland_Hand_Cards_Appropriate_For_The_Present_Step);
