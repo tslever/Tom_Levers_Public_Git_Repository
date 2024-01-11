@@ -102,12 +102,12 @@ public class a_stack {
 							    }	
 						    }
 						}
-						else if (The_Spell.type().equals("Instant") ) {
-							// TODO
-						} else if (The_Spell.type().equals("Sorcery")) {
-							// TODO
-						}
 					}
+				}
+				else if (The_Spell.type().equals("Instant") ) {
+					// TODO
+				} else if (The_Spell.type().equals("Sorcery")) {
+					// TODO
 				}
 			}
 			else if (The_Object instanceof an_ability) {
