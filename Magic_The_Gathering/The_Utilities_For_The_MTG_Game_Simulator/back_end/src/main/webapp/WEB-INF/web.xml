@@ -5,13 +5,24 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 
-<servlet>
-    <servlet-name>echo</servlet-name>
-    <servlet-class>Com.TSL.The_Utilities_For_The_MTG_Game_Simulator.an_echo_servlet</servlet-class>
-</servlet>
+	<servlet>
+	    <servlet-name>The_MTG_Servlet</servlet-name>
+	    <servlet-class>Com.TSL.The_Utilities_For_The_MTG_Game_Simulator.an_MTG_servlet</servlet-class>
+	</servlet>
+	
+	<servlet>
+	    <servlet-name>The_Echo_Servlet</servlet-name>
+	    <servlet-class>Com.TSL.The_Utilities_For_The_MTG_Game_Simulator.an_echo_servlet</servlet-class>
+	</servlet>
 
-<servlet-mapping>
-    <servlet-name>echo</servlet-name>
-    <url-pattern>/echo</url-pattern>
-</servlet-mapping>
+	<servlet-mapping>
+	    <servlet-name>The_MTG_Servlet</servlet-name>
+	    <url-pattern>/</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+	    <servlet-name>The_Echo_Servlet</servlet-name>
+	    <url-pattern>/echo</url-pattern>
+	</servlet-mapping>
+	
 </web-app>
