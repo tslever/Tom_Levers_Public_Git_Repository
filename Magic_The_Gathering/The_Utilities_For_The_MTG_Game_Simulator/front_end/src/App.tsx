@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
-import logo from './logo.svg';
+import { useEffect } from 'react';
 import './App.css';
+import ButtonDisplayer from "./ButtonDisplayer";
+import Displayer from "./Displayer";
 import TableDisplayer from "./TableDisplayer";
 
 function App() {
@@ -21,9 +22,12 @@ function App() {
   }, []); // Empty dependency array ensures the effect runs once when the component mounts
 
   return (
-    <TableDisplayer
-      headerData = { ["Action"] }
-    />
+    <Displayer>
+      <ButtonDisplayer label = "Next"/>
+      <TableDisplayer
+        headerData = { ["Action"] }
+      />
+    </Displayer>
   );
 }
 
