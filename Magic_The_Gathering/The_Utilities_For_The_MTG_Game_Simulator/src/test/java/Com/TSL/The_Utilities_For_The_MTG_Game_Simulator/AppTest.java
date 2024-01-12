@@ -1,4 +1,4 @@
-package Com.TSL.Utilities_for_MTG_Game_Simulator;
+package Com.TSL.The_Utilities_For_The_MTG_Game_Simulator;
 
 import static org.junit.Assert.assertTrue;
 
