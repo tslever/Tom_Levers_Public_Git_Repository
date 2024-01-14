@@ -326,7 +326,6 @@ public class a_deck_builder {
     	// 60 cards
     	
 		a_deck The_Deck_Keep_The_Peace = new a_deck(The_List_Of_Cards_For_Keep_The_Peace, "Keep The Peace");
-		System.out.println("The deck Keep the Peace has " + The_Deck_Keep_The_Peace.number_of_cards() + " cards and is the following. " + The_Deck_Keep_The_Peace);
     	return The_Deck_Keep_The_Peace;
 	}
 	
@@ -350,7 +349,7 @@ public class a_deck_builder {
     	}
     	// 25 cards
     	
-    	for (int i = 0; i < 4; i++) {
+    	for (int i = 0; i < 3; i++) {
     		The_Text = new ArrayList<>();
     		The_Text.add("[3G]: Put a +1/+1 counter on Jungle Delver.");
     		The_List_Of_Cards_For_Large_And_In_Charge.add(
@@ -641,7 +640,6 @@ public class a_deck_builder {
 		// 60 cards
 		
 		a_deck The_Deck_Large_And_In_Charge = new a_deck(The_List_Of_Cards_For_Large_And_In_Charge, "Large_and_in_Charge");
-		System.out.println("The deck Large And In Charge has " + The_Deck_Large_And_In_Charge.number_of_cards() + " cards and is the following. " + The_Deck_Large_And_In_Charge);
     	return The_Deck_Large_And_In_Charge;
 	}
 	

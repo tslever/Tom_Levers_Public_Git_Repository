@@ -1,32 +1,17 @@
 package Com.TSL.The_Utilities_For_The_MTG_Game_Simulator;
 
-import java.util.Scanner;
-
 public class a_game {
 	
 	private a_player Active_Player;
+	private a_deck_builder Deck_Builder;
 	private a_player First_Player;
-	private a_player Second_Player;
 	private String Next_Action;
+	private a_player Second_Player;
+	private a_stack Stack;
+	private String Summary_Of_Action;
 	
 	public a_game() {
-    	a_stack The_Stack = new a_stack();
-    	a_player The_First_Player = new a_player("Tom", The_Stack);
-    	a_deck_builder The_Deck_Builder = new a_deck_builder();
-    	a_deck The_Deck_Keep_The_Peace = The_Deck_Builder.builds_Keep_The_Peace();
-    	//a_deck_history The_Deck_History_For_Keep_the_Peace = new a_deck_history(The_Deck_Keep_The_Peace, 0, 0);
-    	//System.out.println(The_Deck_History_For_Keep_the_Peace);
-    	The_First_Player.receives(The_Deck_Keep_The_Peace);
-    	a_player The_Second_Player = new a_player("Scott", The_Stack);
-    	a_deck The_Deck_Large_And_In_Charge = The_Deck_Builder.builds_Large_And_In_Charge();
-    	//a_deck_history The_Deck_History_For_Large_and_in_Charge = new a_deck_history(The_Deck_Large_And_In_Charge, 0, 0);
-    	//System.out.println(The_Deck_History_For_Large_and_in_Charge);
-    	The_Second_Player.receives(The_Deck_Large_And_In_Charge);
-    	The_First_Player.receives(The_Second_Player);
-    	The_Second_Player.receives(The_First_Player);
-		this.First_Player = The_First_Player;
-		this.Second_Player = The_Second_Player;
-		this.Next_Action = "Decide Starting Player";
+		this.Next_Action = "Set Up First Player";
 	}
 	
 	/**
@@ -42,18 +27,44 @@ public class a_game {
 			this.Second_Player.becomes_the_starting_player();
 			this.Active_Player = this.Second_Player;
 		}
-		String The_Summary_Of_Deciding_The_Starting_Player = this.Active_Player.name() + " is the starting player.";
-		System.out.println(The_Summary_Of_Deciding_The_Starting_Player);
-		return The_Summary_Of_Deciding_The_Starting_Player;
+		this.Summary_Of_Action = this.Active_Player.name() + " is the starting player.";
+		System.out.println(this.Summary_Of_Action);
+		return this.Summary_Of_Action;
 	}
 	
 	public void draws_hands() {
 		this.First_Player.draws_a_hand();
 		this.Second_Player.draws_a_hand();
 	}
+	
+	public String begins_setting_up_the_first_player() {
+    	this.Stack = new a_stack();
+    	this.Deck_Builder = new a_deck_builder();
+    	a_deck The_Deck_Keep_The_Peace = this.Deck_Builder.builds_Keep_The_Peace();
+		this.First_Player = new a_player(The_Deck_Keep_The_Peace, "Tom", this.Stack);
+		this.Next_Action = "Set Up Second Player";
+		this.Summary_Of_Action = "First player " + this.First_Player + " will play the following deck of " + The_Deck_Keep_The_Peace.number_of_cards() + " cards. " + The_Deck_Keep_The_Peace;
+		System.out.println(this.Summary_Of_Action);
+		return this.Summary_Of_Action;
+	}
+	
+	public String completes_setting_up_both_players() {
+    	a_deck The_Deck_Large_And_In_Charge = this.Deck_Builder.builds_Large_And_In_Charge();
+    	this.Second_Player = new a_player(The_Deck_Large_And_In_Charge, "Scott", this.Stack);
+    	this.First_Player.receives(this.Second_Player);
+    	this.Second_Player.receives(this.First_Player);
+    	this.Next_Action = "Decide Starting Player";
+    	this.Summary_Of_Action = "Second player " + this.Second_Player + " will play the following deck of " + The_Deck_Large_And_In_Charge.number_of_cards() + " cards. " + The_Deck_Large_And_In_Charge;
+    	return this.Summary_Of_Action;
+	}
 
 	public String advances() {
-		if (this.Next_Action.equals("Decide Starting Player")) {
+		if (this.Next_Action.equals("Set Up First Player")) {
+			return this.begins_setting_up_the_first_player();
+		} else if (this.Next_Action.equals("Set Up Second Player")) {
+			return this.completes_setting_up_both_players();
+		}
+		else if (this.Next_Action.equals("Decide Starting Player")) {
 			this.Next_Action = "Shuffle Decks";
 			return this.decides_the_starting_player();
 		} else {
