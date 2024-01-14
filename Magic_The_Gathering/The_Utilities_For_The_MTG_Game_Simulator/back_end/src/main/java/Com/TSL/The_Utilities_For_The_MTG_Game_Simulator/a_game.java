@@ -2,13 +2,13 @@ package Com.TSL.The_Utilities_For_The_MTG_Game_Simulator;
 
 import java.util.Scanner;
 
-public class a_pair_of_players {
+public class a_game {
 	
 	private a_player Active_Player;
 	private a_player First_Player;
 	private a_player Second_Player;
 	
-	public a_pair_of_players(a_player The_First_Player_To_Use, a_player The_Second_Player_To_Use) {
+	public a_game(a_player The_First_Player_To_Use, a_player The_Second_Player_To_Use) {
 		
 		this.First_Player = The_First_Player_To_Use;
 		this.Second_Player = The_Second_Player_To_Use;

@@ -17,7 +17,7 @@ public class The_MTG_Game_Simulator {
     	a_player The_Second_Player = new a_player(The_Deck_Large_And_In_Charge, "Scott", The_Stack);
     	The_First_Player.receives(The_Second_Player);
     	The_Second_Player.receives(The_First_Player);
-    	a_pair_of_players The_Pair_Of_Players = new a_pair_of_players(The_First_Player, The_Second_Player);
+    	a_game The_Pair_Of_Players = new a_game(The_First_Player, The_Second_Player);
     	The_Pair_Of_Players.play();
     }
 }
