@@ -44,7 +44,7 @@ public class a_game {
 	 * Rule 103.7:
 	 * The starting player takes their first turn.
 	 */
-	public void play() throws Exception {
+	public void plays() throws Exception {
 		this.decides_the_starting_player();
 		this.shuffles_decks();
 		this.draws_hands();

@@ -35,8 +35,7 @@ public class a_player {
 	 * 
 	 * Rule 103.3: Each player begins the game with a starting life total of 20.
 	 */
-	public a_player(a_deck The_Deck_To_Use, String The_Name_To_Use, a_stack The_Stack_To_Use) {
-		this.Deck = The_Deck_To_Use;
+	public a_player(String The_Name_To_Use, a_stack The_Stack_To_Use) {
 		this.Graveyard = new a_graveyard();
 		this.Hand = new a_hand();
 		this.Has_Passed = false;
@@ -56,6 +55,10 @@ public class a_player {
 		this.Was_Starting_Player = false;
 	}
 
+	public void receives(a_deck The_Deck_To_Receive) {
+		this.Deck = The_Deck_To_Receive;
+	}
+	
 	public a_mana_pool acquires_mana_for_nonland_card_or_nonmana_activated_ability(Object The_Object) throws Exception {
 		a_nonland_card The_Nonland_Card = null;
 		a_nonmana_activated_ability The_Nonmana_Activated_Ability = null;
