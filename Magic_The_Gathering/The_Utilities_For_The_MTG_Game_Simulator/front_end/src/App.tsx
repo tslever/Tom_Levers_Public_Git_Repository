@@ -38,8 +38,8 @@ function App() {
   */
   async function Executor() {
     const response = await fetch('http://localhost:8080');
-    const text = await response.text();
-    const rowWithText = [text];
+    const json = await response.json();
+    const rowWithText = [json];
     const newBodyData = [];
     newBodyData.push(rowWithText);
     for (let i = 0; i < bodyData.length; i++) {

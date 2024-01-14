@@ -7,6 +7,8 @@ import java.util.Collections;
 
 import org.apache.commons.io.IOUtils;
 
+import com.google.gson.Gson;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,22 +30,12 @@ public class an_MTG_servlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
         String firstLine = request.getMethod() + " " + request.getRequestURI();
-        if (request.getQueryString() != null) {
-            firstLine += "?" + request.getQueryString();
-        }
-        firstLine += " " + request.getProtocol();
+        Gson gson = new Gson();
+        String The_Test_JSON = gson.toJson("test string");
         try (
             PrintWriter printWriter = response.getWriter();
-            BufferedReader bufferedReader = request.getReader();
         ) {
-            printWriter.println(firstLine);
-            for (String headerName : Collections.list(request.getHeaderNames())) {
-                for (String headerValue : Collections.list(request.getHeaders(headerName))) {
-                    printWriter.println(headerName + ": " + headerValue);
-                }
-            }
-            printWriter.println();
-            IOUtils.copy(bufferedReader, printWriter);
+        	printWriter.println(The_Test_JSON);
         }
     }
     
