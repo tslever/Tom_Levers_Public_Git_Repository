@@ -13,6 +13,7 @@ public class a_player {
 	private a_deck Deck;
 	private a_graveyard Graveyard;
 	private a_hand Hand;
+	private a_game Game;
 	private boolean Has_Passed;
 	private boolean Has_Played_A_Land_This_Turn;
 	private boolean Has_Performed_A_State_Based_Action;
@@ -28,6 +29,7 @@ public class a_player {
 	private a_player Other_Player;
 	private RandomDataGenerator Random_Data_Generator;
 	private a_stack Stack;
+	private String Summary_Of_Action;
 	private boolean Was_Starting_Player;
 	
 	/**
@@ -35,8 +37,9 @@ public class a_player {
 	 * 
 	 * Rule 103.3: Each player begins the game with a starting life total of 20.
 	 */
-	public a_player(a_deck The_Deck_To_Use, String The_Name_To_Use, a_stack The_Stack_To_Use) {
+	public a_player(a_deck The_Deck_To_Use, a_game The_Game_To_Use, String The_Name_To_Use, a_stack The_Stack_To_Use) {
 		this.Deck = The_Deck_To_Use;
+		this.Game = The_Game_To_Use;
 		this.Graveyard = new a_graveyard();
 		this.Hand = new a_hand();
 		this.Has_Passed = false;
@@ -163,8 +166,7 @@ public class a_player {
 	}
 	
 	 /* Rule 501.1: The beginning phase consists of three steps, in this order: untap, upkeep, and draw. */
-	public void completes_her_beginning_phase() throws Exception {
-		System.out.println(this + " is completing " + this + "'s Beginning Phase.");
+	public String completes_her_beginning_phase() {
 		this.Has_Passed = false;
 		this.Has_Played_A_Land_This_Turn = false;
 		this.Has_Performed_A_State_Based_Action = false;
@@ -174,14 +176,20 @@ public class a_player {
 		this.List_Of_Blockers.clear();
 		 /* No player receives priority during the untap step.
 		 * Rule 503.1a: Any abilities that triggered during the untap step and any abilities that triggered at the beginning of the upkeep [step] are put onto the stack before the active player gets priority; the order in which they triggered doesn't matter. (See rule 603, "Handling Triggered Abilities.") */
-		this.completes_her_untap_step();
-		this.completes_her_upkeep_step();
-		/* Rule 103.7a: In a two-player game, the player who plays first skips the draw step (see rule 504, "Draw Step") of their first turn. */
-		if (this.Was_Starting_Player && this.Index_Of_The_Present_Turn == 0) {
-			System.out.println("Because " + this + " is the starting player and " + this + " is taking " + this + "'s first turn, " + this + " skips " + this + "'s draw step.");
+		if (this.Game.next_action().equals("Active Player Takes Turn")) {
+			return this.completes_her_untap_step();
+		} else if (this.Game.next_action().equals("Active Player Completes Upkeep Step")) {
+			return "TODO: Active Player Completes Upkeep Step";
 		} else {
-			this.completes_her_draw_step();
+			return "TODO: Unknown";
 		}
+//		this.completes_her_upkeep_step();
+		/* Rule 103.7a: In a two-player game, the player who plays first skips the draw step (see rule 504, "Draw Step") of their first turn. */
+//		if (this.Was_Starting_Player && this.Index_Of_The_Present_Turn == 0) {
+//			System.out.println("Because " + this + " is the starting player and " + this + " is taking " + this + "'s first turn, " + this + " skips " + this + "'s draw step.");
+//		} else {
+//			this.completes_her_draw_step();
+//		}
 		/* Rule 500.2: A phase or step in which players receive priority ends when the stack is empty and all players pass in succession.
 		 * Rule 500.4: When a step or phase ends, any unused mana left in a player's mana pool empties. This turn-based action doesn't use the stack.
 		 * Rule 500.5: When a phase or step ends, any effects scheduled to last "until end of" that phase or step expire. */
@@ -588,20 +596,17 @@ public class a_player {
 	}
 	
 	
-	public void completes_her_untap_step() {
-		System.out.println(this + " is completing " + this + "'s Untap Step.");
-		// Rule 500.5: When a phase or step begins, any effects scheduled to last "until" that phase or step expire.
-		// Rule 500.6: When a phase or step begins, any abilities that trigger "at the beginning of" that phase or step trigger. They are put on the stack the next time a player would receive priority. (See rule 117, "Timing and Priority.")
-		// Rule 502.1: First, all phased-in permanents with phasing that the active player controls phase out, and all phased-out permanents that the active player controlled when they phased out phase in. This all happens simultaneously. This turn-based action doesn't use the stack. See rule 702.25, "Phasing."
-		// TODO
+	public String completes_her_untap_step() {
 		// Rule 502.2: Second, the active player determines which permanents they control will untap. Then they untap them all simultaneously. This turn-based action doesn't use the stack. Normally, all of a player's permanents untap, but effects can keep one or more of a player's permanents from untapping.
 		// Rule 502.3: No player receives priority during the untap step, so no spells can be cast or resolve and no abilities can be activated or resolve. Any ability that triggers during this step will be held until the next time a player would receive priority, which is usually during the upkeep step (See rule 503, "Upkeep Step.")
+		this.Game.next_action_becomes("Active Player Completes Upkeep Step");
 		ArrayList<a_permanent> The_List_Of_Permanents_That_Should_Be_Untapped = this.determines_her_permanents_to_untap();
 		if (The_List_Of_Permanents_That_Should_Be_Untapped.isEmpty()) {
-			System.out.println("No permanents are untapped.");
+			this.Summary_Of_Action = this + " has no permanents that should be untapped.";
+			System.out.println(this.Summary_Of_Action);
+			return this.Summary_Of_Action;
 		} else {
-			this.untaps_her_permanents(The_List_Of_Permanents_That_Should_Be_Untapped);
-			System.out.println("Permanents in the above list are untapped.");
+			return this.untaps_her_permanents(The_List_Of_Permanents_That_Should_Be_Untapped);
 		}
 		// Rule 500.3: A step in which no players receive priority ends when all specified actions that take place during that step are completed.
 		// Rule 500.4: When a step or phase ends, any unused mana left in a player's mana pool empties. This turn-based action doesn't use the stack.
@@ -667,32 +672,11 @@ public class a_player {
 	
 	public ArrayList<a_permanent> determines_her_permanents_to_untap() {
 		ArrayList<a_permanent> The_List_Of_Permanents_That_Should_Be_Untapped = new ArrayList<a_permanent>();
-		for (an_artifact The_Artifact : this.Part_Of_The_Battlefield.list_of_artifacts()) {
-			if (The_Artifact.is_tapped()) {
-				The_List_Of_Permanents_That_Should_Be_Untapped.add(The_Artifact);
+		for (a_permanent The_Permanent : this.Part_Of_The_Battlefield.list_of_permanents()) {
+			if (The_Permanent.is_tapped()) {
+				The_List_Of_Permanents_That_Should_Be_Untapped.add(The_Permanent);
 			}
 		}
-		for (a_creature The_Creature : this.Part_Of_The_Battlefield.list_of_creatures()) {
-			if (The_Creature.is_tapped()) {
-				The_List_Of_Permanents_That_Should_Be_Untapped.add(The_Creature);
-			}
-		}
-		for (an_enchantment The_Enchantment : this.Part_Of_The_Battlefield.list_of_enchantments()) {
-			if (The_Enchantment.is_tapped()) {
-				The_List_Of_Permanents_That_Should_Be_Untapped.add(The_Enchantment);
-			}
-		}
-		for (a_land The_Land : this.Part_Of_The_Battlefield.list_of_lands()) {
-			if (The_Land.is_tapped()) {
-				The_List_Of_Permanents_That_Should_Be_Untapped.add(The_Land);
-			}
-		}
-		for (a_planeswalker The_Planeswalker : this.Part_Of_The_Battlefield.list_of_planeswalkers()) {
-			if (The_Planeswalker.is_tapped()) {
-				The_List_Of_Permanents_That_Should_Be_Untapped.add(The_Planeswalker);
-			}
-		}
-		//System.out.println(this.Name + " determines the following list of permanents to untap. " + The_List_Of_Permanents_That_Should_Be_Untapped);
 		return The_List_Of_Permanents_That_Should_Be_Untapped;
 	}
 	
@@ -743,12 +727,13 @@ public class a_player {
 	 * 
 	 * Rule 103.4: Each player draws a number of cards equal to their starting hand size, which is normally seven.
 	 */
-	public void draws_a_hand() {
+	public String draws_a_hand() {
 		for (int i = 0; i < STARTING_HAND_SIZE; i++) {
 			this.draws();
 		}
-		System.out.println("After drawing, " + this + "'s deck has " + this.Deck.number_of_cards() + " cards and contains the following. " + this.Deck);
-		System.out.println("After drawing, " + this + "'s hand has " + this.Hand.number_of_cards() + " cards and contains the following. " + this.Hand);
+		this.Summary_Of_Action = this + " draws a hand of " + this.Hand.number_of_cards() + " cards that is the following. " + this.Hand;
+		System.out.println(this.Summary_Of_Action);
+		return this.Summary_Of_Action;
 	}
     
 	
@@ -923,26 +908,34 @@ public class a_player {
 		this.Deck.shuffles();
 	}
 	
-	public void takes_her_turn() throws Exception {
-		System.out.println(this.Name + " is taking their turn.");
+	public String takes_her_turn() {
 		/* Rule 117.3a: The active player receives priority at the beginning of most steps and phases, after any turn-based actions (such as drawing a card during the draw step; see rule 703) have been dealt with and abilities that trigger at the beginning of that phase or step have been put on the stack.
 		 * Rule 500.5: When a phase or step begins, any effects scheduled to last "until" that phase or step expire.
 		 * Rule 500.6: When a phase or step begins, any abilities that trigger "at the beginning of" that phase or step trigger. They are put on the stack the next time a player would receive priority. (See rule 117, "Timing and Priority.") */
-		this.completes_her_beginning_phase();
-		this.completes_a_main_phase();
-		this.completes_her_combat_phase();
-		this.completes_a_main_phase();
-		this.completes_her_ending_phase();
-		
-		// Rule 500.5: Effects that last "until end of turn" are subject to special rules; see rule 514.2.	
+		if (
+			this.Game.next_action().equals("Active Player Takes Turn") ||
+			this.Game.next_action().equals("Active Player Completes Upkeep Step")
+		) {
+			return this.completes_her_beginning_phase();
+		} else {
+			return "TODO";
+		}
+//		this.completes_her_beginning_phase();
+//		this.completes_a_main_phase();
+//		this.completes_her_combat_phase();
+//		this.completes_a_main_phase();
+//		this.completes_her_ending_phase();
+		/* Rule 500.5: Effects that last "until end of turn" are subject to special rules; see rule 514.2. */	
 	}
 	
 	
-	public void untaps_her_permanents(ArrayList<a_permanent> The_List_Of_Permanents_That_Should_Be_Untapped) {
-		System.out.println(this.Name + " is untapping their permanents.");
+	public String untaps_her_permanents(ArrayList<a_permanent> The_List_Of_Permanents_That_Should_Be_Untapped) {
 		for (a_permanent The_Permanent : The_List_Of_Permanents_That_Should_Be_Untapped) {
 			The_Permanent.untaps();
 		}
+		this.Summary_Of_Action = this + " untapped " + this + "'s permanents.";
+		System.out.println(this.Summary_Of_Action);
+		return this.Summary_Of_Action;
 	}
 	
 	public a_player other_player() {
