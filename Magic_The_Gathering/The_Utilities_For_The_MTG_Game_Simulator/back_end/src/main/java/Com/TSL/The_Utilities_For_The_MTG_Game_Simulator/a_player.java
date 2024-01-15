@@ -59,7 +59,7 @@ public class a_player {
 		this.Was_Starting_Player = false;
 	}
 	
-	public a_mana_pool acquires_mana_for_nonland_card_or_nonmana_activated_ability(Object The_Object) throws Exception {
+	public a_mana_pool acquires_mana_for_nonland_card_or_nonmana_activated_ability(Object The_Object) {
 		a_nonland_card The_Nonland_Card = null;
 		a_nonmana_activated_ability The_Nonmana_Activated_Ability = null;
 		if (The_Object instanceof a_nonland_card) {
@@ -67,16 +67,16 @@ public class a_player {
 		} else if (The_Object instanceof a_nonmana_activated_ability) {
 			The_Nonmana_Activated_Ability = (a_nonmana_activated_ability) The_Object;
 		} else {
-			throw new Exception("Mana is acquired only for a nonland card or a nonmana activated ability.");
+			System.out.println("Mana is acquired only for a nonland card or a nonmana activated ability.");
 		}
 		a_mana_pool The_Mana_Pool = new a_mana_pool(0, 0, 0, 0, 0, 0);
-		ArrayList<ArrayList<a_mana_ability>> The_List_Of_Combinations_Of_Available_Mana_Abilities_Sufficient_To_Play_The_Object;
+		ArrayList<ArrayList<a_mana_ability>> The_List_Of_Combinations_Of_Available_Mana_Abilities_Sufficient_To_Play_The_Object = null;
 		if (The_Nonland_Card != null) {
 			The_List_Of_Combinations_Of_Available_Mana_Abilities_Sufficient_To_Play_The_Object = The_Nonland_Card.list_of_combinations_of_available_mana_abilities_sufficient_to_play_this();
 		} else if (The_Nonmana_Activated_Ability != null) {
 			The_List_Of_Combinations_Of_Available_Mana_Abilities_Sufficient_To_Play_The_Object = The_Nonmana_Activated_Ability.list_of_combinations_of_available_mana_abilities_sufficient_to_play_this();			
 		} else {
-			throw new Exception("A nonland card and a nonmana activated ability were null.");
+			System.out.println("A nonland card and a nonmana activated ability were null.");
 		}
 		ArrayList<a_mana_ability> The_Combination_Of_Available_Mana_Abilities_Sufficient_To_Play_The_Object = this.chooses_a_combination_of_available_mana_abilities_sufficient_to_play_an_object_from(The_List_Of_Combinations_Of_Available_Mana_Abilities_Sufficient_To_Play_The_Object);
 		for (a_mana_ability The_Available_Mana_Ability : The_Combination_Of_Available_Mana_Abilities_Sufficient_To_Play_The_Object) {
@@ -85,7 +85,7 @@ public class a_player {
 		return The_Mana_Pool;
 	}
 	
-	public void assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_nonland_card_or_nonmana_activated_ability(Object The_Object) throws Exception {
+	public void assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_nonland_card_or_nonmana_activated_ability(Object The_Object) {
 		a_nonland_card The_Nonland_Card = null;
 		a_nonmana_activated_ability The_Nonmana_Activated_Ability = null;
 		if (The_Object instanceof a_nonland_card) {
@@ -93,7 +93,7 @@ public class a_player {
 		} else if (The_Object instanceof a_nonmana_activated_ability) {
 			The_Nonmana_Activated_Ability = (a_nonmana_activated_ability) The_Object;
 		} else {
-			throw new Exception("A list of sufficient combinations of available mana abilities is assigned only to a nonland card or nonmana activated ability.");
+			System.out.println("A list of sufficient combinations of available mana abilities is assigned only to a nonland card or nonmana activated ability.");
 		}
 		ArrayList<a_permanent> The_List_Of_Permanents = this.Part_Of_The_Battlefield.list_of_permanents();
 		ArrayList<a_mana_ability> The_List_Of_Available_Mana_Abilities_For_The_Player = new ArrayList<>();
@@ -114,14 +114,14 @@ public class a_player {
 			} else if (The_Nonmana_Activated_Ability != null) {
 				The_Mana_Cost = The_Nonmana_Activated_Ability.mana_cost();
 			} else {
-				throw new Exception("A nonland card and a nonmana activated ability were null.");
+				System.out.println("A nonland card and a nonmana activated ability were null.");
 			}
 			if (The_Mana_Cost != null) {
 				if (The_Mana_Pool.is_sufficient_for(The_Mana_Cost)) {
 					The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities.add(The_Combination_Of_Available_Mana_Abilities);
 				}
 			} else {
-				throw new Exception("A mana cost was null.");
+				System.out.println("A mana cost was null.");
 			}
 		}
 		if (The_Nonland_Card != null) {
@@ -129,17 +129,17 @@ public class a_player {
 		} else if (The_Nonmana_Activated_Ability != null) {
 			The_Nonmana_Activated_Ability.receives(The_List_Of_Sufficient_Combinations_Of_Available_Mana_Abilities);
 		} else {
-			throw new Exception("A nonland card and a nonmana activated ability were null.");
+			System.out.println("A nonland card and a nonmana activated ability were null.");
 		}
 	}
 	
-	public void assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_nonland_hand_cards_in(ArrayList<a_nonland_card> The_List_Of_Nonland_Hand_Cards) throws Exception {
+	public void assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_nonland_hand_cards_in(ArrayList<a_nonland_card> The_List_Of_Nonland_Hand_Cards) {
 		for (a_nonland_card The_Nonland_Hand_Card : The_List_Of_Nonland_Hand_Cards) {
 			this.assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_nonland_card_or_nonmana_activated_ability(The_Nonland_Hand_Card);
 		}
 	}
 	
-	public void assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_her_permanents_nonmana_activated_abilities() throws Exception {
+	public void assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_her_permanents_nonmana_activated_abilities() {
 		for (a_permanent The_Permanent : this.Part_Of_The_Battlefield.list_of_permanents()) {
 			for (a_nonmana_activated_ability The_Nonmana_Activated_Ability : The_Permanent.list_of_nonmana_activated_abilities()) {
 				this.assigns_a_list_of_sufficient_combinations_of_available_mana_abilities_to_nonland_card_or_nonmana_activated_ability(The_Nonmana_Activated_Ability);
@@ -179,11 +179,10 @@ public class a_player {
 		if (this.Game.next_action().equals("Active Player Takes Turn")) {
 			return this.completes_her_untap_step();
 		} else if (this.Game.next_action().equals("Active Player Completes Upkeep Step")) {
-			return "TODO: Active Player Completes Upkeep Step";
+			return this.completes_her_upkeep_step();
 		} else {
 			return "TODO: Unknown";
 		}
-//		this.completes_her_upkeep_step();
 		/* Rule 103.7a: In a two-player game, the player who plays first skips the draw step (see rule 504, "Draw Step") of their first turn. */
 //		if (this.Was_Starting_Player && this.Index_Of_The_Present_Turn == 0) {
 //			System.out.println("Because " + this + " is the starting player and " + this + " is taking " + this + "'s first turn, " + this + " skips " + this + "'s draw step.");
@@ -510,7 +509,7 @@ public class a_player {
 		this.completes_her_cleanup_step();
 	}
 	
-	public void casts_a_spell_or_activates_a_nonmana_activated_ability(String The_Step_To_Use, boolean Indicator_Of_Whether_This_Player_May_Only_Play_Instants_Nonland_Hand_Cards_With_Flash_And_Nonmana_Activated_Abilities) throws Exception {
+	public void casts_a_spell_or_activates_a_nonmana_activated_ability(String The_Step_To_Use, boolean Indicator_Of_Whether_This_Player_May_Only_Play_Instants_Nonland_Hand_Cards_With_Flash_And_Nonmana_Activated_Abilities) {
 		// Rule 601.2: To cast a spell is to [use a card to create a spell], put [the spell] on the stack, and pay its mana costs, so that [the spell] will eventually resolve and have its effect. Casting a spell includes proposal of the spell (rules 601.2a-d) and determination and payment of costs (rules 601.2f-h). To cast a spell, a player follows the steps listed below, in order. A player must be legally allowed to cast the spell to begin this process (see rule 601.3). If a player is unable to comply with the requirements of a step listed below while performing that step, the casting of the spell is illegal; the game returns to the moment before the casting of that spell was proposed (see rule 723, "Handling Illegal Actions").
 		// Rule 601.2e: The game checks to see if the proposed spell can legally be cast. If the proposed spell is illegal, the game returns to the moment before the casting of that spell was proposed (see rule 723, "Handling Illegal Actions").
 		//System.out.println(this + " is considering casting a spell or activating an ability.");
@@ -621,49 +620,56 @@ public class a_player {
 		return false;
 	}
 	
-	public void performs_state_based_actions_adds_trigged_abilities_to_stack_and_has_this_and_other_player_cast_spells_activate_abiltiies_and_take_special_actions(String The_Step_To_Use) throws Exception {
+	public String performs_state_based_actions_adds_trigged_abilities_to_stack_and_has_this_and_other_player_cast_spells_activate_abiltiies_and_take_special_actions(String The_Step_To_Use) {
 		/* Rule 117.3c: If a player has priority when they cast a spell, activate an ability, or take a special action, that player receives priority afterward.
 		 * If a player has priority and chooses not to take any actions, that player passes.
 		 * If any mana is in that player's mana pool, they announce what mana is there.
 		 * Then the next player in turn order receives priority.
 		 * Rule 117.4: If all players pass in succession (that is, if all players pass without taking any actions in between passing), the spell or ability on top of the stack resolves or, if the stack is empty, the phase or step ends. */
-		do {
+		if (this.Game.next_action().equals("Active Player Completes Upkeep Step")) {
 			do {
-				/* Rule 117.5: Each time a player would get priority, the game first performs all applicable state-based actions as a single event (see rule 704, "State-Based Actions"), then repeats this process until no state-based actions are performed.
-				 * Then triggered abilities are put on the stack (see rule 603, "Handling Triggered Abilities").
-				 * These steps repeat in order until no further state-based actions are performed and no abilities trigger.
-				 * Then the player who would have received priority does so. */
-				/* Rule 117.1: ... The player with priority may cast spells, activate abilities, and take special actions. */
-				/* Rule 117.1a: A player may cast an instant spell any time they have priority...
-				 * Rule 117.1b: A player may activate an activated ability any time they have priority. */
 				do {
+					/* Rule 117.5: Each time a player would get priority, the game first performs all applicable state-based actions as a single event (see rule 704, "State-Based Actions"), then repeats this process until no state-based actions are performed.
+					 * Then triggered abilities are put on the stack (see rule 603, "Handling Triggered Abilities").
+					 * These steps repeat in order until no further state-based actions are performed and no abilities trigger.
+					 * Then the player who would have received priority does so. */
+					/* Rule 117.1: ... The player with priority may cast spells, activate abilities, and take special actions. */
+					/* Rule 117.1a: A player may cast an instant spell any time they have priority...
+					 * Rule 117.1b: A player may activate an activated ability any time they have priority. */
 					do {
-						this.performs_all_applicable_state_based_actions_as_a_single_event();
-					} while (this.Has_Performed_A_State_Based_Action);
-					this.Stack.adds_all_triggered_abilities_in_list_of_triggered_abilities_to_be_added_to_this_to_this();
-				} while (this.Has_Performed_A_State_Based_Action || !this.Stack.list_of_triggered_abilities_to_be_added_to_this().isEmpty());
-				do {
-					this.casts_a_spell_activates_an_activated_ability_or_takes_a_special_action("This Player's " + The_Step_To_Use, this + " begins " + this + "'s " + The_Step_To_Use);
-				} while (!this.Has_Passed);
-				do {
+						do {
+							this.performs_all_applicable_state_based_actions_as_a_single_event();
+						} while (this.Has_Performed_A_State_Based_Action);
+						this.Stack.adds_all_triggered_abilities_in_list_of_triggered_abilities_to_be_added_to_this_to_this();
+					} while (this.Has_Performed_A_State_Based_Action || !this.Stack.list_of_triggered_abilities_to_be_added_to_this().isEmpty());
 					do {
-						this.performs_all_applicable_state_based_actions_as_a_single_event();
-					} while (this.Has_Performed_A_State_Based_Action);
-					this.Stack.adds_all_triggered_abilities_in_list_of_triggered_abilities_to_be_added_to_this_to_this();
-				} while (this.Has_Performed_A_State_Based_Action || !this.Stack.list_of_triggered_abilities_to_be_added_to_this().isEmpty());
-				do {
-					this.Other_Player.casts_a_spell_activates_an_activated_ability_or_takes_a_special_action("The Other Player's " + The_Step_To_Use, this + " begins " + this + "'s " + The_Step_To_Use + " and acts");
-				} while (!this.Other_Player.Has_Passed);
-			} while (this.Other_Player.Has_Taken_An_Action);
-			this.Stack.resolves_top_object();
-		} while (this.Stack.has_resolved());
+						this.casts_a_spell_activates_an_activated_ability_or_takes_a_special_action("This Player's " + The_Step_To_Use, this + " begins " + this + "'s " + The_Step_To_Use);
+					} while (!this.Has_Passed);
+					do {
+						do {
+							this.performs_all_applicable_state_based_actions_as_a_single_event();
+						} while (this.Has_Performed_A_State_Based_Action);
+						this.Stack.adds_all_triggered_abilities_in_list_of_triggered_abilities_to_be_added_to_this_to_this();
+					} while (this.Has_Performed_A_State_Based_Action || !this.Stack.list_of_triggered_abilities_to_be_added_to_this().isEmpty());
+					do {
+						this.Other_Player.casts_a_spell_activates_an_activated_ability_or_takes_a_special_action("The Other Player's " + The_Step_To_Use, this + " begins " + this + "'s " + The_Step_To_Use + " and acts");
+					} while (!this.Other_Player.Has_Passed);
+				} while (this.Other_Player.Has_Taken_An_Action);
+				this.Stack.resolves_top_object();
+			} while (this.Stack.has_resolved());
+			this.Game.next_action_becomes("Active Player Completes Main Phase");
+			this.Summary_Of_Action = this + " completed " + this + "'s Upkeep Step.";
+			System.out.println(this.Summary_Of_Action);
+			return this.Summary_Of_Action;
+		} else {
+			return "TODO";
+		}
 	}
 	
 	/* Rule 503.1: The upkeep step has no turn-based actions.
 	 * Once it begins, the active player gets priority. (See rule 117, "Timing and Priority.") */
-	public void completes_her_upkeep_step() throws Exception {
-		System.out.println(this + " is completing " + this + "'s Upkeep Step.");
-		this.performs_state_based_actions_adds_trigged_abilities_to_stack_and_has_this_and_other_player_cast_spells_activate_abiltiies_and_take_special_actions("Upkeep Step");
+	public String completes_her_upkeep_step() {
+		return this.performs_state_based_actions_adds_trigged_abilities_to_stack_and_has_this_and_other_player_cast_spells_activate_abiltiies_and_take_special_actions("Upkeep Step");
 	}
 	
 	public a_part_of_the_battlefield part_of_the_battlefield() {
@@ -692,7 +698,7 @@ public class a_player {
 	}
 	
 	
-	public void determines_whether_her_permanents_nonmana_activated_abilities_are_activatable() throws Exception {
+	public void determines_whether_her_permanents_nonmana_activated_abilities_are_activatable() {
 		for (a_permanent The_Permanent : this.Part_Of_The_Battlefield.list_of_permanents()) {
 			for (a_nonmana_activated_ability The_Nonmana_Activated_Ability : The_Permanent.list_of_nonmana_activated_abilities()) {
 				if (The_Nonmana_Activated_Ability.requires_tapping()) {
@@ -828,7 +834,7 @@ public class a_player {
 	}
 	
 	
-	public void plays_a_land() throws Exception {
+	public void plays_a_land() {
 		ArrayList<a_land_card> The_List_Of_Land_Cards = this.Hand.list_of_land_cards();
 		int The_Number_Of_Land_Cards = The_List_Of_Land_Cards.size();
 		System.out.println(this.Name + " is taking the special action of playing a land.");
@@ -845,7 +851,7 @@ public class a_player {
 			a_mana_ability The_Mana_Ability = new a_mana_ability("T", "Add [G].", The_Land);
 			The_Land.receives(The_Mana_Ability);
 		} else {
-			throw new Exception("The MTG Game Simulator does not know how to play the land with name " + The_Name_Of_The_Land_Card);
+			System.out.println("The MTG Game Simulator does not know how to play the land with name " + The_Name_Of_The_Land_Card);
 		}
 		this.Hand.removes(The_Land_Card_To_Play);
 		this.Part_Of_The_Battlefield.receives(The_Land);
@@ -867,7 +873,7 @@ public class a_player {
 	 * 
 	 * Rule 117.1: Unless a spell or ability is instructing a player to take an action, which player can take actions at any given time is determined by a system of priority...
 	 */
-	public void casts_a_spell_activates_an_activated_ability_or_takes_a_special_action(String The_Step_To_Use, String The_Event_After_Which_She_Is_Receiving_Priority_And_Acting) throws Exception {
+	public void casts_a_spell_activates_an_activated_ability_or_takes_a_special_action(String The_Step_To_Use, String The_Event_After_Which_She_Is_Receiving_Priority_And_Acting) {
 		System.out.print(this + " is considering casting a spell, activating an ability, or taking a special action. ");
 		if (this.Stack.isEmpty()) {
 			if (The_Step_To_Use.equals("This Player's Main Phase")) {

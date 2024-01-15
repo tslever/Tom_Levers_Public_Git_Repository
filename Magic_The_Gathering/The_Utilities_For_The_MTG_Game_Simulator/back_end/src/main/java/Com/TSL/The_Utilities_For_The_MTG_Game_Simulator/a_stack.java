@@ -39,11 +39,11 @@ public class a_stack {
 		return this.List_Of_Triggered_Abilities_To_Be_Added_To_This;
 	}
 	
-	public void receives(Object The_Object) throws Exception {
+	public void receives(Object The_Object) {
 		if ((The_Object instanceof a_spell) || (The_Object instanceof a_nonmana_activated_ability) || (The_Object instanceof a_triggered_ability)) {
 			this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.add(The_Object);
 		} else {
-			throw new Exception("The stack only receives spells, nonmana activated abilties, and triggered abilities.");
+			System.out.println("The stack only receives spells, nonmana activated abilties, and triggered abilities.");
 		}
 	}
 	
@@ -51,7 +51,7 @@ public class a_stack {
 		this.List_Of_Spells_Nonmana_Activated_Abilities_And_Triggered_Abilities.remove(The_Object_To_Remove);
 	}
 	
-	public void resolves_top_object() throws Exception {
+	public void resolves_top_object() {
 		this.Has_Resolved = false;
 		if (this.contains_objects()) {
 			Object The_Object = this.top_object();
