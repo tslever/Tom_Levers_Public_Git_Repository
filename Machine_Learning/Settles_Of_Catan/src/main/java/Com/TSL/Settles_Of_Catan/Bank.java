@@ -1,6 +1,14 @@
-package com.tsl.turngenerator;
+package Com.TSL.Settles_Of_Catan;
 
-public class Hand {
+public class Bank {
+	
+	public static final int INITIAL_NUMBER_OF_CARDS_OF_ONE_RESOURCE = 19;
+	public static final int     INITIAL_NUMBER_OF_DEVELOPMENT_CARDS = 25;
+	public static final int          INITIAL_NUMBER_OF_KNIGHT_CARDS = 14;
+	public static final int    INITIAL_NUMBER_OF_VICTORY_POINT_CARDS = 5;
+	public static final int    INITIAL_NUMBER_OF_ROAD_BUILDING_CARDS = 2;
+	public static final int   INITIAL_NUMBER_OF_YEAR_OF_PLENTY_CARDS = 2;
+	public static final int         INITIAL_NUMBER_OF_MONOPOLY_CARDS = 2;
 
 	private int brickCards;
 	private int lumberCards;
@@ -18,23 +26,22 @@ public class Hand {
 	private float probabilityThatADevelopmentCardIsAYearOfPlentyCard;
 	private float probabilityThatADevelopmentCardIsAMonopolyCard;
 	
-	public Hand() {
-		brickCards = 0;
-		lumberCards = 0;
-		oreCards = 0;
-		grainCards = 0;
-		woolCards = 0;
-		knightCards = 0;
-		victoryPointCards = 0;
-		roadBuildingCards = 0;
-		yearOfPlentyCards = 0;
-		monopolyCards = 0;
-		probabilityThatADevelopmentCardIsAKnightCard       = ((float)         Bank.INITIAL_NUMBER_OF_KNIGHT_CARDS) / ((float) Bank.INITIAL_NUMBER_OF_DEVELOPMENT_CARDS);
-		probabilityThatADevelopmentCardIsAVictoryPointCard = ((float)  Bank.INITIAL_NUMBER_OF_VICTORY_POINT_CARDS) / ((float) Bank.INITIAL_NUMBER_OF_DEVELOPMENT_CARDS);
-		probabilityThatADevelopmentCardIsARoadBuildingCard = ((float)  Bank.INITIAL_NUMBER_OF_ROAD_BUILDING_CARDS) / ((float) Bank.INITIAL_NUMBER_OF_DEVELOPMENT_CARDS);
-		probabilityThatADevelopmentCardIsAYearOfPlentyCard = ((float) Bank.INITIAL_NUMBER_OF_YEAR_OF_PLENTY_CARDS) / ((float) Bank.INITIAL_NUMBER_OF_DEVELOPMENT_CARDS);
-		probabilityThatADevelopmentCardIsAMonopolyCard     = ((float)       Bank.INITIAL_NUMBER_OF_MONOPOLY_CARDS) / ((float) Bank.INITIAL_NUMBER_OF_DEVELOPMENT_CARDS);
-		
+	public Bank() {
+		brickCards = 19;
+		lumberCards = 19;
+		oreCards = 19;
+		grainCards = 19;
+		woolCards = 19;
+		knightCards = INITIAL_NUMBER_OF_KNIGHT_CARDS;
+		victoryPointCards = INITIAL_NUMBER_OF_VICTORY_POINT_CARDS;
+		roadBuildingCards = INITIAL_NUMBER_OF_ROAD_BUILDING_CARDS;
+		yearOfPlentyCards = INITIAL_NUMBER_OF_YEAR_OF_PLENTY_CARDS;
+		monopolyCards = INITIAL_NUMBER_OF_MONOPOLY_CARDS;
+		probabilityThatADevelopmentCardIsAKnightCard       = ((float)         INITIAL_NUMBER_OF_KNIGHT_CARDS) / ((float) INITIAL_NUMBER_OF_DEVELOPMENT_CARDS);
+		probabilityThatADevelopmentCardIsAVictoryPointCard = ((float)  INITIAL_NUMBER_OF_VICTORY_POINT_CARDS) / ((float) INITIAL_NUMBER_OF_DEVELOPMENT_CARDS);
+		probabilityThatADevelopmentCardIsARoadBuildingCard = ((float)  INITIAL_NUMBER_OF_ROAD_BUILDING_CARDS) / ((float) INITIAL_NUMBER_OF_DEVELOPMENT_CARDS);
+		probabilityThatADevelopmentCardIsAYearOfPlentyCard = ((float) INITIAL_NUMBER_OF_YEAR_OF_PLENTY_CARDS) / ((float) INITIAL_NUMBER_OF_DEVELOPMENT_CARDS);
+		probabilityThatADevelopmentCardIsAMonopolyCard     = ((float)       INITIAL_NUMBER_OF_MONOPOLY_CARDS) / ((float) INITIAL_NUMBER_OF_DEVELOPMENT_CARDS);
 	}
 	
 	public int brickCards() {

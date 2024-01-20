@@ -1,4 +1,4 @@
-package com.tsl.turngenerator;
+package Com.TSL.Settles_Of_Catan;
 
 public class Road {
 	

@@ -1,4 +1,4 @@
-package com.tsl.turngenerator;
+package Com.TSL.Settles_Of_Catan;
 
 import java.util.Arrays;
 import java.util.List;
