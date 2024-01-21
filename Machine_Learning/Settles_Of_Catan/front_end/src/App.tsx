@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './App.css';
 import Displayer from "./Displayer";
-import TableDisplayer from "./TableDisplayer";
+import ImageDisplayer from "./ImageDisplayer";
 
 /**
  * An Organizer organizes, initializes, and connects as appropriate all of the Caretakers, Displayers, and Executors that comprise an application.
@@ -89,10 +89,7 @@ function App() {
    */
   return (
     <Displayer>
-      <TableDisplayer
-        headerData = { ["Action"] }
-        bodyData = { bodyData }
-      />
+      <ImageDisplayer/>
     </Displayer>
   );
 }
