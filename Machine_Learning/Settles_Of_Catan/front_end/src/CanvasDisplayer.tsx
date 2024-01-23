@@ -35,12 +35,14 @@ function CanvasDisplayer(props: Props) {
     if (canvas) {
       const context = canvas.getContext('2d');
       if (context) {
-        drawGrid(context, canvas.width, canvas.height, 20);
+        drawGrid(context, canvas.width, canvas.height, canvas.width / 10);
       }
     }
   }, []);
+  const width_of_scroll_bar_in_Google_Chrome_for_Windows_10 = 17
+  const width_of_webpage = window.innerWidth - width_of_scroll_bar_in_Google_Chrome_for_Windows_10
   return (
-    <canvas ref = { canvasRef } width = { 1000 } height = { 1000 } style = { { backgroundColor: '#ffffff' } }/>
+    <canvas ref = { canvasRef } width = { width_of_webpage } height = { width_of_webpage } style = { { backgroundColor: '#ffffff' } }/>
   );
 }
 
