@@ -1,7 +1,5 @@
-import { useState } from 'react';
 import './App.css';
-import Displayer from "./Displayer";
-import ImageDisplayer from "./ImageDisplayer";
+import CanvasDisplayer from './CanvasDisplayer'
 
 /**
  * An Organizer organizes, initializes, and connects as appropriate all of the Caretakers, Displayers, and Executors that comprise an application.
@@ -35,7 +33,7 @@ function App() {
     * An Executor works with agency delegated to them by an Organizer.
     * An Executor is not a React component.
   */
-  async function Executor() {
+  /*async function Executor() {
     const response = await fetch('http://localhost:8080');
     const json = await response.json();
     const rowWithText = [json];
@@ -45,7 +43,7 @@ function App() {
       newBodyData.push(bodyData[i]);
     }
     setBodyData(newBodyData);
-  }
+  }*/
 
   /**
    * A Caretaker holds, takes care, is responsible for, and controls access to discrete pieces of information.
@@ -59,14 +57,14 @@ function App() {
    * CaretakerOfBodyData provide notifications of when bodyData changes through calling setBodyData.
    * CaretakerOfBodyData provides new values of bodyData through calling setBodyData.
   */
-  const [bodyData, setBodyData] = useState<string[][]>([]);
+  /*const [bodyData, setBodyData] = useState<string[][]>([]);
 
   function CaretakerOfIndicatorThatButtonHasBeenClicked() {
     const onClick = async () => {
       await Executor();
     };
     return onClick
-  }
+  }*/
 
   /**
    * A Displayers takes care of a user and the interface with the user.
@@ -88,9 +86,7 @@ function App() {
    * A Displayer is self-bounding.
    */
   return (
-    <Displayer>
-      <ImageDisplayer/>
-    </Displayer>
+    <CanvasDisplayer aspectRatio = {16/9} backgroundColor = '#ff0000' widthPercentage = {100}/>
   );
 }
 
