@@ -18,6 +18,78 @@ function get_canvas_coordinate_pair_given(isometric_x_coordinate: number, isomet
 
 var drawGrid = function(ctx: CanvasRenderingContext2D, w: number, h: number, step: number) {
 
+    // Tile 0: Desert
+    let region = new Path2D();
+    const pair_per_2_0 = get_canvas_coordinate_pair_given(2, 0, w);
+    region.moveTo(pair_per_2_0.x, pair_per_2_0.y);
+    const pair_per_2_neg_2 = get_canvas_coordinate_pair_given(2, -2, w);
+    region.lineTo(pair_per_2_neg_2.x, pair_per_2_neg_2.y);
+    const pair_per_0_neg_2 = get_canvas_coordinate_pair_given(0, -2, w);
+    region.lineTo(pair_per_0_neg_2.x, pair_per_0_neg_2.y);
+    const pair_per_neg_2_0 = get_canvas_coordinate_pair_given(-2, 0, w);
+    region.lineTo(pair_per_neg_2_0.x, pair_per_neg_2_0.y);
+    const pair_per_neg_2_2 = get_canvas_coordinate_pair_given(-2, 2, w);
+    region.lineTo(pair_per_neg_2_2.x, pair_per_neg_2_2.y);
+    const pair_per_0_2 = get_canvas_coordinate_pair_given(0, 2, w);
+    region.lineTo(pair_per_0_2.x, pair_per_0_2.y);
+    region.lineTo(pair_per_2_0.x, pair_per_2_0.y);
+    region.closePath();
+    ctx.fillStyle = '#F5D5A1';
+    ctx.fill(region);
+
+    // Tile 4: Brick
+    region = new Path2D();
+    region.moveTo(pair_per_neg_2_2.x, pair_per_neg_2_2.y);
+    region.lineTo(pair_per_neg_2_0.x, pair_per_neg_2_0.y);
+    const pair_per_neg_4_0 = get_canvas_coordinate_pair_given(-4, 0, w);
+    region.lineTo(pair_per_neg_4_0.x, pair_per_neg_4_0.y);
+    const pair_per_neg_6_2 = get_canvas_coordinate_pair_given(-6, 2, w);
+    region.lineTo(pair_per_neg_6_2.x, pair_per_neg_6_2.y);
+    const pair_per_neg_6_4 = get_canvas_coordinate_pair_given(-6, 4, w);
+    region.lineTo(pair_per_neg_6_4.x, pair_per_neg_6_4.y);
+    const pair_per_neg_4_4 = get_canvas_coordinate_pair_given(-4, 4, w);
+    region.lineTo(pair_per_neg_4_4.x, pair_per_neg_4_4.y);
+    region.lineTo(pair_per_neg_2_2.x, pair_per_neg_2_2.y);
+    region.closePath();
+    ctx.fillStyle = '#AA4A44';
+    ctx.fill(region);
+
+  // Tile 14: Ore
+  region = new Path2D();
+  region.moveTo(pair_per_neg_6_4.x, pair_per_neg_6_4.y);
+  region.lineTo(pair_per_neg_6_2.x, pair_per_neg_6_2.y);
+  const pair_per_neg_8_2 = get_canvas_coordinate_pair_given(-8, 2, w);
+  region.lineTo(pair_per_neg_8_2.x, pair_per_neg_8_2.y);
+  const pair_per_neg_10_4 = get_canvas_coordinate_pair_given(-10, 4, w);
+  region.lineTo(pair_per_neg_10_4.x, pair_per_neg_10_4.y);
+  const pair_per_neg_10_6 = get_canvas_coordinate_pair_given(-10, 6, w);
+  region.lineTo(pair_per_neg_10_6.x, pair_per_neg_10_6.y);
+  const pair_per_neg_8_6 = get_canvas_coordinate_pair_given(-8, 6, w);
+  region.lineTo(pair_per_neg_8_6.x, pair_per_neg_8_6.y);
+  region.lineTo(pair_per_neg_6_4.x, pair_per_neg_6_4.y);
+  region.closePath();
+  ctx.fillStyle = '#52595D';
+  ctx.fill(region);
+
+  // Tile 18: Ore
+  region = new Path2D();
+  const pair_per_6_4 = get_canvas_coordinate_pair_given(6, 4, w);
+  region.moveTo(pair_per_6_4.x, pair_per_6_4.y);
+  const pair_per_6_2 = get_canvas_coordinate_pair_given(6, 2, w);
+  region.lineTo(pair_per_6_2.x, pair_per_6_2.y);
+  const pair_per_4_2 = get_canvas_coordinate_pair_given(4, 2, w);
+  region.lineTo(pair_per_4_2.x, pair_per_4_2.y);
+  const pair_per_2_4 = get_canvas_coordinate_pair_given(2, 4, w);
+  region.lineTo(pair_per_2_4.x, pair_per_2_4.y);
+  const pair_per_2_6 = get_canvas_coordinate_pair_given(2, 6, w);
+  region.lineTo(pair_per_2_6.x, pair_per_2_6.y);
+  const pair_per_4_6 = get_canvas_coordinate_pair_given(4, 6, w);
+  region.lineTo(pair_per_4_6.x, pair_per_4_6.y);
+  region.lineTo(pair_per_6_4.x, pair_per_6_4.y);
+  region.closePath();
+  ctx.fillStyle = '#52595D';
+  ctx.fill(region);
+
   // x axis
   ctx.beginPath();
   const pair_per_neg_10_0 = get_canvas_coordinate_pair_given(-10, 0, w);
@@ -61,7 +133,6 @@ var drawGrid = function(ctx: CanvasRenderingContext2D, w: number, h: number, ste
   // y = 4
   ctx.beginPath();
   const pair_per_neg_12_4 = get_canvas_coordinate_pair_given(-12, 4, w);
-  const pair_per_6_4 = get_canvas_coordinate_pair_given(6, 4, w);
   ctx.moveTo(pair_per_neg_12_4.x, pair_per_neg_12_4.y);
   ctx.lineTo(pair_per_6_4.x, pair_per_6_4.y);
   ctx.strokeStyle = 'rgb(128,128,128)';
@@ -80,8 +151,6 @@ var drawGrid = function(ctx: CanvasRenderingContext2D, w: number, h: number, ste
 
   // y = 6
   ctx.beginPath();
-  const pair_per_neg_10_6 = get_canvas_coordinate_pair_given(-10, 6, w);
-  const pair_per_4_6 = get_canvas_coordinate_pair_given(4, 6, w);
   ctx.moveTo(pair_per_neg_10_6.x, pair_per_neg_10_6.y);
   ctx.lineTo(pair_per_4_6.x, pair_per_4_6.y);
   ctx.strokeStyle = 'rgb(128,128,128)';
@@ -190,49 +259,6 @@ var drawGrid = function(ctx: CanvasRenderingContext2D, w: number, h: number, ste
   ctx.strokeStyle = 'rgb(128,128,128)';
   ctx.lineWidth = 1;
   ctx.stroke();
-
-  // Tile 0: Desert
-  let region = new Path2D();
-  region.moveTo(5 * step, 6 * step * tangent_of_30_degrees);
-  region.lineTo(6 * step, 7 * step * tangent_of_30_degrees);
-  region.lineTo(6 * step, 9 * step * tangent_of_30_degrees);
-  region.lineTo(5 * step, 6 * step * tangent_of_30_degrees);
-  region.closePath();
-  ctx.fillStyle = '#F5D5A1';
-  ctx.fill(region);
-
-  // Tile 4: Brick
-  region = new Path2D();
-  region.moveTo(4 * step, 3 * step * tangent_of_30_degrees);
-  region.lineTo(5 * step, 4 * step * tangent_of_30_degrees);
-  region.lineTo(5 * step, 6 * step * tangent_of_30_degrees);
-  region.lineTo(4 * step, 3 * step * tangent_of_30_degrees);
-  region.closePath();
-  ctx.fillStyle = '#AA4A44';
-  ctx.fill(region);
-
-  // Tile 14: Ore
-  region = new Path2D();
-  region.moveTo(3 * step, 0);
-  region.lineTo(4 * step, 1 * step * tangent_of_30_degrees);
-  region.lineTo(4 * step, 3 * step * tangent_of_30_degrees);
-  region.lineTo(3 * step, 4 * step * tangent_of_30_degrees);
-  region.lineTo(2 * step, 3 * step * tangent_of_30_degrees);
-  region.lineTo(2 * step, 1 * step * tangent_of_30_degrees);
-  region.lineTo(3 * step, 0);
-  region.closePath();
-  ctx.fillStyle = '#52595D';
-  ctx.fill(region);
-
-  // Tile 18: Ore
-  region = new Path2D();
-  region.moveTo(9 * step, 6 * step * tangent_of_30_degrees);
-  region.lineTo(10 * step, 7 * step * tangent_of_30_degrees);
-  region.lineTo(10 * step, 9 * step * tangent_of_30_degrees);
-  region.lineTo(9 * step, 6 * step * tangent_of_30_degrees);
-  region.closePath();
-  ctx.fillStyle = '#52595D';
-  ctx.fill(region);
 };
 
 function CanvasDisplayer(props: Props) {
