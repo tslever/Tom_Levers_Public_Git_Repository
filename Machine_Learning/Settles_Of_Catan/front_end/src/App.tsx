@@ -1,5 +1,5 @@
 import './App.css';
-import CanvasDisplayer from './CanvasDisplayer'
+import BaseBoardDisplayer from './BaseBoardDisplayer'
 
 function App() {
   
@@ -25,7 +25,7 @@ function App() {
   }*/
 
   return (
-    <CanvasDisplayer/>
+    <BaseBoardDisplayer/>
   );
 }
 

@@ -252,7 +252,7 @@ var drawBoard = function(ctx: CanvasRenderingContext2D, width_of_canvas: number)
   ctx.stroke();
 };
 
-function CanvasDisplayer() {
+function BaseBoardDisplayer() {
   const mutableRefObject: MutableRefObject<HTMLCanvasElement | null> = useRef<HTMLCanvasElement | null>(null);
   useEffect(() => {
     const canvas = mutableRefObject.current;
@@ -276,4 +276,4 @@ function CanvasDisplayer() {
   );
 }
 
-export default CanvasDisplayer;
+export default BaseBoardDisplayer;
