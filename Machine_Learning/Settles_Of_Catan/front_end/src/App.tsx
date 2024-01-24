@@ -25,7 +25,7 @@ function App() {
   }*/
 
   return (
-    <CanvasDisplayer aspectRatio = {16/9} backgroundColor = '#ff0000' widthPercentage = {100}/>
+    <CanvasDisplayer/>
   );
 }
 
