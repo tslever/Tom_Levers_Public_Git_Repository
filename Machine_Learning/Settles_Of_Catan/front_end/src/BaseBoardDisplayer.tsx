@@ -7,6 +7,15 @@ function get_canvas_coordinate_pair_given(isometric_x_coordinate: number, isomet
   return {x: canvas_x_coordinate, y: canvas_y_coordinate};
 }
 
+const color_of = {
+  Brick: '#AA4A44',
+  Desert: '#F5D5A1',
+  Grain: '#FADB5E',
+  Ore: '#52595D',
+  Wood: '#014421',
+  Wool: '#A6C964'
+}
+
 var drawBoard = function(ctx: CanvasRenderingContext2D, width_of_canvas: number) {
 
     // Tile 0: Desert
@@ -25,7 +34,7 @@ var drawBoard = function(ctx: CanvasRenderingContext2D, width_of_canvas: number)
     region.lineTo(pair_per_0_2.x, pair_per_0_2.y);
     region.lineTo(pair_per_2_0.x, pair_per_2_0.y);
     region.closePath();
-    ctx.fillStyle = '#F5D5A1';
+    ctx.fillStyle = color_of.Desert;
     ctx.fill(region);
 
     // Tile 1: Grain
@@ -42,7 +51,7 @@ var drawBoard = function(ctx: CanvasRenderingContext2D, width_of_canvas: number)
     region.lineTo(pair_per_4_0.x, pair_per_4_0.y);
     region.lineTo(pair_per_6_neg_2.x, pair_per_6_neg_2.y);
     region.closePath();
-    ctx.fillStyle = '#FADB5E';
+    ctx.fillStyle = color_of.Grain;
     ctx.fill(region);
 
     // Tile 4: Brick
@@ -59,7 +68,7 @@ var drawBoard = function(ctx: CanvasRenderingContext2D, width_of_canvas: number)
     region.lineTo(pair_per_neg_4_4.x, pair_per_neg_4_4.y);
     region.lineTo(pair_per_neg_2_2.x, pair_per_neg_2_2.y);
     region.closePath();
-    ctx.fillStyle = '#AA4A44';
+    ctx.fillStyle = color_of.Brick;
     ctx.fill(region);
 
   // Tile 14: Ore
@@ -76,7 +85,7 @@ var drawBoard = function(ctx: CanvasRenderingContext2D, width_of_canvas: number)
   region.lineTo(pair_per_neg_8_6.x, pair_per_neg_8_6.y);
   region.lineTo(pair_per_neg_6_4.x, pair_per_neg_6_4.y);
   region.closePath();
-  ctx.fillStyle = '#52595D';
+  ctx.fillStyle = color_of.Ore;
   ctx.fill(region);
 
   // Tile 18: Ore
@@ -95,7 +104,7 @@ var drawBoard = function(ctx: CanvasRenderingContext2D, width_of_canvas: number)
   region.lineTo(pair_per_4_6.x, pair_per_4_6.y);
   region.lineTo(pair_per_6_4.x, pair_per_6_4.y);
   region.closePath();
-  ctx.fillStyle = '#52595D';
+  ctx.fillStyle = color_of.Ore;
   ctx.fill(region);
 
   for (let i = -13; i <= 14; i++) {
