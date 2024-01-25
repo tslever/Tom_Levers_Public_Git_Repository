@@ -11,7 +11,7 @@ const color_of = {
   Brick: '#AA4A44',
   Desert: '#F5D5A1',
   Grain: '#FADB5E',
-  Ore: '#52595D',
+  Ore: 'rgb(192,192,192)',
   Wood: '#014421',
   Wool: '#A6C964'
 }
@@ -52,6 +52,22 @@ var drawBoard = function(ctx: CanvasRenderingContext2D, width_of_canvas: number)
     region.lineTo(pair_per_6_neg_2.x, pair_per_6_neg_2.y);
     region.closePath();
     ctx.fillStyle = color_of.Grain;
+    ctx.fill(region);
+
+    // Tile 2: Ore
+    region = new Path2D();
+    region.moveTo(pair_per_4_neg_4.x, pair_per_4_neg_4.y);
+    const pair_per_4_neg_6 = get_canvas_coordinate_pair_given(4, -6, width_of_canvas);
+    region.lineTo(pair_per_4_neg_6.x, pair_per_4_neg_6.y);
+    const pair_per_2_neg_6 = get_canvas_coordinate_pair_given(2, -6, width_of_canvas);
+    region.lineTo(pair_per_2_neg_6.x, pair_per_2_neg_6.y);
+    const pair_per_0_neg_4 = get_canvas_coordinate_pair_given(0, -4, width_of_canvas);
+    region.lineTo(pair_per_0_neg_4.x, pair_per_0_neg_4.y);
+    region.lineTo(pair_per_0_neg_2.x, pair_per_0_neg_2.y);
+    region.lineTo(pair_per_2_neg_2.x, pair_per_2_neg_2.y);
+    region.lineTo(pair_per_4_neg_4.x, pair_per_4_neg_4.y);
+    region.closePath();
+    ctx.fillStyle = color_of.Ore;
     ctx.fill(region);
 
     // Tile 4: Brick
@@ -106,13 +122,6 @@ var drawBoard = function(ctx: CanvasRenderingContext2D, width_of_canvas: number)
   region.closePath();
   ctx.fillStyle = color_of.Ore;
   ctx.fill(region);
-
-  for (let i = -13; i <= 14; i++) {
-    for (let j = -14; j <= 13; j++) {
-      const pair = get_canvas_coordinate_pair_given(i, j, width_of_canvas);
-      ctx.fillText('(' + i + ',' + j + ')', pair.x, pair.y);
-    }
-  }
 
   // y = -14
   ctx.beginPath();
@@ -597,6 +606,14 @@ var drawBoard = function(ctx: CanvasRenderingContext2D, width_of_canvas: number)
   ctx.strokeStyle = 'rgb(128,128,128)';
   ctx.lineWidth = 1;
   ctx.stroke();
+
+  ctx.fillStyle = 'rgb(128,128,128)';
+  for (let i = -13; i <= 14; i++) {
+    for (let j = -14; j <= 13; j++) {
+      const pair = get_canvas_coordinate_pair_given(i, j, width_of_canvas);
+      ctx.fillText('(' + i + ',' + j + ')', pair.x, pair.y);
+    }
+  }
 };
 
 function BaseBoardDisplayer() {
