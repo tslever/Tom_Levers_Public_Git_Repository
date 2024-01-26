@@ -1,31 +1,14 @@
 import './App.css';
 import BaseBoardDisplayer from './BaseBoardDisplayer'
+import TableDisplayer from './TableDisplayer';
 
 function App() {
-  
-  /*async function Executor() {
-    const response = await fetch('http://localhost:8080');
-    const json = await response.json();
-    const rowWithText = [json];
-    const newBodyData = [];
-    newBodyData.push(rowWithText);
-    for (let i = 0; i < bodyData.length; i++) {
-      newBodyData.push(bodyData[i]);
-    }
-    setBodyData(newBodyData);
-  }*/
-
-  /*const [bodyData, setBodyData] = useState<string[][]>([]);
-
-  function CaretakerOfIndicatorThatButtonHasBeenClicked() {
-    const onClick = async () => {
-      await Executor();
-    };
-    return onClick
-  }*/
-
+  const bodyData = [[<BaseBoardDisplayer/>], ['Table Describing Cards'], ['Table Describing Messages']];
+  const colgroup = <colgroup>
+    <col style = { { width: '100%' } }/>
+  </colgroup>
   return (
-    <BaseBoardDisplayer/>
+    <TableDisplayer bodyData = { bodyData } colgroup = { colgroup } widthPercentage = { 100 }/>
   );
 }
 

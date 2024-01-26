@@ -1,4 +1,5 @@
 import { useRef, useEffect, MutableRefObject } from 'react';
+import TableDisplayer from './TableDisplayer';
 
 function get_canvas_coordinate_pair_given(isometric_x_coordinate: number, isometric_y_coordinate: number, length_of_side_of_canvas: number) {
   const canvas_x_coordinate = length_of_side_of_canvas / 2 + (isometric_x_coordinate + isometric_y_coordinate) * length_of_side_of_canvas / 20;
@@ -634,7 +635,6 @@ function BaseBoardDisplayer() {
         ref = { mutableRefObject }
         width = { height_of_webpage - 4 }
         height = { height_of_webpage - 4 }
-        style = { { backgroundColor: '#ffffff' } }
       />
     </center>
   );
