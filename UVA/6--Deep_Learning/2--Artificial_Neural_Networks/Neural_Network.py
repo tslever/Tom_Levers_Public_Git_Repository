@@ -1,3 +1,13 @@
+'''
+This neural network has the advantage of being generalizable to any number of layers with any number of neurons.
+
+To generate this neural network, I asked GPT 4 the following on 01/27/2024.
+
+Write Python code that trains and tests a neural network from scratch. The neural network system will receive a training data set of m 28x28 images. The first fully connected hidden layer will have 25 neurons. The second fully connected hidden layer will have 20 neurons. The third fully connected hidden layer will have 10 neurons. Each neuron in a hidden layer will have a ReLU activation function. The neural network will have a softmax output layer. The neural network will have cross-entropy loss. The neural network will learn via minibatch gradient descent. The learning rate will be 0.1.
+
+Based on GPT 4's response, I copied most of the following, massaged training and testing images and labels, implement minibatch training, asked twice for GPT 4 to correct calculating dZ, trained the neural network, reduced learning rate, and calculated accuracy.
+'''
+
 import numpy as np
 
 def initialize_parameters(layers_dims):
