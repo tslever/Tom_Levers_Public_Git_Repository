@@ -1,9 +1,10 @@
 import { ReactElement } from "react";
 
 type Props = {
-    bodyData: (JSX.Element | string)[][],
+    bodyData: (JSX.Element | number | string)[][],
     colgroup: ReactElement,
     headerData?: String[],
+    title?: ReactElement,
     widthPercentage: number
 };
 
@@ -50,6 +51,7 @@ function TableDisplayer (props: Props): JSX.Element {
     const tableStyle = { border: '1px solid black', width: '100%' }
     return (
         <table style = { tableStyle }>
+            <caption>{ props.title }</caption>
             { props.colgroup }
             { header }
             <tbody style = { style }>
