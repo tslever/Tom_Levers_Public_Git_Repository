@@ -4,28 +4,25 @@ type Props = {
     bodyData: (JSX.Element | number | string)[][],
     colgroup: ReactElement,
     headerData?: String[],
+    rowStyles?: { backgroundColor: string }[],
     title?: ReactElement,
     widthPercentage: number
 };
 
 function TableDisplayer (props: Props): JSX.Element {
-    const style = {
-        border: '1px solid black'
-    }
-
     const headerCells: JSX.Element[] = [];
     let header: JSX.Element = <></>;
     if ((props.headerData !== null) && (props.headerData !== undefined)) {
         for (let i = 0; i < (props.headerData).length; i++) {
             headerCells.push(
-                <th key = { i } style = { style }>
+                <th key = { i }>
                     { (props.headerData)[i] }
                 </th>
             );
         }
         header = (
-            <thead style = { style }>
-                <tr style = { style }>
+            <thead>
+                <tr>
                     { headerCells }
                 </tr>
             </thead>
@@ -37,24 +34,31 @@ function TableDisplayer (props: Props): JSX.Element {
         const bodyRow: JSX.Element[] = [];
         for (let j = 0; j < dataRow.length; j++) {
             bodyRow.push(
-                <td key = { j } style = { style }>
+                <td key = { j }>
                     { dataRow[j] }
                 </td>
             );
         }
-        bodyRows.push(
-            <tr key = { i } style = { style }>
-                { bodyRow }
-            </tr>
-        );
+        if (props.rowStyles) {
+            bodyRows.push(
+                <tr key = { i } style = { props.rowStyles[i] }>
+                    { bodyRow }
+                </tr>
+            );
+        } else {
+            bodyRows.push(
+                <tr key = { i }>
+                    { bodyRow }
+                </tr>
+            );
+        }
     }
-    const tableStyle = { border: '1px solid black', width: '100%' }
     return (
-        <table style = { tableStyle }>
+        <table style = { { width: props.widthPercentage + '%' } }>
             <caption>{ props.title }</caption>
             { props.colgroup }
             { header }
-            <tbody style = { style }>
+            <tbody>
                 { bodyRows }
             </tbody>
         </table>

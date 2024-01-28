@@ -1,5 +1,6 @@
 import './App.css';
 import BaseBoardDisplayer from './BaseBoardDisplayer'
+import Displayer from './Displayer';
 import TableDisplayer from './TableDisplayer';
 
 function App() {
@@ -20,9 +21,9 @@ function App() {
     bodyData = { body_data_for_table_describing_bank_cards }
     colgroup = { column_group_for_table_describing_bank_cards }
     title = <div>
-      <h2>
+      <h3>
         Table Describing Bank Cards
-      </h2>
+      </h3>
       P(E) represents probability that the next development card to be drawn is an E card.
     </div>
     widthPercentage = { 100 }
@@ -36,13 +37,23 @@ function App() {
   const column_group_for_primary_table = <colgroup>
     <col style = { { width: '100%' } }/>
   </colgroup>
+  const row_styles_for_primary_table = [
+    { 'backgroundColor': 'rgb(255, 248, 195)' },
+    { 'backgroundColor': 'rgb(255, 243, 137)' },
+    { 'backgroundColor': 'rgb(255, 248, 195)' },
+    { 'backgroundColor': 'rgb(255, 243, 137)' }
+  ]
   const primary_table_displayer = <TableDisplayer
     bodyData = { body_data_for_primary_table_displayer }
     colgroup = { column_group_for_primary_table }
+    rowStyles = { row_styles_for_primary_table }
+    title = <h2>Settlers Of Catan, Monte Carlo Tree Search, And Neural Networks</h2>
     widthPercentage = { 100 }
   />
   return (
-    primary_table_displayer
+    <Displayer backgroundColor = 'rgb(255, 248, 195)'>
+      { primary_table_displayer }
+    </Displayer>
   );
 }
 

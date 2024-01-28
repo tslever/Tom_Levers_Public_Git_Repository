@@ -11,7 +11,7 @@ const color_of = {
   Brick: '#AA4A44',
   Desert: '#F5D5A1',
   Grain: '#FADB5E',
-  Ore: 'rgb(192,192,192)',
+  Ore: 'rgb(128,128,128)',
   Sea: '#00c5ff',
   Wood: '#014421',
   Wool: '#A6C964'
@@ -24,7 +24,7 @@ const drawGridLine = function(ctx: CanvasRenderingContext2D, left_endpoint: {x: 
   if (color) {
     ctx.strokeStyle = color;
   } else {
-    ctx.strokeStyle = 'rgb(128,128,128)';
+    ctx.strokeStyle = 'rgb(64,64,64)';
   }
   ctx.lineWidth = 1;
   ctx.stroke();
@@ -372,9 +372,9 @@ const drawBoard = function(ctx: CanvasRenderingContext2D, width_of_canvas: numbe
   // x = 15
   drawGridLine(ctx, pair_per_15_neg_6, pair_per_15_neg_4);
 
-  ctx.fillStyle = 'rgb(128,128,128)';
-  for (let i = -13; i <= 14; i++) {
-    for (let j = -15; j <= 14; j++) {
+  ctx.fillStyle = 'rgb(64,64,64)';
+  for (let i = -14; i <= 15; i++) {
+    for (let j = -16; j <= 14; j++) {
       const pair = get_canvas_coordinate_pair_given(i, j, width_of_canvas);
       ctx.fillText('(' + i + ',' + j + ')', pair.x, pair.y);
     }
