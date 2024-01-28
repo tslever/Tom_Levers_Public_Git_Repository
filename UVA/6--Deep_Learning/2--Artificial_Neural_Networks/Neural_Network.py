@@ -1,11 +1,24 @@
 '''
+Compared to NNfromScratch.ipynb,
 This neural network has the advantage of being generalizable to any number of layers with any number of neurons.
+Accuracy doubled.
+This neural network is surprisingly fast, though slower.
+This neural network generally learns certain features of training images more precisely.
 
-To generate this neural network, I asked GPT 4 the following on 01/27/2024.
+I went down this path after reading the accepted answer at https://stats.stackexchange.com/questions/376312/mnist-digit-recognition-what-is-the-best-we-can-get-with-a-fully-connected-nn-o , which suggests that
+
+"All we need to achieve this best result so far are many hidden layers, many neurons per layer, numerous deformed training images, and graphics cards to greatly speed up learning."
+
+Ultimately, I confirmed the author's general idea.
+
+On this basis, I tried to add a layer to NNfromScratch, but failed in implementing functions for calculating gradients.
+I also realized that NNfromScratch is not particularly generalizable.
+
+Then, to generate this neural network, I asked GPT 4 the following on 01/27/2024.
 
 Write Python code that trains and tests a neural network from scratch. The neural network system will receive a training data set of m 28x28 images. The first fully connected hidden layer will have 25 neurons. The second fully connected hidden layer will have 20 neurons. The third fully connected hidden layer will have 10 neurons. Each neuron in a hidden layer will have a ReLU activation function. The neural network will have a softmax output layer. The neural network will have cross-entropy loss. The neural network will learn via minibatch gradient descent. The learning rate will be 0.1.
 
-Based on GPT 4's response, I copied most of the following, massaged training and testing images and labels, implement minibatch training, asked twice for GPT 4 to correct calculating dZ, trained the neural network, reduced learning rate, and calculated accuracy.
+Based on GPT 4's response, I copied most of the following, massaged training and testing images and labels, implement minibatch training, asked twice for GPT 4 to correct calculating dZ, trained the neural network, reduced learning rate according to https://ni.cmu.edu/~plaut/Lens/Manual/thumb.html , and calculated accuracy.
 '''
 
 import numpy as np
@@ -124,7 +137,6 @@ Y_test = mnist.test_labels()
 # Example usage
 # X_train is (784, m) and Y_train is (10, m) with one-hot encoded labels
 layers_dims = [784, 250, 200, 100, 10] # 10 output classes
-# Learning Rate: https://ni.cmu.edu/~plaut/Lens/Manual/thumb.html
 parameters = model(X_train, Y_train, layers_dims, learning_rate=0.0001, num_iterations = 5000)
 
 # Test the model
