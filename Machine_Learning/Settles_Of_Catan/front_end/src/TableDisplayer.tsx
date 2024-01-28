@@ -34,7 +34,7 @@ function TableDisplayer (props: Props): JSX.Element {
         const bodyRow: JSX.Element[] = [];
         for (let j = 0; j < dataRow.length; j++) {
             bodyRow.push(
-                <td key = { j }>
+                <td key = { j } style = { { textAlign: 'center' } }>
                     { dataRow[j] }
                 </td>
             );
