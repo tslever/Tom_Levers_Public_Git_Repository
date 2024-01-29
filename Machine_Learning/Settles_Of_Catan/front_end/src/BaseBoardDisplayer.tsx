@@ -1,5 +1,12 @@
 import { useRef, useEffect, MutableRefObject } from 'react';
 
+function getMousePosition(canvas: HTMLCanvasElement, event: MouseEvent) {
+  const DOM_rect = canvas.getBoundingClientRect();
+  let x = event.clientX - DOM_rect.left;
+  let y = event.clientY - DOM_rect.top;
+  console.log('Mouse clicked at (' + x + ', ' + y + ') relative to canvas.');
+}
+
 function get_canvas_coordinate_pair_given(isometric_x_coordinate: number, isometric_y_coordinate: number, length_of_side_of_canvas: number) {
   const canvas_x_coordinate = length_of_side_of_canvas / 2 + (isometric_x_coordinate + isometric_y_coordinate) * length_of_side_of_canvas / 22;
   const tangent_of_30_degrees = 0.5773502691896257645091487805019574556476017512701268760186023264;
@@ -386,6 +393,12 @@ function BaseBoardDisplayer() {
   useEffect(() => {
     const canvas = mutableRefObject.current;
     if (canvas) {
+      canvas.addEventListener(
+        "mousedown",
+        function (e: MouseEvent) {
+          getMousePosition(canvas, e);
+        }
+      );
       const context = canvas.getContext('2d');
       if (context) {
         drawBoard(context, canvas.width);
@@ -393,6 +406,7 @@ function BaseBoardDisplayer() {
     }
   }, []);
   const height_of_webpage = window.innerHeight;
+
   return (
     <center>
       <canvas
