@@ -4,7 +4,7 @@ function getMousePosition(canvas: HTMLCanvasElement, event: MouseEvent) {
   const DOM_rect = canvas.getBoundingClientRect();
   let x = event.clientX - DOM_rect.left;
   let y = event.clientY - DOM_rect.top;
-  console.log('Mouse clicked at (' + x + ', ' + y + ') relative to canvas.');
+  return 'Mouse clicked at (' + x + ', ' + y + ') relative to canvas.';
 }
 
 function get_canvas_coordinate_pair_given(isometric_x_coordinate: number, isometric_y_coordinate: number, length_of_side_of_canvas: number) {
@@ -388,7 +388,11 @@ const drawBoard = function(ctx: CanvasRenderingContext2D, width_of_canvas: numbe
   }
 };
 
-function BaseBoardDisplayer() {
+type Props = {
+  setListOfActions: Function
+}
+
+function BaseBoardDisplayer(props: Props) {
   const mutableRefObject: MutableRefObject<HTMLCanvasElement | null> = useRef<HTMLCanvasElement | null>(null);
   useEffect(() => {
     const canvas = mutableRefObject.current;
@@ -396,7 +400,8 @@ function BaseBoardDisplayer() {
       canvas.addEventListener(
         "mousedown",
         function (e: MouseEvent) {
-          getMousePosition(canvas, e);
+          const message = getMousePosition(canvas, e);
+          props.setListOfActions([message]);
         }
       );
       const context = canvas.getContext('2d');

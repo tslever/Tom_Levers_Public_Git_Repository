@@ -2,6 +2,7 @@ import './App.css';
 import BaseBoardDisplayer from './BaseBoardDisplayer'
 import Displayer from './Displayer';
 import TableDisplayer from './TableDisplayer';
+import { useState } from 'react';
 
 function App() {
 
@@ -99,8 +100,39 @@ function App() {
     widthPercentage = { 100 }
   />
 
+  const [listOfActions, setListOfActions] = useState(['Click On Map']);
+
+  const column_group_for_menu = <colgroup>
+    <col style = { { width: '100%' } }/>
+  </colgroup>
+  const header_data_for_menu = ['Menu Of Actions']
+  const body_data_for_menu = [
+    listOfActions
+  ]
+  const table_displayer_for_menu = <TableDisplayer
+    headerData = { header_data_for_menu }
+    bodyData = { body_data_for_menu }
+    colgroup = { column_group_for_menu }
+    title = <div>
+      <h3>
+        Settlers Of Catan, Monte Carlo Tree Search, And Neural Networks
+      </h3>
+    </div>
+    widthPercentage = { 100 }
+  />
+
+  const column_group_for_table_for_base_board_displayer_and_menu = <colgroup>
+    <col style = { { width: '50%' } }/>
+    <col style = { { width: '50%' } }/>
+  </colgroup>
+  const table_displayer_for_base_board_displayer_and_menu = <TableDisplayer
+    bodyData = { [[<BaseBoardDisplayer setListOfActions = { (listOfActions: string[]) => setListOfActions(listOfActions) }/>, table_displayer_for_menu]] }
+    colgroup = { column_group_for_table_for_base_board_displayer_and_menu }
+    widthPercentage = { 100 }
+  />
+
   const body_data_for_primary_table_displayer = [
-    [<BaseBoardDisplayer/>],
+    [table_displayer_for_base_board_displayer_and_menu],
     [table_displayer_for_table_describing_bank_cards],
     [table_displayer_for_table_describing_active_players_hand_cards],
     [table_displayer_for_table_describing_nonactive_players_hand_cards],
@@ -119,7 +151,6 @@ function App() {
     bodyData = { body_data_for_primary_table_displayer }
     colgroup = { column_group_for_primary_table }
     rowStyles = { row_styles_for_primary_table }
-    title = <h2>Settlers Of Catan, Monte Carlo Tree Search, And Neural Networks</h2>
     widthPercentage = { 100 }
   />
   return (
