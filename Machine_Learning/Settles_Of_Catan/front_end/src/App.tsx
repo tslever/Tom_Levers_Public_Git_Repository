@@ -100,7 +100,7 @@ function App() {
     widthPercentage = { 100 }
   />
 
-  const [listOfActions, setListOfActions] = useState(['Click On Map']);
+  const [listOfActions, setListOfActions] = useState(['First Player, click on map to place settlement.']);
 
   const column_group_for_menu = <colgroup>
     <col style = { { width: '100%' } }/>
