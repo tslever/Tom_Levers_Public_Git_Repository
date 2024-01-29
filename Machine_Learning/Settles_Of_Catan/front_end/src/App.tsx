@@ -4,18 +4,19 @@ import Displayer from './Displayer';
 import TableDisplayer from './TableDisplayer';
 
 function App() {
+
   const column_group_for_table_describing_bank_cards = <colgroup>
-    <col style = { { width: '12.5%' } }/>
-    <col style = { { width: '12.5%' } }/>
-    <col style = { { width: '12.5%' } }/>
-    <col style = { { width: '12.5%' } }/>
-    <col style = { { width: '12.5%' } }/>
-    <col style = { { width: '12.5%' } }/>
-    <col style = { { width: '12.5%' } }/>
-    <col style = { { width: '12.5%' } }/>
+    <col style = { { width: '10%' } }/>
+    <col style = { { width: '10%' } }/>
+    <col style = { { width: '10%' } }/>
+    <col style = { { width: '10%' } }/>
+    <col style = { { width: '10%' } }/>
+    <col style = { { width: '10%' } }/>
+    <col style = { { width: '10%' } }/>
+    <col style = { { width: '10%' } }/>
   </colgroup>
-  const header_data_for_table_describing_bank_cards = ['P(Knight)', 'P(Progress)', 'P(Victory Point)', 'Brick', 'Grain', 'Lumber', 'Ore', 'Wool']
-  const body_data_for_table_describing_bank_cards = [[0.56, 0.24, 0.20, 19, 19, 19, 19, 19]]
+  const header_data_for_table_describing_bank_cards = ['P(Knight)', 'P(Road Building)', 'P(Year Of Plenty)', 'P(Monopoly)', 'P(Victory Point)', 'Brick', 'Grain', 'Lumber', 'Ore', 'Wool']
+  const body_data_for_table_describing_bank_cards = [[0.56, 0.08, 0.08, 0.08, 0.20, 19, 19, 19, 19, 19]]
   const table_displayer_for_table_describing_bank_cards = <TableDisplayer
     headerData = { header_data_for_table_describing_bank_cards }
     bodyData = { body_data_for_table_describing_bank_cards }
@@ -28,11 +29,82 @@ function App() {
     </div>
     widthPercentage = { 100 }
   />
+
+  const header_data_for_table_describing_active_players_hand_cards = ['Knight', 'Road Building', 'Year Of Plenty', 'Monopoly', 'Victory Point', 'Brick', 'Grain', 'Lumber', 'Ore', 'Wool']
+  const body_data_for_table_describing_active_players_hand_cards = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+  const column_group_for_table_describing_active_players_hand_cards = <colgroup>
+    <col style = { { width: '10%' } }/>
+    <col style = { { width: '10%' } }/>
+    <col style = { { width: '10%' } }/>
+    <col style = { { width: '10%' } }/>
+    <col style = { { width: '10%' } }/>
+    <col style = { { width: '10%' } }/>
+    <col style = { { width: '10%' } }/>
+    <col style = { { width: '10%' } }/>
+  </colgroup>
+  const table_displayer_for_table_describing_active_players_hand_cards = <TableDisplayer
+    headerData = { header_data_for_table_describing_active_players_hand_cards }
+    bodyData = { body_data_for_table_describing_active_players_hand_cards }
+    colgroup = { column_group_for_table_describing_active_players_hand_cards }
+    title = <div>
+      <h3>
+        Table Describing Active Player's Hand Cards
+      </h3>
+    </div>
+    widthPercentage = { 100 }
+  />
+
+  const column_group_for_table_describing_nonactive_players_hand_cards = <colgroup>
+    <col style = { { width: '16.667%' } }/>
+    <col style = { { width: '16.667%' } }/>
+    <col style = { { width: '16.667%' } }/>
+    <col style = { { width: '16.667%' } }/>
+    <col style = { { width: '16.666%' } }/>
+    <col style = { { width: '16.666%' } }/>
+  </colgroup>
+  const header_data_for_table_describing_nonactive_players_hand_cards = ['Development Cards', 'Brick', 'Grain', 'Lumber', 'Ore', 'Wool']
+  const body_data_for_table_describing_nonactive_players_hand_cards = [
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0]
+  ]
+  const table_displayer_for_table_describing_nonactive_players_hand_cards = <TableDisplayer
+    headerData = { header_data_for_table_describing_nonactive_players_hand_cards }
+    bodyData = { body_data_for_table_describing_nonactive_players_hand_cards }
+    colgroup = { column_group_for_table_describing_nonactive_players_hand_cards }
+    title = <div>
+      <h3>
+        Table Describing Nonactive Players' Hand Cards
+      </h3>
+    </div>
+    widthPercentage = { 100 }
+  />
+
+  const column_group_for_table_of_messages = <colgroup>
+    <col style = { { width: '100%' } }/>
+  </colgroup>
+  const header_data_for_table_of_messages = ['Messages']
+  const body_data_for_table_of_messages = [
+    []
+  ]
+  const table_displayer_for_table_of_messages = <TableDisplayer
+    headerData = { header_data_for_table_of_messages }
+    bodyData = { body_data_for_table_of_messages }
+    colgroup = { column_group_for_table_of_messages }
+    title = <div>
+      <h3>
+        Table Of Messages
+      </h3>
+    </div>
+    widthPercentage = { 100 }
+  />
+
   const body_data_for_primary_table_displayer = [
     [<BaseBoardDisplayer/>],
     [table_displayer_for_table_describing_bank_cards],
-    ['Table Describing Development Hand Cards'],
-    ['Table Describing Messages']
+    [table_displayer_for_table_describing_active_players_hand_cards],
+    [table_displayer_for_table_describing_nonactive_players_hand_cards],
+    [table_displayer_for_table_of_messages]
   ];
   const column_group_for_primary_table = <colgroup>
     <col style = { { width: '100%' } }/>
