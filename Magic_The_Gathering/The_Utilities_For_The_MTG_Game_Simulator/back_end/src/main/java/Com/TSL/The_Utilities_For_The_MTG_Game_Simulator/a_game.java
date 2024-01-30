@@ -20,7 +20,7 @@ public class a_game {
 	 * In the first game of a match (including a single-game match), the players may use any mutually agreeable method (flipping a coin, rolling dice, etc.) to do so.
 	 */
 	public String decides_the_starting_player() {
-		if (an_enumeration_of_states_of_a_coin.provides_a_state() == an_enumeration_of_states_of_a_coin.HEADS) {
+		if (an_enumeration_of_states_of_a_coin.provides_a_random_state() == an_enumeration_of_states_of_a_coin.HEADS) {
 			this.First_Player.becomes_the_starting_player();
 			this.Active_Player = this.First_Player;
 		} else {

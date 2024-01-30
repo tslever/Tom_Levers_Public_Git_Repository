@@ -227,7 +227,8 @@ public class a_player {
 		System.out.println(this + " is completing " + this + "'s Declare Attackers Step.");
 		for (a_creature The_Creature : this.Part_Of_The_Battlefield.list_of_creatures()) {
 			if (!The_Creature.is_tapped() && !The_Creature.is_battle() && (The_Creature.has_haste() || The_Creature.has_been_controlled_by_the_active_player_continuously_since_the_turn_began()) && The_Creature.can_attack()) {
-				//if (The_Creature.must_attack() || (an_enumeration_of_states_of_a_coin.provides_a_state() == an_enumeration_of_states_of_a_coin.HEADS)) {
+				//if (The_Creature.must_attack() || (an_enumeration_of_states_of_a_coin.provides_a_random_state() == an_enumeration_of_states_of_a_coin.HEADS)) {
+					// the_coin_state == a_coin.HEADS
 					The_Creature.sets_its_indicator_of_whether_it_is_attacking_to(true);
 					Object The_Attackee = null;
 					if (!this.Part_Of_The_Battlefield.list_of_planeswalkers().isEmpty() || !this.List_Of_Battles.isEmpty()) {
@@ -265,7 +266,7 @@ public class a_player {
 		System.out.println(this + " is declaring blockers.");
 		for (a_creature The_Creature : this.Part_Of_The_Battlefield.list_of_creatures()) {
 			if (!The_Creature.is_tapped() && !The_Creature.is_battle()) {
-				//if (The_Creature.must_block() || (an_enumeration_of_states_of_a_coin.provides_a_state() == an_enumeration_of_states_of_a_coin.HEADS)) {
+				//if (The_Creature.must_block() || (an_enumeration_of_states_of_a_coin.provides_a_random_state() == an_enumeration_of_states_of_a_coin.HEADS)) {
 					this.List_Of_Blockers.add(The_Creature);
 				//}
 			}
@@ -886,7 +887,7 @@ public class a_player {
 				 * Neither the land nor the action of playing the land is a spell or ability, so it can't be countered, and players can't respond to it with instants or activated abilities.
 				 * (See rule 305, "Lands.")
 				 */
-				if (!this.Has_Played_A_Land_This_Turn && !this.Hand.list_of_land_cards().isEmpty() /*&& an_enumeration_of_states_of_a_coin.provides_a_state() == an_enumeration_of_states_of_a_coin.HEADS*/) {
+				if (!this.Has_Played_A_Land_This_Turn && !this.Hand.list_of_land_cards().isEmpty() /*&& an_enumeration_of_states_of_a_coin.provides_a_random_state() == an_enumeration_of_states_of_a_coin.HEADS*/) {
 					this.plays_a_land();
 				}
 				/* Rule 117.1a: ... A player may cast a non-instant spell during their main phase any time they have priority and the stack is empty. */
