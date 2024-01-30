@@ -17,8 +17,8 @@ function get_canvas_coordinate_pair_given(isometric_x_coordinate: number, isomet
 }
 
 function get_isometric_coordinate_pair_given(canvas_x_coordinate: number, canvas_y_coordinate: number, length_of_side_of_canvas: number) {
-  const isometric_x_coordinate = 11 / length_of_side_of_canvas * canvas_x_coordinate + 11 / length_of_side_of_canvas * canvas_y_coordinate / tangent_of_30_degrees - 14;
-  const isometric_y_coordinate = 3 + 11 / length_of_side_of_canvas * (canvas_x_coordinate - canvas_y_coordinate / tangent_of_30_degrees);
+  const isometric_x_coordinate = Math.round( 11 / length_of_side_of_canvas * canvas_x_coordinate + 11 / length_of_side_of_canvas * canvas_y_coordinate / tangent_of_30_degrees - 14 );
+  const isometric_y_coordinate = Math.round( 3 + 11 / length_of_side_of_canvas * (canvas_x_coordinate - canvas_y_coordinate / tangent_of_30_degrees) );
   return {x: isometric_x_coordinate, y: isometric_y_coordinate};
 }
 
