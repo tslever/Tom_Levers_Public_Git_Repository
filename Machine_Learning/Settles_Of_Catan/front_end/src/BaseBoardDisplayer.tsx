@@ -2,16 +2,24 @@ import { useRef, useEffect, MutableRefObject } from 'react';
 
 function getMousePosition(canvas: HTMLCanvasElement, event: MouseEvent) {
   const DOM_rect = canvas.getBoundingClientRect();
-  let x = event.clientX - DOM_rect.left;
-  let y = event.clientY - DOM_rect.top;
-  return 'Mouse clicked at (' + x + ', ' + y + ') relative to canvas.';
+  const canvas_x_coordinate = event.clientX - DOM_rect.left;
+  const canvas_y_coordinate = event.clientY - DOM_rect.top;
+  const pair_of_isometric_coordinates = get_isometric_coordinate_pair_given(canvas_x_coordinate, canvas_y_coordinate, canvas.width);
+  return 'Mouse clicked at (' + pair_of_isometric_coordinates.x + ', ' + pair_of_isometric_coordinates.y + ') relative to canvas.';
 }
+
+const tangent_of_30_degrees = 0.5773502691896257645091487805019574556476017512701268760186023264;
 
 function get_canvas_coordinate_pair_given(isometric_x_coordinate: number, isometric_y_coordinate: number, length_of_side_of_canvas: number) {
   const canvas_x_coordinate = length_of_side_of_canvas / 2 + (isometric_x_coordinate + isometric_y_coordinate) * length_of_side_of_canvas / 22;
-  const tangent_of_30_degrees = 0.5773502691896257645091487805019574556476017512701268760186023264;
   const canvas_y_coordinate = (length_of_side_of_canvas / 2 + 3 * length_of_side_of_canvas / 11 + isometric_x_coordinate * length_of_side_of_canvas / 22 - isometric_y_coordinate * length_of_side_of_canvas / 22) * tangent_of_30_degrees;
   return {x: canvas_x_coordinate, y: canvas_y_coordinate};
+}
+
+function get_isometric_coordinate_pair_given(canvas_x_coordinate: number, canvas_y_coordinate: number, length_of_side_of_canvas: number) {
+  const isometric_x_coordinate = 11 / length_of_side_of_canvas * canvas_x_coordinate + 11 / length_of_side_of_canvas * canvas_y_coordinate / tangent_of_30_degrees - 14;
+  const isometric_y_coordinate = 3 + 11 / length_of_side_of_canvas * (canvas_x_coordinate - canvas_y_coordinate / tangent_of_30_degrees);
+  return {x: isometric_x_coordinate, y: isometric_y_coordinate};
 }
 
 const color_of = {
