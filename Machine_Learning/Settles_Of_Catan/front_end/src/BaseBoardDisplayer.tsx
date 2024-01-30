@@ -424,8 +424,8 @@ function BaseBoardDisplayer(props: Props) {
     <center>
       <canvas
         ref = { mutableRefObject }
-        width = { height_of_webpage - 4 }
-        height = { height_of_webpage - 4 }
+        width = { height_of_webpage - 7 }
+        height = { height_of_webpage - 7 }
         style = { { 'backgroundColor': color_of.Sea } }
       />
     </center>
