@@ -1,4 +1,5 @@
 import { useRef, useEffect, MutableRefObject } from 'react';
+import ActionDisplayer from './ActionDisplayer';
 
 function getMousePosition(canvas: HTMLCanvasElement, event: MouseEvent) {
   const DOM_rect = canvas.getBoundingClientRect();
@@ -396,11 +397,7 @@ const drawBoard = function(ctx: CanvasRenderingContext2D, width_of_canvas: numbe
   }
 };
 
-type Props = {
-  setListOfActions: Function
-}
-
-function BaseBoardDisplayer(props: Props) {
+function BaseBoardDisplayer() {
   const mutableRefObject: MutableRefObject<HTMLCanvasElement | null> = useRef<HTMLCanvasElement | null>(null);
   useEffect(() => {
     const canvas = mutableRefObject.current;
@@ -409,7 +406,7 @@ function BaseBoardDisplayer(props: Props) {
         "mousedown",
         function (e: MouseEvent) {
           const message = getMousePosition(canvas, e);
-          props.setListOfActions([message]);
+          console.log(message);
         }
       );
       const context = canvas.getContext('2d');

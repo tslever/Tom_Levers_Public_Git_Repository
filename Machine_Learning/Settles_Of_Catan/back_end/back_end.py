@@ -6,9 +6,16 @@ CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 @app.route("/", methods = ['POST'])
 def main():
-    JSON_object_from_POST_request_body = request.json
-    response = jsonify(JSON_object_from_POST_request_body)
-    return response
+    try:
+        JSON_object_from_POST_request_body = request.json
+        if JSON_object_from_POST_request_body['action'] == 'Click me to get started.':
+            JSON_object_representing_body_of_response = {"next_action": "Player Red, place your first settlement."}
+        else:
+            JSON_object_representing_body_of_response = {"next_action": "TODO"}
+        response = jsonify(JSON_object_representing_body_of_response)
+        return response
+    except Exception as e:
+        print(e)
 
 if __name__ == '__main__':
     app.run(debug = True)

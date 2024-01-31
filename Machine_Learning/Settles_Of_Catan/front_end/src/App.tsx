@@ -101,9 +101,9 @@ function App() {
     widthPercentage = { 100 }
   />
 
-  async function action_click_me_to_get_started() {
+  async function act(action: string) {
     const url = 'http://localhost:5000';
-    const JSON_object = { action: 'click_me_to_get_started' };
+    const JSON_object = { action: action };
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -113,11 +113,18 @@ function App() {
     });  
     const json = await response.json();
     console.log(json);
+    const displayer_of_action = <ActionDisplayer
+      backgroundColor='#ffffff'
+      act = { act }
+    >
+      { json.next_action }
+    </ActionDisplayer>
+    setListOfActions([displayer_of_action]);
   }
 
   const displayer_of_action_click_me_to_get_started = <ActionDisplayer
     backgroundColor = '#ffffff'
-    onClick = { action_click_me_to_get_started }
+    act = { act }
   >
     Click me to get started.
   </ActionDisplayer>
@@ -147,7 +154,7 @@ function App() {
     <col style = { { width: '50%' } }/>
   </colgroup>
   const table_displayer_for_base_board_displayer_and_menu_of_actions = <TableDisplayer
-    bodyData = { [[<BaseBoardDisplayer setListOfActions = { (listOfActions: JSX.Element[]) => setListOfActions(listOfActions) }/>, table_displayer_for_menu_of_actions]] }
+    bodyData = { [[<BaseBoardDisplayer/>, table_displayer_for_menu_of_actions]] }
     colgroup = { column_group_for_table_for_base_board_displayer_and_menu_of_actions }
     widthPercentage = { 100 }
   />
