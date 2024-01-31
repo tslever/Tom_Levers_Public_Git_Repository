@@ -1,3 +1,4 @@
+import ActionDisplayer from './ActionDisplayer';
 import './App.css';
 import BaseBoardDisplayer from './BaseBoardDisplayer'
 import Displayer from './Displayer';
@@ -100,19 +101,39 @@ function App() {
     widthPercentage = { 100 }
   />
 
-  const [listOfActions, setListOfActions] = useState(['First Player, click on map to place settlement.']);
+  async function action_click_me_to_get_started() {
+    const url = 'http://localhost:5000';
+    const JSON_object = { action: 'click_me_to_get_started' };
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(JSON_object)
+    });  
+    const json = await response.json();
+    console.log(json);
+  }
 
-  const column_group_for_menu = <colgroup>
+  const displayer_of_action_click_me_to_get_started = <ActionDisplayer
+    backgroundColor = '#ffffff'
+    onClick = { action_click_me_to_get_started }
+  >
+    Click me to get started.
+  </ActionDisplayer>
+  const [listOfActions, setListOfActions] = useState([displayer_of_action_click_me_to_get_started]);
+
+  const column_group_for_menu_of_actions = <colgroup>
     <col style = { { width: '100%' } }/>
   </colgroup>
-  const header_data_for_menu = ['Menu Of Actions']
-  const body_data_for_menu = [
+  const header_data_for_menu_of_actions = ['Menu Of Actions']
+  const body_data_for_menu_of_actions = [
     listOfActions
   ]
-  const table_displayer_for_menu = <TableDisplayer
-    headerData = { header_data_for_menu }
-    bodyData = { body_data_for_menu }
-    colgroup = { column_group_for_menu }
+  const table_displayer_for_menu_of_actions = <TableDisplayer
+    headerData = { header_data_for_menu_of_actions }
+    bodyData = { body_data_for_menu_of_actions }
+    colgroup = { column_group_for_menu_of_actions }
     title = <div>
       <h3>
         Settlers Of Catan, Monte Carlo Tree Search, And Neural Networks
@@ -121,18 +142,18 @@ function App() {
     widthPercentage = { 100 }
   />
 
-  const column_group_for_table_for_base_board_displayer_and_menu = <colgroup>
+  const column_group_for_table_for_base_board_displayer_and_menu_of_actions = <colgroup>
     <col style = { { width: '50%' } }/>
     <col style = { { width: '50%' } }/>
   </colgroup>
-  const table_displayer_for_base_board_displayer_and_menu = <TableDisplayer
-    bodyData = { [[<BaseBoardDisplayer setListOfActions = { (listOfActions: string[]) => setListOfActions(listOfActions) }/>, table_displayer_for_menu]] }
-    colgroup = { column_group_for_table_for_base_board_displayer_and_menu }
+  const table_displayer_for_base_board_displayer_and_menu_of_actions = <TableDisplayer
+    bodyData = { [[<BaseBoardDisplayer setListOfActions = { (listOfActions: JSX.Element[]) => setListOfActions(listOfActions) }/>, table_displayer_for_menu_of_actions]] }
+    colgroup = { column_group_for_table_for_base_board_displayer_and_menu_of_actions }
     widthPercentage = { 100 }
   />
 
   const body_data_for_primary_table_displayer = [
-    [table_displayer_for_base_board_displayer_and_menu],
+    [table_displayer_for_base_board_displayer_and_menu_of_actions],
     [table_displayer_for_table_describing_bank_cards],
     [table_displayer_for_table_describing_active_players_hand_cards],
     [table_displayer_for_table_describing_nonactive_players_hand_cards],
