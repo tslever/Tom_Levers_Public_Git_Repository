@@ -2,11 +2,39 @@ import ActionDisplayer from './ActionDisplayer';
 import './App.css';
 import BaseBoardDisplayer from './BaseBoardDisplayer'
 import Displayer from './Displayer';
-import TableDisplayer from './TableDisplayer';
 import { useState } from 'react';
+import TableDisplayer from './TableDisplayer';
 
 function App() {
 
+    // table displayer for describing active player's hand cards
+    const body_data_for_table_describing_active_players_hand_cards = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+    const column_group_for_table_describing_active_players_hand_cards = <colgroup>
+      <col style = { { width: '10%' } }/>
+      <col style = { { width: '10%' } }/>
+      <col style = { { width: '10%' } }/>
+      <col style = { { width: '10%' } }/>
+      <col style = { { width: '10%' } }/>
+      <col style = { { width: '10%' } }/>
+      <col style = { { width: '10%' } }/>
+      <col style = { { width: '10%' } }/>
+    </colgroup>
+    const header_data_for_table_describing_active_players_hand_cards = ['Knight', 'Road Building', 'Year Of Plenty', 'Monopoly', 'Victory Point', 'Brick', 'Grain', 'Lumber', 'Ore', 'Wool']
+    const title_for_table_describing_active_players_hand_cards = <div>
+      <h3>
+        Table Describing Active Player's Hand Cards
+      </h3>
+    </div>
+    const table_displayer_for_table_describing_active_players_hand_cards = <TableDisplayer
+      bodyData = { body_data_for_table_describing_active_players_hand_cards }
+      colgroup = { column_group_for_table_describing_active_players_hand_cards }
+      headerData = { header_data_for_table_describing_active_players_hand_cards }
+      title = { title_for_table_describing_active_players_hand_cards }
+      widthPercentage = { 100 }
+    />
+
+  // table displayer for describing bank cards
+  const body_data_for_table_describing_bank_cards = [[0.56, 0.08, 0.08, 0.08, 0.20, 19, 19, 19, 19, 19]]
   const column_group_for_table_describing_bank_cards = <colgroup>
     <col style = { { width: '10%' } }/>
     <col style = { { width: '10%' } }/>
@@ -18,44 +46,26 @@ function App() {
     <col style = { { width: '10%' } }/>
   </colgroup>
   const header_data_for_table_describing_bank_cards = ['P(Knight)', 'P(Road Building)', 'P(Year Of Plenty)', 'P(Monopoly)', 'P(Victory Point)', 'Brick', 'Grain', 'Lumber', 'Ore', 'Wool']
-  const body_data_for_table_describing_bank_cards = [[0.56, 0.08, 0.08, 0.08, 0.20, 19, 19, 19, 19, 19]]
+  const title_for_table_describing_bank_cards = <div>
+    <h3>
+      Table Describing Bank Cards
+    </h3>
+    P(E) represents probability that the next development card to be drawn is an E card.
+  </div>
   const table_displayer_for_table_describing_bank_cards = <TableDisplayer
-    headerData = { header_data_for_table_describing_bank_cards }
     bodyData = { body_data_for_table_describing_bank_cards }
     colgroup = { column_group_for_table_describing_bank_cards }
-    title = <div>
-      <h3>
-        Table Describing Bank Cards
-      </h3>
-      P(E) represents probability that the next development card to be drawn is an E card.
-    </div>
+    headerData = { header_data_for_table_describing_bank_cards }
+    title = { title_for_table_describing_bank_cards }
     widthPercentage = { 100 }
   />
 
-  const header_data_for_table_describing_active_players_hand_cards = ['Knight', 'Road Building', 'Year Of Plenty', 'Monopoly', 'Victory Point', 'Brick', 'Grain', 'Lumber', 'Ore', 'Wool']
-  const body_data_for_table_describing_active_players_hand_cards = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
-  const column_group_for_table_describing_active_players_hand_cards = <colgroup>
-    <col style = { { width: '10%' } }/>
-    <col style = { { width: '10%' } }/>
-    <col style = { { width: '10%' } }/>
-    <col style = { { width: '10%' } }/>
-    <col style = { { width: '10%' } }/>
-    <col style = { { width: '10%' } }/>
-    <col style = { { width: '10%' } }/>
-    <col style = { { width: '10%' } }/>
-  </colgroup>
-  const table_displayer_for_table_describing_active_players_hand_cards = <TableDisplayer
-    headerData = { header_data_for_table_describing_active_players_hand_cards }
-    bodyData = { body_data_for_table_describing_active_players_hand_cards }
-    colgroup = { column_group_for_table_describing_active_players_hand_cards }
-    title = <div>
-      <h3>
-        Table Describing Active Player's Hand Cards
-      </h3>
-    </div>
-    widthPercentage = { 100 }
-  />
-
+  // table describing nonactive players' hand cards
+  const body_data_for_table_describing_nonactive_players_hand_cards = [
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0]
+  ]
   const column_group_for_table_describing_nonactive_players_hand_cards = <colgroup>
     <col style = { { width: '16.667%' } }/>
     <col style = { { width: '16.667%' } }/>
@@ -65,39 +75,37 @@ function App() {
     <col style = { { width: '16.666%' } }/>
   </colgroup>
   const header_data_for_table_describing_nonactive_players_hand_cards = ['Development Cards', 'Brick', 'Grain', 'Lumber', 'Ore', 'Wool']
-  const body_data_for_table_describing_nonactive_players_hand_cards = [
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0]
-  ]
+  const title_for_table_describing_nonactive_players_hand_cards = <div>
+    <h3>
+      Table Describing Nonactive Players' Hand Cards
+    </h3>
+  </div>
   const table_displayer_for_table_describing_nonactive_players_hand_cards = <TableDisplayer
-    headerData = { header_data_for_table_describing_nonactive_players_hand_cards }
     bodyData = { body_data_for_table_describing_nonactive_players_hand_cards }
     colgroup = { column_group_for_table_describing_nonactive_players_hand_cards }
-    title = <div>
-      <h3>
-        Table Describing Nonactive Players' Hand Cards
-      </h3>
-    </div>
+    headerData = { header_data_for_table_describing_nonactive_players_hand_cards }
+    title = { title_for_table_describing_nonactive_players_hand_cards }
     widthPercentage = { 100 }
   />
 
+  // table of messages
+  const body_data_for_table_of_messages = [
+    []
+  ]
   const column_group_for_table_of_messages = <colgroup>
     <col style = { { width: '100%' } }/>
   </colgroup>
   const header_data_for_table_of_messages = ['Messages']
-  const body_data_for_table_of_messages = [
-    []
-  ]
+  const title_for_table_of_messages = <div>
+    <h3>
+      Table Of Messages
+    </h3>
+  </div>
   const table_displayer_for_table_of_messages = <TableDisplayer
-    headerData = { header_data_for_table_of_messages }
     bodyData = { body_data_for_table_of_messages }
     colgroup = { column_group_for_table_of_messages }
-    title = <div>
-      <h3>
-        Table Of Messages
-      </h3>
-    </div>
+    headerData = { header_data_for_table_of_messages }
+    title = { title_for_table_of_messages }
     widthPercentage = { 100 }
   />
 
