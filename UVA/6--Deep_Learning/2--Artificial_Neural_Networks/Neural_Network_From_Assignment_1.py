@@ -87,11 +87,12 @@ class TwoLayerNeuralNetwork(object):
             self.params['b1'] = self.params['b1'] - learning_rate * grads['b1']
             if verbose and it % 100 == 0:
                 print('iteration %d / %d: loss %f' % (it, num_iters, loss))
-            if it % iterations_per_epoch == 0:
+            if it % 1000 == 0:
                 train_acc = (self.predict(X_batch) == y_batch).mean()
                 val_acc = (self.predict(X_val) == y_val).mean()
                 train_acc_history.append(train_acc)
                 val_acc_history.append(val_acc)
+            if it % iterations_per_epoch == 0:
                 learning_rate *= learning_rate_decay
         return {
           'loss_history': loss_history,
