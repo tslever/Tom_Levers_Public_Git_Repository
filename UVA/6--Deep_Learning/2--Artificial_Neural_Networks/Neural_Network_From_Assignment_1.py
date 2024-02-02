@@ -1,7 +1,10 @@
 import cifar10
+import logging
 import numpy as np
-from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
+
+logging.basicConfig(filename = 'Neural_Network_Evaluation.log', level = logging.INFO)
+logger = logging.getLogger(__name__)
 
 def ReLU(x):
   return np.maximum(0, x)
@@ -142,6 +145,48 @@ def plot_loss_and_training_and_validation_accuracies(list_of_stats, description_
     plt.savefig(fname = f'./plots/{filename}.png')
     plt.close()
 
+from math import sqrt, ceil
+
+def visualize_grid(Xs, ubound=255.0, padding=1):
+    """
+    Reshape a 4D tensor of image data to a grid for easy visualization.
+
+    Inputs:
+    - Xs: Data of shape (N, H, W, C)
+    - ubound: Output grid will have values scaled to the range [0, ubound]
+    - padding: The number of blank pixels between elements of the grid
+    """
+    (N, H, W, C) = Xs.shape
+    grid_size = int(ceil(sqrt(N)))
+    grid_height = H * grid_size + padding * (grid_size - 1)
+    grid_width = W * grid_size + padding * (grid_size - 1)
+    grid = np.zeros((grid_height, grid_width, C))
+    next_idx = 0
+    y0, y1 = 0, H
+    for y in range(grid_size):
+        x0, x1 = 0, W
+        for x in range(grid_size):
+            if next_idx < N:
+                img = Xs[next_idx]
+                low, high = np.min(img), np.max(img)
+                grid[y0:y1, x0:x1] = ubound * (img - low) / (high - low)
+                next_idx += 1
+            x0 += W + padding
+            x1 += W + padding
+        y0 += H + padding
+        y1 += H + padding
+    # grid_max = np.max(grid)
+    # grid_min = np.min(grid)
+    # grid = ubound * (grid - grid_min) / (grid_max - grid_min)
+    return grid
+
+def show_net_weights(net):
+    W1 = net.params['W1']
+    W1 = W1.reshape(32, 32, 3, -1).transpose(3, 0, 1, 2)
+    plt.imshow(visualize_grid(W1, padding=3).astype('uint8'))
+    plt.gca().axis('off')
+    plt.savefig(fname = f'./plots/Network_Weights.png')
+    plt.close()
 
 if __name__ == '__main__':
 
@@ -174,7 +219,9 @@ if __name__ == '__main__':
                             for scale in [1e-4, 1e-3, 1e-2, 1e-1, 1]:
                                 list_of_stats = []
                                 description_of_neural_network = f'{hidden_size}, {scale}, {number_of_iterations}, {batch_size}, {learning_rate}, {learning_rate_decay}, {L2_regularization_strength}'
-                                print(f'Neural Network: {description_of_neural_network}')
+                                message = f'Neural Network: {description_of_neural_network}'
+                                print(message)
+                                logging.info(message)
                                 for i in range(0, number_of_folds):
                                     indices_of_validation_objects = range((i - 1) * number_of_validation_images, i * number_of_validation_images)
                                     validation_images = images[indices_of_validation_objects, :]
@@ -203,17 +250,28 @@ if __name__ == '__main__':
                                         verbose = True
                                     )
                                     validation_accuracy = (network.predict(standardized_validation_images) == validation_labels).mean()
-                                    print(f'Validation Accuracy {i}: {validation_accuracy}')
+                                    message = f'Validation Accuracy {i}: {validation_accuracy}'
+                                    print(message)
+                                    logging.info(message)
                                     average_validation_accuracy += validation_accuracy
                                     list_of_stats.append(stats)
                                 average_validation_accuracy /= number_of_folds
-                                print(f'Average Validation Accuracy: {average_validation_accuracy}')
+                                message = f'Average Validation Accuracy: {average_validation_accuracy}'
+                                print(message)
+                                logging.info(message)
                                 plot_loss_and_training_and_validation_accuracies(list_of_stats, description_of_neural_network)
                                 if average_validation_accuracy > best_average_validation_accuracy:
                                     best_average_validation_accuracy = average_validation_accuracy
                                     best_network = network
                                     description_of_best_neural_network = description_of_neural_network
-                                    print(f'Best Neural Network: {description_of_best_neural_network}')
-                                    print(f'Best Average Validation Accuracy: {best_average_validation_accuracy}')
+                                    message = f'Best Neural Network: {description_of_best_neural_network}'
+                                    print(message)
+                                    logging.info(message)
+                                    message = f'Best Average Validation Accuracy: {best_average_validation_accuracy}'
+                                    print(message)
+                                    logging.info(message)
                                     test_accuracy = (best_network.predict(standardized_test_images) == test_labels).mean()
-                                    print('Test Accuracy: ', test_accuracy)
+                                    message = f'Test Accuracy: {test_accuracy}'
+                                    print(message)
+                                    logging.info(message)
+                                    show_net_weights(best_network)
