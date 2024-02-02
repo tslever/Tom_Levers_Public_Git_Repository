@@ -163,7 +163,6 @@ if __name__ == '__main__':
     number_of_folds = 3
     number_of_validation_images = int(number_of_training_and_validation_images / number_of_folds)
     number_of_training_images = number_of_training_and_validation_images - number_of_validation_images
-    list_of_stats = []
     output_size = 10
     network = None
     for batch_size in [10, 100, 1000, 10_000, 20_000]:
@@ -173,9 +172,10 @@ if __name__ == '__main__':
                     for learning_rate_decay in [1, 0.95, 0.9, 0.85, 0.8]:
                         for number_of_iterations in [10_000, 30_000, 50_000, 70_000, 90_000]:
                             for scale in [1e-4, 1e-3, 1e-2, 1e-1, 1]:
+                                list_of_stats = []
+                                description_of_neural_network = f'{hidden_size}, {scale}, {number_of_iterations}, {batch_size}, {learning_rate}, {learning_rate_decay}, {L2_regularization_strength}'
+                                print(f'Neural Network: {description_of_neural_network}')
                                 for i in range(0, number_of_folds):
-                                    description_of_neural_network = f'{i}, {hidden_size}, {scale}, {number_of_iterations}, {batch_size}, {learning_rate}, {learning_rate_decay}, {L2_regularization_strength}'
-                                    print(f'Neural Network: {description_of_neural_network}')
                                     indices_of_validation_objects = range((i - 1) * number_of_validation_images, i * number_of_validation_images)
                                     validation_images = images[indices_of_validation_objects, :]
                                     validation_means = np.mean(validation_images, axis = 0)
@@ -202,18 +202,18 @@ if __name__ == '__main__':
                                         reg = L2_regularization_strength,
                                         verbose = True
                                     )
-                                    validation_accuracy = (network.predict(validation_images) == validation_labels).mean()
-                                    print(f'Validation Accuracy: {validation_accuracy}')
+                                    validation_accuracy = (network.predict(standardized_validation_images) == validation_labels).mean()
+                                    print(f'Validation Accuracy {i}: {validation_accuracy}')
                                     average_validation_accuracy += validation_accuracy
                                     list_of_stats.append(stats)
-                                    plot_loss_and_training_and_validation_accuracies(list_of_stats, description_of_neural_network)
                                 average_validation_accuracy /= number_of_folds
                                 print(f'Average Validation Accuracy: {average_validation_accuracy}')
+                                plot_loss_and_training_and_validation_accuracies(list_of_stats, description_of_neural_network)
                                 if average_validation_accuracy > best_average_validation_accuracy:
                                     best_average_validation_accuracy = average_validation_accuracy
                                     best_network = network
                                     description_of_best_neural_network = description_of_neural_network
                                     print(f'Best Neural Network: {description_of_best_neural_network}')
                                     print(f'Best Average Validation Accuracy: {best_average_validation_accuracy}')
-                                    test_accuracy = (best_network.predict(test_images) == test_labels).mean()
+                                    test_accuracy = (best_network.predict(standardized_test_images) == test_labels).mean()
                                     print('Test Accuracy: ', test_accuracy)
