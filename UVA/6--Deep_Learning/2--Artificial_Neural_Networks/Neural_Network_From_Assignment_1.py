@@ -18,12 +18,12 @@ def combined_loss(Yhat, Y, W1, W2, lambda_for_L2_regularization):
 
 class TwoLayerNeuralNetwork(object):
 
-    def __init__(self, input_size, hidden_size, output_size, std = 1e-4):
+    def __init__(self, input_size, hidden_size, output_size, scale):
         self._output_size = output_size
         self.params = {}
-        self.params['W1'] = std * np.random.randn(input_size, hidden_size)
+        self.params['W1'] = scale * np.random.randn(input_size, hidden_size)
         self.params['b1'] = np.zeros(hidden_size)
-        self.params['W2'] = std * np.random.randn(hidden_size, output_size)
+        self.params['W2'] = scale * np.random.randn(hidden_size, output_size)
         self.params['b2'] = np.zeros(output_size)
 
     def loss(self, X, y = None, reg = 0.0):
@@ -101,6 +101,12 @@ class TwoLayerNeuralNetwork(object):
 
     def predict(self, X):
         return np.argmax(self.loss(X), axis = 1)
+    
+    def save(self):
+        np.save('W1.npy', self.params['W1'])
+        np.save('b1.npy', self.params['b1'])
+        np.save('W2.npy', self.params['W2'])
+        np.save('b2.npy', self.params['b2'])
 
 def load_CIFAR10():
     images = []
@@ -109,53 +115,104 @@ def load_CIFAR10():
         images.append(image.astype('float32'))
         labels.append(label)
     images = np.array(images)
+    images = images.reshape(images.shape[0], -1)
     labels = np.array(labels)
-    X_train, X_test, y_train, y_test = train_test_split(images, labels, test_size = 0.33, random_state = 42)
-    return X_train, X_test, y_train, y_test
+    array_of_random_indices = np.random.randint(0, images.shape[0], images.shape[0])
+    images = images[array_of_random_indices, :]
+    labels = labels[array_of_random_indices]
+    return (images, labels)
 
-def get_CIFAR10_data(num_training = 49000, num_validation = 1000, num_test = 1000):
-    try:
-       del X_train, y_train
-       del X_test, y_test
-       print('Cleared previously loaded data.')
-    except:
-       pass
-    X_train, X_test, y_train, y_test = load_CIFAR10()
-    mask = list(range(num_training, num_training + num_validation))
-    X_val = X_train[mask]
-    y_val = y_train[mask]
-    mask = list(range(num_training))
-    X_train = X_train[mask]
-    y_train = y_train[mask]
-    mask = list(range(num_test))
-    X_test = X_test[mask]
-    y_test = y_test[mask]
-    mean_image = np.mean(X_train, axis = 0)
-    X_train -= mean_image
-    X_val -= mean_image
-    X_test -= mean_image
-    X_train = X_train.reshape(num_training, -1)
-    X_val = X_val.reshape(num_validation, -1)
-    X_test = X_test.reshape(num_test, -1)
-    return X_train, y_train, X_val, y_val, X_test, y_test
+def plot_loss_and_training_and_validation_accuracies(list_of_stats, description_of_neural_network):
+    plt.subplot(2, 1, 1)
+    for stats in list_of_stats:
+        plt.plot(stats['loss_history'], 'b-')
+    plt.title('Loss history')
+    plt.xlabel('Iteration')
+    plt.ylabel('Loss')
+    plt.subplot(2, 1, 2)
+    for stats in list_of_stats:
+        plt.plot(stats['train_acc_history'], 'b-', label='train')
+        plt.plot(stats['val_acc_history'], 'g-', label='val')
+    plt.title('Classification accuracy history')
+    plt.xlabel('Epoch')
+    plt.ylabel('Classification accuracy')
+    plt.legend()
+    filename = description_of_neural_network.replace(', ', '_')
+    plt.savefig(fname = f'./plots/{filename}.png')
+    plt.close()
+
 
 if __name__ == '__main__':
-    X_train, y_train, X_val, y_val, X_test, y_test = get_CIFAR10_data()
-    input_size = 32 * 32 * 3
-    hidden_size = 50
-    num_classes = 10
-    network = TwoLayerNeuralNetwork(input_size, hidden_size, num_classes)
-    stats = network.train(
-        X_train,
-        y_train,
-        X_val,
-        y_val,
-        num_iters = 1000,
-        batch_size = 200,
-        learning_rate = 1e-4,
-        learning_rate_decay = 0.95,
-        reg = 0.25,
-        verbose = True
-    )
-    val_acc = (network.predict(X_val) == y_val).mean()
-    print('Validation accuracy: ', val_acc)
+
+    best_network = None
+    best_average_validation_accuracy = -1.0
+    description_of_best_neural_network = ''
+
+    images, labels = load_CIFAR10()
+    number_of_training_and_validation_images = int(0.8 * images.shape[0])
+    number_of_testing_images = int(0.2 * images.shape[0])
+    training_and_validation_images = images[0 : number_of_training_and_validation_images, :]
+    training_and_validation_labels = labels[0 : number_of_training_and_validation_images]
+    test_images = images[-number_of_testing_images:, :]
+    test_means = np.mean(test_images, axis = 0)
+    test_standard_deviations = np.std(test_images, axis = 0)
+    standardized_test_images = (test_images - test_means) / test_standard_deviations
+    test_labels = labels[-number_of_testing_images:]
+    average_validation_accuracy = 0
+    number_of_folds = 3
+    number_of_validation_images = int(number_of_training_and_validation_images / number_of_folds)
+    number_of_training_images = number_of_training_and_validation_images - number_of_validation_images
+    list_of_stats = []
+    output_size = 10
+    network = None
+    for batch_size in [10, 100, 1000, 10_000, 20_000]:
+        for hidden_size in [100, 600, 1100, 1600, 2100]:
+            for L2_regularization_strength in [0, 1e-4, 1e-3, 1e-2, 1e-1]:
+                for learning_rate in [1e-2, 1e-3, 1e-1, 5e-2, 5e-3]:
+                    for learning_rate_decay in [1, 0.95, 0.9, 0.85, 0.8]:
+                        for number_of_iterations in [10_000, 30_000, 50_000, 70_000, 90_000]:
+                            for scale in [1e-4, 1e-3, 1e-2, 1e-1, 1]:
+                                for i in range(0, number_of_folds):
+                                    description_of_neural_network = f'{i}, {hidden_size}, {scale}, {number_of_iterations}, {batch_size}, {learning_rate}, {learning_rate_decay}, {L2_regularization_strength}'
+                                    print(f'Neural Network: {description_of_neural_network}')
+                                    indices_of_validation_objects = range((i - 1) * number_of_validation_images, i * number_of_validation_images)
+                                    validation_images = images[indices_of_validation_objects, :]
+                                    validation_means = np.mean(validation_images, axis = 0)
+                                    validation_standard_deviations = np.std(validation_images, axis = 0)
+                                    standardized_validation_images = (validation_images - validation_means) / validation_standard_deviations
+                                    validation_labels = labels[indices_of_validation_objects]
+                                    mask = np.ones(len(training_and_validation_images), dtype = bool)
+                                    mask[indices_of_validation_objects] = False
+                                    training_images = training_and_validation_images[mask]
+                                    training_means = np.mean(training_images, axis = 0)
+                                    training_standard_deviations = np.std(training_images, axis = 0)
+                                    standardized_training_images = (training_images - training_means) / training_standard_deviations
+                                    training_labels = training_and_validation_labels[mask]
+                                    network = TwoLayerNeuralNetwork(input_size = training_images.shape[1], hidden_size = hidden_size, output_size = output_size, scale = scale)
+                                    stats = network.train(
+                                        standardized_training_images,
+                                        training_labels,
+                                        standardized_validation_images,
+                                        validation_labels,
+                                        num_iters = number_of_iterations,
+                                        batch_size = batch_size,
+                                        learning_rate = learning_rate,
+                                        learning_rate_decay = learning_rate_decay,
+                                        reg = L2_regularization_strength,
+                                        verbose = True
+                                    )
+                                    validation_accuracy = (network.predict(validation_images) == validation_labels).mean()
+                                    print(f'Validation Accuracy: {validation_accuracy}')
+                                    average_validation_accuracy += validation_accuracy
+                                    list_of_stats.append(stats)
+                                    plot_loss_and_training_and_validation_accuracies(list_of_stats, description_of_neural_network)
+                                average_validation_accuracy /= number_of_folds
+                                print(f'Average Validation Accuracy: {average_validation_accuracy}')
+                                if average_validation_accuracy > best_average_validation_accuracy:
+                                    best_average_validation_accuracy = average_validation_accuracy
+                                    best_network = network
+                                    description_of_best_neural_network = description_of_neural_network
+                                    print(f'Best Neural Network: {description_of_best_neural_network}')
+                                    print(f'Best Average Validation Accuracy: {best_average_validation_accuracy}')
+                                    test_accuracy = (best_network.predict(test_images) == test_labels).mean()
+                                    print('Test Accuracy: ', test_accuracy)
