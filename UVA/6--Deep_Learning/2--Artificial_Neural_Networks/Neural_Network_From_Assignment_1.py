@@ -189,11 +189,9 @@ def show_net_weights(net):
     plt.close()
 
 if __name__ == '__main__':
-
     best_network = None
     best_average_validation_accuracy = -1.0
     description_of_best_neural_network = ''
-
     images, labels = load_CIFAR10()
     number_of_training_and_validation_images = int(0.8 * images.shape[0])
     number_of_testing_images = int(0.2 * images.shape[0])
@@ -204,7 +202,6 @@ if __name__ == '__main__':
     test_standard_deviations = np.std(test_images, axis = 0)
     standardized_test_images = (test_images - test_means) / test_standard_deviations
     test_labels = labels[-number_of_testing_images:]
-    average_validation_accuracy = 0
     number_of_folds = 3
     number_of_validation_images = int(number_of_training_and_validation_images / number_of_folds)
     number_of_training_images = number_of_training_and_validation_images - number_of_validation_images
@@ -222,6 +219,7 @@ if __name__ == '__main__':
                                 message = f'Neural Network: {description_of_neural_network}'
                                 print(message)
                                 logging.info(message)
+                                average_validation_accuracy = 0
                                 for i in range(0, number_of_folds):
                                     indices_of_validation_objects = range((i - 1) * number_of_validation_images, i * number_of_validation_images)
                                     validation_images = images[indices_of_validation_objects, :]
