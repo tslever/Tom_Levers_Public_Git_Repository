@@ -1,0 +1,6 @@
+Motivation: https://opensource.com/article/18/2/why-python-devs-should-use-pipenv
+
+pip install pipenv --user
+python -m site --user-base
+On Windows, add C:\Users\[User]\AppData\Roaming\Python\Python312\Scripts to User PATH
+To upgrade, try pip install --user --upgrade pipenv
