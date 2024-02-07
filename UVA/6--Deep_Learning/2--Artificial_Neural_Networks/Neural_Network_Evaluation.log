@@ -1,0 +1,598 @@
+INFO:root:Neural Network: 100, 0.0001, 10000, 10, 0.01, 1, 0
+INFO:root:Validation Accuracy 0: 0.49845
+INFO:root:Validation Accuracy 1: 0.4817
+INFO:root:Validation Accuracy 2: 0.5079
+INFO:root:Average Validation Accuracy: 0.4960166666666667
+INFO:root:Best Neural Network: 100, 0.0001, 10000, 10, 0.01, 1, 0
+INFO:root:Best Average Validation Accuracy: 0.4960166666666667
+INFO:root:Test Accuracy: 0.5074666666666666
+INFO:root:Neural Network: 100, 0.001, 10000, 10, 0.01, 1, 0
+INFO:root:Validation Accuracy 0: 0.49615
+INFO:root:Validation Accuracy 1: 0.48785
+INFO:root:Validation Accuracy 2: 0.504275
+INFO:root:Average Validation Accuracy: 0.49609166666666665
+INFO:root:Best Neural Network: 100, 0.001, 10000, 10, 0.01, 1, 0
+INFO:root:Best Average Validation Accuracy: 0.49609166666666665
+INFO:root:Test Accuracy: 0.5087666666666667
+INFO:root:Neural Network: 100, 0.01, 10000, 10, 0.01, 1, 0
+INFO:root:Validation Accuracy 0: 0.507125
+INFO:root:Validation Accuracy 1: 0.516125
+INFO:root:Validation Accuracy 2: 0.50725
+INFO:root:Average Validation Accuracy: 0.5101666666666667
+INFO:root:Best Neural Network: 100, 0.01, 10000, 10, 0.01, 1, 0
+INFO:root:Best Average Validation Accuracy: 0.5101666666666667
+INFO:root:Test Accuracy: 0.5131666666666667
+INFO:root:Neural Network: 100, 0.1, 10000, 10, 0.01, 1, 0
+INFO:root:Validation Accuracy 0: 0.4575
+INFO:root:Validation Accuracy 1: 0.44075
+INFO:root:Validation Accuracy 2: 0.447475
+INFO:root:Average Validation Accuracy: 0.448575
+INFO:root:Neural Network: 100, 1, 10000, 10, 0.01, 1, 0
+INFO:root:Validation Accuracy 0: 0.26255
+INFO:root:Validation Accuracy 1: 0.29115
+INFO:root:Validation Accuracy 2: 0.261225
+INFO:root:Average Validation Accuracy: 0.2716416666666667
+INFO:root:Neural Network: 100, 0.0001, 30000, 10, 0.01, 1, 0
+INFO:root:Validation Accuracy 0: 0.5699
+INFO:root:Validation Accuracy 1: 0.577425
+INFO:root:Validation Accuracy 2: 0.5852
+INFO:root:Average Validation Accuracy: 0.5775083333333333
+INFO:root:Best Neural Network: 100, 0.0001, 30000, 10, 0.01, 1, 0
+INFO:root:Best Average Validation Accuracy: 0.5775083333333333
+INFO:root:Test Accuracy: 0.5885333333333334
+INFO:root:Neural Network: 100, 0.001, 30000, 10, 0.01, 1, 0
+INFO:root:Validation Accuracy 0: 0.58315
+INFO:root:Validation Accuracy 1: 0.574625
+INFO:root:Validation Accuracy 2: 0.5818
+INFO:root:Average Validation Accuracy: 0.5798583333333333
+INFO:root:Best Neural Network: 100, 0.001, 30000, 10, 0.01, 1, 0
+INFO:root:Best Average Validation Accuracy: 0.5798583333333333
+INFO:root:Test Accuracy: 0.5827666666666667
+INFO:root:Neural Network: 100, 0.01, 30000, 10, 0.01, 1, 0
+INFO:root:Validation Accuracy 0: 0.583575
+INFO:root:Validation Accuracy 1: 0.590225
+INFO:root:Validation Accuracy 2: 0.5832
+INFO:root:Average Validation Accuracy: 0.5856666666666667
+INFO:root:Best Neural Network: 100, 0.01, 30000, 10, 0.01, 1, 0
+INFO:root:Best Average Validation Accuracy: 0.5856666666666667
+INFO:root:Test Accuracy: 0.59
+INFO:root:Neural Network: 100, 0.1, 30000, 10, 0.01, 1, 0
+INFO:root:Validation Accuracy 0: 0.532075
+INFO:root:Validation Accuracy 1: 0.5521
+INFO:root:Validation Accuracy 2: 0.536725
+INFO:root:Average Validation Accuracy: 0.5403000000000001
+INFO:root:Neural Network: 100, 1, 30000, 10, 0.01, 1, 0
+INFO:root:Validation Accuracy 0: 0.30145
+INFO:root:Validation Accuracy 1: 0.25875
+INFO:root:Validation Accuracy 2: 0.28105
+INFO:root:Average Validation Accuracy: 0.2804166666666667
+INFO:root:Neural Network: 100, 0.0001, 50000, 10, 0.01, 1, 0
+INFO:root:Validation Accuracy 0: 0.6103
+INFO:root:Validation Accuracy 1: 0.617275
+INFO:root:Validation Accuracy 2: 0.61095
+INFO:root:Average Validation Accuracy: 0.6128416666666666
+INFO:root:Best Neural Network: 100, 0.0001, 50000, 10, 0.01, 1, 0
+INFO:root:Best Average Validation Accuracy: 0.6128416666666666
+INFO:root:Test Accuracy: 0.6153333333333333
+INFO:root:Neural Network: 100, 0.001, 50000, 10, 0.01, 1, 0
+INFO:root:Validation Accuracy 0: 0.6247
+INFO:root:Validation Accuracy 1: 0.62325
+INFO:root:Validation Accuracy 2: 0.63295
+INFO:root:Average Validation Accuracy: 0.6269666666666667
+INFO:root:Best Neural Network: 100, 0.001, 50000, 10, 0.01, 1, 0
+INFO:root:Best Average Validation Accuracy: 0.6269666666666667
+INFO:root:Test Accuracy: 0.6361
+INFO:root:Neural Network: 100, 0.01, 50000, 10, 0.01, 1, 0
+INFO:root:Validation Accuracy 0: 0.62395
+INFO:root:Validation Accuracy 1: 0.620225
+INFO:root:Validation Accuracy 2: 0.6031
+INFO:root:Average Validation Accuracy: 0.6157583333333333
+INFO:root:Neural Network: 100, 0.1, 50000, 10, 0.01, 1, 0
+INFO:root:Validation Accuracy 0: 0.59305
+INFO:root:Validation Accuracy 1: 0.57705
+INFO:root:Validation Accuracy 2: 0.60285
+INFO:root:Average Validation Accuracy: 0.5909833333333333
+INFO:root:Neural Network: 100, 1, 50000, 10, 0.01, 1, 0
+INFO:root:Validation Accuracy 0: 0.308825
+INFO:root:Validation Accuracy 1: 0.310975
+INFO:root:Validation Accuracy 2: 0.312175
+INFO:root:Average Validation Accuracy: 0.3106583333333333
+INFO:root:Neural Network: 100, 0.0001, 70000, 10, 0.01, 1, 0
+INFO:root:Validation Accuracy 0: 0.65055
+INFO:root:Validation Accuracy 1: 0.656475
+INFO:root:Validation Accuracy 2: 0.6427
+INFO:root:Average Validation Accuracy: 0.6499083333333333
+INFO:root:Best Neural Network: 100, 0.0001, 70000, 10, 0.01, 1, 0
+INFO:root:Best Average Validation Accuracy: 0.6499083333333333
+INFO:root:Test Accuracy: 0.6454666666666666
+INFO:root:Neural Network: 100, 0.001, 70000, 10, 0.01, 1, 0
+INFO:root:Validation Accuracy 0: 0.655725
+INFO:root:Validation Accuracy 1: 0.646525
+INFO:root:Validation Accuracy 2: 0.64995
+INFO:root:Average Validation Accuracy: 0.6507333333333333
+INFO:root:Best Neural Network: 100, 0.001, 70000, 10, 0.01, 1, 0
+INFO:root:Best Average Validation Accuracy: 0.6507333333333333
+INFO:root:Test Accuracy: 0.6542333333333333
+INFO:root:Neural Network: 100, 0.01, 70000, 10, 0.01, 1, 0
+INFO:root:Validation Accuracy 0: 0.653675
+INFO:root:Validation Accuracy 1: 0.634875
+INFO:root:Validation Accuracy 2: 0.64
+INFO:root:Average Validation Accuracy: 0.64285
+INFO:root:Neural Network: 100, 0.1, 70000, 10, 0.01, 1, 0
+INFO:root:Validation Accuracy 0: 0.6316
+INFO:root:Validation Accuracy 1: 0.632575
+INFO:root:Validation Accuracy 2: 0.636325
+INFO:root:Average Validation Accuracy: 0.6335000000000001
+INFO:root:Neural Network: 100, 1, 70000, 10, 0.01, 1, 0
+INFO:root:Validation Accuracy 0: 0.356875
+INFO:root:Validation Accuracy 1: 0.26695
+INFO:root:Validation Accuracy 2: 0.29995
+INFO:root:Average Validation Accuracy: 0.307925
+INFO:root:Neural Network: 100, 0.0001, 90000, 10, 0.01, 1, 0
+INFO:root:Validation Accuracy 0: 0.67135
+INFO:root:Validation Accuracy 1: 0.6777
+INFO:root:Validation Accuracy 2: 0.6716
+INFO:root:Average Validation Accuracy: 0.67355
+INFO:root:Best Neural Network: 100, 0.0001, 90000, 10, 0.01, 1, 0
+INFO:root:Best Average Validation Accuracy: 0.67355
+INFO:root:Test Accuracy: 0.6767333333333333
+INFO:root:Neural Network: 100, 0.001, 90000, 10, 0.01, 1, 0
+INFO:root:Validation Accuracy 0: 0.672675
+INFO:root:Validation Accuracy 1: 0.6674
+INFO:root:Validation Accuracy 2: 0.664425
+INFO:root:Average Validation Accuracy: 0.6681666666666667
+INFO:root:Neural Network: 100, 0.01, 90000, 10, 0.01, 1, 0
+INFO:root:Validation Accuracy 0: 0.6874
+INFO:root:Validation Accuracy 1: 0.655
+INFO:root:Validation Accuracy 2: 0.65955
+INFO:root:Average Validation Accuracy: 0.6673166666666667
+INFO:root:Neural Network: 100, 0.1, 90000, 10, 0.01, 1, 0
+INFO:root:Validation Accuracy 0: 0.659775
+INFO:root:Validation Accuracy 1: 0.6486
+INFO:root:Validation Accuracy 2: 0.666575
+INFO:root:Average Validation Accuracy: 0.6583166666666666
+INFO:root:Neural Network: 100, 1, 90000, 10, 0.01, 1, 0
+INFO:root:Validation Accuracy 0: 0.337375
+INFO:root:Validation Accuracy 1: 0.320425
+INFO:root:Validation Accuracy 2: 0.36785
+INFO:root:Average Validation Accuracy: 0.3418833333333333
+INFO:root:Neural Network: 100, 0.0001, 10000, 10, 0.01, 0.95, 0
+INFO:root:Validation Accuracy 0: 0.505425
+INFO:root:Validation Accuracy 1: 0.50005
+INFO:root:Validation Accuracy 2: 0.494775
+INFO:root:Average Validation Accuracy: 0.5000833333333333
+INFO:root:Neural Network: 100, 0.001, 10000, 10, 0.01, 0.95, 0
+INFO:root:Validation Accuracy 0: 0.494
+INFO:root:Validation Accuracy 1: 0.507425
+INFO:root:Validation Accuracy 2: 0.503475
+INFO:root:Average Validation Accuracy: 0.5016333333333334
+INFO:root:Neural Network: 100, 0.01, 10000, 10, 0.01, 0.95, 0
+INFO:root:Validation Accuracy 0: 0.509
+INFO:root:Validation Accuracy 1: 0.511775
+INFO:root:Validation Accuracy 2: 0.51785
+INFO:root:Average Validation Accuracy: 0.5128750000000001
+INFO:root:Neural Network: 100, 0.1, 10000, 10, 0.01, 0.95, 0
+INFO:root:Validation Accuracy 0: 0.45155
+INFO:root:Validation Accuracy 1: 0.46595
+INFO:root:Validation Accuracy 2: 0.45445
+INFO:root:Average Validation Accuracy: 0.45731666666666665
+INFO:root:Neural Network: 100, 1, 10000, 10, 0.01, 0.95, 0
+INFO:root:Validation Accuracy 0: 0.254975
+INFO:root:Validation Accuracy 1: 0.265375
+INFO:root:Validation Accuracy 2: 0.2106
+INFO:root:Average Validation Accuracy: 0.24365000000000003
+INFO:root:Neural Network: 100, 0.0001, 30000, 10, 0.01, 0.95, 0
+INFO:root:Validation Accuracy 0: 0.5871
+INFO:root:Validation Accuracy 1: 0.57815
+INFO:root:Validation Accuracy 2: 0.58985
+INFO:root:Average Validation Accuracy: 0.5850333333333333
+INFO:root:Neural Network: 100, 0.001, 30000, 10, 0.01, 0.95, 0
+INFO:root:Validation Accuracy 0: 0.5878
+INFO:root:Validation Accuracy 1: 0.578825
+INFO:root:Validation Accuracy 2: 0.5911
+INFO:root:Average Validation Accuracy: 0.5859083333333334
+INFO:root:Neural Network: 100, 0.01, 30000, 10, 0.01, 0.95, 0
+INFO:root:Validation Accuracy 0: 0.594025
+INFO:root:Validation Accuracy 1: 0.583075
+INFO:root:Validation Accuracy 2: 0.572175
+INFO:root:Average Validation Accuracy: 0.5830916666666667
+INFO:root:Neural Network: 100, 0.1, 30000, 10, 0.01, 0.95, 0
+INFO:root:Validation Accuracy 0: 0.54045
+INFO:root:Validation Accuracy 1: 0.55585
+INFO:root:Validation Accuracy 2: 0.54355
+INFO:root:Average Validation Accuracy: 0.5466166666666666
+INFO:root:Neural Network: 100, 1, 30000, 10, 0.01, 0.95, 0
+INFO:root:Validation Accuracy 0: 0.262425
+INFO:root:Validation Accuracy 1: 0.2384
+INFO:root:Validation Accuracy 2: 0.27365
+INFO:root:Average Validation Accuracy: 0.2581583333333333
+INFO:root:Neural Network: 100, 0.0001, 50000, 10, 0.01, 0.95, 0
+INFO:root:Validation Accuracy 0: 0.610875
+INFO:root:Validation Accuracy 1: 0.623275
+INFO:root:Validation Accuracy 2: 0.633525
+INFO:root:Average Validation Accuracy: 0.6225583333333334
+INFO:root:Neural Network: 100, 0.001, 50000, 10, 0.01, 0.95, 0
+INFO:root:Validation Accuracy 0: 0.6411
+INFO:root:Validation Accuracy 1: 0.636775
+INFO:root:Validation Accuracy 2: 0.6382
+INFO:root:Average Validation Accuracy: 0.6386916666666665
+INFO:root:Neural Network: 100, 0.01, 50000, 10, 0.01, 0.95, 0
+INFO:root:Validation Accuracy 0: 0.623875
+INFO:root:Validation Accuracy 1: 0.6377
+INFO:root:Validation Accuracy 2: 0.643325
+INFO:root:Average Validation Accuracy: 0.6349666666666667
+INFO:root:Neural Network: 100, 0.1, 50000, 10, 0.01, 0.95, 0
+INFO:root:Validation Accuracy 0: 0.616875
+INFO:root:Validation Accuracy 1: 0.6017
+INFO:root:Validation Accuracy 2: 0.5972
+INFO:root:Average Validation Accuracy: 0.6052583333333333
+INFO:root:Neural Network: 100, 1, 50000, 10, 0.01, 0.95, 0
+INFO:root:Validation Accuracy 0: 0.27965
+INFO:root:Validation Accuracy 1: 0.2962
+INFO:root:Validation Accuracy 2: 0.285725
+INFO:root:Average Validation Accuracy: 0.2871916666666667
+INFO:root:Neural Network: 100, 0.0001, 70000, 10, 0.01, 0.95, 0
+INFO:root:Validation Accuracy 0: 0.66135
+INFO:root:Validation Accuracy 1: 0.652225
+INFO:root:Validation Accuracy 2: 0.6668
+INFO:root:Average Validation Accuracy: 0.660125
+INFO:root:Neural Network: 100, 0.001, 70000, 10, 0.01, 0.95, 0
+INFO:root:Validation Accuracy 0: 0.676825
+INFO:root:Validation Accuracy 1: 0.658275
+INFO:root:Validation Accuracy 2: 0.67585
+INFO:root:Average Validation Accuracy: 0.6703166666666668
+INFO:root:Neural Network: 100, 0.01, 70000, 10, 0.01, 0.95, 0
+INFO:root:Validation Accuracy 0: 0.6759
+INFO:root:Validation Accuracy 1: 0.676225
+INFO:root:Validation Accuracy 2: 0.676025
+INFO:root:Average Validation Accuracy: 0.67605
+INFO:root:Best Neural Network: 100, 0.01, 70000, 10, 0.01, 0.95, 0
+INFO:root:Best Average Validation Accuracy: 0.67605
+INFO:root:Test Accuracy: 0.6789666666666667
+INFO:root:Neural Network: 100, 0.1, 70000, 10, 0.01, 0.95, 0
+INFO:root:Validation Accuracy 0: 0.642725
+INFO:root:Validation Accuracy 1: 0.63765
+INFO:root:Validation Accuracy 2: 0.62635
+INFO:root:Average Validation Accuracy: 0.635575
+INFO:root:Neural Network: 100, 1, 70000, 10, 0.01, 0.95, 0
+INFO:root:Validation Accuracy 0: 0.2774
+INFO:root:Validation Accuracy 1: 0.312825
+INFO:root:Validation Accuracy 2: 0.287025
+INFO:root:Average Validation Accuracy: 0.29241666666666666
+INFO:root:Neural Network: 100, 0.0001, 90000, 10, 0.01, 0.95, 0
+INFO:root:Validation Accuracy 0: 0.7075
+INFO:root:Validation Accuracy 1: 0.707575
+INFO:root:Validation Accuracy 2: 0.6939
+INFO:root:Average Validation Accuracy: 0.7029916666666667
+INFO:root:Best Neural Network: 100, 0.0001, 90000, 10, 0.01, 0.95, 0
+INFO:root:Best Average Validation Accuracy: 0.7029916666666667
+INFO:root:Test Accuracy: 0.6953666666666667
+INFO:root:Neural Network: 100, 0.001, 90000, 10, 0.01, 0.95, 0
+INFO:root:Validation Accuracy 0: 0.698475
+INFO:root:Validation Accuracy 1: 0.6905
+INFO:root:Validation Accuracy 2: 0.70535
+INFO:root:Average Validation Accuracy: 0.6981083333333333
+INFO:root:Neural Network: 100, 0.01, 90000, 10, 0.01, 0.95, 0
+INFO:root:Validation Accuracy 0: 0.70785
+INFO:root:Validation Accuracy 1: 0.691025
+INFO:root:Validation Accuracy 2: 0.70455
+INFO:root:Average Validation Accuracy: 0.7011416666666666
+INFO:root:Neural Network: 100, 0.1, 90000, 10, 0.01, 0.95, 0
+INFO:root:Validation Accuracy 0: 0.6747
+INFO:root:Validation Accuracy 1: 0.6747
+INFO:root:Validation Accuracy 2: 0.688725
+INFO:root:Average Validation Accuracy: 0.679375
+INFO:root:Neural Network: 100, 1, 90000, 10, 0.01, 0.95, 0
+INFO:root:Validation Accuracy 0: 0.337675
+INFO:root:Validation Accuracy 1: 0.331575
+INFO:root:Validation Accuracy 2: 0.330675
+INFO:root:Average Validation Accuracy: 0.3333083333333333
+INFO:root:Neural Network: 100, 0.0001, 10000, 10, 0.01, 0.9, 0
+INFO:root:Validation Accuracy 0: 0.493175
+INFO:root:Validation Accuracy 1: 0.507475
+INFO:root:Validation Accuracy 2: 0.497425
+INFO:root:Average Validation Accuracy: 0.49935833333333335
+INFO:root:Neural Network: 100, 0.001, 10000, 10, 0.01, 0.9, 0
+INFO:root:Validation Accuracy 0: 0.50875
+INFO:root:Validation Accuracy 1: 0.490675
+INFO:root:Validation Accuracy 2: 0.51345
+INFO:root:Average Validation Accuracy: 0.5042916666666667
+INFO:root:Neural Network: 100, 0.01, 10000, 10, 0.01, 0.9, 0
+INFO:root:Validation Accuracy 0: 0.526875
+INFO:root:Validation Accuracy 1: 0.517925
+INFO:root:Validation Accuracy 2: 0.504375
+INFO:root:Average Validation Accuracy: 0.5163916666666667
+INFO:root:Neural Network: 100, 0.1, 10000, 10, 0.01, 0.9, 0
+INFO:root:Validation Accuracy 0: 0.4631
+INFO:root:Validation Accuracy 1: 0.463025
+INFO:root:Validation Accuracy 2: 0.46835
+INFO:root:Average Validation Accuracy: 0.46482500000000004
+INFO:root:Neural Network: 100, 1, 10000, 10, 0.01, 0.9, 0
+INFO:root:Validation Accuracy 0: 0.2539
+INFO:root:Validation Accuracy 1: 0.25635
+INFO:root:Validation Accuracy 2: 0.27955
+INFO:root:Average Validation Accuracy: 0.2632666666666667
+INFO:root:Neural Network: 100, 0.0001, 30000, 10, 0.01, 0.9, 0
+INFO:root:Validation Accuracy 0: 0.59605
+INFO:root:Validation Accuracy 1: 0.596475
+INFO:root:Validation Accuracy 2: 0.5889
+INFO:root:Average Validation Accuracy: 0.5938083333333333
+INFO:root:Neural Network: 100, 0.001, 30000, 10, 0.01, 0.9, 0
+INFO:root:Validation Accuracy 0: 0.58965
+INFO:root:Validation Accuracy 1: 0.5931
+INFO:root:Validation Accuracy 2: 0.58375
+INFO:root:Average Validation Accuracy: 0.5888333333333333
+INFO:root:Neural Network: 100, 0.01, 30000, 10, 0.01, 0.9, 0
+INFO:root:Validation Accuracy 0: 0.60735
+INFO:root:Validation Accuracy 1: 0.598425
+INFO:root:Validation Accuracy 2: 0.606625
+INFO:root:Average Validation Accuracy: 0.6041333333333333
+INFO:root:Neural Network: 100, 0.1, 30000, 10, 0.01, 0.9, 0
+INFO:root:Validation Accuracy 0: 0.541775
+INFO:root:Validation Accuracy 1: 0.543225
+INFO:root:Validation Accuracy 2: 0.556925
+INFO:root:Average Validation Accuracy: 0.5473083333333334
+INFO:root:Neural Network: 100, 1, 30000, 10, 0.01, 0.9, 0
+INFO:root:Validation Accuracy 0: 0.2512
+INFO:root:Validation Accuracy 1: 0.268675
+INFO:root:Validation Accuracy 2: 0.2682
+INFO:root:Average Validation Accuracy: 0.26269166666666666
+INFO:root:Neural Network: 100, 0.0001, 50000, 10, 0.01, 0.9, 0
+INFO:root:Validation Accuracy 0: 0.645175
+INFO:root:Validation Accuracy 1: 0.6498
+INFO:root:Validation Accuracy 2: 0.6537
+INFO:root:Average Validation Accuracy: 0.6495583333333333
+INFO:root:Neural Network: 100, 0.001, 50000, 10, 0.01, 0.9, 0
+INFO:root:Validation Accuracy 0: 0.65655
+INFO:root:Validation Accuracy 1: 0.647875
+INFO:root:Validation Accuracy 2: 0.641025
+INFO:root:Average Validation Accuracy: 0.6484833333333333
+INFO:root:Neural Network: 100, 0.01, 50000, 10, 0.01, 0.9, 0
+INFO:root:Validation Accuracy 0: 0.6508
+INFO:root:Validation Accuracy 1: 0.650975
+INFO:root:Validation Accuracy 2: 0.64215
+INFO:root:Average Validation Accuracy: 0.6479750000000001
+INFO:root:Neural Network: 100, 0.1, 50000, 10, 0.01, 0.9, 0
+INFO:root:Validation Accuracy 0: 0.6124
+INFO:root:Validation Accuracy 1: 0.608725
+INFO:root:Validation Accuracy 2: 0.60725
+INFO:root:Average Validation Accuracy: 0.6094583333333333
+INFO:root:Neural Network: 100, 1, 50000, 10, 0.01, 0.9, 0
+INFO:root:Validation Accuracy 0: 0.313925
+INFO:root:Validation Accuracy 1: 0.32305
+INFO:root:Validation Accuracy 2: 0.310025
+INFO:root:Average Validation Accuracy: 0.3156666666666667
+INFO:root:Neural Network: 100, 0.0001, 70000, 10, 0.01, 0.9, 0
+INFO:root:Validation Accuracy 0: 0.69085
+INFO:root:Validation Accuracy 1: 0.6967
+INFO:root:Validation Accuracy 2: 0.68815
+INFO:root:Average Validation Accuracy: 0.6919000000000001
+INFO:root:Neural Network: 100, 0.001, 70000, 10, 0.01, 0.9, 0
+INFO:root:Validation Accuracy 0: 0.67965
+INFO:root:Validation Accuracy 1: 0.6968
+INFO:root:Validation Accuracy 2: 0.6888
+INFO:root:Average Validation Accuracy: 0.6884166666666666
+INFO:root:Neural Network: 100, 0.01, 70000, 10, 0.01, 0.9, 0
+INFO:root:Validation Accuracy 0: 0.69245
+INFO:root:Validation Accuracy 1: 0.688425
+INFO:root:Validation Accuracy 2: 0.690925
+INFO:root:Average Validation Accuracy: 0.6906
+INFO:root:Neural Network: 100, 0.1, 70000, 10, 0.01, 0.9, 0
+INFO:root:Validation Accuracy 0: 0.63615
+INFO:root:Validation Accuracy 1: 0.635075
+INFO:root:Validation Accuracy 2: 0.640725
+INFO:root:Average Validation Accuracy: 0.6373166666666666
+INFO:root:Neural Network: 100, 1, 70000, 10, 0.01, 0.9, 0
+INFO:root:Validation Accuracy 0: 0.303875
+INFO:root:Validation Accuracy 1: 0.260075
+INFO:root:Validation Accuracy 2: 0.24495
+INFO:root:Average Validation Accuracy: 0.26963333333333334
+INFO:root:Neural Network: 100, 0.0001, 90000, 10, 0.01, 0.9, 0
+INFO:root:Validation Accuracy 0: 0.71045
+INFO:root:Validation Accuracy 1: 0.72035
+INFO:root:Validation Accuracy 2: 0.726525
+INFO:root:Average Validation Accuracy: 0.7191083333333333
+INFO:root:Best Neural Network: 100, 0.0001, 90000, 10, 0.01, 0.9, 0
+INFO:root:Best Average Validation Accuracy: 0.7191083333333333
+INFO:root:Test Accuracy: 0.7298
+INFO:root:Neural Network: 100, 0.001, 90000, 10, 0.01, 0.9, 0
+INFO:root:Validation Accuracy 0: 0.7214
+INFO:root:Validation Accuracy 1: 0.7282
+INFO:root:Validation Accuracy 2: 0.729075
+INFO:root:Average Validation Accuracy: 0.726225
+INFO:root:Best Neural Network: 100, 0.001, 90000, 10, 0.01, 0.9, 0
+INFO:root:Best Average Validation Accuracy: 0.726225
+INFO:root:Test Accuracy: 0.7303666666666667
+INFO:root:Neural Network: 100, 0.01, 90000, 10, 0.01, 0.9, 0
+INFO:root:Validation Accuracy 0: 0.728725
+INFO:root:Validation Accuracy 1: 0.7223
+INFO:root:Validation Accuracy 2: 0.72595
+INFO:root:Average Validation Accuracy: 0.7256583333333334
+INFO:root:Neural Network: 100, 0.1, 90000, 10, 0.01, 0.9, 0
+INFO:root:Validation Accuracy 0: 0.67805
+INFO:root:Validation Accuracy 1: 0.675975
+INFO:root:Validation Accuracy 2: 0.66925
+INFO:root:Average Validation Accuracy: 0.6744249999999999
+INFO:root:Neural Network: 100, 1, 90000, 10, 0.01, 0.9, 0
+INFO:root:Validation Accuracy 0: 0.325575
+INFO:root:Validation Accuracy 1: 0.30885
+INFO:root:Validation Accuracy 2: 0.29925
+INFO:root:Average Validation Accuracy: 0.31122500000000003
+INFO:root:Neural Network: 100, 0.0001, 10000, 10, 0.01, 0.85, 0
+INFO:root:Validation Accuracy 0: 0.5023
+INFO:root:Validation Accuracy 1: 0.514125
+INFO:root:Validation Accuracy 2: 0.5084
+INFO:root:Average Validation Accuracy: 0.5082749999999999
+INFO:root:Neural Network: 100, 0.001, 10000, 10, 0.01, 0.85, 0
+INFO:root:Validation Accuracy 0: 0.505825
+INFO:root:Validation Accuracy 1: 0.505725
+INFO:root:Validation Accuracy 2: 0.50765
+INFO:root:Average Validation Accuracy: 0.5064000000000001
+INFO:root:Neural Network: 100, 0.01, 10000, 10, 0.01, 0.85, 0
+INFO:root:Validation Accuracy 0: 0.522475
+INFO:root:Validation Accuracy 1: 0.52845
+INFO:root:Validation Accuracy 2: 0.5214
+INFO:root:Average Validation Accuracy: 0.5241083333333333
+INFO:root:Neural Network: 100, 0.1, 10000, 10, 0.01, 0.85, 0
+INFO:root:Validation Accuracy 0: 0.46665
+INFO:root:Validation Accuracy 1: 0.44885
+INFO:root:Validation Accuracy 2: 0.45075
+INFO:root:Average Validation Accuracy: 0.45541666666666664
+INFO:root:Neural Network: 100, 1, 10000, 10, 0.01, 0.85, 0
+INFO:root:Validation Accuracy 0: 0.263175
+INFO:root:Validation Accuracy 1: 0.2493
+INFO:root:Validation Accuracy 2: 0.21755
+INFO:root:Average Validation Accuracy: 0.24334166666666668
+INFO:root:Neural Network: 100, 0.0001, 30000, 10, 0.01, 0.85, 0
+INFO:root:Validation Accuracy 0: 0.584025
+INFO:root:Validation Accuracy 1: 0.5883
+INFO:root:Validation Accuracy 2: 0.596475
+INFO:root:Average Validation Accuracy: 0.5896
+INFO:root:Neural Network: 100, 0.001, 30000, 10, 0.01, 0.85, 0
+INFO:root:Validation Accuracy 0: 0.595225
+INFO:root:Validation Accuracy 1: 0.594225
+INFO:root:Validation Accuracy 2: 0.5992
+INFO:root:Average Validation Accuracy: 0.5962166666666666
+INFO:root:Neural Network: 100, 0.01, 30000, 10, 0.01, 0.85, 0
+INFO:root:Validation Accuracy 0: 0.602125
+INFO:root:Validation Accuracy 1: 0.59645
+INFO:root:Validation Accuracy 2: 0.6016
+INFO:root:Average Validation Accuracy: 0.6000583333333332
+INFO:root:Neural Network: 100, 0.1, 30000, 10, 0.01, 0.85, 0
+INFO:root:Validation Accuracy 0: 0.547575
+INFO:root:Validation Accuracy 1: 0.552425
+INFO:root:Validation Accuracy 2: 0.5466
+INFO:root:Average Validation Accuracy: 0.5488666666666667
+INFO:root:Neural Network: 100, 1, 30000, 10, 0.01, 0.85, 0
+INFO:root:Validation Accuracy 0: 0.287025
+INFO:root:Validation Accuracy 1: 0.268275
+INFO:root:Validation Accuracy 2: 0.282025
+INFO:root:Average Validation Accuracy: 0.2791083333333333
+INFO:root:Neural Network: 100, 0.0001, 50000, 10, 0.01, 0.85, 0
+INFO:root:Validation Accuracy 0: 0.6594
+INFO:root:Validation Accuracy 1: 0.65175
+INFO:root:Validation Accuracy 2: 0.6544
+INFO:root:Average Validation Accuracy: 0.6551833333333333
+INFO:root:Neural Network: 100, 0.001, 50000, 10, 0.01, 0.85, 0
+INFO:root:Validation Accuracy 0: 0.651475
+INFO:root:Validation Accuracy 1: 0.655075
+INFO:root:Validation Accuracy 2: 0.644125
+INFO:root:Average Validation Accuracy: 0.6502249999999999
+INFO:root:Neural Network: 100, 0.01, 50000, 10, 0.01, 0.85, 0
+INFO:root:Validation Accuracy 0: 0.66385
+INFO:root:Validation Accuracy 1: 0.650625
+INFO:root:Validation Accuracy 2: 0.672125
+INFO:root:Average Validation Accuracy: 0.6622
+INFO:root:Neural Network: 100, 0.1, 50000, 10, 0.01, 0.85, 0
+INFO:root:Validation Accuracy 0: 0.599075
+INFO:root:Validation Accuracy 1: 0.597675
+INFO:root:Validation Accuracy 2: 0.60115
+INFO:root:Average Validation Accuracy: 0.5992999999999999
+INFO:root:Neural Network: 100, 1, 50000, 10, 0.01, 0.85, 0
+INFO:root:Validation Accuracy 0: 0.287675
+INFO:root:Validation Accuracy 1: 0.284325
+INFO:root:Validation Accuracy 2: 0.3016
+INFO:root:Average Validation Accuracy: 0.2912
+INFO:root:Neural Network: 100, 0.0001, 70000, 10, 0.01, 0.85, 0
+INFO:root:Validation Accuracy 0: 0.6898
+INFO:root:Validation Accuracy 1: 0.698975
+INFO:root:Validation Accuracy 2: 0.6893
+INFO:root:Average Validation Accuracy: 0.6926916666666667
+INFO:root:Neural Network: 100, 0.001, 70000, 10, 0.01, 0.85, 0
+INFO:root:Validation Accuracy 0: 0.68685
+INFO:root:Validation Accuracy 1: 0.691025
+INFO:root:Validation Accuracy 2: 0.699
+INFO:root:Average Validation Accuracy: 0.6922916666666666
+INFO:root:Neural Network: 100, 0.01, 70000, 10, 0.01, 0.85, 0
+INFO:root:Validation Accuracy 0: 0.702975
+INFO:root:Validation Accuracy 1: 0.701525
+INFO:root:Validation Accuracy 2: 0.70395
+INFO:root:Average Validation Accuracy: 0.7028166666666666
+INFO:root:Neural Network: 100, 0.1, 70000, 10, 0.01, 0.85, 0
+INFO:root:Validation Accuracy 0: 0.639375
+INFO:root:Validation Accuracy 1: 0.63765
+INFO:root:Validation Accuracy 2: 0.6323
+INFO:root:Average Validation Accuracy: 0.6364416666666667
+INFO:root:Neural Network: 100, 1, 70000, 10, 0.01, 0.85, 0
+INFO:root:Validation Accuracy 0: 0.31205
+INFO:root:Validation Accuracy 1: 0.31835
+INFO:root:Validation Accuracy 2: 0.294075
+INFO:root:Average Validation Accuracy: 0.30815833333333337
+INFO:root:Neural Network: 100, 0.0001, 90000, 10, 0.01, 0.85, 0
+INFO:root:Validation Accuracy 0: 0.718775
+INFO:root:Validation Accuracy 1: 0.72155
+INFO:root:Validation Accuracy 2: 0.72165
+INFO:root:Average Validation Accuracy: 0.7206583333333333
+INFO:root:Neural Network: 100, 0.001, 90000, 10, 0.01, 0.85, 0
+INFO:root:Validation Accuracy 0: 0.725425
+INFO:root:Validation Accuracy 1: 0.719525
+INFO:root:Validation Accuracy 2: 0.725625
+INFO:root:Average Validation Accuracy: 0.723525
+INFO:root:Neural Network: 100, 0.01, 90000, 10, 0.01, 0.85, 0
+INFO:root:Validation Accuracy 0: 0.72475
+INFO:root:Validation Accuracy 1: 0.73055
+INFO:root:Validation Accuracy 2: 0.72635
+INFO:root:Average Validation Accuracy: 0.7272166666666667
+INFO:root:Best Neural Network: 100, 0.01, 90000, 10, 0.01, 0.85, 0
+INFO:root:Best Average Validation Accuracy: 0.7272166666666667
+INFO:root:Test Accuracy: 0.7312666666666666
+INFO:root:Neural Network: 100, 0.1, 90000, 10, 0.01, 0.85, 0
+INFO:root:Validation Accuracy 0: 0.648425
+INFO:root:Validation Accuracy 1: 0.658825
+INFO:root:Validation Accuracy 2: 0.653475
+INFO:root:Average Validation Accuracy: 0.653575
+INFO:root:Neural Network: 100, 1, 90000, 10, 0.01, 0.85, 0
+INFO:root:Validation Accuracy 0: 0.2944
+INFO:root:Validation Accuracy 1: 0.3367
+INFO:root:Validation Accuracy 2: 0.331
+INFO:root:Average Validation Accuracy: 0.3207
+INFO:root:Neural Network: 100, 0.0001, 10000, 10, 0.01, 0.8, 0
+INFO:root:Validation Accuracy 0: 0.510275
+INFO:root:Validation Accuracy 1: 0.496775
+INFO:root:Validation Accuracy 2: 0.515775
+INFO:root:Average Validation Accuracy: 0.5076083333333333
+INFO:root:Neural Network: 100, 0.001, 10000, 10, 0.01, 0.8, 0
+INFO:root:Validation Accuracy 0: 0.50655
+INFO:root:Validation Accuracy 1: 0.506375
+INFO:root:Validation Accuracy 2: 0.507875
+INFO:root:Average Validation Accuracy: 0.5069333333333333
+INFO:root:Neural Network: 100, 0.01, 10000, 10, 0.01, 0.8, 0
+INFO:root:Validation Accuracy 0: 0.520675
+INFO:root:Validation Accuracy 1: 0.525725
+INFO:root:Validation Accuracy 2: 0.51945
+INFO:root:Average Validation Accuracy: 0.52195
+INFO:root:Neural Network: 100, 0.1, 10000, 10, 0.01, 0.8, 0
+INFO:root:Validation Accuracy 0: 0.45165
+INFO:root:Validation Accuracy 1: 0.45825
+INFO:root:Validation Accuracy 2: 0.4574
+INFO:root:Average Validation Accuracy: 0.45576666666666665
+INFO:root:Neural Network: 100, 1, 10000, 10, 0.01, 0.8, 0
+INFO:root:Validation Accuracy 0: 0.2291
+INFO:root:Validation Accuracy 1: 0.261175
+INFO:root:Validation Accuracy 2: 0.2505
+INFO:root:Average Validation Accuracy: 0.24692499999999998
+INFO:root:Neural Network: 100, 0.0001, 30000, 10, 0.01, 0.8, 0
+INFO:root:Validation Accuracy 0: 0.5943
+INFO:root:Validation Accuracy 1: 0.599275
+INFO:root:Validation Accuracy 2: 0.596525
+INFO:root:Average Validation Accuracy: 0.5967
+INFO:root:Neural Network: 100, 0.001, 30000, 10, 0.01, 0.8, 0
+INFO:root:Validation Accuracy 0: 0.59515
+INFO:root:Validation Accuracy 1: 0.5979
+INFO:root:Validation Accuracy 2: 0.592025
+INFO:root:Average Validation Accuracy: 0.595025
+INFO:root:Neural Network: 100, 0.01, 30000, 10, 0.01, 0.8, 0
+INFO:root:Validation Accuracy 0: 0.6114
+INFO:root:Validation Accuracy 1: 0.607325
+INFO:root:Validation Accuracy 2: 0.611925
+INFO:root:Average Validation Accuracy: 0.6102166666666667
+INFO:root:Neural Network: 100, 0.1, 30000, 10, 0.01, 0.8, 0
+INFO:root:Validation Accuracy 0: 0.541825
+INFO:root:Validation Accuracy 1: 0.538575
+INFO:root:Validation Accuracy 2: 0.55195
+INFO:root:Average Validation Accuracy: 0.5441166666666667
+INFO:root:Neural Network: 100, 1, 30000, 10, 0.01, 0.8, 0
+INFO:root:Validation Accuracy 0: 0.277875
+INFO:root:Validation Accuracy 1: 0.265875
+INFO:root:Validation Accuracy 2: 0.287875
+INFO:root:Average Validation Accuracy: 0.27720833333333333
