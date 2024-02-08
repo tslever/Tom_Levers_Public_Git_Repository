@@ -4,3 +4,4 @@ pip install pipenv --user
 python -m site --user-base
 On Windows, add C:\Users\[User]\AppData\Roaming\Python\Python312\Scripts to User PATH
 To upgrade, try pip install --user --upgrade pipenv
+To run a Python file, use pipenv run python file.py
