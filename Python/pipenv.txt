@@ -1,7 +1,8 @@
 Motivation: https://opensource.com/article/18/2/why-python-devs-should-use-pipenv
 
-pip install pipenv --user
-python -m site --user-base
+Install: pip install pipenv --user
+Move toward finding directory with pipenv: python -m site --user-base (prints /home/tsl2b/.local)
+On Linux, add export PATH="/home/tsl2b/.local/bin:$PATH" to bottom of ~/.bashrc
 On Windows, add C:\Users\[User]\AppData\Roaming\Python\Python312\Scripts to User PATH
 To upgrade, try pip install --user --upgrade pipenv
 To run a Python file, use pipenv run python file.py
