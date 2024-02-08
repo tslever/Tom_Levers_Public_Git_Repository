@@ -1,11 +1,10 @@
 import ActionDisplayer from './ActionDisplayer';
-import './App.css';
 import BaseBoardDisplayer from './BaseBoardDisplayer'
 import Displayer from './Displayer';
 import { useState } from 'react';
 import TableDisplayer from './TableDisplayer';
 
-function App() {
+function Front_End() {
 
     // table displayer for describing active player's hand cards
     const body_data_for_table_describing_active_players_hand_cards = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
@@ -196,4 +195,4 @@ function App() {
   );
 }
 
-export default App;
+export default Front_End;
