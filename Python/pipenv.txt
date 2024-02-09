@@ -5,4 +5,5 @@ Move toward finding directory with pipenv: python -m site --user-base (prints /h
 On Linux, add export PATH="/home/tsl2b/.local/bin:$PATH" to bottom of ~/.bashrc
 On Windows, add C:\Users\[User]\AppData\Roaming\Python\Python312\Scripts to User PATH
 To upgrade, try pip install --user --upgrade pipenv
+To install a package, use pipenv install [package]
 To run a Python file, use pipenv run python file.py
