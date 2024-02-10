@@ -1,9 +1,15 @@
 import TableDisplayer from "./TableDisplayer"
 
-function TableDisplayerOfMessages() {
-  const body_data_for_table_of_messages = [
-    []
-  ]
+type Props = {
+  listOfMessages: string[]
+}
+
+function mapMessageToList(message: string) {
+  return [message];
+}
+
+function TableDisplayerOfMessages(props: Props) {
+  const body_data_for_table_of_messages = props.listOfMessages.map(mapMessageToList)
   const column_group_for_table_of_messages = <colgroup>
     <col style = { { width: '100%' } }/>
   </colgroup>

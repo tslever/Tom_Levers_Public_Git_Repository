@@ -5,6 +5,7 @@ import PrimaryTableDisplayer from './PrimaryTableDisplayer';
 
 function Front_End() {
 
+  const [listOfMessages, setListOfMessages] = useState([''])
   const [listOfPossibleActions, setListOfPossibleActions] = useState(['Click me to get started.'])
 
   async function act(action: string) {
@@ -16,9 +17,9 @@ function Front_End() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(JSON_object)
-    });  
+    });
     const json = await response.json();
-    console.log(json);
+    setListOfMessages([...listOfMessages, json.action_completed])
     setListOfPossibleActions(json.list_of_possible_actions);
   }
 
@@ -35,7 +36,10 @@ function Front_End() {
 
   return (
     <Displayer backgroundColor = 'rgb(255, 248, 195)'>
-      { <PrimaryTableDisplayer listOfActionDisplayers = { listOfActionDisplayers }/> }
+      <PrimaryTableDisplayer
+        listOfActionDisplayers = { listOfActionDisplayers }
+        listOfMessages = { listOfMessages }
+      />
     </Displayer>
   );
 }

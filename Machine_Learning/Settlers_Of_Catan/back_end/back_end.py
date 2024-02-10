@@ -9,7 +9,10 @@ def main():
     try:
         JSON_object_from_POST_request_body = request.json
         if JSON_object_from_POST_request_body['action'] == 'Click me to get started.':
-            JSON_object_representing_body_of_response = {"list_of_possible_actions": ["Player Red, place your first settlement."]}
+            JSON_object_representing_body_of_response = {
+                "action_completed": "Game was started.",
+                "list_of_possible_actions": ["Player Red, place your first settlement."]
+            }
         else:
             JSON_object_representing_body_of_response = {"list_of_possible_actions": ["TODO"]}
         response = jsonify(JSON_object_representing_body_of_response)

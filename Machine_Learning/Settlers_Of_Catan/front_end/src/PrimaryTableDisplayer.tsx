@@ -7,15 +7,16 @@ import TableDisplayerOfNonactivePlayersHandCards from "./TableDisplayerOfNonacti
 
 type Props = {
     listOfActionDisplayers: JSX.Element[]
+    listOfMessages: string[]
 }
 
 function PrimaryTableDisplayer(props: Props) {
     const body_data_for_primary_table_displayer = [
-        [<TableDisplayerForBaseBoardDisplayerAndMenuOfActions listOfActionDisplayers = { props.listOfActionDisplayers }/>],
+        [<TableDisplayerForBaseBoardDisplayerAndMenuOfActions listOfActionDisplayers = { props.listOfActionDisplayers } />],
         [<TableDisplayerOfBankCards/>],
         [<TableDisplayerOfActivePlayersHandCards/>],
         [<TableDisplayerOfNonactivePlayersHandCards/>],
-        [<TableDisplayerOfMessages/>]
+        [<TableDisplayerOfMessages listOfMessages = { props.listOfMessages } />]
       ];
       const column_group_for_primary_table = <colgroup>
         <col style = { { width: '100%' } }/>
