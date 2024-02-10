@@ -5,10 +5,11 @@ import PrimaryTableDisplayer from './PrimaryTableDisplayer';
 
 function Front_End() {
 
-  const [listOfMessages, setListOfMessages] = useState([''])
-  const [listOfPossibleActions, setListOfPossibleActions] = useState(['Click me to get started.'])
+  const [actionToComplete, setActionToComplete] = useState('');
+  const [listOfMessages, setListOfMessages] = useState(['']);
+  const [listOfPossibleActions, setListOfPossibleActions] = useState(['Click me to get started.']);
 
-  async function act(action: string) {
+  async function respond(action: string) {
     const url = 'http://localhost:5000';
     const JSON_object = { action: action };
     const response = await fetch(url, {
@@ -19,29 +20,31 @@ function Front_End() {
       body: JSON.stringify(JSON_object)
     });
     const json = await response.json();
-    setListOfMessages([...listOfMessages, json.action_completed])
+    setActionToComplete(json.action_to_complete);
+    setListOfMessages([...listOfMessages, json.action_completed]);
     setListOfPossibleActions(json.list_of_possible_actions);
-  }
+  };
 
   function mapToActionDisplayer(possibleAction: string) {
     return <ActionDisplayer
-      act = { act }
+      respond = { respond }
       backgroundColor = 'white'
     >
       { possibleAction }
     </ActionDisplayer>
-  }
+  };
 
   const listOfActionDisplayers = listOfPossibleActions.map(mapToActionDisplayer);
 
   return (
     <Displayer backgroundColor = 'rgb(255, 248, 195)'>
       <PrimaryTableDisplayer
+        respond = { respond }
         listOfActionDisplayers = { listOfActionDisplayers }
         listOfMessages = { listOfMessages }
       />
     </Displayer>
   );
-}
+};
 
 export default Front_End;

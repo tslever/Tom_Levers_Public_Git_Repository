@@ -1,5 +1,4 @@
 import { useRef, useEffect, MutableRefObject } from 'react';
-import ActionDisplayer from './ActionDisplayer';
 
 function getMousePosition(canvas: HTMLCanvasElement, event: MouseEvent) {
   const DOM_rect = canvas.getBoundingClientRect();
@@ -397,7 +396,11 @@ const drawBoard = function(ctx: CanvasRenderingContext2D, width_of_canvas: numbe
   }
 };
 
-function BaseBoardDisplayer() {
+type Props = {
+  respond: Function
+}
+
+function BaseBoardDisplayer(props: Props) {
   const mutableRefObject: MutableRefObject<HTMLCanvasElement | null> = useRef<HTMLCanvasElement | null>(null);
   useEffect(() => {
     const canvas = mutableRefObject.current;
@@ -420,10 +423,11 @@ function BaseBoardDisplayer() {
   return (
     <center>
       <canvas
-        ref = { mutableRefObject }
-        width = { height_of_webpage - 7 }
         height = { height_of_webpage - 7 }
+        onClick = { () => { props.respond('Player clicked canvas.') } }
+        ref = { mutableRefObject }
         style = { { 'backgroundColor': color_of.Sea } }
+        width = { height_of_webpage - 7 }
       />
     </center>
   );

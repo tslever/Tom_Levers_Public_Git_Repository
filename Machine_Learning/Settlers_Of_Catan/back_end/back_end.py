@@ -8,9 +8,10 @@ CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 def main():
     try:
         JSON_object_from_POST_request_body = request.json
-        if JSON_object_from_POST_request_body['action'] == 'Click me to get started.':
+        if JSON_object_from_POST_request_body['action'] == 'Player clicked action displayer with child \"Click me to get started.\".':
             JSON_object_representing_body_of_response = {
-                "action_completed": "Game was started.",
+                "action_completed": 'Player clicked action displayer with child \"Click me to get started.\".',
+                "action_to_complete": "Player Red, place your first settlement.",
                 "list_of_possible_actions": ["Player Red, place your first settlement."]
             }
         else:
