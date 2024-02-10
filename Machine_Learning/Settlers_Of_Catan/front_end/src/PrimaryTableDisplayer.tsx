@@ -6,6 +6,7 @@ import TableDisplayerOfMessages from "./TableDisplayerOfMessages";
 import TableDisplayerOfNonactivePlayersHandCards from "./TableDisplayerOfNonactivePlayersHandCards";
 
 type Props = {
+    actionToComplete: string,
     respond: Function,
     listOfActionDisplayers: JSX.Element[]
     listOfMessages: string[]
@@ -15,6 +16,7 @@ function PrimaryTableDisplayer(props: Props) {
     const body_data_for_primary_table_displayer = [
         [
           <TableDisplayerForBaseBoardDisplayerAndMenuOfActions
+            actionToComplete = { props.actionToComplete }
             respond = { props.respond }
             listOfActionDisplayers = { props.listOfActionDisplayers }
           />

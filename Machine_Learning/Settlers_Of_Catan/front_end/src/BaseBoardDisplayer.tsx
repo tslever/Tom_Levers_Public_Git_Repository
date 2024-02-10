@@ -5,7 +5,7 @@ function getMousePosition(canvas: HTMLCanvasElement, event: MouseEvent) {
   const canvas_x_coordinate = event.clientX - DOM_rect.left;
   const canvas_y_coordinate = event.clientY - DOM_rect.top;
   const pair_of_isometric_coordinates = get_isometric_coordinate_pair_given(canvas_x_coordinate, canvas_y_coordinate, canvas.width);
-  return 'Mouse clicked at (' + pair_of_isometric_coordinates.x + ', ' + pair_of_isometric_coordinates.y + ') relative to canvas.';
+  return pair_of_isometric_coordinates;
 }
 
 const tangent_of_30_degrees = 0.5773502691896257645091487805019574556476017512701268760186023264;
@@ -397,6 +397,7 @@ const drawBoard = function(ctx: CanvasRenderingContext2D, width_of_canvas: numbe
 };
 
 type Props = {
+  actionToComplete: string,
   respond: Function
 }
 
@@ -405,26 +406,30 @@ function BaseBoardDisplayer(props: Props) {
   useEffect(() => {
     const canvas = mutableRefObject.current;
     if (canvas) {
-      canvas.addEventListener(
-        "mousedown",
-        function (e: MouseEvent) {
-          const message = getMousePosition(canvas, e);
-          console.log(message);
+      const handleMouseDown = function (e: MouseEvent) {
+        console.log(props.actionToComplete);
+        const match = /Player (.*), place your first settlement\./.exec(props.actionToComplete);
+        console.log(match);
+        if (match) {
+          const mousePosition = getMousePosition(canvas, e);
+          const action = 'When action to complete was \"' + props.actionToComplete + '\", player clicked base board at (' + mousePosition.x + ', ' + mousePosition.y + ') relative to grid.'
+          props.respond(action);
         }
-      );
+      }
+      canvas.addEventListener("mousedown", handleMouseDown);
       const context = canvas.getContext('2d');
       if (context) {
         drawBoard(context, canvas.width);
       }
+      return () => { canvas.removeEventListener("mousedown", handleMouseDown); };
     }
-  }, []);
+  }, [props.actionToComplete]);
   const height_of_webpage = window.innerHeight;
 
   return (
     <center>
       <canvas
         height = { height_of_webpage - 7 }
-        onClick = { () => { props.respond('Player clicked canvas.') } }
         ref = { mutableRefObject }
         style = { { 'backgroundColor': color_of.Sea } }
         width = { height_of_webpage - 7 }

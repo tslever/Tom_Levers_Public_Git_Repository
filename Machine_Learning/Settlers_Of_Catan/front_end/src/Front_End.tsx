@@ -5,7 +5,7 @@ import PrimaryTableDisplayer from './PrimaryTableDisplayer';
 
 function Front_End() {
 
-  const [actionToComplete, setActionToComplete] = useState('');
+  const [actionToComplete, setActionToComplete] = useState('Placeholder Text');
   const [listOfMessages, setListOfMessages] = useState(['']);
   const [listOfPossibleActions, setListOfPossibleActions] = useState(['Click me to get started.']);
 
@@ -39,6 +39,7 @@ function Front_End() {
   return (
     <Displayer backgroundColor = 'rgb(255, 248, 195)'>
       <PrimaryTableDisplayer
+        actionToComplete = { actionToComplete }
         respond = { respond }
         listOfActionDisplayers = { listOfActionDisplayers }
         listOfMessages = { listOfMessages }
