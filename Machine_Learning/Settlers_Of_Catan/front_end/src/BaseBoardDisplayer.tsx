@@ -77,6 +77,7 @@ const drawToken = function(ctx: CanvasRenderingContext2D, isometricxCoordinate: 
   ctx.fill();
   ctx.strokeStyle = 'black';
   ctx.stroke();
+  
   let fontSize = -1;
   ctx.fillStyle = 'black';
   if (the_number === 2 || the_number === 12) {
@@ -90,13 +91,39 @@ const drawToken = function(ctx: CanvasRenderingContext2D, isometricxCoordinate: 
   } else if (the_number === 6 || the_number === 8) {
     fontSize = 55;
     ctx.fillStyle = 'red';
-  } else {
-    fontSize = 55;
   }
   ctx.font = fontSize + 'px Times New Roman';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillText(the_number.toString(), canvasCoordinatePair.x, canvasCoordinatePair.y);
+  
+  let numberOfDots = 0;
+  if (the_number === 2 || the_number === 12) {
+    numberOfDots = 1;
+  } else if (the_number === 3 || the_number === 11) {
+    numberOfDots = 2;
+  } else if (the_number === 4 || the_number === 10) {
+    numberOfDots = 3;
+  } else if (the_number === 5 || the_number === 9) {
+    numberOfDots = 4;
+  } else if (the_number === 6 || the_number === 8) {
+    numberOfDots = 5;
+  }
+  const distanceBetweenCenterOfTokenAndBottomOfText = fontSize / 2;
+  const verticalPositionOfCenterOfDot = canvasCoordinatePair.y + distanceBetweenCenterOfTokenAndBottomOfText * 0.8;
+  const dotRadius = radius * 0.05;
+  const distanceBetweenCentersOfDots = dotRadius * 3;
+  let startDotX = canvasCoordinatePair.x - ((numberOfDots - 1) * distanceBetweenCentersOfDots) / 2;
+  for (let i = 0; i < numberOfDots; i++) {
+      ctx.beginPath();
+      ctx.arc(startDotX + (i * distanceBetweenCentersOfDots), verticalPositionOfCenterOfDot, dotRadius, 0, Math.PI * 2, true);
+      if (the_number === 6 || the_number === 8) {
+        ctx.fillStyle = 'red';
+      } else {
+        ctx.fillStyle = 'black';
+      }
+      ctx.fill();
+  }
 }
 
 const drawBoard = function(ctx: CanvasRenderingContext2D, widthOfCanvas: number) {
