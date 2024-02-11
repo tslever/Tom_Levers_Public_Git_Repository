@@ -1,9 +1,13 @@
 import ActionDisplayer from './ActionDisplayer';
 import Displayer from './Displayer';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PrimaryTableDisplayer from './PrimaryTableDisplayer';
 
 function Front_End() {
+
+  useEffect(() => {
+    document.title = "SOC, MCTS, And NNs";
+  }, []); // The empty array ensures this effect runs only once after the initial render.
 
   const [actionToComplete, setActionToComplete] = useState('Placeholder Text');
   const [listOfMessages, setListOfMessages] = useState(['']);

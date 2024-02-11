@@ -23,14 +23,15 @@ function getIsometricCoordinatePairGiven(canvasxCoordinate: number, canvasyCoord
 }
 
 const colorOf = {
-  Brick: '#AA4A44',
-  Desert: '#F5D5A1',
-  Grain: '#FADB5E',
+  Brick: 'rgb(170, 74, 68)',
+  Desert: 'rgb(245, 213, 161)',
+  Grain: 'rgb(250, 219, 94)',
   Ore: 'rgb(128,128,128)',
-  Sea: '#00c5ff',
-  Token: '#e3c08d',
-  Wood: '#228B22',
-  Wool: '#79D021'
+  Sea: 'rgb(0, 197, 255)',
+  QuestionMark: 'rgb(0, 0, 205)',
+  Token: 'rgb(227, 192, 141)',
+  Wood: 'rgb(34, 139, 34)',
+  Wool: 'rgb(121, 208, 33)'
 }
 
 const drawPath = function(ctx: CanvasRenderingContext2D, array_of_vertices: Pair[], color: string) {
@@ -51,7 +52,7 @@ type Pair = {
   y: number
 }
 
-const drawTile = function(array_of_pairs: Pair[], color: string, context: CanvasRenderingContext2D) {
+const drawRegion = function(array_of_pairs: Pair[], color: string, context: CanvasRenderingContext2D) {
   const region = new Path2D();
   const pair_0 = array_of_pairs[0]
   region.moveTo(pair_0.x, pair_0.y);
@@ -136,7 +137,7 @@ const drawBoard = function(ctx: CanvasRenderingContext2D, widthOfCanvas: number)
     const pair_per_neg_2_2 = getCanvasCoordinatePairGiven(-2, 2, widthOfCanvas);
     const pair_per_0_2 = getCanvasCoordinatePairGiven(0, 2, widthOfCanvas);
     let array_of_pairs = [pair_per_2_0, pair_per_2_neg_2, pair_per_0_neg_2, pair_per_neg_2_0, pair_per_neg_2_2, pair_per_0_2];
-    drawTile(array_of_pairs, colorOf.Desert, ctx);
+    drawRegion(array_of_pairs, colorOf.Desert, ctx);
 
     // Tile 1: Grain
     const pair_per_6_neg_2 = getCanvasCoordinatePairGiven(6, -2, widthOfCanvas);
@@ -144,122 +145,173 @@ const drawBoard = function(ctx: CanvasRenderingContext2D, widthOfCanvas: number)
     const pair_per_4_neg_4 = getCanvasCoordinatePairGiven(4, -4, widthOfCanvas);
     const pair_per_4_0 = getCanvasCoordinatePairGiven(4, 0, widthOfCanvas);
     array_of_pairs = [pair_per_6_neg_2, pair_per_6_neg_4, pair_per_4_neg_4, pair_per_2_neg_2, pair_per_2_0, pair_per_4_0];
-    drawTile(array_of_pairs, colorOf.Grain, ctx);
+    drawRegion(array_of_pairs, colorOf.Grain, ctx);
 
     // Tile 2: Ore
     const pair_per_4_neg_6 = getCanvasCoordinatePairGiven(4, -6, widthOfCanvas);
     const pair_per_2_neg_6 = getCanvasCoordinatePairGiven(2, -6, widthOfCanvas);
     const pair_per_0_neg_4 = getCanvasCoordinatePairGiven(0, -4, widthOfCanvas);
     array_of_pairs = [pair_per_4_neg_4, pair_per_4_neg_6, pair_per_2_neg_6, pair_per_0_neg_4, pair_per_0_neg_2, pair_per_2_neg_2];
-    drawTile(array_of_pairs, colorOf.Ore, ctx);
+    drawRegion(array_of_pairs, colorOf.Ore, ctx);
 
     // Tile 3: Wood
     const pair_per_neg_2_neg_4 = getCanvasCoordinatePairGiven(-2, -4, widthOfCanvas);
     const pair_per_neg_4_neg_2 = getCanvasCoordinatePairGiven(-4, -2, widthOfCanvas);
     const pair_per_neg_4_0 = getCanvasCoordinatePairGiven(-4, 0, widthOfCanvas);
     array_of_pairs = [pair_per_0_neg_2, pair_per_0_neg_4, pair_per_neg_2_neg_4, pair_per_neg_4_neg_2, pair_per_neg_4_0, pair_per_neg_2_0];
-    drawTile(array_of_pairs, colorOf.Wood, ctx);
+    drawRegion(array_of_pairs, colorOf.Wood, ctx);
 
     // Tile 4: Brick
     const pair_per_neg_6_2 = getCanvasCoordinatePairGiven(-6, 2, widthOfCanvas);
     const pair_per_neg_6_4 = getCanvasCoordinatePairGiven(-6, 4, widthOfCanvas);
     const pair_per_neg_4_4 = getCanvasCoordinatePairGiven(-4, 4, widthOfCanvas);
     array_of_pairs = [pair_per_neg_2_2, pair_per_neg_2_0, pair_per_neg_4_0, pair_per_neg_6_2, pair_per_neg_6_4, pair_per_neg_4_4];
-    drawTile(array_of_pairs, colorOf.Brick, ctx);
+    drawRegion(array_of_pairs, colorOf.Brick, ctx);
 
     // Tile 5: Wool
     const pair_per_0_4 = getCanvasCoordinatePairGiven(0, 4, widthOfCanvas);
-    //0,2
-    //-2,2
-    //-4,4
     const pair_per_neg_4_6 = getCanvasCoordinatePairGiven(-4, 6, widthOfCanvas);
     const pair_per_neg_2_6 = getCanvasCoordinatePairGiven(-2, 6, widthOfCanvas);
     array_of_pairs = [pair_per_0_4, pair_per_0_2, pair_per_neg_2_2, pair_per_neg_4_4, pair_per_neg_4_6, pair_per_neg_2_6];
-    drawTile(array_of_pairs, colorOf.Wool, ctx);
+    drawRegion(array_of_pairs, colorOf.Wool, ctx);
 
     // Tile 6: Wood
     const pair_per_4_2 = getCanvasCoordinatePairGiven(4, 2, widthOfCanvas);
     const pair_per_2_4 = getCanvasCoordinatePairGiven(2, 4, widthOfCanvas);
     array_of_pairs = [pair_per_4_2, pair_per_4_0, pair_per_2_0, pair_per_0_2, pair_per_0_4, pair_per_2_4];
-    drawTile(array_of_pairs, colorOf.Wood, ctx);
+    drawRegion(array_of_pairs, colorOf.Wood, ctx);
 
     // Tile 7: Wool
     const pair_per_8_0 = getCanvasCoordinatePairGiven(8, 0, widthOfCanvas);
     const pair_per_8_neg_2 = getCanvasCoordinatePairGiven(8, -2, widthOfCanvas);
     const pair_per_6_2 = getCanvasCoordinatePairGiven(6, 2, widthOfCanvas);
     array_of_pairs = [pair_per_8_0, pair_per_8_neg_2, pair_per_6_neg_2, pair_per_4_0, pair_per_4_2, pair_per_6_2];
-    drawTile(array_of_pairs, colorOf.Wool, ctx);
+    drawRegion(array_of_pairs, colorOf.Wool, ctx);
 
     // Tile 8: Wool
     const pair_per_10_neg_4 = getCanvasCoordinatePairGiven(10, -4, widthOfCanvas);
     const pair_per_10_neg_6 = getCanvasCoordinatePairGiven(10, -6, widthOfCanvas);
     const pair_per_8_neg_6 = getCanvasCoordinatePairGiven(8, -6, widthOfCanvas);
     array_of_pairs = [pair_per_10_neg_4, pair_per_10_neg_6, pair_per_8_neg_6, pair_per_6_neg_4, pair_per_6_neg_2, pair_per_8_neg_2];
-    drawTile(array_of_pairs, colorOf.Wool, ctx);
+    drawRegion(array_of_pairs, colorOf.Wool, ctx);
 
     // Tile 9: Grain
     const pair_per_8_neg_8 = getCanvasCoordinatePairGiven(8, -8, widthOfCanvas);
     const pair_per_6_neg_8 = getCanvasCoordinatePairGiven(6, -8, widthOfCanvas);
     array_of_pairs = [pair_per_8_neg_6, pair_per_8_neg_8, pair_per_6_neg_8, pair_per_4_neg_6, pair_per_4_neg_4, pair_per_6_neg_4];
-    drawTile(array_of_pairs, colorOf.Grain, ctx);
+    drawRegion(array_of_pairs, colorOf.Grain, ctx);
 
     // Tile 10: Brick
     const pair_per_6_neg_10 = getCanvasCoordinatePairGiven(6, -10, widthOfCanvas);
     const pair_per_4_neg_10 = getCanvasCoordinatePairGiven(4, -10, widthOfCanvas);
     const pair_per_2_neg_8 = getCanvasCoordinatePairGiven(2, -8, widthOfCanvas);
     array_of_pairs = [pair_per_6_neg_8, pair_per_6_neg_10, pair_per_4_neg_10, pair_per_2_neg_8, pair_per_2_neg_6, pair_per_4_neg_6];
-    drawTile(array_of_pairs, colorOf.Brick, ctx);
+    drawRegion(array_of_pairs, colorOf.Brick, ctx);
 
     // Tile 11: Wood
     const pair_per_0_neg_8 = getCanvasCoordinatePairGiven(0, -8, widthOfCanvas);
     const pair_per_neg_2_neg_6 = getCanvasCoordinatePairGiven(-2, -6, widthOfCanvas);
     array_of_pairs = [pair_per_2_neg_6, pair_per_2_neg_8, pair_per_0_neg_8, pair_per_neg_2_neg_6, pair_per_neg_2_neg_4, pair_per_0_neg_4];
-    drawTile(array_of_pairs, colorOf.Wood, ctx);
+    drawRegion(array_of_pairs, colorOf.Wood, ctx);
 
     // Tile 12: Grain
     const pair_per_neg_4_neg_6 = getCanvasCoordinatePairGiven(-4, -6, widthOfCanvas);
     const pair_per_neg_6_neg_4 = getCanvasCoordinatePairGiven(-6, -4, widthOfCanvas);
     const pair_per_neg_6_neg_2 = getCanvasCoordinatePairGiven(-6, -2, widthOfCanvas);
     array_of_pairs = [pair_per_neg_2_neg_4, pair_per_neg_2_neg_6, pair_per_neg_4_neg_6, pair_per_neg_6_neg_4, pair_per_neg_6_neg_2, pair_per_neg_4_neg_2];
-    drawTile(array_of_pairs, colorOf.Grain, ctx);
+    drawRegion(array_of_pairs, colorOf.Grain, ctx);
 
     // Tile 13: Grain
     const pair_per_neg_8_0 = getCanvasCoordinatePairGiven(-8, 0, widthOfCanvas);
     const pair_per_neg_8_2 = getCanvasCoordinatePairGiven(-8, 2, widthOfCanvas);
     array_of_pairs = [pair_per_neg_4_0, pair_per_neg_4_neg_2, pair_per_neg_6_neg_2, pair_per_neg_8_0, pair_per_neg_8_2, pair_per_neg_6_2];
-    drawTile(array_of_pairs, colorOf.Grain, ctx);
+    drawRegion(array_of_pairs, colorOf.Grain, ctx);
 
     // Tile 14: Ore
     const pair_per_neg_10_4 = getCanvasCoordinatePairGiven(-10, 4, widthOfCanvas);
     const pair_per_neg_10_6 = getCanvasCoordinatePairGiven(-10, 6, widthOfCanvas);
     const pair_per_neg_8_6 = getCanvasCoordinatePairGiven(-8, 6, widthOfCanvas);
     array_of_pairs = [pair_per_neg_6_4, pair_per_neg_6_2, pair_per_neg_8_2, pair_per_neg_10_4, pair_per_neg_10_6, pair_per_neg_8_6];
-    drawTile(array_of_pairs, colorOf.Ore, ctx);
+    drawRegion(array_of_pairs, colorOf.Ore, ctx);
 
     // Tile 15: Wool
     const pair_per_neg_8_8 = getCanvasCoordinatePairGiven(-8, 8, widthOfCanvas);
     const pair_per_neg_6_8 = getCanvasCoordinatePairGiven(-6, 8, widthOfCanvas);
     array_of_pairs = [pair_per_neg_4_6, pair_per_neg_4_4, pair_per_neg_6_4, pair_per_neg_8_6, pair_per_neg_8_8, pair_per_neg_6_8];
-    drawTile(array_of_pairs, colorOf.Wool, ctx);
+    drawRegion(array_of_pairs, colorOf.Wool, ctx);
 
     // Tile 16: Wood
     const pair_per_neg_2_8 = getCanvasCoordinatePairGiven(-2, 8, widthOfCanvas);
     const pair_per_neg_6_10 = getCanvasCoordinatePairGiven(-6, 10, widthOfCanvas);
     const pair_per_neg_4_10 = getCanvasCoordinatePairGiven(-4, 10, widthOfCanvas);
     array_of_pairs = [pair_per_neg_2_8, pair_per_neg_2_6, pair_per_neg_4_6, pair_per_neg_6_8, pair_per_neg_6_10, pair_per_neg_4_10];
-    drawTile(array_of_pairs, colorOf.Wood, ctx);    
+    drawRegion(array_of_pairs, colorOf.Wood, ctx);    
 
     // Tile 17: Brick
     const pair_per_2_6 = getCanvasCoordinatePairGiven(2, 6, widthOfCanvas);
     const pair_per_0_8 = getCanvasCoordinatePairGiven(0, 8, widthOfCanvas);
     array_of_pairs = [pair_per_2_6, pair_per_2_4, pair_per_0_4, pair_per_neg_2_6, pair_per_neg_2_8, pair_per_0_8];
-    drawTile(array_of_pairs, colorOf.Brick, ctx);
+    drawRegion(array_of_pairs, colorOf.Brick, ctx);
 
     // Tile 18: Ore
     const pair_per_6_4 = getCanvasCoordinatePairGiven(6, 4, widthOfCanvas);
     const pair_per_4_6 = getCanvasCoordinatePairGiven(4, 6, widthOfCanvas);
     array_of_pairs = [pair_per_6_4, pair_per_6_2, pair_per_4_2, pair_per_2_4, pair_per_2_6, pair_per_4_6];
-    drawTile(array_of_pairs, colorOf.Ore, ctx);
+    drawRegion(array_of_pairs, colorOf.Ore, ctx);
+
+    // Wool Port
+    const pair_per_9_neg_1 = getCanvasCoordinatePairGiven(9, -1, widthOfCanvas);
+    const pair_per_9_neg_2 = getCanvasCoordinatePairGiven(9, -2, widthOfCanvas);
+    array_of_pairs = [pair_per_9_neg_1, pair_per_9_neg_2, pair_per_8_neg_2, pair_per_8_0];
+    drawRegion(array_of_pairs, colorOf.Wool, ctx);
+
+    // Brick Port
+    const pair_per_neg_1_neg_8 = getCanvasCoordinatePairGiven(-1, -8, widthOfCanvas);
+    const pair_per_neg_2_neg_7 = getCanvasCoordinatePairGiven(-2, -7, widthOfCanvas);
+    array_of_pairs = [pair_per_0_neg_8, pair_per_neg_1_neg_8, pair_per_neg_2_neg_7, pair_per_neg_2_neg_6];
+    drawRegion(array_of_pairs, colorOf.Brick, ctx);
+
+    // Wood Port
+    const pair_per_neg_7_neg_2 = getCanvasCoordinatePairGiven(-7, -2, widthOfCanvas);
+    const pair_per_neg_8_neg_1 = getCanvasCoordinatePairGiven(-8, -1, widthOfCanvas);
+    array_of_pairs = [pair_per_neg_6_neg_2, pair_per_neg_7_neg_2, pair_per_neg_8_neg_1, pair_per_neg_8_0];
+    drawRegion(array_of_pairs, colorOf.Wood, ctx);
+
+    // Grain Port
+    const pair_per_neg_8_9 = getCanvasCoordinatePairGiven(-8, 9, widthOfCanvas);
+    const pair_per_neg_7_9 = getCanvasCoordinatePairGiven(-7, 9, widthOfCanvas);
+    array_of_pairs = [pair_per_neg_6_8, pair_per_neg_8_8, pair_per_neg_8_9, pair_per_neg_7_9];
+    drawRegion(array_of_pairs, colorOf.Grain, ctx);
+
+    // Ore Port
+    const pair_per_neg_2_9 = getCanvasCoordinatePairGiven(-2, 9, widthOfCanvas);
+    const pair_per_neg_1_9 = getCanvasCoordinatePairGiven(-1, 9, widthOfCanvas);
+    array_of_pairs = [pair_per_0_8, pair_per_neg_2_8, pair_per_neg_2_9, pair_per_neg_1_9];
+    drawRegion(array_of_pairs, colorOf.Ore, ctx);
+
+    // Three-To-One Port
+    const pair_per_6_5 = getCanvasCoordinatePairGiven(6, 5, widthOfCanvas);
+    const pair_per_5_6 = getCanvasCoordinatePairGiven(5, 6, widthOfCanvas);
+    array_of_pairs = [pair_per_6_5, pair_per_6_4, pair_per_4_6, pair_per_5_6];
+    drawRegion(array_of_pairs, colorOf.QuestionMark, ctx);
+
+    // Three-To-One Port
+    const pair_per_9_neg_8 = getCanvasCoordinatePairGiven(9, -8, widthOfCanvas);
+    const pair_per_9_neg_7 = getCanvasCoordinatePairGiven(9, -7, widthOfCanvas);
+    array_of_pairs = [pair_per_9_neg_8, pair_per_8_neg_8, pair_per_8_neg_6, pair_per_9_neg_7];
+    drawRegion(array_of_pairs, colorOf.QuestionMark, ctx);
+
+    // Three-To-One Port
+    const pair_per_6_neg_11 = getCanvasCoordinatePairGiven(6, -11, widthOfCanvas);
+    const pair_per_5_neg_11 = getCanvasCoordinatePairGiven(5, -11, widthOfCanvas);
+    array_of_pairs = [pair_per_6_neg_11, pair_per_5_neg_11, pair_per_4_neg_10, pair_per_6_neg_10];
+    drawRegion(array_of_pairs, colorOf.QuestionMark, ctx);
+
+    // Three-To-One Port
+    const pair_per_neg_11_5 = getCanvasCoordinatePairGiven(-11, 5, widthOfCanvas);
+    const pair_per_neg_11_6 = getCanvasCoordinatePairGiven(-11, 6, widthOfCanvas);
+    array_of_pairs = [pair_per_neg_10_4, pair_per_neg_11_5, pair_per_neg_11_6, pair_per_neg_10_6];
+    drawRegion(array_of_pairs, colorOf.QuestionMark, ctx);
 
     drawToken(ctx, 4, -2, 4, widthOfCanvas);
     drawToken(ctx, 2, -4, 3, widthOfCanvas);
@@ -382,12 +434,9 @@ const drawBoard = function(ctx: CanvasRenderingContext2D, widthOfCanvas: number)
 
   // y = 5
   const pair_per_neg_12_5 = getCanvasCoordinatePairGiven(-12, 5, widthOfCanvas);
-  const pair_per_6_5 = getCanvasCoordinatePairGiven(6, 5, widthOfCanvas);
   drawPath(ctx, [pair_per_neg_12_5, pair_per_6_5], 'rgb(64,64,64)');
 
   // y = 6
-  const pair_per_neg_11_6 = getCanvasCoordinatePairGiven(-11, 6, widthOfCanvas);
-  const pair_per_5_6 = getCanvasCoordinatePairGiven(5, 6, widthOfCanvas);
   drawPath(ctx, [pair_per_neg_11_6, pair_per_5_6], 'rgb(64,64,64)');
 
   // y = 7
@@ -401,7 +450,6 @@ const drawBoard = function(ctx: CanvasRenderingContext2D, widthOfCanvas: number)
   drawPath(ctx, [pair_per_neg_9_8, pair_per_3_8], 'rgb(64,64,64)');
 
   // y = 9
-  const pair_per_neg_8_9 = getCanvasCoordinatePairGiven(-8, 9, widthOfCanvas);
   const pair_per_2_9 = getCanvasCoordinatePairGiven(2, 9, widthOfCanvas);
   drawPath(ctx, [pair_per_neg_8_9, pair_per_2_9], 'rgb(64,64,64)');
 
