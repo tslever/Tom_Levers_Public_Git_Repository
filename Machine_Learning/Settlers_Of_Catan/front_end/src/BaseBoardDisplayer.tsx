@@ -32,15 +32,15 @@ const colorOf = {
   Wool: '#79D021'
 }
 
-const drawGridLine = function(ctx: CanvasRenderingContext2D, leftEndpoint: {x: number, y: number}, rightEndpoint: {x: number, y: number}, color?: string) {
+const drawPath = function(ctx: CanvasRenderingContext2D, array_of_vertices: Pair[], color: string) {
   ctx.beginPath();
-  ctx.moveTo(leftEndpoint.x, leftEndpoint.y);
-  ctx.lineTo(rightEndpoint.x, rightEndpoint.y);
-  if (color) {
-    ctx.strokeStyle = color;
-  } else {
-    ctx.strokeStyle = 'rgb(64,64,64)';
+  const vertex_0 = array_of_vertices[0];
+  ctx.moveTo(vertex_0.x, vertex_0.y);
+  for (let i = 1; i < array_of_vertices.length; i++) {
+    const vertex_i = array_of_vertices[i];
+    ctx.lineTo(vertex_i.x, vertex_i.y);
   }
+  ctx.strokeStyle = color;
   ctx.lineWidth = 1;
   ctx.stroke();
 }
@@ -61,6 +61,8 @@ const drawTile = function(array_of_pairs: Pair[], color: string, context: Canvas
   region.closePath();
   context.fillStyle = color;
   context.fill(region);
+  array_of_pairs.push(pair_0);
+  drawPath(context, array_of_pairs, '#000000');
 }
 
 const drawBoard = function(ctx: CanvasRenderingContext2D, widthOfCanvas: number) {
@@ -201,237 +203,237 @@ const drawBoard = function(ctx: CanvasRenderingContext2D, widthOfCanvas: number)
   // y = -15
   const pair_per_4_neg_15 = getCanvasCoordinatePairGiven(4, -15, widthOfCanvas);
   const pair_per_6_neg_15 = getCanvasCoordinatePairGiven(6, -15, widthOfCanvas);
-  drawGridLine(ctx, pair_per_4_neg_15, pair_per_6_neg_15);
+  drawPath(ctx, [pair_per_4_neg_15, pair_per_6_neg_15], 'rgb(64,64,64)');
 
   // y = -14
   const pair_per_3_neg_14 = getCanvasCoordinatePairGiven(3, -14, widthOfCanvas);
   const pair_per_7_neg_14 = getCanvasCoordinatePairGiven(7, -14, widthOfCanvas);
-  drawGridLine(ctx, pair_per_3_neg_14, pair_per_7_neg_14);
+  drawPath(ctx, [pair_per_3_neg_14, pair_per_7_neg_14], 'rgb(64,64,64)');
 
   // y = -13
   const pair_per_2_neg_13 = getCanvasCoordinatePairGiven(2, -13, widthOfCanvas);
   const pair_per_8_neg_13 = getCanvasCoordinatePairGiven(8, -13, widthOfCanvas);
-  drawGridLine(ctx, pair_per_2_neg_13, pair_per_8_neg_13);
+  drawPath(ctx, [pair_per_2_neg_13, pair_per_8_neg_13], 'rgb(64,64,64)');
 
   // y = -12
   const pair_per_1_neg_12 = getCanvasCoordinatePairGiven(1, -12, widthOfCanvas);
   const pair_per_9_neg_12 = getCanvasCoordinatePairGiven(9, -12, widthOfCanvas);
-  drawGridLine(ctx, pair_per_1_neg_12, pair_per_9_neg_12);
+  drawPath(ctx, [pair_per_1_neg_12, pair_per_9_neg_12], 'rgb(64,64,64)');
 
   // y = -11
   const pair_per_0_neg_11 = getCanvasCoordinatePairGiven(0, -11, widthOfCanvas);
   const pair_per_10_neg_11 = getCanvasCoordinatePairGiven(10, -11, widthOfCanvas);
-  drawGridLine(ctx, pair_per_0_neg_11, pair_per_10_neg_11);
+  drawPath(ctx, [pair_per_0_neg_11, pair_per_10_neg_11], 'rgb(64,64,64)');
 
   // y = -10
   const pair_per_neg_1_neg_10 = getCanvasCoordinatePairGiven(-1, -10, widthOfCanvas);
   const pair_per_11_neg_10 = getCanvasCoordinatePairGiven(11, -10, widthOfCanvas);
-  drawGridLine(ctx, pair_per_neg_1_neg_10, pair_per_11_neg_10);
+  drawPath(ctx, [pair_per_neg_1_neg_10, pair_per_11_neg_10], 'rgb(64,64,64)');
 
   // y = -9
   const pair_per_neg_2_neg_9 = getCanvasCoordinatePairGiven(-2, -9, widthOfCanvas);
   const pair_per_12_neg_9 = getCanvasCoordinatePairGiven(12, -9, widthOfCanvas);
-  drawGridLine(ctx, pair_per_neg_2_neg_9, pair_per_12_neg_9);
+  drawPath(ctx, [pair_per_neg_2_neg_9, pair_per_12_neg_9], 'rgb(64,64,64)');
 
   // y = -8 
   const pair_per_neg_3_neg_8 = getCanvasCoordinatePairGiven(-3, -8, widthOfCanvas);
   const pair_per_13_neg_8 = getCanvasCoordinatePairGiven(13, -8, widthOfCanvas);
-  drawGridLine(ctx, pair_per_neg_3_neg_8, pair_per_13_neg_8);
+  drawPath(ctx, [pair_per_neg_3_neg_8, pair_per_13_neg_8], 'rgb(64,64,64)');
 
   // y = -7
   const pair_per_neg_4_neg_7 = getCanvasCoordinatePairGiven(-4, -7, widthOfCanvas);
   const pair_per_14_neg_7 = getCanvasCoordinatePairGiven(14, -7, widthOfCanvas);
-  drawGridLine(ctx, pair_per_neg_4_neg_7, pair_per_14_neg_7);
+  drawPath(ctx, [pair_per_neg_4_neg_7, pair_per_14_neg_7], 'rgb(64,64,64)');
 
   // y = -6
   const pair_per_neg_5_neg_6 = getCanvasCoordinatePairGiven(-5, -6, widthOfCanvas);
   const pair_per_15_neg_6 = getCanvasCoordinatePairGiven(15, -6, widthOfCanvas);
-  drawGridLine(ctx, pair_per_neg_5_neg_6, pair_per_15_neg_6);
+  drawPath(ctx, [pair_per_neg_5_neg_6, pair_per_15_neg_6], 'rgb(64,64,64)');
 
   // y = -5
   const pair_per_neg_6_neg_5 = getCanvasCoordinatePairGiven(-6, -5, widthOfCanvas);
   const pair_per_16_neg_5 = getCanvasCoordinatePairGiven(16, -5, widthOfCanvas);
-  drawGridLine(ctx, pair_per_neg_6_neg_5, pair_per_16_neg_5);
+  drawPath(ctx, [pair_per_neg_6_neg_5, pair_per_16_neg_5], 'rgb(64,64,64)');
 
   // y = -4
   const pair_per_neg_7_neg_4 = getCanvasCoordinatePairGiven(-7, -4, widthOfCanvas);
   const pair_per_15_neg_4 = getCanvasCoordinatePairGiven(15, -4, widthOfCanvas);
-  drawGridLine(ctx, pair_per_neg_7_neg_4, pair_per_15_neg_4);
+  drawPath(ctx, [pair_per_neg_7_neg_4, pair_per_15_neg_4], 'rgb(64,64,64)');
 
   // y = -3
   const pair_per_neg_8_neg_3 = getCanvasCoordinatePairGiven(-8, -3, widthOfCanvas);
   const pair_per_14_neg_3 = getCanvasCoordinatePairGiven(14, -3, widthOfCanvas);
-  drawGridLine(ctx, pair_per_neg_8_neg_3, pair_per_14_neg_3);
+  drawPath(ctx, [pair_per_neg_8_neg_3, pair_per_14_neg_3], 'rgb(64,64,64)');
 
   // y = -2
   const pair_per_neg_9_neg_2 = getCanvasCoordinatePairGiven(-9, -2, widthOfCanvas);
   const pair_per_13_neg_2 = getCanvasCoordinatePairGiven(13, -2, widthOfCanvas);
-  drawGridLine(ctx, pair_per_neg_9_neg_2, pair_per_13_neg_2);
+  drawPath(ctx, [pair_per_neg_9_neg_2, pair_per_13_neg_2], 'rgb(64,64,64)');
 
   // y = -1
   const pair_per_neg_10_neg_1 = getCanvasCoordinatePairGiven(-10, -1, widthOfCanvas);
   const pair_per_12_neg_1 = getCanvasCoordinatePairGiven(12, -1, widthOfCanvas);
-  drawGridLine(ctx, pair_per_neg_10_neg_1, pair_per_12_neg_1);
+  drawPath(ctx, [pair_per_neg_10_neg_1, pair_per_12_neg_1], 'rgb(64,64,64)');
 
   // x axis
   const pair_per_neg_11_0 = getCanvasCoordinatePairGiven(-11, 0, widthOfCanvas);
   const pair_per_11_0 = getCanvasCoordinatePairGiven(11, 0, widthOfCanvas);
-  drawGridLine(ctx, pair_per_neg_11_0, pair_per_11_0, '#000000');
+  drawPath(ctx, [pair_per_neg_11_0, pair_per_11_0], 'rgb(0,0,0)');
 
   // y = 1
   const pair_per_neg_12_1 = getCanvasCoordinatePairGiven(-12, 1, widthOfCanvas);
   const pair_per_10_1 = getCanvasCoordinatePairGiven(10, 1, widthOfCanvas);
-  drawGridLine(ctx, pair_per_neg_12_1, pair_per_10_1);
+  drawPath(ctx, [pair_per_neg_12_1, pair_per_10_1], 'rgb(64,64,64)');
 
   // y = 2
   const pair_per_neg_13_2 = getCanvasCoordinatePairGiven(-13, 2, widthOfCanvas);
   const pair_per_9_2 = getCanvasCoordinatePairGiven(9, 2, widthOfCanvas);
-  drawGridLine(ctx, pair_per_neg_13_2, pair_per_9_2);
+  drawPath(ctx, [pair_per_neg_13_2, pair_per_9_2], 'rgb(64,64,64)');
 
   // y = 3
   const pair_per_neg_14_3 = getCanvasCoordinatePairGiven(-14, 3, widthOfCanvas);
   const pair_per_8_3 = getCanvasCoordinatePairGiven(8, 3, widthOfCanvas);
-  drawGridLine(ctx, pair_per_neg_14_3, pair_per_8_3);
+  drawPath(ctx, [pair_per_neg_14_3, pair_per_8_3], 'rgb(64,64,64)');
 
   // y = 4
   const pair_per_neg_13_4 = getCanvasCoordinatePairGiven(-13, 4, widthOfCanvas);
   const pair_per_7_4 = getCanvasCoordinatePairGiven(7, 4, widthOfCanvas);
-  drawGridLine(ctx, pair_per_neg_13_4, pair_per_7_4);
+  drawPath(ctx, [pair_per_neg_13_4, pair_per_7_4], 'rgb(64,64,64)');
 
   // y = 5
   const pair_per_neg_12_5 = getCanvasCoordinatePairGiven(-12, 5, widthOfCanvas);
   const pair_per_6_5 = getCanvasCoordinatePairGiven(6, 5, widthOfCanvas);
-  drawGridLine(ctx, pair_per_neg_12_5, pair_per_6_5);
+  drawPath(ctx, [pair_per_neg_12_5, pair_per_6_5], 'rgb(64,64,64)');
 
   // y = 6
   const pair_per_neg_11_6 = getCanvasCoordinatePairGiven(-11, 6, widthOfCanvas);
   const pair_per_5_6 = getCanvasCoordinatePairGiven(5, 6, widthOfCanvas);
-  drawGridLine(ctx, pair_per_neg_11_6, pair_per_5_6);
+  drawPath(ctx, [pair_per_neg_11_6, pair_per_5_6], 'rgb(64,64,64)');
 
   // y = 7
   const pair_per_neg_10_7 = getCanvasCoordinatePairGiven(-10, 7, widthOfCanvas);
   const pair_per_4_7 = getCanvasCoordinatePairGiven(4, 7, widthOfCanvas);
-  drawGridLine(ctx, pair_per_neg_10_7, pair_per_4_7);
+  drawPath(ctx, [pair_per_neg_10_7, pair_per_4_7], 'rgb(64,64,64)');
 
   // y = 8
   const pair_per_neg_9_8 = getCanvasCoordinatePairGiven(-9, 8, widthOfCanvas);
   const pair_per_3_8 = getCanvasCoordinatePairGiven(3, 8, widthOfCanvas);
-  drawGridLine(ctx, pair_per_neg_9_8, pair_per_3_8);
+  drawPath(ctx, [pair_per_neg_9_8, pair_per_3_8], 'rgb(64,64,64)');
 
   // y = 9
   const pair_per_neg_8_9 = getCanvasCoordinatePairGiven(-8, 9, widthOfCanvas);
   const pair_per_2_9 = getCanvasCoordinatePairGiven(2, 9, widthOfCanvas);
-  drawGridLine(ctx, pair_per_neg_8_9, pair_per_2_9);
+  drawPath(ctx, [pair_per_neg_8_9, pair_per_2_9], 'rgb(64,64,64)');
 
   // y = 10
   const pair_per_neg_7_10 = getCanvasCoordinatePairGiven(-7, 10, widthOfCanvas);
   const pair_per_1_10 = getCanvasCoordinatePairGiven(1, 10, widthOfCanvas);
-  drawGridLine(ctx, pair_per_neg_7_10, pair_per_1_10);
+  drawPath(ctx, [pair_per_neg_7_10, pair_per_1_10], 'rgb(64,64,64)');
 
   // y = 11
   const pair_per_neg_6_11 = getCanvasCoordinatePairGiven(-6, 11, widthOfCanvas);
   const pair_per_0_11 = getCanvasCoordinatePairGiven(-0, 11, widthOfCanvas);
-  drawGridLine(ctx, pair_per_neg_6_11, pair_per_0_11);
+  drawPath(ctx, [pair_per_neg_6_11, pair_per_0_11], 'rgb(64,64,64)');
 
   // y = 12
   const pair_per_neg_5_12 = getCanvasCoordinatePairGiven(-5, 12, widthOfCanvas);
   const pair_per_neg_1_12 = getCanvasCoordinatePairGiven(-1, 12, widthOfCanvas);
-  drawGridLine(ctx, pair_per_neg_5_12, pair_per_neg_1_12);
+  drawPath(ctx, [pair_per_neg_5_12, pair_per_neg_1_12], 'rgb(64,64,64)');
 
   // y = 13
   const pair_per_neg_4_13 = getCanvasCoordinatePairGiven(-4, 13, widthOfCanvas);
   const pair_per_neg_2_13 = getCanvasCoordinatePairGiven(-2, 13, widthOfCanvas);
-  drawGridLine(ctx, pair_per_neg_4_13, pair_per_neg_2_13);
+  drawPath(ctx, [pair_per_neg_4_13, pair_per_neg_2_13], 'rgb(64,64,64)');
 
   // x = -13
   const pair_per_neg_13_5 = getCanvasCoordinatePairGiven(-13, 5, widthOfCanvas);
-  drawGridLine(ctx, pair_per_neg_13_2, pair_per_neg_13_5);
+  drawPath(ctx, [pair_per_neg_13_2, pair_per_neg_13_5], 'rgb(64,64,64)');
 
   // x = -12
-  drawGridLine(ctx, pair_per_neg_12_1, pair_per_neg_12_5);
+  drawPath(ctx, [pair_per_neg_12_1, pair_per_neg_12_5], 'rgb(64,64,64)');
 
   // x = -11
-  drawGridLine(ctx, pair_per_neg_11_0, pair_per_neg_11_6);
+  drawPath(ctx, [pair_per_neg_11_0, pair_per_neg_11_6], 'rgb(64,64,64)');
 
   // x = -10
-  drawGridLine(ctx, pair_per_neg_10_neg_1, pair_per_neg_10_7);
+  drawPath(ctx, [pair_per_neg_10_neg_1, pair_per_neg_10_7], 'rgb(64,64,64)');
 
   // x = -9
-  drawGridLine(ctx, pair_per_neg_9_neg_2, pair_per_neg_9_8);
+  drawPath(ctx, [pair_per_neg_9_neg_2, pair_per_neg_9_8], 'rgb(64,64,64)');
 
   // x = -8
-  drawGridLine(ctx, pair_per_neg_8_neg_3, pair_per_neg_8_9);
+  drawPath(ctx, [pair_per_neg_8_neg_3, pair_per_neg_8_9], 'rgb(64,64,64)');
 
   // x = -7
-  drawGridLine(ctx, pair_per_neg_7_neg_4, pair_per_neg_7_10);
+  drawPath(ctx, [pair_per_neg_7_neg_4, pair_per_neg_7_10], 'rgb(64,64,64)');
 
   // x = -6
-  drawGridLine(ctx, pair_per_neg_6_neg_5, pair_per_neg_6_11);
+  drawPath(ctx, [pair_per_neg_6_neg_5, pair_per_neg_6_11], 'rgb(64,64,64)');
 
   // x = -5
-  drawGridLine(ctx, pair_per_neg_5_neg_6, pair_per_neg_5_12);
+  drawPath(ctx, [pair_per_neg_5_neg_6, pair_per_neg_5_12], 'rgb(64,64,64)');
 
   // x = -4
-  drawGridLine(ctx, pair_per_neg_4_neg_7, pair_per_neg_4_13);
+  drawPath(ctx, [pair_per_neg_4_neg_7, pair_per_neg_4_13], 'rgb(64,64,64)');
 
   // x = -3
   const pair_per_neg_3_14 = getCanvasCoordinatePairGiven(-3, 14, widthOfCanvas);
-  drawGridLine(ctx, pair_per_neg_3_neg_8, pair_per_neg_3_14);
+  drawPath(ctx, [pair_per_neg_3_neg_8, pair_per_neg_3_14], 'rgb(64,64,64)');
 
   // x = -2
-  drawGridLine(ctx, pair_per_neg_2_neg_9, pair_per_neg_2_13);
+  drawPath(ctx, [pair_per_neg_2_neg_9, pair_per_neg_2_13], 'rgb(64,64,64)');
 
   // x = -1
-  drawGridLine(ctx, pair_per_neg_1_neg_10, pair_per_neg_1_12);
+  drawPath(ctx, [pair_per_neg_1_neg_10, pair_per_neg_1_12], 'rgb(64,64,64)');
 
   // y axis
-  drawGridLine(ctx, pair_per_0_neg_11, pair_per_0_11, '#000000');
+  drawPath(ctx, [pair_per_0_neg_11, pair_per_0_11], '#000000');
 
   // x = 1
-  drawGridLine(ctx, pair_per_1_neg_12, pair_per_1_10);
+  drawPath(ctx, [pair_per_1_neg_12, pair_per_1_10], 'rgb(64,64,64)');
 
   // x = 2
-  drawGridLine(ctx, pair_per_2_neg_13, pair_per_2_9);
+  drawPath(ctx, [pair_per_2_neg_13, pair_per_2_9], 'rgb(64,64,64)');
 
   // x = 3
-  drawGridLine(ctx, pair_per_3_neg_14, pair_per_3_8);
+  drawPath(ctx, [pair_per_3_neg_14, pair_per_3_8], 'rgb(64,64,64)');
 
   // x = 4
-  drawGridLine(ctx, pair_per_4_neg_15, pair_per_4_7);
+  drawPath(ctx, [pair_per_4_neg_15, pair_per_4_7], 'rgb(64,64,64)');
 
   // x = 5
   const pair_per_5_neg_16 = getCanvasCoordinatePairGiven(5, -16, widthOfCanvas);
-  drawGridLine(ctx, pair_per_5_neg_16, pair_per_5_6);
+  drawPath(ctx, [pair_per_5_neg_16, pair_per_5_6], 'rgb(64,64,64)');
 
   // x = 6
-  drawGridLine(ctx, pair_per_6_neg_15, pair_per_6_5);
+  drawPath(ctx, [pair_per_6_neg_15, pair_per_6_5], 'rgb(64,64,64)');
 
   // x = 7
-  drawGridLine(ctx, pair_per_7_neg_14, pair_per_7_4);
+  drawPath(ctx, [pair_per_7_neg_14, pair_per_7_4], 'rgb(64,64,64)');
 
   // x = 8
-  drawGridLine(ctx, pair_per_8_neg_13, pair_per_8_3);
+  drawPath(ctx, [pair_per_8_neg_13, pair_per_8_3], 'rgb(64,64,64)');
 
   // x = 9
-  drawGridLine(ctx, pair_per_9_neg_12, pair_per_9_2);
+  drawPath(ctx, [pair_per_9_neg_12, pair_per_9_2], 'rgb(64,64,64)');
 
   // x = 10
-  drawGridLine(ctx, pair_per_10_neg_11, pair_per_10_1);
+  drawPath(ctx, [pair_per_10_neg_11, pair_per_10_1], 'rgb(64,64,64)');
 
   // x = 11
-  drawGridLine(ctx, pair_per_11_neg_10, pair_per_11_0);
+  drawPath(ctx, [pair_per_11_neg_10, pair_per_11_0], 'rgb(64,64,64)');
 
   // x = 12
-  drawGridLine(ctx, pair_per_12_neg_9, pair_per_12_neg_1);
+  drawPath(ctx, [pair_per_12_neg_9, pair_per_12_neg_1], 'rgb(64,64,64)');
 
   // x = 13
-  drawGridLine(ctx, pair_per_13_neg_8, pair_per_13_neg_2);
+  drawPath(ctx, [pair_per_13_neg_8, pair_per_13_neg_2], 'rgb(64,64,64)');
 
   // x = 14
-  drawGridLine(ctx, pair_per_14_neg_7, pair_per_14_neg_3);
+  drawPath(ctx, [pair_per_14_neg_7, pair_per_14_neg_3], 'rgb(64,64,64)');
 
   // x = 15
-  drawGridLine(ctx, pair_per_15_neg_6, pair_per_15_neg_4);
+  drawPath(ctx, [pair_per_15_neg_6, pair_per_15_neg_4], 'rgb(64,64,64)');
 
   ctx.fillStyle = 'rgb(64,64,64)';
   for (let i = -14; i <= 15; i++) {
