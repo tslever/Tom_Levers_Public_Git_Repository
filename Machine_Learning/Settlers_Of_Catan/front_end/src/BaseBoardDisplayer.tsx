@@ -464,6 +464,7 @@ function BaseBoardDisplayer(props: Props) {
       canvas.addEventListener("mousedown", handleMouseDown);
       const context = canvas.getContext('2d');
       if (context) {
+        context.clearRect(0, 0, canvas.width, canvas.width);
         drawBoard(context, canvas.width);
       }
       return () => { canvas.removeEventListener("mousedown", handleMouseDown); };
