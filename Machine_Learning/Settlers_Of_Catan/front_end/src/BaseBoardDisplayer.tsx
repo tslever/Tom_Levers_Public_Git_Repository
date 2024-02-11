@@ -77,8 +77,23 @@ const drawToken = function(ctx: CanvasRenderingContext2D, isometricxCoordinate: 
   ctx.fill();
   ctx.strokeStyle = 'black';
   ctx.stroke();
+  let fontSize = -1;
   ctx.fillStyle = 'black';
-  ctx.font = '40px Times New Roman';
+  if (the_number === 2 || the_number === 12) {
+    fontSize = 15;
+  } else if (the_number == 3 || the_number == 11) {
+    fontSize = 25;
+  } else if (the_number == 4 || the_number == 10) {
+    fontSize = 35;
+  } else if (the_number == 5 || the_number == 9) {
+    fontSize = 45;
+  } else if (the_number === 6 || the_number === 8) {
+    fontSize = 55;
+    ctx.fillStyle = 'red';
+  } else {
+    fontSize = 55;
+  }
+  ctx.font = fontSize + 'px Times New Roman';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillText(the_number.toString(), canvasCoordinatePair.x, canvasCoordinatePair.y);
