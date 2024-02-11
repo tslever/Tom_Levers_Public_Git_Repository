@@ -28,6 +28,7 @@ const colorOf = {
   Grain: '#FADB5E',
   Ore: 'rgb(128,128,128)',
   Sea: '#00c5ff',
+  Token: '#e3c08d',
   Wood: '#228B22',
   Wool: '#79D021'
 }
@@ -63,6 +64,24 @@ const drawTile = function(array_of_pairs: Pair[], color: string, context: Canvas
   context.fill(region);
   array_of_pairs.push(pair_0);
   drawPath(context, array_of_pairs, '#000000');
+}
+
+const drawToken = function(ctx: CanvasRenderingContext2D, isometricxCoordinate: number, isometricyCoordinate: number, the_number: number, widthOfCanvas: number) {
+  ctx.beginPath();
+  const canvasCoordinatePair = getCanvasCoordinatePairGiven(isometricxCoordinate, isometricyCoordinate, widthOfCanvas);
+  const pair_per_0_1 = getCanvasCoordinatePairGiven(0, 1, widthOfCanvas);
+  const pair_per_0_0 = getCanvasCoordinatePairGiven(0, 0, widthOfCanvas);
+  const radius = Math.sqrt(Math.pow(pair_per_0_1.x - pair_per_0_0.x, 2) + Math.pow(pair_per_0_1.y - pair_per_0_0.y, 2)) * Math.cos(Math.PI / 6);
+  ctx.arc(canvasCoordinatePair.x, canvasCoordinatePair.y, radius, 0, Math.PI * 2, true);
+  ctx.fillStyle = colorOf.Token;
+  ctx.fill();
+  ctx.strokeStyle = 'black';
+  ctx.stroke();
+  ctx.fillStyle = 'black';
+  ctx.font = '40px Times New Roman';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(the_number.toString(), canvasCoordinatePair.x, canvasCoordinatePair.y);
 }
 
 const drawBoard = function(ctx: CanvasRenderingContext2D, widthOfCanvas: number) {
@@ -199,6 +218,25 @@ const drawBoard = function(ctx: CanvasRenderingContext2D, widthOfCanvas: number)
     const pair_per_4_6 = getCanvasCoordinatePairGiven(4, 6, widthOfCanvas);
     array_of_pairs = [pair_per_6_4, pair_per_6_2, pair_per_4_2, pair_per_2_4, pair_per_2_6, pair_per_4_6];
     drawTile(array_of_pairs, colorOf.Ore, ctx);
+
+    drawToken(ctx, 4, -2, 4, widthOfCanvas);
+    drawToken(ctx, 2, -4, 3, widthOfCanvas);
+    drawToken(ctx, -2, -2, 11, widthOfCanvas);
+    drawToken(ctx, -4, 2, 6, widthOfCanvas);
+    drawToken(ctx, -2, 4, 4, widthOfCanvas);
+    drawToken(ctx, 2, 2, 3, widthOfCanvas);
+    drawToken(ctx, 6, 0, 5, widthOfCanvas);
+    drawToken(ctx, 8, -4, 11, widthOfCanvas);
+    drawToken(ctx, 6, -6, 6, widthOfCanvas);
+    drawToken(ctx, 4, -8, 5, widthOfCanvas);
+    drawToken(ctx, 0, -6, 8, widthOfCanvas);
+    drawToken(ctx, -4, -4, 9, widthOfCanvas);
+    drawToken(ctx, -6, 0, 12, widthOfCanvas);
+    drawToken(ctx, -8, 4, 10, widthOfCanvas);
+    drawToken(ctx, -6, 6, 2, widthOfCanvas);
+    drawToken(ctx, -4, 8, 9, widthOfCanvas);
+    drawToken(ctx, 0, 6, 10, widthOfCanvas);
+    drawToken(ctx, 4, 4, 8, widthOfCanvas);
 
   // y = -15
   const pair_per_4_neg_15 = getCanvasCoordinatePairGiven(4, -15, widthOfCanvas);
@@ -435,6 +473,7 @@ const drawBoard = function(ctx: CanvasRenderingContext2D, widthOfCanvas: number)
   // x = 15
   drawPath(ctx, [pair_per_15_neg_6, pair_per_15_neg_4], 'rgb(64,64,64)');
 
+  ctx.font = '10px Times New Roman';
   ctx.fillStyle = 'rgb(64,64,64)';
   for (let i = -14; i <= 15; i++) {
     for (let j = -16; j <= 14; j++) {
