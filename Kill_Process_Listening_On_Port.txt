@@ -1,0 +1,4 @@
+To kill a process listening on port 5000, run the following.
+
+netstat -ano | findstr :5000
+taskkill /PID 8096 /F
