@@ -1,12 +1,12 @@
 type Props = {
     backgroundColor: string
     children: string
-    act: Function
+    respond: Function
 };
 
 function ActionDisplayer (props: Props) {
     return (
-        <div style = { { backgroundColor: props.backgroundColor } } onClick = { () => { props.act( props.children ) } }>
+        <div style = { { backgroundColor: props.backgroundColor } } onClick = { () => { props.respond('Player clicked action displayer with child "' + props.children + '".') } }>
             { props.children }
         </div>
     );

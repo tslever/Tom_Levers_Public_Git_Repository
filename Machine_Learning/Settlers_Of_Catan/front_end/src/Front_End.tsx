@@ -1,17 +1,19 @@
 import ActionDisplayer from './ActionDisplayer';
-import BaseBoardDisplayer from './BaseBoardDisplayer'
 import Displayer from './Displayer';
-import { useState } from 'react';
-import TableDisplayer from './TableDisplayer';
-import TableDisplayerOfActivePlayersHandCards from './TableDisplayerOfActivePlayersHandCards';
-import TableDisplayerOfBankCards from './TableDisplayerOfBankCards';
-import TableDisplayerOfNonactivePlayersHandCards from './TableDisplayerOfNonactivePlayersHandCards';
-import TableDisplayerOfMessages from './TableDisplayerOfMessages';
-import TableDisplayerOfMenuOfActions from './TableDisplayerOfMenuOfActions';
+import { useEffect, useState } from 'react';
+import PrimaryTableDisplayer from './PrimaryTableDisplayer';
 
 function Front_End() {
 
-  async function act(action: string) {
+  useEffect(() => {
+    document.title = "SOC, MCTS, And NNs";
+  }, []); // The empty array ensures this effect runs only once after the initial render.
+
+  const [actionToComplete, setActionToComplete] = useState('Placeholder Text');
+  const [listOfMessages, setListOfMessages] = useState(['']);
+  const [listOfPossibleActions, setListOfPossibleActions] = useState(['Click me to get started.']);
+
+  async function respond(action: string) {
     const url = 'http://localhost:5000';
     const JSON_object = { action: action };
     const response = await fetch(url, {
@@ -20,64 +22,34 @@ function Front_End() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(JSON_object)
-    });  
+    });
     const json = await response.json();
-    console.log(json);
-    const displayer_of_action = <ActionDisplayer
-      backgroundColor='#ffffff'
-      act = { act }
+    setActionToComplete(json.action_to_complete);
+    setListOfMessages([...listOfMessages, json.action_completed]);
+    setListOfPossibleActions(json.list_of_possible_actions);
+  };
+
+  function mapToActionDisplayer(possibleAction: string) {
+    return <ActionDisplayer
+      respond = { respond }
+      backgroundColor = 'white'
     >
-      { json.next_action }
+      { possibleAction }
     </ActionDisplayer>
-    setListOfActions([displayer_of_action]);
-  }
+  };
 
-  const displayer_of_action_click_me_to_get_started = <ActionDisplayer
-    backgroundColor = '#ffffff'
-    act = { act }
-  >
-    Click me to get started.
-  </ActionDisplayer>
-  const [listOfActionDisplayers, setListOfActions] = useState([displayer_of_action_click_me_to_get_started]);
+  const listOfActionDisplayers = listOfPossibleActions.map(mapToActionDisplayer);
 
-
-  const column_group_for_table_for_base_board_displayer_and_menu_of_actions = <colgroup>
-    <col style = { { width: '50%' } }/>
-    <col style = { { width: '50%' } }/>
-  </colgroup>
-  const table_displayer_for_base_board_displayer_and_menu_of_actions = <TableDisplayer
-    bodyData = { [[<BaseBoardDisplayer/>, <TableDisplayerOfMenuOfActions listOfActionDisplayers = {listOfActionDisplayers}/>]] }
-    colgroup = { column_group_for_table_for_base_board_displayer_and_menu_of_actions }
-    widthPercentage = { 100 }
-  />
-
-  const body_data_for_primary_table_displayer = [
-    [table_displayer_for_base_board_displayer_and_menu_of_actions],
-    [<TableDisplayerOfBankCards/>],
-    [<TableDisplayerOfActivePlayersHandCards/>],
-    [<TableDisplayerOfNonactivePlayersHandCards/>],
-    [<TableDisplayerOfMessages/>]
-  ];
-  const column_group_for_primary_table = <colgroup>
-    <col style = { { width: '100%' } }/>
-  </colgroup>
-  const row_styles_for_primary_table = [
-    { 'backgroundColor': 'rgb(255, 248, 195)' },
-    { 'backgroundColor': 'rgb(255, 243, 137)' },
-    { 'backgroundColor': 'rgb(255, 248, 195)' },
-    { 'backgroundColor': 'rgb(255, 243, 137)' }
-  ]
-  const primary_table_displayer = <TableDisplayer
-    bodyData = { body_data_for_primary_table_displayer }
-    colgroup = { column_group_for_primary_table }
-    rowStyles = { row_styles_for_primary_table }
-    widthPercentage = { 100 }
-  />
   return (
     <Displayer backgroundColor = 'rgb(255, 248, 195)'>
-      { primary_table_displayer }
+      <PrimaryTableDisplayer
+        actionToComplete = { actionToComplete }
+        respond = { respond }
+        listOfActionDisplayers = { listOfActionDisplayers }
+        listOfMessages = { listOfMessages }
+      />
     </Displayer>
   );
-}
+};
 
 export default Front_End;
