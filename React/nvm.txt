@@ -45,3 +45,5 @@ nano hello.js and console.log('Hello World');
 node hello.js
 rm hello.js
 ```
+
+Considering adding `"terminal.integrated.defaultProfile.windows": "Git Bash"` to Visual Studio Code -> Ctrl+Shift+P -> Preferences: Open User Settings (JSON) to have Visual Studio use Git Bash with nvm sourced.
