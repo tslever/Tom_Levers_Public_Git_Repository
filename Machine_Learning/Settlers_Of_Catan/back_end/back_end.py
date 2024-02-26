@@ -1,12 +1,13 @@
+from database_manager import DatabaseManager
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import re
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
+database_manager = None
 
 @app.route("/", methods = ['POST'])
-def main():
+def listen_at_root():
     try:
         JSON_object_from_POST_request_body = request.json
         if JSON_object_from_POST_request_body['action'] == 'Player clicked action displayer with child \"Click me to get started.\".':
@@ -75,4 +76,7 @@ def main():
         print(e)
 
 if __name__ == '__main__':
+    CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
+    database_manager = DatabaseManager()
+    database_manager.sets_up_table_Board()
     app.run(debug = True)
