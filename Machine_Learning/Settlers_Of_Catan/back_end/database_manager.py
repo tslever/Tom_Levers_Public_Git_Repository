@@ -2,6 +2,25 @@ import sqlite3
 
 class DatabaseManager:
 
+    def gets_table_Board(self):
+        connection = sqlite3.connect('Settlers_Of_Catan.db')
+        cursor = connection.cursor()
+        cursor.execute('SELECT CN10, CN9, CN8, CN7, CN6, CN5, CN4, CN3, CN2, CN1, C0, C1, C2, C3, C4, C5, C6, C7, C8, C9, C10 FROM Board')
+        rows = cursor.fetchall()
+        board = [list(map(str, row)) for row in rows]
+        connection.close()
+        return board
+
+    def resets_table_Board(self):
+        connection = sqlite3.connect('Settlers_Of_Catan.db')
+        cursor = connection.cursor()
+        columns = ['CN10', 'CN9', 'CN8', 'CN7', 'CN6', 'CN5', 'CN4', 'CN3', 'CN2', 'CN1', 'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10']
+        set_clause = ', '.join([f"{col}='N'" for col in columns])
+        cursor.execute(f"UPDATE Board SET {set_clause}")
+        cursor.execute("UPDATE Board SET C0='Robber' WHERE ID='R0'")
+        connection.commit()
+        connection.close()
+
     def sets_up_table_Board(self):
         connection = sqlite3.connect('Settlers_Of_Catan.db') # Connect to the SQLite database (or create it if it doesn't exist)
         cursor = connection.cursor()
@@ -27,5 +46,6 @@ class DatabaseManager:
                     VALUES ('{ID}', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N')
                     '''
                 )
+        cursor.execute("UPDATE Board SET C0='Robber' WHERE ID='R0'")
         connection.commit()
         connection.close()
