@@ -8,7 +8,7 @@ import subprocess
 
 def get_list_of_packages() -> list[str]:
     list_of_packages = []
-    subprocess.run(f'pip list --format=freeze > list_of_pip_packages.txt', shell = True)
+    subprocess.run(f'python3 -m pip list --format=freeze > list_of_pip_packages.txt', shell = True)
     with open('list_of_pip_packages.txt', 'r') as file:
         for line in file:
             line = line.split('==')
